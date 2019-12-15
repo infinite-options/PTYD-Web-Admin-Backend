@@ -1,0 +1,3 @@
+pymysql
+gspread
+oauth2client
