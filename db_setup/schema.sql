@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
 
 DROP TABLE IF EXISTS Orders;
 CREATE TABLE IF NOT EXISTS Orders (
-    Date_Submitted DATE NOT NULL,
+    Date_Submitted DATETIME NOT NULL,
     Last_Name VARCHAR(32),
     First_Name VARCHAR(32),
     Email VARCHAR(64),

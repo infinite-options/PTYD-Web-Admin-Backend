@@ -4,6 +4,7 @@ import gspread
 import pymysql
 import sys
 import json
+import datetime
 
 # Store first command line argument as database password
 if len(sys.argv) == 2:
@@ -24,8 +25,9 @@ def jsonifyInput():
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
         creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
         client = gspread.authorize(creds)
-        print("Created interactive client for Google Drive API")
+        print("Created interactive client for Google Drive API.")
     except:
+        print("Bad credentials or scope for Google Drive API.")
         raise Exception("Bad credentials or scope for spreadsheet")
 
     try:
@@ -39,7 +41,9 @@ def jsonifyInput():
 #           inputJson[keyValue] = records
 #       print("Retrieved data")
 #       return inputJson
+        print("Retrieved input data from Google Sheets.")
     except:
+        print("Could not retrieve input data from Google Sheets.")
         raise Exception("Cannot retrieve and/or format input data")
 
     try:
@@ -49,8 +53,10 @@ def jsonifyInput():
         inputJson['Subscriptions'] = subscriptions.get_all_records()
         inputJson['Orders'] = consolidateMealColumns(orders)
         inputJson['Meals'] = formatMeals(meals)
+        print("Formatted input data into Python dict.")
         return inputJson
     except:
+        print("Cannot format input data into Python dict.")
         raise Exception("Cannot format input data")
 
 # Consolidate columns of different meal plans for the same item
@@ -58,7 +64,6 @@ def consolidateMealColumns(orders):
     newDict = []
     for order in orders:
         rowToAppend = {}
-#       print(order)
         for key, value in order.items():
             if '5: ' in key:
                 newKey = formatKey(key, 3)
@@ -72,7 +77,6 @@ def consolidateMealColumns(orders):
                 newKey = formatKey(key, 0)
                 rowToAppend[newKey] = value
         newDict.append(rowToAppend)
-#   print(newDict)
     return newDict
 
 # Format meals dict
@@ -129,8 +133,6 @@ def connectToRDS(RDS_PW):
         print("Connected to RDS successfully.")
     except:
         raise Exception("Could not connect to RDS.")
-#       sys.exit(1)
-
     # Initialize pymysql cursor
     print("Initializing cursor...")
     try:
@@ -138,8 +140,6 @@ def connectToRDS(RDS_PW):
         print("Initialized cursor.")
     except:
         raise Exception("Could not initialize cursor.")
-#       sys.exit(1)
-
     return [conn, cur]
 
 # Return a list of SQL commands to run from a JSON dict
@@ -147,32 +147,20 @@ def dictToSql(jsonDicts, tableName, tableInfo):
     query = []
     try:
         print("Generating SQL commands for", tableName + "...")
-#       print("Data types of table", tableName + ":", tableInfo)
         for jsonDict in jsonDicts:
-#           print(jsonDict)
             ins = "INSERT INTO " + tableName + " ("
             val = "VALUES ("
-#           print(ins)
-#           print(val)
             for key, value in jsonDict.items():
-#               print(key)
                 if '/' in key:
-#                   print("REFORMATTING KEY")
                     key = reformatDColumn(key)
-#                   print("REFORMATED D COLUMN KEY: ", key)
                 valueType = tableInfo[key]
                 if value == '':
                     value = 'NULL'
                     valueType = 'null_value'
-#               print(value, ", DATA_TYPE: ", valueType)
                 ins = appendSqlItem(ins, key, "column_name")
                 val = appendSqlItem(val, value, valueType)
-#               print(ins)
-#               print(val)
             ins = completeSqlCmd(ins, ") ")
             val = completeSqlCmd(val, ");")
-#           print(ins)
-#           print(val)
             query.append(ins + val)
             print("Generated query:", ins + val)
         return query
@@ -184,11 +172,19 @@ def dictToSql(jsonDicts, tableName, tableInfo):
 def reformatDColumn(key):
     return "D" + key.replace('/','')
 
+# Reformate date values from input data
+def formatInputDate(inputDate):
+    datetimeObj = datetime.datetime.strptime(inputDate, "%b %d, %Y %H:%M:%S")
+    objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
+    return objToStr
+
 # Append an item to an SQL command
 def appendSqlItem(cmd, item, data_type):
     if any(nonStringType in data_type for nonStringType in ['int', 'column_name', 'null_value']):
         item = str(item)
     else:
+        if data_type == 'datetime':
+            item = formatInputDate(str(item))
         item = "\'" + str(item) + "\'"
     newCmd = cmd + item
     return newCmd + ", "
@@ -214,7 +210,6 @@ def mapTupleList(tuples):
 # Code executes here
 def main():
     data = jsonifyInput()
-#   print("Full JSON dictionary: ", data)
     try:
         db = connectToRDS(RDS_PW)
         conn = db[0]
@@ -222,19 +217,15 @@ def main():
         queries = []
         for table, tableValues in data.items():
             tableInfoQuery = describeTable(table)
-#           print("Table info query: ", tableInfoQuery)
             cur.execute(tableInfoQuery)
             tableInfo = cur.fetchall()
             tableInfo = mapTupleList(tableInfo)
-#           print("Table Infomation: ", tableInfo)
             queries.extend(dictToSql(tableValues, table, tableInfo))
         print("Successfully wrote all queries.")
-#       print("List of all queries:", queries)
-#       print("Beginning queries.")
         for query in queries:
-            print("Attempting query: ", query)
+            print("Attempting query:", query)
             cur.execute(query)
-            print("Executed query: ", query)
+            print("Executed query:", query)
         conn.commit()
         print("Successfully committed queries to database.")
     except:

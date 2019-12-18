@@ -5,13 +5,20 @@ function usage () {
     echo "usage:";
     echo "--login, -l: log onto mysql server"
     echo "--run-schema, -r: setup schema in database, use with caution";
-    exit 1;
 }
 
-if [[ $# -eq 1 ]]; then
+function logon() {
+    mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p
+}
+
+if [[ $# -eq 0 ]]; then
+    usage;
+    logon;
+    exit 0
+elif [[ $# -eq 1 ]]; then
     case $1 in
     -l | --login)
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p
+        logon;
         exit 0
         ;;
     -r | --run-schema)
@@ -20,6 +27,7 @@ if [[ $# -eq 1 ]]; then
         ;;
     *)
         usage
+        exit 1
         ;;
     esac
 else
