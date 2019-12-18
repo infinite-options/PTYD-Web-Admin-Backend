@@ -16,7 +16,7 @@ else:
 def jsonifyInput():
     # Initialize JSON to return
     inputJson = {}
-    keys = ('subscriptions', 'orders', 'meals')
+#   keys = ('Subscriptions', 'Orders', 'Meals')
 
     try:
         # creds: create a client to interact with the Google Drive API
@@ -46,9 +46,9 @@ def jsonifyInput():
         # Extract and format all of the values
         orders = orders.get_all_records()
         meals = meals.get_all_records()
-        inputJson['subscriptions'] = subscriptions.get_all_records()
-        inputJson['orders'] = consolidateMealColumns(orders)
-        inputJson['meals'] = formatMeals(meals)
+        inputJson['Subscriptions'] = subscriptions.get_all_records()
+        inputJson['Orders'] = consolidateMealColumns(orders)
+        inputJson['Meals'] = formatMeals(meals)
         return inputJson
     except:
         raise Exception("Cannot format input data")
@@ -142,33 +142,107 @@ def connectToRDS(RDS_PW):
 
     return [conn, cur]
 
-'''
-def writeToSubscriptions(subscriptionsTable):
+# Return a list of SQL commands to run from a JSON dict
+def dictToSql(jsonDicts, tableName, tableInfo):
+    query = []
+    try:
+        print("Generating SQL commands for", tableName + "...")
+#       print("Data types of table", tableName + ":", tableInfo)
+        for jsonDict in jsonDicts:
+#           print(jsonDict)
+            ins = "INSERT INTO " + tableName + " ("
+            val = "VALUES ("
+#           print(ins)
+#           print(val)
+            for key, value in jsonDict.items():
+#               print(key)
+                if '/' in key:
+#                   print("REFORMATTING KEY")
+                    key = reformatDColumn(key)
+#                   print("REFORMATED D COLUMN KEY: ", key)
+                valueType = tableInfo[key]
+                if value == '':
+                    value = 'NULL'
+                    valueType = 'null_value'
+#               print(value, ", DATA_TYPE: ", valueType)
+                ins = appendSqlItem(ins, key, "column_name")
+                val = appendSqlItem(val, value, valueType)
+#               print(ins)
+#               print(val)
+            ins = completeSqlCmd(ins, ") ")
+            val = completeSqlCmd(val, ");")
+#           print(ins)
+#           print(val)
+            query.append(ins + val)
+            print("Generated query:", ins + val)
+        return query
+    except:
+        print("Could not generate SQL commands.")
+        raise Exception("Could not generate SQL commands.")
 
+# Reformat columns with name XX/XX/XXXX
+def reformatDColumn(key):
+    return "D" + key.replace('/','')
 
-def writeToOrders(ordersTable):
+# Append an item to an SQL command
+def appendSqlItem(cmd, item, data_type):
+    if any(nonStringType in data_type for nonStringType in ['int', 'column_name', 'null_value']):
+        item = str(item)
+    else:
+        item = "\'" + str(item) + "\'"
+    newCmd = cmd + item
+    return newCmd + ", "
 
+# Close an SQL command
+def completeSqlCmd(cmd, endChar):
+    newCmd = cmd[:-2] + endChar
+    return newCmd
 
-def writeToMeals(mealsTable):
+# Returns query that selects data types of every column of a table
+def describeTable(table):
+    return "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = \'" + table + "\';"
 
+# Convert list of tuples (from cur.fetchall) to a dictionary
+def mapTupleList(tuples):
+    newMap = {}
+    for aTuple in tuples:
+        key = aTuple[0]
+        value = aTuple[1]
+        newMap[key] = value
+    return newMap
 
-def getSubscriptionsColumns(headerRow):
-
-
-def getOrdersColumns(headerRow):
-
-
-def getMealsColumns(headerRow):
-
-
-'''
-
+# Code executes here
 def main():
     data = jsonifyInput()
-    print(data)
-#   db = connectToRDS(RDS_PW)
-#   conn = db[0]
-#   cur = db[1]
+#   print("Full JSON dictionary: ", data)
+    try:
+        db = connectToRDS(RDS_PW)
+        conn = db[0]
+        cur = db[1]
+        queries = []
+        for table, tableValues in data.items():
+            tableInfoQuery = describeTable(table)
+#           print("Table info query: ", tableInfoQuery)
+            cur.execute(tableInfoQuery)
+            tableInfo = cur.fetchall()
+            tableInfo = mapTupleList(tableInfo)
+#           print("Table Infomation: ", tableInfo)
+            queries.extend(dictToSql(tableValues, table, tableInfo))
+        print("Successfully wrote all queries.")
+#       print("List of all queries:", queries)
+#       print("Beginning queries.")
+        for query in queries:
+            print("Attempting query: ", query)
+            cur.execute(query)
+            print("Executed query: ", query)
+        conn.commit()
+        print("Successfully committed queries to database.")
+    except:
+        print("Could not commit to database.")
+    finally:
+        cur.close()
+        conn.close()
+        print("Connection to database closed.")
 
 if __name__ == '__main__':
     main()
