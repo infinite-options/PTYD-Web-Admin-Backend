@@ -5,15 +5,16 @@ import pymysql
 import sys
 import json
 
-# RDS PASSWORD
+# Store first command line argument as database password
 if len(sys.argv) == 2:
     RDS_PW = str(sys.argv[1])
 else:
     print("Usage: Enter password for MySQL server as first command line argument")
     sys.exit(1)
 
+# Retrieve data from Google Sheets and return it as a JSON object
 def jsonifyInput():
-    # Initialize json
+    # Initialize JSON to return
     inputJson = {}
     keys = ('subscriptions', 'orders', 'meals')
 
@@ -43,15 +44,75 @@ def jsonifyInput():
 
     try:
         # Extract and format all of the values
+        orders = orders.get_all_records()
+        meals = meals.get_all_records()
         inputJson['subscriptions'] = subscriptions.get_all_records()
-        inputJson['orders'] = orders.get_all_records()
-        inputJson['meals'] = meals.get_all_records()
+        inputJson['orders'] = consolidateMealColumns(orders)
+        inputJson['meals'] = formatMeals(meals)
         return inputJson
     except:
         raise Exception("Cannot format input data")
 
+# Consolidate columns of different meal plans for the same item
+def consolidateMealColumns(orders):
+    newDict = []
+    for order in orders:
+        rowToAppend = {}
+#       print(order)
+        for key, value in order.items():
+            if '5: ' in key:
+                newKey = formatKey(key, 3)
+                newValue = replaceNullWithZero(value)
+                rowToAppend[newKey] = newValue
+            elif any(substring in key for substring in ['10: ', '15: ', '20: ']):
+                newKey = formatKey(key, 4)
+                newValue = replaceNullWithZero(value)
+                rowToAppend[newKey] += newValue
+            else:
+                newKey = formatKey(key, 0)
+                rowToAppend[newKey] = value
+        newDict.append(rowToAppend)
+#   print(newDict)
+    return newDict
+
+# Format meals dict
+def formatMeals(meals):
+    newDict = []
+    for meal in meals:
+        rowToAppend = {'Meals': meal['Meals'], 'Actual_Meal': meal['Actual Meal']}
+        newDict.append(rowToAppend)
+    return newDict
+
+# Format key from JSON for SQL insert statement
+def formatKey(key, index):
+    newKey = replaceSpacesWithUnderscores(key[index:])
+    newKey = removeLeadingUnderscore(newKey)
+    return newKey
+
+# Replace spaces with underscores in an item
+def replaceSpacesWithUnderscores(item):
+    try:
+        newItem = item.replace(' ','_')
+        return newItem
+    except:
+        print("Spaces of item could not be replaced with dashes")
+        return item
+
+# Remove leading underscore if item has it
+def removeLeadingUnderscore(item):
+    if item[0] == '_':
+        return item[1:]
+    return item
+
+# Replace value with 0 if it is a null string
+def replaceNullWithZero(value):
+    if value is '':
+        return 0
+    return value
+
+# Returns a Connection object from pymysql to the database
 def connectToRDS(RDS_PW):
-    # RDS
+    # RDS information
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
     RDS_USER = 'admin'
@@ -105,9 +166,9 @@ def getMealsColumns(headerRow):
 def main():
     data = jsonifyInput()
     print(data)
-    db = connectToRDS(RDS_PW)
-    conn = db[0]
-    cur = db[1]
+#   db = connectToRDS(RDS_PW)
+#   conn = db[0]
+#   cur = db[1]
 
 if __name__ == '__main__':
     main()
