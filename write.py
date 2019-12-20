@@ -65,18 +65,29 @@ def consolidateMealColumns(orders):
     for order in orders:
         rowToAppend = {}
         for key, value in order.items():
-            if '5: ' in key:
+            if key.startswith('5: '):
                 newKey = formatKey(key, 3)
                 newValue = replaceNullWithZero(value)
                 rowToAppend[newKey] = newValue
+#               print("KEY:", key)
+#               print("VALUE:", "\'", value, "\'")
+#               print("NEWKEY:", newKey)
+#               print("NEWVALUE (new):", "\'", newValue, "\'")
             elif any(substring in key for substring in ['10: ', '15: ', '20: ']):
                 newKey = formatKey(key, 4)
                 newValue = replaceNullWithZero(value)
+#               print("KEY:", key)
+#               print("VALUE:", "\'", value, "\'")
+#               print("NEWKEY:", newKey)
+#               print("OLDVALUE:", "\'", rowToAppend[newKey], "\'")
                 rowToAppend[newKey] += newValue
+#               print("VALUETOADD:", "\'", newValue, "\'")
+#               print("NEWVALUE:", "\'", rowToAppend[newKey], "\'")
             else:
                 newKey = formatKey(key, 0)
                 rowToAppend[newKey] = value
         newDict.append(rowToAppend)
+#       print(rowToAppend)
     return newDict
 
 # Format meals dict
