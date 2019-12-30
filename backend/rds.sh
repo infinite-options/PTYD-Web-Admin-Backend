@@ -22,7 +22,7 @@ elif [[ $# -eq 1 ]]; then
         exit 0
         ;;
     -r | --run-schema)
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < db_setup/schema.sql
+        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < schema.sql
         exit 0
         ;;
     *)
