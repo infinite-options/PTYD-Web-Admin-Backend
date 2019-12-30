@@ -32,12 +32,12 @@ def jsonifyInput():
 
     try:
         # Find a workbook by name and open the sheets
-        subscriptions = client.open("Database Example").get_worksheet(0)
-        orders = client.open("Database Example").get_worksheet(1)
-        meals = client.open("Database Example").get_worksheet(2)
-        paymentplans = client.open("Database Example").get_worksheet(3)
-        mealplans = client.open("Database Example").get_worksheet(4)
-        ingredients = client.open("Database Example").get_worksheet(5)
+        subscriptions = client.open("Database Example").get_worksheet(1)
+        orders = client.open("Database Example").get_worksheet(2)
+        meals = client.open("Database Example").get_worksheet(3)
+        paymentplans = client.open("Database Example").get_worksheet(4)
+        mealplans = client.open("Database Example").get_worksheet(5)
+        ingredients = client.open("Database Example").get_worksheet(6)
 #       for keyIndex, keyValue in enumerate(keys):
 #           print(keyIndex)
 #           records = client.open("Database Example").get_worksheet(keyIndex)
@@ -52,10 +52,11 @@ def jsonifyInput():
     try:
         # Extract and format all of the values
         orders = orders.get_all_records()
-        meals = meals.get_all_records()
+#       meals = meals.get_all_records()
         inputJson['Subscriptions'] = subscriptions.get_all_records()
         inputJson['Orders'] = consolidateMealColumns(orders)
-        inputJson['Meals'] = formatMeals(meals)
+#       inputJson['Meals'] = formatMeals(meals)
+        inputJson['Meals'] = meals.get_all_records()
         inputJson['PaymentPlans'] = paymentplans.get_all_records()
         inputJson['MealPlans'] = mealplans.get_all_records()
         inputJson['Ingredients'] = ingredients.get_all_records()
@@ -170,7 +171,8 @@ def dictToSql(jsonDicts, tableName, tableInfo):
             val = "VALUES ("
             for key, value in jsonDict.items():
                 if '/' in key:
-                    key = reformatDColumn(key)
+                    continue
+#                   key = reformatDColumn(key)
                 valueType = tableInfo[key]
                 if value == '':
                     value = 'NULL'
