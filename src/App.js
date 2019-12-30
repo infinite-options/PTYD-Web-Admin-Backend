@@ -1,13 +1,13 @@
 import React from "react";
 import "./App.css";
 import Main from "./components/main";
-
-import { Layout, Header, Drawer, Navigation, Content } from "react-mdl";
+import { Header, Drawer, Navigation, Content } from "react-mdl";
+import Layout from "./components/layout";
 
 function App() {
   return (
     <div style={{ height: "300px", position: "relative" }}>
-      <Layout fixedHeader>
+      <Layout>
         <Header
           title={
             <span>
