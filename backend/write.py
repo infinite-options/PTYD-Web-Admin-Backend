@@ -35,6 +35,9 @@ def jsonifyInput():
         subscriptions = client.open("Database Example").get_worksheet(0)
         orders = client.open("Database Example").get_worksheet(1)
         meals = client.open("Database Example").get_worksheet(2)
+        paymentplans = client.open("Database Example").get_worksheet(3)
+        mealplans = client.open("Database Example").get_worksheet(4)
+        ingredients = client.open("Database Example").get_worksheet(5)
 #       for keyIndex, keyValue in enumerate(keys):
 #           print(keyIndex)
 #           records = client.open("Database Example").get_worksheet(keyIndex)
@@ -53,6 +56,9 @@ def jsonifyInput():
         inputJson['Subscriptions'] = subscriptions.get_all_records()
         inputJson['Orders'] = consolidateMealColumns(orders)
         inputJson['Meals'] = formatMeals(meals)
+        inputJson['PaymentPlans'] = paymentplans.get_all_records()
+        inputJson['MealPlans'] = mealplans.get_all_records()
+        inputJson['Ingredients'] = ingredients.get_all_records()
         print("Formatted input data into Python dict.")
         return inputJson
     except:
@@ -86,8 +92,9 @@ def consolidateMealColumns(orders):
             else:
                 newKey = formatKey(key, 0)
                 rowToAppend[newKey] = value
+#           print("Row currently:", rowToAppend)
         newDict.append(rowToAppend)
-#       print(rowToAppend)
+#       print("Final row:", rowToAppend)
     return newDict
 
 # Format meals dict
