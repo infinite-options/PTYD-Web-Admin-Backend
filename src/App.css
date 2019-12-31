@@ -52,7 +52,7 @@
   left: 16px;
   float: left;
   margin-left: 0.5em;
-  margin-top: 3em;
+  margin-top: 2em;
   font-size: 50px;
   letter-spacing: 1.5px;
 }
@@ -95,6 +95,7 @@ br {
   text-transform: uppercase;
   letter-spacing: 0.15rem;
   border: 0;
+  border-radius: 4px;
 }
 
 .btn1-primary {
@@ -113,4 +114,15 @@ br {
 
 .btn1-primary:active {
   background-color: #427c42 !important;
+}
+
+hr {
+  border: none;
+  height: 20px;
+  width: 90%;
+  height: 50px;
+  margin-top: 0;
+  border-bottom: 1px solid #1f1209;
+  box-shadow: 0 20px 20px -20px #333;
+  margin: -50px auto 10px;
 }
