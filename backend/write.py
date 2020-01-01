@@ -38,6 +38,7 @@ def jsonifyInput():
         paymentplans = client.open("Database Example").get_worksheet(4)
         mealplans = client.open("Database Example").get_worksheet(5)
         ingredients = client.open("Database Example").get_worksheet(6)
+        paymentadjustments = client.open("Database Example").get_worksheet(7)
 #       for keyIndex, keyValue in enumerate(keys):
 #           print(keyIndex)
 #           records = client.open("Database Example").get_worksheet(keyIndex)
@@ -60,6 +61,7 @@ def jsonifyInput():
         inputJson['PaymentPlans'] = paymentplans.get_all_records()
         inputJson['MealPlans'] = mealplans.get_all_records()
         inputJson['Ingredients'] = ingredients.get_all_records()
+        inputJson['PaymentAdjustments'] = paymentadjustments.get_all_records()
         print("Formatted input data into Python dict.")
         return inputJson
     except:
@@ -173,12 +175,16 @@ def dictToSql(jsonDicts, tableName, tableInfo):
                 if '/' in key:
                     continue
 #                   key = reformatDColumn(key)
+                if 'phone' in key.lower():
+                    value = reformatPhoneNum(value)
                 valueType = tableInfo[key]
                 if value == '':
                     value = 'NULL'
                     valueType = 'null_value'
                 ins = appendSqlItem(ins, key, "column_name")
                 val = appendSqlItem(val, value, valueType)
+#               print("Current ins:", ins)
+#               print("Current val:", val)
             ins = completeSqlCmd(ins, ") ")
             val = completeSqlCmd(val, ");")
             query.append(ins + val)
@@ -187,6 +193,25 @@ def dictToSql(jsonDicts, tableName, tableInfo):
     except:
         print("Could not generate SQL commands.")
         raise Exception("Could not generate SQL commands.")
+
+# Currently only handles country area code 1
+def reformatPhoneNum(num):
+#   print("Reformatting phone number:", num)
+    areaCode = '1'
+    formatNum = str(num)
+    symbolsToRemove = ['(',')',' ','-','+','.']
+    for symbol in symbolsToRemove:
+        if symbol in formatNum:
+            formatNum = formatNum.replace(symbol,'')
+#           print("Current value:", formatNum)
+    if len(formatNum) is 11 and formatNum[0] == areaCode:
+        formatNum = formatNum[1:]
+#       print("Current value:", formatNum)
+    if len(formatNum) is not 10:
+        print("Cannot format phone number", num, "to 10-digit number.")
+        raise Exception("Cannot remove non-digit symbols in phone number")
+#   print("Final value:", formatNum)
+    return formatNum
 
 # Reformat columns with name XX/XX/XXXX
 def reformatDColumn(key):

@@ -1,5 +1,6 @@
 USE pricing;
 
+-- Ingredients has foreign key referenced in Meals
 DROP TABLE IF EXISTS Ingredients;
 
 DROP TABLE IF EXISTS Meals;
@@ -27,7 +28,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
     ship_street VARCHAR(32) NOT NULL,
     ship_unit VARCHAR(16),
     ship_city VARCHAR(16) NOT NULL,
-    ship_phone_number VARCHAR(14) NOT NULL,
+    ship_phone_number VARCHAR(10) NOT NULL,
     ship_state VARCHAR(2) NOT NULL,
     ship_zip_code INT NOT NULL,
     ship_country VARCHAR(2) NOT NULL,
@@ -42,7 +43,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     First_Name VARCHAR(32),
     Email VARCHAR(64),
     Delivery_Time VARCHAR(176),
-    Phone_Number VARCHAR(14),
+    Phone_Number VARCHAR(10),
     Meal_Plan VARCHAR(8),
     WKLY_SPCL_1 INT,
     WKLY_SPCL_2 INT,
@@ -54,19 +55,12 @@ CREATE TABLE IF NOT EXISTS Orders (
     ALMOND_BUTTER INT,
     THE_ENERGIZER INT,
     SEASONAL_SMOOTHIE INT,
---  D12222019 VARCHAR(30),
---  D12292019 VARCHAR(30),
---  D152020 VARCHAR(30),
---  D1122020 VARCHAR(30),
---  D1192020 VARCHAR(30),
---  D1262020 VARCHAR(30),
     Pick_Meals VARCHAR(41)
 );
 
 DROP TABLE IF EXISTS MealPlans;
 CREATE TABLE IF NOT EXISTS MealPlans (
     MealsPerWeek INT NOT NULL,
-    StartingPrice DECIMAL(7,2) NOT NULL,
     PlanSummary VARCHAR(255),
     PlanFooter VARCHAR(64)
 );
@@ -85,7 +79,21 @@ CREATE TABLE IF NOT EXISTS PaymentPlans (
 CREATE TABLE IF NOT EXISTS Ingredients (
     Ingredient VARCHAR(128) NOT NULL,
     Meal VARCHAR(50) NOT NULL,
+    Qty INT NOT NULL,
+    Unit VARCHAR(32) NOT NULL,
     FOREIGN KEY (Meal) REFERENCES Meals(Actual_Meal)
 );
 
---  need schema for PaymentAdjustments table
+DROP TABLE IF EXISTS PaymentAdjustments;
+CREATE TABLE IF NOT EXISTS PaymentAdjustments (
+    PromoCode VARCHAR(64) NOT NULL,
+    Reduction INT NOT NULL,
+    Unit VARCHAR(32) NOT NULL,
+    AppliesTo VARCHAR(64) NOT NULL
+);
+
+DROP TABLE IF EXISTS UnitConversion;
+CREATE TABLE IF NOT EXISTS UnitConversion (
+    BuyUnit VARCHAR(64) NOT NULL,
+    IngredientUnit VARCHAR(64) NOT NULL
+);
