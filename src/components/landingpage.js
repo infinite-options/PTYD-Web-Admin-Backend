@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import Profile from "../img/img1.jpg";
-import { Row, Col, Container } from "react-bootstrap";
+import IMG1 from "../img/img1.jpg";
+import IMG2 from "../img/img2.jpeg";
+import { Row, Col, Container, Image } from "react-bootstrap";
+import { Grid, Cell } from "react-mdl";
 
 class Landing extends Component {
   render() {
@@ -12,12 +14,12 @@ class Landing extends Component {
               <img
                 class="img-fluid"
                 style={{ width: "100%", height: "700px" }}
-                src={Profile}
+                src={IMG1}
                 alt=""
               />
               <div
                 class="top-left"
-                style={{ size: "300px", lineHeight: "50px" }}
+                style={{ size: "300px", lineHeight: "55px" }}
               >
                 LOCAL<br></br>ORGANIC<br></br>RESPONSIBLE
               </div>
@@ -26,8 +28,8 @@ class Landing extends Component {
                 class="bottom-left"
                 style={{
                   marginBottom: "200px",
-                  fontSize: "20px",
-                  textShadow: "2px 2px 4px #000000",
+                  fontSize: "21px",
+                  textShadow: "2px 2px 4px #FFEFB0",
                   lineHeight: "35px"
                 }}
               >
@@ -42,7 +44,7 @@ class Landing extends Component {
                 </button>
               </div>
 
-              <div class="bottom-left">Already a Mmeber? Sign in</div>
+              <div class="bottom-left">Already a Member? Sign in</div>
             </div>
             <div class="container">
               <div class="langding-part2">
@@ -80,6 +82,109 @@ class Landing extends Component {
                   </Row>
                 </Container>
                 <hr></hr>
+                <center>
+                  <button
+                    type="button"
+                    class="btn1 btn1-primary"
+                    style={{
+                      marginTop: "10px",
+                      color: "white",
+                      size: "10px",
+                      fontSize: "20px"
+                    }}
+                  >
+                    Get Started
+                  </button>
+                </center>
+              </div>
+            </div>
+
+            <div class="container">
+              <div class="langding-part2">
+                <br></br>
+                <br></br>
+                <Grid>
+                  <Cell col={8}>
+                    <Container>
+                      <Row style={{ fontSize: "25px" }}>
+                        <Col>LOCAL FARMS</Col>
+                        <Col>REUSABLE PACKAGING</Col>
+                      </Row>
+                      <Row
+                        style={{
+                          fontSize: "15px",
+                          color: "black",
+                          lineHeight: "25px"
+                        }}
+                      >
+                        <Col>
+                          Eat seasonally and locally every week. Our chefs
+                          create each menu based on what is growing in Texas.
+                        </Col>
+                        <Col>
+                          Did you know that every piece of plastic ever
+                          produced, still exists today? Enjoy a plastic-free
+                          experience with your PTYD deliveries.
+                        </Col>
+                      </Row>
+                      <br></br>
+                      <br></br>
+                      <Row style={{ fontSize: "25px" }}>
+                        <Col>LOCAL FARMS</Col>
+                        <Col>REUSABLE PACKAGING</Col>
+                      </Row>
+
+                      <Row
+                        style={{
+                          fontSize: "15px",
+                          color: "black",
+                          lineHeight: "25px"
+                        }}
+                      >
+                        <Col>
+                          Eat seasonally and locally every week. Our chefs
+                          create each menu based on what is growing in Texas.
+                        </Col>
+                        <Col>
+                          Did you know that every piece of plastic ever
+                          produced, still exists today? Enjoy a plastic-free
+                          experience with your PTYD deliveries.
+                        </Col>
+                      </Row>
+                    </Container>
+                  </Cell>
+                  <Cell col={4}>
+                    <img
+                      class="img-fluid"
+                      style={{ width: "80%", height: "80%" }}
+                      src={IMG2}
+                      alt=""
+                    />
+                  </Cell>
+                  <button
+                    type="button"
+                    class="btn1 btn1-primary"
+                    style={{
+                      marginTop: "10px",
+                      color: "white",
+                      size: "10px",
+                      fontSize: "20px"
+                    }}
+                  >
+                    Get Started
+                  </button>
+                </Grid>
+                <Row>
+                  <Col xs={6} md={4}>
+                    <Image src="holder.js/171x180" rounded />
+                  </Col>
+                  <Col xs={6} md={4}>
+                    <Image src="holder.js/171x180" roundedCircle />
+                  </Col>
+                  <Col xs={6} md={4}>
+                    <Image src="holder.js/171x180" thumbnail />
+                  </Col>
+                </Row>
               </div>
             </div>
           </h3>
