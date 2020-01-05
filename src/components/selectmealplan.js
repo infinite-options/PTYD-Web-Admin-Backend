@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
 import IMG2 from "../img/img2.jpg";
+import { Link } from "react-router-dom";
 
 class Selectmealplan extends Component {
   render() {
@@ -31,18 +32,23 @@ class Selectmealplan extends Component {
                   <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                     Sales tax of 8.25% will be added
                   </Card.Text>
-                  <button
-                    type="button"
-                    class="btn1 btn1-primary"
-                    style={{
-                      marginTop: "10px",
-                      padding: "5px",
-                      color: "white",
-                      fontSize: "15px"
-                    }}
+                  <Link
+                    style={{ fontFamily: "Kalam", color: "white" }}
+                    to="/5-meals-subscription"
                   >
-                    CHOOSE 5 MEALS
-                  </button>
+                    <button
+                      type="button"
+                      class="btn1 btn1-primary"
+                      style={{
+                        marginTop: "10px",
+                        padding: "5px",
+                        color: "white",
+                        fontSize: "15px"
+                      }}
+                    >
+                      CHOOSE 5 MEALS
+                    </button>
+                  </Link>
                 </Card.Body>
                 <Card.Footer>
                   <large className="text-muted">LUNCH-TO-GO</large>
@@ -64,18 +70,23 @@ class Selectmealplan extends Component {
                   <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                     Sales tax of 8.25% will be added
                   </Card.Text>
-                  <button
-                    type="button"
-                    class="btn1 btn1-primary"
-                    style={{
-                      marginTop: "10px",
-                      padding: "5px",
-                      color: "white",
-                      fontSize: "15px"
-                    }}
+                  <Link
+                    style={{ fontFamily: "Kalam", color: "white" }}
+                    to="/10-meals-subscription"
                   >
-                    CHOOSE 10 MEALS
-                  </button>
+                    <button
+                      type="button"
+                      class="btn1 btn1-primary"
+                      style={{
+                        marginTop: "10px",
+                        padding: "5px",
+                        color: "white",
+                        fontSize: "15px"
+                      }}
+                    >
+                      CHOOSE 10 MEALS
+                    </button>
+                  </Link>
                 </Card.Body>
                 <Card.Footer>
                   <large className="text-muted">ROOMIES & COUPLES</large>
@@ -97,18 +108,23 @@ class Selectmealplan extends Component {
                   <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                     Sales tax of 8.25% will be added
                   </Card.Text>
-                  <button
-                    type="button"
-                    class="btn1 btn1-primary"
-                    style={{
-                      marginTop: "10px",
-                      padding: "5px",
-                      color: "white",
-                      fontSize: "15px"
-                    }}
+                  <Link
+                    style={{ fontFamily: "Kalam", color: "white" }}
+                    to="/15-meals-subscription"
                   >
-                    CHOOSE 15 MEALS
-                  </button>
+                    <button
+                      type="button"
+                      class="btn1 btn1-primary"
+                      style={{
+                        marginTop: "10px",
+                        padding: "5px",
+                        color: "white",
+                        fontSize: "15px"
+                      }}
+                    >
+                      CHOOSE 15 MEALS
+                    </button>
+                  </Link>
                 </Card.Body>
                 <Card.Footer>
                   <large className="text-muted">COUPLES & FAMILIES</large>
@@ -130,18 +146,23 @@ class Selectmealplan extends Component {
                   <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                     Sales tax of 8.25% will be added
                   </Card.Text>
-                  <button
-                    type="button"
-                    class="btn1 btn1-primary"
-                    style={{
-                      marginTop: "10px",
-                      padding: "5px",
-                      color: "white",
-                      fontSize: "15px"
-                    }}
+                  <Link
+                    style={{ fontFamily: "Kalam", color: "white" }}
+                    to="/5-meals-subscription"
                   >
-                    CHOOSE 20 MEALS
-                  </button>
+                    <button
+                      type="button"
+                      class="btn1 btn1-primary"
+                      style={{
+                        marginTop: "10px",
+                        padding: "5px",
+                        color: "white",
+                        fontSize: "15px"
+                      }}
+                    >
+                      CHOOSE 20 MEALS
+                    </button>
+                  </Link>
                 </Card.Body>
                 <Card.Footer>
                   <large className="text-muted">FAMILIES & BIG EATERS</large>
