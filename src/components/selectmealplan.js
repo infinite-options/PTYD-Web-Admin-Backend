@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
-import IMG2 from "../img/img2.jpg";
+import IMG1 from "../img/img1.jpg";
 import { Link } from "react-router-dom";
 
 class Selectmealplan extends Component {
@@ -17,7 +17,7 @@ class Selectmealplan extends Component {
             <br></br>
             <CardDeck>
               <Card>
-                <Card.Img variant="top" src={IMG2} />
+                <Card.Img variant="top" src={IMG1} />
                 <Card.Body>
                   <Card.Title>
                     <b>5 MEALS WEEKLY</b>
@@ -55,7 +55,7 @@ class Selectmealplan extends Component {
                 </Card.Footer>
               </Card>
               <Card>
-                <Card.Img variant="top" src={IMG2} />
+                <Card.Img variant="top" src={IMG1} />
                 <Card.Body>
                   <Card.Title>
                     <b>10 MEALS WEEKLY</b>
@@ -93,7 +93,7 @@ class Selectmealplan extends Component {
                 </Card.Footer>
               </Card>
               <Card>
-                <Card.Img variant="top" src={IMG2} />
+                <Card.Img variant="top" src={IMG1} />
                 <Card.Body>
                   <Card.Title>
                     <b>15 MEALS WEEKLY</b>
@@ -131,7 +131,7 @@ class Selectmealplan extends Component {
                 </Card.Footer>
               </Card>
               <Card>
-                <Card.Img variant="top" src={IMG2} />
+                <Card.Img variant="top" src={IMG1} />
                 <Card.Body>
                   <Card.Title>
                     <b>20 MEALS WEEKLY</b>

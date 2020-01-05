@@ -99,3 +99,7 @@ hr.two {
   width: 30%;
   background-color: black;
 }
+
+hr.three {
+  width: 40%;
+}
