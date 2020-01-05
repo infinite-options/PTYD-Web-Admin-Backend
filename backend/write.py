@@ -18,7 +18,7 @@ def jsonifyInput():
     # Initialize JSON to return
     inputJson = {}
 #   keys = ('Subscriptions', 'Orders', 'Meals')
-
+    sheets_name = "122319 Test Data"
     try:
         # creds: create a client to interact with the Google Drive API
 #       scope = ['https://spreadsheets.google.com/feeds']
@@ -32,16 +32,16 @@ def jsonifyInput():
 
     try:
         # Find a workbook by name and open the sheets
-        subscriptions = client.open("Database Example").get_worksheet(1)
-        orders = client.open("Database Example").get_worksheet(2)
-        meals = client.open("Database Example").get_worksheet(3)
-        paymentplans = client.open("Database Example").get_worksheet(4)
-        mealplans = client.open("Database Example").get_worksheet(5)
-        ingredients = client.open("Database Example").get_worksheet(6)
-        paymentadjustments = client.open("Database Example").get_worksheet(7)
+        subscriptions = client.open(sheets_name).get_worksheet(0)
+        orders = client.open(sheets_name).get_worksheet(1)
+#       meals = client.open(sheets_name).get_worksheet(2)
+#       paymentplans = client.open(sheets_name).get_worksheet(4)
+#       mealplans = client.open(sheets_name).get_worksheet(5)
+#       ingredients = client.open(sheets_name).get_worksheet(6)
+#       paymentadjustments = client.open(sheets_name).get_worksheet(7)
 #       for keyIndex, keyValue in enumerate(keys):
 #           print(keyIndex)
-#           records = client.open("Database Example").get_worksheet(keyIndex)
+#           records = client.open(sheets_name).get_worksheet(keyIndex)
 #           inputJson[keyValue] = records
 #       print("Retrieved data")
 #       return inputJson
@@ -57,11 +57,11 @@ def jsonifyInput():
         inputJson['Subscriptions'] = subscriptions.get_all_records()
         inputJson['Orders'] = consolidateMealColumns(orders)
 #       inputJson['Meals'] = formatMeals(meals)
-        inputJson['Meals'] = meals.get_all_records()
-        inputJson['PaymentPlans'] = paymentplans.get_all_records()
-        inputJson['MealPlans'] = mealplans.get_all_records()
-        inputJson['Ingredients'] = ingredients.get_all_records()
-        inputJson['PaymentAdjustments'] = paymentadjustments.get_all_records()
+#       inputJson['Meals'] = meals.get_all_records()
+#       inputJson['PaymentPlans'] = paymentplans.get_all_records()
+#       inputJson['MealPlans'] = mealplans.get_all_records()
+#       inputJson['Ingredients'] = ingredients.get_all_records()
+#       inputJson['PaymentAdjustments'] = paymentadjustments.get_all_records()
         print("Formatted input data into Python dict.")
         return inputJson
     except:
