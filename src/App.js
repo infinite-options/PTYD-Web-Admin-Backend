@@ -42,10 +42,10 @@ class App extends Component {
               </div>
               
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" href="/">SUBSCRIBE</Nav.Link>
+                <Nav.Link Style="color:black" href="/selectmealplan">SUBSCRIBE</Nav.Link>
               </Nav.Item>
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" eventKey="link-1">MENU</Nav.Link>
+                <Nav.Link Style="color:black" href="/menuthisweek">MENU</Nav.Link>
               </Nav.Item>
               <Nav.Item Style="margin-top:90px">
                 <Nav.Link Style="color:black" eventKey="link-2">FIND US</Nav.Link>
@@ -144,7 +144,7 @@ class App extends Component {
               <Nav defaultActiveKey="/">
                 <Nav.Link Style="color:green" disabled>Join Our Mailing List</Nav.Link>
                 <p> </p>
-                <p Style="font-size:12px; padding-top:20px; padding-left:5;">& Never Miss an Update</p>
+                <p Style="font-size:12px; padding-top:25px; margin-left:-25px;">& Never Miss an Update</p>
                 <p> </p>
                 <p Style="font-size:12px; padding-left:15px;">Email Address:</p>
                 <Form Style="padding-left:10px;">
