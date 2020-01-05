@@ -39,7 +39,7 @@ class FifteenMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/5-meals-subscription"
+                    to="/checkout"
                   >
                     <button
                       type="button"
@@ -72,7 +72,7 @@ class FifteenMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/5-meals-subscription"
+                    to="/checkout"
                   >
                     <button
                       type="button"
@@ -105,7 +105,7 @@ class FifteenMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/5-meals-subscription"
+                    to="/checkout"
                   >
                     <button
                       type="button"
