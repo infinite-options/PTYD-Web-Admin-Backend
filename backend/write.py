@@ -76,7 +76,7 @@ def consolidateMealColumns(orders):
         for key, value in order.items():
             if key.startswith('5: '):
                 newKey = formatKey(key, 3)
-                newValue = replaceNullWithZero(value)
+                newValue = getMealQty(value)
                 rowToAppend[newKey] = newValue
 #               print("KEY:", key)
 #               print("VALUE:", "\'", value, "\'")
@@ -84,7 +84,7 @@ def consolidateMealColumns(orders):
 #               print("NEWVALUE (new):", "\'", newValue, "\'")
             elif any(substring in key for substring in ['10: ', '15: ', '20: ']):
                 newKey = formatKey(key, 4)
-                newValue = replaceNullWithZero(value)
+                newValue = getMealQty(value)
 #               print("KEY:", key)
 #               print("VALUE:", "\'", value, "\'")
 #               print("NEWKEY:", newKey)
@@ -99,6 +99,13 @@ def consolidateMealColumns(orders):
         newDict.append(rowToAppend)
 #       print("Final row:", rowToAppend)
     return newDict
+
+def getMealQty(value):
+    if value is '':
+        return 0
+    if 'charge_type = no_charge|quantity' in value:
+        return int(value[35:])
+    return value
 
 # Format meals dict
 def formatMeals(meals):
@@ -166,12 +173,18 @@ def connectToRDS(RDS_PW):
 # Return a list of SQL commands to run from a JSON dict
 def dictToSql(jsonDicts, tableName, tableInfo):
     query = []
+    query.append("DELETE FROM " + tableName + ";")
     try:
         print("Generating SQL commands for", tableName + "...")
+#       print("JSON:", jsonDicts)
         for jsonDict in jsonDicts:
             ins = "INSERT INTO " + tableName + " ("
             val = "VALUES ("
+#           print("Current ins:", ins)
+#           print("Current val:", val)
             for key, value in jsonDict.items():
+#               print("Key:", key)
+#               print("Value:", value)
                 if '/' in key:
                     continue
 #                   key = reformatDColumn(key)
@@ -182,6 +195,7 @@ def dictToSql(jsonDicts, tableName, tableInfo):
                     value = 'NULL'
                     valueType = 'null_value'
                 ins = appendSqlItem(ins, key, "column_name")
+#               print("valueType:", valueType)
                 val = appendSqlItem(val, value, valueType)
 #               print("Current ins:", ins)
 #               print("Current val:", val)
@@ -228,8 +242,9 @@ def appendSqlItem(cmd, item, data_type):
     if any(nonStringType in data_type for nonStringType in ['int', 'column_name', 'null_value']):
         item = str(item)
     else:
-        if data_type == 'datetime':
-            item = formatInputDate(str(item))
+        # Use the below two lines if Date_Submitted value format is Dec 9, 2019, 17:00:00
+#       if data_type == 'datetime':
+#           item = formatInputDate(str(item))
         item = "\'" + str(item) + "\'"
     newCmd = cmd + item
     return newCmd + ", "
