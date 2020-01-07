@@ -1,13 +1,12 @@
 const express = require('express');
-const app = express();
-const port = 3030;
+const port = 3000;
 var mysql = require('mysql');
 
 //  Connection to database
 const connection = mysql.createConnection({
     host:       'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com',
     user:       'admin',
-    password:   'super_secret_password',
+    password:   'prashant',
     database:   'pricing'
 });
 
@@ -19,9 +18,9 @@ app.get('/', function (req, res) {
     res.send("homepage")
 });
 
-app.get('/selectmealplan', function(req, res) {
+app.get('/api/selectmealplan', function(req, res) {
     connection.connect();
-    connection.query(, function (error, results, fields) {
+    connection.query("SELECT * FROM MealPlans", function (error, results, fields) {
         if (error) throw error;
         res.send(results)
     });
@@ -30,5 +29,5 @@ app.get('/selectmealplan', function(req, res) {
 
 //  Start the server
 app.listen(port, () => {
-    console.log("Visit http://localhost:${port} to access the frontend");
+    console.log(`Listening on port: ${port}`);
 });
