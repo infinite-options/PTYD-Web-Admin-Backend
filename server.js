@@ -13,14 +13,18 @@ const connection = mysql.createConnection({
 //  Initialize the app
 const app = express();
 
-//  Routing
-app.get('/', function (req, res) {
-    res.send("homepage")
-});
-
 app.get('/api/selectmealplan', function(req, res) {
     connection.connect();
     connection.query("SELECT * FROM MealPlans", function (error, results, fields) {
+        if (error) throw error;
+        res.send(results)
+    });
+    connection.end();
+});
+
+app.get('/api/selectpaymentplan', function(req, res) {
+    connection.connect();
+    connection.query("SELECT * FROM PaymentPlans", function (error, results, fields) {
         if (error) throw error;
         res.send(results)
     });
