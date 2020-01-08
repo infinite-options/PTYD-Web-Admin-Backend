@@ -1,0 +1,5 @@
+flask
+flask-restful
+flask_cors
+pymysql
+werkzeug.exceptions
