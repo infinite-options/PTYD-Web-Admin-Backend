@@ -3,18 +3,20 @@ import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
 import IMG1 from "../img/img1.jpg";
 import { Link } from "react-router-dom";
 
+let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
+
 class Selectmealplan extends Component {
-  let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
   constructor(props) {
     super(props);
-    this.state = { plans: [] };
+    this.state = { mealPlans: [] };
   }
 
   // Call API from AWS S3
   async componentDidMount() {
     const res = await fetch(`${DEV_URL}/api/v1/plans`);
     const plans = await res.json();
-    this.setState( {plans} );
+    const mealPlans = plans.result.MealPlans;
+    this.setState( {mealPlans} );
   }
 
   render() {
@@ -23,6 +25,15 @@ class Selectmealplan extends Component {
         <div class="container">
           <center>
             <h1>SELECT A MEAL PLAN</h1>
+
+            <ul>
+              {this.state.mealPlans.map(mealPlan => <li>
+                <h3>{mealPlan.MealsPerWeek}</h3>
+                <p>{mealPlan.PlanSummary}</p>
+                <p>{mealPlan.PlanFooter}</p>
+              </li>)}
+            </ul>
+
             <hr class="two" />
             <h4>
               LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
