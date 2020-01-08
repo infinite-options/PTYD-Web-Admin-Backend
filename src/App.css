@@ -94,6 +94,11 @@ hr.one {
   margin: -50px auto 10px;
 }
 
+hr.three {
+  width: 40%;
+  background-color: black;
+}
+
 /* select meal page */
 hr.two {
   width: 30%;

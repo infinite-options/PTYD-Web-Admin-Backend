@@ -6,7 +6,8 @@ import IMG4 from "../img/img4.jpg";
 import IMG5 from "../img/img5.jpg";
 import IMG6 from "../img/img6.jpg";
 import IMG7 from "../img/img7.jpg";
-import { Row, Col, Container } from "react-bootstrap";
+import IMG8 from "../img/img8.jpeg";
+import { Row, Col, Container, Card, CardColumns } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 
 class Landing extends Component {
@@ -186,35 +187,30 @@ class Landing extends Component {
               </div>
             </div>
             <br></br>
-            <div class="container" style={{ color: "white" }}>
+            <div
+              class="container"
+              style={{ backgroundColor: "black", color: "white" }}
+            >
               <center>
-                <img
-                  class="img-fluid"
-                  style={{ width: "60%", height: "60%" }}
-                  src={IMG3}
-                  alt=""
-                />
-                <div
-                  class="centered"
-                  style={{ size: "300px", lineHeight: "55px" }}
-                >
-                  LOCAL<br></br>ORGANIC<br></br>RESPONSIBLE
-                </div>
-
-                <div
-                  class="centered"
-                  style={{
-                    marginBottom: "200px",
-                    fontSize: "21px",
-                    textShadow: "2px 2px 4px #FFEFB0",
-                    lineHeight: "35px"
-                  }}
-                >
-                  Farm-to-table, prepared meals <br></br>delivered to your
-                  doorstep.<br></br>
-                </div>
-
-                <div class="centered">Already a Member? Sign in</div>
+                <br></br>
+                <h2>DELIVERED WEEKLY</h2>
+                <h3>STRAIGHT TO YOUR DOOR</h3>
+                <hr class="three" />
+                <h5>&bull; READY-TO-EAT PLANT BASED MEALS</h5>
+                <h5>&bull; ORGANIC INGREDIENTS</h5>
+                <h5>&bull; LOCALLY SOURCED</h5>
+                <h5>&bull; REUSABLE ECO-FRIENDLY MASON JARS</h5>
+                <hr class="three" />
+                <h6>All meals are 100% gluten, meat, and dairy free.</h6>
+                <h6>
+                  <i>Pause anytime, no commitment.</i>
+                </h6>
+                <br></br>
+                <h5>PLANS STARTING AT</h5>
+                <h4>
+                  <large>$59</large> / WEEK
+                </h4>
+                <br></br>
               </center>
             </div>
             <br></br>
@@ -377,6 +373,125 @@ class Landing extends Component {
             <br></br>
             <div class="container">
               <h3>What Prepsters love about us...</h3>
+              <CardColumns>
+                <Card className="p-3">
+                  <p>
+                    Healthy, delicious, and delivered to your door at an
+                    affordable price. Hard to beat. As a bonus, the jars are
+                    eco-friendly. I can't wait to see PTYD expand.
+                  </p>
+                  <br />
+                  <br />
+                  <Grid>
+                    <Cell col={3}>
+                      <img
+                        style={{
+                          borderRadius: "50%",
+                          width: "60px",
+                          height: "60px",
+                          marginTop: "10px"
+                        }}
+                        src={IMG8}
+                        alt="Avatar"
+                      ></img>
+                    </Cell>
+                    <Cell col={7}>
+                      <h5>
+                        Prashant
+                        <br />
+                        UX Designer
+                      </h5>
+                    </Cell>
+                  </Grid>
+                </Card>
+                <Card className="p-3">
+                  <p>
+                    Best meal prep service we've ever used. The food is fresh,
+                    organic, dairy and meat free. When you love food as much as
+                    my husband and I do, you appreciate having consistent meals
+                    throughout the week that are the definition of clean.
+                  </p>
+                  <br />
+                  <Grid>
+                    <Cell col={3}>
+                      <img
+                        style={{
+                          borderRadius: "50%",
+                          width: "60px",
+                          height: "60px",
+                          marginTop: "10px"
+                        }}
+                        src={IMG8}
+                        alt="Avatar"
+                      ></img>
+                    </Cell>
+                    <Cell col={7}>
+                      <h5>
+                        Prashant
+                        <br />
+                        Tech
+                      </h5>
+                    </Cell>
+                  </Grid>
+                </Card>
+                <Card className="p-3">
+                  <p>
+                    These meals are delicious, healthy, and make life SO easy
+                    and enjoyable! The team is great with customer service if I
+                    ever have any questions. I don't think I've ever had a meal
+                    I didn't like!
+                  </p>
+                  <br />
+                  <br />
+                  <Grid>
+                    <Cell col={3}>
+                      <img
+                        style={{
+                          borderRadius: "50%",
+                          width: "60px",
+                          height: "60px",
+                          marginTop: "10px"
+                        }}
+                        src={IMG8}
+                        alt="Avatar"
+                      ></img>
+                    </Cell>
+                    <Cell col={7}>
+                      <h5>
+                        Prashant
+                        <br />
+                        Fitness Designer
+                      </h5>
+                    </Cell>
+                  </Grid>
+                </Card>
+              </CardColumns>
+              <br />
+              <button
+                type="button"
+                class="btn1 btn1-primary"
+                style={{
+                  marginTop: "10px",
+                  color: "white",
+                  size: "10px",
+                  fontSize: "20px"
+                }}
+              >
+                TRY US TODAY
+              </button>
+              <br />
+              <Grid>
+                <center>
+                  <Cell col={6}>
+                    <h4 style={{ lineHeight: "50px" }}>
+                      "PTYD is so good and we love it so much, it feels like
+                      part of our family! It's so thrilling to fill our fridge
+                      every week with tasty surprises!"
+                    </h4>
+                  </Cell>
+                </center>
+              </Grid>
+              <br />
             </div>
           </h3>
         </section>
