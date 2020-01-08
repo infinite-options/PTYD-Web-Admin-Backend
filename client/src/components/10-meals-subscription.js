@@ -1,40 +1,45 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
+import { Grid, Cell } from "react-mdl";
 import IMG1 from "../img/img1.jpg";
 import { Link } from "react-router-dom";
 
-class Selectmealplan extends Component {
+class TenMealSubscription extends Component {
   render() {
     return (
       <section class="content-section">
         <div class="container">
           <center>
-            <h1>SELECT A MEAL PLAN</h1>
+            <h1>10 MEALS PAYMENT OPTIONS</h1>
             <hr class="two" />
             <h4>
               LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
             </h4>
+            <br></br>
+            <hr class="three" />
+            <a href="/5-meals-subscription">5 MEALS</a>
+            <a href="/15-meals-subscription">15 MEALS </a>
+            <a href="/20-meals-subscription">20 MEALS </a>
+            <hr class="three" />
             <br></br>
             <CardDeck>
               <Card>
                 <Card.Img variant="top" src={IMG1} />
                 <Card.Body>
                   <Card.Title>
-                    <b>5 MEALS WEEKLY</b>
+                    <b>WEEK-TO-WEEK</b>
                   </Card.Title>
                   <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                    from $10.75 per meal
+                    $11.50 per meal
                   </Card.Text>
-                  <Card.Text style={{ fontSize: "13px" }}>
-                    Perfect meal-prep rescue for your work week.
-                  </Card.Text>
-                  <Card.Title>STARTING AT $53⁷⁵ /week</Card.Title>
+                  <br></br>
+                  <Card.Title>$114⁹⁹ /week</Card.Title>
                   <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                     Sales tax of 8.25% will be added
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/5-meals-subscription"
+                    to="/checkout"
                   >
                     <button
                       type="button"
@@ -46,33 +51,28 @@ class Selectmealplan extends Component {
                         fontSize: "15px"
                       }}
                     >
-                      CHOOSE 5 MEALS
+                      CHECKOUT
                     </button>
                   </Link>
                 </Card.Body>
-                <Card.Footer>
-                  <large className="text-muted">LUNCH-TO-GO</large>
-                </Card.Footer>
               </Card>
               <Card>
                 <Card.Img variant="top" src={IMG1} />
                 <Card.Body>
                   <Card.Title>
-                    <b>10 MEALS WEEKLY</b>
+                    <b>2 WEEK PRE-PAY</b>
                   </Card.Title>
                   <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                    from $10.25 per meal
+                    $10.25 per meal
                   </Card.Text>
-                  <Card.Text style={{ fontSize: "13px" }}>
-                    For people who need a little help when it's crunch time.
-                  </Card.Text>
-                  <Card.Title>STARTING AT $102⁵⁰ /week</Card.Title>
+                  <br></br>
+                  <Card.Title>$102⁵⁰ /week</Card.Title>
                   <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                     Sales tax of 8.25% will be added
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/10-meals-subscription"
+                    to="/checkout"
                   >
                     <button
                       type="button"
@@ -84,33 +84,28 @@ class Selectmealplan extends Component {
                         fontSize: "15px"
                       }}
                     >
-                      CHOOSE 10 MEALS
+                      CHECKOUT
                     </button>
                   </Link>
                 </Card.Body>
-                <Card.Footer>
-                  <large className="text-muted">ROOMIES & COUPLES</large>
-                </Card.Footer>
               </Card>
               <Card>
                 <Card.Img variant="top" src={IMG1} />
                 <Card.Body>
                   <Card.Title>
-                    <b>15 MEALS WEEKLY</b>
+                    <b>4 WEEK PRE-PAY</b>
                   </Card.Title>
                   <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                    from $9.33 per meal
+                    $9.75 per meal
                   </Card.Text>
-                  <Card.Text style={{ fontSize: "13px" }}>
-                    Perfect meal-prep rescue for your work week.
-                  </Card.Text>
-                  <Card.Title>STARTING AT $139⁹⁹ /week</Card.Title>
+                  <br></br>
+                  <Card.Title>$97⁵⁰ /week</Card.Title>
                   <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                     Sales tax of 8.25% will be added
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/15-meals-subscription"
+                    to="/checkout"
                   >
                     <button
                       type="button"
@@ -122,51 +117,10 @@ class Selectmealplan extends Component {
                         fontSize: "15px"
                       }}
                     >
-                      CHOOSE 15 MEALS
+                      CHECKOUT
                     </button>
                   </Link>
                 </Card.Body>
-                <Card.Footer>
-                  <large className="text-muted">COUPLES & FAMILIES</large>
-                </Card.Footer>
-              </Card>
-              <Card>
-                <Card.Img variant="top" src={IMG1} />
-                <Card.Body>
-                  <Card.Title>
-                    <b>20 MEALS WEEKLY</b>
-                  </Card.Title>
-                  <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                    from $8.95 per meal
-                  </Card.Text>
-                  <Card.Text style={{ fontSize: "13px" }}>
-                    Perfect for families who need healthy options on the fly.
-                  </Card.Text>
-                  <Card.Title>STARTING AT $179 /week</Card.Title>
-                  <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
-                    Sales tax of 8.25% will be added
-                  </Card.Text>
-                  <Link
-                    style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/5-meals-subscription"
-                  >
-                    <button
-                      type="button"
-                      class="btn1 btn1-primary"
-                      style={{
-                        marginTop: "10px",
-                        padding: "5px",
-                        color: "white",
-                        fontSize: "15px"
-                      }}
-                    >
-                      CHOOSE 20 MEALS
-                    </button>
-                  </Link>
-                </Card.Body>
-                <Card.Footer>
-                  <large className="text-muted">FAMILIES & BIG EATERS</large>
-                </Card.Footer>
               </Card>
             </CardDeck>
             <br></br>
@@ -214,6 +168,7 @@ class Selectmealplan extends Component {
                   your plan at any time with no commitment.
                 </Col>
               </Row>
+              <br></br>
             </Container>
           </center>
         </div>
@@ -222,4 +177,4 @@ class Selectmealplan extends Component {
   }
 }
 
-export default Selectmealplan;
+export default TenMealSubscription;
