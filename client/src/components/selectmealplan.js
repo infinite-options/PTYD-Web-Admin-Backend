@@ -4,6 +4,19 @@ import IMG1 from "../img/img1.jpg";
 import { Link } from "react-router-dom";
 
 class Selectmealplan extends Component {
+  let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
+  constructor(props) {
+    super(props);
+    this.state = { plans: [] };
+  }
+
+  // Call API from AWS S3
+  async componentDidMount() {
+    const res = await fetch(`${DEV_URL}/api/v1/plans`);
+    const plans = await res.json();
+    this.setState( {plans} );
+  }
+
   render() {
     return (
       <section class="content-section">
