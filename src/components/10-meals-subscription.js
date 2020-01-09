@@ -17,9 +17,9 @@ class TenMealSubscription extends Component {
             </h4>
             <br></br>
             <hr class="three" />
-            <a href="/5-meals-subscription">5 MEALS</a>
-            <a href="/15-meals-subscription">15 MEALS </a>
-            <a href="/20-meals-subscription">20 MEALS </a>
+            <a Style="padding: 15px" href="/5-meals-subscription">5 MEALS</a>
+            <a Style="padding: 15px" href="/15-meals-subscription">15 MEALS </a>
+            <a Style="padding: 15px" href="/20-meals-subscription">20 MEALS </a>
             <hr class="three" />
             <br></br>
             <CardDeck>
@@ -39,7 +39,13 @@ class TenMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+                    to={{
+                      pathname: '/checkout',
+                      item: {
+                        name: '10-Meals: Week-to-Week Subscription - $114.99 /week',
+                        total: 114.99
+                      }
+                    }} 
                   >
                     <button
                       type="button"
@@ -72,7 +78,13 @@ class TenMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+                    to={{
+                      pathname: '/checkout',
+                      item: {
+                        name: '10-Meals: 2-Week Prepaid Subscription - $102.50',
+                        total: 205.00
+                      }
+                    }} 
                   >
                     <button
                       type="button"
@@ -105,7 +117,13 @@ class TenMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+                    to={{
+                      pathname: '/checkout',
+                      item: {
+                        name: '10-Meals: 4-Week Prepaid Subscription - $97.50',
+                        total: 390.00
+                      }
+                    }} 
                   >
                     <button
                       type="button"

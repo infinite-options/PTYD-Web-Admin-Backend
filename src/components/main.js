@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import LandingPage from "./landingpage";
 import SelectMealPlan from "./selectmealplan";
 import MenuThisWeek from "./menuthisweek";
+import MenuNextWeek from "./menunextweek";
 import Checkout from "./checkout";
 import FiveMealSubscription from "./5-meals-subscription";
 import TenMealSubscription from "./10-meals-subscription";
@@ -15,6 +16,7 @@ const Main = () => (
     <Route exact path="/" component={LandingPage} />
     <Route exact path="/selectmealplan" component={SelectMealPlan} />
     <Route exact path="/menuthisweek" component={MenuThisWeek} />
+    <Route exact path="/menunextweek" component={MenuNextWeek} />
     <Route exact path="/checkout" component={Checkout} />
     <Route
       exact

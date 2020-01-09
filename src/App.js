@@ -32,7 +32,6 @@ class App extends Component {
               className="navbar fixed-top justify-content-center"
               Style="min-height:145px; background-color:white;"
               activeKey="/home"
-              onSelect={selectedKey => alert(`selected ${selectedKey}`)}
             >
               <div Style="margin-top:25px">
                 <a class="navbar-brand" href="/">
@@ -239,7 +238,7 @@ class App extends Component {
                     Join Our Mailing List
                   </Nav.Link>
                   <p> </p>
-                  <p Style="font-size:12px; padding-top:20px; padding-left:5;">
+                  <p Style="font-size:12px; padding-top:25px; margin-left:-25px;">
                     & Never Miss an Update
                   </p>
                   <p> </p>

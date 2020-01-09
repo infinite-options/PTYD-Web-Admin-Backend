@@ -10,16 +10,16 @@ class TwentyMealSubscription extends Component {
       <section class="content-section">
         <div class="container">
           <center>
-            <h1>15 MEALS PAYMENT OPTIONS</h1>
+            <h1>20 MEALS PAYMENT OPTIONS</h1>
             <hr class="two" />
             <h4>
               LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
             </h4>
             <br></br>
             <hr class="three" />
-            <a href="/5-meals-subscription">5 MEALS</a>
-            <a href="/10-meals-subscription">10 MEALS </a>
-            <a href="/15-meals-subscription">15 MEALS </a>
+            <a Style="padding: 15px" href="/5-meals-subscription">5 MEALS</a>
+            <a Style="padding: 15px" href="/10-meals-subscription">10 MEALS </a>
+            <a Style="padding: 15px" href="/15-meals-subscription">15 MEALS </a>
             <hr class="three" />
             <br></br>
             <CardDeck>
@@ -39,7 +39,13 @@ class TwentyMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+                    to={{
+                      pathname: '/checkout',
+                      item: {
+                        name: '20-Meals: Week-to-Week Subscription - $209.99 /week',
+                        total: 209.99
+                      }
+                    }} 
                   >
                     <button
                       type="button"
@@ -72,7 +78,13 @@ class TwentyMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+                    to={{
+                      pathname: '/checkout',
+                      item: {
+                        name: '20-Meals: 2-Week Prepaid Subscription - $187.50 /week',
+                        total: 375.00
+                      }
+                    }} 
                   >
                     <button
                       type="button"
@@ -105,7 +117,13 @@ class TwentyMealSubscription extends Component {
                   </Card.Text>
                   <Link
                     style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+                    to={{
+                      pathname: '/checkout',
+                      item: {
+                        name: '20-Meals: Week-to-Week Subscription - $178.99 /week',
+                        total: 715.96
+                      }
+                    }} 
                   >
                     <button
                       type="button"

@@ -6,13 +6,13 @@ class Selectmealplan extends Component {
     return (
         <main Style="margin-top:-80px;">
           <div class="container text-center">
-              <h3>MENU THIS WEEK</h3>
-              <h5 Style="margin-top:-10px;">December 29th & 30th</h5>
+              <h3>COMING NEXT WEEK</h3>
+              <h5 Style="margin-top:-10px;">January 5th & 6th</h5>
               <hr></hr>
               <div class="row justify-content-md-center" Style="margin-top:-10px; margin-bottom:-10px;">
                   <ul class="navbar-nav">
                       <li class="nav-item">
-                          <a class="nav-link" href="/menunextweek">NEXT WEEK</a>
+                          <a class="nav-link" href="/menuthisweek">THIS WEEK</a>
                       </li>
                   </ul>
               </div>
@@ -23,7 +23,7 @@ class Selectmealplan extends Component {
           </div>
           <div class="album py-5 bg-white">
               <div class="container" Style="margin-top:-40px;">
-                <div class="row justify-content-center">
+                <div class="row">
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
                         <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
