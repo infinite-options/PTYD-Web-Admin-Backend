@@ -178,17 +178,17 @@ def dictToSql(jsonDicts, tableName, tableInfo):
                 if SUPER_VERBOSE_MODE is True: print("Value:", value)
                 if '/' in key:
                     continue
-                    key = reformatDColumn(key)
+#                   key = reformatDColumn(key)
                 if SUPER_VERBOSE_MODE is True: print("Finished slash in key check")
                 if 'phone' in key.lower():
                     value = reformatPhoneNum(value)
                 if SUPER_VERBOSE_MODE is True: print("Finished phone in key check")
-                print(tableInfo)
                 valueType = tableInfo[key]
                 if SUPER_VERBOSE_MODE is True: print("valueType:", valueType)
                 if value == '':
                     value = 'NULL'
                     valueType = 'null_value'
+                value = escapeSingleQuotes(value)
                 ins = appendSqlItem(ins, key, "column_name")
                 val = appendSqlItem(val, value, valueType)
                 if SUPER_VERBOSE_MODE is True: print("Current ins:", ins)
@@ -201,6 +201,14 @@ def dictToSql(jsonDicts, tableName, tableInfo):
     except:
         print("Could not generate SQL commands.")
         raise Exception("Could not generate SQL commands.")
+
+# Add an escape character in front of each single quote
+def escapeSingleQuotes(value):
+    try:
+        return value.replace('\'','\\\'')
+    except:
+        if SUPER_VERBOSE_MODE is True: print("Can't add escape character for value:", value)
+        return value
 
 # Currently only handles country area code 1
 def reformatPhoneNum(num):

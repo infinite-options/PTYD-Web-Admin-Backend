@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
     ship_city VARCHAR(16) NOT NULL,
     ship_phone_number VARCHAR(10) NOT NULL,
     ship_state VARCHAR(2) NOT NULL,
-    ship_zip_code INT NOT NULL,
+    ship_zip_code VARCHAR(10) NOT NULL,
     ship_country VARCHAR(2) NOT NULL,
     verification_status VARCHAR(64),
     verification_message VARCHAR(64),
