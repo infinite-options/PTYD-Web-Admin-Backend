@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
+import IMG6 from "../img/img6.jpg";
 
 class Selectmealplan extends Component {
   render() {
@@ -26,7 +27,7 @@ class Selectmealplan extends Component {
                 <div class="row">
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                        <img class="card-img-top" width="100%" height="200px" src={IMG6} alt="meal pic"/>
                         <Card.Body>
                           <Card.Title>RAINBOW ZOODLES</Card.Title>
                           <Card.Text>
@@ -38,7 +39,7 @@ class Selectmealplan extends Component {
 
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                        <img class="card-img-top" width="100%" height="200px" src={IMG6} alt="meal pic"/>
                         <Card.Body>
                           <Card.Title>KALE POWER SALAD</Card.Title>
                           <Card.Text>
@@ -50,7 +51,7 @@ class Selectmealplan extends Component {
 
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                        <img class="card-img-top" width="100%" height="200px" src={IMG6} alt="meal pic"/>
                         <Card.Body>
                           <Card.Title>SMOKEY BLACKEYED PEA SOUP</Card.Title>
                           <Card.Text Style="font-size:10px">
@@ -62,7 +63,7 @@ class Selectmealplan extends Component {
 
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                      <img class="card-img-top" width="100%" height="200px" src={IMG6} alt="meal pic"/>
                         <Card.Body>
                           <Card.Title>MASHERS w/ TURKEY TEMPEH & SAUTEED RED CABBAGE</Card.Title>
                           <Card.Text Style="font-size:10px">
@@ -74,7 +75,7 @@ class Selectmealplan extends Component {
 
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                      <img class="card-img-top" width="100%" height="200px" src={IMG6} alt="meal pic"/>
                         <Card.Body>
                           <Card.Title>BUDDHA BOWL</Card.Title>
                           <Card.Text>
@@ -86,7 +87,7 @@ class Selectmealplan extends Component {
 
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                      <img class="card-img-top" width="100%" height="200px" src={IMG6} alt="meal pic"/>
                         <Card.Body>
                           <Card.Title>GINGERBREAD OATS</Card.Title>
                           <Card.Text>
