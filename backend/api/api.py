@@ -17,11 +17,14 @@ app.config['DEBUG'] = True
 
 api = Api(app)
 
+RDS_PW = "prashant"
+'''
 # RDS PASSWORD
 if len(sys.argv) == 2:
     RDS_PW = str(sys.argv[1])
 else:
     RDS_PW = ""
+'''
 
 # Connect to RDS
 def getRdsConn(RDS_PW):
@@ -58,24 +61,14 @@ class Plans(Resource):
             cur = db[1]
             items = {'MealPlans': [], 'PaymentPlans': []}
 
-            queries = [ """ SELECT MealsPerWeek, PlanSummary, PlanFooter
-                            FROM MealPlans;""",
-                        """ SELECT MealsPerWeek, WeekToWeek, WeekToWeekPrice, TwoWeekPrePay, TwoWeekPrice, FourWeekPrePay, FourWeekPrice
-                            FROM PaymentPlans;"""]
+            queries = [ """ SELECT MealsPerWeek, WeekToWeek, WeekToWeekPrice, TwoWeekPrePay, TwoWeekPrice, FourWeekPrePay, FourWeekPrice
+                            FROM PaymentPlans;""",
+                        """ SELECT m.MealsPerWeek, m.PlanSummary, m.PlanFooter, p.FourWeekPrice
+                            FROM MealPlans as m
+                            INNER JOIN PaymentPlans as p
+                            WHERE m.MealsPerWeek = p.MealsPerWeek;"""]
 
             query = runQuery(queries[0], cur)
-            print("MealPlans query ran successfully.")
-            for row in query:
-                rowDict = {}
-                rowDictKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter')
-
-                for element in enumerate(row):
-                    key = rowDictKeys[element[0]]
-                    value = element[1]
-                    rowDict[key] = value
-                items['MealPlans'].append(rowDict)
-
-            query = runQuery(queries[1], cur)
             print("PaymentPlans query ran successfully.")
             for row in query:
                 rowDict = {}
@@ -89,6 +82,25 @@ class Plans(Resource):
                         value = float(value)
                     rowDict[key] = value
                 items['PaymentPlans'].append(rowDict)
+
+            query = runQuery(queries[1], cur)
+            print("MealPlans query ran successfully.")
+            for row in query:
+                rowDict = {}
+                rowDictKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'LowestPrice')
+
+                for element in enumerate(row):
+                    key = rowDictKeys[element[0]]
+                    value = element[1]
+                    # Convert all decimal values in row to floats
+                    if 'Price' in key:
+                        value = float(value)
+                    rowDict[key] = value
+
+                url = '/' + str(rowDict['MealsPerWeek']) + '-meals-subscriptions'
+                rowDict['RouteTo'] = url
+
+                items['MealPlans'].append(rowDict)
 
             response['message'] = 'Request successful.'
             response['result'] = items
