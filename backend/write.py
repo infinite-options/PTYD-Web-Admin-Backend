@@ -7,11 +7,16 @@ import json
 import datetime
 
 # Store first command line argument as database password
-if len(sys.argv) == 2:
+if len(sys.argv) >= 2:
     RDS_PW = str(sys.argv[1])
 else:
     print("Usage: Enter password for MySQL server as first command line argument")
     sys.exit(1)
+
+# Enable to print more info to console log
+SUPER_VERBOSE_MODE = False
+if any(arg in ['-s', '--super-verbose'] for arg in sys.argv):
+    SUPER_VERBOSE_MODE = True
 
 # Retrieve data from Google Sheets and return it as a JSON object
 def jsonifyInput():
@@ -54,28 +59,28 @@ def consolidateMealColumns(orders):
                 newKey = key[3:]
                 newValue = getMealQty(value)
                 rowToAppend[newKey] = newValue
-#               print("KEY:", key)
-#               print("VALUE:", "\'", value, "\'")
-#               print("NEWKEY:", newKey)
-#               print("NEWVALUE (new):", "\'", newValue, "\'")
+                if SUPER_VERBOSE_MODE is True: print("KEY:", key)
+                if SUPER_VERBOSE_MODE is True: print("VALUE:", "\'", value, "\'")
+                if SUPER_VERBOSE_MODE is True: print("NEWKEY:", newKey)
+                if SUPER_VERBOSE_MODE is True: print("NEWVALUE (new):", "\'", newValue, "\'")
             elif any(substring in key for substring in ['10: ', '15: ', '20: ']):
 #               newKey = formatKey(key, 4)
                 newKey = key[4:]
                 newValue = getMealQty(value)
-#               print("KEY:", key)
-#               print("VALUE:", "\'", value, "\'")
-#               print("NEWKEY:", newKey)
-#               print("OLDVALUE:", "\'", rowToAppend[newKey], "\'")
+                if SUPER_VERBOSE_MODE is True: print("KEY:", key)
+                if SUPER_VERBOSE_MODE is True: print("VALUE:", "\'", value, "\'")
+                if SUPER_VERBOSE_MODE is True: print("NEWKEY:", newKey)
+                if SUPER_VERBOSE_MODE is True: print("OLDVALUE:", "\'", rowToAppend[newKey], "\'")
                 rowToAppend[newKey] += newValue
-#               print("VALUETOADD:", "\'", newValue, "\'")
-#               print("NEWVALUE:", "\'", rowToAppend[newKey], "\'")
+                if SUPER_VERBOSE_MODE is True: print("VALUETOADD:", "\'", newValue, "\'")
+                if SUPER_VERBOSE_MODE is True: print("NEWVALUE:", "\'", rowToAppend[newKey], "\'")
             else:
 #               newKey = formatKey(key, 0)
                 newKey = key
                 rowToAppend[newKey] = value
-#           print("Row currently:", rowToAppend)
+            if SUPER_VERBOSE_MODE is True: print("Row currently:", rowToAppend)
         newDict.append(rowToAppend)
-#       print("Final row:", rowToAppend)
+        if SUPER_VERBOSE_MODE is True: print("Final row:", rowToAppend)
     return newDict
 
 def getMealQty(value):
@@ -162,32 +167,32 @@ def dictToSql(jsonDicts, tableName, tableInfo):
     query.append("DELETE FROM " + tableName + ";")
     try:
         print("Generating SQL commands for", tableName + "...")
-#       print("JSON:", jsonDicts)
+        if SUPER_VERBOSE_MODE is True: print("JSON:", jsonDicts)
         for jsonDict in jsonDicts:
             ins = "INSERT INTO " + tableName + " ("
             val = "VALUES ("
-#           print("Current ins:", ins)
-#           print("Current val:", val)
+            if SUPER_VERBOSE_MODE is True: print("Current ins:", ins)
+            if SUPER_VERBOSE_MODE is True: print("Current val:", val)
             for key, value in jsonDict.items():
-#               print("Key:", key)
-#               print("Value:", value)
+                if SUPER_VERBOSE_MODE is True: print("Key:", key)
+                if SUPER_VERBOSE_MODE is True: print("Value:", value)
                 if '/' in key:
                     continue
-#                   key = reformatDColumn(key)
-#               print("Finished slash in key check")
+                    key = reformatDColumn(key)
+                if SUPER_VERBOSE_MODE is True: print("Finished slash in key check")
                 if 'phone' in key.lower():
                     value = reformatPhoneNum(value)
-#               print("Finished phone in key check")
-#               print(tableInfo)
+                if SUPER_VERBOSE_MODE is True: print("Finished phone in key check")
+                print(tableInfo)
                 valueType = tableInfo[key]
-#               print("valueType:", valueType)
+                if SUPER_VERBOSE_MODE is True: print("valueType:", valueType)
                 if value == '':
                     value = 'NULL'
                     valueType = 'null_value'
                 ins = appendSqlItem(ins, key, "column_name")
                 val = appendSqlItem(val, value, valueType)
-#               print("Current ins:", ins)
-#               print("Current val:", val)
+                if SUPER_VERBOSE_MODE is True: print("Current ins:", ins)
+                if SUPER_VERBOSE_MODE is True: print("Current val:", val)
             ins = completeSqlCmd(ins, ") ")
             val = completeSqlCmd(val, ");")
             query.append(ins + val)
@@ -199,21 +204,21 @@ def dictToSql(jsonDicts, tableName, tableInfo):
 
 # Currently only handles country area code 1
 def reformatPhoneNum(num):
-#   print("Reformatting phone number:", num)
+    if SUPER_VERBOSE_MODE is True: print("Reformatting phone number:", num)
     areaCode = '1'
     formatNum = str(num)
     symbolsToRemove = ['(',')',' ','-','+','.']
     for symbol in symbolsToRemove:
         if symbol in formatNum:
             formatNum = formatNum.replace(symbol,'')
-#           print("Current value:", formatNum)
+            if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
     if len(formatNum) is 11 and formatNum[0] == areaCode:
         formatNum = formatNum[1:]
-#       print("Current value:", formatNum)
+        if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
     if len(formatNum) is not 10:
         print("Cannot format phone number", num, "to 10-digit number.")
         raise Exception("Cannot remove non-digit symbols in phone number")
-#   print("Final value:", formatNum)
+    if SUPER_VERBOSE_MODE is True: print("Final value:", formatNum)
     return formatNum
 
 
@@ -235,7 +240,7 @@ def appendSqlItem(cmd, item, data_type):
             item = formatInputDate(str(item))
         item = "\'" + str(item) + "\'"
     newCmd = cmd + item
-#   print("appendSqlItem():", newCmd)
+    if SUPER_VERBOSE_MODE is True: print("appendSqlItem():", newCmd)
     return newCmd + ", "
 
 # Close an SQL command
