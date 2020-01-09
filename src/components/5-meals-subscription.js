@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
-import { CardTitle, CardText, CardActions, Button } from "react-mdl";
+import { Grid, Cell } from "react-mdl";
 import IMG1 from "../img/img1.jpg";
 import IMG9 from "../img/img9.webp";
 import { Link } from "react-router-dom";
@@ -18,12 +18,19 @@ class FiveMealSubscription extends Component {
             </h4>
             <br></br>
             <hr class="three" />
-            <a href="/10-meals-subscription">10 MEALS</a>
-            <a href="/15-meals-subscription">15 MEALS </a>
-            <a href="/20-meals-subscription">20 MEALS </a>
+            <a href="/10-meals-subscription" style={{ color: "black" }}>
+              10 MEALS
+            </a>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/15-meals-subscription" style={{ color: "black" }}>
+              15 MEALS{" "}
+            </a>{" "}
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/20-meals-subscription" style={{ color: "black" }}>
+              20 MEALS{" "}
+            </a>
             <hr class="three" />
             <br></br>
-
             <CardDeck style={{ marginLeft: "250px" }}>
               <Card
                 style={{
@@ -64,7 +71,7 @@ class FiveMealSubscription extends Component {
                     >
                       <button
                         type="button"
-                        class="btn1 btn1-primary"
+                        class="btn2 btn2-primary"
                         style={{
                           marginTop: "10px",
                           paddingLeft: "30px",
@@ -133,7 +140,7 @@ class FiveMealSubscription extends Component {
                     >
                       <button
                         type="button"
-                        class="btn1 btn1-primary"
+                        class="btn2 btn2-primary"
                         style={{
                           marginTop: "10px",
                           paddingLeft: "30px",
@@ -164,12 +171,34 @@ class FiveMealSubscription extends Component {
             <br></br>
             <br></br>
             <h3 style={{ color: "#196F3D" }}>Our Customers Say</h3>
-            <br></br>
             <Container>
-              <Row style={{ fontSize: "15px", color: "#196F3D" }}>
-                <Col>CHOOSE YOUR PLAN</Col>
-                <Col>WEEKLY DELIVERY</Col>
-                <Col>NO COMMITMENT</Col>
+              <Row style={{ fontSize: "20px" }}>
+                <Col>
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                </Col>
+                <Col>
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                </Col>
+                <Col>
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                  <span class="fa fa-star checked" />
+                </Col>
+              </Row>
+              <Row style={{ fontSize: "15px" }}>
+                <Col>Convenience and goodness</Col>
+                <Col>PTYD feels like family!</Col>
+                <Col>They make life SO easy!</Col>
               </Row>
               <br></br>
               <Row style={{ fontSize: "15px", color: "#196F3D" }}>
@@ -190,21 +219,45 @@ class FiveMealSubscription extends Component {
                   lineHeight: "25px"
                 }}
               >
-                <Col>
-                  Order 5, 10, or 20 meals each week. Customize your order from
-                  6 new recipes every week.
-                </Col>
-                <Col>
-                  We deliver in Austin, Texas to your home or office. Delivery
-                  times are Sunday 6pm to 9pm and Monday 9am to 1pm.{" "}
-                </Col>
-                <Col>
-                  Prep to Your Door is flexible. You can modify, skip, or cancel
-                  your plan at any time with no commitment.
-                </Col>
+                <Grid>
+                  <Col>
+                    <Cell col={10}>
+                      Besides the convenience and goodness going inside our
+                      bods, PTYD is also the friendliest most generous team that
+                      is always quick to respond.
+                      <br />- Austin
+                    </Cell>
+                  </Col>
+                  <Col>
+                    <Cell col={10}>
+                      Whether I split a soup between our two kids, feed my
+                      husband after his workout, or snack on a salad while the
+                      kids nap, it's an outstanding addition to our fridge!
+                      <br />- Christy
+                    </Cell>
+                  </Col>
+                  <Col>
+                    <Cell col={10}>
+                      I love how the food is as locally sourced as possible and
+                      containers are not going to waste. I don't think I've ever
+                      had a meal I didn't like!
+                      <br />- Courtney
+                    </Cell>
+                  </Col>
+                </Grid>
               </Row>
               <br></br>
             </Container>
+            <br />
+            <br />
+            <div style={{ backgroundColor: "black" }}>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+            </div>
+            <br />
           </center>
         </div>
       </section>
