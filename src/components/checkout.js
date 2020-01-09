@@ -20,8 +20,8 @@ class Checkout extends Component {
               <p>{this.props.location.item.name}</p>
             </div>
             <hr/>
-            <h5>Estimated Shipping - $9.99</h5>
-            <h5>Estimated Tax - ${this.props.location.item.total * 0.075}</h5>
+            <p>Estimated Shipping - $9.99</p>
+            <p>Estimated Tax - ${this.props.location.item.total * 0.075}</p>
             <hr/>
             <h3>Total - ${(this.props.location.item.total * 1.075) + 9.99}</h3>
             <Form>
