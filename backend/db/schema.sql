@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS Ingredients;
 
 DROP TABLE IF EXISTS Meals;
 CREATE TABLE IF NOT EXISTS Meals (
-    `Meal ID` VARCHAR(16) NOT NULL,
+    Meal_ID VARCHAR(16) NOT NULL,
     Meals VARCHAR(20) NOT NULL,
     Actual_Meal VARCHAR(50) NOT NULL,
     Calories INT NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Meals (
     Fiber DECIMAL(6,2) NOT NULL,
     Fat DECIMAL(6,2) NOT NULL,
     Sat DECIMAL(6,2) NOT NULL,
-    PRIMARY KEY (`Meal ID`)
+    PRIMARY KEY (Meal_ID)
 );
 
 DROP TABLE IF EXISTS Subscriptions;
@@ -65,30 +65,30 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
     product_1_name VARCHAR(18),
     product_1_sku VARCHAR(14),
     product_1_Flavor VARCHAR(32),
-    `product_0_FLAVOR 2` VARCHAR(32),
-    `product_0_FLAVOR 1` VARCHAR(32)
+    product_0_FLAVOR_2 VARCHAR(32),
+    product_0_FLAVOR_1 VARCHAR(32)
 );
 
 DROP TABLE IF EXISTS Orders;
 CREATE TABLE IF NOT EXISTS Orders (
-    `Date Submitted` DATETIME NOT NULL,
-    `Last Name` VARCHAR(32),
-    `First Name` VARCHAR(32),
+    Date_Submitted DATETIME NOT NULL,
+    Last_Name VARCHAR(32),
+    First_Name VARCHAR(32),
     Email VARCHAR(64),
-    `Delivery Time` VARCHAR(176),
-    `Phone Number` VARCHAR(10),
-    `Meal Plan` VARCHAR(8),
-    `WKLY SPCL 1` INT,
-    `WKLY SPCL 2` INT,
-    `WKLY SPCL 3` INT,
-    `SEAS FAVE 1` INT,
-    `SEAS FAVE 2` INT,
-    `SEAS FAVE 3` INT,
-    `THE ORIGINAL` INT,
-    `ALMOND BUTTER` INT,
-    `THE ENERGIZER` INT,
-    `SEASONAL SMOOTHIE` INT,
-    `Pick Meals` VARCHAR(41)
+    Delivery_Time VARCHAR(176),
+    Phone_Number VARCHAR(10),
+    Meal_Plan VARCHAR(8),
+    WKLY_SPCL_1 INT,
+    WKLY_SPCL_2 INT,
+    WKLY_SPCL_3 INT,
+    SEAS_FAVE_1 INT,
+    SEAS_FAVE_2 INT,
+    SEAS_FAVE_3 INT,
+    THE_ORIGINAL INT,
+    ALMOND_BUTTER INT,
+    THE_ENERGIZER INT,
+    SEASONAL_SMOOTHIE INT,
+    Pick_Meals VARCHAR(41)
 );
 
 --  DROP TABLE IF EXISTS MealPlans;
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS Ingredients (
     Meal VARCHAR(50) NOT NULL,
     Qty INT NOT NULL,
     Unit VARCHAR(32) NOT NULL,
-    FOREIGN KEY (Meal) REFERENCES Meals(`Meal ID`)
+    FOREIGN KEY (Meal) REFERENCES Meals(Meal_ID)
 );
 
 --  DROP TABLE IF EXISTS UnitConversion;

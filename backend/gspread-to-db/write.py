@@ -13,8 +13,10 @@ else:
     print("Usage: Enter password for MySQL server as first command line argument")
     sys.exit(1)
 
-# Enable to print more info to console log
+# Flag that prints more info to console log when set to True
 SUPER_VERBOSE_MODE = False
+
+# Set super verbose flag to true if user enters the --super-verbose argument
 if any(arg in ['-s', '--super-verbose'] for arg in sys.argv):
     SUPER_VERBOSE_MODE = True
 
@@ -37,10 +39,10 @@ def jsonifyInput():
     try:
         # Find a workbook by name and open the sheets
         for key in enumerate(keys):
+            if SUPER_VERBOSE_MODE is True: print("Reformating table:", key[1])
             sheet = client.open(sheets_name).get_worksheet(key[0])
             records = sheet.get_all_records()
-            if key[1] == "Orders":
-                records = consolidateMealColumns(records)
+            records = reformatRecords(records)
             inputJson[key[1]] = records
         print("Retrieved data from Google Sheets:", inputJson)
         return inputJson
@@ -49,14 +51,13 @@ def jsonifyInput():
         raise Exception("Cannot retrieve and/or format input data")
 
 # Consolidate columns of different meal plans for the same item
-def consolidateMealColumns(orders):
+def reformatRecords(records):
     newDict = []
-    for order in orders:
+    for record in records:
         rowToAppend = {}
-        for key, value in order.items():
+        for key, value in record.items():
             if key.startswith('5: '):
-#               newKey = formatKey(key, 3)
-                newKey = key[3:]
+                newKey = formatKey(key, 3)
                 newValue = getMealQty(value)
                 rowToAppend[newKey] = newValue
                 if SUPER_VERBOSE_MODE is True: print("KEY:", key)
@@ -64,8 +65,7 @@ def consolidateMealColumns(orders):
                 if SUPER_VERBOSE_MODE is True: print("NEWKEY:", newKey)
                 if SUPER_VERBOSE_MODE is True: print("NEWVALUE (new):", "\'", newValue, "\'")
             elif any(substring in key for substring in ['10: ', '15: ', '20: ']):
-#               newKey = formatKey(key, 4)
-                newKey = key[4:]
+                newKey = formatKey(key, 4)
                 newValue = getMealQty(value)
                 if SUPER_VERBOSE_MODE is True: print("KEY:", key)
                 if SUPER_VERBOSE_MODE is True: print("VALUE:", "\'", value, "\'")
@@ -75,8 +75,7 @@ def consolidateMealColumns(orders):
                 if SUPER_VERBOSE_MODE is True: print("VALUETOADD:", "\'", newValue, "\'")
                 if SUPER_VERBOSE_MODE is True: print("NEWVALUE:", "\'", rowToAppend[newKey], "\'")
             else:
-#               newKey = formatKey(key, 0)
-                newKey = key
+                newKey = formatKey(key, 0)
                 rowToAppend[newKey] = value
             if SUPER_VERBOSE_MODE is True: print("Row currently:", rowToAppend)
         newDict.append(rowToAppend)
@@ -91,19 +90,11 @@ def getMealQty(value):
             return int(value[35:])
     return value
 
-'''
-# Format meals dict
-def formatMeals(meals):
-    newDict = []
-    for meal in meals:
-        rowToAppend = {'Meals': meal['Meals'], 'Actual_Meal': meal['Actual Meal']}
-        newDict.append(rowToAppend)
-    return newDict
-
 # Format key from JSON for SQL insert statement
 def formatKey(key, index):
     newKey = replaceSpacesWithUnderscores(key[index:])
-    newKey = removeLeadingUnderscore(newKey)
+    if len(newKey) > 0:
+        newKey = removeLeadingUnderscore(newKey)
     return newKey
 
 # Replace spaces with underscores in an item
@@ -120,6 +111,24 @@ def removeLeadingUnderscore(item):
     if item[0] == '_':
         return item[1:]
     return item
+
+# Add an escape character in front of each single quote
+def escapeSingleQuotes(value):
+    try:
+        return value.replace('\'','\\\'')
+    except:
+        if SUPER_VERBOSE_MODE is True: print("Can't add escape character for value:", value)
+        return value
+
+# Deprecated functions
+'''
+# Format meals dict
+def formatMeals(meals):
+    newDict = []
+    for meal in meals:
+        rowToAppend = {'Meals': meal['Meals'], 'Actual_Meal': meal['Actual Meal']}
+        newDict.append(rowToAppend)
+    return newDict
 
 # Replace value with 0 if it is a null string
 def replaceNullWithZero(value):
@@ -177,8 +186,8 @@ def dictToSql(jsonDicts, tableName, tableInfo):
                 if SUPER_VERBOSE_MODE is True: print("Key:", key)
                 if SUPER_VERBOSE_MODE is True: print("Value:", value)
                 if '/' in key:
-                    continue
 #                   key = reformatDColumn(key)
+                    continue
                 if SUPER_VERBOSE_MODE is True: print("Finished slash in key check")
                 if 'phone' in key.lower():
                     value = reformatPhoneNum(value)
@@ -201,14 +210,6 @@ def dictToSql(jsonDicts, tableName, tableInfo):
     except:
         print("Could not generate SQL commands.")
         raise Exception("Could not generate SQL commands.")
-
-# Add an escape character in front of each single quote
-def escapeSingleQuotes(value):
-    try:
-        return value.replace('\'','\\\'')
-    except:
-        if SUPER_VERBOSE_MODE is True: print("Can't add escape character for value:", value)
-        return value
 
 # Currently only handles country area code 1
 def reformatPhoneNum(num):
@@ -240,8 +241,8 @@ def formatInputDate(inputDate):
 def appendSqlItem(cmd, item, data_type):
     if any(nonStringType in data_type for nonStringType in ['int', 'column_name', 'null_value']):
         item = str(item)
-        if data_type == 'column_name':
-            item = "`" + str(item) + "`"
+#       if data_type == 'column_name':
+#           item = "`" + str(item) + "`"
     else:
         # Use the below two lines if Date_Submitted value format is Dec 9, 2019, 17:00:00
         if data_type == 'datetime':
