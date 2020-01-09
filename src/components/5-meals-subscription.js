@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
-import { Grid, Cell } from "react-mdl";
+import { CardTitle, CardText, CardActions, Button } from "react-mdl";
 import IMG1 from "../img/img1.jpg";
+import IMG9 from "../img/img9.webp";
 import { Link } from "react-router-dom";
 
 class FiveMealSubscription extends Component {
@@ -22,72 +23,139 @@ class FiveMealSubscription extends Component {
             <a href="/20-meals-subscription">20 MEALS </a>
             <hr class="three" />
             <br></br>
-            <CardDeck>
-              <Card>
-                <Card.Img variant="top" src={IMG1} />
-                <Card.Body>
-                  <Card.Title>
-                    <b>WEEK-TO-WEEK</b>
-                  </Card.Title>
-                  <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                    $11.99 per meal
-                  </Card.Text>
-                  <br></br>
-                  <Card.Title>$59⁹⁹ /week</Card.Title>
-                  <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
-                    Sales tax of 8.25% will be added
-                  </Card.Text>
-                  <Link
-                    style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+
+            <CardDeck style={{ marginLeft: "250px" }}>
+              <Card
+                style={{
+                  maxWidth: "20rem",
+                  boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
+                }}
+              >
+                {" "}
+                <span class="border border-dark" style={{}}>
+                  <Card.Img class="black" variant="top" src={IMG1} />
+                  <div
+                    class="top-center"
+                    style={{
+                      marginBottom: "200px",
+                      fontSize: "100px",
+                      textShadow: "2px 2px 4px #FFEFB0",
+                      lineHeight: "35px",
+                      color: "white"
+                    }}
                   >
-                    <button
-                      type="button"
-                      class="btn1 btn1-primary"
-                      style={{
-                        marginTop: "10px",
-                        padding: "5px",
-                        color: "white",
-                        fontSize: "15px"
-                      }}
+                    5
+                  </div>
+                  <Card.Body>
+                    <Card.Title>
+                      <b>WEEK-TO-WEEK</b>
+                    </Card.Title>
+                    <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
+                      $11.99 per meal
+                    </Card.Text>
+                    <br></br>
+                    <Card.Title>$59⁹⁹ /week</Card.Title>
+                    <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
+                      Sales tax of 8.25% will be added
+                    </Card.Text>
+                    <Link
+                      style={{ fontFamily: "Kalam", color: "white" }}
+                      to="/checkout"
                     >
-                      CHECKOUT
-                    </button>
-                  </Link>
-                </Card.Body>
+                      <button
+                        type="button"
+                        class="btn1 btn1-primary"
+                        style={{
+                          marginTop: "10px",
+                          paddingLeft: "30px",
+                          paddingRight: "30px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                          color: "white",
+                          fontSize: "15px"
+                        }}
+                      >
+                        CHECKOUT
+                      </button>
+                    </Link>
+                    <img
+                      class="img-fluid"
+                      src={IMG9}
+                      alt=""
+                      style={{
+                        width: "90%"
+                      }}
+                    />
+                  </Card.Body>
+                </span>
               </Card>
-              <Card>
-                <Card.Img variant="top" src={IMG1} />
-                <Card.Body>
-                  <Card.Title>
-                    <b>4 WEEK PRE-PAY</b>
-                  </Card.Title>
-                  <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                    $10.75 per meal
-                  </Card.Text>
-                  <br></br>
-                  <Card.Title>$53⁷⁵ /week</Card.Title>
-                  <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
-                    Sales tax of 8.25% will be added
-                  </Card.Text>
-                  <Link
-                    style={{ fontFamily: "Kalam", color: "white" }}
-                    to="/checkout"
+
+              <Card
+                height="450"
+                style={{
+                  stroke: "black",
+                  strokeWidth: "5",
+                  fillOpacity: "0.1",
+                  strokeOpacity: "0.9",
+                  boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
+                  maxWidth: "20rem"
+                }}
+              >
+                <span class="border border-dark" style={{}}>
+                  <Card.Img class="black" variant="top" src={IMG1} />
+                  <div
+                    class="top-center"
+                    style={{
+                      marginBottom: "200px",
+                      fontSize: "100px",
+                      textShadow: "2px 2px 4px #FFEFB0",
+                      lineHeight: "35px",
+                      color: "white"
+                    }}
                   >
-                    <button
-                      type="button"
-                      class="btn1 btn1-primary"
-                      style={{
-                        marginTop: "10px",
-                        padding: "5px",
-                        color: "white",
-                        fontSize: "15px"
-                      }}
+                    5
+                  </div>
+                  <Card.Body>
+                    <Card.Title>
+                      <b>4 WEEK PRE-PAY</b>
+                    </Card.Title>
+                    <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
+                      $10.75 per meal
+                    </Card.Text>
+                    <br></br>
+                    <Card.Title>$53⁷⁵ /week</Card.Title>
+                    <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
+                      Sales tax of 8.25% will be added
+                    </Card.Text>
+                    <Link
+                      style={{ fontFamily: "Kalam", color: "white" }}
+                      to="/checkout"
                     >
-                      CHECKOUT
-                    </button>
-                  </Link>
-                </Card.Body>
+                      <button
+                        type="button"
+                        class="btn1 btn1-primary"
+                        style={{
+                          marginTop: "10px",
+                          paddingLeft: "30px",
+                          paddingRight: "30px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                          color: "white",
+                          fontSize: "15px"
+                        }}
+                      >
+                        CHECKOUT
+                      </button>
+                    </Link>
+                    <img
+                      src={IMG9}
+                      alt=""
+                      style={{
+                        width: "90%"
+                      }}
+                    />
+                  </Card.Body>
+                </span>
               </Card>
             </CardDeck>
             <br></br>
