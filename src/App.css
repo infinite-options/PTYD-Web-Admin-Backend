@@ -104,6 +104,10 @@ hr.three {
   background-color: black;
 }
 
+.background {
+  background-image: url(./img/img3.jpg);
+}
+
 /* select meal page */
 hr.two {
   width: 30%;
