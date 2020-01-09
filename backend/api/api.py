@@ -17,14 +17,11 @@ app.config['DEBUG'] = True
 
 api = Api(app)
 
-RDS_PW = "prashant"
-'''
 # RDS PASSWORD
 if len(sys.argv) == 2:
     RDS_PW = str(sys.argv[1])
 else:
     RDS_PW = ""
-'''
 
 # Connect to RDS
 def getRdsConn(RDS_PW):
