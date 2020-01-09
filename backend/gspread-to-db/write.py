@@ -7,21 +7,25 @@ import json
 import datetime
 
 # Store first command line argument as database password
-if len(sys.argv) == 2:
+if len(sys.argv) >= 2:
     RDS_PW = str(sys.argv[1])
 else:
     print("Usage: Enter password for MySQL server as first command line argument")
     sys.exit(1)
 
+# Enable to print more info to console log
+SUPER_VERBOSE_MODE = False
+if any(arg in ['-s', '--super-verbose'] for arg in sys.argv):
+    SUPER_VERBOSE_MODE = True
+
 # Retrieve data from Google Sheets and return it as a JSON object
 def jsonifyInput():
     # Initialize JSON to return
     inputJson = {}
-#   keys = ('Subscriptions', 'Orders', 'Meals')
-
+    keys = ('Subscriptions', 'Orders', 'Meals')
+    sheets_name = "Prep To Your Door Data Schema"
     try:
-        # creds: create a client to interact with the Google Drive API
-#       scope = ['https://spreadsheets.google.com/feeds']
+        # Create a client to interact with the Google Drive API
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
         creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
         client = gspread.authorize(creds)
@@ -32,41 +36,17 @@ def jsonifyInput():
 
     try:
         # Find a workbook by name and open the sheets
-        subscriptions = client.open("Database Example").get_worksheet(1)
-        orders = client.open("Database Example").get_worksheet(2)
-        meals = client.open("Database Example").get_worksheet(3)
-        paymentplans = client.open("Database Example").get_worksheet(4)
-        mealplans = client.open("Database Example").get_worksheet(5)
-        ingredients = client.open("Database Example").get_worksheet(6)
-        paymentadjustments = client.open("Database Example").get_worksheet(7)
-#       for keyIndex, keyValue in enumerate(keys):
-#           print(keyIndex)
-#           records = client.open("Database Example").get_worksheet(keyIndex)
-#           inputJson[keyValue] = records
-#       print("Retrieved data")
-#       return inputJson
-        print("Retrieved input data from Google Sheets.")
+        for key in enumerate(keys):
+            sheet = client.open(sheets_name).get_worksheet(key[0])
+            records = sheet.get_all_records()
+            if key[1] == "Orders":
+                records = consolidateMealColumns(records)
+            inputJson[key[1]] = records
+        print("Retrieved data from Google Sheets:", inputJson)
+        return inputJson
     except:
         print("Could not retrieve input data from Google Sheets.")
         raise Exception("Cannot retrieve and/or format input data")
-
-    try:
-        # Extract and format all of the values
-        orders = orders.get_all_records()
-#       meals = meals.get_all_records()
-        inputJson['Subscriptions'] = subscriptions.get_all_records()
-        inputJson['Orders'] = consolidateMealColumns(orders)
-#       inputJson['Meals'] = formatMeals(meals)
-        inputJson['Meals'] = meals.get_all_records()
-        inputJson['PaymentPlans'] = paymentplans.get_all_records()
-        inputJson['MealPlans'] = mealplans.get_all_records()
-        inputJson['Ingredients'] = ingredients.get_all_records()
-        inputJson['PaymentAdjustments'] = paymentadjustments.get_all_records()
-        print("Formatted input data into Python dict.")
-        return inputJson
-    except:
-        print("Cannot format input data into Python dict.")
-        raise Exception("Cannot format input data")
 
 # Consolidate columns of different meal plans for the same item
 def consolidateMealColumns(orders):
@@ -75,31 +55,43 @@ def consolidateMealColumns(orders):
         rowToAppend = {}
         for key, value in order.items():
             if key.startswith('5: '):
-                newKey = formatKey(key, 3)
-                newValue = replaceNullWithZero(value)
+#               newKey = formatKey(key, 3)
+                newKey = key[3:]
+                newValue = getMealQty(value)
                 rowToAppend[newKey] = newValue
-#               print("KEY:", key)
-#               print("VALUE:", "\'", value, "\'")
-#               print("NEWKEY:", newKey)
-#               print("NEWVALUE (new):", "\'", newValue, "\'")
+                if SUPER_VERBOSE_MODE is True: print("KEY:", key)
+                if SUPER_VERBOSE_MODE is True: print("VALUE:", "\'", value, "\'")
+                if SUPER_VERBOSE_MODE is True: print("NEWKEY:", newKey)
+                if SUPER_VERBOSE_MODE is True: print("NEWVALUE (new):", "\'", newValue, "\'")
             elif any(substring in key for substring in ['10: ', '15: ', '20: ']):
-                newKey = formatKey(key, 4)
-                newValue = replaceNullWithZero(value)
-#               print("KEY:", key)
-#               print("VALUE:", "\'", value, "\'")
-#               print("NEWKEY:", newKey)
-#               print("OLDVALUE:", "\'", rowToAppend[newKey], "\'")
+#               newKey = formatKey(key, 4)
+                newKey = key[4:]
+                newValue = getMealQty(value)
+                if SUPER_VERBOSE_MODE is True: print("KEY:", key)
+                if SUPER_VERBOSE_MODE is True: print("VALUE:", "\'", value, "\'")
+                if SUPER_VERBOSE_MODE is True: print("NEWKEY:", newKey)
+                if SUPER_VERBOSE_MODE is True: print("OLDVALUE:", "\'", rowToAppend[newKey], "\'")
                 rowToAppend[newKey] += newValue
-#               print("VALUETOADD:", "\'", newValue, "\'")
-#               print("NEWVALUE:", "\'", rowToAppend[newKey], "\'")
+                if SUPER_VERBOSE_MODE is True: print("VALUETOADD:", "\'", newValue, "\'")
+                if SUPER_VERBOSE_MODE is True: print("NEWVALUE:", "\'", rowToAppend[newKey], "\'")
             else:
-                newKey = formatKey(key, 0)
+#               newKey = formatKey(key, 0)
+                newKey = key
                 rowToAppend[newKey] = value
-#           print("Row currently:", rowToAppend)
+            if SUPER_VERBOSE_MODE is True: print("Row currently:", rowToAppend)
         newDict.append(rowToAppend)
-#       print("Final row:", rowToAppend)
+        if SUPER_VERBOSE_MODE is True: print("Final row:", rowToAppend)
     return newDict
 
+def getMealQty(value):
+    if value is '':
+        return 0
+    if isinstance(value, str):
+        if 'charge_type = no_charge|quantity' in value:
+            return int(value[35:])
+    return value
+
+'''
 # Format meals dict
 def formatMeals(meals):
     newDict = []
@@ -135,6 +127,12 @@ def replaceNullWithZero(value):
         return 0
     return value
 
+# Reformat columns with name XX/XX/XXXX
+def reformatDColumn(key):
+    return "D" + key.replace('/','')
+
+'''
+
 # Returns a Connection object from pymysql to the database
 def connectToRDS(RDS_PW):
     # RDS information
@@ -166,25 +164,35 @@ def connectToRDS(RDS_PW):
 # Return a list of SQL commands to run from a JSON dict
 def dictToSql(jsonDicts, tableName, tableInfo):
     query = []
+    query.append("DELETE FROM " + tableName + ";")
     try:
         print("Generating SQL commands for", tableName + "...")
+        if SUPER_VERBOSE_MODE is True: print("JSON:", jsonDicts)
         for jsonDict in jsonDicts:
             ins = "INSERT INTO " + tableName + " ("
             val = "VALUES ("
+            if SUPER_VERBOSE_MODE is True: print("Current ins:", ins)
+            if SUPER_VERBOSE_MODE is True: print("Current val:", val)
             for key, value in jsonDict.items():
+                if SUPER_VERBOSE_MODE is True: print("Key:", key)
+                if SUPER_VERBOSE_MODE is True: print("Value:", value)
                 if '/' in key:
                     continue
 #                   key = reformatDColumn(key)
+                if SUPER_VERBOSE_MODE is True: print("Finished slash in key check")
                 if 'phone' in key.lower():
                     value = reformatPhoneNum(value)
+                if SUPER_VERBOSE_MODE is True: print("Finished phone in key check")
                 valueType = tableInfo[key]
+                if SUPER_VERBOSE_MODE is True: print("valueType:", valueType)
                 if value == '':
                     value = 'NULL'
                     valueType = 'null_value'
+                value = escapeSingleQuotes(value)
                 ins = appendSqlItem(ins, key, "column_name")
                 val = appendSqlItem(val, value, valueType)
-#               print("Current ins:", ins)
-#               print("Current val:", val)
+                if SUPER_VERBOSE_MODE is True: print("Current ins:", ins)
+                if SUPER_VERBOSE_MODE is True: print("Current val:", val)
             ins = completeSqlCmd(ins, ") ")
             val = completeSqlCmd(val, ");")
             query.append(ins + val)
@@ -194,28 +202,33 @@ def dictToSql(jsonDicts, tableName, tableInfo):
         print("Could not generate SQL commands.")
         raise Exception("Could not generate SQL commands.")
 
+# Add an escape character in front of each single quote
+def escapeSingleQuotes(value):
+    try:
+        return value.replace('\'','\\\'')
+    except:
+        if SUPER_VERBOSE_MODE is True: print("Can't add escape character for value:", value)
+        return value
+
 # Currently only handles country area code 1
 def reformatPhoneNum(num):
-#   print("Reformatting phone number:", num)
+    if SUPER_VERBOSE_MODE is True: print("Reformatting phone number:", num)
     areaCode = '1'
     formatNum = str(num)
     symbolsToRemove = ['(',')',' ','-','+','.']
     for symbol in symbolsToRemove:
         if symbol in formatNum:
             formatNum = formatNum.replace(symbol,'')
-#           print("Current value:", formatNum)
+            if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
     if len(formatNum) is 11 and formatNum[0] == areaCode:
         formatNum = formatNum[1:]
-#       print("Current value:", formatNum)
+        if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
     if len(formatNum) is not 10:
         print("Cannot format phone number", num, "to 10-digit number.")
         raise Exception("Cannot remove non-digit symbols in phone number")
-#   print("Final value:", formatNum)
+    if SUPER_VERBOSE_MODE is True: print("Final value:", formatNum)
     return formatNum
 
-# Reformat columns with name XX/XX/XXXX
-def reformatDColumn(key):
-    return "D" + key.replace('/','')
 
 # Reformate date values from input data
 def formatInputDate(inputDate):
@@ -227,11 +240,15 @@ def formatInputDate(inputDate):
 def appendSqlItem(cmd, item, data_type):
     if any(nonStringType in data_type for nonStringType in ['int', 'column_name', 'null_value']):
         item = str(item)
+        if data_type == 'column_name':
+            item = "`" + str(item) + "`"
     else:
+        # Use the below two lines if Date_Submitted value format is Dec 9, 2019, 17:00:00
         if data_type == 'datetime':
             item = formatInputDate(str(item))
         item = "\'" + str(item) + "\'"
     newCmd = cmd + item
+    if SUPER_VERBOSE_MODE is True: print("appendSqlItem():", newCmd)
     return newCmd + ", "
 
 # Close an SQL command
