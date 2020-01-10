@@ -41,7 +41,7 @@ class Selectmealplan extends Component {
                       <b>{mealPlan.MealsPerWeek} MEALS WEEKLY</b>
                     </Card.Title>
                     <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                      from $10.75 per meal
+                      from ${mealPlan.PricePerMeal} per meal
                     </Card.Text>
                     <Card.Text style={{ fontSize: "13px" }}>
                       {mealPlan.PlanSummary}
@@ -52,7 +52,7 @@ class Selectmealplan extends Component {
                     </Card.Text>
                     <Link
                       style={{ fontFamily: "Kalam", color: "white" }}
-                      to={mealPlan.RouteTo}
+                      to={mealPlan.RouteOnclick}
                     >
                       <button
                         type="button"
