@@ -4,8 +4,8 @@
 function usage () {
     echo "usage:";
     echo "--login, -l: log onto mysql server"
-    echo "--run-schema, -r: setup schema in database, use with caution";
-    echo "--force-reset, -f: reset schema completely, including static tables";
+    echo "--reset, -r: setup or soft reset schema in database";
+    echo "--hard-reset, -h: hard reset schema";
 }
 
 function logon() {
@@ -22,12 +22,12 @@ elif [[ $# -eq 1 ]]; then
         logon;
         exit 0
         ;;
-    -f | --force-reset)
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < static.sql
+    -h | --hard-reset)
+        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < hard_delete.sql
         mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < schema.sql
         exit 0
         ;;
-    -r | --run-schema)
+    -r | --reset)
         mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < schema.sql
         exit 0
         ;;

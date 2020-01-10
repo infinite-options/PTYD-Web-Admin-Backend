@@ -95,7 +95,9 @@ CREATE TABLE IF NOT EXISTS Orders (
 CREATE TABLE IF NOT EXISTS MealPlans (
     MealsPerWeek INT NOT NULL,
     PlanSummary VARCHAR(255),
-    PlanFooter VARCHAR(64)
+    PlanFooter VARCHAR(64),
+    Img VARCHAR(512),
+    RouteOnclick VARCHAR(128)
 );
 
 --  DROP TABLE IF EXISTS PaymentPlans;
