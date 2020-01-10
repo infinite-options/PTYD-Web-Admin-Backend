@@ -1,0 +1,110 @@
+/* landing page */
+.container {
+  position: relative;
+  color: black;
+}
+/* Bottom left text */
+.bottom-left {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+  font-size: 15px;
+  margin-left: 1.5em;
+}
+
+/* Top left text */
+.top-left {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  float: left;
+  margin-left: 0.5em;
+  margin-top: 2em;
+  font-size: 50px;
+  letter-spacing: 1.5px;
+}
+
+/* Top right text */
+.top-right {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+}
+
+/* Bottom right text */
+.bottom-right {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+}
+
+/* Centered text */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+br {
+  display: block;
+  margin: 100px 100px;
+  line-height: 22px;
+}
+
+/* button */
+
+.btn1 {
+  -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
+  box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
+  padding: 0.1rem 2rem;
+  font-size: 70%;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  border: 0;
+  border-radius: 4px;
+}
+
+.btn1-primary {
+  background-color: #cd790c;
+  opacity: 1;
+}
+
+.btn1-primary:hover {
+  background-color: #427c42;
+}
+
+.btn1-primary:focus {
+  background-color: #427c42;
+  color: white;
+}
+
+.btn1-primary:active {
+  background-color: #427c42 !important;
+}
+
+hr.one {
+  border: none;
+  height: 20px;
+  width: 90%;
+  height: 50px;
+  margin-top: 0;
+  border-bottom: 1px solid #1f1209;
+  box-shadow: 0 20px 20px -20px #333;
+  margin: -50px auto 10px;
+}
+
+hr.three {
+  width: 40%;
+  background-color: black;
+}
+
+/* select meal page */
+hr.two {
+  width: 30%;
+  background-color: black;
+}
+
+hr.three {
+  width: 40%;
+}
