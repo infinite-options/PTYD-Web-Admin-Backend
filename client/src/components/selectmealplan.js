@@ -35,7 +35,7 @@ class Selectmealplan extends Component {
             <CardDeck>
               {this.state.mealPlans.map(mealPlan =>
                 <Card>
-                  <Card.Img variant="top" src={IMG1} />
+                  <Card.Img variant="top" src={mealPlan.Img} />
                   <Card.Body>
                     <Card.Title>
                       <b>{mealPlan.MealsPerWeek} MEALS WEEKLY</b>

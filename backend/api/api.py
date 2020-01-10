@@ -17,11 +17,15 @@ app.config['DEBUG'] = True
 
 api = Api(app)
 
+# Get RDS password from command line argument
+def RdsPw():
+    if len(sys.argv) == 2: return str(sys.argv[1])
+    return ""
+
 # RDS PASSWORD
-if len(sys.argv) == 2:
-    RDS_PW = str(sys.argv[1])
-else:
-    RDS_PW = ""
+# When deploying to Zappa, set RDS_PW equal to the password as a string
+# When pushing to GitHub, set RDS_PW equal to RdsPw()
+RDS_PW = RdsPw()
 
 # Connect to RDS
 def getRdsConn(RDS_PW):
@@ -72,7 +76,7 @@ class Plans(Resource):
             cur = db[1]
             items = {}
 
-            queries = [ 
+            queries = [
                 """ SELECT
                     MealsPerWeek,
                     WeekToWeek,
@@ -88,13 +92,14 @@ class Plans(Resource):
                     m.PlanFooter,
                     CAST(p.FourWeekPrice/CAST(p.MealsPerWeek AS DECIMAL(7,2)) AS DECIMAL(7,2)) AS PricePerMeal,
                     p.FourWeekPrice as LowestPrice,
+                    m.Img,
                     m.RouteOnclick
                 FROM MealPlans as m
                 INNER JOIN PaymentPlans as p
                 WHERE m.MealsPerWeek = p.MealsPerWeek;"""]
 
             paymentPlanKeys = ('MealsPerWeek', 'WeekToWeek', 'WeekToWeekPrice', 'TwoWeekPrePay', 'TwoWeekPrice', 'FourWeekPrePay', 'FourWeekPrice')
-            mealPlanKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'PricePerMeal', 'LowestPrice', 'RouteOnclick')
+            mealPlanKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'PricePerMeal', 'LowestPrice', 'Img', 'RouteOnclick')
 
             query = runQuery(queries[0], cur)
             items['PaymentPlans'] = jsonifyQuery(query, paymentPlanKeys)
