@@ -48,6 +48,20 @@ def runQuery(query, cur):
     queriedData = cur.fetchall()
     return queriedData
 
+def jsonifyQuery(query, rowDictKeys):
+    json = []
+    for row in query:
+        rowDict = {}
+        for element in enumerate(row):
+            key = rowDictKeys[element[0]]
+            value = element[1]
+            # Convert all decimal values in row to floats
+            if 'Price' in key:
+                value = format(float(value), '.2f')
+            rowDict[key] = value
+        json.append(rowDict)
+    return json
+
 class Plans(Resource):
     global RDS_PW
     def get(self):
@@ -56,48 +70,37 @@ class Plans(Resource):
             db = getRdsConn(RDS_PW)
             conn = db[0]
             cur = db[1]
-            items = {'MealPlans': [], 'PaymentPlans': []}
+            items = {}
 
-            queries = [ """ SELECT MealsPerWeek, WeekToWeek, WeekToWeekPrice, TwoWeekPrePay, TwoWeekPrice, FourWeekPrePay, FourWeekPrice
-                            FROM PaymentPlans;""",
-                        """ SELECT m.MealsPerWeek, m.PlanSummary, m.PlanFooter, p.FourWeekPrice
-                            FROM MealPlans as m
-                            INNER JOIN PaymentPlans as p
-                            WHERE m.MealsPerWeek = p.MealsPerWeek;"""]
+            queries = [ 
+                """ SELECT
+                    MealsPerWeek,
+                    WeekToWeek,
+                    WeekToWeekPrice,
+                    TwoWeekPrePay,
+                    TwoWeekPrice,
+                    FourWeekPrePay,
+                    FourWeekPrice
+                FROM PaymentPlans;""",
+                """ SELECT
+                    m.MealsPerWeek,
+                    m.PlanSummary,
+                    m.PlanFooter,
+                    CAST(p.FourWeekPrice/CAST(p.MealsPerWeek AS DECIMAL(7,2)) AS DECIMAL(7,2)) AS PricePerMeal,
+                    p.FourWeekPrice as LowestPrice,
+                    m.RouteOnclick
+                FROM MealPlans as m
+                INNER JOIN PaymentPlans as p
+                WHERE m.MealsPerWeek = p.MealsPerWeek;"""]
+
+            paymentPlanKeys = ('MealsPerWeek', 'WeekToWeek', 'WeekToWeekPrice', 'TwoWeekPrePay', 'TwoWeekPrice', 'FourWeekPrePay', 'FourWeekPrice')
+            mealPlanKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'PricePerMeal', 'LowestPrice', 'RouteOnclick')
 
             query = runQuery(queries[0], cur)
-            print("PaymentPlans query ran successfully.")
-            for row in query:
-                rowDict = {}
-                rowDictKeys = ('MealsPerWeek', 'WeekToWeek', 'WeekToWeekPrice', 'TwoWeekPrePay', 'TwoWeekPrice', 'FourWeekPrePay', 'FourWeekPrice')
-
-                for element in enumerate(row):
-                    key = rowDictKeys[element[0]]
-                    value = element[1]
-                    # Convert all decimal values in row to floats
-                    if 'Price' in key:
-                        value = float(value)
-                    rowDict[key] = value
-                items['PaymentPlans'].append(rowDict)
+            items['PaymentPlans'] = jsonifyQuery(query, paymentPlanKeys)
 
             query = runQuery(queries[1], cur)
-            print("MealPlans query ran successfully.")
-            for row in query:
-                rowDict = {}
-                rowDictKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'LowestPrice')
-
-                for element in enumerate(row):
-                    key = rowDictKeys[element[0]]
-                    value = element[1]
-                    # Convert all decimal values in row to floats
-                    if 'Price' in key:
-                        value = float(value)
-                    rowDict[key] = value
-
-                url = '/' + str(rowDict['MealsPerWeek']) + '-meals-subscriptions'
-                rowDict['RouteTo'] = url
-
-                items['MealPlans'].append(rowDict)
+            items['MealPlans'] = jsonifyQuery(query, mealPlanKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items
