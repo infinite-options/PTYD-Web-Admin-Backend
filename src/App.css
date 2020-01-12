@@ -33,7 +33,7 @@
 
 .top-center {
   position: absolute;
-  top: 15%;
+  top: 5%;
   left: 30%;
 }
 /* Bottom right text */
@@ -116,7 +116,7 @@ hr.two {
 
 hr.three {
   width: 40%;
-  background-color: rgba(219, 219, 219, 0.753);
+  background-color: #dbdbdbc0;
 }
 
 .header {
