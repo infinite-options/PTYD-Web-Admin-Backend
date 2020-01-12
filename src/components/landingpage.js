@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
-import IMG3 from "../img/img3.jpg";
 import IMG4 from "../img/img4.jpg";
 import IMG5 from "../img/img5.jpg";
 import IMG6 from "../img/img6.jpg";

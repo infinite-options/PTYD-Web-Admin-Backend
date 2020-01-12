@@ -9,6 +9,9 @@ import FiveMealSubscription from "./5-meals-subscription";
 import TenMealSubscription from "./10-meals-subscription";
 import FifteenMealSubscription from "./15-meals-subscription";
 import TwentyMealSubscription from "./20-meals-subscription";
+import FindUs from "./findus";
+import GiftCards from "./giftcards";
+import HowItWorks from "./howitworks";
 
 const Main = () => (
   <Switch>
@@ -16,6 +19,7 @@ const Main = () => (
     <Route exact path="/selectmealplan" component={SelectMealPlan} />
     <Route exact path="/menuthisweek" component={MenuThisWeek} />
     <Route exact path="/checkout" component={Checkout} />
+
     <Route
       exact
       path="/5-meals-subscription"
@@ -36,6 +40,9 @@ const Main = () => (
       path="/20-meals-subscription"
       component={TwentyMealSubscription}
     />
+    <Route exact path="/findus" component={FindUs} />
+    <Route exact path="/giftcards" component={GiftCards} />
+    <Route exact path="/howitworks" component={HowItWorks} />
   </Switch>
 );
 

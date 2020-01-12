@@ -52,20 +52,22 @@ class App extends Component {
               </div>
 
               <Nav.Item Style="margin-top:90px">
-
-                <Nav.Link Style="color:black" href="/selectmealplan">SUBSCRIBE</Nav.Link>
+                <Nav.Link Style="color:black" href="/selectmealplan">
+                  SUBSCRIBE
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" href="/menuthisweek">MENU</Nav.Link>
-
+                <Nav.Link Style="color:black" href="/menuthisweek">
+                  MENU
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" eventKey="link-2">
+                <Nav.Link Style="color:black" href="/findus">
                   FIND US
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" eventKey="link-3">
+                <Nav.Link Style="color:black" href="/giftcards">
                   GIFT CARDS
                 </Nav.Link>
               </Nav.Item>
