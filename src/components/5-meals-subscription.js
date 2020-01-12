@@ -73,7 +73,7 @@ class FiveMealSubscription extends Component {
                       to={{
                         pathname: '/checkout',
                         item: {
-                          name: '5-Meals: Week-to-Week Subscription - $53.75 /week',
+                          name: '5-Meals: Week-to-Week Subscription - $59.99 /week',
                           total: 59.99
                         }
                       }}

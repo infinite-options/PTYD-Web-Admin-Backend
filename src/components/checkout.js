@@ -20,10 +20,10 @@ class Checkout extends Component {
               <p>{this.props.location.item.name}</p>
             </div>
             <hr/>
-            <p>Estimated Shipping - $9.99</p>
-            <p>Estimated Tax - ${this.props.location.item.total * 0.075}</p>
+            <p>Estimated Shipping - $15.00</p>
+            <p>Estimated Tax - ${(this.props.location.item.total * 0.075).toFixed(2)}</p>
             <hr/>
-            <h3>Total - ${(this.props.location.item.total * 1.075) + 9.99}</h3>
+            <h3>Total - ${((this.props.location.item.total * 1.075) + 15.00).toFixed(2)}</h3>
             <Form>
               <Form.Row>
                 <Form.Group as={Col} md={8} controlId="formGridCouponCode">
