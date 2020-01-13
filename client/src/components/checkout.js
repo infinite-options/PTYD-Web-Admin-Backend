@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Button, Card, CardDeck, Form, Row, Col, Container } from "react-bootstrap";
 import TruckIcon from "../img/prepTruckIcon.png";
 
-class Selectmealplan extends Component {
+class Checkout extends Component {
   render() {
+
     return (
       <Container>
         <Row>
@@ -16,13 +17,13 @@ class Selectmealplan extends Component {
             </div>
             <h3>Order Summary</h3>
             <div id="cart">
-              <p>Temp Cart Summary</p>
+              <p>{this.props.location.item.name}</p>
             </div>
             <hr/>
-            <h5>Estimated Shipping</h5>
-            <h5>Estimated Tax</h5>
+            <p>Estimated Shipping - $15.00</p>
+            <p>Estimated Tax - ${(this.props.location.item.total * 0.075).toFixed(2)}</p>
             <hr/>
-            <h3>Total</h3>
+            <h3>Total - ${((this.props.location.item.total * 1.075) + 15.00).toFixed(2)}</h3>
             <Form>
               <Form.Row>
                 <Form.Group as={Col} md={8} controlId="formGridCouponCode">
@@ -176,4 +177,4 @@ class Selectmealplan extends Component {
   }
 }
 
-export default Selectmealplan;
+export default Checkout;

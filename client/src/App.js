@@ -7,6 +7,7 @@ import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends Component {
@@ -32,7 +33,6 @@ class App extends Component {
               className="navbar fixed-top justify-content-center"
               Style="min-height:145px; background-color:white;"
               activeKey="/home"
-              onSelect={selectedKey => alert(`selected ${selectedKey}`)}
             >
               <div Style="margin-top:25px">
                 <a class="navbar-brand" href="/">
@@ -52,20 +52,23 @@ class App extends Component {
               </div>
 
               <Nav.Item Style="margin-top:90px">
-
-                <Nav.Link Style="color:black" href="/selectmealplan">SUBSCRIBE</Nav.Link>
+                <Nav.Link Style="color:black" href="/selectmealplan">
+                  SUBSCRIBE
+                  </Nav.Link>
               </Nav.Item>
-              <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" href="/menuthisweek">MENU</Nav.Link>
+              
+              <NavDropdown title="MENU" id="nav-dropdown" Style="margin-top:90px; color:black;">
+                <NavDropdown.Item href="/menuthisweek">THIS WEEK</NavDropdown.Item>
+                <NavDropdown.Item href="/menunextweek">NEXT WEEK</NavDropdown.Item>
+              </NavDropdown>
 
-              </Nav.Item>
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" eventKey="link-2">
+                <Nav.Link Style="color:black" href="/findus">
                   FIND US
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" eventKey="link-3">
+                <Nav.Link Style="color:black" href="/giftcards">
                   GIFT CARDS
                 </Nav.Link>
               </Nav.Item>
@@ -203,7 +206,7 @@ class App extends Component {
                   </Nav.Link>
                 </Nav>
                 <Nav defaultActiveKey="/">
-                  <a href="/">
+                  <a href="https://www.facebook.com/preptoyourdoor" target="_blank">
                     <img
                       id="i3fogh650imageimageimage"
                       alt="Grey Facebook Icon"
@@ -213,7 +216,7 @@ class App extends Component {
                       src="https://static.wixstatic.com/media/d3470ec8ca26475da4b228f0199b5d3d.png/v1/fill/w_51,h_51,al_c,q_95/d3470ec8ca26475da4b228f0199b5d3d.webp"
                     ></img>
                   </a>
-                  <a href="/">
+                  <a href="https://twitter.com/preptoyourdoor" target="_blank">
                     <img
                       id="i3fogh651imageimageimage"
                       alt="Grey Twitter Icon"
@@ -223,7 +226,7 @@ class App extends Component {
                       src="https://static.wixstatic.com/media/7177d158c36d432b93f51e54f80e2f3c.png/v1/fill/w_51,h_51,al_c,q_95/7177d158c36d432b93f51e54f80e2f3c.webp"
                     ></img>
                   </a>
-                  <a href="/">
+                  <a href="https://www.instagram.com/preptoyourdoor/" target="_blank">
                     <img
                       id="i3fogh652imageimageimage"
                       alt="Grey Instagram Icon"
@@ -239,7 +242,7 @@ class App extends Component {
                     Join Our Mailing List
                   </Nav.Link>
                   <p> </p>
-                  <p Style="font-size:12px; padding-top:20px; padding-left:5;">
+                  <p Style="font-size:12px; padding-top:25px; margin-left:-25px;">
                     & Never Miss an Update
                   </p>
                   <p> </p>

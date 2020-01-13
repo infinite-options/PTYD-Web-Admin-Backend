@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
-import IMG3 from "../img/img3.jpg";
 import IMG4 from "../img/img4.jpg";
 import IMG5 from "../img/img5.jpg";
 import IMG6 from "../img/img6.jpg";
@@ -188,30 +187,44 @@ class Landing extends Component {
             </div>
             <br></br>
             <div
-              class="container"
-              style={{ backgroundColor: "black", color: "white" }}
+              class="container background"
+              style={{
+                backgroundSize: "100% 100%"
+              }}
             >
+              <br />
+              <br />
               <center>
-                <br></br>
-                <h2>DELIVERED WEEKLY</h2>
-                <h3>STRAIGHT TO YOUR DOOR</h3>
-                <hr class="three" />
-                <h5>&bull; READY-TO-EAT PLANT BASED MEALS</h5>
-                <h5>&bull; ORGANIC INGREDIENTS</h5>
-                <h5>&bull; LOCALLY SOURCED</h5>
-                <h5>&bull; REUSABLE ECO-FRIENDLY MASON JARS</h5>
-                <hr class="three" />
-                <h6>All meals are 100% gluten, meat, and dairy free.</h6>
-                <h6>
-                  <i>Pause anytime, no commitment.</i>
-                </h6>
-                <br></br>
-                <h5>PLANS STARTING AT</h5>
-                <h4>
-                  <large>$59</large> / WEEK
-                </h4>
-                <br></br>
+                <div
+                  style={{
+                    color: "white",
+                    backgroundColor: "black",
+                    width: "600px",
+                    height: "700px"
+                  }}
+                >
+                  <br></br>
+                  <h2>DELIVERED WEEKLY</h2>
+                  <h3>STRAIGHT TO YOUR DOOR</h3>
+                  <hr class="three" />
+                  <h5>&bull; READY-TO-EAT PLANT BASED MEALS</h5>
+                  <h5>&bull; ORGANIC INGREDIENTS</h5>
+                  <h5>&bull; LOCALLY SOURCED</h5>
+                  <h5>&bull; REUSABLE ECO-FRIENDLY MASON JARS</h5>
+                  <hr class="three" />
+                  <h6>All meals are 100% gluten, meat, and dairy free.</h6>
+                  <h6>
+                    <i>Pause anytime, no commitment.</i>
+                  </h6>
+                  <br></br>
+                  <h5>PLANS STARTING AT</h5>
+                  <h4>
+                    <large>$59</large> / WEEK
+                  </h4>
+                </div>
               </center>
+              <br />
+              <br />
             </div>
             <br></br>
             <div class="container">
@@ -488,7 +501,13 @@ class Landing extends Component {
                       part of our family! It's so thrilling to fill our fridge
                       every week with tasty surprises!"
                     </h4>
-                  </Cell>
+                    <br />
+                  </Cell>{" "}
+                  <div style={{ backgroundColor: "black" }}>
+                    <br />
+                    <br />
+                  </div>
+                  <br />
                 </center>
               </Grid>
               <br />

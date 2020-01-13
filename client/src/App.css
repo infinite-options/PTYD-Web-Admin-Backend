@@ -31,6 +31,11 @@
   right: 16px;
 }
 
+.top-center {
+  position: absolute;
+  top: 5%;
+  left: 30%;
+}
 /* Bottom right text */
 .bottom-right {
   position: absolute;
@@ -99,6 +104,10 @@ hr.three {
   background-color: black;
 }
 
+.background {
+  background-image: url(./img/img3.jpg);
+}
+
 /* select meal page */
 hr.two {
   width: 30%;
@@ -107,4 +116,61 @@ hr.two {
 
 hr.three {
   width: 40%;
+  background-color: #dbdbdbc0;
+}
+
+.header {
+  height: 600px;
+  width: 100vw;
+  background: black;
+  overflow: hidden;
+}
+
+.black {
+  outline: 100px solid rgba(0, 0, 0, 0.5) !important;
+  outline-offset: -100px;
+  overflow: hidden;
+  position: relative;
+  height: 187px;
+  width: 276px;
+}
+.blackM {
+  outline: 100px solid rgba(0, 0, 0, 0.5) !important;
+  outline-offset: -100px;
+  overflow: hidden;
+  position: relative;
+  height: 187px;
+  width: 252px;
+}
+.checked {
+  color: rgb(255, 196, 0);
+}
+
+.btn2 {
+  -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
+  box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
+  padding: 0.1rem 2rem;
+  font-size: 70%;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  border: 0;
+  border-radius: 4px;
+}
+
+.btn2-primary {
+  background-color: #427c42;
+  opacity: 1;
+}
+
+.btn2-primary:hover {
+  background-color: #cd790c;
+}
+
+.btn2-primary:focus {
+  background-color: #cd790c;
+  color: white;
+}
+
+.btn2-primary:active {
+  background-color: #cd790c !important;
 }
