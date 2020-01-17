@@ -23,8 +23,7 @@ elif [[ $# -eq 1 ]]; then
         exit 0
         ;;
     -h | --hard-reset)
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < hard_delete.sql
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < schema.sql
+        cat hard_delete.sql schema.sql | mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p
         exit 0
         ;;
     -r | --reset)
