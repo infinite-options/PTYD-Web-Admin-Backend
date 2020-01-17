@@ -1,4 +1,5 @@
 from requests.auth import HTTPBasicAuth
+from datetime import datetime
 import sys
 import pymysql
 import requests
@@ -46,26 +47,28 @@ def getMysqlConn(MYSQLPW):
         raise Exception("Could not connect to MySQL server")
 
 GET_URL = API_URL_SHIPMENTS
-shipments = []
+
+response = {'start_time': None, 'end_time': None, 'data': []}
 
 try:
+    response['start_time'] = datetime.now().strftime('%Y-%M-%d %H:%M:%S')
     while GET_URL:
         print("Getting data from:", GET_URL)
-        response = requests.get(GET_URL, auth=(CLIENT_ID, CLIENT_SKEY))
-        response.raise_for_status()
-        objs = response.json()
+        api_response = requests.get(GET_URL, auth=(CLIENT_ID, CLIENT_SKEY))
+        api_response.raise_for_status()
+        objs = api_response.json()
         if objs['next']:
             GET_URL = API_URL_SHIPMENTS + objs['next']
         else:
             GET_URL = None
         for obj in objs['results']:
-            shipments.append(obj)
+            response['data'].append(obj)
     print("Finished retrieving API data.")
 except:
     print("Error occured while retrieving API data.")
     print("URL of API:", GET_URL)
     raise Exception("Could not retrieve API data")
 finally:
-    print("===========================")
-    print("API data:")
-    print(shipments)
+    response['end_time'] = datetime.now().strftime('%Y-%M-%d %H:%M:%S')
+    sys.stdout = open('data.json', 'w')
+    print(response)
