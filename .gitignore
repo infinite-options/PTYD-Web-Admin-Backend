@@ -1,4 +1,5 @@
 node_modules
 *.log
 *client_secret.json
+*cratejoy_keys.json
 yarn.lock
