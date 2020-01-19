@@ -6,6 +6,7 @@ function usage () {
     echo "--login, -l: log onto mysql server"
     echo "--reset, -r: setup or soft reset schema in database";
     echo "--hard-reset, -h: hard reset schema";
+    echo "--file <filename>, -f <filename>: run a specific file";
 }
 
 function logon() {
@@ -16,19 +17,22 @@ if [[ $# -eq 0 ]]; then
     usage;
     logon;
     exit 0
-elif [[ $# -eq 1 ]]; then
+else
     case $1 in
     -l | --login)
         logon;
         exit 0
         ;;
     -h | --hard-reset)
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < hard_delete.sql
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < schema.sql
+        cat hard_delete.sql schema.sql | logon
         exit 0
         ;;
     -r | --reset)
-        mysql -h pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com -u admin -D pricing -p < schema.sql
+        logon < schema.sql
+        exit 0
+        ;;
+    -f | --file)
+        cat $2 | logon
         exit 0
         ;;
     *)
@@ -36,7 +40,5 @@ elif [[ $# -eq 1 ]]; then
         exit 1
         ;;
     esac
-else
-    usage;
 fi
 
