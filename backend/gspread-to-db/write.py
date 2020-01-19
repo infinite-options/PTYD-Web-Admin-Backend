@@ -21,6 +21,10 @@ WRITE_SETTINGS = 'write.json'
 SUPER_VERBOSE_MODE = False
 
 # Set super verbose flag to true if user enters the --super-verbose argument
+if any(arg in ['-d', '--delete-table'] for arg in sys.argv):
+    DELETE_TABLE_MODE = True
+
+# Set super verbose flag to true if user enters the --super-verbose argument
 if any(arg in ['-s', '--super-verbose'] for arg in sys.argv):
     SUPER_VERBOSE_MODE = True
 
@@ -32,9 +36,6 @@ def jsonifyInput():
     with open(WRITE_SETTINGS, 'r') as f:
         settings = json.load(f)
         sheets_name = settings['sheet_name']
-#       keys = []
-#       for key is settings['keys']:
-#           keys.append
         keys = tuple(settings['keys'])
     try:
         # Create a client to interact with the Google Drive API
@@ -130,15 +131,6 @@ def escapeSingleQuotes(value):
         if SUPER_VERBOSE_MODE is True: print("Can't add escape character for value:", value)
         return value
 
-# Deprecated functions
-'''
-# Replace value with 0 if it is a null string
-def replaceNullWithZero(value):
-    if value is '':
-        return 0
-    return value
-'''
-
 # Get 2-digit month/day values, 4-digit year and append "SKIP" before it
 def reformatSkipColumn(key, now):
     if SUPER_VERBOSE_MODE is True: print("Attempting reformatSkipColumns()")
@@ -191,9 +183,9 @@ def connectToRDS(RDS_PW):
 
 # Return a list of SQL commands to run from a JSON dict
 def dictToSql(jsonDicts, tableName, tableInfo):
-    now = datetime.now()#-timedelta(days=2)
+    now = datetime.now()
     query = []
-#   query.append("DELETE FROM " + tableName + ";")
+    if DELETE_FROM_MODE is True: query.append("DELETE FROM " + tableName + ";")
     try:
         print("Generating SQL commands for", tableName + "...")
         if SUPER_VERBOSE_MODE is True: print("JSON:", jsonDicts)
@@ -205,8 +197,9 @@ def dictToSql(jsonDicts, tableName, tableInfo):
             for key, value in jsonDict.items():
                 if SUPER_VERBOSE_MODE is True: print("Key:", key)
                 if SUPER_VERBOSE_MODE is True: print("Value:", value)
-                if '/' in key:
-                    key = reformatSkipColumn(key, now)
+                if '/' or 'SKIP' in key:
+                    if '/' in key:
+                        key = reformatSkipColumn(key, now)
                     if SUPER_VERBOSE_MODE is True: print("SKIP Key reformatted:", key)
                     if key not in tableInfo:
                         addColumnQuery = "ALTER TABLE " + tableName + " ADD COLUMN " + key + " VARCHAR(64);"
@@ -218,6 +211,7 @@ def dictToSql(jsonDicts, tableName, tableInfo):
                     value = reformatPhoneNum(value)
                 if SUPER_VERBOSE_MODE is True: print("Finished phone in key check")
                 # tableInfo won't intially have value type info on newly created columns
+                if SUPER_VERBOSE_MODE is True: print("tableInfo:", tableInfo)
                 valueType = tableInfo[key]
                 if SUPER_VERBOSE_MODE is True: print("valueType:", valueType)
                 if value == '':
@@ -251,9 +245,6 @@ def reformatPhoneNum(num):
     for symbol in symbolsToRemove:
         formatNum = formatNum.replace(symbol,'')
         if SUPER_VERBOSE_MODE is True: print("Current value after removing symbol " + symbol + ":", formatNum)
-#       if symbol in formatNum:
-#           formatNum = formatNum.replace(symbol,'')
-#           if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
     if len(formatNum) is 11 and formatNum[0] == areaCode:
         formatNum = formatNum[1:]
         if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
@@ -268,16 +259,21 @@ def reformatPhoneNum(num):
 
 # Reformate date values from input data
 def formatInputDate(inputDate):
-    datetimeObj = datetime.strptime(inputDate, "%b %d, %Y %H:%M:%S")
-    objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
-    return objToStr
+    formats = ["%b %d, %Y %H:%M:%S", "%Y-%m-%d %H:%M:%S"]
+    for fmt in formats:
+        try:
+            datetimeObj = datetime.strptime(inputDate, fmt)
+            objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
+            return objToStr
+        except:
+            pass
+    print("Cannot format to SQL datetime value:", inputDate)
+    raise Exception("formatInputDate(): Cannot format datetime value")
 
 # Append an item to an SQL command
 def appendSqlItem(cmd, item, data_type):
     if any(nonStringType in data_type for nonStringType in ['int', 'column_name', 'null_value']):
         item = str(item)
-#       if data_type == 'column_name':
-#           item = "`" + str(item) + "`"
     else:
         # Use the below two lines if Date_Submitted value format is Dec 9, 2019, 17:00:00
         if data_type == 'datetime':
@@ -321,6 +317,10 @@ def main():
             if SUPER_VERBOSE_MODE is True: print("tableInfo:", tableInfo)
             queries.extend(dictToSql(tableValues, table, tableInfo))
         global SKIP_KEY
+
+        # Remove later - temporarily setting SKIP_KEY as SKIP01192020 for now
+        SKIP_KEY = "SKIP01192020"
+
         if SUPER_VERBOSE_MODE is True: print("SKIP_KEY:", SKIP_KEY)
         if SKIP_KEY:
             if SUPER_VERBOSE_MODE is True: print("Adding UPDATE query...")
