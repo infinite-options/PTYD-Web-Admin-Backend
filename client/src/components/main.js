@@ -13,6 +13,9 @@ import TwentyMealSubscription from "./20-meals-subscription";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./howitworks";
+import OurStory from "./ourstory";
+import FaQ from "./faq";
+import JobS from "./jobs";
 
 const Main = () => (
   <Switch>
@@ -45,6 +48,9 @@ const Main = () => (
     <Route exact path="/findus" component={FindUs} />
     <Route exact path="/giftcards" component={GiftCards} />
     <Route exact path="/howitworks" component={HowItWorks} />
+    <Route exact path="/ourstory" component={OurStory} />
+    <Route exact path="/faq" component={FaQ} />
+    <Route exact path="/jobs" component={JobS} />
   </Switch>
 );
 

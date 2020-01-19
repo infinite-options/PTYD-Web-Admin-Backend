@@ -80,11 +80,25 @@ class App extends Component {
                   GIFT CARDS
                 </Nav.Link>
               </Nav.Item>
-              <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" eventKey="/howitworks">
-                  ABOUT
-                </Nav.Link>
-              </Nav.Item>
+
+              <NavDropdown
+                title="ABOUT"
+                id="nav-dropdown"
+                Style="margin-top:90px; color:black;"
+              >
+                <NavDropdown.Item href="/howitworks">
+                  HOW IT WORKS
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/ourstory">OUR STORY</NavDropdown.Item>
+                <NavDropdown.Item href="/faq">FAQ</NavDropdown.Item>
+                <NavDropdown.Item
+                  href="https://www.messenger.com/t/preptoyourdoor"
+                  target="_blank"
+                >
+                  CONTACT
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
+              </NavDropdown>
               <Nav.Item Style="margin-top:90px;">
                 <Nav.Link Style="color:black" eventKey="link-5">
                   GET $100
