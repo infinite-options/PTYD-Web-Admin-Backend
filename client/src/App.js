@@ -54,12 +54,20 @@ class App extends Component {
               <Nav.Item Style="margin-top:90px">
                 <Nav.Link Style="color:black" href="/selectmealplan">
                   SUBSCRIBE
-                  </Nav.Link>
+                </Nav.Link>
               </Nav.Item>
-              
-              <NavDropdown title="MENU" id="nav-dropdown" Style="margin-top:90px; color:black;">
-                <NavDropdown.Item href="/menuthisweek">THIS WEEK</NavDropdown.Item>
-                <NavDropdown.Item href="/menunextweek">NEXT WEEK</NavDropdown.Item>
+
+              <NavDropdown
+                title="MENU"
+                id="nav-dropdown"
+                Style="margin-top:90px; color:black;"
+              >
+                <NavDropdown.Item href="/menuthisweek">
+                  THIS WEEK
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/menunextweek">
+                  NEXT WEEK
+                </NavDropdown.Item>
               </NavDropdown>
 
               <Nav.Item Style="margin-top:90px">
@@ -73,7 +81,7 @@ class App extends Component {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item Style="margin-top:90px">
-                <Nav.Link Style="color:black" eventKey="link-4">
+                <Nav.Link Style="color:black" eventKey="/howitworks">
                   ABOUT
                 </Nav.Link>
               </Nav.Item>
@@ -206,7 +214,10 @@ class App extends Component {
                   </Nav.Link>
                 </Nav>
                 <Nav defaultActiveKey="/">
-                  <a href="https://www.facebook.com/preptoyourdoor" target="_blank">
+                  <a
+                    href="https://www.facebook.com/preptoyourdoor"
+                    target="_blank"
+                  >
                     <img
                       id="i3fogh650imageimageimage"
                       alt="Grey Facebook Icon"
@@ -226,7 +237,10 @@ class App extends Component {
                       src="https://static.wixstatic.com/media/7177d158c36d432b93f51e54f80e2f3c.png/v1/fill/w_51,h_51,al_c,q_95/7177d158c36d432b93f51e54f80e2f3c.webp"
                     ></img>
                   </a>
-                  <a href="https://www.instagram.com/preptoyourdoor/" target="_blank">
+                  <a
+                    href="https://www.instagram.com/preptoyourdoor/"
+                    target="_blank"
+                  >
                     <img
                       id="i3fogh652imageimageimage"
                       alt="Grey Instagram Icon"
