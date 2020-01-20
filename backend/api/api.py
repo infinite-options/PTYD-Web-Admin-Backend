@@ -116,6 +116,25 @@ class Plans(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
 
+class Orders(Resource):
+    global RDS_PW
+    def get(self):
+        response = {}
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = {}
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            cur.close()
+            conn.close()
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+
 api.add_resource(Plans, '/api/v1/plans')
 
 if __name__ == '__main__':
