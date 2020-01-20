@@ -47,10 +47,9 @@ class App extends Component {
         if (r === user()) {
           console.log(user());
           document.getElementById("loginStatus").innerHTML = "Signed In";
+          i = arr.length;
         } 
-        else {
-          document.getElementById("loginStatus").innerHTML = "Sign In";
-        }
+      
       }
     }
 
