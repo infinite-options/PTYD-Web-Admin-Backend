@@ -119,6 +119,11 @@ hr.three {
   background-color: #dbdbdbc0;
 }
 
+hr.four {
+  width: 40%;
+  background-color: #dbdbdbc0;
+}
+
 .header {
   height: 600px;
   width: 100vw;
