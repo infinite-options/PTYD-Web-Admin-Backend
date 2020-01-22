@@ -59,12 +59,12 @@ class Selectmealplan extends Component {
                         <b>{mealPlan.MealsPerWeek} MEALS WEEKLY</b>
                       </Card.Title>
                       <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                        from ${mealPlan.PricePerMeal} per meal
+                        from ${mealPlan.PricePerMeal.toFixed(2)} per meal
                       </Card.Text>
                       <Card.Text style={{ fontSize: "13px" }}>
                         {mealPlan.PlanSummary}
                       </Card.Text>
-                      <Card.Title>STARTING AT ${mealPlan.LowestPrice} /week</Card.Title>
+                      <Card.Title>STARTING AT ${mealPlan.LowestPrice.toFixed(2)} /week</Card.Title>
                       <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>

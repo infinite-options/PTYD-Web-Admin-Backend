@@ -59,9 +59,9 @@ def jsonifyQuery(query, rowDictKeys):
         for element in enumerate(row):
             key = rowDictKeys[element[0]]
             value = element[1]
-            # Convert all decimal values in row to floats
-            if 'Price' in key:
-                value = format(float(value), '.2f')
+#           # Convert all decimal values in row to floats
+#           if 'Price' in key:
+#               value = format(float(value), '.2f')
             rowDict[key] = value
         json.append(rowDict)
     return json
