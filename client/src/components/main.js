@@ -16,6 +16,7 @@ import HowItWorks from "./howitworks";
 import OurStory from "./ourstory";
 import FaQ from "./faq";
 import JobS from "./jobs";
+import Get100 from "./get100";
 
 const Main = () => (
   <Switch>
@@ -51,6 +52,7 @@ const Main = () => (
     <Route exact path="/ourstory" component={OurStory} />
     <Route exact path="/faq" component={FaQ} />
     <Route exact path="/jobs" component={JobS} />
+    <Route exact path="/get100" component={Get100} />
   </Switch>
 );
 

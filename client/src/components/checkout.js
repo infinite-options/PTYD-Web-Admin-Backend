@@ -1,17 +1,25 @@
 import React, { Component } from "react";
-import { Button, Card, CardDeck, Form, Row, Col, Container } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  CardDeck,
+  Form,
+  Row,
+  Col,
+  Container
+} from "react-bootstrap";
 import TruckIcon from "../img/prepTruckIcon.png";
 
 class Checkout extends Component {
   render() {
-
     return (
       <Container>
         <Row>
           <Col md={4}>
             <div class="justify-content-md-center">
-              <img src={TruckIcon}
-                style={{ height: "75%", width: "75%"}}
+              <img
+                src={TruckIcon}
+                style={{ height: "75%", width: "75%" }}
                 alt="Delivery Truck Icon"
               />
             </div>
@@ -19,19 +27,30 @@ class Checkout extends Component {
             <div id="cart">
               <p>{this.props.location.item.name}</p>
             </div>
-            <hr/>
+            <hr />
             <p>Estimated Shipping - $15.00</p>
-            <p>Estimated Tax - ${(this.props.location.item.total * 0.075).toFixed(2)}</p>
-            <hr/>
-            <h3>Total - ${((this.props.location.item.total * 1.075) + 15.00).toFixed(2)}</h3>
+            <p>
+              Estimated Tax - $
+              {(this.props.location.item.total * 0.075).toFixed(2)}
+            </p>
+            <hr />
+            <h3>
+              Total - $
+              {(this.props.location.item.total * 1.075 + 15.0).toFixed(2)}
+            </h3>
             <Form>
               <Form.Row>
                 <Form.Group as={Col} md={8} controlId="formGridCouponCode">
                   <Form.Label>Coupon/Gift Code</Form.Label>
-                  <Form.Control placeholder="Secret Passcode"/>
+                  <Form.Control placeholder="Secret Passcode" />
                 </Form.Group>
 
-                <Button variant="success" size="sm" Style="height:30px; margin-top:30px;" type="submit">
+                <Button
+                  variant="success"
+                  size="sm"
+                  Style="height:30px; margin-top:30px;"
+                  type="submit"
+                >
                   Checkout
                 </Button>
               </Form.Row>
@@ -74,15 +93,22 @@ class Checkout extends Component {
                 <Form.Control placeholder="1234 Main St" />
               </Form.Group>
 
-              <Form.Group as={Col} md={4} Style="margin-left:-15px;" controlId="formGridAptNum">
-                <Form.Label>Apartment/Unit <b>(Optional)</b></Form.Label>
+              <Form.Group
+                as={Col}
+                md={4}
+                Style="margin-left:-15px;"
+                controlId="formGridAptNum"
+              >
+                <Form.Label>
+                  Apartment/Unit <b>(Optional)</b>
+                </Form.Label>
                 <Form.Control placeholder="Apartment, studio, or floor" />
               </Form.Group>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridCity">
                   <Form.Label>City</Form.Label>
-                  <Form.Control placeholder="Prep City"/>
+                  <Form.Control placeholder="Prep City" />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridState">
@@ -95,11 +121,16 @@ class Checkout extends Component {
 
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Zip</Form.Label>
-                  <Form.Control placeholder="12345"/>
+                  <Form.Control placeholder="12345" />
                 </Form.Group>
               </Form.Row>
 
-              <Form.Group as={Col} md={6} Style="margin-left:-15px;" controlId="formGridCountry">
+              <Form.Group
+                as={Col}
+                md={6}
+                Style="margin-left:-15px;"
+                controlId="formGridCountry"
+              >
                 <Form.Label>Country</Form.Label>
                 <Form.Control as="select">
                   <option>Choose...</option>
@@ -120,15 +151,14 @@ class Checkout extends Component {
               <Form.Row>
                 <Form.Group as={Col} md={6} controlId="formGridCardNumber">
                   <Form.Label>Credit Card Number</Form.Label>
-                  <Form.Control placeholder="Enter Card Number"/>
+                  <Form.Control placeholder="Enter Card Number" />
                 </Form.Group>
-
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} md={3} controlId="formGridCardCvc">
                   <Form.Label>CVC</Form.Label>
-                  <Form.Control placeholder="123"/>
+                  <Form.Control placeholder="123" />
                 </Form.Group>
 
                 <Form.Group as={Col} md={3} controlId="formGridCardMonth">
@@ -151,7 +181,7 @@ class Checkout extends Component {
               <Form.Row>
                 <Form.Group as={Col} md={4} controlId="formGridBillingZip">
                   <Form.Label>Postal Code</Form.Label>
-                  <Form.Control placeholder="12345"/>
+                  <Form.Control placeholder="12345" />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridBillingCountry">
@@ -163,13 +193,10 @@ class Checkout extends Component {
                 </Form.Group>
               </Form.Row>
 
-
               <Button variant="success" type="submit">
                 Checkout
               </Button>
-
             </Form>
-            
           </Col>
         </Row>
       </Container>

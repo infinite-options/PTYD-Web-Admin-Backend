@@ -100,11 +100,14 @@ class Faq extends Component {
                 <br />
                 <br /> Voila! Here's a video showing you how:
                 <br />
-                <video width="500" controls>
-                  <source src="mov_bbb.mp4" type="video/mp4" />
-                  <source src="mov_bbb.ogg" type="video/ogg" />
-                  Your browser does not support HTML5 video.
-                </video>
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/KPOaDphaiiQ"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
               </Card.Body>
             </Accordion.Collapse>
           </Card>

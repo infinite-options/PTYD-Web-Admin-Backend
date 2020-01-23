@@ -43,11 +43,19 @@ class Ourstory extends Component {
               <br />
               <br />
 
-              <video width="500" controls>
+              {/* <video width="500" controls>
                 <source src="mov_bbb.mp4" type="video/mp4" />
                 <source src="mov_bbb.ogg" type="video/ogg" />
                 Your browser does not support HTML5 video.
-              </video>
+              </video> */}
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/3bKhzWKc1Xw"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
               <br />
               <br />
               <Cell col={10}>

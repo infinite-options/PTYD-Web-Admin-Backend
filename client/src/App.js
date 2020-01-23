@@ -100,7 +100,7 @@ class App extends Component {
                 <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
               </NavDropdown>
               <Nav.Item Style="margin-top:90px;">
-                <Nav.Link Style="color:black" eventKey="link-5">
+                <Nav.Link Style="color:black" href="/get100">
                   GET $100
                 </Nav.Link>
               </Nav.Item>
