@@ -47,10 +47,13 @@ def getRdsConn(RDS_PW):
         print("Could not connect to RDS.")
         raise Exception("RDS Connection failed.")
 
-def runQuery(query, cur):
-    cur.execute(query)
-    queriedData = cur.fetchall()
-    return queriedData
+def runSelectQuery(query, cur):
+    try:
+        cur.execute(query)
+        queriedData = cur.fetchall()
+        return queriedData
+    except:
+        raise Exception("Could not run select query and/or return data")
 
 def jsonifyQuery(query, rowDictKeys):
     json = []
@@ -59,8 +62,9 @@ def jsonifyQuery(query, rowDictKeys):
         for element in enumerate(row):
             key = rowDictKeys[element[0]]
             value = element[1]
-#           # Convert all decimal values in row to floats
-#           if 'Price' in key:
+            # Convert all decimal values in row to floats
+            if 'Price' in key:
+                value = float(value)
 #               value = format(float(value), '.2f')
             rowDict[key] = value
         json.append(rowDict)
@@ -101,22 +105,65 @@ class Plans(Resource):
             paymentPlanKeys = ('MealsPerWeek', 'WeekToWeek', 'WeekToWeekPrice', 'TwoWeekPrePay', 'TwoWeekPrice', 'FourWeekPrePay', 'FourWeekPrice')
             mealPlanKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'PricePerMeal', 'LowestPrice', 'Img', 'RouteOnclick')
 
-            query = runQuery(queries[0], cur)
+            query = runSelectQuery(queries[0], cur)
             items['PaymentPlans'] = jsonifyQuery(query, paymentPlanKeys)
 
-            query = runQuery(queries[1], cur)
+            query = runSelectQuery(queries[1], cur)
             items['MealPlans'] = jsonifyQuery(query, mealPlanKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items
 
-            cur.close()
-            conn.close()
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
+        finally:
+            cur.close()
+            conn.close()
+
+class Meals(Resource):
+    global RDS_PW
+    def get(self):
+        response = {}
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = {}
+
+            queries = [
+                """ SELECT
+                    Meal_ID,
+                    Meals,
+                    Actual_Meal,
+                    Calories,
+                    Protein,
+                    Carbs,
+                    Sugar,
+                    Fiber,
+                    Fat,
+                    Sat,
+                    Ingredient,
+                    Qty,
+                    Unit
+                    FROM
+                    Meals
+                    LEFT JOIN Ingredients
+                    ON Meal_ID = Meal;
+                    """]
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            cur.close()
+            conn.close()
 
 api.add_resource(Plans, '/api/v1/plans')
+api.add_resource(Meals, '/api/v1/meals')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='2000')
