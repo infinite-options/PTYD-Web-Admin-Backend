@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS Orders;
 CREATE TABLE IF NOT EXISTS Orders (
     Date_Submitted DATETIME NOT NULL,
+    Affected_Week DATETIME NOT NULL,
     Last_Name VARCHAR(32),
     First_Name VARCHAR(32),
     Email VARCHAR(64),
@@ -18,6 +19,5 @@ CREATE TABLE IF NOT EXISTS Orders (
     THE_ENERGIZER INT,
     SEASONAL_SMOOTHIE INT,
     Pick_Meals VARCHAR(41),
-    SKIP_THIS_WEEK VARCHAR(64),
     PRIMARY KEY (Date_Submitted, Phone_Number)
 );
