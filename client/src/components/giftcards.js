@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-import { Card, CardDeck, Carousel } from "react-bootstrap";
-import { Grid, Cell } from "react-mdl";
-import IMG1 from "../img/img1.jpg";
-import IMG3 from "../img/img3.jpg";
-import { Link } from "react-router-dom";
+import GIFTCARD from "../img/giftcard.png";
 class Giftcards extends Component {
   render() {
     return (
@@ -18,7 +14,7 @@ class Giftcards extends Component {
           <img
             class="img-fluid"
             style={{ width: "70%", height: "70%" }}
-            src={IMG1}
+            src={GIFTCARD}
             alt=""
           />
 
@@ -34,7 +30,7 @@ class Giftcards extends Component {
             <button
               type="button"
               class="btn1 btn1-primary"
-              style={{ marginTop: "10px", color: "white" }}
+              style={{ marginTop: "25px", color: "white" }}
             >
               Get Started
             </button>

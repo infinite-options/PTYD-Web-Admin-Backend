@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Cell, Center } from "react-mdl";
 import IMG8 from "../img/img8.jpeg";
+import COMPANY from "../img/company.png";
 
 class Ourstory extends Component {
   render() {
@@ -265,6 +266,12 @@ class Ourstory extends Component {
             <br />
             <h5>A special thanks to these “team members” too!</h5>
             <br />
+            <img
+              class="img-fluid"
+              style={{ width: "60%", height: "30%" }}
+              src={COMPANY}
+              alt=""
+            />
           </center>
         </div>
       </div>

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Carousel } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
-import IMG1 from "../img/img1.jpg";
-import IMG3 from "../img/img3.jpg";
+import FINDUS1 from "../img/findus1.png";
+import FINDUS2 from "../img/findus2.png";
+import FINDUS3 from "../img/findus3.png";
+import FINDUS4 from "../img/findus4.png";
 import { Link } from "react-router-dom";
 class Findus extends Component {
   render() {
@@ -25,7 +27,7 @@ class Findus extends Component {
                   boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
                   maxWidth: "20rem"
                 }}
-                src={IMG1}
+                src={FINDUS1}
                 alt=""
               />
               <Cell col={10}>
@@ -49,7 +51,7 @@ class Findus extends Component {
                   boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
                   maxWidth: "20rem"
                 }}
-                src={IMG1}
+                src={FINDUS2}
                 alt=""
               />
               <Cell col={10}>
@@ -75,7 +77,7 @@ class Findus extends Component {
                   boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
                   maxWidth: "20rem"
                 }}
-                src={IMG1}
+                src={FINDUS3}
                 alt=""
               />
               <Cell col={10}>
@@ -162,20 +164,20 @@ class Findus extends Component {
           <br />
           <Carousel>
             <Carousel.Item style={{ height: "500px" }}>
-              <img className="d-block w-100" src={IMG3} alt="First slide" />
+              <img className="d-block w-100" src={FINDUS4} alt="First slide" />
               <Carousel.Caption>
-                <h3>Upcoming Events!</h3>
+                {/* <h3>Upcoming Events!</h3>
                 <h1>NOVEMBER 20</h1>
                 <p>
                   JOIN US FOR YOGA
                   <br /> @ BFree Yoga​
                   <br />
                   7-8pm
-                </p>
+                </p> */}
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item style={{ height: "500px" }}>
-              <img className="d-block w-100" src={IMG3} alt="Third slide" />
+              <img className="d-block w-100" src={FINDUS4} alt="Third slide" />
 
               <Carousel.Caption>
                 <h3>Upcoming Events!</h3>
@@ -189,7 +191,7 @@ class Findus extends Component {
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item style={{ height: "500px" }}>
-              <img className="d-block w-100" src={IMG3} alt="Third slide" />
+              <img className="d-block w-100" src={FINDUS4} alt="Third slide" />
 
               <Carousel.Caption>
                 <h3>Upcoming Events!</h3>
