@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS Orders;
 CREATE TABLE IF NOT EXISTS Orders (
     Date_Submitted DATETIME NOT NULL,
-    Affected_Week DATETIME NOT NULL,
     Last_Name VARCHAR(32),
     First_Name VARCHAR(32),
     Email VARCHAR(64),

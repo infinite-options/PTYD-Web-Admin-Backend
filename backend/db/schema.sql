@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
     product_1_instance_id VARCHAR(32),
     product_1_name VARCHAR(18),
     product_1_sku VARCHAR(14),
+    product_0_One_Time_Order VARCHAR(16),
     product_1_Flavor VARCHAR(32),
     product_0_FLAVOR_2 VARCHAR(32),
     product_0_FLAVOR_1 VARCHAR(32)

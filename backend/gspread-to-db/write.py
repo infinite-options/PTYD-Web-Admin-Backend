@@ -19,6 +19,7 @@ WRITE_SETTINGS = 'write.json'
 
 # Flag that prints more info to console log when set to True
 SUPER_VERBOSE_MODE = False
+DELETE_TABLE_MODE = False 
 
 # Set super verbose flag to true if user enters the --super-verbose argument
 if any(arg in ['-d', '--delete-table'] for arg in sys.argv):
@@ -114,7 +115,16 @@ def replaceSpacesWithUnderscores(item):
         newItem = item.replace(' ','_')
         return newItem
     except:
-        print("Spaces of item could not be replaced with dashes")
+        print("Spaces of item could not be replaced with underscoress")
+        return item
+
+# Replace slashes with dashes in an item
+def replaceSlashesWithDashes(item):
+    try:
+        newItem = item.replace('/','-')
+        return newItem
+    except:
+        print("Slashes of item could not be replaced with dashes")
         return item
 
 # Remove leading underscore if item has it
@@ -183,9 +193,11 @@ def connectToRDS(RDS_PW):
 
 # Return a list of SQL commands to run from a JSON dict
 def dictToSql(jsonDicts, tableName, tableInfo):
+    if SUPER_VERBOSE_MODE is True: print("Starting dictToSql()")
     now = datetime.now()
     query = []
-    if DELETE_FROM_MODE is True: query.append("DELETE FROM " + tableName + ";")
+    skipquery = []
+    if DELETE_TABLE_MODE is True: query.append("DELETE FROM " + tableName + ";")
     try:
         print("Generating SQL commands for", tableName + "...")
         if SUPER_VERBOSE_MODE is True: print("JSON:", jsonDicts)
@@ -197,15 +209,23 @@ def dictToSql(jsonDicts, tableName, tableInfo):
             for key, value in jsonDict.items():
                 if SUPER_VERBOSE_MODE is True: print("Key:", key)
                 if SUPER_VERBOSE_MODE is True: print("Value:", value)
-                if '/' or 'SKIP' in key:
-                    if '/' in key:
-                        key = reformatSkipColumn(key, now)
-                    if SUPER_VERBOSE_MODE is True: print("SKIP Key reformatted:", key)
-                    if key not in tableInfo:
-                        addColumnQuery = "ALTER TABLE " + tableName + " ADD COLUMN " + key + " VARCHAR(64);"
-                        tableInfo[key] = 'varchar'
-                        if SUPER_VERBOSE_MODE is True: print("Appending query:", addColumnQuery)
-                        query.append(addColumnQuery)
+                if '/' in key:
+#                   key = reformatSkipColumn(key, now)
+#                   if SUPER_VERBOSE_MODE is True: print("SKIP Key reformatted:", key)
+#                   if key not in tableInfo:
+#                       addColumnQuery = "ALTER TABLE " + tableName + " ADD COLUMN " + key + " VARCHAR(64);"
+#                       tableInfo[key] = 'varchar'
+#                       if SUPER_VERBOSE_MODE is True: print("Appending query:", addColumnQuery)
+#                       query.append(addColumnQuery)
+                    if 'SKIP' in value:
+                        insToSkips = "INSERT IGNORE INTO Skips (Date_Submitted, Phone_Number, Skip_Sunday_Date) VALUES ("
+                        insToSkips = appendSqlItem(insToSkips, jsonDict['Date_Submitted'], "datetime")
+                        insToSkips = appendSqlItem(insToSkips, reformatPhoneNum(jsonDict['Phone_Number']), "varchar")
+                        insToSkips = appendSqlItem(insToSkips, key, "date")
+                        insToSkips = completeSqlCmd(insToSkips, ");")
+                        skipquery.append(insToSkips)
+                    continue
+
                 if SUPER_VERBOSE_MODE is True: print("Finished slash in key check")
                 if 'phone' in key.lower():
                     value = reformatPhoneNum(value)
@@ -227,6 +247,7 @@ def dictToSql(jsonDicts, tableName, tableInfo):
             query.append(ins + val)
             print("Generated query:", ins + val)
         print("Finished queries for table", tableName + ".")
+        query.extend(skipquery)
         return query
     except:
         print("Could not generate SQL commands.")
@@ -258,12 +279,15 @@ def reformatPhoneNum(num):
 
 
 # Reformate date values from input data
-def formatInputDate(inputDate):
-    formats = ["%b %d, %Y %H:%M:%S", "%Y-%m-%d %H:%M:%S"]
+def formatInputDate(inputDate, formatType):
+    formats = ["%b %d, %Y %H:%M:%S", "%Y-%m-%d %H:%M:%S", "%m/%d/%Y", "%Y-%m-%d", "%Y-%m-%d %H:%M:%S-0600", "%Y-%m-%d %H:%M:%S-0500"]
     for fmt in formats:
         try:
             datetimeObj = datetime.strptime(inputDate, fmt)
-            objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
+            if formatType is 'datetime':
+                objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                objToStr = datetimeObj.strftime("%Y-%m-%d")
             return objToStr
         except:
             pass
@@ -276,8 +300,8 @@ def appendSqlItem(cmd, item, data_type):
         item = str(item)
     else:
         # Use the below two lines if Date_Submitted value format is Dec 9, 2019, 17:00:00
-        if data_type == 'datetime':
-            item = formatInputDate(str(item))
+        if data_type == 'datetime' or data_type == 'date':
+            item = formatInputDate(str(item), data_type)
         item = "\'" + str(item) + "\'"
     newCmd = cmd + item
     if SUPER_VERBOSE_MODE is True: print("appendSqlItem():", newCmd)
@@ -316,15 +340,15 @@ def main():
             tableInfo = mapTupleList(tableInfo)
             if SUPER_VERBOSE_MODE is True: print("tableInfo:", tableInfo)
             queries.extend(dictToSql(tableValues, table, tableInfo))
-        global SKIP_KEY
+#       global SKIP_KEY
 
-        # Remove later - temporarily setting SKIP_KEY as SKIP01192020 for now
-        SKIP_KEY = "SKIP01192020"
+#       # Remove later - temporarily setting SKIP_KEY as SKIP01192020 for now
+#       SKIP_KEY = "SKIP01192020"
 
-        if SUPER_VERBOSE_MODE is True: print("SKIP_KEY:", SKIP_KEY)
-        if SKIP_KEY:
-            if SUPER_VERBOSE_MODE is True: print("Adding UPDATE query...")
-            queries.append("UPDATE Orders SET SKIP_THIS_WEEK = " + SKIP_KEY + ";")
+#       if SUPER_VERBOSE_MODE is True: print("SKIP_KEY:", SKIP_KEY)
+#       if SKIP_KEY:
+#           if SUPER_VERBOSE_MODE is True: print("Adding UPDATE query...")
+#           queries.append("UPDATE Orders SET SKIP_THIS_WEEK = " + SKIP_KEY + ";")
         print("Successfully wrote all queries.")
         for query in queries:
             print("Attempting query:", query)
