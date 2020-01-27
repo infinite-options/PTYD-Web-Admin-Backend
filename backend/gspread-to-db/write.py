@@ -15,7 +15,7 @@ else:
 
 RDS_DB = 'pricing'
 SKIP_KEY = None
-WRITE_SETTINGS = 'write.json'
+WRITE_SETTINGS = 'gspread.json'
 
 # Flag that prints more info to console log when set to True
 SUPER_VERBOSE_MODE = False
@@ -284,9 +284,9 @@ def formatInputDate(inputDate, formatType):
     for fmt in formats:
         try:
             datetimeObj = datetime.strptime(inputDate, fmt)
-            if formatType is 'datetime':
+            if formatType == 'datetime':
                 objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
-            else:
+            if formatType == 'date':
                 objToStr = datetimeObj.strftime("%Y-%m-%d")
             return objToStr
         except:
