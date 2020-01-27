@@ -1,18 +1,20 @@
-import React, { Component } from "react";
-import "./App.css";
+import React, { Component, useEffect, useContext } from "react";
 import { Layout, Header, Navigation, Drawer, Content } from "react-mdl";
-import Main from "./components/main";
 import { Link } from "react-router-dom";
+
+import "./App.css";
+import Main from "./components/main";
+import Login from "./components/login";
+import Store from "./Store"
+import {Context} from "./Store";
+
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import Popover from "react-bootstrap/Popover";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Blog from "./Blog";
 
 class App extends Component {
   static defaultProps = {
@@ -21,90 +23,18 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-
-    this.textInput = React.createRef();
-
     // this is where login info should be stored once api url is made to send get request based on form info, write helper function to do so once connected
     this.state = {
-      users: [
-        {user: "mickey"},
-        {user: "donald"}
-      ]
+      loginStatus: "Sign In"
     };
-  }
-
-  getUser() {
-    return this.textInput.current.value;
   }
 
   render() {
 
-    function checkLogin() {
-      var arr = getState();
-      console.log(arr);
-      for (var i = 0; i < arr.length; i++) {
-        var r = (arr[i].user);
-        if (r === user()) {
-          console.log(user());
-          document.getElementById("loginStatus").innerHTML = "Signed In";
-          i = arr.length;
-        } 
-      
-      }
-    }
-
-    const user = () => this.getUser();
-
-    const getState = () => {
-      console.log(this.state);
-      return this.state.users;
-    }
-
-    const popover = (
-      <Popover id="popover-basic" size="sm">
-        <Popover.Title as="h3">Signup or Login</Popover.Title>
-        <Popover.Content>
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              ref={this.textInput}
-              onChange={() => this.getUser()}
-              id="userForm"
-              placeholder="Username"
-              aria-label="Username"
-              aria-describedby="basic-addon1"
-            />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon2">@</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="Password"
-              aria-label="Password"
-              aria-describedby="basic-addon2"
-            />
-          </InputGroup>
-          <Button onClick={checkLogin}>Sign In</Button>
-          <p>
-            Or <strong><a href="/">Signup</a></strong> Here!
-          </p>
-        </Popover.Content>
-      </Popover>
-    );
-
-    const Example = () => (
-      <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-        <Button variant="success" size="sm">Get Started</Button>
-      </OverlayTrigger>
-    );
-
     return (
 
       <div className="demo-big-content">
-
+        <Store>
         <Layout>
           <Header
             className="header-color"
@@ -172,11 +102,8 @@ class App extends Component {
 
               <div className="" Style="margin-top:70px">
 
-                <Example></Example>
+                <Login></Login>
                 
-                <p id="loginStatus" Style="font-size:12px; text-align:right; color:black;">
-                  Sign In
-                </p>
               </div>
             </Nav>
           </Header>
@@ -186,15 +113,18 @@ class App extends Component {
             className="header-color-background"
             title={
               <Link style={{ fontFamily: "Kalam", color: "white" }} to="/">
-                Home
+                Prep To Your Door
               </Link>
             }
           >
             <Navigation>
-              <a href="/">Link</a>
-              <a href="/">Link</a>
-              <a href="/">Link</a>
-              <a href="/">Link</a>
+              <a href="/selectmealplan">SUBSCRIBE</a>
+              <a href="/menuthisweek">MENU</a>
+              <a href="/findus">FIND US</a>
+              <a href="/giftcards">GIFT CARDS</a>
+              <a href="/">ABOUT</a>
+              <a href="/">GET $100</a>
+              <Blog></Blog>
             </Navigation>
           </Drawer>
 
@@ -354,6 +284,7 @@ class App extends Component {
             </div>
           </footer>
         </Layout>
+        </Store>
       </div>
     );
   }
