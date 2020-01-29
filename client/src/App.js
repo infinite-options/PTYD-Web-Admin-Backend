@@ -10,6 +10,8 @@ import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
+
 class App extends Component {
   static defaultProps = {
     icon: "fas fa-home"
