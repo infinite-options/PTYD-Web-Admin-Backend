@@ -3,4 +3,5 @@ node_modules
 *client_secret.json
 *data.json
 *cratejoy_keys.json
+*gspread.json
 yarn.lock

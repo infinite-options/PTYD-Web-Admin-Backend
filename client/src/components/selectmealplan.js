@@ -5,7 +5,11 @@ import IMG1 from "../img/img1.jpg";
 //import IMG9 from "../img/img9.webp";
 import { Link } from "react-router-dom";
 
+//  For live, comment out when testing
 let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
+
+//  For testing, comment out when deploying
+//let DEV_URL = 'http://localhost:2000';
 
 class Selectmealplan extends Component {
   constructor(props) {
@@ -59,12 +63,12 @@ class Selectmealplan extends Component {
                         <b>{mealPlan.MealsPerWeek} MEALS WEEKLY</b>
                       </Card.Title>
                       <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                        from ${mealPlan.PricePerMeal} per meal
+                        from ${mealPlan.PricePerMeal.toFixed(2)} per meal
                       </Card.Text>
                       <Card.Text style={{ fontSize: "13px" }}>
                         {mealPlan.PlanSummary}
                       </Card.Text>
-                      <Card.Title>STARTING AT ${mealPlan.LowestPrice} /week</Card.Title>
+                      <Card.Title>STARTING AT ${mealPlan.LowestPrice.toFixed(2)} /week</Card.Title>
                       <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>

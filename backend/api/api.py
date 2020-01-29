@@ -47,27 +47,39 @@ def getRdsConn(RDS_PW):
         print("Could not connect to RDS.")
         raise Exception("RDS Connection failed.")
 
-def runQuery(query, cur):
-    cur.execute(query)
-    queriedData = cur.fetchall()
-    return queriedData
+# Close RDS connection
+def closeRdsConn(cur, conn):
+    try:
+        cur.close()
+        conn.close()
+        print("Successfully closed RDS connection.")
+    except:
+        print("Could not close RDS connection.")
 
-def jsonifyQuery(query, rowDictKeys):
-    json = []
-    for row in query:
-        rowDict = {}
-        for element in enumerate(row):
-            key = rowDictKeys[element[0]]
-            value = element[1]
-            # Convert all decimal values in row to floats
-            if 'Price' in key:
-                value = format(float(value), '.2f')
-            rowDict[key] = value
-        json.append(rowDict)
-    return json
+def runSelectQuery(query, cur):
+    try:
+        cur.execute(query)
+        queriedData = cur.fetchall()
+        return queriedData
+    except:
+        raise Exception("Could not run select query and/or return data")
 
 class Plans(Resource):
     global RDS_PW
+    def jsonifyQuery(self, query, rowDictKeys):
+        json = []
+        for row in query:
+            rowDict = {}
+            for element in enumerate(row):
+                key = rowDictKeys[element[0]]
+                value = element[1]
+                # Convert all decimal values in row to floats
+                if 'Price' in key:
+                    value = float(value)
+                rowDict[key] = value
+            json.append(rowDict)
+        return json
+
     def get(self):
         response = {}
         try:
@@ -78,45 +90,124 @@ class Plans(Resource):
 
             queries = [
                 """ SELECT
-                    MealsPerWeek,
-                    WeekToWeek,
-                    WeekToWeekPrice,
-                    TwoWeekPrePay,
-                    TwoWeekPrice,
-                    FourWeekPrePay,
-                    FourWeekPrice
-                FROM PaymentPlans;""",
+                        MealsPerWeek,
+                        WeekToWeek,
+                        WeekToWeekPrice,
+                        TwoWeekPrePay,
+                        TwoWeekPrice,
+                        FourWeekPrePay,
+                        FourWeekPrice
+                    FROM PaymentPlans;""",
                 """ SELECT
-                    m.MealsPerWeek,
-                    m.PlanSummary,
-                    m.PlanFooter,
-                    CAST(p.FourWeekPrice/CAST(p.MealsPerWeek AS DECIMAL(7,2)) AS DECIMAL(7,2)) AS PricePerMeal,
-                    p.FourWeekPrice as LowestPrice,
-                    m.Img,
-                    m.RouteOnclick
-                FROM MealPlans as m
-                INNER JOIN PaymentPlans as p
-                WHERE m.MealsPerWeek = p.MealsPerWeek;"""]
+                        m.MealsPerWeek,
+                        m.PlanSummary,
+                        m.PlanFooter,
+                        CAST(p.FourWeekPrice/CAST(p.MealsPerWeek AS DECIMAL(7,2)) AS DECIMAL(7,2)) AS PricePerMeal,
+                        p.FourWeekPrice as LowestPrice,
+                        m.Img,
+                        m.RouteOnclick
+                    FROM MealPlans as m
+                    INNER JOIN PaymentPlans as p
+                    WHERE m.MealsPerWeek = p.MealsPerWeek;"""]
 
             paymentPlanKeys = ('MealsPerWeek', 'WeekToWeek', 'WeekToWeekPrice', 'TwoWeekPrePay', 'TwoWeekPrice', 'FourWeekPrePay', 'FourWeekPrice')
             mealPlanKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'PricePerMeal', 'LowestPrice', 'Img', 'RouteOnclick')
 
-            query = runQuery(queries[0], cur)
-            items['PaymentPlans'] = jsonifyQuery(query, paymentPlanKeys)
+            query = runSelectQuery(queries[0], cur)
+            items['PaymentPlans'] = self.jsonifyQuery(query, paymentPlanKeys)
 
-            query = runQuery(queries[1], cur)
-            items['MealPlans'] = jsonifyQuery(query, mealPlanKeys)
+            query = runSelectQuery(queries[1], cur)
+            items['MealPlans'] = self.jsonifyQuery(query, mealPlanKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items
 
-            cur.close()
-            conn.close()
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
+
+class Meals(Resource):
+    global RDS_PW
+    def getIngredients(self, mealID, cur):
+        sql = """   SELECT
+                        Ingredient,
+                        Meal,
+                        Qty,
+                        Unit
+                    FROM Ingredients
+                    WHERE Meal = \'""" + mealID + """\';"""
+        ingrKeys = ('Ingredient', 'Meal', 'Qty', 'Unit')
+        query = runSelectQuery(sql, cur)
+        ingredients = self.jsonifyQuery(query, ingrKeys)
+
+        return ingredients
+
+    def jsonifyMeals(self, query, mealKeys, cur):
+        json = []
+        decimalKeys = ['Protein', 'Carbs', 'Sugar', 'Fiber', 'Fat', 'Sat']
+        for row in query:
+            rowDict = {}
+            mealID = row[0]
+            for element in enumerate(row):
+                key = mealKeys[element[0]]
+                value = element[1]
+                # Convert all decimal values in row to floats
+                if key in decimalKeys:
+                    value = float(value)
+                rowDict[key] = value
+            rowDict['Ingredients'] = self.getIngredients(mealID, cur)
+            json.append(rowDict)
+        return json
+
+    def jsonifyQuery(self, query, rowDictKeys):
+        json = []
+        for row in query:
+            rowDict = {}
+            for element in enumerate(row):
+                key = rowDictKeys[element[0]]
+                value = element[1]
+                rowDict[key] = value
+            json.append(rowDict)
+        return json
+
+    def get(self):
+        response = {}
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = {}
+
+            queries = [
+                """ SELECT
+                        Meal_ID,
+                        Meals,
+                        Actual_Meal,
+                        Calories,
+                        Protein,
+                        Carbs,
+                        Sugar,
+                        Fiber,
+                        Fat,
+                        Sat
+                    FROM Meals;"""]
+
+            mealsKeys = ('Meal_ID', 'Meals', 'Actual_Meal', 'Calories', 'Protein', 'Carbs', 'Sugar', 'Fiber', 'Fat', 'Sat')
+            query = runSelectQuery(queries[0], cur)
+            items['Meals'] = self.jsonifyMeals(query, mealsKeys, cur)
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
 
 api.add_resource(Plans, '/api/v1/plans')
+api.add_resource(Meals, '/api/v1/meals')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='2000')
