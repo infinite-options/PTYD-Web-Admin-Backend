@@ -30,10 +30,7 @@ const Blog = () => {
         posts = <p>yay {state.test} </p>;
     }
 
-    return (
-        <p>hey</p>
-    );
-    
+    return <p>hey hey</p>;
 }
 
 

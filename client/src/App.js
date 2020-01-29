@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useContext } from "react";
+import React, { Component, useEffect, useContext, useState } from "react";
 import { Layout, Header, Navigation, Drawer, Content } from "react-mdl";
 import { Link } from "react-router-dom";
 
@@ -16,23 +16,42 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Blog from "./Blog";
 
-class App extends Component {
-  static defaultProps = {
-    icon: "fas fa-home"
+const App = props => {
+
+  const [loginOn, loginOff] = ["Logged In", "Sign In"];
+
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+
+  var loginState = "";
+  if (document.cookie) {
+    loginState = document.cookie;
+  }
+  else {
+    alert(document.cookie);
+    loginState = "wow";
   }
 
-  constructor(props) {
-    super(props);
-    // this is where login info should be stored once api url is made to send get request based on form info, write helper function to do so once connected
-    this.state = {
-      loginStatus: "Sign In"
-    };
+  useEffect(() => {
+    onLoad();
+  }, []);
+  
+  async function onLoad() {
+    try {
+      userHasAuthenticated(true);
+    }
+    catch(e) {
+      if (e !== 'No current user') {
+        alert(e);
+      }
+    }
+  
+    setIsAuthenticating(false);
+
   }
 
-  render() {
-
-    return (
-
+  let stuff = (
+      !isAuthenticating &&
       <div className="demo-big-content">
         <Store>
         <Layout>
@@ -101,9 +120,7 @@ class App extends Component {
               </Nav.Item>
 
               <div className="" Style="margin-top:70px">
-
-                <Login></Login>
-                
+                <Login></Login>              
               </div>
             </Nav>
           </Header>
@@ -124,13 +141,21 @@ class App extends Component {
               <a href="/giftcards">GIFT CARDS</a>
               <a href="/">ABOUT</a>
               <a href="/">GET $100</a>
-              <Blog></Blog>
+              {isAuthenticated
+                ? <p>Logged In</p>
+                : <>
+                    <p>Not Logged In</p>
+                  </>
+              }
+              <div>
+              <p id="helper">{ loginState }</p>
+              </div>
             </Navigation>
           </Drawer>
 
           <Content Style="padding-top:145px">
             <div className="page-content" />
-            <Main />
+            <Main appProps={{ isAuthenticated, userHasAuthenticated }} />
           </Content>
 
           <hr></hr>
@@ -286,8 +311,9 @@ class App extends Component {
         </Layout>
         </Store>
       </div>
-    );
-  }
-}
+  );
+
+  return stuff;
+};
 
 export default App;
