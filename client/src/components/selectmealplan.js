@@ -6,10 +6,10 @@ import IMG1 from "../img/img1.jpg";
 import { Link } from "react-router-dom";
 
 //  For live, comment out when testing
-//let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
+let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
 
 //  For testing, comment out when deploying
-let DEV_URL = 'http://localhost:2000';
+//let DEV_URL = 'http://localhost:2000';
 
 class Selectmealplan extends Component {
   constructor(props) {
