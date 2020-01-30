@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 class Mealschedule extends Component {
   state = { count: 1 };
+
   changeDisable(btn) {
     this.button.disabled = !this.button.disabled;
     this.button2.disabled = !this.button2.disabled;
@@ -27,6 +28,18 @@ class Mealschedule extends Component {
     } else {
       this.button.disabled = this.button.disabled;
       this.button2.disabled = this.button2.disabled;
+    }
+  }
+  state = { count1: 1 };
+  changeColor(btn) {
+    var target = btn.target;
+    if (this.state.count1 == 0) {
+      target.style.backgroundColor = "white";
+      this.state.count1 = 1;
+    } else {
+      target.style.backgroundColor = "blue";
+      target.style.color = "gray";
+      this.state.count1 = 0;
     }
   }
   render() {
@@ -197,6 +210,7 @@ class Mealschedule extends Component {
                     <Button
                       variant="outline-secondary"
                       ref={button => (this.button = button)}
+                      onClick={this.changeColor.bind(this)}
                       style={{ width: "80px", height: "80px" }}
                     >
                       Select Meal
@@ -217,7 +231,7 @@ class Mealschedule extends Component {
                       Special Requests
                     </Button>
                   </ButtonToolbar>
-                  <br />
+                  {/* <br />
                   <ButtonToolbar>
                     <Button
                       variant="outline-secondary"
@@ -461,7 +475,7 @@ class Mealschedule extends Component {
                     >
                       Special Requests
                     </Button>
-                  </ButtonToolbar>
+                  </ButtonToolbar> */}
                 </div>
               </Cell>
             </Grid>
