@@ -17,6 +17,7 @@ import OurStory from "./ourstory";
 import FaQ from "./faq";
 import JobS from "./jobs";
 import Get100 from "./get100";
+import MealSchedule from "./mealschedule";
 
 const Main = () => (
   <Switch>
@@ -53,6 +54,7 @@ const Main = () => (
     <Route exact path="/faq" component={FaQ} />
     <Route exact path="/jobs" component={JobS} />
     <Route exact path="/get100" component={Get100} />
+    <Route exact path="/mealschedule" component={MealSchedule} />
   </Switch>
 );
 
