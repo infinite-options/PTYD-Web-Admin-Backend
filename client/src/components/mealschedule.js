@@ -193,7 +193,7 @@ class Mealschedule extends Component {
                     >
                       Skip This Week
                     </Button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <Button
                       variant="outline-secondary"
                       ref={button => (this.button = button)}
@@ -209,7 +209,252 @@ class Mealschedule extends Component {
                     >
                       Surprise Me!
                     </Button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Special Requests
+                    </Button>
+                  </ButtonToolbar>
+                  <br />
+                  <ButtonToolbar>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Sunday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Monday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.stayDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Skip This Week
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Select Meal
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button2 = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Surprise Me!
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Special Requests
+                    </Button>
+                  </ButtonToolbar>
+                  <br />
+                  <ButtonToolbar>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Sunday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Monday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.stayDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Skip This Week
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Select Meal
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button2 = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Surprise Me!
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Special Requests
+                    </Button>
+                  </ButtonToolbar>
+                  <br />
+                  <ButtonToolbar>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Sunday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Monday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.stayDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Skip This Week
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Select Meal
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button2 = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Surprise Me!
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Special Requests
+                    </Button>
+                  </ButtonToolbar>
+                  <br />
+                  <ButtonToolbar>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Sunday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Monday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.stayDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Skip This Week
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Select Meal
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button2 = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Surprise Me!
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Special Requests
+                    </Button>
+                  </ButtonToolbar>
+                  <br />
+                  <ButtonToolbar>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Sunday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Monday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.stayDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Skip This Week
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Select Meal
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button2 = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Surprise Me!
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <Button
                       variant="outline-secondary"
                       style={{ width: "80px", height: "80px" }}
