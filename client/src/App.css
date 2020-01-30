@@ -179,3 +179,7 @@ hr.four {
 .btn2-primary:active {
   background-color: #cd790c !important;
 }
+
+.meals-button {
+  font-size: 150%;
+}

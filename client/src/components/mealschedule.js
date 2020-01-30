@@ -1,18 +1,24 @@
 import React, { Component } from "react";
-import {
-  ButtonToolbar,
-  ToggleButtonGroup,
-  ToggleButton
-} from "react-bootstrap";
+import { ButtonToolbar, Button } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 import IMG8 from "../img/img8.jpeg";
 
 import { Link } from "react-router-dom";
 
 class Mealschedule extends Component {
-  changeDisable(btn, color) {
+  state = { count: 1 };
+  changeDisable(btn) {
     this.button.disabled = !this.button.disabled;
     this.button2.disabled = !this.button2.disabled;
+    var target = btn.target;
+    if (this.state.count == 0) {
+      target.style.backgroundColor = "pink";
+      this.state.count = 1;
+    } else {
+      target.style.backgroundColor = "white";
+      target.style.color = "gray";
+      this.state.count = 0;
+    }
   }
   stayDisable(btn) {
     if (!this.button.disabled) {
@@ -162,21 +168,56 @@ class Mealschedule extends Component {
                     </svg>
                   </Cell>
                 </Grid> */}
-                <button onClick={this.changeDisable}>Sunday</button>
-                <button onClick={this.changeDisable.bind(this)}>Monday</button>
-                <button onClick={this.stayDisable.bind(this)}>
-                  Skip This Week
-                </button>
-                &nbsp;&nbsp;&nbsp;
-                <button
-                  className="add-item__button"
-                  ref={button => (this.button = button)}
-                >
-                  Select Meal
-                </button>
-                <button ref={button => (this.button2 = button)}>
-                  Surprise Me!
-                </button>
+                <div class="meals-button">
+                  <ButtonToolbar>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Sunday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.changeDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Monday
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.stayDisable.bind(this)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Skip This Week
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Select Meal
+                    </Button>
+                    &nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      ref={button => (this.button2 = button)}
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Surprise Me!
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                      variant="outline-secondary"
+                      style={{ width: "80px", height: "80px" }}
+                    >
+                      Special Requests
+                    </Button>
+                  </ButtonToolbar>
+                </div>
               </Cell>
             </Grid>
           </div>
