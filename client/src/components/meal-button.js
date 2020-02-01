@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { Grid, Cell } from "react-mdl";
-import { ButtonToolbar, Button, Modal } from "react-bootstrap";
+import {
+  ButtonToolbar,
+  Button,
+  Modal,
+  Form,
+  FormControl
+} from "react-bootstrap";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -69,26 +75,6 @@ export default class MealButton extends Component {
       requestModal: !this.state.requestModal
     });
   };
-  Example = () => {
-    // const [show, setShow] = this.setState(false);
-
-    return (
-      <>
-        <Button variant="primary">Launch demo modal</Button>
-
-        <Modal show={true}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary">Close</Button>
-            <Button variant="primary">Save Changes</Button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  };
   render() {
     const pink = {
       width: "80px",
@@ -109,6 +95,55 @@ export default class MealButton extends Component {
       backgroundColor: "green",
       color: "white"
     };
+
+    function MyVerticallyCenteredModal(props) {
+      return (
+        <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Special Request
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group controlId="exampleForm.ControlTextarea1">
+              <Form.Control as="textarea" rows="3" />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+            <Button onClick={props.onHide}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      );
+    }
+
+    function App() {
+      const [modalShow, setModalShow] = React.useState(false);
+
+      return (
+        <ButtonToolbar>
+          <Button
+            variant="outline-secondary"
+            style={{ width: "80px", height: "80px" }}
+            onClick={() => setModalShow(true)}
+          >
+            Special Requests
+          </Button>
+
+          <MyVerticallyCenteredModal
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+          />
+        </ButtonToolbar>
+      );
+    }
     return (
       <div>
         <ButtonToolbar>
@@ -161,29 +196,10 @@ export default class MealButton extends Component {
             Surprise Me!
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button
-            variant="outline-secondary"
-            style={{ width: "80px", height: "80px" }}
-            onClick={this.Example}
-          >
-            Special Requests
-          </Button>
+          <App />
         </ButtonToolbar>
         <div style={this.state.requestModal ? {} : { display: "none" }}>
-          {/* <Modal.Dialog>
-            <Modal.Header closeButton>
-              <Modal.Title>Modal title</Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body>
-              <p>Modal body text goes here.</p>
-            </Modal.Body>
-
-            <Modal.Footer>
-              <Button variant="secondary">Close</Button>
-              <Button variant="primary">Save changes</Button>
-            </Modal.Footer>
-          </Modal.Dialog> */}
+          <App />
         </div>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </div>
