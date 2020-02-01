@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 import "./App.css";
 import Main from "./components/main";
 import Login from "./components/login";
-import Store from "./Store"
-import {Context} from "./Store";
 
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
@@ -14,7 +12,6 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Blog from "./Blog";
 
 const App = props => {
 
@@ -53,7 +50,7 @@ const App = props => {
   let stuff = (
       !isAuthenticating &&
       <div className="demo-big-content">
-        <Store>
+      
         <Layout>
           <Header
             className="header-color"
@@ -309,7 +306,7 @@ const App = props => {
             </div>
           </footer>
         </Layout>
-        </Store>
+
       </div>
   );
 

@@ -1,5 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect } from "react";
 
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
@@ -7,7 +6,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 
-import crypto from "crypto";
+//import crypto from "crypto";
 
 export default function Login (props) {
 
