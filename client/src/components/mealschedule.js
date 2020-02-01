@@ -3,46 +3,123 @@ import { ButtonToolbar, Button } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 import IMG8 from "../img/img8.jpeg";
 
-import { Link } from "react-router-dom";
-
 class Mealschedule extends Component {
-  state = { count: 1 };
+  state = {
+    count: 0,
+    buttonS: false,
+    buttonM: false,
+    buttonSkip: false,
+    buttonSelect: false,
+    buttonSurprise: false
+  };
 
-  changeDisable(btn) {
+  // changeDisable(btn) {
+  //   // this.button3.style.backgroundColor = "white";
+  //   // this.button4.style.backgroundColor = "white";
+
+  //   // var target = btn.target;
+  //   // if (this.state.count == 0) {
+  //   //   target.style.backgroundColor = "white";
+  //   //   target.style.color = "gray";
+  //   //   this.state.count = 1;
+  //   // } else {
+  //   //   target.style.backgroundColor = "pink";
+  //   //   target.style.color = "gray";
+  //   //   this.state.count = 0;
+  //   // }
+  //   this.button.disabled = this.button.enabled;
+  //   this.button2.disabled = this.button2.enabled;
+  // }
+  // stayDisable(btn) {
+  //   if (!this.button.disabled) {
+  //     this.button.disabled = !this.button.disabled;
+  //     this.button2.disabled = !this.button2.disabled;
+  //   } else {
+  //     this.button.disabled = this.button.disabled;
+  //     this.button2.disabled = this.button2.disabled;
+  //   }
+  // }
+  // changeColor(btn) {
+  //   var target = btn.target;
+  //   if (this.state.count1 == 0) {
+  //     target.style.backgroundColor = "white";
+  //     this.state.count1 = 1;
+  //   } else {
+  //     target.style.backgroundColor = "blue";
+  //     target.style.color = "gray";
+  //     this.state.count1 = 0;
+  //   }
+  // }
+
+  changeButtonS = () => {
+    this.setState({
+      buttonS: true,
+      buttonM: false,
+      buttonSkip: false
+    });
+
+    this.button.disabled = this.button.enabled;
+    this.button2.disabled = this.button2.enabled;
+  };
+
+  changeButtonM = () => {
+    this.setState({
+      buttonM: true,
+      buttonS: false,
+      buttonSkip: false
+    });
+
+    this.button.disabled = this.button.enabled;
+    this.button2.disabled = this.button2.enabled;
+  };
+
+  changeButtonSkip = () => {
+    this.setState({
+      buttonM: false,
+      buttonS: false,
+      buttonSkip: true,
+
+      buttonSurprise: false,
+      buttonSelect: false
+    });
     this.button.disabled = !this.button.disabled;
     this.button2.disabled = !this.button2.disabled;
-    var target = btn.target;
-    if (this.state.count == 0) {
-      target.style.backgroundColor = "pink";
-      this.state.count = 1;
-    } else {
-      target.style.backgroundColor = "white";
-      target.style.color = "gray";
-      this.state.count = 0;
-    }
-  }
-  stayDisable(btn) {
-    if (!this.button.disabled) {
-      this.button.disabled = !this.button.disabled;
-      this.button2.disabled = !this.button2.disabled;
-    } else {
-      this.button.disabled = this.button.disabled;
-      this.button2.disabled = this.button2.disabled;
-    }
-  }
-  state = { count1: 1 };
-  changeColor(btn) {
-    var target = btn.target;
-    if (this.state.count1 == 0) {
-      target.style.backgroundColor = "white";
-      this.state.count1 = 1;
-    } else {
-      target.style.backgroundColor = "blue";
-      target.style.color = "gray";
-      this.state.count1 = 0;
-    }
-  }
+  };
+
+  changeButtonSelect = () => {
+    this.setState({
+      buttonSelect: true,
+      buttonSurprise: false
+    });
+  };
+  changeButtonSurprise = () => {
+    this.setState({
+      buttonSelect: false,
+      buttonSurprise: true
+    });
+  };
+
   render() {
+    const pink = {
+      width: "80px",
+      height: "80px",
+      backgroundColor: "pink",
+      color: "gray"
+    };
+
+    const hide = {
+      width: "80px",
+      height: "80px",
+      backgroundColor: "white",
+      color: "gray"
+    };
+    const green = {
+      width: "80px",
+      height: "80px",
+      backgroundColor: "green",
+      color: "white"
+    };
+
     return (
       <div>
         <section class="content-section">
@@ -183,35 +260,38 @@ class Mealschedule extends Component {
                 </Grid> */}
                 <div class="meals-button">
                   <ButtonToolbar>
-                    <Button
-                      variant="outline-secondary"
-                      onClick={this.changeDisable.bind(this)}
-                      style={{ width: "80px", height: "80px" }}
-                    >
-                      Sunday
-                    </Button>
-                    &nbsp;
-                    <Button
-                      variant="outline-secondary"
-                      onClick={this.changeDisable.bind(this)}
-                      style={{ width: "80px", height: "80px" }}
-                    >
-                      Monday
-                    </Button>
-                    &nbsp;
-                    <Button
-                      variant="outline-secondary"
-                      onClick={this.stayDisable.bind(this)}
-                      style={{ width: "80px", height: "80px" }}
-                    >
-                      Skip This Week
-                    </Button>
+                    <div className="radio">
+                      <Button
+                        variant="outline-secondary"
+                        ref={button => (this.button = button)}
+                        onClick={this.changeButtonS}
+                        style={this.state.buttonS ? pink : hide}
+                      >
+                        Sunday
+                      </Button>
+                      &nbsp;
+                      <Button
+                        variant="outline-secondary"
+                        onClick={this.changeButtonM}
+                        style={this.state.buttonM ? pink : hide}
+                      >
+                        Monday
+                      </Button>
+                      &nbsp;
+                      <Button
+                        variant="outline-secondary"
+                        onClick={this.changeButtonSkip}
+                        style={{ width: "80px", height: "80px" }}
+                      >
+                        Skip This Week
+                      </Button>
+                    </div>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <Button
                       variant="outline-secondary"
                       ref={button => (this.button = button)}
-                      onClick={this.changeColor.bind(this)}
-                      style={{ width: "80px", height: "80px" }}
+                      onClick={this.changeButtonSelect}
+                      style={this.state.buttonSelect ? green : hide}
                     >
                       Select Meal
                     </Button>
@@ -219,7 +299,8 @@ class Mealschedule extends Component {
                     <Button
                       variant="outline-secondary"
                       ref={button => (this.button2 = button)}
-                      style={{ width: "80px", height: "80px" }}
+                      onClick={this.changeButtonSurprise}
+                      style={this.state.buttonSurprise ? green : hide}
                     >
                       Surprise Me!
                     </Button>
