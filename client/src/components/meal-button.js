@@ -96,7 +96,7 @@ export default class MealButton extends Component {
       color: "white"
     };
 
-    function MyVerticallyCenteredModal(props) {
+    function SpecialRequestModal(props) {
       return (
         <Modal
           {...props}
@@ -124,7 +124,7 @@ export default class MealButton extends Component {
       );
     }
 
-    function App() {
+    function SpecialRequestAnimation() {
       const [modalShow, setModalShow] = React.useState(false);
 
       return (
@@ -137,7 +137,7 @@ export default class MealButton extends Component {
             Special Requests
           </Button>
 
-          <MyVerticallyCenteredModal
+          <SpecialRequestModal
             show={modalShow}
             onHide={() => setModalShow(false)}
           />
@@ -196,11 +196,9 @@ export default class MealButton extends Component {
             Surprise Me!
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <App />
+          <SpecialRequestAnimation />
         </ButtonToolbar>
-        <div style={this.state.requestModal ? {} : { display: "none" }}>
-          <App />
-        </div>
+        {/* <div style={this.state.requestModal ? {} : { display: "none" }}> */}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </div>
     );
