@@ -23,7 +23,7 @@ class App extends Component {
             className="header-color"
             title={
               <span>
-                <span Style='color: "#ddd'>Area / </span>
+                <span style={{ color: "#ddd" }}>Area / </span>
                 <strong>The Title</strong>
               </span>
             }
