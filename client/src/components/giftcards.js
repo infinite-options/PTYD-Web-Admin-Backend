@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import GIFTCARD from "../img/giftcard.png";
+
 class Giftcards extends Component {
   render() {
     return (

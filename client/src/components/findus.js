@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Card, CardDeck, Carousel } from "react-bootstrap";
+import { Carousel } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 import FINDUS1 from "../img/findus1.png";
 import FINDUS2 from "../img/findus2.png";
 import FINDUS3 from "../img/findus3.png";
 import FINDUS4 from "../img/findus4.png";
-import { Link } from "react-router-dom";
+
 class Findus extends Component {
   render() {
     return (

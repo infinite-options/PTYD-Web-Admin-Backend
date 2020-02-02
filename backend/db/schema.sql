@@ -32,12 +32,15 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
     ship_phone_number VARCHAR(10) NOT NULL,
     ship_state VARCHAR(2) NOT NULL,
     ship_zip_code VARCHAR(10) NOT NULL,
-    ship_country VARCHAR(2) NOT NULL,
+--  ship_country VARCHAR(2) NOT NULL,
+--  subscription_date DATETIME NOT NULL,
+--  subscription_expire_original DATETIME NOT NULL,
+    subscription_expire DATETIME NOT NULL,
     verification_status VARCHAR(64),
     verification_message VARCHAR(64),
     shipment_status VARCHAR(64),
     first_shipment VARCHAR(64),
-    shipment_number VARCHAR(64),
+    shipment_number INT,
     order_id VARCHAR(64),
     order_date DATETIME,
     target_ship_date DATETIME,
@@ -88,7 +91,8 @@ CREATE TABLE IF NOT EXISTS Orders (
     ALMOND_BUTTER INT,
     THE_ENERGIZER INT,
     SEASONAL_SMOOTHIE INT,
-    Pick_Meals VARCHAR(41)
+    Pick_Meals VARCHAR(41),
+    SKIP_THIS_WEEK VARCHAR(64)
 );
 
 --  DROP TABLE IF EXISTS MealPlans;

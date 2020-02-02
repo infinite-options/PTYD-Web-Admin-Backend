@@ -4,7 +4,7 @@ import gspread
 import pymysql
 import sys
 import json
-import datetime
+from datetime import datetime, timedelta
 
 # Store first command line argument as database password
 if len(sys.argv) >= 2:
@@ -13,8 +13,16 @@ else:
     print("Usage: Enter password for MySQL server as first command line argument")
     sys.exit(1)
 
+RDS_DB = 'pricing'
+SKIP_KEY = None
+WRITE_SETTINGS = 'write.json'
+
 # Flag that prints more info to console log when set to True
 SUPER_VERBOSE_MODE = False
+
+# Set super verbose flag to true if user enters the --super-verbose argument
+if any(arg in ['-d', '--delete-table'] for arg in sys.argv):
+    DELETE_TABLE_MODE = True
 
 # Set super verbose flag to true if user enters the --super-verbose argument
 if any(arg in ['-s', '--super-verbose'] for arg in sys.argv):
@@ -22,10 +30,13 @@ if any(arg in ['-s', '--super-verbose'] for arg in sys.argv):
 
 # Retrieve data from Google Sheets and return it as a JSON object
 def jsonifyInput():
+    global WRITE_SETTINGS
     # Initialize JSON to return
     inputJson = {}
-    keys = ('Subscriptions', 'Orders', 'Meals')
-    sheets_name = "Prep To Your Door Data Schema"
+    with open(WRITE_SETTINGS, 'r') as f:
+        settings = json.load(f)
+        sheets_name = settings['sheet_name']
+        keys = tuple(settings['keys'])
     try:
         # Create a client to interact with the Google Drive API
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
@@ -120,27 +131,26 @@ def escapeSingleQuotes(value):
         if SUPER_VERBOSE_MODE is True: print("Can't add escape character for value:", value)
         return value
 
-# Deprecated functions
-'''
-# Format meals dict
-def formatMeals(meals):
-    newDict = []
-    for meal in meals:
-        rowToAppend = {'Meals': meal['Meals'], 'Actual_Meal': meal['Actual Meal']}
-        newDict.append(rowToAppend)
-    return newDict
-
-# Replace value with 0 if it is a null string
-def replaceNullWithZero(value):
-    if value is '':
-        return 0
-    return value
-
-# Reformat columns with name XX/XX/XXXX
-def reformatDColumn(key):
-    return "D" + key.replace('/','')
-
-'''
+# Get 2-digit month/day values, 4-digit year and append "SKIP" before it
+def reformatSkipColumn(key, now):
+    if SUPER_VERBOSE_MODE is True: print("Attempting reformatSkipColumns()")
+    try:
+        # Store json key as datetime object
+        datetimeObj = datetime.strptime(key, "%m/%d/%Y")
+        newKey = 'SKIP'
+        newKey += '{:02d}'.format(datetimeObj.month)
+        newKey += '{:02d}'.format(datetimeObj.day)
+        newKey += '{:04d}'.format(datetimeObj.year)
+        # Check if key datetime is within 7 days of today, set thisWeek to True if it is
+        if now <= datetimeObj <= now + timedelta(days=7):
+            global SKIP_KEY
+            SKIP_KEY = newKey
+            if SUPER_VERBOSE_MODE is True: print("The key", newKey, " will also be the key for SKIP_THIS_WEEK")
+        if SUPER_VERBOSE_MODE is True: print("reformatSkipColumns(): Returning", newKey)
+        return newKey
+    except:
+        print("reformatSkipColumns(): Bad key?", key)
+        raise Exception("Cannot reformat json key to table column name")
 
 # Returns a Connection object from pymysql to the database
 def connectToRDS(RDS_PW):
@@ -148,7 +158,8 @@ def connectToRDS(RDS_PW):
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
     RDS_USER = 'admin'
-    RDS_DB = 'pricing'
+    global RDS_DB
+#   RDS_DB = 'pricing'
 
     # RDS connection
     print("Connecting to RDS...")
@@ -172,26 +183,35 @@ def connectToRDS(RDS_PW):
 
 # Return a list of SQL commands to run from a JSON dict
 def dictToSql(jsonDicts, tableName, tableInfo):
+    now = datetime.now()
     query = []
-    query.append("DELETE FROM " + tableName + ";")
+    if DELETE_FROM_MODE is True: query.append("DELETE FROM " + tableName + ";")
     try:
         print("Generating SQL commands for", tableName + "...")
         if SUPER_VERBOSE_MODE is True: print("JSON:", jsonDicts)
         for jsonDict in jsonDicts:
-            ins = "INSERT INTO " + tableName + " ("
+            ins = "INSERT IGNORE INTO " + tableName + " ("
             val = "VALUES ("
             if SUPER_VERBOSE_MODE is True: print("Current ins:", ins)
             if SUPER_VERBOSE_MODE is True: print("Current val:", val)
             for key, value in jsonDict.items():
                 if SUPER_VERBOSE_MODE is True: print("Key:", key)
                 if SUPER_VERBOSE_MODE is True: print("Value:", value)
-                if '/' in key:
-#                   key = reformatDColumn(key)
-                    continue
+                if '/' or 'SKIP' in key:
+                    if '/' in key:
+                        key = reformatSkipColumn(key, now)
+                    if SUPER_VERBOSE_MODE is True: print("SKIP Key reformatted:", key)
+                    if key not in tableInfo:
+                        addColumnQuery = "ALTER TABLE " + tableName + " ADD COLUMN " + key + " VARCHAR(64);"
+                        tableInfo[key] = 'varchar'
+                        if SUPER_VERBOSE_MODE is True: print("Appending query:", addColumnQuery)
+                        query.append(addColumnQuery)
                 if SUPER_VERBOSE_MODE is True: print("Finished slash in key check")
                 if 'phone' in key.lower():
                     value = reformatPhoneNum(value)
                 if SUPER_VERBOSE_MODE is True: print("Finished phone in key check")
+                # tableInfo won't intially have value type info on newly created columns
+                if SUPER_VERBOSE_MODE is True: print("tableInfo:", tableInfo)
                 valueType = tableInfo[key]
                 if SUPER_VERBOSE_MODE is True: print("valueType:", valueType)
                 if value == '':
@@ -206,6 +226,7 @@ def dictToSql(jsonDicts, tableName, tableInfo):
             val = completeSqlCmd(val, ");")
             query.append(ins + val)
             print("Generated query:", ins + val)
+        print("Finished queries for table", tableName + ".")
         return query
     except:
         print("Could not generate SQL commands.")
@@ -216,33 +237,43 @@ def reformatPhoneNum(num):
     if SUPER_VERBOSE_MODE is True: print("Reformatting phone number:", num)
     areaCode = '1'
     formatNum = str(num)
-    symbolsToRemove = ['(',')',' ','-','+','.']
+    if len(formatNum) is 0:
+        if SUPER_VERBOSE_MODE is True: print("No phone number. Returning 0000000000")
+        return "5550000000"
+    # The two spaces are somehow different characters?
+    symbolsToRemove = ['(',')',' ','-','+','.',' ']
     for symbol in symbolsToRemove:
-        if symbol in formatNum:
-            formatNum = formatNum.replace(symbol,'')
-            if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
+        formatNum = formatNum.replace(symbol,'')
+        if SUPER_VERBOSE_MODE is True: print("Current value after removing symbol " + symbol + ":", formatNum)
     if len(formatNum) is 11 and formatNum[0] == areaCode:
         formatNum = formatNum[1:]
         if SUPER_VERBOSE_MODE is True: print("Current value:", formatNum)
-    if len(formatNum) is not 10:
-        print("Cannot format phone number", num, "to 10-digit number.")
-        raise Exception("Cannot remove non-digit symbols in phone number")
+#   if len(formatNum) > 10:
+#       print("Cannot format phone number", num, "to 10-digit number.")
+#       if SUPER_VERBOSE_MODE is True: print("Phone number length:", len(formatNum))
+#       if SUPER_VERBOSE_MODE is True: print("Phone number formatted:", formatNum)
+#       raise Exception("Cannot remove non-digit symbols in phone number")
     if SUPER_VERBOSE_MODE is True: print("Final value:", formatNum)
     return formatNum
 
 
 # Reformate date values from input data
 def formatInputDate(inputDate):
-    datetimeObj = datetime.datetime.strptime(inputDate, "%b %d, %Y %H:%M:%S")
-    objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
-    return objToStr
+    formats = ["%b %d, %Y %H:%M:%S", "%Y-%m-%d %H:%M:%S"]
+    for fmt in formats:
+        try:
+            datetimeObj = datetime.strptime(inputDate, fmt)
+            objToStr = datetimeObj.strftime("%Y-%m-%d %H:%M:%S")
+            return objToStr
+        except:
+            pass
+    print("Cannot format to SQL datetime value:", inputDate)
+    raise Exception("formatInputDate(): Cannot format datetime value")
 
 # Append an item to an SQL command
 def appendSqlItem(cmd, item, data_type):
     if any(nonStringType in data_type for nonStringType in ['int', 'column_name', 'null_value']):
         item = str(item)
-#       if data_type == 'column_name':
-#           item = "`" + str(item) + "`"
     else:
         # Use the below two lines if Date_Submitted value format is Dec 9, 2019, 17:00:00
         if data_type == 'datetime':
@@ -283,7 +314,17 @@ def main():
             cur.execute(tableInfoQuery)
             tableInfo = cur.fetchall()
             tableInfo = mapTupleList(tableInfo)
+            if SUPER_VERBOSE_MODE is True: print("tableInfo:", tableInfo)
             queries.extend(dictToSql(tableValues, table, tableInfo))
+        global SKIP_KEY
+
+        # Remove later - temporarily setting SKIP_KEY as SKIP01192020 for now
+        SKIP_KEY = "SKIP01192020"
+
+        if SUPER_VERBOSE_MODE is True: print("SKIP_KEY:", SKIP_KEY)
+        if SKIP_KEY:
+            if SUPER_VERBOSE_MODE is True: print("Adding UPDATE query...")
+            queries.append("UPDATE Orders SET SKIP_THIS_WEEK = " + SKIP_KEY + ";")
         print("Successfully wrote all queries.")
         for query in queries:
             print("Attempting query:", query)

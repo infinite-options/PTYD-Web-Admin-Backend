@@ -51,7 +51,7 @@ class Landing extends Component {
               </div>
 
               <div class="bottom-left">
-                <a>Already a Member? Sign in</a>
+                <a href="/signup">Already a Member? Sign in</a>
               </div>
             </div>
             <div class="container">
@@ -317,7 +317,6 @@ class Landing extends Component {
                     <Row
                       style={{
                         fontSize: "13px",
-                        color: "black",
                         lineHeight: "20px",
                         color: "#888785"
                       }}
@@ -342,7 +341,6 @@ class Landing extends Component {
                     <Row
                       style={{
                         fontSize: "13px",
-                        color: "black",
                         lineHeight: "20px",
                         color: "#888785"
                       }}
