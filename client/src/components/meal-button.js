@@ -76,11 +76,11 @@ export default class MealButton extends Component {
     });
   };
   render() {
-    const pink = {
+    const orange = {
       width: "80px",
       height: "80px",
-      backgroundColor: "pink",
-      color: "gray"
+      backgroundColor: "#cd790c",
+      color: "white"
     };
 
     const hide = {
@@ -92,7 +92,7 @@ export default class MealButton extends Component {
     const green = {
       width: "80px",
       height: "80px",
-      backgroundColor: "green",
+      backgroundColor: "#427c42",
       color: "white"
     };
 
@@ -144,6 +144,62 @@ export default class MealButton extends Component {
         </ButtonToolbar>
       );
     }
+    // function SelectMealModal(props) {
+    //   return (
+    //     <Modal
+    //       {...props}
+    //       size="lg"
+    //       aria-labelledby="contained-modal-title-vcenter"
+    //       centered
+    //     >
+    //       <Modal.Header closeButton>
+    //         <Modal.Title id="contained-modal-title-vcenter">
+    //           Select Meal
+    //         </Modal.Title>
+    //       </Modal.Header>
+    //       <Modal.Body>
+    //         <Form.Group controlId="exampleForm.ControlTextarea1">
+    //           <Form.Control as="textarea" rows="3" />
+    //         </Form.Group>
+    //       </Modal.Body>
+    //       <Modal.Footer>
+    //         <Button variant="primary" type="submit">
+    //           Submit
+    //         </Button>
+    //         <Button onClick={props.onHide}>Close</Button>
+    //       </Modal.Footer>
+    //     </Modal>
+    //   );
+    // }
+
+    // function SelectMealAnimation() {
+    //   const [modalShow, setModalShow] = React.useState(false);
+
+    //   return (
+    //     <ButtonToolbar>
+    //       <Button
+    //         variant="outline-secondary"
+    //         style={{ width: "80px", height: "80px" }}
+    //         onClick={() => setModalShow(true)}
+    //       >
+    //         Special Requests
+    //       </Button>
+    //       <Button
+    //         variant="outline-secondary"
+    //         ref={button => (this.button = button)}
+    //         onClick={this.changeButtonSelect}
+    //         style={this.state.buttonSelect ? green : hide}
+    //       >
+    //         Select Meal
+    //       </Button>
+
+    //       <SpecialRequestModal
+    //         show={modalShow}
+    //         onHide={() => setModalShow(false)}
+    //       />
+    //     </ButtonToolbar>
+    //   );
+    // }
     return (
       <div>
         <ButtonToolbar>
@@ -152,7 +208,7 @@ export default class MealButton extends Component {
               variant="outline-secondary"
               ref={button => (this.button = button)}
               onClick={this.changeButtonS}
-              style={this.state.buttonS ? pink : hide}
+              style={this.state.buttonS ? green : hide}
             >
               {this.props.day1}
               <br />
@@ -162,7 +218,7 @@ export default class MealButton extends Component {
             <Button
               variant="outline-secondary"
               onClick={this.changeButtonM}
-              style={this.state.buttonM ? pink : hide}
+              style={this.state.buttonM ? green : hide}
             >
               {this.props.day2}
               <br />
@@ -172,7 +228,7 @@ export default class MealButton extends Component {
             <Button
               variant="outline-secondary"
               onClick={this.changeButtonSkip}
-              style={{ width: "80px", height: "80px" }}
+              style={this.state.buttonSkip ? orange : hide}
             >
               Skip This Week
             </Button>

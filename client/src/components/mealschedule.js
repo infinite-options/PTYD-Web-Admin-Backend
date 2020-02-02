@@ -47,44 +47,33 @@ class Mealschedule extends Component {
                   Make Account Changes
                 </button>
                 <br />
-                <br />
-                <h3>Subscription Details</h3>{" "}
                 <Grid>
                   <Cell col={7}>
-                    <h6>My Subscription:</h6>
-                    <h6>Payment Plan:</h6>
-                    <h6>Paid Weeks Remaining:</h6>
-                    <h6>Next Charge:</h6>
-                    <h6>Next Charge Date:</h6>
-                    <h6>Coupons:</h6>
-                    <h6>Account Status:</h6>
+                    <h4>Subscription Details</h4> <p>My Subscription:</p>
+                    <p>Payment Plan:</p>
+                    <p>Paid Weeks Remaining:</p>
+                    <p>Next Charge:</p>
+                    <p>Next Charge Date:</p>
+                    <p>Coupons:</p>
+                    <p>Account Status:</p>
                     <Cell col={5}></Cell>
-                  </Cell>
-                </Grid>
-                <h3>Credit Card Details</h3>{" "}
-                <Grid>
-                  <Cell col={7}>
-                    <h6>Credit Card:</h6>
-                    <h6>Expiration Date:</h6>
-                    <h6>CVV:</h6>
-
+                    <h4>Credit Card Details</h4> <p>Credit Card:</p>
+                    <p>Expiration Date:</p>
+                    <p>CVV:</p>
                     <Cell col={5}></Cell>
-                  </Cell>
-                </Grid>
-                <h3>Delivery Details</h3>{" "}
-                <Grid>
-                  <Cell col={7}>
-                    <h6>Address:</h6>
-                    <h6>Unit:</h6>
-                    <h6>City, State ZIP:</h6>
-                    <h6>Instructions:</h6>
+                    <h4>Delivery Details</h4> <p>Address:</p>
+                    <p>Unit:</p>
+                    <p>City, State ZIP:</p>
+                    <p>Instructions:</p>
                     <Cell col={5}></Cell>
                   </Cell>
                 </Grid>
               </Cell>{" "}
               <Cell col={7}>
                 <br />
+                <br />
                 <h3>Select Meals Around Your Schedule</h3>
+                <br />
                 <div class="meals-button">
                   <MealButton
                     day1="Sunday"

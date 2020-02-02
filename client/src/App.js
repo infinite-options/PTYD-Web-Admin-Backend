@@ -68,6 +68,9 @@ class App extends Component {
                 <NavDropdown.Item href="/menunextweek">
                   NEXT WEEK
                 </NavDropdown.Item>
+                <NavDropdown.Item href="/mealschedule">
+                  MEAL SCHEDULE
+                </NavDropdown.Item>
               </NavDropdown>
 
               <Nav.Item Style="margin-top:90px">
