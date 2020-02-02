@@ -7,7 +7,7 @@ import HOW2 from "../img/how2.png";
 import HOW3 from "../img/how3.png";
 import HOW4 from "../img/how4.png";
 import TEMP from "../img/temp.jpg";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Card, CardColumns } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 
 class Howitworks extends Component {
