@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { Grid, Cell } from "react-mdl";
+import React, { Component, useState } from "react";
 import {
   ButtonToolbar,
   Button,
@@ -18,7 +17,6 @@ export default class MealButton extends Component {
     buttonS: false,
     buttonM: false,
     buttonSkip: false,
-    buttonSelect: false,
     buttonSurprise: false,
     requestModal: false
   };
@@ -118,7 +116,7 @@ export default class MealButton extends Component {
             <Button variant="primary" type="submit">
               Submit
             </Button>
-            <Button onClick={props.onHide}>Close</Button>
+            {/* <Button onClick={props.onHide}>Close</Button> */}
           </Modal.Footer>
         </Modal>
       );
@@ -144,62 +142,66 @@ export default class MealButton extends Component {
         </ButtonToolbar>
       );
     }
-    // function SelectMealModal(props) {
-    //   return (
-    //     <Modal
-    //       {...props}
-    //       size="lg"
-    //       aria-labelledby="contained-modal-title-vcenter"
-    //       centered
-    //     >
-    //       <Modal.Header closeButton>
-    //         <Modal.Title id="contained-modal-title-vcenter">
-    //           Select Meal
-    //         </Modal.Title>
-    //       </Modal.Header>
-    //       <Modal.Body>
-    //         <Form.Group controlId="exampleForm.ControlTextarea1">
-    //           <Form.Control as="textarea" rows="3" />
-    //         </Form.Group>
-    //       </Modal.Body>
-    //       <Modal.Footer>
-    //         <Button variant="primary" type="submit">
-    //           Submit
-    //         </Button>
-    //         <Button onClick={props.onHide}>Close</Button>
-    //       </Modal.Footer>
-    //     </Modal>
-    //   );
-    // }
+    function SelectMealModal(props) {
+      return (
+        <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Select Meal
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group controlId="exampleForm.ControlTextarea1">
+              <Form.Control as="textarea" rows="3" />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+            {/* <Button onClick={props.onHide}>Close</Button> */}
+          </Modal.Footer>
+        </Modal>
+      );
+    }
 
-    // function SelectMealAnimation() {
-    //   const [modalShow, setModalShow] = React.useState(false);
+    function SelectMealAnimation() {
+      const [modalShow, setModalShow] = useState(false);
+      const [buttonSelect, setButtonSelect] = useState(false);
 
-    //   return (
-    //     <ButtonToolbar>
-    //       <Button
-    //         variant="outline-secondary"
-    //         style={{ width: "80px", height: "80px" }}
-    //         onClick={() => setModalShow(true)}
-    //       >
-    //         Special Requests
-    //       </Button>
-    //       <Button
-    //         variant="outline-secondary"
-    //         ref={button => (this.button = button)}
-    //         onClick={this.changeButtonSelect}
-    //         style={this.state.buttonSelect ? green : hide}
-    //       >
-    //         Select Meal
-    //       </Button>
+      return (
+        <ButtonToolbar>
+          <Button
+            variant="outline-secondary"
+            onClick={() => {
+              setButtonSelect(true);
+              setModalShow(true);
+            }}
+            style={buttonSelect ? green : hide}
+          >
+            Select Meal
+          </Button>
+          {/* <Button
+            variant="outline-secondary"
+            ref={button => (this.button = button)}
+            onClick={this.changeButtonSelect}
+            style={this.state.buttonSelect ? green : hide}
+          >
+            Select Meal
+          </Button> */}
 
-    //       <SpecialRequestModal
-    //         show={modalShow}
-    //         onHide={() => setModalShow(false)}
-    //       />
-    //     </ButtonToolbar>
-    //   );
-    // }
+          <SelectMealModal
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+          />
+        </ButtonToolbar>
+      );
+    }
     return (
       <div>
         <ButtonToolbar>
@@ -234,14 +236,15 @@ export default class MealButton extends Component {
             </Button>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button
+          <SelectMealAnimation />
+          {/* <Button
             variant="outline-secondary"
             ref={button => (this.button = button)}
-            onClick={this.changeButtonSelect}
             style={this.state.buttonSelect ? green : hide}
+            onClick={this.changeButtonSelect}
           >
             Select Meal
-          </Button>
+          </Button> */}
           &nbsp;
           <Button
             variant="outline-secondary"
