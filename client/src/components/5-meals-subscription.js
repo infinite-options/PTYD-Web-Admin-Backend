@@ -5,11 +5,23 @@ import IMG1 from "../img/img1.jpg";
 import IMG9 from "../img/img9.webp";
 import { Link } from "react-router-dom";
 
+const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
+
 class FiveMealSubscription extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { paymentPlan: [] };
+  }
+
+  async componentDidMount() {
+    const res = await fetch(`${DEV_URL}/api/v1/plans`);
+    const api = await res.json();
+    const mealPlans = api.result.PaymentPlans[0];
+    this.setState( {paymentPlan} );
+  }
+
+
   render() {
-
-
-
     return (
       <section class="content-section">
         <div class="container">
@@ -61,10 +73,11 @@ class FiveMealSubscription extends Component {
                       <b>WEEK-TO-WEEK</b>
                     </Card.Title>
                     <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                      $11.99 per meal
+                      ${ paymentPlan.WeekToWeekPrice.toFixed(2) } per meal
                     </Card.Text>
                     <br></br>
-                    <Card.Title>$59⁹⁹ /week</Card.Title>
+                    // Divide below by 4
+                    <Card.Title>${ paymentPlan.WeekToWeekPrice.toFixed(2) } /week</Card.Title>
                     <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                       Sales tax of 8.25% will be added
                     </Card.Text>
