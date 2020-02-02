@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
+import  { Redirect } from 'react-router-dom';
 
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import Container from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
 
-//import crypto from "crypto";
+import crypto from "crypto";
 
 export default function Login (props) {
 
@@ -40,76 +45,70 @@ export default function Login (props) {
     for (var i = 0; i < arr.length; i++) {
       var u = arr[i].user;
       var p = arr[i].pass;
-      if (u === email ){//&& p == ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
-        document.getElementById("loginStatus").innerHTML = "Signed In";
+      if (u === email && p == ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
+        document.getElementById("loginStatus").innerHTML = "Logged In";
         setLoginStatus("Logged In");
         document.cookie = "Logged In";
         //props.userHasAuthenticated(true);
-
         i = arr.length;
+        props.history.push("/");
       } 
       else {
         document.getElementById("loginStatus").innerHTML = "Sign In";
         document.cookie = "Sign In";
         console.log(email, " ", u);
+        alert("Wrong Email or Password");
       }
     
     }
   }
 
-  const popover = (
-    <Popover id="popover-basic" size="sm">
-      <Popover.Title as="h3">Signup or Login</Popover.Title>
-      <Popover.Content>
-        <form onSubmit={handleSubmit}>
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              id="userForm"
-              placeholder="Username"
-              aria-label="Username"
-              aria-describedby="basic-addon1"
-            />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon2">@</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              id="passForm"
-              placeholder="Password"
-              aria-label="Password"
-              aria-describedby="basic-addon2"
-            />
-          </InputGroup>
-          <Button onClick={checkLogin} disabled={!validateForm()} type="submit" >Sign In</Button>
-        </form>
-
-        <p>
-          Or <strong><a href="/">Signup</a></strong> Here!
-        </p>
-      </Popover.Content>
-    </Popover>
-  );
-
-  const Example = () => (
-    <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-      <Button variant="success" size="sm">Get Started</Button>
-    </OverlayTrigger>
-  );
-
   return (
-    <div>
-      <Example></Example>
-      <p id="loginStatus" Style="font-size:12px; text-align:right; color:black;">
-        { document.cookie }
-      </p>
-    </div>
+    <main Style="margin-top:-80px;">
+        <div class="container text-center" Style="margin-top:-40px;">
+            <h1>Login</h1>
+        <div class="row">
+            <Col></Col>
+
+            <Container className="justify-content-center">
+              <Row>
+                <Col>               
+                  <Form onSubmit={handleSubmit}>
+
+                    <Form.Label>Email</Form.Label>
+                    <InputGroup className="mb-3">
+                      <FormControl
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        id="userForm"
+                        placeholder="Enter Email"
+                        aria-label="Username"
+                        aria-describedby="basic-addon1"
+                      />
+                    </InputGroup>
+
+                    <Form.Label>Password</Form.Label>
+                    <InputGroup className="mb-3">
+                      <FormControl
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        id="passForm"
+                        placeholder="Enter Password"
+                        aria-label="Password"
+                        aria-describedby="basic-addon2"
+                      />
+                    </InputGroup>
+
+                    <Button variant="success" onClick={checkLogin} disabled={!validateForm()} type="submit" >Sign In</Button>
+
+                  </Form>
+                </Col>
+              </Row>
+            </Container>
+
+            <Col></Col>
+          </div>
+        </div>
+    </main>
   );
 }

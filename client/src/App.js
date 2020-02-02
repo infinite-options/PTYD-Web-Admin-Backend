@@ -117,7 +117,15 @@ const App = props => {
               </Nav.Item>
 
               <div className="" Style="margin-top:70px">
-                <Login></Login>              
+                {document.cookie == "Logged In"
+                  ? <a href="/logout"><Button variant="success" size="sm" >Log Out</Button></a>
+                  : <>
+                      <a href="/login"><Button variant="success" size="sm" >Login</Button></a>
+                    </>
+                }
+                <p id="loginStatus" Style="font-size:12px; text-align:right; color:black;">
+                  { document.cookie }
+                </p>          
               </div>
             </Nav>
           </Header>

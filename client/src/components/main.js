@@ -17,6 +17,8 @@ import GiftCards from "./giftcards";
 import HowItWorks from "./howitworks";
 import NotFound from "./NotFound";
 import SignUp from "./signup";
+import Login from "./login";
+import Logout from "./logout";
 
 export default function Main({ appProps }) {
   return (
@@ -55,7 +57,8 @@ export default function Main({ appProps }) {
       <AppliedRoute exact path="/giftcards" component={GiftCards} appProps={appProps} />
       <AppliedRoute exact path="/howitworks" component={HowItWorks} appProps={appProps} />
       <AppliedRoute exact path="/signup" component={SignUp} appProps={appProps} />
-
+      <AppliedRoute exact path="/login" component={Login} appProps={appProps} />
+      <AppliedRoute exact path="/logout" component={Logout} appProps={appProps} />
       <AppliedRoute component={NotFound} />
     </Switch>
   );
