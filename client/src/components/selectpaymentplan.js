@@ -8,15 +8,16 @@ import { Link } from "react-router-dom";
 class SelectPaymentPlan extends Component {
   constructor(props) {
     super(props);
-    this.state = { paymentPlans: [] };
+    this.state = { meals: null, paymentPlans: [] };
   } 
   
   async componentDidMount() {
+    this.setState( {meals: this.props.objectIndex} );
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
-    const meals = this.props.meals;
-    const paymentPlans = api.result.PaymentPlans[meals];
-    this.setState( {paymentPlans} );
+    const plansData = api.result.PaymentPlans[this.state.meals];
+    const plans = plansData.Plans;
+    this.setState( {paymentPlans: plans} );
   } 
 
   render() {
@@ -24,7 +25,7 @@ class SelectPaymentPlan extends Component {
       <section class="content-section">
         <div class="container">
           <center>
-            <h1>10 MEALS PAYMENT OPTIONS</h1>
+            <h1>{this.state.meals} MEALS PAYMENT OPTIONS</h1>
             <hr class="two" />
             <h4>
               LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
@@ -44,224 +45,79 @@ class SelectPaymentPlan extends Component {
             </a>
             <hr class="three" />
             <br></br>
-            <CardDeck style={{ marginLeft: "90px" }}>
-              <Card
-                style={{
-                  maxWidth: "20rem",
-                  boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
-                }}
-              >
-                {" "}
-                <span class="border border-dark" style={{}}>
-                  <Card.Img class="black" variant="top" src={IMG1} />
-                  <div
-                    class="top-center"
-                    style={{
-                      marginBottom: "200px",
-                      fontSize: "100px",
-                      textShadow: "2px 2px 4px #FFEFB0",
-                      lineHeight: "35px",
-                      color: "white"
-                    }}
-                  >
-                    10
-                  </div>
-                  <Card.Body>
-                    <Card.Title>
-                      <b>WEEK-TO-WEEK</b>
-                    </Card.Title>
-                    <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                      $11.50 per meal
-                    </Card.Text>
-                    <br></br>
-                    <Card.Title>$114⁹⁹ /week</Card.Title>
-                    <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
-                      Sales tax of 8.25% will be added
-                    </Card.Text>
-                    <Link
-                      style={{ fontFamily: "Kalam", color: "white" }}
-                      to={{
-                        pathname: '/checkout',
-                        item: {
-                          name: '10-Meals: Week-to-Week Subscription - $114.99 /week',
-                          total: 114.99
-                        }
+            <CardDeck>
+              {this.state.paymentPlans.map(paymentPlan =>
+                <Card
+                  style={{
+                    maxWidth: "20rem",
+                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
+                  }}
+                >
+                  {" "}
+                  <span class="border border-dark" style={{}}>
+                    <Card.Img class="black" variant="top" src={IMG1} />
+                    <div
+                      class="top-center"
+                      style={{
+                        marginBottom: "200px",
+                        fontSize: "100px",
+                        textShadow: "2px 2px 4px #FFEFB0",
+                        lineHeight: "35px",
+                        color: "white"
                       }}
                     >
-                      <button
-                        type="button"
-                        class="btn2 btn2-primary"
-                        style={{
-                          marginTop: "10px",
-                          paddingLeft: "30px",
-                          paddingRight: "30px",
-                          paddingTop: "5px",
-                          paddingBottom: "5px",
-                          color: "white",
-                          fontSize: "15px"
+                      { this.state.meals }
+                    </div>
+                    <Card.Body>
+                      <Card.Title>
+                        <b>{ paymentPlan.PlanType.toUpperCase() }</b>
+                      </Card.Title>
+                      <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
+                        ${ paymentPlan.PriceByMeal.toFixed(2) } per meal
+                      </Card.Text>
+                      <br></br>
+                      <Card.Title>${ paymentPlan.Price.toFixed(2) } /week</Card.Title>
+                      <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
+                        Sales tax of 8.25% will be added
+                      </Card.Text>
+                      <Link
+                        style={{ fontFamily: "Kalam", color: "white" }}
+                        to={{
+                          pathname: '/checkout',
+                          item: {
+                            name: `{ this.state.paymentPlans.MealsPerWeek }-Meals: { paymentPlan.PlanType } Subscription - ${ paymentPlan.Price.toFixed(2) } /week`,
+                            total: paymentPlan.Price.toFixed(2)
+                          }
                         }}
                       >
-                        CHECKOUT
-                      </button>
-                    </Link>
-                    <img
-                      class="img-fluid"
-                      src={IMG9}
-                      alt=""
-                      style={{
-                        width: "90%"
-                      }}
-                    />
-                  </Card.Body>
-                </span>
-              </Card>
-
-              <Card
-                height="450"
-                style={{
-                  stroke: "black",
-                  strokeWidth: "5",
-                  fillOpacity: "0.1",
-                  strokeOpacity: "0.9",
-                  boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
-                  maxWidth: "20rem"
-                }}
-              >
-                <span class="border border-dark" style={{}}>
-                  <Card.Img class="black" variant="top" src={IMG1} />
-                  <div
-                    class="top-center"
-                    style={{
-                      marginBottom: "200px",
-                      fontSize: "100px",
-                      textShadow: "2px 2px 4px #FFEFB0",
-                      lineHeight: "35px",
-                      color: "white"
-                    }}
-                  >
-                    10
-                  </div>
-                  <Card.Body>
-                    <Card.Title>
-                      <b>2 WEEK PRE-PAY</b>
-                    </Card.Title>
-                    <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                      $10.25 per meal
-                    </Card.Text>
-                    <br></br>
-                    <Card.Title>$102⁵⁰ /week</Card.Title>
-                    <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
-                      Sales tax of 8.25% will be added
-                    </Card.Text>
-                    <Link
-                      style={{ fontFamily: "Kalam", color: "white" }}
-                      to={{
-                        pathname: '/checkout',
-                        item: {
-                          name: '10-Meals: 2-Week Prepaid Subscription - $102.50',
-                          total: 205.00
-                        }
-                      }} 
-                    >
-                      <button
-                        type="button"
-                        class="btn2 btn2-primary"
+                        <button
+                          type="button"
+                          class="btn2 btn2-primary"
+                          style={{
+                            marginTop: "10px",
+                            paddingLeft: "30px",
+                            paddingRight: "30px",
+                            paddingTop: "5px",
+                            paddingBottom: "5px",
+                            color: "white",
+                            fontSize: "15px"
+                          }}
+                        >
+                          CHECKOUT
+                        </button>
+                      </Link>
+                      <img
+                        class="img-fluid"
+                        src={IMG9}
+                        alt=""
                         style={{
-                          marginTop: "10px",
-                          paddingLeft: "30px",
-                          paddingRight: "30px",
-                          paddingTop: "5px",
-                          paddingBottom: "5px",
-                          color: "white",
-                          fontSize: "15px"
+                          width: "90%"
                         }}
-                      >
-                        CHECKOUT
-                      </button>
-                    </Link>
-                    <img
-                      src={IMG9}
-                      alt=""
-                      style={{
-                        width: "90%"
-                      }}
-                    />
-                  </Card.Body>
-                </span>
-              </Card>
-              <Card
-                height="450"
-                style={{
-                  stroke: "black",
-                  strokeWidth: "5",
-                  fillOpacity: "0.1",
-                  strokeOpacity: "0.9",
-                  boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
-                  maxWidth: "20rem"
-                }}
-              >
-                <span class="border border-dark" style={{}}>
-                  <Card.Img class="black" variant="top" src={IMG1} />
-                  <div
-                    class="top-center"
-                    style={{
-                      marginBottom: "200px",
-                      fontSize: "100px",
-                      textShadow: "2px 2px 4px #FFEFB0",
-                      lineHeight: "35px",
-                      color: "white"
-                    }}
-                  >
-                    10
-                  </div>
-                  <Card.Body>
-                    <Card.Title>
-                      <b>4 WEEK PRE-PAY</b>
-                    </Card.Title>
-                    <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                      $9.75 per meal
-                    </Card.Text>
-                    <br></br>
-                    <Card.Title>$97⁵⁰ /week</Card.Title>
-                    <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
-                      Sales tax of 8.25% will be added
-                    </Card.Text>
-                    <Link
-                      style={{ fontFamily: "Kalam", color: "white" }}
-                      to={{
-                        pathname: '/checkout',
-                        item: {
-                          name: '10-Meals: 4-Week Prepaid Subscription - $97.50',
-                          total: 390.00
-                        }
-                      }} 
-                    >
-                      <button
-                        type="button"
-                        class="btn2 btn2-primary"
-                        style={{
-                          marginTop: "10px",
-                          paddingLeft: "30px",
-                          paddingRight: "30px",
-                          paddingTop: "5px",
-                          paddingBottom: "5px",
-                          color: "white",
-                          fontSize: "15px"
-                        }}
-                      >
-                        CHECKOUT
-                      </button>
-                    </Link>
-                    <img
-                      src={IMG9}
-                      alt=""
-                      style={{
-                        width: "90%"
-                      }}
-                    />
-                  </Card.Body>
-                </span>
-              </Card>
+                      />
+                    </Card.Body>
+                  </span>
+                </Card>
+              )}
             </CardDeck>
             <br></br>
             <br></br>
@@ -363,4 +219,4 @@ class SelectPaymentPlan extends Component {
   }
 }
 
-export default TenMealSubscription;
+export default SelectPaymentPlan;

@@ -66,7 +66,7 @@ def runSelectQuery(query, cur):
 
 class Plans(Resource):
     global RDS_PW
-    def jsonifyQuery(self, query, rowDictKeys):
+    def jsonifyMealPlans(self, query, rowDictKeys):
         json = []
         for row in query:
             rowDict = {}
@@ -78,6 +78,34 @@ class Plans(Resource):
                     value = float(value)
                 rowDict[key] = value
             json.append(rowDict)
+        return json
+
+    def jsonifyPaymentPlans(self, query, rowDictKeys):
+        json = {}
+        for row in query:
+            numberOfMeals = row[0]
+            rowDict = {}
+            '''
+            for element in enumerate(row):
+                key = rowDictKeys[element[0]]
+                value = element[1]
+                # Convert all decimal values in row to floats
+                if 'Price' in key:
+                    value = float(value)
+                rowDict[key] = value
+            '''
+            rowDict['MealsPerWeek'] = numberOfMeals
+            rowDict['Plans'] = []
+            for key, value in {1: 'Week-to-Week', 3: '2 Week Pre-pay', 5: '4 Week Pre-pay'}.items():
+                if row[key] is 1:
+                    priceKey = key + 1
+                    planCard = {}
+                    planCard['PlanType'] = value
+                    planCard['Price'] = float(row[priceKey])
+                    planCard['PriceByMeal'] = planCard['Price'] / numberOfMeals
+                    rowDict['Plans'].append(planCard)
+
+            json[numberOfMeals] = rowDict
         return json
 
     def get(self):
@@ -114,10 +142,10 @@ class Plans(Resource):
             mealPlanKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'PricePerMeal', 'LowestPrice', 'Img', 'RouteOnclick')
 
             query = runSelectQuery(queries[0], cur)
-            items['PaymentPlans'] = self.jsonifyQuery(query, paymentPlanKeys)
+            items['PaymentPlans'] = self.jsonifyPaymentPlans(query, paymentPlanKeys)
 
             query = runSelectQuery(queries[1], cur)
-            items['MealPlans'] = self.jsonifyQuery(query, mealPlanKeys)
+            items['MealPlans'] = self.jsonifyMealPlans(query, mealPlanKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items
