@@ -14,10 +14,16 @@ import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./howitworks";
 
+//  Live API from AWS S3 Bucket
+const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/';
+
+//  Localhost API that can be run from /backend/api directory
+//const DEV_URL = 'http://localhost:2000/api/v1/';
+
 const Main = () => (
   <Switch>
     <Route exact path="/" component={LandingPage} />
-    <Route exact path="/selectmealplan" component={SelectMealPlan} />
+    <Route exact path="/selectmealplan" render={(props) => <SelectMealPlan {...props} API_URL={`${DEV_URL}plans`} />} />
     <Route exact path="/menuthisweek" component={MenuThisWeek} />
     <Route exact path="/menunextweek" component={MenuNextWeek} />
     <Route exact path="/checkout" component={Checkout} />
