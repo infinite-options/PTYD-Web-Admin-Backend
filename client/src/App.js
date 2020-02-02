@@ -1,10 +1,9 @@
-import React, { Component, useEffect, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Header, Navigation, Drawer, Content } from "react-mdl";
 import { Link } from "react-router-dom";
 
 import "./App.css";
 import Main from "./components/main";
-import Login from "./components/login";
 
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
@@ -15,19 +14,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = props => {
 
-  const [loginOn, loginOff] = ["Logged In", "Sign In"];
-
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
-
-  var loginState = "";
-  if (document.cookie) {
-    loginState = document.cookie;
-  }
-  else {
-    alert(document.cookie);
-    loginState = "wow";
-  }
 
   useEffect(() => {
     onLoad();
@@ -68,7 +56,7 @@ const App = props => {
               activeKey="/home"
             >
               <div Style="margin-top:25px">
-                <a class="navbar-brand" href="/">
+                <a className="navbar-brand" href="/">
                   <img
                     src="https://static.wixstatic.com/media/db4706_fb464984e3094a629a8bfb5297ca38c7~mv2.png/v1/fill/w_110,h_81,al_c,q_90/LOGO%2012_19_18%20.webp"
                     width="88"
@@ -77,7 +65,7 @@ const App = props => {
                   ></img>
                 </a>
                 <p
-                  class="font_9"
+                  className="font_9"
                   Style="font-size:11px; line-height:0.8em; text-align:center; letter-spacing:0.25em; font-size:11px; color:#E38B19; font-weight:bold;"
                 >
                   AUSTIN, TX
@@ -110,17 +98,17 @@ const App = props => {
                   ABOUT
                 </Nav.Link>
               </Nav.Item>
-              <Nav.Item Style="margin-top:90px;">
+              <Nav.Item style={{ marginTop:"90px"}}>
                 <Nav.Link Style="color:black" eventKey="link-5">
                   GET $100
                 </Nav.Link>
               </Nav.Item>
 
               <div className="" Style="margin-top:70px">
-                {document.cookie == "Logged In"
-                  ? <a href="/logout"><Button variant="success" size="sm" >Log Out</Button></a>
+                {document.cookie.split(" ")[0] === "Hello"
+                  ? <a href="/logout"><Button id="logoutButton" variant="success" size="sm" onClick={() => { document.cookie = "Sign In"; window.location.reload(false) }} >Log Out</Button></a>
                   : <>
-                      <a href="/login"><Button variant="success" size="sm" >Login</Button></a>
+                      <a href="/login"><Button id="loginButton" variant="success" size="sm" onClick={() => window.location.reload(false)} >Login</Button></a>
                     </>
                 }
                 <p id="loginStatus" Style="font-size:12px; text-align:right; color:black;">
@@ -131,10 +119,10 @@ const App = props => {
           </Header>
 
           <Drawer
-            style={{ backgroundColor: "#493f3f" }}
+            Style={{ backgroundColor: "#493f3f" }}
             className="header-color-background"
             title={
-              <Link style={{ fontFamily: "Kalam", color: "white" }} to="/">
+              <Link Style={{ fontFamily: "Kalam", color: "white" }} to="/">
                 Prep To Your Door
               </Link>
             }
@@ -146,15 +134,6 @@ const App = props => {
               <a href="/giftcards">GIFT CARDS</a>
               <a href="/">ABOUT</a>
               <a href="/">GET $100</a>
-              {isAuthenticated
-                ? <p>Logged In</p>
-                : <>
-                    <p>Not Logged In</p>
-                  </>
-              }
-              <div>
-              <p id="helper">{ loginState }</p>
-              </div>
             </Navigation>
           </Drawer>
 
@@ -165,11 +144,11 @@ const App = props => {
 
           <hr></hr>
 
-          <footer class="container text-center">
-            <div class="row">
-              <div class="col">
+          <footer className="container text-center">
+            <div className="row">
+              <div className="col">
                 <div Style="margin-top:-10px">
-                  <a class="navbar-brand" href="/">
+                  <a className="navbar-brand" href="/">
                     <img
                       src="https://static.wixstatic.com/media/db4706_fb464984e3094a629a8bfb5297ca38c7~mv2.png/v1/fill/w_110,h_81,al_c,q_90/LOGO%2012_19_18%20.webp"
                       width="80"
@@ -178,7 +157,7 @@ const App = props => {
                     ></img>
                   </a>
                   <p
-                    class="font_9"
+                    className="font_9"
                     Style="font-size:11px; line-height:0.8em; text-align:center; letter-spacing:0.25em; font-size:11px; color:#E38B19; font-weight:bold;"
                   >
                     AUSTIN, TX
@@ -186,7 +165,7 @@ const App = props => {
                 </div>
               </div>
 
-              <div class="col">
+              <div className="col">
                 <Nav defaultActiveKey="/" className="flex-column">
                   <Nav.Link Style="color:green" disabled>
                     Order
@@ -206,7 +185,7 @@ const App = props => {
                 </Nav>
               </div>
 
-              <div class="col">
+              <div className="col">
                 <Nav defaultActiveKey="/" className="flex-column">
                   <Nav.Link Style="color:green" disabled>
                     Company
@@ -229,7 +208,7 @@ const App = props => {
                 </Nav>
               </div>
 
-              <div class="col">
+              <div className="col">
                 <Nav defaultActiveKey="/" className="flex-column">
                   <Nav.Link Style="color:green" disabled>
                     Questions & Contact
@@ -246,39 +225,39 @@ const App = props => {
                 </Nav>
               </div>
 
-              <div class="col-md-4 flex-column">
+              <div className="col-md-4 flex-column">
                 <Nav defaultActiveKey="/">
                   <Nav.Link Style="color:green" disabled>
                     Follow Us:
                   </Nav.Link>
                 </Nav>
                 <Nav defaultActiveKey="/">
-                  <a href="https://www.facebook.com/preptoyourdoor" target="_blank">
+                  <a href="https://www.facebook.com/preptoyourdoor" target="_blank" rel="noopener noreferrer">
                     <img
                       id="i3fogh650imageimageimage"
                       alt="Grey Facebook Icon"
                       data-type="image"
-                      itemprop="image"
+                      itemProp="image"
                       Style="width: 41px; height: 41px; object-fit: cover;"
                       src="https://static.wixstatic.com/media/d3470ec8ca26475da4b228f0199b5d3d.png/v1/fill/w_51,h_51,al_c,q_95/d3470ec8ca26475da4b228f0199b5d3d.webp"
                     ></img>
                   </a>
-                  <a href="https://twitter.com/preptoyourdoor" target="_blank">
+                  <a href="https://twitter.com/preptoyourdoor" target="_blank" rel="noopener noreferrer">
                     <img
                       id="i3fogh651imageimageimage"
                       alt="Grey Twitter Icon"
                       data-type="image"
-                      itemprop="image"
+                      itemProp="image"
                       Style="width: 41px; height: 41px; object-fit: cover;"
                       src="https://static.wixstatic.com/media/7177d158c36d432b93f51e54f80e2f3c.png/v1/fill/w_51,h_51,al_c,q_95/7177d158c36d432b93f51e54f80e2f3c.webp"
                     ></img>
                   </a>
-                  <a href="https://www.instagram.com/preptoyourdoor/" target="_blank">
+                  <a href="https://www.instagram.com/preptoyourdoor/" target="_blank" rel="noopener noreferrer">
                     <img
                       id="i3fogh652imageimageimage"
                       alt="Grey Instagram Icon"
                       data-type="image"
-                      itemprop="image"
+                      itemProp="image"
                       Style="width: 41px; height: 41px; object-fit: cover;"
                       src="https://static.wixstatic.com/media/d7ffe259c9e54f59837481b3dd0130eb.png/v1/fill/w_51,h_51,al_c,q_95/d7ffe259c9e54f59837481b3dd0130eb.webp"
                     ></img>

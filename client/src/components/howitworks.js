@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import IMG3 from "../img/img3.jpg";
 import TEMP from "../img/temp.jpg";
-import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 

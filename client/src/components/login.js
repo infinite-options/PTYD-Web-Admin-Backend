@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import  { Redirect } from 'react-router-dom';
 
 import Button from "react-bootstrap/Button";
-import Popover from "react-bootstrap/Popover";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Container from "react-bootstrap/Button";
@@ -21,7 +18,8 @@ export default function Login (props) {
 
   const users = [
     {user: "mickey", pass:"4c4699dcce2d8f4655a4a9be1afaf888c1655d0b2ca5ff64d4492cc0e7044bdfec6f52f70a6c75f6a55392417ecb975a6e557805134e2d1b701b6d92ede5bb34"},
-    {user: "donald", pass:"39818fb2d074d0f356392539d68b67afbc4e3768e78b6375936b63555c6928452dcc96e50aeefbf01a56a01d958ad518d29aa9b5c46a6162363cf2438eab5066"}
+    {user: "donald", pass:"39818fb2d074d0f356392539d68b67afbc4e3768e78b6375936b63555c6928452dcc96e50aeefbf01a56a01d958ad518d29aa9b5c46a6162363cf2438eab5066"},
+    {user: "Strother", pass:"b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86"}
   ];
 
   function validateForm() {
@@ -45,19 +43,19 @@ export default function Login (props) {
     for (var i = 0; i < arr.length; i++) {
       var u = arr[i].user;
       var p = arr[i].pass;
-      if (u === email && p == ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
+      if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
         document.getElementById("loginStatus").innerHTML = "Logged In";
         setLoginStatus("Logged In");
-        document.cookie = "Logged In";
-        //props.userHasAuthenticated(true);
+        document.cookie = loginStatus;
+        document.cookie = "Hello " +  u  + "!";
         i = arr.length;
+        // redirect & reload page for buttons and login status
         props.history.push("/");
+        window.location.reload(false);
       } 
       else {
         document.getElementById("loginStatus").innerHTML = "Sign In";
         document.cookie = "Sign In";
-        console.log(email, " ", u);
-        alert("Wrong Email or Password");
       }
     
     }
@@ -73,7 +71,7 @@ export default function Login (props) {
             <Container className="justify-content-center">
               <Row>
                 <Col>               
-                  <Form onSubmit={handleSubmit}>
+                  <Form onSubmit={handleSubmit} autoComplete="off">
 
                     <Form.Label>Email</Form.Label>
                     <InputGroup className="mb-3">
@@ -96,6 +94,7 @@ export default function Login (props) {
                         placeholder="Enter Password"
                         aria-label="Password"
                         aria-describedby="basic-addon2"
+                        type="password"
                       />
                     </InputGroup>
 

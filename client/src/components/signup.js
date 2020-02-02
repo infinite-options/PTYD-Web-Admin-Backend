@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -68,7 +68,7 @@ function SignUp (props)  {
                             </Form.Group>
 
                             <Form.Group id="formGridServiceTerms">
-                                <Form.Check type="checkbox" label="Agree To Te Prep To Your Door Terms Of Service." />
+                                <Form.Check type="checkbox" label="Agree To Prep To Your Door Terms Of Service." />
                             </Form.Group>
 
                             <Button variant="success" type="submit">

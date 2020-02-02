@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { Card, CardDeck, Carousel } from "react-bootstrap";
-import { Grid, Cell } from "react-mdl";
+
 import IMG1 from "../img/img1.jpg";
-import IMG3 from "../img/img3.jpg";
-import { Link } from "react-router-dom";
+
 class Giftcards extends Component {
   render() {
     return (

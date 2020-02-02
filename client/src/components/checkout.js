@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, CardDeck, Form, Row, Col, Container } from "react-bootstrap";
+import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import TruckIcon from "../img/prepTruckIcon.png";
 
 class Checkout extends Component {
