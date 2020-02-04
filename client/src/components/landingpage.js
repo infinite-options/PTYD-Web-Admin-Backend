@@ -41,17 +41,17 @@ class Landing extends Component {
               >
                 Farm-to-table, prepared meals <br></br>delivered to your
                 doorstep.<br></br>
-                <button
+                <a href="/signup"><button
                   type="button"
                   class="btn1 btn1-primary"
                   style={{ marginTop: "10px", color: "white" }}
                 >
                   Get Started
-                </button>
+                </button></a>
               </div>
 
               <div class="bottom-left">
-                <a href="/signup">Already a Member? Sign in</a>
+                <a href="/login">Already a Member? Sign in</a>
               </div>
             </div>
             <div class="container">
@@ -92,7 +92,7 @@ class Landing extends Component {
                 <br></br>
                 <hr class="one" />
                 <center>
-                  <button
+                  <a href="/signup"><button
                     type="button"
                     class="btn1 btn1-primary"
                     style={{
@@ -103,7 +103,7 @@ class Landing extends Component {
                     }}
                   >
                     Get Started
-                  </button>
+                  </button></a>
                 </center>
               </div>
             </div>

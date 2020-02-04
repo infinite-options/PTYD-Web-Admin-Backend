@@ -38,8 +38,8 @@ export default function Login (props) {
   }
 
   function checkLogin() {
-    var arr = users;
-    console.log(arr);
+    let arr = users;
+
     for (var i = 0; i < arr.length; i++) {
       var u = arr[i].user;
       var p = arr[i].pass;
@@ -48,7 +48,7 @@ export default function Login (props) {
         setLoginStatus("Logged In");
         document.cookie = loginStatus;
         document.cookie = "Hello " +  u  + "!";
-        i = arr.length;
+
         // redirect & reload page for buttons and login status
         props.history.push("/");
         window.location.reload(false);
@@ -57,8 +57,8 @@ export default function Login (props) {
         document.getElementById("loginStatus").innerHTML = "Sign In";
         document.cookie = "Sign In";
       }
-    
     }
+    if (document.cookie == "Sign In" ) {alert("Wrong Email or Password!");}
   }
 
   return (
