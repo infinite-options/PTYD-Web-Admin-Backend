@@ -1,5 +1,13 @@
-import React, { Component, useState } from "react";
-import { ButtonToolbar, Button, Modal, Form } from "react-bootstrap";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
+import {
+  ButtonToolbar,
+  Button,
+  Modal,
+  Form,
+  FormControl
+} from "react-bootstrap";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -11,9 +19,9 @@ export default class MealButton extends Component {
     buttonS: false,
     buttonM: false,
     buttonSkip: false,
-    requestModal: false,
+    buttonSelect: false,
     buttonSurprise: false,
-    buttonSelect: false
+    requestModal: false
   };
 
   changeButtonS = () => {
@@ -80,7 +88,7 @@ export default class MealButton extends Component {
       width: "80px",
       height: "80px",
       backgroundColor: "white",
-      color: "gray"
+      color: "black"
     };
     const green = {
       width: "80px",
@@ -111,7 +119,7 @@ export default class MealButton extends Component {
             <Button variant="primary" type="submit">
               Submit
             </Button>
-            {/* <Button onClick={props.onHide}>Close</Button> */}
+            <Button onClick={props.onHide}>Close</Button>
           </Modal.Footer>
         </Modal>
       );
@@ -123,7 +131,7 @@ export default class MealButton extends Component {
       return (
         <ButtonToolbar>
           <Button
-            variant="outline-secondary"
+            variant="outline-dark"
             style={{ width: "80px", height: "80px" }}
             onClick={() => setModalShow(true)}
           >
@@ -137,97 +145,13 @@ export default class MealButton extends Component {
         </ButtonToolbar>
       );
     }
-    function SelectMealModal(props) {
-      return (
-        <Modal
-          {...props}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              Select Meal
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form.Group controlId="exampleForm.ControlTextarea1">
-              <Form.Control as="textarea" rows="3" />
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-            {/* <Button onClick={props.onHide}>Close</Button> */}
-          </Modal.Footer>
-        </Modal>
-      );
-    }
 
-    function SelectMealAnimation() {
-      const [modalShow, setModalShow] = useState(false);
-      // const [buttonSelect, setButtonSelect] = useState(false);
-
-      return (
-        <ButtonToolbar>
-          <Button
-            variant="outline-secondary"
-            onClick={() => {
-              // setButtonSelect(true);
-              setModalShow(true);
-            }}
-            // style={buttonSelect ? green : hide}
-          >
-            Select Meal
-          </Button>
-          {/* <Button
-            variant="outline-secondary"
-            ref={button => (this.button = button)}
-            onClick={this.changeButtonSelect}
-            style={this.state.buttonSelect ? green : hide}
-          >
-            Select Meal
-          </Button> */}
-
-          <SelectMealModal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-          />
-        </ButtonToolbar>
-      );
-    }
-    function SurpriseMeAnimation() {
-      const [buttonSelect, setButtonSelect] = useState(false);
-
-      return (
-        <ButtonToolbar>
-          <Button
-            variant="outline-secondary"
-            onClick={() => {
-              setButtonSelect(true);
-            }}
-            style={buttonSelect ? green : hide}
-          >
-            Select Meal
-          </Button>
-          {/* <Button
-            variant="outline-secondary"
-            ref={button => (this.button = button)}
-            onClick={this.changeButtonSelect}
-            style={this.state.buttonSelect ? green : hide}
-          >
-            Select Meal
-          </Button> */}
-        </ButtonToolbar>
-      );
-    }
     return (
       <div>
         <ButtonToolbar>
           <div className="radio">
             <Button
-              variant="outline-secondary"
+              variant="outline-dark"
               onClick={this.changeButtonS}
               style={this.state.buttonS ? green : hide}
             >
@@ -237,7 +161,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
-              variant="outline-secondary"
+              variant="outline-dark"
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
@@ -247,7 +171,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
-              variant="outline-secondary"
+              variant="outline-dark"
               onClick={this.changeButtonSkip}
               style={this.state.buttonSkip ? orange : hide}
             >
@@ -255,38 +179,64 @@ export default class MealButton extends Component {
             </Button>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <SelectMealAnimation
-            ref={button => (this.button = button)}
-            onClick={this.changeButtonSelect}
-            style={this.state.buttonSelect ? green : hide}
-          />
-          {/* <Button
-            variant="outline-secondary"
+          {/* <Link
+            to={{
+              pathname: "/select-meal"
+            }}
+          > */}
+          <Button
+            variant="outline-dark"
             ref={button => (this.button = button)}
             style={this.state.buttonSelect ? green : hide}
             onClick={this.changeButtonSelect}
           >
             Select Meal
-          </Button> */}
+          </Button>
+          {/* </Link> */}
           &nbsp;
-          {/* <Button
-            variant="outline-secondary"
-            ref={button => (this.button = button)}
+          <Button
+            variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
             style={this.state.buttonSurprise ? green : hide}
           >
             Surprise Me!
-          </Button> */}
-          <SurpriseMeAnimation
-            ref={button => (this.button2 = button)}
-            onClick={this.changeButtonSurprise}
-            style={this.state.buttonSurprise ? green : hide}
-          />
+          </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <SpecialRequestAnimation />
+          <div style={this.state.buttonSelect ? {} : { display: "none" }}>
+            <Modal.Dialog>
+              <Modal.Header closeButton>
+                <Modal.Title>Modal title</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                <p>Modal body text goes here.</p>
+              </Modal.Body>
+
+              <Modal.Footer>
+                <Button variant="secondary">Close</Button>
+                <Button variant="primary">Save changes</Button>
+              </Modal.Footer>
+            </Modal.Dialog>
+          </div>
+          <div style={this.state.buttonSurprise ? {} : { display: "none" }}>
+            <Modal.Dialog>
+              <Modal.Header closeButton>
+                <Modal.Title>Mdddd</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                <p>Modal body text goes here.</p>
+              </Modal.Body>
+
+              <Modal.Footer>
+                <Button variant="secondary">Close</Button>
+                <Button variant="primary">Save changes</Button>
+              </Modal.Footer>
+            </Modal.Dialog>
+          </div>{" "}
         </ButtonToolbar>
-        {/* <div style={this.state.requestModal ? {} : { display: "none" }}> */}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </div>
     );
