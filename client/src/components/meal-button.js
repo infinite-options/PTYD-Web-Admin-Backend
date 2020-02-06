@@ -1,11 +1,5 @@
 import React, { Component, useState } from "react";
-import {
-  ButtonToolbar,
-  Button,
-  Modal,
-  Form,
-  FormControl
-} from "react-bootstrap";
+import { ButtonToolbar, Button, Modal, Form } from "react-bootstrap";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -17,8 +11,9 @@ export default class MealButton extends Component {
     buttonS: false,
     buttonM: false,
     buttonSkip: false,
+    requestModal: false,
     buttonSurprise: false,
-    requestModal: false
+    buttonSelect: false
   };
 
   changeButtonS = () => {
@@ -172,17 +167,17 @@ export default class MealButton extends Component {
 
     function SelectMealAnimation() {
       const [modalShow, setModalShow] = useState(false);
-      const [buttonSelect, setButtonSelect] = useState(false);
+      // const [buttonSelect, setButtonSelect] = useState(false);
 
       return (
         <ButtonToolbar>
           <Button
             variant="outline-secondary"
             onClick={() => {
-              setButtonSelect(true);
+              // setButtonSelect(true);
               setModalShow(true);
             }}
-            style={buttonSelect ? green : hide}
+            // style={buttonSelect ? green : hide}
           >
             Select Meal
           </Button>
@@ -202,13 +197,37 @@ export default class MealButton extends Component {
         </ButtonToolbar>
       );
     }
+    function SurpriseMeAnimation() {
+      const [buttonSelect, setButtonSelect] = useState(false);
+
+      return (
+        <ButtonToolbar>
+          <Button
+            variant="outline-secondary"
+            onClick={() => {
+              setButtonSelect(true);
+            }}
+            style={buttonSelect ? green : hide}
+          >
+            Select Meal
+          </Button>
+          {/* <Button
+            variant="outline-secondary"
+            ref={button => (this.button = button)}
+            onClick={this.changeButtonSelect}
+            style={this.state.buttonSelect ? green : hide}
+          >
+            Select Meal
+          </Button> */}
+        </ButtonToolbar>
+      );
+    }
     return (
       <div>
         <ButtonToolbar>
           <div className="radio">
             <Button
               variant="outline-secondary"
-              ref={button => (this.button = button)}
               onClick={this.changeButtonS}
               style={this.state.buttonS ? green : hide}
             >
@@ -236,7 +255,11 @@ export default class MealButton extends Component {
             </Button>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <SelectMealAnimation />
+          <SelectMealAnimation
+            ref={button => (this.button = button)}
+            onClick={this.changeButtonSelect}
+            style={this.state.buttonSelect ? green : hide}
+          />
           {/* <Button
             variant="outline-secondary"
             ref={button => (this.button = button)}
@@ -246,14 +269,20 @@ export default class MealButton extends Component {
             Select Meal
           </Button> */}
           &nbsp;
-          <Button
+          {/* <Button
             variant="outline-secondary"
+            ref={button => (this.button = button)}
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
             style={this.state.buttonSurprise ? green : hide}
           >
             Surprise Me!
-          </Button>
+          </Button> */}
+          <SurpriseMeAnimation
+            ref={button => (this.button2 = button)}
+            onClick={this.changeButtonSurprise}
+            style={this.state.buttonSurprise ? green : hide}
+          />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <SpecialRequestAnimation />
         </ButtonToolbar>
