@@ -123,14 +123,14 @@ const App = props => {
             </Nav.Item>
 
             <div className="" Style="margin-top:70px">
-              {document.cookie.split(" ")[0] === "Hello" ? (
+              {document.cookie.split(" ")[2] === "Hello" ? (
                 <a href="/logout">
                   <Button
                     id="logoutButton"
                     variant="success"
                     size="sm"
                     onClick={() => {
-                      document.cookie = "Sign In";
+                      document.cookie = "loginStatus: Sign In ,";
                       window.location.reload(false);
                     }}
                   >
@@ -155,7 +155,7 @@ const App = props => {
                 id="loginStatus"
                 Style="font-size:12px; text-align:right; color:black;"
               >
-                {document.cookie}
+                {document.cookie.split(" ").slice(2,4).join(" ")}
               </p>
             </div>
           </Nav>

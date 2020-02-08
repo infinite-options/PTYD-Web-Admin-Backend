@@ -44,18 +44,17 @@ export default function Login (props) {
       var u = arr[i].user;
       var p = arr[i].pass;
       if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
-        document.getElementById("loginStatus").innerHTML = "Logged In";
         setLoginStatus("Logged In");
-        document.cookie = loginStatus;
-        document.cookie = "Hello " +  u  + "!";
+
+        document.cookie = "loginStatus: Hello " +  u  + "! ,";
         i = arr.length;
+
         // redirect & reload page for buttons and login status
         props.history.push("/");
         window.location.reload(false);
       } 
       else {
-        document.getElementById("loginStatus").innerHTML = "Sign In";
-        document.cookie = "Sign In";
+        document.cookie = "loginStatus: Sign In ,";
       }
     
     }
