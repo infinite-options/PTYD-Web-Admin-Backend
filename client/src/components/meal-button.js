@@ -23,6 +23,16 @@ export default class MealButton extends Component {
     buttonSurprise: false,
     requestModal: false
   };
+  closeButtonSelect = () => {
+    this.setState({
+      buttonSelect: false
+    });
+  };
+  closeButtonSurprise = () => {
+    this.setState({
+      buttonSurprise: false
+    });
+  };
 
   changeButtonS = () => {
     this.setState({
@@ -64,12 +74,14 @@ export default class MealButton extends Component {
       buttonSelect: true,
       buttonSurprise: false
     });
+    console.log("select");
   };
   changeButtonSurprise = () => {
     this.setState({
       buttonSelect: false,
       buttonSurprise: true
     });
+    console.log("surprise");
   };
   specialRequest = () => {
     this.setState({
@@ -185,6 +197,7 @@ export default class MealButton extends Component {
             }}
           > */}
           <Button
+            disabled
             variant="outline-dark"
             ref={button => (this.button = button)}
             style={this.state.buttonSelect ? green : hide}
@@ -206,7 +219,7 @@ export default class MealButton extends Component {
           <SpecialRequestAnimation />
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
             <Modal.Dialog>
-              <Modal.Header closeButton>
+              <Modal.Header>
                 <Modal.Title>Modal title</Modal.Title>
               </Modal.Header>
 
@@ -215,14 +228,16 @@ export default class MealButton extends Component {
               </Modal.Body>
 
               <Modal.Footer>
-                <Button variant="secondary">Close</Button>
+                <Button variant="secondary" onClick={this.closeButtonSelect}>
+                  Close
+                </Button>
                 <Button variant="primary">Save changes</Button>
               </Modal.Footer>
             </Modal.Dialog>
           </div>
           <div style={this.state.buttonSurprise ? {} : { display: "none" }}>
             <Modal.Dialog>
-              <Modal.Header closeButton>
+              <Modal.Header>
                 <Modal.Title>Mdddd</Modal.Title>
               </Modal.Header>
 
@@ -231,7 +246,9 @@ export default class MealButton extends Component {
               </Modal.Body>
 
               <Modal.Footer>
-                <Button variant="secondary">Close</Button>
+                <Button variant="secondary" onClick={this.closeButtonSurprise}>
+                  Close
+                </Button>
                 <Button variant="primary">Save changes</Button>
               </Modal.Footer>
             </Modal.Dialog>
