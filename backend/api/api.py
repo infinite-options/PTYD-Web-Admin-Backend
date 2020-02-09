@@ -95,6 +95,17 @@ class Plans(Resource):
                 rowDict[key] = value
             '''
             rowDict['MealsPerWeek'] = numberOfMeals
+
+            otherPaymentPlanUrls = []
+            for mealNum in [5, 10, 15, 20]:
+                if mealNum == int(numberOfMeals):
+                    continue
+                paymentPlanUrlDict = {}
+                paymentPlanUrlDict["Url"] = "/" + str(mealNum) + "-meals-subscription"
+                paymentPlanUrlDict["Label"] = str(mealNum) + " MEALS"
+                otherPaymentPlanUrls.append(paymentPlanUrlDict)
+            rowDict['OtherPaymentPlans'] = otherPaymentPlanUrls
+
             rowDict['Plans'] = []
             for key, value in {1: 'Week-to-Week', 3: '2 Week Pre-pay', 5: '4 Week Pre-pay'}.items():
                 if row[key] is 1:

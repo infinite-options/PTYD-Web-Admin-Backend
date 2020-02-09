@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 class SelectPaymentPlan extends Component {
   constructor(props) {
     super(props);
-    this.state = { meals: null, paymentPlans: [] };
+    this.state = { meals: null, paymentPlans: [], otherPlans: [] };
   } 
   
   async componentDidMount() {
@@ -18,6 +18,8 @@ class SelectPaymentPlan extends Component {
     const plansData = api.result.PaymentPlans[this.state.meals];
     const plans = plansData.Plans;
     this.setState( {paymentPlans: plans} );
+    const otherPlans = plansData.OtherPaymentPlans;
+    this.setState( {otherPlans: otherPlans} );
   } 
 
   render() {
@@ -32,17 +34,11 @@ class SelectPaymentPlan extends Component {
             </h4>
             <br></br>
             <hr class="three" />
-            <a href="/5-meals-subscription" style={{ color: "black" }}>
-              5 MEALS
-            </a>
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href="/15-meals-subscription" style={{ color: "black" }}>
-              15 MEALS{" "}
-            </a>{" "}
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href="/20-meals-subscription" style={{ color: "black" }}>
-              20 MEALS{" "}
-            </a>
+              {this.state.otherPlans.map(otherPlan =>
+                <a href={otherPlan.Url} style={{ color: "black" }}>
+                  {otherPlan.Label}{" "}
+                </a>
+              )}
             <hr class="three" />
             <br></br>
             <CardDeck>
