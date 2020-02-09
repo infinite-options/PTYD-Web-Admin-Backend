@@ -265,7 +265,7 @@ export default class MealButton extends Component {
       //   </Modal.Dialog>
       // </div>
 
-      <Card style={{ width: "50rem" }}>
+      <Card style={{ width: "100%" }}>
         <Card.Header>
           <center>
             <Modal.Title>SEASONAL FAVORITES</Modal.Title>
