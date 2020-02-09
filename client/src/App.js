@@ -32,6 +32,12 @@ const App = props => {
     setIsAuthenticating(false);
   }
 
+  function searchCookie4Login(str) {
+    let arr = str.split(" ")
+    let i = arr.indexOf("loginStatus:") 
+    return arr[i+1] + " " + arr[i+2]
+  }
+
   let stuff = !isAuthenticating && (
     <div className="demo-big-content">
       <Layout>
@@ -142,7 +148,7 @@ const App = props => {
                   id="loginStatus"
                   Style="font-size:20px; text-align:right; color:black;"
                 >
-                  {document.cookie.split(" ").slice(2,4).join(" ")}
+                  { searchCookie4Login(document.cookie) }
                 </p>
                 </div>
               ) : (
@@ -161,7 +167,7 @@ const App = props => {
                     id="loginStatus"
                     Style="font-size:12px; text-align:right; color:black;"
                   >
-                    {document.cookie.split(" ").slice(2,4).join(" ")}
+                    { searchCookie4Login(document.cookie) }
                   </p>
                 </>
               )}

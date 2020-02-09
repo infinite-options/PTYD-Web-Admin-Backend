@@ -57,7 +57,7 @@ export default function Login (props) {
       if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
         setLoginStatus("Logged In");
 
-        document.cookie = "loginStatus: Hello " +  u  + "! ,";
+        document.cookie = " loginStatus: Hello " +  u  + "! , ";
         i = arr.length;
 
         // redirect & reload page for buttons and login status
@@ -65,7 +65,7 @@ export default function Login (props) {
         window.location.reload(false);
       } 
       else {
-        document.cookie = "loginStatus: Sign In ,";
+        document.cookie = " loginStatus: Sign In , ";
       }
     
     }
