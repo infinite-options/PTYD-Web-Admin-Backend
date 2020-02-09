@@ -90,7 +90,7 @@ class SelectPaymentPlan extends Component {
                         to={{
                           pathname: '/checkout',
                           item: {
-                            name: `{ this.state.paymentPlans.MealsPerWeek }-Meals: { paymentPlan.PlanType } Subscription - ${ paymentPlan.Price.toFixed(2) } /week`,
+                            name: `${ this.state.meals }-Meals: ${ paymentPlan.PlanType } Subscription - ${ paymentPlan.Price.toFixed(2) } /week`,
                             total: paymentPlan.Price.toFixed(2)
                           }
                         }}
