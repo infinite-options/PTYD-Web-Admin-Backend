@@ -38,6 +38,10 @@ export default function Login (props) {
   }, []);
 
   async function onLoad() {
+    console.log(props)
+    console.log(props.isAuthenticated)
+    console.log(props.testing)
+    props.userHasAuthenticated(false)
     // fill it up when needed
   }
 

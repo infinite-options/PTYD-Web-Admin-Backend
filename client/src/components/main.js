@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch } from "react-router-dom";
 
 import AppliedRoute from "./AppliedRoute";
@@ -27,6 +27,8 @@ import Login from "./login";
 import Logout from "./logout";
 
 export default function Main({ appProps }) {
+  const [test, setTest] = useState("string");
+
   return (
     <Switch>
       <AppliedRoute
@@ -119,6 +121,7 @@ export default function Main({ appProps }) {
         path="/logout"
         component={Logout}
         appProps={appProps}
+        do={appProps.test = test , appProps.testing = "testing"}
       />
       <AppliedRoute component={NotFound} />
     </Switch>
