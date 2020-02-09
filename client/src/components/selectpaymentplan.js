@@ -12,13 +12,13 @@ class SelectPaymentPlan extends Component {
   } 
   
   async componentDidMount() {
+    console.log(this.props);
     this.setState( {meals: this.props.objectIndex} );
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
     const plansData = api.result.PaymentPlans[this.state.meals];
     const plans = plansData.Plans;
     this.setState( {paymentPlans: plans} );
-    console.log(this.props.objectIndex)
   } 
 
   render() {
@@ -36,6 +36,10 @@ class SelectPaymentPlan extends Component {
             <a href="/5-meals-subscription" style={{ color: "black" }}>
               5 MEALS
             </a>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/10-meals-subscription" style={{ color: "black" }}>
+              10 MEALS{" "}
+            </a>{" "}
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             <a href="/15-meals-subscription" style={{ color: "black" }}>
               15 MEALS{" "}

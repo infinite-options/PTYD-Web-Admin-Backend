@@ -33,6 +33,7 @@ export default function Main({ appProps }) {
 
   const [objectIndex, setObjectIndex] = useState(0);
 
+
   return (
     <Switch>
       <AppliedRoute
@@ -45,8 +46,10 @@ export default function Main({ appProps }) {
         exact
         path="/selectmealplan"
         component={SelectMealPlan}
-        appProps={appProps}
-        do={appProps.API_URL=`${DEV_URL}plans`}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}plans`
+        }}
       />
       <AppliedRoute
         exact
@@ -77,34 +80,41 @@ export default function Main({ appProps }) {
         exact
         path="/5-meals-subscription"
         component={SelectPaymentPlan}
-        appProps={appProps}
-        do={() => {
-          appProps.API_URL=`${DEV_URL}plans`; 
-          setObjectIndex(5);
-          appProps.objectIndex=objectIndex;
-        }}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}plans`,
+          objectIndex: 5
+        }}  
       />
       <AppliedRoute
         exact
         path="/10-meals-subscription"
         component={SelectPaymentPlan}
-        appProps={appProps}
-        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=10}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}plans`,
+          objectIndex: 10
+        }}  
       />
       <AppliedRoute
         exact
         path="/15-meals-subscription"
         component={SelectPaymentPlan}
-        
-        do={ appProps.objectIndex=15, appProps.API_URL=`${DEV_URL}plans`}
-        appProps={appProps}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}plans`,
+          objectIndex: 15
+        }}  
       />
       <AppliedRoute
         exact
         path="/20-meals-subscription"
         component={SelectPaymentPlan}
-        appProps={appProps}
-        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=20}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}plans`,
+          objectIndex: 20
+        }}  
       />
       <AppliedRoute
         exact
