@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch } from "react-router-dom";
 
 import AppliedRoute from "./AppliedRoute";
@@ -30,6 +30,9 @@ import Logout from "./logout";
 const DEV_URL = 'http://localhost:2000/api/v1/';
 
 export default function Main({ appProps }) {
+
+  const [objectIndex, setObjectIndex] = useState(0);
+
   return (
     <Switch>
       <AppliedRoute
@@ -75,7 +78,11 @@ export default function Main({ appProps }) {
         path="/5-meals-subscription"
         component={SelectPaymentPlan}
         appProps={appProps}
-        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=5}
+        do={() => {
+          appProps.API_URL=`${DEV_URL}plans`; 
+          setObjectIndex(5);
+          appProps.objectIndex=objectIndex;
+        }}
       />
       <AppliedRoute
         exact
@@ -88,8 +95,9 @@ export default function Main({ appProps }) {
         exact
         path="/15-meals-subscription"
         component={SelectPaymentPlan}
+        
+        do={ appProps.objectIndex=15, appProps.API_URL=`${DEV_URL}plans`}
         appProps={appProps}
-        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=15}
       />
       <AppliedRoute
         exact

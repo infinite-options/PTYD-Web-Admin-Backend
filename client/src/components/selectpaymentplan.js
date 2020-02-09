@@ -18,6 +18,7 @@ class SelectPaymentPlan extends Component {
     const plansData = api.result.PaymentPlans[this.state.meals];
     const plans = plansData.Plans;
     this.setState( {paymentPlans: plans} );
+    console.log(this.props.objectIndex)
   } 
 
   render() {
