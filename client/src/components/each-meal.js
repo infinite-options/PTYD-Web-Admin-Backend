@@ -29,7 +29,7 @@ class EachMeal extends Component {
               &nbsp;
               <input
                 type="text"
-                size="3"
+                size="4"
                 value={this.state.countFood}
                 id="count"
               />

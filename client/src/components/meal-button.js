@@ -3,13 +3,7 @@ import FINDUS1 from "../img/findus1.png";
 import { Grid, Cell } from "react-mdl";
 import EachMeal from "./each-meal";
 
-import {
-  ButtonToolbar,
-  Button,
-  Modal,
-  Form,
-  FormControl
-} from "react-bootstrap";
+import { ButtonToolbar, Button, Modal, Form, Card } from "react-bootstrap";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -43,11 +37,6 @@ export default class MealButton extends Component {
       buttonSkip: false,
       buttonDisabled: false
     });
-
-    // this.button.disabled = this.button.enabled;
-    // console.log("enabling button");
-
-    // this.button2.disabled = this.button2.enabled;
   };
 
   changeButtonM = () => {
@@ -57,9 +46,6 @@ export default class MealButton extends Component {
       buttonSkip: false,
       buttonDisabled: false
     });
-
-    // this.button.disabled = this.button.enabled;
-    // this.button2.disabled = this.button2.enabled;
   };
 
   changeButtonSkip = () => {
@@ -73,8 +59,6 @@ export default class MealButton extends Component {
       buttonDisabled: true,
       buttonSelectKeepColor: false
     });
-    // this.button.disabled = !this.button.disabled;
-    // this.button2.disabled = !this.button2.disabled;
   };
 
   changeButtonSelect = () => {
@@ -231,6 +215,7 @@ export default class MealButton extends Component {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <SpecialRequestAnimation />
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {this.SelectMealEachMeal()}
           </div>
         </ButtonToolbar>
@@ -241,22 +226,68 @@ export default class MealButton extends Component {
 
   SelectMealEachMeal = () => {
     return (
-      <Modal.Dialog>
-        <Modal.Header>
+      // <div style={{ width: "100rem" }}>
+      //   <Modal.Dialog>
+      //     <Modal.Header>
+      //       <center>
+      //         <Modal.Title style={{ width: "200%" }}>
+      //           SEASONAL FAVORITES
+      //         </Modal.Title>
+      //       </center>
+      //     </Modal.Header>
+      //     <Modal.Body>
+      //       <Grid>
+      //         <Cell col={4}>
+      //           <EachMeal
+      //             mealTitle="WHITE BEAN KALE SOUP"
+      //             ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
+      //             detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
+      //           />
+      //         </Cell>
+      //         <Cell col={6}>
+      //           <EachMeal
+      //             mealTitle="WHITE BEAN KALE SOUP"
+      //             ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
+      //             detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
+      //           />
+      //         </Cell>
+      //       </Grid>
+      //       <p>
+      //         fsdfkjdsfdsjkfhsdkfhshfkdshfkjsdhfkjsdhfkdsfdshjkfdshjdsfhjksdhjksdfjhkdfshjkdfshjkdfskhjdfshjkdfshjkdjkhdshdfsjhkdfshjkdskhjfeoorweyroewyoriweyoi
+      //       </p>
+      //     </Modal.Body>
+      //     <Modal.Footer>
+      //       <Button variant="secondary" onClick={this.closeButtonSelect}>
+      //         Close
+      //       </Button>
+      //       <Button variant="primary">Save changes</Button>
+      //     </Modal.Footer>
+      //   </Modal.Dialog>
+      // </div>
+
+      <Card style={{ width: "50rem" }}>
+        <Card.Header>
           <center>
             <Modal.Title>SEASONAL FAVORITES</Modal.Title>
           </center>
-        </Modal.Header>
-        <Modal.Body>
+        </Card.Header>
+        <Card.Body>
           <Grid>
-            <Cell col={6}>
+            <Cell col={4}>
               <EachMeal
                 mealTitle="WHITE BEAN KALE SOUP"
                 ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
                 detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
               />
             </Cell>
-            <Cell col={6}>
+            <Cell col={4}>
+              <EachMeal
+                mealTitle="WHITE BEAN KALE SOUP"
+                ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
+                detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
+              />
+            </Cell>
+            <Cell col={4}>
               <EachMeal
                 mealTitle="WHITE BEAN KALE SOUP"
                 ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
@@ -264,14 +295,15 @@ export default class MealButton extends Component {
               />
             </Cell>
           </Grid>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={this.closeButtonSelect}>
-            Close
-          </Button>
-          <Button variant="primary">Save changes</Button>
-        </Modal.Footer>
-      </Modal.Dialog>
+          <center>
+            <Button variant="secondary" onClick={this.closeButtonSelect}>
+              Close
+            </Button>
+            &nbsp;&nbsp;
+            <Button variant="primary">Save changes</Button>
+          </center>
+        </Card.Body>
+      </Card>
     );
   };
 }

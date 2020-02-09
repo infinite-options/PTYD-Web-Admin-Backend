@@ -11,15 +11,15 @@ class Mealschedule extends Component {
         <section class="content-section">
           <div class="container">
             <Grid>
-              <Cell col={3}>
+              <Cell col={4}>
                 {" "}
                 <Grid>
                   <Cell col={4}>
                     <img
                       style={{
                         borderRadius: "50%",
-                        width: "70px",
-                        height: "70px",
+                        width: "80px",
+                        height: "80px",
                         marginTop: "10px"
                       }}
                       src={IMG8}
@@ -35,8 +35,8 @@ class Mealschedule extends Component {
                   class="btn2 btn2-primary"
                   style={{
                     marginTop: "10px",
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
+                    paddingLeft: "30px",
+                    paddingRight: "30px",
                     paddingTop: "5px",
                     paddingBottom: "5px",
                     color: "white",
@@ -61,7 +61,7 @@ class Mealschedule extends Component {
                 <p>City, State ZIP:</p>
                 <p>Instructions:</p>
               </Cell>{" "}
-              <Cell col={9}>
+              <Cell col={8}>
                 <br />
                 <br />
                 <h3>Select Meals Around Your Schedule</h3>
