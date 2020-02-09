@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import FINDUS1 from "../img/findus1.png";
+import { Grid, Cell } from "react-mdl";
+import EachMeal from "./each-meal";
 
 import {
   ButtonToolbar,
@@ -21,8 +23,13 @@ export default class MealButton extends Component {
     buttonSkip: false,
     buttonSelect: false,
     buttonSurprise: false,
-    requestModal: false
+    requestModal: false,
+    countFood: 0,
+    buttonDisabled: true
   };
+
+  // var countEl = document.getElementById("count");
+
   closeButtonSelect = () => {
     this.setState({
       buttonSelect: false
@@ -38,10 +45,13 @@ export default class MealButton extends Component {
     this.setState({
       buttonS: true,
       buttonM: false,
-      buttonSkip: false
+      buttonSkip: false,
+      buttonDisabled: false
     });
 
     this.button.disabled = this.button.enabled;
+    console.log("enabling button");
+
     this.button2.disabled = this.button2.enabled;
   };
 
@@ -90,21 +100,21 @@ export default class MealButton extends Component {
   };
   render() {
     const orange = {
-      width: "80px",
-      height: "80px",
+      width: "90px",
+      height: "90px",
       backgroundColor: "#cd790c",
       color: "white"
     };
 
     const hide = {
-      width: "80px",
-      height: "80px",
+      width: "90px",
+      height: "90px",
       backgroundColor: "white",
       color: "black"
     };
     const green = {
-      width: "80px",
-      height: "80px",
+      width: "90px",
+      height: "90px",
       backgroundColor: "#427c42",
       color: "white"
     };
@@ -144,7 +154,7 @@ export default class MealButton extends Component {
         <ButtonToolbar>
           <Button
             variant="outline-dark"
-            style={{ width: "80px", height: "80px" }}
+            style={{ width: "90px", height: "90px" }}
             onClick={() => setModalShow(true)}
           >
             Special Requests
@@ -197,7 +207,7 @@ export default class MealButton extends Component {
             }}
           > */}
           <Button
-            disabled
+            disabled={this.state.buttonDisabled}
             variant="outline-dark"
             ref={button => (this.button = button)}
             style={this.state.buttonSelect ? green : hide}
@@ -208,6 +218,7 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
+            disabled={this.state.buttonDisabled}
             variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
@@ -218,22 +229,7 @@ export default class MealButton extends Component {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <SpecialRequestAnimation />
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
-            <Modal.Dialog>
-              <Modal.Header>
-                <Modal.Title>Modal title</Modal.Title>
-              </Modal.Header>
-
-              <Modal.Body>
-                <p>Modal body text goes here.</p>
-              </Modal.Body>
-
-              <Modal.Footer>
-                <Button variant="secondary" onClick={this.closeButtonSelect}>
-                  Close
-                </Button>
-                <Button variant="primary">Save changes</Button>
-              </Modal.Footer>
-            </Modal.Dialog>
+            {this.SelectMealEachMeal()}
           </div>
           <div style={this.state.buttonSurprise ? {} : { display: "none" }}>
             <Modal.Dialog>
@@ -258,4 +254,40 @@ export default class MealButton extends Component {
       </div>
     );
   }
+
+  SelectMealEachMeal = () => {
+    return (
+      <Modal.Dialog>
+        <Modal.Header>
+          <center>
+            <Modal.Title>SEASONAL FAVORITES</Modal.Title>
+          </center>
+        </Modal.Header>
+        <Modal.Body>
+          <Grid>
+            <Cell col={6}>
+              <EachMeal
+                mealTitle="WHITE BEAN KALE SOUP"
+                ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
+                detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
+              />
+            </Cell>
+            <Cell col={6}>
+              <EachMeal
+                mealTitle="WHITE BEAN KALE SOUP"
+                ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
+                detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
+              />
+            </Cell>
+          </Grid>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={this.closeButtonSelect}>
+            Close
+          </Button>
+          <Button variant="primary">Save changes</Button>
+        </Modal.Footer>
+      </Modal.Dialog>
+    );
+  };
 }

@@ -4,7 +4,7 @@ import { Grid, Cell } from "react-mdl";
 import { Link } from "react-router-dom";
 
 //  For live, comment out when testing
-let DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev';
+let DEV_URL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev";
 
 //  For testing, comment out when deploying
 //let DEV_URL = 'http://localhost:2000';
@@ -19,9 +19,9 @@ class Selectmealplan extends Component {
     const res = await fetch(`${DEV_URL}/api/v1/plans`);
     const api = await res.json();
     const mealPlans = api.result.MealPlans;
-    this.setState( {mealPlans} );
+    this.setState({ mealPlans });
   }
-  
+
   render() {
     return (
       <section class="content-section">
@@ -34,14 +34,13 @@ class Selectmealplan extends Component {
             </h4>
             <br></br>
             <CardDeck>
-
-              {this.state.mealPlans.map(mealPlan =>
+              {this.state.mealPlans.map(mealPlan => (
                 <Card
                   style={{
                     maxWidth: "20rem",
                     boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                   }}
-                > 
+                >
                   <div class="border border-dark" Style="height:100%">
                     <Card.Img class="blackM" variant="top" src={mealPlan.Img} />
                     <div
@@ -66,7 +65,9 @@ class Selectmealplan extends Component {
                       <Card.Text style={{ fontSize: "13px" }}>
                         {mealPlan.PlanSummary}
                       </Card.Text>
-                      <Card.Title>STARTING AT ${mealPlan.LowestPrice.toFixed(2)} /week</Card.Title>
+                      <Card.Text>
+                        STARTING AT ${mealPlan.LowestPrice.toFixed(2)} /week
+                      </Card.Text>
                       <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>
@@ -79,8 +80,8 @@ class Selectmealplan extends Component {
                           class="btn2 btn2-primary"
                           style={{
                             marginTop: "10px",
-                            paddingLeft: "30px",
-                            paddingRight: "30px",
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
                             paddingTop: "5px",
                             paddingBottom: "5px",
                             color: "white",
@@ -92,11 +93,13 @@ class Selectmealplan extends Component {
                       </Link>
                     </Card.Body>
                     <Card.Footer Style="bottom:0px; ">
-                      <large className="text-muted">{mealPlan.PlanFooter}</large>
+                      <large className="text-muted">
+                        {mealPlan.PlanFooter}
+                      </large>
                     </Card.Footer>
                   </div>
-                </Card>)}
-
+                </Card>
+              ))}
             </CardDeck>
 
             <br></br>

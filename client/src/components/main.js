@@ -20,7 +20,6 @@ import FaQ from "./faq";
 import JobS from "./jobs";
 import Get100 from "./get100";
 import MealSchedule from "./mealschedule";
-import SelectMeal from "./select-meal";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
@@ -66,7 +65,6 @@ export default function Main({ appProps }) {
       <AppliedRoute exact path="/jobs" component={JobS} />
       <AppliedRoute exact path="/get100" component={Get100} />
       <AppliedRoute exact path="/mealschedule" component={MealSchedule} />
-      <AppliedRoute exact path="/select-meal" component={SelectMeal} />
 
       <AppliedRoute
         exact
