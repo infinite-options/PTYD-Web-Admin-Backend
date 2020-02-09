@@ -129,7 +129,7 @@ const App = props => {
             </Nav.Item>
 
             <div className="" Style="padding-top:66px">
-              {document.cookie.split(" ")[2] === "Hello" ? (
+              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
                 <div>
                 <a href="/logout">
                   <Button
