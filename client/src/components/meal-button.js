@@ -25,19 +25,14 @@ export default class MealButton extends Component {
     buttonSurprise: false,
     requestModal: false,
     countFood: 0,
-    buttonDisabled: true
+    buttonDisabled: true,
+    buttonSelectKeepColor: false
   };
-
-  // var countEl = document.getElementById("count");
 
   closeButtonSelect = () => {
     this.setState({
-      buttonSelect: false
-    });
-  };
-  closeButtonSurprise = () => {
-    this.setState({
-      buttonSurprise: false
+      buttonSelect: false,
+      buttonSelectKeepColor: true
     });
   };
 
@@ -82,14 +77,16 @@ export default class MealButton extends Component {
   changeButtonSelect = () => {
     this.setState({
       buttonSelect: true,
-      buttonSurprise: false
+      buttonSurprise: false,
+      buttonSelectKeepColor: true
     });
     console.log("select");
   };
   changeButtonSurprise = () => {
     this.setState({
       buttonSelect: false,
-      buttonSurprise: true
+      buttonSurprise: true,
+      buttonSelectKeepColor: false
     });
     console.log("surprise");
   };
@@ -167,7 +164,6 @@ export default class MealButton extends Component {
         </ButtonToolbar>
       );
     }
-
     return (
       <div>
         <ButtonToolbar>
@@ -210,7 +206,10 @@ export default class MealButton extends Component {
             disabled={this.state.buttonDisabled}
             variant="outline-dark"
             ref={button => (this.button = button)}
-            style={this.state.buttonSelect ? green : hide}
+            style={
+              (this.state.buttonSelect ? green : hide,
+              this.state.buttonSelectKeepColor ? green : hide)
+            }
             onClick={this.changeButtonSelect}
           >
             Select Meal
@@ -231,24 +230,6 @@ export default class MealButton extends Component {
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
             {this.SelectMealEachMeal()}
           </div>
-          <div style={this.state.buttonSurprise ? {} : { display: "none" }}>
-            <Modal.Dialog>
-              <Modal.Header>
-                <Modal.Title>Mdddd</Modal.Title>
-              </Modal.Header>
-
-              <Modal.Body>
-                <p>Modal body text goes here.</p>
-              </Modal.Body>
-
-              <Modal.Footer>
-                <Button variant="secondary" onClick={this.closeButtonSurprise}>
-                  Close
-                </Button>
-                <Button variant="primary">Save changes</Button>
-              </Modal.Footer>
-            </Modal.Dialog>
-          </div>{" "}
         </ButtonToolbar>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </div>
