@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import IMG6 from "../img/img6.jpg";
 
 class Selectmealplan extends Component {

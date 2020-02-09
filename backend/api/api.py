@@ -234,8 +234,44 @@ class Meals(Resource):
         finally:
             closeRdsConn(cur, conn)
 
+class Login(Resource):
+    global RDS_PW
+
+    def jsonifyLogin(self, query, rowDictKeys):
+        json = []
+        for row in query:
+            rowDict = {}
+            for element in enumerate(row):
+                key = rowDictKeys[element[0]]
+                value = element[1]
+                rowDict[key] = value
+            json.append(rowDict)
+        return json
+
+    def get(self):
+        response = {}
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = [
+                {'user': "mickey", 'pass':"4c4699dcce2d8f4655a4a9be1afaf888c1655d0b2ca5ff64d4492cc0e7044bdfec6f52f70a6c75f6a55392417ecb975a6e557805134e2d1b701b6d92ede5bb34"},
+                {'user': "donald", 'pass':"39818fb2d074d0f356392539d68b67afbc4e3768e78b6375936b63555c6928452dcc96e50aeefbf01a56a01d958ad518d29aa9b5c46a6162363cf2438eab5066"},
+                {'user': "Strother", 'pass':"b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86"}
+            ]
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
+
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
+api.add_resource(Login, '/api/v1/login')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='2000')

@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
-import IMG1 from "../img/img1.jpg";
-//import IMG9 from "../img/img9.webp";
 import { Link } from "react-router-dom";
 
 class Selectmealplan extends Component {

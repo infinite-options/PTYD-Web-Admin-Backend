@@ -1,5 +1,7 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
+
+import AppliedRoute from "./AppliedRoute";
 
 import LandingPage from "./landingpage";
 import SelectMealPlan from "./selectmealplan";
@@ -10,6 +12,16 @@ import Checkout from "./checkout";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./howitworks";
+import OurStory from "./ourstory";
+import FaQ from "./faq";
+import JobS from "./jobs";
+import Get100 from "./get100";
+import MealSchedule from "./mealschedule";
+
+import NotFound from "./NotFound";
+import SignUp from "./signup";
+import Login from "./login";
+import Logout from "./logout";
 
 //  Live API from AWS S3 Bucket
 //const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/';
@@ -17,37 +29,107 @@ import HowItWorks from "./howitworks";
 //  Localhost API that can be run from /backend/api directory
 const DEV_URL = 'http://localhost:2000/api/v1/';
 
-const Main = () => (
-  <Switch>
-    <Route exact path="/" component={LandingPage} />
-    <Route exact path="/selectmealplan" render={(props) => <SelectMealPlan {...props} API_URL={`${DEV_URL}plans`} />} />
-    <Route exact path="/menuthisweek" render={(props) => <MenuThisWeek {...props} API_URL={`${DEV_URL}meals`} />} />
-    <Route exact path="/menunextweek" component={MenuNextWeek} />
-    <Route exact path="/checkout" component={Checkout} />
-    <Route
-      exact
-      path="/5-meals-subscription"
-      render={(props) => <SelectPaymentPlan {...props} API_URL={`${DEV_URL}plans`} objectIndex={5} />}
-    />
-    <Route
-      exact
-      path="/10-meals-subscription"
-      render={(props) => <SelectPaymentPlan {...props} API_URL={`${DEV_URL}plans`} objectIndex={10} />}
-    />
-    <Route
-      exact
-      path="/15-meals-subscription"
-      render={(props) => <SelectPaymentPlan {...props} API_URL={`${DEV_URL}plans`} objectIndex={15} />}
-    />
-    <Route
-      exact
-      path="/20-meals-subscription"
-      render={(props) => <SelectPaymentPlan {...props} API_URL={`${DEV_URL}plans`} objectIndex={20} />}
-    />
-    <Route exact path="/findus" component={FindUs} />
-    <Route exact path="/giftcards" component={GiftCards} />
-    <Route exact path="/howitworks" component={HowItWorks} />
-  </Switch>
-);
+export default function Main({ appProps }) {
+  return (
+    <Switch>
+      <AppliedRoute
+        exact
+        path="/"
+        component={LandingPage}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/selectmealplan"
+        component={SelectMealPlan}
+        appProps={appProps}
+        do={appProps.API_URL=`${DEV_URL}plans`}
+      />
+      <AppliedRoute
+        exact
+        path="/menuthisweek"
+        component={MenuThisWeek}
+        appProps={appProps}
+        do={appProps.API_URL=`${DEV_URL}meals`}
+      />
+      <AppliedRoute
+        exact
+        path="/menunextweek"
+        component={MenuNextWeek}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/checkout"
+        component={Checkout}
+        appProps={appProps}
+      />
 
-export default Main;
+      <AppliedRoute exact path="/ourstory" component={OurStory} />
+      <AppliedRoute exact path="/faq" component={FaQ} />
+      <AppliedRoute exact path="/jobs" component={JobS} />
+      <AppliedRoute exact path="/get100" component={Get100} />
+      <AppliedRoute exact path="/mealschedule" component={MealSchedule} />
+      <AppliedRoute
+        exact
+        path="/5-meals-subscription"
+        component={SelectPaymentPlan}
+        appProps={appProps}
+        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=5}
+      />
+      <AppliedRoute
+        exact
+        path="/10-meals-subscription"
+        component={SelectPaymentPlan}
+        appProps={appProps}
+        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=10}
+      />
+      <AppliedRoute
+        exact
+        path="/15-meals-subscription"
+        component={SelectPaymentPlan}
+        appProps={appProps}
+        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=15}
+      />
+      <AppliedRoute
+        exact
+        path="/20-meals-subscription"
+        component={SelectPaymentPlan}
+        appProps={appProps}
+        do={appProps.API_URL=`${DEV_URL}plans`, appProps.objectIndex=20}
+      />
+      <AppliedRoute
+        exact
+        path="/findus"
+        component={FindUs}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/giftcards"
+        component={GiftCards}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/howitworks"
+        component={HowItWorks}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/signup"
+        component={SignUp}
+        appProps={appProps}
+      />
+      <AppliedRoute exact path="/login" component={Login} appProps={appProps} />
+      <AppliedRoute
+        exact
+        path="/logout"
+        component={Logout}
+        appProps={appProps}
+      />
+      <AppliedRoute component={NotFound} />
+    </Switch>
+  );
+}

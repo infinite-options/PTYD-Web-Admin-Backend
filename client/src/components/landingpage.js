@@ -6,6 +6,7 @@ import IMG5 from "../img/img5.jpg";
 import IMG6 from "../img/img6.jpg";
 import IMG7 from "../img/img7.jpg";
 import IMG8 from "../img/img8.jpeg";
+import COMPANY from "../img/company.png";
 import { Row, Col, Container, Card, CardColumns } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 
@@ -40,17 +41,19 @@ class Landing extends Component {
               >
                 Farm-to-table, prepared meals <br></br>delivered to your
                 doorstep.<br></br>
-                <button
-                  type="button"
-                  class="btn1 btn1-primary"
-                  style={{ marginTop: "10px", color: "white" }}
-                >
-                  Get Started
-                </button>
+                <a href="/signup">
+                  <button
+                    type="button"
+                    class="btn1 btn1-primary"
+                    style={{ marginTop: "10px", color: "white" }}
+                  >
+                    Get Started
+                  </button>
+                </a>
               </div>
 
               <div class="bottom-left">
-                <a>Already a Member? Sign in</a>
+                <a href="/login">Already a Member? Sign in</a>
               </div>
             </div>
             <div class="container">
@@ -316,7 +319,6 @@ class Landing extends Component {
                     <Row
                       style={{
                         fontSize: "13px",
-                        color: "black",
                         lineHeight: "20px",
                         color: "#888785"
                       }}
@@ -341,7 +343,6 @@ class Landing extends Component {
                     <Row
                       style={{
                         fontSize: "13px",
-                        color: "black",
                         lineHeight: "20px",
                         color: "#888785"
                       }}
@@ -503,6 +504,12 @@ class Landing extends Component {
                     </h4>
                     <br />
                   </Cell>{" "}
+                  <img
+                    class="img-fluid"
+                    style={{ width: "60%", height: "30%" }}
+                    src={COMPANY}
+                    alt=""
+                  />
                   <div style={{ backgroundColor: "black" }}>
                     <br />
                     <br />

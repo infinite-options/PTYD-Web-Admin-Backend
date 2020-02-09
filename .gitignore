@@ -5,3 +5,5 @@ node_modules
 *cratejoy_keys.json
 *gspread.json
 yarn.lock
+env
+.vscode
