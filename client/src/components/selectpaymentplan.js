@@ -12,6 +12,7 @@ class SelectPaymentPlan extends Component {
   } 
   
   async componentDidMount() {
+    console.log(this.props);
     this.setState( {meals: this.props.objectIndex} );
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
@@ -34,11 +35,21 @@ class SelectPaymentPlan extends Component {
             </h4>
             <br></br>
             <hr class="three" />
-              {this.state.otherPlans.map(otherPlan =>
-                <a href={otherPlan.Url} style={{ color: "black" }}>
-                  {otherPlan.Label}{" "}
-                </a>
-              )}
+            <a href="/5-meals-subscription" style={{ color: "black" }}>
+              5 MEALS
+            </a>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/10-meals-subscription" style={{ color: "black" }}>
+              10 MEALS{" "}
+            </a>{" "}
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/15-meals-subscription" style={{ color: "black" }}>
+              15 MEALS{" "}
+            </a>{" "}
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/20-meals-subscription" style={{ color: "black" }}>
+              20 MEALS{" "}
+            </a>
             <hr class="three" />
             <br></br>
             <CardDeck>
