@@ -36,6 +36,11 @@
   top: 5%;
   left: 30%;
 }
+.center-center {
+  position: absolute;
+  top: 15%;
+  left: 30%;
+}
 /* Bottom right text */
 .bottom-right {
   position: absolute;

@@ -44,9 +44,9 @@ class Selectmealplan extends Component {
                   <div class="border border-dark" Style="height:100%">
                     <Card.Img class="blackM" variant="top" src={mealPlan.Img} />
                     <div
-                      class="top-center"
+                      class="center-center"
                       style={{
-                        marginBottom: "200px",
+                        marginBottom: "10%",
                         fontSize: "30px",
                         textShadow: "2px 2px 4px #FFEFB0",
                         lineHeight: "35px",
