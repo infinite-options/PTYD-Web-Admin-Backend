@@ -65,7 +65,11 @@ export default function Main({ appProps }) {
         exact
         path="/menunextweek"
         component={MenuNextWeek}
-        appProps={appProps}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}meals`,
+          objectIndex: 'MenuNextWeek'
+        }}
       />
       <AppliedRoute
         exact
