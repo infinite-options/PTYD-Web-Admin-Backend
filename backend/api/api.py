@@ -5,6 +5,9 @@ from flask_cors import CORS
 from werkzeug.exceptions import BadRequest, NotFound
 
 from decimal import Decimal
+from datetime import datetime, date, timedelta
+from hashlib import sha512
+
 import decimal
 import sys
 import json
@@ -80,36 +83,6 @@ class Plans(Resource):
                 rowDict[key] = value
             json.append(rowDict)
         return json
-
-#   def jsonifyPaymentPlans(self, query, rowDictKeys):
-#       json = {}
-#       for row in query:
-#           numberOfMeals = row[0]
-#           rowDict = {}
-#           rowDict['MealsPerWeek'] = numberOfMeals
-
-#           otherPaymentPlanUrls = []
-#           for mealNum in [5, 10, 15, 20]:
-#               if mealNum == int(numberOfMeals):
-#                   continue
-#               paymentPlanUrlDict = {}
-#               paymentPlanUrlDict["Url"] = "/" + str(mealNum) + "-meals-subscription"
-#               paymentPlanUrlDict["Label"] = str(mealNum) + " MEALS"
-#               otherPaymentPlanUrls.append(paymentPlanUrlDict)
-#           rowDict['OtherPaymentPlans'] = otherPaymentPlanUrls
-
-#           rowDict['Plans'] = []
-#           for key, value in {1: 'Week-to-Week', 3: '2 Week Pre-pay', 5: '4 Week Pre-pay'}.items():
-#               if row[key] is 1:
-#                   priceKey = key + 1
-#                   planCard = {}
-#                   planCard['PlanType'] = value
-#                   planCard['Price'] = float(row[priceKey])
-#                   planCard['PriceByMeal'] = planCard['Price'] / numberOfMeals
-#                   rowDict['Plans'].append(planCard)
-
-#           json[numberOfMeals] = rowDict
-#       return json
 
     def get(self):
         response = {}
@@ -198,23 +171,23 @@ class Plans(Resource):
 
 class Meals(Resource):
     global RDS_PW
-    def getIngredients(self, mealID, cur):
-        sql = """   SELECT
-                        Ingredient,
-                        Meal,
-                        Qty,
-                        Unit
-                    FROM Ingredients
-                    WHERE Meal = \'""" + mealID + """\';"""
-        ingrKeys = ('Ingredient', 'Meal', 'Qty', 'Unit')
-        query = runSelectQuery(sql, cur)
-        ingredients = self.jsonifyQuery(query, ingrKeys)
+#   def getIngredients(self, mealID, cur):
+#       sql = """   SELECT
+#                       Ingredient,
+#                       Meal,
+#                       Qty,
+#                       Unit
+#                   FROM Ingredients
+#                   WHERE Meal = \'""" + mealID + """\';"""
+#       ingrKeys = ('Ingredient', 'Meal', 'Qty', 'Unit')
+#       query = runSelectQuery(sql, cur)
+#       ingredients = self.jsonifyQuery(query, ingrKeys)
 
-        return ingredients
+#       return ingredients
 
-    def jsonifyMeals(self, query, mealKeys, cur):
+    def jsonifyMeals(self, query, mealKeys):
         json = []
-        decimalKeys = ['Protein', 'Carbs', 'Sugar', 'Fiber', 'Fat', 'Sat']
+        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat']
         for row in query:
             rowDict = {}
             mealID = row[0]
@@ -224,21 +197,40 @@ class Meals(Resource):
                 # Convert all decimal values in row to floats
                 if key in decimalKeys:
                     value = float(value)
+                if key == 'menu_date':
+                    value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
-            rowDict['Ingredients'] = self.getIngredients(mealID, cur)
+#           rowDict['Ingredients'] = self.getIngredients(mealID, cur)
             json.append(rowDict)
         return json
 
-    def jsonifyQuery(self, query, rowDictKeys):
-        json = []
-        for row in query:
-            rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                rowDict[key] = value
-            json.append(rowDict)
-        return json
+#   def jsonifyMeals(self, query, mealKeys, cur):
+#       json = []
+#       decimalKeys = ['Protein', 'Carbs', 'Sugar', 'Fiber', 'Fat', 'Sat']
+#       for row in query:
+#           rowDict = {}
+#           mealID = row[0]
+#           for element in enumerate(row):
+#               key = mealKeys[element[0]]
+#               value = element[1]
+#               # Convert all decimal values in row to floats
+#               if key in decimalKeys:
+#                   value = float(value)
+#               rowDict[key] = value
+#           rowDict['Ingredients'] = self.getIngredients(mealID, cur)
+#           json.append(rowDict)
+#       return json
+
+#   def jsonifyQuery(self, query, rowDictKeys):
+#       json = []
+#       for row in query:
+#           rowDict = {}
+#           for element in enumerate(row):
+#               key = rowDictKeys[element[0]]
+#               value = element[1]
+#               rowDict[key] = value
+#           json.append(rowDict)
+#       return json
 
     def get(self):
         response = {}
@@ -248,23 +240,90 @@ class Meals(Resource):
             cur = db[1]
             items = {}
 
+            now = datetime.now()
+            now = datetime(2020, 1, 1, 16, 0)
+
+            print(now.weekday())
+
+            # Set to 0 if Monday, otherwise set to 1
+            if now.weekday() == 0:
+                weeksOffset = 0
+            else:
+                weeksOffset = 1
+
+            # Get this coming and next 2 Tuesdays
+            this_tuesday = str( (now + timedelta(days=-now.weekday()+1, weeks=weeksOffset)) )
+#           this_tuesday = this_monday.replace(hour=16, minute=0, second=0, microsecond=0)
+            next_tuesday = str( (now + timedelta(days=-now.weekday()+1, weeks=weeksOffset+1)) )
+#           next_tuesday = this_monday.replace(hour=16, minute=0, second=0, microsecond=0)
+            next2_tuesday = str( (now + timedelta(days=-now.weekday()+1, weeks=weeksOffset+2)) )
+#           next2_tuesday = this_monday.replace(hour=16, minute=0, second=0, microsecond=0)
+
             queries = [
                 """ SELECT
-                        Meal_ID,
-                        Meals,
-                        Actual_Meal,
-                        Calories,
-                        Protein,
-                        Carbs,
-                        Sugar,
-                        Fiber,
-                        Fat,
-                        Sat
-                    FROM Meals;"""]
+                        menu_date,
+                        menu_category,
+                        menu_meal_id,
+                        meal_desc,
+                        meal_category,
+                        meal_photo_url,
+                        extra_meal_price,
+                        meal_calories,
+                        meal_protein,
+                        meal_carbs,
+                        meal_fiber,
+                        meal_sugar,
+                        meal_fat
+                    FROM ptyd_menu
+                    LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id""",
+                """ SELECT
+                        menu_date,
+                        menu_category,
+                        menu_meal_id,
+                        meal_desc,
+                        meal_category,
+                        meal_photo_url,
+                        extra_meal_price,
+                        meal_calories,
+                        meal_protein,
+                        meal_carbs,
+                        meal_fiber,
+                        meal_sugar,
+                        meal_fat
+                    FROM ptyd_menu
+                    LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                    WHERE menu_date > \'""" + this_tuesday + """\' and menu_date < \'""" + next_tuesday + """\'""",
+                """ SELECT
+                        menu_date,
+                        menu_category,
+                        menu_meal_id,
+                        meal_desc,
+                        meal_category,
+                        meal_photo_url,
+                        extra_meal_price,
+                        meal_calories,
+                        meal_protein,
+                        meal_carbs,
+                        meal_fiber,
+                        meal_sugar,
+                        meal_fat
+                    FROM ptyd_menu
+                    LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                    WHERE menu_date > \'""" + next_tuesday + """\' and menu_date < \'""" + next2_tuesday + """\'"""]
 
-            mealsKeys = ('Meal_ID', 'Meals', 'Actual_Meal', 'Calories', 'Protein', 'Carbs', 'Sugar', 'Fiber', 'Fat', 'Sat')
             query = runSelectQuery(queries[0], cur)
-            items['Meals'] = self.jsonifyMeals(query, mealsKeys, cur)
+
+            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url', 'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat')
+            items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
+
+            query = runSelectQuery(queries[1], cur)
+            items['MenuThisWeek'] = self.jsonifyMeals(query, mealsKeys)
+
+            query = runSelectQuery(queries[2], cur)
+            items['MenuNextWeek'] = self.jsonifyMeals(query, mealsKeys)
+
+#           items['Meals'] = self.jsonifyMeals(query, mealsKeys, cur)
+
             response['message'] = 'Request successful.'
             response['result'] = items
 
@@ -278,12 +337,16 @@ class Login(Resource):
     global RDS_PW
     def jsonifyLogin(self, query, rowDictKeys):
         json = []
+        dateKeys = ['create_date', 'last_update', 'last_delivery']
         for row in query:
             rowDict = {}
             for element in enumerate(row):
                 key = rowDictKeys[element[0]]
                 value = element[1]
+                if key in dateKeys:
+                    value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
+            rowDict['password_sha512'] = sha512(rowDict['user_name'].encode()).hexdigest()
             json.append(rowDict)
         return json
 
@@ -295,14 +358,38 @@ class Login(Resource):
             cur = db[1]
             items = []
 
+#           queries = [
+#               """ SELECT
+#                       UserID,
+#                       Pass
+#                   FROM TestLogin;"""]
+
             queries = [
                 """ SELECT
-                        UserID,
-                        Pass
-                    FROM TestLogin;"""]
+                        user_uid,
+                        user_name,
+                        first_name,
+                        last_name,
+                        user_email,
+                        phone_number,
+                        user_address,
+                        address_unit,
+                        user_city,
+                        user_state,
+                        user_zip,
+                        user_region,
+                        user_gender,
+                        create_date,
+                        last_update,
+                        activeBool,
+                        last_delivery,
+                        referral_source,
+                        user_note
+                    FROM ptyd_user_accounts;"""]
 
-            loginKeys = ('UserID', 'Pass')
+            loginKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city', 'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
             query = runSelectQuery(queries[0], cur)
+            print(query)
 
             items = self.jsonifyLogin(query, loginKeys)
 

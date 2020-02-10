@@ -55,8 +55,11 @@ export default function Main({ appProps }) {
         exact
         path="/menuthisweek"
         component={MenuThisWeek}
-        appProps={appProps}
-        do={appProps.API_URL=`${DEV_URL}meals`}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}meals`,
+          objectIndex: 'MenuThisWeek'
+        }}
       />
       <AppliedRoute
         exact
@@ -144,7 +147,14 @@ export default function Main({ appProps }) {
         component={SignUp}
         appProps={appProps}
       />
-      <AppliedRoute exact path="/login" component={Login} appProps={appProps} />
+      <AppliedRoute
+        exact
+        path="/login"
+        component={Login}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}login`,
+        }} />
       <AppliedRoute
         exact
         path="/logout"

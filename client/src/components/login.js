@@ -42,6 +42,7 @@ export default function Login (props) {
   }
 
   async function componentDidMount() {
+//  const res = await fetch(`${this.props.API_URL}`);
     const res = await fetch(`http://127.0.0.1:2000/api/v1/login`);
     const api = await res.json();
     const logins = api.result;
@@ -52,8 +53,8 @@ export default function Login (props) {
     let arr = users;
     console.log(arr);
     for (var i = 0; i < arr.length; i++) {
-      var u = arr[i].user;
-      var p = arr[i].pass;
+      var u = arr[i].user_name;
+      var p = arr[i].password_sha512;
       if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
         setLoginStatus("Logged In");
 

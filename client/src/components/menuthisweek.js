@@ -2,12 +2,25 @@ import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 
 class Selectmealplan extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { currentWeek: null, meals: [] };
+  }
+
+  async componentDidMount() {
+    console.log(this.props);
+    this.setState( {currentWeek: this.props.objectIndex} );
+    const res = await fetch(`${this.props.API_URL}`);
+    const api = await res.json();
+    const mealsData = api.result[this.state.currentWeek];
+    this.setState( {meals: mealsData} );
+  }
   render() {
     return (
         <main Style="margin-top:-80px;">
           <div class="container text-center">
               <h3>MENU THIS WEEK</h3>
-              <h5 Style="margin-top:-10px;">December 29th & 30th</h5>
+              <h5 Style="margin-top:-10px;">January 12th & 13th</h5>
               <hr></hr>
               <div class="row justify-content-md-center" Style="margin-top:-10px; margin-bottom:-10px;">
                   <ul class="navbar-nav">
@@ -28,7 +41,7 @@ class Selectmealplan extends Component {
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
                         <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
                         <Card.Body>
-                          <Card.Title>RAINBOW ZOODLES</Card.Title>
+                          <Card.Title>this.state.meals.meal_desc</Card.Title>
                           <Card.Text>
                             Cal 500, Prot 14, Carb 37, Fat 36, Sug 23, Fat 36, Sat 5
                           </Card.Text>
