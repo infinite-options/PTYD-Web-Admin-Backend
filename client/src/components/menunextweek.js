@@ -5,7 +5,7 @@ import IMG6 from "../img/img6.jpg";
 class Selectmealplan extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentWeek: null, meals: [] };
+    this.state = { currentWeek: null, dates: null, meals: [] };
   }
 
   async componentDidMount() {
@@ -13,6 +13,8 @@ class Selectmealplan extends Component {
     this.setState( {currentWeek: this.props.objectIndex} );
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
+    const deliveryDates = api.result[this.state.currentWeek].DeliveryDates;
+    this.setState( {dates: deliveryDates} );
     const mealsData = api.result[this.state.currentWeek].Meals;
     this.setState( {meals: mealsData} );
   }
@@ -21,7 +23,7 @@ class Selectmealplan extends Component {
         <main Style="margin-top:-80px;">
           <div class="container text-center">
               <h3>COMING NEXT WEEK</h3>
-              <h5 Style="margin-top:-10px;">January 19th & 20th</h5>
+              <h5 Style="margin-top:-10px;">{this.state.dates}</h5>
               <hr></hr>
               <div class="row justify-content-md-center" Style="margin-top:-10px; margin-bottom:-10px;">
                   <ul class="navbar-nav">

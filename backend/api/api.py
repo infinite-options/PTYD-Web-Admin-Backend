@@ -187,7 +187,7 @@ class Meals(Resource):
 
     def jsonifyMeals(self, query, mealKeys):
         json = []
-        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat']
+        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
         indexOfMealId = mealKeys.index('menu_meal_id')
         for row in query:
             if row[indexOfMealId] is None:
@@ -246,18 +246,25 @@ class Meals(Resource):
             now = datetime.now()
             now = datetime(2020, 2, 2, 15, 59)
 
-            print(now.weekday())
-            # Get this coming and next Sunday
+            # Get this coming and next Saturday (menu_date values are Saturdays)
             if now.weekday() == 0 and now.hour < 16:
                 print("it's monday before 4pm")
-                this_week = (now + timedelta(days=-1, weeks=0)).date()
-                next_week = (now + timedelta(days=-1, weeks=1)).date()
+                this_week = (now + timedelta(days=-2, weeks=0)).date()
+                next_week = (now + timedelta(days=-2, weeks=1)).date()
             else:
                 print("it's not monday before 4pm")
-                this_week = (now + timedelta(days=-now.weekday()-1, weeks=1)).date()
-                next_week = (now + timedelta(days=-now.weekday()-1, weeks=2)).date()
+                this_week = (now + timedelta(days=-now.weekday()-2, weeks=1)).date()
+                next_week = (now + timedelta(days=-now.weekday()-2, weeks=2)).date()
 
-            print(this_week)
+            # Get this Sunday and Monday as a string
+            this_sun = (this_week + timedelta(days=1))
+            this_mon = (this_week + timedelta(days=2))
+            this_week_dates = this_sun.strftime("%b %-d") + " & " + this_mon.strftime("%b %-d")
+
+            # Get next Sunday and Monday as a string
+            next_sun = (next_week + timedelta(days=1))
+            next_mon = (next_week + timedelta(days=2))
+            next_week_dates = next_sun.strftime("%b %-d") + " & " + next_mon.strftime("%b %-d")
 
             queries = [
                 """ SELECT
@@ -273,7 +280,8 @@ class Meals(Resource):
                         meal_carbs,
                         meal_fiber,
                         meal_sugar,
-                        meal_fat
+                        meal_fat,
+                        meal_sat
                     FROM ptyd_menu
                     LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id""",
                 """ SELECT
@@ -289,7 +297,8 @@ class Meals(Resource):
                         meal_carbs,
                         meal_fiber,
                         meal_sugar,
-                        meal_fat
+                        meal_fat,
+                        meal_sat
                     FROM ptyd_menu
                     LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                     WHERE menu_date = \'""" + str(this_week) + """\';""",
@@ -306,22 +315,25 @@ class Meals(Resource):
                         meal_carbs,
                         meal_fiber,
                         meal_sugar,
-                        meal_fat
+                        meal_fat,
+                        meal_sat
                     FROM ptyd_menu
                     LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                     WHERE menu_date = \'""" + str(next_week) + """\';"""]
 
             query = runSelectQuery(queries[0], cur)
 
-            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url', 'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat')
+            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url', 'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
             items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
 
             query = runSelectQuery(queries[1], cur)
             items['MenuThisWeek'] = {}
+            items['MenuThisWeek']['DeliveryDates'] = this_week_dates
             items['MenuThisWeek']['Meals'] = self.jsonifyMeals(query, mealsKeys)
 
             query = runSelectQuery(queries[2], cur)
             items['MenuNextWeek'] = {}
+            items['MenuNextWeek']['DeliveryDates'] = next_week_dates
             items['MenuNextWeek']['Meals'] = self.jsonifyMeals(query, mealsKeys)
 
 #           items['Meals'] = self.jsonifyMeals(query, mealsKeys, cur)
