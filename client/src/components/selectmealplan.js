@@ -13,9 +13,9 @@ class Selectmealplan extends Component {
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
     const mealPlans = api.result.MealPlans;
-    this.setState( {mealPlans} );
+    this.setState({ mealPlans });
   }
-  
+
   render() {
     return (
       <section class="content-section">
@@ -28,20 +28,19 @@ class Selectmealplan extends Component {
             </h4>
             <br></br>
             <CardDeck>
-
-              {this.state.mealPlans.map(mealPlan =>
+              {this.state.mealPlans.map(mealPlan => (
                 <Card
                   style={{
                     maxWidth: "20rem",
                     boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                   }}
-                > 
+                >
                   <div class="border border-dark" Style="height:100%">
                     <Card.Img class="blackM" variant="top" src={mealPlan.photo_URL} />
                     <div
-                      class="top-center"
+                      class="center-center"
                       style={{
-                        marginBottom: "200px",
+                        marginBottom: "10%",
                         fontSize: "30px",
                         textShadow: "2px 2px 4px #FFEFB0",
                         lineHeight: "35px",
@@ -73,8 +72,8 @@ class Selectmealplan extends Component {
                           class="btn2 btn2-primary"
                           style={{
                             marginTop: "10px",
-                            paddingLeft: "30px",
-                            paddingRight: "30px",
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
                             paddingTop: "5px",
                             paddingBottom: "5px",
                             color: "white",
@@ -89,8 +88,8 @@ class Selectmealplan extends Component {
                       <large className="text-muted">{mealPlan.plan_footer}</large>
                     </Card.Footer>
                   </div>
-                </Card>)}
-
+                </Card>
+              ))}
             </CardDeck>
 
             <br></br>

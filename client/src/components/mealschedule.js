@@ -11,65 +11,57 @@ class Mealschedule extends Component {
         <section class="content-section">
           <div class="container">
             <Grid>
-              <Cell col={5}>
+              <Cell col={3}>
                 {" "}
                 <Grid>
-                  <Cell col={3}>
+                  <Cell col={4}>
                     <img
                       style={{
                         borderRadius: "50%",
-                        width: "80px",
-                        height: "80px",
+                        width: "70px",
+                        height: "70px",
                         marginTop: "10px"
                       }}
                       src={IMG8}
                       alt="Avatar"
                     ></img>
                   </Cell>
-                  <Cell col={9}>
-                    <h3>Hi, Prashant</h3>
+                  <Cell col={8}>
+                    <h4>Hi, Prashant</h4>
                   </Cell>
                 </Grid>
                 <button
                   type="button"
                   class="btn2 btn2-primary"
                   style={{
-                    marginLeft: "50px",
                     marginTop: "10px",
                     paddingLeft: "10px",
                     paddingRight: "10px",
                     paddingTop: "5px",
                     paddingBottom: "5px",
                     color: "white",
-                    fontSize: "15px"
+                    fontSize: "12px"
                   }}
                 >
                   Make Account Changes
                 </button>
                 <br />
-                <Grid>
-                  <Cell col={7}>
-                    <h4>Subscription Details</h4> <p>My Subscription:</p>
-                    <p>Payment Plan:</p>
-                    <p>Paid Weeks Remaining:</p>
-                    <p>Next Charge:</p>
-                    <p>Next Charge Date:</p>
-                    <p>Coupons:</p>
-                    <p>Account Status:</p>
-                    <Cell col={5}></Cell>
-                    <h4>Credit Card Details</h4> <p>Credit Card:</p>
-                    <p>Expiration Date:</p>
-                    <p>CVV:</p>
-                    <Cell col={5}></Cell>
-                    <h4>Delivery Details</h4> <p>Address:</p>
-                    <p>Unit:</p>
-                    <p>City, State ZIP:</p>
-                    <p>Instructions:</p>
-                    <Cell col={5}></Cell>
-                  </Cell>
-                </Grid>
+                <h4>Subscription Details</h4> <p>My Subscription:</p>
+                <p>Payment Plan:</p>
+                <p>Paid Weeks Remaining:</p>
+                <p>Next Charge:</p>
+                <p>Next Charge Date:</p>
+                <p>Coupons:</p>
+                <p>Account Status:</p>
+                <h4>Credit Card Details</h4> <p>Credit Card:</p>
+                <p>Expiration Date:</p>
+                <p>CVV:</p>
+                <h4>Delivery Details</h4> <p>Address:</p>
+                <p>Unit:</p>
+                <p>City, State ZIP:</p>
+                <p>Instructions:</p>
               </Cell>{" "}
-              <Cell col={7}>
+              <Cell col={9}>
                 <br />
                 <br />
                 <h3>Select Meals Around Your Schedule</h3>
