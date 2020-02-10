@@ -12,7 +12,7 @@ class Selectmealplan extends Component {
     this.setState( {currentWeek: this.props.objectIndex} );
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
-    const mealsData = api.result[this.state.currentWeek];
+    const mealsData = api.result[this.state.currentWeek].Meals;
     this.setState( {meals: mealsData} );
   }
   render() {

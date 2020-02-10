@@ -241,23 +241,17 @@ class Meals(Resource):
             items = {}
 
             now = datetime.now()
-            now = datetime(2020, 1, 1, 16, 0)
+            now = datetime(2020, 1, 13, 15, 59)
 
-            print(now.weekday())
-
-            # Set to 0 if Monday, otherwise set to 1
-            if now.weekday() == 0:
-                weeksOffset = 0
+            # Get this coming and next Monday
+            if now.weekday() == 0 and now.hour < 16:
+                this_week = (now + timedelta(days=-1, weeks=0)).date()
+                next_week = (now + timedelta(days=-1, weeks=1)).date()
             else:
-                weeksOffset = 1
+                this_week = (now + timedelta(days=-now.weekday()-1, weeks=1)).date()
+                next_week = (now + timedelta(days=-now.weekday()-1, weeks=2)).date()
 
-            # Get this coming and next 2 Tuesdays
-            this_tuesday = str( (now + timedelta(days=-now.weekday()+1, weeks=weeksOffset)) )
-#           this_tuesday = this_monday.replace(hour=16, minute=0, second=0, microsecond=0)
-            next_tuesday = str( (now + timedelta(days=-now.weekday()+1, weeks=weeksOffset+1)) )
-#           next_tuesday = this_monday.replace(hour=16, minute=0, second=0, microsecond=0)
-            next2_tuesday = str( (now + timedelta(days=-now.weekday()+1, weeks=weeksOffset+2)) )
-#           next2_tuesday = this_monday.replace(hour=16, minute=0, second=0, microsecond=0)
+            print(this_week)
 
             queries = [
                 """ SELECT
@@ -292,7 +286,7 @@ class Meals(Resource):
                         meal_fat
                     FROM ptyd_menu
                     LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
-                    WHERE menu_date > \'""" + this_tuesday + """\' and menu_date < \'""" + next_tuesday + """\'""",
+                    WHERE menu_date = \'""" + str(this_week) + """\';""",
                 """ SELECT
                         menu_date,
                         menu_category,
@@ -309,7 +303,7 @@ class Meals(Resource):
                         meal_fat
                     FROM ptyd_menu
                     LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
-                    WHERE menu_date > \'""" + next_tuesday + """\' and menu_date < \'""" + next2_tuesday + """\'"""]
+                    WHERE menu_date = \'""" + str(next_week) + """\';"""]
 
             query = runSelectQuery(queries[0], cur)
 
@@ -317,10 +311,12 @@ class Meals(Resource):
             items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
 
             query = runSelectQuery(queries[1], cur)
-            items['MenuThisWeek'] = self.jsonifyMeals(query, mealsKeys)
+            items['MenuThisWeek'] = {}
+            items['MenuThisWeek']['Meals'] = self.jsonifyMeals(query, mealsKeys)
 
             query = runSelectQuery(queries[2], cur)
-            items['MenuNextWeek'] = self.jsonifyMeals(query, mealsKeys)
+            items['MenuNextWeek'] = {}
+            items['MenuNextWeek']['Meals'] = self.jsonifyMeals(query, mealsKeys)
 
 #           items['Meals'] = self.jsonifyMeals(query, mealsKeys, cur)
 
