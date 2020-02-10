@@ -158,7 +158,7 @@ export default function Main({ appProps }) {
         component={Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}login`,
+          API_URL: `${DEV_URL}accounts`,
         }} />
       <AppliedRoute
         exact

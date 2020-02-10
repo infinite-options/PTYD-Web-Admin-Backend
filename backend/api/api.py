@@ -335,9 +335,9 @@ class Meals(Resource):
         finally:
             closeRdsConn(cur, conn)
 
-class Login(Resource):
+class Accounts(Resource):
     global RDS_PW
-    def jsonifyLogin(self, query, rowDictKeys):
+    def jsonifyAccounts(self, query, rowDictKeys):
         json = []
         dateKeys = ['create_date', 'last_update', 'last_delivery']
         for row in query:
@@ -387,12 +387,12 @@ class Login(Resource):
                         last_delivery,
                         referral_source,
                         user_note
-                    FROM ptyd_user_accounts;"""]
+                    FROM ptyd_accounts;"""]
 
-            loginKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city', 'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
+            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city', 'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
             query = runSelectQuery(queries[0], cur)
 
-            items = self.jsonifyLogin(query, loginKeys)
+            items = self.jsonifyAccounts(query, accountKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -405,7 +405,7 @@ class Login(Resource):
 
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
-api.add_resource(Login, '/api/v1/login')
+api.add_resource(Accounts, '/api/v1/accounts')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='2000')

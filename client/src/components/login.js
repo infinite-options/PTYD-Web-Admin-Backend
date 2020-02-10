@@ -43,7 +43,7 @@ export default function Login (props) {
 
   async function componentDidMount() {
 //  const res = await fetch(`${this.props.API_URL}`);
-    const res = await fetch(`http://127.0.0.1:2000/api/v1/login`);
+    const res = await fetch(`http://127.0.0.1:2000/api/v1/accounts`);
     const api = await res.json();
     const logins = api.result;
     setUsers(logins);
