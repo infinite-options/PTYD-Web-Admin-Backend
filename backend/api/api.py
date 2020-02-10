@@ -188,9 +188,12 @@ class Meals(Resource):
     def jsonifyMeals(self, query, mealKeys):
         json = []
         decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat']
+        indexOfMealId = mealKeys.index('menu_meal_id')
         for row in query:
+            if row[indexOfMealId] is None:
+                continue
             rowDict = {}
-            mealID = row[0]
+#           mealID = row[0]
             for element in enumerate(row):
                 key = mealKeys[element[0]]
                 value = element[1]
@@ -241,13 +244,16 @@ class Meals(Resource):
             items = {}
 
             now = datetime.now()
-            now = datetime(2020, 1, 13, 15, 59)
+            now = datetime(2020, 2, 2, 15, 59)
 
-            # Get this coming and next Monday
+            print(now.weekday())
+            # Get this coming and next Sunday
             if now.weekday() == 0 and now.hour < 16:
+                print("it's monday before 4pm")
                 this_week = (now + timedelta(days=-1, weeks=0)).date()
                 next_week = (now + timedelta(days=-1, weeks=1)).date()
             else:
+                print("it's not monday before 4pm")
                 this_week = (now + timedelta(days=-now.weekday()-1, weeks=1)).date()
                 next_week = (now + timedelta(days=-now.weekday()-1, weeks=2)).date()
 
@@ -385,7 +391,6 @@ class Login(Resource):
 
             loginKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city', 'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
             query = runSelectQuery(queries[0], cur)
-            print(query)
 
             items = self.jsonifyLogin(query, loginKeys)
 
