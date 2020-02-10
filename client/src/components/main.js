@@ -83,7 +83,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 5
+          objectIndex: 'FiveMealPaymentPlans',
+          meals: 5
         }}  
       />
       <AppliedRoute
@@ -93,7 +94,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 10
+          objectIndex: 'TenMealPaymentPlans',
+          meals: 10
         }}  
       />
       <AppliedRoute
@@ -103,7 +105,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 15
+          objectIndex: 'FifteenMealPaymentPlans',
+          meals: 15
         }}  
       />
       <AppliedRoute
@@ -113,7 +116,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 20
+          objectIndex: 'TwentyMealPaymentPlans',
+          meals: 20
         }}  
       />
       <AppliedRoute

@@ -37,7 +37,7 @@ class Selectmealplan extends Component {
                   }}
                 > 
                   <div class="border border-dark" Style="height:100%">
-                    <Card.Img class="blackM" variant="top" src={mealPlan.Img} />
+                    <Card.Img class="blackM" variant="top" src={mealPlan.photo_URL} />
                     <div
                       class="top-center"
                       style={{
@@ -48,19 +48,19 @@ class Selectmealplan extends Component {
                         color: "white"
                       }}
                     >
-                      {mealPlan.MealsPerWeek} MEALS
+                      {mealPlan.num_meals} MEALS
                     </div>
                     <Card.Body>
                       <Card.Title>
-                        <b>{mealPlan.MealsPerWeek} MEALS WEEKLY</b>
+                        <b>{mealPlan.num_meals} MEALS WEEKLY</b>
                       </Card.Title>
                       <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                        from ${mealPlan.PricePerMeal.toFixed(2)} per meal
+                        from ${mealPlan.meal_plan_price_per_meal.toFixed(2)} per meal
                       </Card.Text>
                       <Card.Text style={{ fontSize: "13px" }}>
-                        {mealPlan.PlanSummary}
+                        {mealPlan.plan_headline}
                       </Card.Text>
-                      <Card.Title>STARTING AT ${mealPlan.LowestPrice.toFixed(2)} /week</Card.Title>
+                      <Card.Title>STARTING AT ${mealPlan.meal_plan_price.toFixed(2)} /week</Card.Title>
                       <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>
@@ -81,12 +81,12 @@ class Selectmealplan extends Component {
                             fontSize: "15px"
                           }}
                         >
-                          CHOOSE {mealPlan.MealsPerWeek} MEALS
+                          CHOOSE {mealPlan.num_meals} MEALS
                         </button>
                       </Link>
                     </Card.Body>
                     <Card.Footer Style="bottom:0px; ">
-                      <large className="text-muted">{mealPlan.PlanFooter}</large>
+                      <large className="text-muted">{mealPlan.plan_footer}</large>
                     </Card.Footer>
                   </div>
                 </Card>)}

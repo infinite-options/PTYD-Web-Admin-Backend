@@ -8,19 +8,20 @@ import { Link } from "react-router-dom";
 class SelectPaymentPlan extends Component {
   constructor(props) {
     super(props);
-    this.state = { meals: null, paymentPlans: [], otherPlans: [] };
+    this.state = { meals: null, obj: null, paymentPlans: [], otherPlans: [] };
   } 
   
   async componentDidMount() {
     console.log(this.props);
-    this.setState( {meals: this.props.objectIndex} );
+    this.setState( {obj: this.props.objectIndex} );
+    this.setState( {meals: this.props.meals} );
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
-    const plansData = api.result.PaymentPlans[this.state.meals];
-    const plans = plansData.Plans;
+    const plans = api.result[this.state.obj];
+//  const plans = plansData.Plans;
     this.setState( {paymentPlans: plans} );
-    const otherPlans = plansData.OtherPaymentPlans;
-    this.setState( {otherPlans: otherPlans} );
+//  const otherPlans = plansData.OtherPaymentPlans;
+//  this.setState( {otherPlans: otherPlans} );
   } 
 
   render() {
@@ -62,7 +63,7 @@ class SelectPaymentPlan extends Component {
                 >
                   {" "}
                   <span class="border border-dark" style={{}}>
-                    <Card.Img class="black" variant="top" src={IMG1} />
+                    <Card.Img class="black" variant="top" src={paymentPlan.photo_URL} />
                     <div
                       class="top-center"
                       style={{
@@ -73,17 +74,17 @@ class SelectPaymentPlan extends Component {
                         color: "white"
                       }}
                     >
-                      { this.state.meals }
+                      { paymentPlan.num_meals }
                     </div>
                     <Card.Body>
                       <Card.Title>
-                        <b>{ paymentPlan.PlanType.toUpperCase() }</b>
+                        <b>{ paymentPlan.payment_frequency.toUpperCase() }</b>
                       </Card.Title>
                       <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                        ${ paymentPlan.PriceByMeal.toFixed(2) } per meal
+                        ${ paymentPlan.meal_plan_price_per_meal.toFixed(2) } per meal
                       </Card.Text>
                       <br></br>
-                      <Card.Title>${ paymentPlan.Price.toFixed(2) } /week</Card.Title>
+                      <Card.Title>${ paymentPlan.meal_plan_price.toFixed(2) } /week</Card.Title>
                       <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>
@@ -92,8 +93,8 @@ class SelectPaymentPlan extends Component {
                         to={{
                           pathname: '/checkout',
                           item: {
-                            name: `{ this.state.paymentPlans.MealsPerWeek }-Meals: { paymentPlan.PlanType } Subscription - ${ paymentPlan.Price.toFixed(2) } /week`,
-                            total: paymentPlan.Price.toFixed(2)
+                            name: `${ paymentPlan.meal_plan_desc } Subscription - ${ paymentPlan.meal_plan_price.toFixed(2) } /week`,
+                            total: paymentPlan.meal_plan_price.toFixed(2)
                           }
                         }}
                       >

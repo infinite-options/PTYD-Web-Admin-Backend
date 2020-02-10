@@ -74,50 +74,42 @@ class Plans(Resource):
                 key = rowDictKeys[element[0]]
                 value = element[1]
                 # Convert all decimal values in row to floats
-                if 'Price' in key:
+                if key == 'meal_plan_price':
                     value = float(value)
+                    rowDict[key+'_per_meal'] = value / rowDict['num_meals']
                 rowDict[key] = value
             json.append(rowDict)
         return json
 
-    def jsonifyPaymentPlans(self, query, rowDictKeys):
-        json = {}
-        for row in query:
-            numberOfMeals = row[0]
-            rowDict = {}
-            '''
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                # Convert all decimal values in row to floats
-                if 'Price' in key:
-                    value = float(value)
-                rowDict[key] = value
-            '''
-            rowDict['MealsPerWeek'] = numberOfMeals
+#   def jsonifyPaymentPlans(self, query, rowDictKeys):
+#       json = {}
+#       for row in query:
+#           numberOfMeals = row[0]
+#           rowDict = {}
+#           rowDict['MealsPerWeek'] = numberOfMeals
 
-            otherPaymentPlanUrls = []
-            for mealNum in [5, 10, 15, 20]:
-                if mealNum == int(numberOfMeals):
-                    continue
-                paymentPlanUrlDict = {}
-                paymentPlanUrlDict["Url"] = "/" + str(mealNum) + "-meals-subscription"
-                paymentPlanUrlDict["Label"] = str(mealNum) + " MEALS"
-                otherPaymentPlanUrls.append(paymentPlanUrlDict)
-            rowDict['OtherPaymentPlans'] = otherPaymentPlanUrls
+#           otherPaymentPlanUrls = []
+#           for mealNum in [5, 10, 15, 20]:
+#               if mealNum == int(numberOfMeals):
+#                   continue
+#               paymentPlanUrlDict = {}
+#               paymentPlanUrlDict["Url"] = "/" + str(mealNum) + "-meals-subscription"
+#               paymentPlanUrlDict["Label"] = str(mealNum) + " MEALS"
+#               otherPaymentPlanUrls.append(paymentPlanUrlDict)
+#           rowDict['OtherPaymentPlans'] = otherPaymentPlanUrls
 
-            rowDict['Plans'] = []
-            for key, value in {1: 'Week-to-Week', 3: '2 Week Pre-pay', 5: '4 Week Pre-pay'}.items():
-                if row[key] is 1:
-                    priceKey = key + 1
-                    planCard = {}
-                    planCard['PlanType'] = value
-                    planCard['Price'] = float(row[priceKey])
-                    planCard['PriceByMeal'] = planCard['Price'] / numberOfMeals
-                    rowDict['Plans'].append(planCard)
+#           rowDict['Plans'] = []
+#           for key, value in {1: 'Week-to-Week', 3: '2 Week Pre-pay', 5: '4 Week Pre-pay'}.items():
+#               if row[key] is 1:
+#                   priceKey = key + 1
+#                   planCard = {}
+#                   planCard['PlanType'] = value
+#                   planCard['Price'] = float(row[priceKey])
+#                   planCard['PriceByMeal'] = planCard['Price'] / numberOfMeals
+#                   rowDict['Plans'].append(planCard)
 
-            json[numberOfMeals] = rowDict
-        return json
+#           json[numberOfMeals] = rowDict
+#       return json
 
     def get(self):
         response = {}
@@ -128,35 +120,72 @@ class Plans(Resource):
             items = {}
 
             queries = [
-                """ SELECT
-                        MealsPerWeek,
-                        WeekToWeek,
-                        WeekToWeekPrice,
-                        TwoWeekPrePay,
-                        TwoWeekPrice,
-                        FourWeekPrePay,
-                        FourWeekPrice
-                    FROM PaymentPlans;""",
-                """ SELECT
-                        m.MealsPerWeek,
-                        m.PlanSummary,
-                        m.PlanFooter,
-                        CAST(p.FourWeekPrice/CAST(p.MealsPerWeek AS DECIMAL(7,2)) AS DECIMAL(7,2)) AS PricePerMeal,
-                        p.FourWeekPrice as LowestPrice,
-                        m.Img,
-                        m.RouteOnclick
-                    FROM MealPlans as m
-                    INNER JOIN PaymentPlans as p
-                    WHERE m.MealsPerWeek = p.MealsPerWeek;"""]
+                """SELECT
+                        meal_plan_id,
+                        meal_plan_desc,
+                        payment_frequency,
+                        photo_URL,
+                        plan_headline,
+                        plan_footer,
+                        num_meals,
+                        meal_plan_price,
+                        CONCAT('/', num_meals, '-meals-subscription') AS RouteOnclick
+                    FROM ptyd_meal_plans
+                    WHERE payment_frequency = \'Monthly\';""",
+                """SELECT
+                        meal_plan_id,
+                        meal_plan_desc,
+                        payment_frequency,
+                        photo_URL,
+                        num_meals,
+                        meal_plan_price
+                    FROM ptyd_meal_plans
+                    WHERE num_meals = 5;""",
+                """SELECT
+                        meal_plan_id,
+                        meal_plan_desc,
+                        payment_frequency,
+                        photo_URL,
+                        num_meals,
+                        meal_plan_price
+                    FROM ptyd_meal_plans
+                    WHERE num_meals = 10;""",
+                """SELECT
+                        meal_plan_id,
+                        meal_plan_desc,
+                        payment_frequency,
+                        photo_URL,
+                        num_meals,
+                        meal_plan_price
+                    FROM ptyd_meal_plans
+                    WHERE num_meals = 15;""",
+                """SELECT
+                        meal_plan_id,
+                        meal_plan_desc,
+                        payment_frequency,
+                        photo_URL,
+                        num_meals,
+                        meal_plan_price
+                    FROM ptyd_meal_plans
+                    WHERE num_meals = 20;"""]
 
-            paymentPlanKeys = ('MealsPerWeek', 'WeekToWeek', 'WeekToWeekPrice', 'TwoWeekPrePay', 'TwoWeekPrice', 'FourWeekPrePay', 'FourWeekPrice')
-            mealPlanKeys = ('MealsPerWeek', 'PlanSummary', 'PlanFooter', 'PricePerMeal', 'LowestPrice', 'Img', 'RouteOnclick')
+            mealPlanKeys = ('meal_plan_id', 'meal_plan_desc', 'payment_frequency', 'photo_URL', 'plan_headline', 'plan_footer', 'num_meals', 'meal_plan_price', 'RouteOnclick')
+            paymentPlanKeys = ('meal_plan_id', 'meal_plan_desc', 'payment_frequency', 'photo_URL', 'num_meals', 'meal_plan_price')
 
             query = runSelectQuery(queries[0], cur)
-            items['PaymentPlans'] = self.jsonifyPaymentPlans(query, paymentPlanKeys)
+            items['MealPlans'] = self.jsonifyMealPlans(query, mealPlanKeys)
 
             query = runSelectQuery(queries[1], cur)
-            items['MealPlans'] = self.jsonifyMealPlans(query, mealPlanKeys)
+            items['FiveMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
+
+            query = runSelectQuery(queries[2], cur)
+            items['TenMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
+
+            query = runSelectQuery(queries[3], cur)
+            items['FifteenMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
+
+            query = runSelectQuery(queries[4], cur)
+            items['TwentyMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items
