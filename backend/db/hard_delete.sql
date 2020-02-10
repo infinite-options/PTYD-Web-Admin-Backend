@@ -1,4 +1,0 @@
-DROP TABLE IF EXISTS MealPlans;
-DROP TABLE IF EXISTS PaymentPlans;
-DROP TABLE IF EXISTS PaymentAdjustments;
-DROP TABLE IF EXISTS UnitConversion;

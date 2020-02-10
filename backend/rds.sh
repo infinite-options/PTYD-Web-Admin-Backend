@@ -4,8 +4,6 @@
 function usage () {
     echo "usage:";
     echo "--login, -l: log onto mysql server"
-    echo "--reset, -r: setup or soft reset schema in database";
-    echo "--hard-reset, -h: hard reset schema";
     echo "--file <filename>, -f <filename>: run a specific file";
 }
 
@@ -21,14 +19,6 @@ else
     case $1 in
     -l | --login)
         logon;
-        exit 0
-        ;;
-    -h | --hard-reset)
-        cat hard_delete.sql schema.sql | logon
-        exit 0
-        ;;
-    -r | --reset)
-        logon < schema.sql
         exit 0
         ;;
     -f | --file)
