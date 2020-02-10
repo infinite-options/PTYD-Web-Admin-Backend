@@ -257,7 +257,8 @@ class Login(Resource):
             items = [
                 {'user': "mickey", 'pass':"4c4699dcce2d8f4655a4a9be1afaf888c1655d0b2ca5ff64d4492cc0e7044bdfec6f52f70a6c75f6a55392417ecb975a6e557805134e2d1b701b6d92ede5bb34"},
                 {'user': "donald", 'pass':"39818fb2d074d0f356392539d68b67afbc4e3768e78b6375936b63555c6928452dcc96e50aeefbf01a56a01d958ad518d29aa9b5c46a6162363cf2438eab5066"},
-                {'user': "Strother", 'pass':"b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86"}
+                {'user': "Strother", 'pass':"b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86"},
+                {'user': "Junha", 'pass': "e6d80cff851e5807c8a744f06947061c61f1d31fdfbaa2813db0378c144825e211f19559005dbeeffc0aee4b1dac75e9566221c0556e9d2d7fe52affc2e46287"}
             ]
 
             response['message'] = 'Request successful.'
