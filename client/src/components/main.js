@@ -82,7 +82,16 @@ export default function Main({ appProps }) {
       <AppliedRoute exact path="/faq" component={FaQ} />
       <AppliedRoute exact path="/jobs" component={JobS} />
       <AppliedRoute exact path="/get100" component={Get100} />
-      <AppliedRoute exact path="/mealschedule" component={MealSchedule} />
+      <AppliedRoute
+        exact
+        path="/mealschedule"
+        component={MealSchedule}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}meals`,
+          USERS_API_URL: `${DEV_URL}accounts`
+        }}
+      />
 
       <AppliedRoute
         exact

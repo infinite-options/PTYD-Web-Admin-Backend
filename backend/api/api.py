@@ -244,6 +244,8 @@ class Meals(Resource):
             items = {}
 
             now = datetime.now()
+
+            # Temporarily setting now to Feb 2 15:59
             now = datetime(2020, 2, 2, 15, 59)
 
             # Get meals for the next six weeks
@@ -303,7 +305,6 @@ class Meals(Resource):
                         FROM ptyd_menu
                         LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                         WHERE menu_date = \'""" + str(eachWeek['saturday']) + """\';""")
-            print(queries)
 
             mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url', 'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
 

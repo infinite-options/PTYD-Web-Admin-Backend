@@ -5,6 +5,34 @@ import IMG8 from "../img/img8.jpeg";
 import MealButton from "./meal-button";
 
 class Mealschedule extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { menu: [] };
+  }
+
+  async componentDidMount() {
+    console.log(this.props);
+    const res = await fetch(`${this.props.API_URL}`);
+    const api = await res.json();
+
+    let key;
+    let sixWeekMenu = [];
+    let weekNum;
+    for (weekNum = 1; weekNum < 7; weekNum++) {
+      key = "MenuForWeek" + weekNum;
+      let currentWeek = {};
+      console.log(api.result[key]);
+      currentWeek.sun = api.result[key].Sunday;
+      currentWeek.mon = api.result[key].Monday;
+      currentWeek.menu = api.result[key].Meals;
+      sixWeekMenu.push(currentWeek);
+    }
+    this.setState( {menu: sixWeekMenu} );
+
+//  const users_res = await fetch(`${this.props.USERS_API_URL}`);
+//  const users_api = await users_res.json();
+  }
+
   render() {
     return (
       <div>
@@ -67,42 +95,14 @@ class Mealschedule extends Component {
                 <h3>Select Meals Around Your Schedule</h3>
                 <br />
                 <div class="meals-button">
+                  {this.state.menu.map(eachWeek => (
                   <MealButton
                     day1="Sunday"
                     day2="Monday"
-                    date1="Jan 26"
-                    date2="Jan 27"
+                    date1={eachWeek.sun}
+                    date2={eachWeek.mon}
                   />
-                  <MealButton
-                    day1="Sunday"
-                    day2="Monday"
-                    date1="Feb 2"
-                    date2="Feb 3"
-                  />
-                  <MealButton
-                    day1="Sunday"
-                    day2="Monday"
-                    date1="Feb 9"
-                    date2="Feb 10"
-                  />
-                  <MealButton
-                    day1="Sunday"
-                    day2="Monday"
-                    date1="Feb 16"
-                    date2="Feb 17"
-                  />
-                  <MealButton
-                    day1="Sunday"
-                    day2="Monday"
-                    date1="Feb 23"
-                    date2="Feb 24"
-                  />
-                  <MealButton
-                    day1="Sunday"
-                    day2="Monday"
-                    date1="Mar 3"
-                    date2="Mar 4"
-                  />
+                  ))}
                 </div>
               </Cell>
             </Grid>
