@@ -13,7 +13,9 @@ class Selectmealplan extends Component {
     this.setState( {currentWeek: this.props.objectIndex} );
     const res = await fetch(`${this.props.API_URL}`);
     const api = await res.json();
-    const deliveryDates = api.result[this.state.currentWeek].DeliveryDates;
+    const sundayDate = api.result[this.state.currentWeek].Sunday;
+    const mondayDate = api.result[this.state.currentWeek].Monday;
+    const deliveryDates = sundayDate + " & " + mondayDate
     this.setState( {dates: deliveryDates} );
     const mealsData = api.result[this.state.currentWeek].Meals;
     this.setState( {meals: mealsData} );

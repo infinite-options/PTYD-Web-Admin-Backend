@@ -58,7 +58,7 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          objectIndex: 'MenuThisWeek'
+          objectIndex: 'MenuForWeek1'
         }}
       />
       <AppliedRoute
@@ -68,7 +68,7 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          objectIndex: 'MenuNextWeek'
+          objectIndex: 'MenuForWeek2'
         }}
       />
       <AppliedRoute
