@@ -14,15 +14,17 @@ import json
 import pymysql
 
 app = Flask(__name__)
+
+# Allow cross-origin resource sharing
 cors = CORS(app, resources={r'/api/*': {'origins': '*'}})
 
+# Set this to false when deploying to live application
 app.config['DEBUG'] = True
 
+# API
 api = Api(app)
 
 # Get RDS password from command line argument
-
-
 def RdsPw():
     if len(sys.argv) == 2:
         return str(sys.argv[1])
@@ -35,8 +37,6 @@ def RdsPw():
 RDS_PW = RdsPw()
 
 # Connect to RDS
-
-
 def getRdsConn(RDS_PW):
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
@@ -57,8 +57,6 @@ def getRdsConn(RDS_PW):
         raise Exception("RDS Connection failed.")
 
 # Close RDS connection
-
-
 def closeRdsConn(cur, conn):
     try:
         cur.close()
@@ -67,7 +65,8 @@ def closeRdsConn(cur, conn):
     except:
         print("Could not close RDS connection.")
 
-
+# Runs a select query with the SQL query string and pymysql cursor as arguments
+# Returns a list of Python tuples
 def runSelectQuery(query, cur):
     try:
         cur.execute(query)
@@ -76,10 +75,11 @@ def runSelectQuery(query, cur):
     except:
         raise Exception("Could not run select query and/or return data")
 
-
+# Plans API
 class Plans(Resource):
     global RDS_PW
 
+    # Format queried tuples into JSON
     def jsonifyMealPlans(self, query, rowDictKeys):
         json = []
         for row in query:
@@ -95,6 +95,7 @@ class Plans(Resource):
             json.append(rowDict)
         return json
 
+    # HTTP method GET
     def get(self):
         response = {}
         try:
@@ -186,23 +187,11 @@ class Plans(Resource):
         finally:
             closeRdsConn(cur, conn)
 
-
+# Meals API
 class Meals(Resource):
     global RDS_PW
-#   def getIngredients(self, mealID, cur):
-#       sql = """   SELECT
-#                       Ingredient,
-#                       Meal,
-#                       Qty,
-#                       Unit
-#                   FROM Ingredients
-#                   WHERE Meal = \'""" + mealID + """\';"""
-#       ingrKeys = ('Ingredient', 'Meal', 'Qty', 'Unit')
-#       query = runSelectQuery(sql, cur)
-#       ingredients = self.jsonifyQuery(query, ingrKeys)
 
-#       return ingredients
-
+    # Format queried tuples into JSON
     def jsonifyMeals(self, query, mealKeys):
         json = {}
         for key in [('Seasonal', 'SEASONAL FAVORITES'), ('Weekly', 'WEEKLY SPECIALS'), ('Smoothies', 'Smoothies'), ('Addons', 'Add-ons'), ('Misc', 'Miscellaneous')]:
@@ -213,7 +202,6 @@ class Meals(Resource):
             if row[indexOfMealId] is None:
                 continue
             rowDict = {}
-#           mealID = row[0]
             for element in enumerate(row):
                 key = mealKeys[element[0]]
                 value = element[1]
@@ -223,7 +211,7 @@ class Meals(Resource):
                 if key == 'menu_date':
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
-#           rowDict['Ingredients'] = self.getIngredients(mealID, cur)
+#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
             if 'SEAS_FAVE' in rowDict['menu_category']:
                 json['Seasonal']['Menu'].append(rowDict)
             elif 'WKLY_SPCL' in rowDict['menu_category']:
@@ -236,34 +224,7 @@ class Meals(Resource):
                 json['Misc']['Menu'].append(rowDict)
         return json
 
-#   def jsonifyMeals(self, query, mealKeys, cur):
-#       json = []
-#       decimalKeys = ['Protein', 'Carbs', 'Sugar', 'Fiber', 'Fat', 'Sat']
-#       for row in query:
-#           rowDict = {}
-#           mealID = row[0]
-#           for element in enumerate(row):
-#               key = mealKeys[element[0]]
-#               value = element[1]
-#               # Convert all decimal values in row to floats
-#               if key in decimalKeys:
-#                   value = float(value)
-#               rowDict[key] = value
-#           rowDict['Ingredients'] = self.getIngredients(mealID, cur)
-#           json.append(rowDict)
-#       return json
-
-#   def jsonifyQuery(self, query, rowDictKeys):
-#       json = []
-#       for row in query:
-#           rowDict = {}
-#           for element in enumerate(row):
-#               key = rowDictKeys[element[0]]
-#               value = element[1]
-#               rowDict[key] = value
-#           json.append(rowDict)
-#       return json
-
+    # HTTP method GET
     def get(self):
         response = {}
         try:
@@ -364,6 +325,7 @@ class Meals(Resource):
 class Accounts(Resource):
     global RDS_PW
 
+    # Format queried tuples into JSON
     def jsonifyAccounts(self, query, rowDictKeys):
         json = []
         dateKeys = ['create_date', 'last_update', 'last_delivery']
@@ -380,6 +342,7 @@ class Accounts(Resource):
             json.append(rowDict)
         return json
 
+    # HTTP method GET
     def get(self):
         response = {}
         try:
@@ -387,12 +350,6 @@ class Accounts(Resource):
             conn = db[0]
             cur = db[1]
             items = []
-
-#           queries = [
-#               """ SELECT
-#                       UserID,
-#                       Pass
-#                   FROM TestLogin;"""]
 
             queries = [
                 """ SELECT
@@ -432,10 +389,12 @@ class Accounts(Resource):
         finally:
             closeRdsConn(cur, conn)
 
-
+# Define API routes
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 
+# Run on below IP address and port
+# Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='2000')
