@@ -17,7 +17,7 @@ class EachMeal extends Component {
 
         <Grid>
           <Cell col={7}>
-            <img class="img-fluid" src={FINDUS1} alt="" />
+            <img class="img-fluid" src={this.props.imgurl} alt="no_meal_img" />
           </Cell>
           <Cell col={5}>
             <div class="input-group">
