@@ -6,7 +6,7 @@ import AppliedRoute from "./AppliedRoute";
 import LandingPage from "./landingpage";
 import SelectMealPlan from "./selectmealplan";
 import SelectPaymentPlan from "./selectpaymentplan";
-import MenuThisWeek from "./menuthisweek";
+import WeeklyMenu from "./weeklymenu";
 import Checkout from "./checkout";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
@@ -51,7 +51,7 @@ export default function Main({ appProps }) {
       <AppliedRoute
         exact
         path="/menuthisweek"
-        component={MenuThisWeek}
+        component={WeeklyMenu}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
@@ -64,7 +64,7 @@ export default function Main({ appProps }) {
       <AppliedRoute
         exact
         path="/menunextweek"
-        component={MenuThisWeek}
+        component={WeeklyMenu}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,

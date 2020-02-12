@@ -12,7 +12,7 @@ class Mealschedule extends Component {
 
   async componentDidMount() {
     console.log(this.props);
-    const res = await fetch(`${this.props.API_URL}`);
+    const res = await fetch(this.props.API_URL);
     const api = await res.json();
 
     let key;
@@ -28,7 +28,7 @@ class Mealschedule extends Component {
     }
     this.setState( {menu: sixWeekMenu} );
 
-//  const users_res = await fetch(`${this.props.USERS_API_URL}`);
+//  const users_res = await fetch(this.props.USERS_API_URL);
 //  const users_api = await users_res.json();
   }
 

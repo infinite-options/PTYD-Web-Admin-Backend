@@ -15,7 +15,7 @@ class SelectPaymentPlan extends Component {
     console.log(this.props);
     this.setState({ obj: this.props.objectIndex });
     this.setState({ meals: this.props.meals });
-    const res = await fetch(`${this.props.API_URL}`);
+    const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const plans = api.result[this.state.obj];
     //  const plans = plansData.Plans;
@@ -102,7 +102,7 @@ class SelectPaymentPlan extends Component {
                           item: {
                             name: `${
                               paymentPlan.meal_plan_desc
-                            } Subscription - ${paymentPlan.meal_plan_price.toFixed(
+                            } Subscription - $${paymentPlan.meal_plan_price.toFixed(
                               2
                             )} /week`,
                             total: paymentPlan.meal_plan_price.toFixed(2)

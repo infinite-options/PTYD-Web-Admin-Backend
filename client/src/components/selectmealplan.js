@@ -10,7 +10,7 @@ class Selectmealplan extends Component {
   }
 
   async componentDidMount() {
-    const res = await fetch(`${this.props.API_URL}`);
+    const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const mealPlans = api.result.MealPlans;
     this.setState({ mealPlans });

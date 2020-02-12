@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 
 //  Not using images currently
 
-class Selectmealplan extends Component {
+class WeeklyMenu extends Component {
   constructor(props) {
     super(props);
     this.state = { currentWeek: null, dates: null, meals: { Seasonal: { Category: null, Menu: [] }, Weekly: { Category: null, Menu: [] }, Smoothies: { Category: null, Menu: [] }, Addons: { Category: null, Menu: [] }, Misc: { Category: null, Menu: [] } } };
@@ -12,7 +12,7 @@ class Selectmealplan extends Component {
   async componentDidMount() {
     console.log(this.props);
     this.setState( {currentWeek: this.props.objectIndex} );
-    const res = await fetch(`${this.props.API_URL}`);
+    const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const sundayDate = api.result[this.state.currentWeek].Sunday;
     const mondayDate = api.result[this.state.currentWeek].Monday;
@@ -66,4 +66,4 @@ class Selectmealplan extends Component {
   }
 }
 
-export default Selectmealplan;
+export default WeeklyMenu;

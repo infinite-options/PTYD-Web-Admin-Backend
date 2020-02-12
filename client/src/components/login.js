@@ -35,7 +35,7 @@ export default function Login (props) {
   }
 
   async function componentDidMount() {
-    const res = await fetch(`${props.API_URL}`);
+    const res = await fetch(props.API_URL);
     const api = await res.json();
     const logins = api.result;
     setUsers(logins);
