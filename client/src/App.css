@@ -36,10 +36,15 @@
   top: 5%;
   left: 30%;
 }
-.center-center {
+.mealoption-center {
   position: absolute;
   top: 15%;
-  left: 30%;
+  left: 35%;
+}
+.selectmeal-center {
+  position: absolute;
+  top: 15%;
+  left: 20%;
 }
 /* Bottom right text */
 .bottom-right {

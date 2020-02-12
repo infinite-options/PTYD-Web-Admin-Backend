@@ -27,12 +27,10 @@ import Logout from "./logout";
 //const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/';
 
 //  Localhost API that can be run from /backend/api directory
-const DEV_URL = 'http://localhost:2000/api/v1/';
+const DEV_URL = "http://localhost:2000/api/v1/";
 
 export default function Main({ appProps }) {
-
   const [objectIndex, setObjectIndex] = useState(0);
-
 
   return (
     <Switch>
@@ -58,7 +56,7 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          objectIndex: 'MenuForWeek1'
+          objectIndex: "MenuForWeek1"
         }}
       />
       <AppliedRoute
@@ -68,7 +66,7 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          objectIndex: 'MenuForWeek2'
+          objectIndex: "MenuForWeek2"
         }}
       />
       <AppliedRoute
@@ -100,9 +98,9 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 'FiveMealPaymentPlans',
+          objectIndex: "FiveMealPaymentPlans",
           meals: 5
-        }}  
+        }}
       />
       <AppliedRoute
         exact
@@ -111,9 +109,9 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 'TenMealPaymentPlans',
+          objectIndex: "TenMealPaymentPlans",
           meals: 10
-        }}  
+        }}
       />
       <AppliedRoute
         exact
@@ -122,9 +120,9 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 'FifteenMealPaymentPlans',
+          objectIndex: "FifteenMealPaymentPlans",
           meals: 15
-        }}  
+        }}
       />
       <AppliedRoute
         exact
@@ -133,9 +131,9 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}plans`,
-          objectIndex: 'TwentyMealPaymentPlans',
+          objectIndex: "TwentyMealPaymentPlans",
           meals: 20
-        }}  
+        }}
       />
       <AppliedRoute
         exact
@@ -167,8 +165,9 @@ export default function Main({ appProps }) {
         component={Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}accounts`,
-        }} />
+          API_URL: `${DEV_URL}accounts`
+        }}
+      />
       <AppliedRoute
         exact
         path="/logout"

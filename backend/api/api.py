@@ -21,9 +21,13 @@ app.config['DEBUG'] = True
 api = Api(app)
 
 # Get RDS password from command line argument
+
+
 def RdsPw():
-    if len(sys.argv) == 2: return str(sys.argv[1])
+    if len(sys.argv) == 2:
+        return str(sys.argv[1])
     return ""
+
 
 # RDS PASSWORD
 # When deploying to Zappa, set RDS_PW equal to the password as a string
@@ -31,6 +35,8 @@ def RdsPw():
 RDS_PW = RdsPw()
 
 # Connect to RDS
+
+
 def getRdsConn(RDS_PW):
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
@@ -38,11 +44,11 @@ def getRdsConn(RDS_PW):
     RDS_DB = 'pricing'
     print("Trying to connect to RDS...")
     try:
-        conn = pymysql.connect( RDS_HOST,
-                                user=RDS_USER,
-                                port=RDS_PORT,
-                                passwd=RDS_PW,
-                                db=RDS_DB)
+        conn = pymysql.connect(RDS_HOST,
+                               user=RDS_USER,
+                               port=RDS_PORT,
+                               passwd=RDS_PW,
+                               db=RDS_DB)
         cur = conn.cursor()
         print("Successfully connected to RDS.")
         return [conn, cur]
@@ -51,6 +57,8 @@ def getRdsConn(RDS_PW):
         raise Exception("RDS Connection failed.")
 
 # Close RDS connection
+
+
 def closeRdsConn(cur, conn):
     try:
         cur.close()
@@ -58,6 +66,7 @@ def closeRdsConn(cur, conn):
         print("Successfully closed RDS connection.")
     except:
         print("Could not close RDS connection.")
+
 
 def runSelectQuery(query, cur):
     try:
@@ -67,8 +76,10 @@ def runSelectQuery(query, cur):
     except:
         raise Exception("Could not run select query and/or return data")
 
+
 class Plans(Resource):
     global RDS_PW
+
     def jsonifyMealPlans(self, query, rowDictKeys):
         json = []
         for row in query:
@@ -142,23 +153,29 @@ class Plans(Resource):
                     FROM ptyd_meal_plans
                     WHERE num_meals = 20;"""]
 
-            mealPlanKeys = ('meal_plan_id', 'meal_plan_desc', 'payment_frequency', 'photo_URL', 'plan_headline', 'plan_footer', 'num_meals', 'meal_plan_price', 'RouteOnclick')
-            paymentPlanKeys = ('meal_plan_id', 'meal_plan_desc', 'payment_frequency', 'photo_URL', 'num_meals', 'meal_plan_price')
+            mealPlanKeys = ('meal_plan_id', 'meal_plan_desc', 'payment_frequency', 'photo_URL',
+                            'plan_headline', 'plan_footer', 'num_meals', 'meal_plan_price', 'RouteOnclick')
+            paymentPlanKeys = ('meal_plan_id', 'meal_plan_desc',
+                               'payment_frequency', 'photo_URL', 'num_meals', 'meal_plan_price')
 
             query = runSelectQuery(queries[0], cur)
             items['MealPlans'] = self.jsonifyMealPlans(query, mealPlanKeys)
 
             query = runSelectQuery(queries[1], cur)
-            items['FiveMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
+            items['FiveMealPaymentPlans'] = self.jsonifyMealPlans(
+                query, paymentPlanKeys)
 
             query = runSelectQuery(queries[2], cur)
-            items['TenMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
+            items['TenMealPaymentPlans'] = self.jsonifyMealPlans(
+                query, paymentPlanKeys)
 
             query = runSelectQuery(queries[3], cur)
-            items['FifteenMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
+            items['FifteenMealPaymentPlans'] = self.jsonifyMealPlans(
+                query, paymentPlanKeys)
 
             query = runSelectQuery(queries[4], cur)
-            items['TwentyMealPaymentPlans'] = self.jsonifyMealPlans(query, paymentPlanKeys)
+            items['TwentyMealPaymentPlans'] = self.jsonifyMealPlans(
+                query, paymentPlanKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -168,6 +185,7 @@ class Plans(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             closeRdsConn(cur, conn)
+
 
 class Meals(Resource):
     global RDS_PW
@@ -187,7 +205,8 @@ class Meals(Resource):
 
     def jsonifyMeals(self, query, mealKeys):
         json = []
-        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
+        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
+                       'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
         indexOfMealId = mealKeys.index('menu_meal_id')
         for row in query:
             if row[indexOfMealId] is None:
@@ -259,7 +278,8 @@ class Meals(Resource):
 
             for weekIndex in range(6):
                 weekDict = {}
-                weekDict['saturday'] = (now + timedelta(days=-now.weekday()-2, weeks=weekIndex+offset)).date()
+                weekDict['saturday'] = (
+                    now + timedelta(days=-now.weekday()-2, weeks=weekIndex+offset)).date()
                 weekDict['sunday'] = weekDict['saturday'] + timedelta(days=1)
                 weekDict['monday'] = weekDict['saturday'] + timedelta(days=2)
                 weekDict['sundayDate'] = weekDict['sunday'].strftime("%b %-d")
@@ -306,7 +326,8 @@ class Meals(Resource):
                         LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                         WHERE menu_date = \'""" + str(eachWeek['saturday']) + """\';""")
 
-            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url', 'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
+            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url',
+                         'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
 
             query = runSelectQuery(queries[0], cur)
             items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
@@ -328,8 +349,10 @@ class Meals(Resource):
         finally:
             closeRdsConn(cur, conn)
 
+
 class Accounts(Resource):
     global RDS_PW
+
     def jsonifyAccounts(self, query, rowDictKeys):
         json = []
         dateKeys = ['create_date', 'last_update', 'last_delivery']
@@ -341,7 +364,8 @@ class Accounts(Resource):
                 if key in dateKeys:
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
-            rowDict['password_sha512'] = sha512(rowDict['user_name'].encode()).hexdigest()
+            rowDict['password_sha512'] = sha512(
+                rowDict['user_name'].encode()).hexdigest()
             json.append(rowDict)
         return json
 
@@ -382,7 +406,8 @@ class Accounts(Resource):
                         user_note
                     FROM ptyd_accounts;"""]
 
-            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city', 'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
+            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city',
+                           'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
             query = runSelectQuery(queries[0], cur)
 
             items = self.jsonifyAccounts(query, accountKeys)
@@ -396,9 +421,10 @@ class Accounts(Resource):
         finally:
             closeRdsConn(cur, conn)
 
+
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='2000')
+    app.run(host='127.0.0.1', port=2000)
