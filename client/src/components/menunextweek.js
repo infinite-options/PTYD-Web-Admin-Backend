@@ -51,7 +51,7 @@ class Selectmealplan extends Component {
 
                     <div class="col-md-4">
                     <div class="card mb-4 shadow-sm" Style="height:300px; width:300px;">
-                        <img class="card-img-top" width="100%" height="200px" src={IMG6} alt="meal pic"/>
+                        <img class="card-img-top" width="100%" height="200px" src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" alt="meal pic"/>
                         <Card.Body>
                           <Card.Title>SMOKEY BLACKEYED PEA SOUP</Card.Title>
                           <Card.Text Style="font-size:10px">
