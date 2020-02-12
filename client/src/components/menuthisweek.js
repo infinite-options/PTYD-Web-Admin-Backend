@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 
+//  Not using images currently
+
 class Selectmealplan extends Component {
   constructor(props) {
     super(props);

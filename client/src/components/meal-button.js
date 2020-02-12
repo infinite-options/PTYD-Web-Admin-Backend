@@ -241,8 +241,9 @@ export default class MealButton extends Component {
                   <Cell col={4}>
                     <EachMeal
                       mealTitle={meal.meal_desc}
-                      ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
+                      ingridents="Ingredients: Not Yet in Database"
                       detail={"Cal " + meal.meal_calories + ", Prot " + meal.meal_protein + ", Carb " + meal.meal_carbs + ", Sug " + meal.meal_sugar + ", Fib " + meal.meal_fiber + ", Fat " + meal.meal_fat + ", Sat " + meal.meal_sat }
+                      imgurl={meal.meal_photo_url}
                     />
                   </Cell>
                 ))}

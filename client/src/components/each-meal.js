@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import FINDUS1 from "../img/findus1.png";
 import { Grid, Cell } from "react-mdl";
 
+//  Replace FINDUS1 below with this.props.imgurl
+
 class EachMeal extends Component {
   state = {
     countFood: 0
