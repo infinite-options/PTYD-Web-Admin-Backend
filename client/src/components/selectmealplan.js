@@ -36,9 +36,13 @@ class Selectmealplan extends Component {
                   }}
                 >
                   <div class="border border-dark" Style="height:100%">
-                    <Card.Img class="blackM" variant="top" src={mealPlan.photo_URL} />
+                    <Card.Img
+                      class="blackM"
+                      variant="top"
+                      src={mealPlan.photo_URL}
+                    />
                     <div
-                      class="center-center"
+                      class="selectmeal-center"
                       style={{
                         marginBottom: "10%",
                         fontSize: "30px",
@@ -54,12 +58,15 @@ class Selectmealplan extends Component {
                         <b>{mealPlan.num_meals} MEALS WEEKLY</b>
                       </Card.Title>
                       <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                        from ${mealPlan.meal_plan_price_per_meal.toFixed(2)} per meal
+                        from ${mealPlan.meal_plan_price_per_meal.toFixed(2)} per
+                        meal
                       </Card.Text>
                       <Card.Text style={{ fontSize: "13px" }}>
                         {mealPlan.plan_headline}
                       </Card.Text>
-                      <Card.Title>STARTING AT ${mealPlan.meal_plan_price.toFixed(2)} /week</Card.Title>
+                      <Card.Text>
+                        STARTING AT ${mealPlan.meal_plan_price.toFixed(2)} /week
+                      </Card.Text>
                       <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>
@@ -85,7 +92,9 @@ class Selectmealplan extends Component {
                       </Link>
                     </Card.Body>
                     <Card.Footer Style="bottom:0px; ">
-                      <large className="text-muted">{mealPlan.plan_footer}</large>
+                      <large className="text-muted">
+                        {mealPlan.plan_footer}
+                      </large>
                     </Card.Footer>
                   </div>
                 </Card>
