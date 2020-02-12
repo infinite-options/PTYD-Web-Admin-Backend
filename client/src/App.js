@@ -32,6 +32,12 @@ const App = props => {
     setIsAuthenticating(false);
   }
 
+  function searchCookie4Login(str) {
+    let arr = str.split(" ")
+    let i = arr.indexOf("loginStatus:") 
+    return arr[i+1] + " " + arr[i+2]
+  }
+
   let stuff = !isAuthenticating && (
     <div className="demo-big-content">
       <Layout>
@@ -47,10 +53,10 @@ const App = props => {
         >
           <Nav
             className="navbar fixed-top justify-content-center"
-            Style="min-height:145px; background-color:white;"
+            Style="min-height:140px; background-color:white;"
             activeKey="/home"
           >
-            <div Style="margin-top:25px">
+            <div Style="margin-top:-25px">
               <a className="navbar-brand" href="/">
                 <img
                   src="https://static.wixstatic.com/media/db4706_fb464984e3094a629a8bfb5297ca38c7~mv2.png/v1/fill/w_110,h_81,al_c,q_90/LOGO%2012_19_18%20.webp"
@@ -67,7 +73,7 @@ const App = props => {
               </p>
             </div>
 
-            <Nav.Item Style="margin-top:90px">
+            <Nav.Item Style="margin-top:30px">
               <Nav.Link Style="color:black" href="/selectmealplan">
                 SUBSCRIBE
               </Nav.Link>
@@ -75,7 +81,7 @@ const App = props => {
             <NavDropdown
               title="MENU"
               id="nav-dropdown"
-              Style="margin-top:90px; color:black;"
+              Style="margin-top:30px; color:black;"
             >
               <NavDropdown.Item href="/menuthisweek">
                 THIS WEEK
@@ -88,12 +94,12 @@ const App = props => {
               </NavDropdown.Item>
             </NavDropdown>
 
-            <Nav.Item Style="margin-top:90px">
+            <Nav.Item Style="margin-top:30px">
               <Nav.Link Style="color:black" href="/findus">
                 FIND US
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item Style="margin-top:90px">
+            <Nav.Item Style="margin-top:30px">
               <Nav.Link Style="color:black" href="/giftcards">
                 GIFT CARDS
               </Nav.Link>
@@ -101,7 +107,7 @@ const App = props => {
             <NavDropdown
               title="ABOUT"
               id="nav-dropdown"
-              Style="margin-top:90px; color:black;"
+              Style="margin-top:30px; color:black;"
             >
               <NavDropdown.Item href="/howitworks">
                 HOW IT WORKS
@@ -116,27 +122,35 @@ const App = props => {
               </NavDropdown.Item>
               <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Item Style="margin-top:90px;">
+            <Nav.Item Style="margin-top:30px;">
               <Nav.Link Style="color:black" href="/get100">
                 GET $100
               </Nav.Link>
             </Nav.Item>
 
-            <div className="" Style="margin-top:70px">
-              {document.cookie.split(" ")[0] === "Hello" ? (
+            <div className="" Style="padding-top:66px">
+              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
+                <div>
                 <a href="/logout">
                   <Button
                     id="logoutButton"
                     variant="success"
                     size="sm"
                     onClick={() => {
-                      document.cookie = "Sign In";
+                      document.cookie = "loginStatus: Sign In ,";
                       window.location.reload(false);
                     }}
                   >
                     Log Out
                   </Button>
                 </a>
+                <p
+                  id="loginStatus"
+                  Style="font-size:20px; text-align:right; color:black;"
+                >
+                  { searchCookie4Login(document.cookie) }
+                </p>
+                </div>
               ) : (
                 <>
                   <a href="/login">
@@ -149,14 +163,14 @@ const App = props => {
                       Login
                     </Button>
                   </a>
+                  <p
+                    id="loginStatus"
+                    Style="font-size:12px; text-align:right; color:black;"
+                  >
+                    { searchCookie4Login(document.cookie) }
+                  </p>
                 </>
               )}
-              <p
-                id="loginStatus"
-                Style="font-size:12px; text-align:right; color:black;"
-              >
-                {document.cookie}
-              </p>
             </div>
           </Nav>
         </Header>
@@ -180,7 +194,7 @@ const App = props => {
           </Navigation>
         </Drawer>
 
-        <Content Style="padding-top:145px">
+        <Content Style="padding-top:140px">
           <div className="page-content" />
           <Main appProps={{ isAuthenticated, userHasAuthenticated }} />
         </Content>

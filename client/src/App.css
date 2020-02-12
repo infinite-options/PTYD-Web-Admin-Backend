@@ -36,6 +36,16 @@
   top: 5%;
   left: 30%;
 }
+.mealoption-center {
+  position: absolute;
+  top: 15%;
+  left: 35%;
+}
+.selectmeal-center {
+  position: absolute;
+  top: 15%;
+  left: 20%;
+}
 /* Bottom right text */
 .bottom-right {
   position: absolute;
@@ -182,4 +192,8 @@ hr.four {
 
 .meals-button {
   font-size: 150%;
+}
+
+.h6 {
+  font-size: 10em;
 }

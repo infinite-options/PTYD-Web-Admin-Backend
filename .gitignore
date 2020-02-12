@@ -1,7 +1,5 @@
 node_modules
 *.log
-*client_secret.json
-*data.json
-*cratejoy_keys.json
-*gspread.json
 yarn.lock
+env
+.vscode

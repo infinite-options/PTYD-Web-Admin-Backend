@@ -41,17 +41,19 @@ class Landing extends Component {
               >
                 Farm-to-table, prepared meals <br></br>delivered to your
                 doorstep.<br></br>
-                <button
-                  type="button"
-                  class="btn1 btn1-primary"
-                  style={{ marginTop: "10px", color: "white" }}
-                >
-                  Get Started
-                </button>
+                <a href="/signup">
+                  <button
+                    type="button"
+                    class="btn1 btn1-primary"
+                    style={{ marginTop: "10px", color: "white" }}
+                  >
+                    Get Started
+                  </button>
+                </a>
               </div>
 
               <div class="bottom-left">
-                <a href="/signup">Already a Member? Sign in</a>
+                <a href="/login">Already a Member? Sign in</a>
               </div>
             </div>
             <div class="container">
