@@ -427,4 +427,4 @@ api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=2000)
+    app.run(host='127.0.0.1', port='2000')
