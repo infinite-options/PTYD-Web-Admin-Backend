@@ -186,7 +186,9 @@ class Meals(Resource):
 #       return ingredients
 
     def jsonifyMeals(self, query, mealKeys):
-        json = []
+        json = {}
+        for key in [('Seasonal', 'SEASONAL FAVORITES'), ('Weekly', 'WEEKLY SPECIALS'), ('Smoothies', 'Smoothies'), ('Addons', 'Add-ons'), ('Misc', 'Miscellaneous')]:
+            json[key[0]] = {'Category': key[1], 'Menu': []}
         decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
         indexOfMealId = mealKeys.index('menu_meal_id')
         for row in query:
@@ -204,7 +206,16 @@ class Meals(Resource):
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
 #           rowDict['Ingredients'] = self.getIngredients(mealID, cur)
-            json.append(rowDict)
+            if 'SEAS_FAVE' in rowDict['menu_category']:
+                json['Seasonal']['Menu'].append(rowDict)
+            elif 'WKLY_SPCL' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            elif rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
+                json['Smoothies']['Menu'].append(rowDict)
+            elif 'Add_On' in rowDict['menu_category']:
+                json['Addons']['Menu'].append(rowDict)
+            else:
+                json['Misc']['Menu'].append(rowDict)
         return json
 
 #   def jsonifyMeals(self, query, mealKeys, cur):
@@ -308,9 +319,6 @@ class Meals(Resource):
 
             mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url', 'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
 
-            query = runSelectQuery(queries[0], cur)
-            items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
-
             for eachWeek in range(6):
                 query = runSelectQuery(queries[eachWeek+1], cur)
                 key = 'MenuForWeek' + str(eachWeek+1)
@@ -318,6 +326,10 @@ class Meals(Resource):
                 items[key]['Sunday'] = nextSixWeeks[eachWeek]['sundayDate']
                 items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
                 items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
+
+            # Uncomment if you want all meals stored in one key
+#           query = runSelectQuery(queries[0], cur)
+#           items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
 
             response['message'] = 'Request successful.'
             response['result'] = items

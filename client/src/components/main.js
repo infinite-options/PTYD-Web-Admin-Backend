@@ -7,7 +7,6 @@ import LandingPage from "./landingpage";
 import SelectMealPlan from "./selectmealplan";
 import SelectPaymentPlan from "./selectpaymentplan";
 import MenuThisWeek from "./menuthisweek";
-import MenuNextWeek from "./menunextweek";
 import Checkout from "./checkout";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
@@ -58,16 +57,22 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
+          header_label: 'MENU THIS WEEK',
+          header_link_label: 'NEXT WEEK',
+          header_link_url: '/menunextweek',
           objectIndex: 'MenuForWeek1'
         }}
       />
       <AppliedRoute
         exact
         path="/menunextweek"
-        component={MenuNextWeek}
+        component={MenuThisWeek}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
+          header_label: 'COMING NEXT WEEK',
+          header_link_label: 'THIS WEEK',
+          header_link_url: '/menuthisweek',
           objectIndex: 'MenuForWeek2'
         }}
       />

@@ -8,8 +8,9 @@ import { ButtonToolbar, Button, Modal, Form, Card } from "react-bootstrap";
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
-    console.log("testtest");
+    console.log(this.props.menu);
   }
+
   state = {
     count: 0,
     buttonS: false,
@@ -226,75 +227,30 @@ export default class MealButton extends Component {
 
   SelectMealEachMeal = () => {
     return (
-      // <div style={{ width: "100rem" }}>
-      //   <Modal.Dialog>
-      //     <Modal.Header>
-      //       <center>
-      //         <Modal.Title style={{ width: "200%" }}>
-      //           SEASONAL FAVORITES
-      //         </Modal.Title>
-      //       </center>
-      //     </Modal.Header>
-      //     <Modal.Body>
-      //       <Grid>
-      //         <Cell col={4}>
-      //           <EachMeal
-      //             mealTitle="WHITE BEAN KALE SOUP"
-      //             ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
-      //             detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
-      //           />
-      //         </Cell>
-      //         <Cell col={6}>
-      //           <EachMeal
-      //             mealTitle="WHITE BEAN KALE SOUP"
-      //             ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
-      //             detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
-      //           />
-      //         </Cell>
-      //       </Grid>
-      //       <p>
-      //         fsdfkjdsfdsjkfhsdkfhshfkdshfkjsdhfkjsdhfkdsfdshjkfdshjdsfhjksdhjksdfjhkdfshjkdfshjkdfskhjdfshjkdfshjkdjkhdshdfsjhkdfshjkdskhjfeoorweyroewyoriweyoi
-      //       </p>
-      //     </Modal.Body>
-      //     <Modal.Footer>
-      //       <Button variant="secondary" onClick={this.closeButtonSelect}>
-      //         Close
-      //       </Button>
-      //       <Button variant="primary">Save changes</Button>
-      //     </Modal.Footer>
-      //   </Modal.Dialog>
-      // </div>
-
       <Card style={{ width: "100%" }}>
-        <Card.Header>
-          <center>
-            <Modal.Title>SEASONAL FAVORITES</Modal.Title>
-          </center>
-        </Card.Header>
+        {Object.keys(this.props.menu).map(key => (
+          <div>
+            <Card.Header>
+              <center>
+                <Modal.Title>{this.props.menu[key].Category}</Modal.Title>
+              </center>
+            </Card.Header>
+            <Card.Body>
+              <Grid>
+                {this.props.menu[key].Menu.map(meal => (
+                  <Cell col={4}>
+                    <EachMeal
+                      mealTitle={meal.meal_desc}
+                      ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
+                      detail={"Cal " + meal.meal_calories + ", Prot " + meal.meal_protein + ", Carb " + meal.meal_carbs + ", Sug " + meal.meal_sugar + ", Fib " + meal.meal_fiber + ", Fat " + meal.meal_fat + ", Sat " + meal.meal_sat }
+                    />
+                  </Cell>
+                ))}
+              </Grid>
+            </Card.Body>
+          </div>
+        ))}
         <Card.Body>
-          <Grid>
-            <Cell col={4}>
-              <EachMeal
-                mealTitle="WHITE BEAN KALE SOUP"
-                ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
-                detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
-              />
-            </Cell>
-            <Cell col={4}>
-              <EachMeal
-                mealTitle="WHITE BEAN KALE SOUP"
-                ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
-                detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
-              />
-            </Cell>
-            <Cell col={4}>
-              <EachMeal
-                mealTitle="WHITE BEAN KALE SOUP"
-                ingridents="Ingredients: White Beans, Kale, Vegetable Broth"
-                detail="Cal 500, Prot 27, Carb 41, Sug 5, Fib 9, Fat 29, Sat 5"
-              />
-            </Cell>
-          </Grid>
           <center>
             <Button variant="secondary" onClick={this.closeButtonSelect}>
               Close
