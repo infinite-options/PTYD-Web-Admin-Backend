@@ -97,9 +97,16 @@ const App = props => {
               <NavDropdown.Item href="/menunextweek">
                 NEXT WEEK
               </NavDropdown.Item>
-              <NavDropdown.Item href="/mealschedule">
-                MEAL SCHEDULE
-              </NavDropdown.Item>
+              { searchCookie4UserID(document.cookie) != "null" ? (
+                <NavDropdown.Item href="/mealschedule">
+                  MEAL SCHEDULE
+                </NavDropdown.Item>
+              ) : (
+                <>
+                </>
+              )
+            }
+              
             </NavDropdown>
 
             <Nav.Item Style="margin-top:30px">
