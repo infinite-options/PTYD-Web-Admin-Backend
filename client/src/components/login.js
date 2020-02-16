@@ -59,7 +59,7 @@ export default function Login (props) {
         window.location.reload(false);
       } 
       else {
-        document.cookie = " loginStatus: Sign In , ";
+        document.cookie = " loginStatus: Sign In , user_uid: null , ";
       }
     
     }

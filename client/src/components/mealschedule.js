@@ -4,16 +4,49 @@ import { Grid, Cell } from "react-mdl";
 import IMG8 from "../img/img8.jpeg";
 import MealButton from "./meal-button";
 
+
 class Mealschedule extends Component {
   constructor(props) {
     super(props);
-    this.state = { menu: [] };
-  }
+    this.state = { 
+      menu: [] ,
+      user_uid: searchCookie4UserID(document.cookie),
+      user: {}
+    };
 
+    function searchCookie4UserID (str) {
+      let arr = str.split(" ")
+      let i = arr.indexOf("user_uid:") 
+      return arr[i+1]
+    };
+  }
+  
   async componentDidMount() {
     console.log(this.props);
+    console.log(this.state);
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
+
+    let currUser = {"user_uid": "null", "user_name": "null", "first_name": "null", "last_name": "null", "user_email": "null@gmail.com", "phone_number": "null", "user_address": "null", "address_unit": null, "user_city": "null", "user_state": "null", "user_zip": "null", "user_region": "US", "user_gender": "null", "create_date": "2018-08-27", "last_update": "2019-09-14", "activeBool": "Yes", "last_delivery": "2020-02-08", "referral_source": "Website", "user_note": null, "password_sha512": "bed5b0364207eb5b8a51b4d8f646f151c0cd3d9b05cd0f405bf1fc4d816b90eb322460d9e5ad8e329e218a402380694fd08fcaf1116b9e48ddb68e1823caf10d"};
+
+    if ( this.user_uid != "null" ) {
+      const users = await fetch(this.props.USERS_API_URL);
+      const usersApi = await users.json();
+      const Ausers = usersApi.result;
+      console.log(Ausers);
+      console.log(this.state.user_uid)
+      for (let i in Ausers) {
+        
+        // console.log(Ausers[i].user_uid)
+        if (Ausers[i].user_uid == this.state.user_uid) {
+          currUser = Ausers[i]
+          console.log(currUser)
+        }
+      }
+
+
+
+    }
 
     let key;
     let sixWeekMenu = [];
@@ -26,7 +59,7 @@ class Mealschedule extends Component {
       currentWeek.menu = api.result[key].Meals;
       sixWeekMenu.push(currentWeek);
     }
-    this.setState( {menu: sixWeekMenu} );
+    this.setState( {menu: sixWeekMenu, user: currUser} );
 
 //  const users_res = await fetch(this.props.USERS_API_URL);
 //  const users_api = await users_res.json();
@@ -83,9 +116,9 @@ class Mealschedule extends Component {
                 <h4>Credit Card Details</h4> <p>Credit Card:</p>
                 <p>Expiration Date:</p>
                 <p>CVV:</p>
-                <h4>Delivery Details</h4> <p>Address:</p>
-                <p>Unit:</p>
-                <p>City, State ZIP:</p>
+                <h4>Delivery Details</h4> <p>Address: {this.state.user.user_address}</p>
+                <p>Unit: {this.state.user.address_unit}</p>
+                <p>City, State ZIP: {this.state.user.user_city}, {this.state.user.user_state} {this.state.user.user_zip}</p>
                 <p>Instructions:</p>
               </Cell>{" "}
               <Cell col={9}>
