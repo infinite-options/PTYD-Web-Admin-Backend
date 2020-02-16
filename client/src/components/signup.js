@@ -18,15 +18,20 @@ function SignUp (props)  {
                 <Row>
                     <Col size={6}>               
                         <Form>
+                            <Form.Group  controlId="formGridUsername">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control placeholder="Enter Username" />
+                            </Form.Group>
+
                             <Form.Row>
                                 <Form.Group as={Col} controlId="formGridFirstName">
                                 <Form.Label>First Name</Form.Label>
-                                <Form.Control />
+                                <Form.Control placeholder="First" />
                                 </Form.Group>
 
                                 <Form.Group as={Col} controlId="formGridLastName">
                                 <Form.Label>Last Name</Form.Label>
-                                <Form.Control />
+                                <Form.Control placeholder="Last" />
                                 </Form.Group>
                             </Form.Row>
 
@@ -78,7 +83,7 @@ function SignUp (props)  {
                                 <Form.Label>State</Form.Label>
                                 <Form.Control as="select">
                                     <option>Choose...</option>
-                                    <option>...</option>
+                                    <option>Texas</option>
                                 </Form.Control>
                                 </Form.Group>
 
@@ -87,6 +92,16 @@ function SignUp (props)  {
                                 <Form.Control />
                                 </Form.Group>
                             </Form.Row>
+
+                            <Form.Group as={Col} controlId="formGridReferral">
+                                <Form.Label>Referral</Form.Label>
+                                <Form.Control as="select">
+                                    <option>Social Media</option>
+                                    <option>Website</option>
+                                    <option>Friend</option>
+                                    <option>Event</option>
+                                </Form.Control>
+                            </Form.Group>
 
                             <Form.Group id="formGridCheckbox">
                                 <Form.Check type="checkbox" label="Sign Me Up For Weekly Prep To Your Door Updates!" />

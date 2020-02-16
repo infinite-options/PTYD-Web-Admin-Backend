@@ -22,6 +22,7 @@ const App = props => {
 
   async function onLoad() {
     try {
+      console.log(document.cookie);
       userHasAuthenticated(true);
     } catch (e) {
       if (e !== "No current user") {
