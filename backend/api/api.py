@@ -321,6 +321,26 @@ class Meals(Resource):
         finally:
             closeRdsConn(cur, conn)
 
+class Signup(Resource):
+    global RDS_PW
+
+    # HTTP method POST
+    def post(self):
+        response = {}
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+
+            data = request.get_json(force=True)
+
+            response['message'] = 'Request successful.'
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
 
 class Accounts(Resource):
     global RDS_PW
