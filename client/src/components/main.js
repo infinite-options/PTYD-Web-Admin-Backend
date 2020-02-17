@@ -23,10 +23,10 @@ import Login from "./login";
 import Logout from "./logout";
 
 //  Live API from AWS S3 Bucket
-//const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/';
+const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/';
 
 //  Localhost API that can be run from /backend/api directory
-const DEV_URL = "http://localhost:2000/api/v1/";
+//const DEV_URL = "http://localhost:2000/api/v1/";
 
 export default function Main({ appProps }) {
   const [objectIndex, setObjectIndex] = useState(0);
