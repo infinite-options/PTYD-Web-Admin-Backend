@@ -14,7 +14,7 @@ class Mealschedule extends Component {
     console.log(this.props);
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
-
+    console.log(api.result["MenuForWeek" + 1]);
     let key;
     let sixWeekMenu = [];
     let weekNum;
@@ -24,12 +24,15 @@ class Mealschedule extends Component {
       currentWeek.sun = api.result[key].Sunday;
       currentWeek.mon = api.result[key].Monday;
       currentWeek.menu = api.result[key].Meals;
+      currentWeek.addons = api.result[key].Addons;
       sixWeekMenu.push(currentWeek);
     }
-    this.setState( {menu: sixWeekMenu} );
+    console.log("here");
+    console.log(sixWeekMenu);
+    this.setState({ menu: sixWeekMenu });
 
-//  const users_res = await fetch(this.props.USERS_API_URL);
-//  const users_api = await users_res.json();
+    //  const users_res = await fetch(this.props.USERS_API_URL);
+    //  const users_api = await users_res.json();
   }
 
   render() {
@@ -95,13 +98,14 @@ class Mealschedule extends Component {
                 <br />
                 <div class="meals-button">
                   {this.state.menu.map(eachWeek => (
-                  <MealButton
-                    day1="Sunday"
-                    day2="Monday"
-                    date1={eachWeek.sun}
-                    date2={eachWeek.mon}
-                    menu={eachWeek.menu}
-                  />
+                    <MealButton
+                      day1="Sunday"
+                      day2="Monday"
+                      date1={eachWeek.sun}
+                      date2={eachWeek.mon}
+                      menu={eachWeek.menu}
+                      addons={eachWeek.addons}
+                    />
                   ))}
                 </div>
               </Cell>

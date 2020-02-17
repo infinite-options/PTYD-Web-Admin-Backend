@@ -19,9 +19,10 @@ export default class MealButton extends Component {
     buttonSelect: false,
     buttonSurprise: true,
     buttonAddOn: false,
-    requestModal: false
+    requestModal: false,
     // buttonDisabled: true,
-    // buttonSelectKeepColor: false
+    buttonSelectKeepColor: false,
+    buttonAddOnKeepColor: false
   };
 
   closeButtonSelect = () => {
@@ -32,7 +33,8 @@ export default class MealButton extends Component {
   };
   closeButtonAddOn = () => {
     this.setState({
-      buttonAddOn: false
+      buttonAddOn: false,
+      buttonAddOnKeepColor: true
     });
     console.log("addon");
   };
@@ -229,7 +231,10 @@ export default class MealButton extends Component {
           {/* <SpecialRequestAnimation /> */}
           <Button
             variant="outline-dark"
-            style={this.state.buttonAddOn ? green : hide}
+            style={
+              (this.state.buttonAddOn ? green : hide,
+              this.state.buttonAddOnKeepColor ? green : hide)
+            }
             onClick={this.changeButtonAddOn}
           >
             Add On
@@ -302,18 +307,19 @@ export default class MealButton extends Component {
     );
   };
   SelectMealEachMealAddOn = () => {
+    console.log(this.props.addons);
     return (
       <Card style={{ width: "100%" }}>
-        {Object.keys(this.props.menu).map(key => (
+        {Object.keys(this.props.addons).map(key => (
           <div>
             <Card.Header>
               <center>
-                <Modal.Title>{this.props.menu[key].Category}</Modal.Title>
+                <Modal.Title>{this.props.addons[key].Category}</Modal.Title>
               </center>
             </Card.Header>
             <Card.Body>
               <Grid>
-                {this.props.menu[key].Menu.map(meal => (
+                {this.props.addons[key].Menu.map(meal => (
                   <Cell col={4}>
                     <EachMeal
                       mealTitle={meal.meal_desc}

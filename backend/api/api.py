@@ -25,6 +25,8 @@ app.config['DEBUG'] = True
 api = Api(app)
 
 # Get RDS password from command line argument
+
+
 def RdsPw():
     if len(sys.argv) == 2:
         return str(sys.argv[1])
@@ -37,6 +39,8 @@ def RdsPw():
 RDS_PW = RdsPw()
 
 # Connect to RDS
+
+
 def getRdsConn(RDS_PW):
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
@@ -57,6 +61,8 @@ def getRdsConn(RDS_PW):
         raise Exception("RDS Connection failed.")
 
 # Close RDS connection
+
+
 def closeRdsConn(cur, conn):
     try:
         cur.close()
@@ -67,6 +73,8 @@ def closeRdsConn(cur, conn):
 
 # Runs a select query with the SQL query string and pymysql cursor as arguments
 # Returns a list of Python tuples
+
+
 def runSelectQuery(query, cur):
     try:
         cur.execute(query)
@@ -76,6 +84,8 @@ def runSelectQuery(query, cur):
         raise Exception("Could not run select query and/or return data")
 
 # Plans API
+
+
 class Plans(Resource):
     global RDS_PW
 
@@ -188,15 +198,18 @@ class Plans(Resource):
             closeRdsConn(cur, conn)
 
 # Meals API
+
+
 class Meals(Resource):
     global RDS_PW
 
     # Format queried tuples into JSON
     def jsonifyMeals(self, query, mealKeys):
         json = {}
-        for key in [('Seasonal', 'SEASONAL FAVORITES'), ('Weekly', 'WEEKLY SPECIALS'), ('Smoothies', 'Smoothies'), ('Addons', 'Add-ons'), ('Misc', 'Miscellaneous')]:
+        for key in [('Seasonal', 'SEASONAL FAVORITES'), ('Weekly', 'WEEKLY SPECIALS'), ('Smoothies', 'Smoothies')]:
             json[key[0]] = {'Category': key[1], 'Menu': []}
-        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
+        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
+                       'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
         indexOfMealId = mealKeys.index('menu_meal_id')
         for row in query:
             if row[indexOfMealId] is None:
@@ -218,10 +231,34 @@ class Meals(Resource):
                 json['Weekly']['Menu'].append(rowDict)
             elif rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
                 json['Smoothies']['Menu'].append(rowDict)
-            elif 'Add_On' in rowDict['menu_category']:
+        return json
+
+    def jsonifyAddons(self, query, mealKeys):
+        json = {}
+        for key in [('Addons', 'Add-ons'), ('Misc', 'Miscellaneous')]:
+            json[key[0]] = {'Category': key[1], 'Menu': []}
+        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
+                       'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
+        indexOfMealId = mealKeys.index('menu_meal_id')
+        for row in query:
+            if row[indexOfMealId] is None:
+                continue
+            rowDict = {}
+            for element in enumerate(row):
+                key = mealKeys[element[0]]
+                value = element[1]
+                # Convert all decimal values in row to floats
+                if key in decimalKeys:
+                    value = float(value)
+                if key == 'menu_date':
+                    value = value.strftime("%Y-%m-%d")
+                rowDict[key] = value
+#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
+            if 'Add_On' in rowDict['menu_category']:
                 json['Addons']['Menu'].append(rowDict)
             else:
                 json['Misc']['Menu'].append(rowDict)
+        print(json)
         return json
 
     # HTTP method GET
@@ -307,6 +344,7 @@ class Meals(Resource):
                 items[key]['Sunday'] = nextSixWeeks[eachWeek]['sundayDate']
                 items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
                 items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
+                items[key]['Addons'] = self.jsonifyAddons(query, mealsKeys)
 
             # Uncomment if you want all meals stored in one key
 #           query = runSelectQuery(queries[0], cur)
@@ -389,6 +427,7 @@ class Accounts(Resource):
         finally:
             closeRdsConn(cur, conn)
 
+
 # Define API routes
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
@@ -397,4 +436,4 @@ api.add_resource(Accounts, '/api/v1/accounts')
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='2000')
+    app.run(host='127.0.0.1', port=2100)

@@ -23,10 +23,11 @@ import Login from "./login";
 import Logout from "./logout";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/';
+// const DEV_URL =
+//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/";
 
 //  Localhost API that can be run from /backend/api directory
-//const DEV_URL = "http://localhost:2000/api/v1/";
+const DEV_URL = "http://localhost:2100/api/v1/";
 
 export default function Main({ appProps }) {
   const [objectIndex, setObjectIndex] = useState(0);
@@ -55,10 +56,10 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          header_label: 'MENU THIS WEEK',
-          header_link_label: 'NEXT WEEK',
-          header_link_url: '/menunextweek',
-          objectIndex: 'MenuForWeek1'
+          header_label: "MENU THIS WEEK",
+          header_link_label: "NEXT WEEK",
+          header_link_url: "/menunextweek",
+          objectIndex: "MenuForWeek1"
         }}
       />
       <AppliedRoute
@@ -68,10 +69,10 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          header_label: 'COMING NEXT WEEK',
-          header_link_label: 'THIS WEEK',
-          header_link_url: '/menuthisweek',
-          objectIndex: 'MenuForWeek2'
+          header_label: "COMING NEXT WEEK",
+          header_link_label: "THIS WEEK",
+          header_link_url: "/menuthisweek",
+          objectIndex: "MenuForWeek2"
         }}
       />
       <AppliedRoute
