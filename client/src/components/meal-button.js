@@ -8,7 +8,6 @@ import { ButtonToolbar, Button, Modal, Form, Card } from "react-bootstrap";
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.menu);
   }
 
   state = {
@@ -67,7 +66,8 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonAddOn: false,
       buttonDisabled: true,
-      buttonSelectKeepColor: false
+      buttonSelectKeepColor: false,
+      buttonAddOnKeepColor: false
     });
   };
 
@@ -89,7 +89,8 @@ export default class MealButton extends Component {
   };
   changeButtonAddOn = () => {
     this.setState({
-      buttonAddOn: true
+      buttonAddOn: true,
+      buttonAddOnKeepColor: true
     });
   };
   specialRequest = () => {
@@ -307,7 +308,6 @@ export default class MealButton extends Component {
     );
   };
   SelectMealEachMealAddOn = () => {
-    console.log(this.props.addons);
     return (
       <Card style={{ width: "100%" }}>
         {Object.keys(this.props.addons).map(key => (

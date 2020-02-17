@@ -436,4 +436,4 @@ api.add_resource(Accounts, '/api/v1/accounts')
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=2100)
+    app.run(host='127.0.0.1', port=2000)

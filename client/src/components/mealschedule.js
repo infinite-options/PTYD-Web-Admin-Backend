@@ -14,7 +14,7 @@ class Mealschedule extends Component {
     console.log(this.props);
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
-    console.log(api.result["MenuForWeek" + 1]);
+
     let key;
     let sixWeekMenu = [];
     let weekNum;
@@ -27,8 +27,6 @@ class Mealschedule extends Component {
       currentWeek.addons = api.result[key].Addons;
       sixWeekMenu.push(currentWeek);
     }
-    console.log("here");
-    console.log(sixWeekMenu);
     this.setState({ menu: sixWeekMenu });
 
     //  const users_res = await fetch(this.props.USERS_API_URL);
