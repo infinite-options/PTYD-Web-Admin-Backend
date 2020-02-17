@@ -55,10 +55,10 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          header_label: 'MENU THIS WEEK',
-          header_link_label: 'NEXT WEEK',
-          header_link_url: '/menunextweek',
-          objectIndex: 'MenuForWeek1'
+          header_label: "MENU THIS WEEK",
+          header_link_label: "NEXT WEEK",
+          header_link_url: "/menunextweek",
+          objectIndex: "MenuForWeek1"
         }}
       />
       <AppliedRoute
@@ -68,10 +68,10 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}meals`,
-          header_label: 'COMING NEXT WEEK',
-          header_link_label: 'THIS WEEK',
-          header_link_url: '/menuthisweek',
-          objectIndex: 'MenuForWeek2'
+          header_label: "COMING NEXT WEEK",
+          header_link_label: "THIS WEEK",
+          header_link_url: "/menuthisweek",
+          objectIndex: "MenuForWeek2"
         }}
       />
       <AppliedRoute

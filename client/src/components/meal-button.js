@@ -8,20 +8,20 @@ import { ButtonToolbar, Button, Modal, Form, Card } from "react-bootstrap";
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.menu);
   }
 
   state = {
     count: 0,
-    buttonS: false,
+    buttonS: true,
     buttonM: false,
     buttonSkip: false,
     buttonSelect: false,
-    buttonSurprise: false,
+    buttonSurprise: true,
+    buttonAddOn: false,
     requestModal: false,
-    countFood: 0,
-    buttonDisabled: true,
-    buttonSelectKeepColor: false
+    // buttonDisabled: true,
+    buttonSelectKeepColor: false,
+    buttonAddOnKeepColor: false
   };
 
   closeButtonSelect = () => {
@@ -29,6 +29,13 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSelectKeepColor: true
     });
+  };
+  closeButtonAddOn = () => {
+    this.setState({
+      buttonAddOn: false,
+      buttonAddOnKeepColor: true
+    });
+    console.log("addon");
   };
 
   changeButtonS = () => {
@@ -57,8 +64,10 @@ export default class MealButton extends Component {
 
       buttonSurprise: false,
       buttonSelect: false,
+      buttonAddOn: false,
       buttonDisabled: true,
-      buttonSelectKeepColor: false
+      buttonSelectKeepColor: false,
+      buttonAddOnKeepColor: false
     });
   };
 
@@ -77,6 +86,12 @@ export default class MealButton extends Component {
       buttonSelectKeepColor: false
     });
     console.log("surprise");
+  };
+  changeButtonAddOn = () => {
+    this.setState({
+      buttonAddOn: true,
+      buttonAddOnKeepColor: true
+    });
   };
   specialRequest = () => {
     this.setState({
@@ -214,10 +229,24 @@ export default class MealButton extends Component {
             Surprise Me!
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <SpecialRequestAnimation />
+          {/* <SpecialRequestAnimation /> */}
+          <Button
+            variant="outline-dark"
+            style={
+              (this.state.buttonAddOn ? green : hide,
+              this.state.buttonAddOnKeepColor ? green : hide)
+            }
+            onClick={this.changeButtonAddOn}
+          >
+            Add On
+          </Button>
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {this.SelectMealEachMeal()}
+          </div>
+          <div style={this.state.buttonAddOn ? {} : { display: "none" }}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {this.SelectMealEachMealAddOn()}
           </div>
         </ButtonToolbar>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -242,7 +271,22 @@ export default class MealButton extends Component {
                     <EachMeal
                       mealTitle={meal.meal_desc}
                       ingridents="Ingredients: Not Yet in Database"
-                      detail={"Cal " + meal.meal_calories + ", Prot " + meal.meal_protein + ", Carb " + meal.meal_carbs + ", Sug " + meal.meal_sugar + ", Fib " + meal.meal_fiber + ", Fat " + meal.meal_fat + ", Sat " + meal.meal_sat }
+                      detail={
+                        "Cal " +
+                        meal.meal_calories +
+                        ", Prot " +
+                        meal.meal_protein +
+                        ", Carb " +
+                        meal.meal_carbs +
+                        ", Sug " +
+                        meal.meal_sugar +
+                        ", Fib " +
+                        meal.meal_fiber +
+                        ", Fat " +
+                        meal.meal_fat +
+                        ", Sat " +
+                        meal.meal_sat
+                      }
                       imgurl={meal.meal_photo_url}
                     />
                   </Cell>
@@ -254,6 +298,59 @@ export default class MealButton extends Component {
         <Card.Body>
           <center>
             <Button variant="secondary" onClick={this.closeButtonSelect}>
+              Close
+            </Button>
+            &nbsp;&nbsp;
+            <Button variant="primary">Save changes</Button>
+          </center>
+        </Card.Body>
+      </Card>
+    );
+  };
+  SelectMealEachMealAddOn = () => {
+    return (
+      <Card style={{ width: "100%" }}>
+        {Object.keys(this.props.addons).map(key => (
+          <div>
+            <Card.Header>
+              <center>
+                <Modal.Title>{this.props.addons[key].Category}</Modal.Title>
+              </center>
+            </Card.Header>
+            <Card.Body>
+              <Grid>
+                {this.props.addons[key].Menu.map(meal => (
+                  <Cell col={4}>
+                    <EachMeal
+                      mealTitle={meal.meal_desc}
+                      ingridents="Ingredients: Not Yet in Database"
+                      detail={
+                        "Cal " +
+                        meal.meal_calories +
+                        ", Prot " +
+                        meal.meal_protein +
+                        ", Carb " +
+                        meal.meal_carbs +
+                        ", Sug " +
+                        meal.meal_sugar +
+                        ", Fib " +
+                        meal.meal_fiber +
+                        ", Fat " +
+                        meal.meal_fat +
+                        ", Sat " +
+                        meal.meal_sat
+                      }
+                      imgurl={meal.meal_photo_url}
+                    />
+                  </Cell>
+                ))}
+              </Grid>
+            </Card.Body>
+          </div>
+        ))}
+        <Card.Body>
+          <center>
+            <Button variant="secondary" onClick={this.closeButtonAddOn}>
               Close
             </Button>
             &nbsp;&nbsp;
