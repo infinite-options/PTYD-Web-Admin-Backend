@@ -22,6 +22,8 @@ const App = props => {
 
   async function onLoad() {
     try {
+      console.log(document.cookie);
+      console.log(searchCookie4UserID(document.cookie));
       userHasAuthenticated(true);
     } catch (e) {
       if (e !== "No current user") {
@@ -36,6 +38,12 @@ const App = props => {
     let arr = str.split(" ")
     let i = arr.indexOf("loginStatus:") 
     return arr[i+1] + " " + arr[i+2]
+  }
+
+  function searchCookie4UserID(str) {
+    let arr = str.split(" ")
+    let i = arr.indexOf("user_uid:") 
+    return arr[i+1]
   }
 
   let stuff = !isAuthenticating && (
@@ -89,9 +97,16 @@ const App = props => {
               <NavDropdown.Item href="/menunextweek">
                 NEXT WEEK
               </NavDropdown.Item>
-              <NavDropdown.Item href="/mealschedule">
-                MEAL SCHEDULE
-              </NavDropdown.Item>
+              { searchCookie4UserID(document.cookie) != "null" ? (
+                <NavDropdown.Item href="/mealschedule">
+                  MEAL SCHEDULE
+                </NavDropdown.Item>
+              ) : (
+                <>
+                </>
+              )
+            }
+              
             </NavDropdown>
 
             <Nav.Item Style="margin-top:30px">
@@ -137,7 +152,7 @@ const App = props => {
                     variant="success"
                     size="sm"
                     onClick={() => {
-                      document.cookie = "loginStatus: Sign In ,";
+                      document.cookie = " loginStatus: Sign In , user_uid: null , ";
                       window.location.reload(false);
                     }}
                   >
