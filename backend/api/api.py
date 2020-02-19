@@ -415,7 +415,7 @@ class Accounts(Resource):
             return nextPaymentDate.strftime("%b %d, %Y")
 
     # Format queried tuples into JSON
-    def jsonifyAccounts(self, query, rowDictKeys):
+    def jsonifyAccounts(self, query, rowDictKeys, mondayZips):
         json = []
         dateKeys = ['create_date', 'last_update', 'last_delivery', 'cc_exp_date']
         for row in query:
@@ -444,6 +444,10 @@ class Accounts(Resource):
                 rowDict[key] = value
             rowDict['password_sha512'] = sha512(
                 rowDict['user_name'].encode()).hexdigest()
+            if rowDict['user_zip'] in mondayZips:
+                rowDict['MondayAvailable'] = True
+            else:
+                rowDict['MondayAvailable'] = False
             json.append(rowDict)
         return json
 
@@ -506,7 +510,13 @@ class Accounts(Resource):
                             'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret')
             query = runSelectQuery(queries[0], cur)
 
-            items = self.jsonifyAccounts(query, accountKeys)
+            mondayZips = [  "78701", "78702", "78703", "78704",
+                            "78705", "78721", "78722", "78723",
+                            "78737", "78741", "78744", "78745",
+                            "78746", "78748", "78751", "78752",
+                            "78757", "78758"]
+
+            items = self.jsonifyAccounts(query, accountKeys, mondayZips)
 
             response['message'] = 'Request successful.'
             response['result'] = items
