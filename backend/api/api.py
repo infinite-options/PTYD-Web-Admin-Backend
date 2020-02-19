@@ -485,6 +485,7 @@ class Accounts(Resource):
                         meal_plan_price AS WeeklyPrice,
                         payment_time_stamp,
                         purchase_status,
+                        num_meals AS MaximumMeals,
                         CONCAT('XXXX-XXXX-XXXX-', RIGHT(cc_num, 4) ) AS cc_num_secret,
                         cc_exp_date,
                         CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret
@@ -502,7 +503,7 @@ class Accounts(Resource):
                             'user_gender', 'create_date', 'last_update', 'activeBool',
                             'last_delivery', 'referral_source', 'user_note', 'Subscription',
                             'PaymentPlan', 'WeeklyPrice', 'payment_time_stamp', 'purchase_status',
-                            'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret')
+                            'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret')
             query = runSelectQuery(queries[0], cur)
 
             items = self.jsonifyAccounts(query, accountKeys)
