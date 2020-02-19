@@ -471,7 +471,7 @@ class Accounts(Resource):
             # to avoid storing sensitive info in
             # Python objects
             queries = [
-                """ SELECT
+                """ SELECT DISTINCT
                         user_uid,
                         user_name,
                         first_name,
@@ -500,13 +500,14 @@ class Accounts(Resource):
                         CONCAT('XXXX-XXXX-XXXX-', RIGHT(cc_num, 4) ) AS cc_num_secret,
                         cc_exp_date,
                         CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret
-                    FROM ptyd_accounts
+                    FROM ptyd_accounts a1
+                    LEFT JOIN ptyd_payments p1
+                    ON user_uid = p1.buyer_id
                     LEFT JOIN ptyd_purchases
                     ON user_uid = recipient_id
                     LEFT JOIN ptyd_meal_plans
                     ON ptyd_purchases.meal_plan_id = ptyd_meal_plans.meal_plan_id
-                    JOIN ptyd_payments
-                    ON user_uid = buyer_id;""",
+                    ORDER BY payment_time_stamp, user_uid DESC;""",
                     "SELECT * FROM ptyd_monday_zipcodes;"]
 
             accountKeys = ( 'user_uid', 'user_name', 'first_name', 'last_name',
