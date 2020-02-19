@@ -78,7 +78,10 @@ export default function Main({ appProps }) {
         exact
         path="/checkout"
         component={Checkout}
-        appProps={appProps}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}accounts`
+        }}
       />
 
       <AppliedRoute exact path="/ourstory" component={OurStory} />

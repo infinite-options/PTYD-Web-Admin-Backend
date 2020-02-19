@@ -451,6 +451,12 @@ class Accounts(Resource):
                 rowDict[key] = value
             rowDict['password_sha512'] = sha512(
                 rowDict['user_name'].encode()).hexdigest()
+
+            ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
+            rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
+            rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
+            rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
+
             if rowDict['user_zip'] in mondayZips:
                 rowDict['MondayAvailable'] = True
             else:
