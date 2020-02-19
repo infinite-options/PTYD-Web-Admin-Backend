@@ -414,6 +414,13 @@ class Accounts(Resource):
             nextPaymentDate = lastPaymentDate + timedelta(weeks=4)
             return nextPaymentDate.strftime("%b %d, %Y")
 
+    # Format Monday Zipcodes Query to a list of strings
+    def formatMondayZips(self, query):
+        zips = []
+        for row in query:
+            zips.append(row[0])
+        return zips
+
     # Format queried tuples into JSON
     def jsonifyAccounts(self, query, rowDictKeys, mondayZips):
         json = []
@@ -499,7 +506,8 @@ class Accounts(Resource):
                     LEFT JOIN ptyd_meal_plans
                     ON ptyd_purchases.meal_plan_id = ptyd_meal_plans.meal_plan_id
                     JOIN ptyd_payments
-                    ON user_uid = buyer_id;"""]
+                    ON user_uid = buyer_id;""",
+                    "SELECT * FROM ptyd_monday_zipcodes;"]
 
             accountKeys = ( 'user_uid', 'user_name', 'first_name', 'last_name',
                             'user_email', 'phone_number', 'user_address', 'address_unit',
@@ -510,11 +518,8 @@ class Accounts(Resource):
                             'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret')
             query = runSelectQuery(queries[0], cur)
 
-            mondayZips = [  "78701", "78702", "78703", "78704",
-                            "78705", "78721", "78722", "78723",
-                            "78737", "78741", "78744", "78745",
-                            "78746", "78748", "78751", "78752",
-                            "78757", "78758"]
+            mondayZipsQuery = runSelectQuery(queries[1], cur)
+            mondayZips = self.formatMondayZips(mondayZipsQuery)
 
             items = self.jsonifyAccounts(query, accountKeys, mondayZips)
 
