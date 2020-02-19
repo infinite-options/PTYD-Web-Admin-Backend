@@ -206,7 +206,7 @@ class Meals(Resource):
     # Format queried tuples into JSON
     def jsonifyMeals(self, query, mealKeys):
         json = {}
-        for key in [('Seasonal', 'SEASONAL FAVORITES'), ('Weekly', 'WEEKLY SPECIALS'), ('Smoothies', 'Smoothies')]:
+        for key in [('Weekly', 'WEEKLY SPECIALS'), ('Seasonal', 'SEASONAL FAVORITES'), ('Smoothies', 'SMOOTHIES')]:
             json[key[0]] = {'Category': key[1], 'Menu': []}
         decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
                        'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
