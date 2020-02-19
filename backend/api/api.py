@@ -258,7 +258,6 @@ class Meals(Resource):
                 json['Addons']['Menu'].append(rowDict)
             else:
                 json['Misc']['Menu'].append(rowDict)
-        print(json)
         return json
 
     # HTTP method GET
@@ -359,41 +358,89 @@ class Meals(Resource):
         finally:
             closeRdsConn(cur, conn)
 
-class Signup(Resource):
-    global RDS_PW
+#   class Signup(Resource):
+#       global RDS_PW
 
-    # HTTP method POST
-    def post(self):
-        response = {}
-        try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
+#       # HTTP method POST
+#       def post(self):
+#           response = {}
+#           try:
+#               db = getRdsConn(RDS_PW)
+#               conn = db[0]
+#               cur = db[1]
 
-            data = request.get_json(force=True)
+#               data = request.get_json(force=True)
 
-            response['message'] = 'Request successful.'
+#               response['message'] = 'Request successful.'
 
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            closeRdsConn(cur, conn)
+#               return response, 200
+#           except:
+#               raise BadRequest('Request failed, please try again later.')
+#           finally:
+#               closeRdsConn(cur, conn)
 
 class Accounts(Resource):
     global RDS_PW
 
+    # Split by dashes and return whatever is on the left side of it
+    # Also remove any whitespaces at the end
+    def shortenPlanDesc(self, planDesc):
+        return planDesc.split('-')[0].rstrip()
+
+    # Check if subscription plan is a one time order
+    def isOneTimePlan(self, subscriptionPlan):
+        if 'One Time' in subscriptionPlan:
+            return True
+        return False
+
+    # Calculate amount to charge based on weekly price and subscription
+    def calculateNextCharge(self, weeklyPrice, subscriptionPlan):
+        if 'Bi-Weekly' in subscriptionPlan:
+            return float(weeklyPrice) * 2
+        elif 'Weekly' in subscriptionPlan:
+            return float(weeklyPrice)
+        elif 'Monthly' in subscriptionPlan:
+            return float(weeklyPrice) * 4
+
+    # Calculate next charge date based on most recent payment and subscription
+    def calculateNextChargeDate(self, lastPaymentDate, subscriptionPlan):
+        if 'Bi-Weekly' in subscriptionPlan:
+            nextPaymentDate = lastPaymentDate + timedelta(weeks=2)
+            return nextPaymentDate.strftime("%b %d, %Y")
+        elif 'Weekly' in subscriptionPlan:
+            nextPaymentDate = lastPaymentDate + timedelta(weeks=1)
+            return nextPaymentDate.strftime("%b %d, %Y")
+        elif 'Monthly' in subscriptionPlan:
+            nextPaymentDate = lastPaymentDate + timedelta(weeks=4)
+            return nextPaymentDate.strftime("%b %d, %Y")
+
     # Format queried tuples into JSON
     def jsonifyAccounts(self, query, rowDictKeys):
         json = []
-        dateKeys = ['create_date', 'last_update', 'last_delivery']
+        dateKeys = ['create_date', 'last_update', 'last_delivery', 'cc_exp_date']
         for row in query:
             rowDict = {}
             for element in enumerate(row):
                 key = rowDictKeys[element[0]]
                 value = element[1]
                 if key in dateKeys:
-                    value = value.strftime("%Y-%m-%d")
+                    value = value.strftime("%b %d, %Y")
+                if key is 'Subscription':
+                    value = self.shortenPlanDesc(value)
+                # Get weekly price of meal plan and multiply by X
+                if key is 'WeeklyPrice':
+                    key = 'NextCharge'
+                    if self.isOneTimePlan(rowDict['Subscription']):
+                        value = 0
+                    else:
+                        value = self.calculateNextCharge(value, rowDict['PaymentPlan'])
+                # Get user's most recent payment date and offset by X weeks
+                if key is 'payment_time_stamp':
+                    key = 'NextChargeDate'
+                    if self.isOneTimePlan(rowDict['Subscription']):
+                        value = None
+                    else:
+                        value = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
                 rowDict[key] = value
             rowDict['password_sha512'] = sha512(
                 rowDict['user_name'].encode()).hexdigest()
@@ -409,6 +456,9 @@ class Accounts(Resource):
             cur = db[1]
             items = []
 
+            # Select last digits of credit card info only
+            # to avoid storing sensitive info in
+            # Python objects
             queries = [
                 """ SELECT
                         user_uid,
@@ -429,11 +479,30 @@ class Accounts(Resource):
                         activeBool,
                         last_delivery,
                         referral_source,
-                        user_note
-                    FROM ptyd_accounts;"""]
+                        user_note,
+                        meal_plan_desc AS Subscription,
+                        payment_frequency AS PaymentPlan,
+                        meal_plan_price AS WeeklyPrice,
+                        payment_time_stamp,
+                        purchase_status,
+                        CONCAT('XXXX-XXXX-XXXX-', RIGHT(cc_num, 4) ) AS cc_num_secret,
+                        cc_exp_date,
+                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret
+                    FROM ptyd_accounts
+                    LEFT JOIN ptyd_purchases
+                    ON user_uid = recipient_id
+                    LEFT JOIN ptyd_meal_plans
+                    ON ptyd_purchases.meal_plan_id = ptyd_meal_plans.meal_plan_id
+                    JOIN ptyd_payments
+                    ON user_uid = buyer_id;"""]
 
-            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city',
-                           'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
+            accountKeys = ( 'user_uid', 'user_name', 'first_name', 'last_name',
+                            'user_email', 'phone_number', 'user_address', 'address_unit',
+                            'user_city', 'user_state', 'user_zip', 'user_region',
+                            'user_gender', 'create_date', 'last_update', 'activeBool',
+                            'last_delivery', 'referral_source', 'user_note', 'Subscription',
+                            'PaymentPlan', 'WeeklyPrice', 'payment_time_stamp', 'purchase_status',
+                            'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret')
             query = runSelectQuery(queries[0], cur)
 
             items = self.jsonifyAccounts(query, accountKeys)

@@ -10,7 +10,7 @@ class Mealschedule extends Component {
     this.state = {
       menu: [],
       user_uid: searchCookie4UserID(document.cookie),
-      user: {}
+      user: { NextCharge: 0 }
     };
 
     function searchCookie4UserID(str) {
@@ -23,32 +23,41 @@ class Mealschedule extends Component {
   async componentDidMount() {
     console.log(this.props);
     console.log(this.state);
-    const res = await fetch(this.props.API_URL);
-    const api = await res.json();
 
     let currUser = {
       user_uid: "null",
-      user_name: "null",
-      first_name: "null",
-      last_name: "null",
+      user_name: null,
+      first_name: null,
+      last_name: null,
       user_email: "null@gmail.com",
       phone_number: "null",
-      user_address: "null",
+      user_address: null,
       address_unit: null,
-      user_city: "null",
-      user_state: "null",
-      user_zip: "null",
+      user_city: null,
+      user_state: null,
+      user_zip: null,
       user_region: "US",
-      user_gender: "null",
+      user_gender: null,
       create_date: "2018-08-27",
       last_update: "2019-09-14",
       activeBool: "Yes",
       last_delivery: "2020-02-08",
       referral_source: "Website",
       user_note: null,
+      Subscription: null,
+      PaymentPlan: null,
+      NextCharge: 0,
+      NextChargeDate: null,
+      purchase_status: null,
+      cc_num_secret: null,
+      cc_exp_date: null,
+      cc_cvv_secret: null,
       password_sha512:
         "bed5b0364207eb5b8a51b4d8f646f151c0cd3d9b05cd0f405bf1fc4d816b90eb322460d9e5ad8e329e218a402380694fd08fcaf1116b9e48ddb68e1823caf10d"
     };
+
+    const res = await fetch(this.props.API_URL);
+    const api = await res.json();
 
     if (this.user_uid != "null") {
       const users = await fetch(this.props.USERS_API_URL);
@@ -106,7 +115,7 @@ class Mealschedule extends Component {
                     ></img>
                   </Cell>
                   <Cell col={8}>
-                    <h4>Hi, Prashant</h4>
+                    <h4>Hi, {this.state.user.first_name}</h4>
                   </Cell>
                 </Grid>
                 <button
@@ -125,16 +134,16 @@ class Mealschedule extends Component {
                   Make Account Changes
                 </button>
                 <br />
-                <h4>Subscription Details</h4> <p>My Subscription:</p>
-                <p>Payment Plan:</p>
+                <h4>Subscription Details</h4> <p>My Subscription: {this.state.user.Subscription}</p>
+                <p>Payment Plan: {this.state.user.PaymentPlan}</p>
                 <p>Paid Weeks Remaining:</p>
-                <p>Next Charge:</p>
-                <p>Next Charge Date:</p>
+                <p>Next Charge: ${this.state.user.NextCharge.toFixed(2)}</p>
+                <p>Next Charge Date: {this.state.user.NextChargeDate}</p>
                 <p>Coupons:</p>
-                <p>Account Status:</p>
-                <h4>Credit Card Details</h4> <p>Credit Card:</p>
-                <p>Expiration Date:</p>
-                <p>CVV:</p>
+                <p>Account Status: {this.state.user.purchase_status}</p>
+                <h4>Credit Card Details</h4> <p>Credit Card: {this.state.user.cc_num_secret}</p>
+                <p>Expiration Date: {this.state.user.cc_exp_date}</p>
+                <p>CVV: {this.state.user.cc_cvv_secret}</p>
                 <h4>Delivery Details</h4>{" "}
                 <p>Address: {this.state.user.user_address}</p>
                 <p>Unit: {this.state.user.address_unit}</p>
@@ -142,7 +151,7 @@ class Mealschedule extends Component {
                   City, State ZIP: {this.state.user.user_city},{" "}
                   {this.state.user.user_state} {this.state.user.user_zip}
                 </p>
-                <p>Instructions:</p>
+                <p>Instructions: {this.state.user.user_note}</p>
               </Cell>{" "}
               <Cell col={9}>
                 <br />
