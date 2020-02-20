@@ -225,3 +225,9 @@ hr.four {
 .font4 {
   font-family: "Heebo", sans-serif;
 }
+
+.borderr {
+  size: 10px;
+  border-style: solid;
+  border-width: thick;
+}

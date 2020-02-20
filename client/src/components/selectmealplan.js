@@ -21,10 +21,14 @@ class Selectmealplan extends Component {
       <section class="content-section">
         <div class="container">
           <center>
-            <h1>SELECT A MEAL PLAN</h1>
+            <h2 class="font1" style={{ color: "#4D4D4D" }}>
+              SELECT A MEAL PLAN
+            </h2>
             <hr class="two" />
-            <h4>
-              LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
+            <h4 class="font1">
+              <b>
+                LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
+              </b>
             </h4>
             <br></br>
             <CardDeck>
@@ -35,11 +39,12 @@ class Selectmealplan extends Component {
                     boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                   }}
                 >
-                  <div class="border border-dark" Style="height:100%">
+                  <div class="borderr" Style={{ height: "100%" }}>
                     <Card.Img
                       class="blackM"
                       variant="top"
                       src={mealPlan.photo_URL}
+                      style={{ width: "99%" }}
                     />
                     <div
                       class="selectmeal-center"
