@@ -230,7 +230,20 @@ hr.four {
   font-family: "Montserrat", sans-serif;
 }
 
+/* subscription page */
 .borderr {
   border-style: solid;
   border-width: thick;
+}
+
+.rcorners {
+  border-radius: 100px 100px 0 0;
+  background: #427c42;
+  padding: 15px;
+  margin: 2px;
+  width: 88%;
+  height: 7%;
+  color: white;
+  font-size: 20px;
+  text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
 }

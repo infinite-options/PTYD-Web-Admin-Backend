@@ -20,7 +20,7 @@ class Selectmealplan extends Component {
   render() {
     return (
       <section class="content-section">
-        <div class="container font2">
+        <div class="container font2" style={{ width: "80%" }}>
           <center>
             <h2 class="font1" style={{ color: "#4D4D4D" }}>
               SELECT A MEAL PLAN
@@ -34,84 +34,109 @@ class Selectmealplan extends Component {
             <br></br>
             <CardDeck>
               {this.state.mealPlans.map(mealPlan => (
-                <Card
+                <div
                   style={{
-                    maxWidth: "20rem",
-                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
+                    width: "25%",
+                    margin: "0",
+                    padding: "0"
                   }}
                 >
-                  <div class="borderr" Style={{ height: "110%" }}>
-                    <Card.Img
-                      class="blackM"
-                      variant="top"
-                      src={mealPlan.photo_URL}
-                      style={{ width: "100%" }}
-                    />
+                  {mealPlan.num_meals == 10 ? (
+                    <p class="rcorners font3">MOST POPULAR</p>
+                  ) : (
+                    <p style={{ height: "32px" }} />
+                  )}
+                  <Card
+                    style={{
+                      maxWidth: "20rem",
+                      boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
+                    }}
+                  >
                     <div
-                      class="selectmeal-center"
-                      style={{
-                        marginBottom: "10%",
-                        fontSize: "30px",
-                        textShadow: "2px 2px 4px #FFEFB0",
-                        lineHeight: "35px",
-                        color: "white"
-                      }}
+                      class="borderr"
+                      style={
+                        mealPlan.num_meals == 10
+                          ? { height: "110%", color: "green" }
+                          : { height: "110%" }
+                      }
                     >
-                      {mealPlan.num_meals} MEALS
-                    </div>
-                    <Card.Body>
-                      <Card.Title>
-                        <b>{mealPlan.num_meals} MEALS WEEKLY</b>
-                      </Card.Title>
-                      <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                        from ${mealPlan.meal_plan_price_per_meal.toFixed(2)} per
-                        meal
-                      </Card.Text>
-                      <Card.Text style={{ fontSize: "13px" }}>
-                        {mealPlan.plan_headline}
-                      </Card.Text>
-                      <Card.Text>
-                        STARTING AT ${mealPlan.meal_plan_price.toFixed(2)} /week
-                      </Card.Text>
-                      <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
-                        Sales tax of 8.25% will be added
-                      </Card.Text>
-                      <Link
-                        style={{ fontFamily: "Kalam", color: "white" }}
-                        to={mealPlan.RouteOnclick}
-                      >
-                        <button
-                          type="button"
-                          class="btn2 btn2-primary font4"
-                          style={{
-                            marginTop: "10px",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            paddingTop: "5px",
-                            paddingBottom: "5px",
-                            color: "white",
-                            fontSize: "12px"
-                          }}
-                        >
-                          CHOOSE {mealPlan.num_meals} MEALS
-                        </button>
-                      </Link>
-                      <img
-                        class="img-fluid"
-                        src={IMG9}
-                        alt=""
-                        style={{
-                          width: "90%"
-                        }}
+                      <Card.Img
+                        class="blackM"
+                        variant="top"
+                        src={mealPlan.photo_URL}
+                        style={{ width: "100%" }}
                       />
-                    </Card.Body>
-                    <Card.Footer Style="bottom:0px; ">
-                      <large className="text-muted">
-                        {mealPlan.plan_footer}
-                      </large>
-                    </Card.Footer>
-                  </div>
-                </Card>
+                      <div
+                        class="selectmeal-center"
+                        style={{
+                          marginBottom: "10%",
+                          fontSize: "30px",
+                          textShadow: "2px 2px 4px #FFEFB0",
+                          lineHeight: "35px",
+                          color: "white"
+                        }}
+                      >
+                        {mealPlan.num_meals} MEALS
+                      </div>
+                      <Card.Body>
+                        <Card.Title>
+                          <b>{mealPlan.num_meals} MEALS WEEKLY</b>
+                        </Card.Title>
+                        <Card.Text
+                          style={{ fontSize: "15px", color: "#888785" }}
+                        >
+                          from ${mealPlan.meal_plan_price_per_meal.toFixed(2)}{" "}
+                          per meal
+                        </Card.Text>
+                        <Card.Text style={{ fontSize: "13px" }}>
+                          {mealPlan.plan_headline}
+                        </Card.Text>
+                        <Card.Text>
+                          STARTING AT ${mealPlan.meal_plan_price.toFixed(2)}{" "}
+                          /week
+                        </Card.Text>
+                        <Card.Text
+                          style={{ fontSize: "13px", color: "#888785" }}
+                        >
+                          Sales tax of 8.25% will be added
+                        </Card.Text>
+                        <Link
+                          style={{ fontFamily: "Kalam", color: "white" }}
+                          to={mealPlan.RouteOnclick}
+                        >
+                          <button
+                            type="button"
+                            class="btn2 btn2-primary font4"
+                            style={{
+                              marginTop: "10px",
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              paddingTop: "5px",
+                              paddingBottom: "5px",
+                              color: "white",
+                              fontSize: "12px"
+                            }}
+                          >
+                            CHOOSE {mealPlan.num_meals} MEALS
+                          </button>
+                        </Link>
+                        <img
+                          class="img-fluid"
+                          src={IMG9}
+                          alt=""
+                          style={{
+                            width: "90%"
+                          }}
+                        />
+                      </Card.Body>
+                      <Card.Footer Style="bottom:0px; ">
+                        <large className="text-muted">
+                          {mealPlan.plan_footer}
+                        </large>
+                      </Card.Footer>
+                    </div>
+                  </Card>
+                </div>
               ))}
             </CardDeck>
 
