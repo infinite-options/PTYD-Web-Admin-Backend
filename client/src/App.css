@@ -226,8 +226,11 @@ hr.four {
   font-family: "Heebo", sans-serif;
 }
 
+.font5 {
+  font-family: "Montserrat", sans-serif;
+}
+
 .borderr {
-  size: 10px;
   border-style: solid;
   border-width: thick;
 }

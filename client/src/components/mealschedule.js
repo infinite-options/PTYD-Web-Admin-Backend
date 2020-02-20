@@ -88,7 +88,7 @@ class Mealschedule extends Component {
     return (
       <div>
         <section class="content-section">
-          <div class="container">
+          <div class="container font2">
             <Grid>
               <Cell col={3}>
                 {" "}
@@ -106,12 +106,12 @@ class Mealschedule extends Component {
                     ></img>
                   </Cell>
                   <Cell col={8}>
-                    <h4>Hi, Prashant</h4>
+                    <h4 class="font2">Hi, Prashant</h4>
                   </Cell>
                 </Grid>
                 <button
                   type="button"
-                  class="btn2 btn2-primary"
+                  class="btn2 btn2-primary font4"
                   style={{
                     marginTop: "10px",
                     paddingLeft: "10px",
@@ -125,14 +125,15 @@ class Mealschedule extends Component {
                   Make Account Changes
                 </button>
                 <br />
-                <h4>Subscription Details</h4> <p>My Subscription:</p>
+                <h4 class="font2">Subscription Details</h4>{" "}
+                <p>My Subscription:</p>
                 <p>Payment Plan:</p>
                 <p>Paid Weeks Remaining:</p>
                 <p>Next Charge:</p>
                 <p>Next Charge Date:</p>
                 <p>Coupons:</p>
                 <p>Account Status:</p>
-                <h4>Credit Card Details</h4> <p>Credit Card:</p>
+                <h4 class="font2">Credit Card Details</h4> <p>Credit Card:</p>
                 <p>Expiration Date:</p>
                 <p>CVV:</p>
                 <h4>Delivery Details</h4>{" "}
@@ -147,7 +148,9 @@ class Mealschedule extends Component {
               <Cell col={9}>
                 <br />
                 <br />
-                <h3>Select Meals Around Your Schedule</h3>
+                <h3 class="font1">
+                  <b>Select Meals Around Your Schedule</b>
+                </h3>
                 <br />
                 <div class="meals-button">
                   {this.state.menu.map(eachWeek => (

@@ -5,8 +5,10 @@ import { Card, Accordion, Button } from "react-bootstrap";
 class Faq extends Component {
   render() {
     return (
-      <div class="container" style={{ color: "#196F3D" }}>
-        <h4 style={{ color: "black" }}>Frequently Asked Questions</h4>
+      <div class="container font2" style={{ color: "#196F3D" }}>
+        <h3 class="container font2" style={{ color: "black" }}>
+          Frequently Asked Questions
+        </h3>
         <br />
         {/* <Question
           question="Which farms do you get your produce from?"

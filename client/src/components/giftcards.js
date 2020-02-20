@@ -5,10 +5,12 @@ class Giftcards extends Component {
   render() {
     return (
       <center>
-        <h2 style={{ lineHeight: "10px" }}>GIFT CARDS</h2>
-        <h4>ONE WEEK of 5 MEALS</h4>
+        <h2 class="font1" style={{ lineHeight: "10px" }}>
+          GIFT CARDS
+        </h2>
+        <h4 class="font1">ONE WEEK of 5 MEALS</h4>
         <hr class="two" />
-        <h5>
+        <h5 class="font1">
           LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
         </h5>
         <div class="container" style={{ color: "white" }}>
@@ -30,10 +32,10 @@ class Giftcards extends Component {
           >
             <button
               type="button"
-              class="btn1 btn1-primary"
+              class="btn1 btn1-primary font4"
               style={{ marginTop: "25px", color: "white" }}
             >
-              Get Started
+              Shop Now
             </button>
           </div>
         </div>

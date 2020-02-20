@@ -1,19 +1,29 @@
 import React, { Component } from "react";
 import { Grid, Cell, Center } from "react-mdl";
 import IMG8 from "../img/img8.jpeg";
+import HEATHER from "../img/heather.png";
+import FAIEZ from "../img/faiez.png";
+import MICHAEL from "../img/Michael.png";
+import KAYLA from "../img/Kayla.png";
+import MAURICE from "../img/Maurice.png";
+import ANNA from "../img/Anna.png";
+import THOMAS from "../img/Thomas.png";
+import JUSTIN from "../img/Justin.png";
 import COMPANY from "../img/company.png";
 
 class Ourstory extends Component {
   render() {
     return (
       <div>
-        <div class="container" style={{ color: "white" }}>
+        <div class="container font2" style={{ color: "white" }}>
           <Grid>
             <Cell
               col={5}
               style={{ fontSize: "15px", color: "#888785", lineHeight: "55px" }}
             >
-              <h3 style={{ color: "#196F3D" }}>Our Story</h3>
+              <h3 class="font1" style={{ color: "#196F3D" }}>
+                Our Story
+              </h3>
               <p>
                 Our co-founders, Heather and Faiez, met while studying at
                 Harvard University. Paired on a group project together, they
@@ -61,7 +71,7 @@ class Ourstory extends Component {
               <br />
               <Cell col={10}>
                 <center>
-                  <p
+                  {/* <p
                     style={{
                       fontSize: "10px",
                       color: "#888785",
@@ -72,21 +82,19 @@ class Ourstory extends Component {
                     reach them via their social media channels, or email at{" "}
                     <a>faiez@preptoyourdoor.com</a> or{" "}
                     <a>heather@preptoyourdoor.com.</a>
-                  </p>
+                  </p> */}
                 </center>
               </Cell>
             </Cell>
           </Grid>
-          <br />
-          <br />
         </div>{" "}
         <div class="container" style={{ color: "#196F3D" }}>
           <br />
           <br />
           <center>
             <hr class="one" />
-            <h3>Our Team</h3>
-            <h5>
+            <h3 class="font1"> Our Team</h3>
+            <h5 class="font1">
               People. Purpose. Positivity. We are here to be of service to our
               community.{" "}
             </h5>{" "}
@@ -101,11 +109,11 @@ class Ourstory extends Component {
                       height: "150px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={HEATHER}
                     alt="Avatar"
                   ></img>
                   <br />
-                  <h6>
+                  <h6 class="font2">
                     Heather
                     <br />
                     Co-Founder/CEO
@@ -119,7 +127,7 @@ class Ourstory extends Component {
                       height: "150px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={FAIEZ}
                     alt="Avatar"
                   ></img>
                   <h6>
@@ -139,11 +147,11 @@ class Ourstory extends Component {
                       height: "100px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={MICHAEL}
                     alt="Avatar"
                   ></img>
                   <br />
-                  <h6>
+                  <h6 class="font2">
                     Michael
                     <br />
                     VP of Operations
@@ -157,11 +165,11 @@ class Ourstory extends Component {
                       height: "100px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={KAYLA}
                     alt="Avatar"
                   ></img>
                   <br />
-                  <h6>
+                  <h6 class="font2">
                     Kayla
                     <br />
                     Customer Service
@@ -175,10 +183,10 @@ class Ourstory extends Component {
                       height: "100px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={MAURICE}
                     alt="Avatar"
                   ></img>
-                  <h6>
+                  <h6 class="font2">
                     Maurice
                     <br />
                     Head Chef
@@ -192,11 +200,11 @@ class Ourstory extends Component {
                       height: "100px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={ANNA}
                     alt="Avatar"
                   ></img>
                   <br />
-                  <h6>
+                  <h6 class="font2">
                     Anna
                     <br />
                     Logistics Manager
@@ -210,11 +218,11 @@ class Ourstory extends Component {
                       height: "100px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={THOMAS}
                     alt="Avatar"
                   ></img>
                   <br />
-                  <h6>
+                  <h6 class="font2">
                     Thomas
                     <br />
                     Content Creator
@@ -228,11 +236,11 @@ class Ourstory extends Component {
                       height: "100px",
                       marginTop: "10px"
                     }}
-                    src={IMG8}
+                    src={JUSTIN}
                     alt="Avatar"
                   ></img>
                   <br />
-                  <h6>
+                  <h6 class="font2">
                     Justin
                     <br />
                     Digital Marketing
@@ -240,12 +248,16 @@ class Ourstory extends Component {
                 </Cell>
               </Grid>
               <div style={{ color: "#196F3D" }}>
-                <h5>Interested in working with us?</h5>
-                <h5>Tell us about yourself! We hire people, not positions.</h5>
+                <h5 class="font1">
+                  <b>Interested in working with us?</b>
+                </h5>
+                <h5 class="font1">
+                  Tell us about yourself! We hire people, not positions.
+                </h5>
               </div>
               <button
                 type="button"
-                class="btn2 btn2-primary"
+                class="btn2 btn2-primary font4"
                 style={{
                   marginTop: "10px",
                   paddingLeft: "30px",
@@ -256,7 +268,7 @@ class Ourstory extends Component {
                   fontSize: "15px"
                 }}
               >
-                CHOOSE MEALS
+                Apply Today
               </button>
               <br />
               <br />
@@ -264,7 +276,7 @@ class Ourstory extends Component {
             <hr class="one" />
             <br />
             <br />
-            <h5>A special thanks to these “team members” too!</h5>
+            <h5 class="font1">A special thanks to these “team members” too!</h5>
             <br />
             <img
               class="img-fluid"

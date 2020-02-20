@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
+import IMG9 from "../img/img9.webp";
 import { Link } from "react-router-dom";
 
 class Selectmealplan extends Component {
@@ -19,7 +20,7 @@ class Selectmealplan extends Component {
   render() {
     return (
       <section class="content-section">
-        <div class="container">
+        <div class="container font2">
           <center>
             <h2 class="font1" style={{ color: "#4D4D4D" }}>
               SELECT A MEAL PLAN
@@ -81,7 +82,7 @@ class Selectmealplan extends Component {
                       >
                         <button
                           type="button"
-                          class="btn2 btn2-primary"
+                          class="btn2 btn2-primary font4"
                           style={{
                             marginTop: "10px",
                             paddingLeft: "10px",
@@ -89,12 +90,20 @@ class Selectmealplan extends Component {
                             paddingTop: "5px",
                             paddingBottom: "5px",
                             color: "white",
-                            fontSize: "15px"
+                            fontSize: "12px"
                           }}
                         >
                           CHOOSE {mealPlan.num_meals} MEALS
                         </button>
                       </Link>
+                      <img
+                        class="img-fluid"
+                        src={IMG9}
+                        alt=""
+                        style={{
+                          width: "90%"
+                        }}
+                      />
                     </Card.Body>
                     <Card.Footer Style="bottom:0px; ">
                       <large className="text-muted">
@@ -111,84 +120,88 @@ class Selectmealplan extends Component {
             <hr></hr>
             <br></br>
             <br></br>
-            <h3 style={{ color: "#196F3D" }}>Our Customers Say</h3>
-            <Container>
-              <Row style={{ fontSize: "20px" }}>
-                <Col>
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                </Col>
-                <Col>
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                </Col>
-                <Col>
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                  <span class="fa fa-star checked" />
-                </Col>
-              </Row>
-              <Row style={{ fontSize: "15px" }}>
-                <Col>Convenience and goodness</Col>
-                <Col>PTYD feels like family!</Col>
-                <Col>They make life SO easy!</Col>
-              </Row>
-              <br></br>
-              <Row style={{ fontSize: "15px", color: "#196F3D" }}>
-                <Col>
-                  <hr class="one" />
-                </Col>
-                <Col>
-                  <hr class="one" />
-                </Col>
-                <Col>
-                  <hr class="one" />
-                </Col>
-              </Row>
-              <Row
-                style={{
-                  fontSize: "15px",
-                  color: "black",
-                  lineHeight: "25px"
-                }}
-              >
-                <Grid>
+            <h3 class="font1" style={{ color: "#196F3D" }}>
+              Our Customers Say
+            </h3>
+            <div class="font2">
+              <Container>
+                <Row style={{ fontSize: "20px" }}>
                   <Col>
-                    <Cell col={10}>
-                      Besides the convenience and goodness going inside our
-                      bods, PTYD is also the friendliest most generous team that
-                      is always quick to respond.
-                      <br />- Austin
-                    </Cell>
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
                   </Col>
                   <Col>
-                    <Cell col={10}>
-                      Whether I split a soup between our two kids, feed my
-                      husband after his workout, or snack on a salad while the
-                      kids nap, it's an outstanding addition to our fridge!
-                      <br />- Christy
-                    </Cell>
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
                   </Col>
                   <Col>
-                    <Cell col={10}>
-                      I love how the food is as locally sourced as possible and
-                      containers are not going to waste. I don't think I've ever
-                      had a meal I didn't like!
-                      <br />- Courtney
-                    </Cell>
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
+                    <span class="fa fa-star checked" />
                   </Col>
-                </Grid>
-              </Row>
-              <br></br>
-            </Container>
+                </Row>
+                <Row style={{ fontSize: "15px" }}>
+                  <Col>Convenience and goodness</Col>
+                  <Col>PTYD feels like family!</Col>
+                  <Col>They make life SO easy!</Col>
+                </Row>
+                <br></br>
+                <Row style={{ fontSize: "15px", color: "#196F3D" }}>
+                  <Col>
+                    <hr class="one" />
+                  </Col>
+                  <Col>
+                    <hr class="one" />
+                  </Col>
+                  <Col>
+                    <hr class="one" />
+                  </Col>
+                </Row>
+                <Row
+                  style={{
+                    fontSize: "15px",
+                    color: "black",
+                    lineHeight: "25px"
+                  }}
+                >
+                  <Grid>
+                    <Col>
+                      <Cell col={10}>
+                        Besides the convenience and goodness going inside our
+                        bods, PTYD is also the friendliest most generous team
+                        that is always quick to respond.
+                        <br />- Austin
+                      </Cell>
+                    </Col>
+                    <Col>
+                      <Cell col={10}>
+                        Whether I split a soup between our two kids, feed my
+                        husband after his workout, or snack on a salad while the
+                        kids nap, it's an outstanding addition to our fridge!
+                        <br />- Christy
+                      </Cell>
+                    </Col>
+                    <Col>
+                      <Cell col={10}>
+                        I love how the food is as locally sourced as possible
+                        and containers are not going to waste. I don't think
+                        I've ever had a meal I didn't like!
+                        <br />- Courtney
+                      </Cell>
+                    </Col>
+                  </Grid>
+                </Row>
+                <br></br>
+              </Container>
+            </div>
             <br />
             <br />
             <div style={{ backgroundColor: "black" }}>

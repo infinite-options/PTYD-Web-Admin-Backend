@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
-import IMG1 from "../img/img1.jpg";
 import IMG9 from "../img/img9.webp";
 import { Link } from "react-router-dom";
 
@@ -27,12 +26,14 @@ class SelectPaymentPlan extends Component {
   render() {
     return (
       <section class="content-section">
-        <div class="container">
+        <div class="container font2">
           <center>
-            <h1>{this.state.meals} MEALS PAYMENT OPTIONS</h1>
+            <h2 class="font1">{this.state.meals} MEALS PAYMENT OPTIONS</h2>
             <hr class="two" />
-            <h4>
-              LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
+            <h4 class="font1">
+              <b>
+                LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
+              </b>
             </h4>
             <br></br>
             <hr class="three" />
@@ -111,7 +112,7 @@ class SelectPaymentPlan extends Component {
                       >
                         <button
                           type="button"
-                          class="btn2 btn2-primary"
+                          class="btn2 btn2-primary font4"
                           style={{
                             marginTop: "10px",
                             paddingLeft: "30px",
@@ -143,7 +144,9 @@ class SelectPaymentPlan extends Component {
             <hr></hr>
             <br></br>
             <br></br>
-            <h3 style={{ color: "#196F3D" }}>Our Customers Say</h3>
+            <h3 class="font1" style={{ color: "#196F3D" }}>
+              Our Customers Say
+            </h3>
             <Container>
               <Row style={{ fontSize: "20px" }}>
                 <Col>

@@ -10,7 +10,7 @@ class Findus extends Component {
   render() {
     return (
       <section class="content-section">
-        <div class="container">
+        <div class="container font2">
           {" "}
           <Grid>
             <Cell col={4}>
