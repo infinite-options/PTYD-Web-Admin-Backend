@@ -35,15 +35,15 @@ const App = props => {
   }
 
   function searchCookie4Login(str) {
-    let arr = str.split(" ")
-    let i = arr.indexOf("loginStatus:") 
-    return arr[i+1] + " " + arr[i+2]
+    let arr = str.split(" ");
+    let i = arr.indexOf("loginStatus:");
+    return arr[i + 1] + " " + arr[i + 2];
   }
 
   function searchCookie4UserID(str) {
-    let arr = str.split(" ")
-    let i = arr.indexOf("user_uid:") 
-    return arr[i+1]
+    let arr = str.split(" ");
+    let i = arr.indexOf("user_uid:");
+    return arr[i + 1];
   }
 
   let stuff = !isAuthenticating && (
@@ -60,7 +60,7 @@ const App = props => {
           scroll
         >
           <Nav
-            className="navbar fixed-top justify-content-center"
+            className="navbar fixed-top justify-content-center font2"
             Style="min-height:140px; background-color:white;"
             activeKey="/home"
           >
@@ -97,16 +97,13 @@ const App = props => {
               <NavDropdown.Item href="/menunextweek">
                 NEXT WEEK
               </NavDropdown.Item>
-              { searchCookie4UserID(document.cookie) != "null" ? (
+              {searchCookie4UserID(document.cookie) != "null" ? (
                 <NavDropdown.Item href="/mealschedule">
                   MEAL SCHEDULE
                 </NavDropdown.Item>
               ) : (
-                <>
-                </>
-              )
-            }
-              
+                <></>
+              )}
             </NavDropdown>
 
             <Nav.Item Style="margin-top:30px">
@@ -146,25 +143,26 @@ const App = props => {
             <div className="" Style="padding-top:66px">
               {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
                 <div>
-                <a href="/logout">
-                  <Button
-                    id="logoutButton"
-                    variant="success"
-                    size="sm"
-                    onClick={() => {
-                      document.cookie = " loginStatus: Sign In , user_uid: null , ";
-                      window.location.reload(false);
-                    }}
+                  <a href="/logout">
+                    <Button
+                      id="logoutButton"
+                      variant="success"
+                      size="sm"
+                      onClick={() => {
+                        document.cookie =
+                          " loginStatus: Sign In , user_uid: null , ";
+                        window.location.reload(false);
+                      }}
+                    >
+                      Log Out
+                    </Button>
+                  </a>
+                  <p
+                    id="loginStatus"
+                    Style="font-size:20px; text-align:right; color:black;"
                   >
-                    Log Out
-                  </Button>
-                </a>
-                <p
-                  id="loginStatus"
-                  Style="font-size:20px; text-align:right; color:black;"
-                >
-                  { searchCookie4Login(document.cookie) }
-                </p>
+                    {searchCookie4Login(document.cookie)}
+                  </p>
                 </div>
               ) : (
                 <>
@@ -182,7 +180,7 @@ const App = props => {
                     id="loginStatus"
                     Style="font-size:12px; text-align:right; color:black;"
                   >
-                    { searchCookie4Login(document.cookie) }
+                    {searchCookie4Login(document.cookie)}
                   </p>
                 </>
               )}
@@ -216,7 +214,7 @@ const App = props => {
 
         <hr></hr>
 
-        <footer className="container text-center">
+        <footer className="container text-center font2">
           <div className="row">
             <div className="col">
               <div Style="margin-top:-10px">

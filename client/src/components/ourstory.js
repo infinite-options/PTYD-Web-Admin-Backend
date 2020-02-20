@@ -92,7 +92,7 @@ class Ourstory extends Component {
           <br />
           <br />
           <center>
-            <hr class="one" />
+            <hr class="one-half" />
             <h3 class="font1"> Our Team</h3>
             <h5 class="font1">
               People. Purpose. Positivity. We are here to be of service to our

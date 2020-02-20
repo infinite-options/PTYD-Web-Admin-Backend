@@ -40,12 +40,12 @@ class Selectmealplan extends Component {
                     boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                   }}
                 >
-                  <div class="borderr" Style={{ height: "100%" }}>
+                  <div class="borderr" Style={{ height: "110%" }}>
                     <Card.Img
                       class="blackM"
                       variant="top"
                       src={mealPlan.photo_URL}
-                      style={{ width: "99%" }}
+                      style={{ width: "100%" }}
                     />
                     <div
                       class="selectmeal-center"

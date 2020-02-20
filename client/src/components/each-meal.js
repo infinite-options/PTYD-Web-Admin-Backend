@@ -12,7 +12,16 @@ class EachMeal extends Component {
     return (
       <div>
         <center>
-          <h6>{this.props.mealTitle}</h6>
+          <h6>
+            {this.props.mealTitle.length > 23 ? (
+              this.props.mealTitle
+            ) : (
+              <div>
+                {this.props.mealTitle} <br />
+                <br />
+              </div>
+            )}
+          </h6>
         </center>
 
         <Grid>
