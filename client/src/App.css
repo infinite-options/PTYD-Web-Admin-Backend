@@ -20,7 +20,7 @@
   float: left;
   margin-left: 0.5em;
   margin-top: 2em;
-  font-size: 50px;
+  font-size: 52px;
   letter-spacing: 1.5px;
 }
 
@@ -75,7 +75,7 @@ br {
   padding: 0.1rem 2rem;
   font-size: 70%;
   text-transform: uppercase;
-  letter-spacing: 0.15rem;
+  letter-spacing: 0;
   border: 0;
   border-radius: 4px;
 }
@@ -104,9 +104,19 @@ hr.one {
   width: 90%;
   height: 50px;
   margin-top: 0;
-  border-bottom: 1px solid #1f1209;
+  border-bottom: 0 solid #1f1209;
   box-shadow: 0 20px 20px -20px #333;
   margin: -50px auto 10px;
+}
+hr.one-half {
+  border: none;
+  width: 90%;
+  height: 50px;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-top: 0 solid #1f1209;
+  box-shadow: 0 -20px 20px -20px #333;
+  margin-left: 50px;
 }
 
 hr.three {
@@ -125,7 +135,7 @@ hr.two {
 }
 
 hr.three {
-  width: 40%;
+  width: 55%;
   background-color: #dbdbdbc0;
 }
 
@@ -196,4 +206,22 @@ hr.four {
 
 .h6 {
   font-size: 10em;
+}
+
+/* font */
+
+/* big header */
+.font1 {
+  font-family: "Raleway", sans-serif;
+}
+/* text font */
+.font2 {
+  font-family: "Nunito", sans-serif;
+}
+.font3 {
+  font-family: "Cousine", monospace;
+}
+/* button */
+.font4 {
+  font-family: "Heebo", sans-serif;
 }
