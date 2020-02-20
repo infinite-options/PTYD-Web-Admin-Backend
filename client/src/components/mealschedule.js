@@ -87,7 +87,7 @@ class Mealschedule extends Component {
                     ></img>
                   </Cell>
                   <Cell col={8}>
-                    <h4>Hi, Prashant</h4>
+                    <h4>Hi, {this.state.user.first_name}</h4>
                   </Cell>
                 </Grid>
                 <button
