@@ -27,7 +27,7 @@ export default function Login (props) {
 
   useEffect(() => {
     onLoad();
-    componentDidMount();
+    //componentDidMount();
   }, []);
 
   async function onLoad() {
@@ -41,8 +41,24 @@ export default function Login (props) {
     setUsers(logins);
   }
 
+  async function grabLoginInfoForUser(userName) {
+    const res = await fetch('http://127.0.0.1:2000/api/v1/account/'+ userName + '/bed');
+    const api = await res.json();
+    const login = api.result;
+    console.log(login);
+    setUsers(login);
+  }
+
+  async function grabLoginInfoForUser2(userName) {
+    const res = await fetch('http://127.0.0.1:2000/api/v1/account/'+ userName + '/bed');
+    const api = await res.json();
+    const login = await api.result;
+    return await login;
+  }
+
   function checkLogin() {
-    let arr = users;
+    grabLoginInfoForUser(email);
+    let arr = users
     console.log(arr);
     for (var i = 0; i < arr.length; i++) {
       var u = arr[i].user_name;
@@ -102,7 +118,7 @@ export default function Login (props) {
                       />
                     </InputGroup>
 
-                    <Button variant="success" onClick={checkLogin} disabled={!validateForm()} type="submit" >Sign In</Button>
+                    <Button variant="success" onClick={ checkLogin } disabled={!validateForm()} type="submit" >Sign In</Button>
 
                   </Form>
                 </Col>
