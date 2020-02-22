@@ -13,7 +13,7 @@ class EachMeal extends Component {
       <div>
         <center>
           <h6>
-            {this.props.mealTitle.length > 25 ? (
+            {this.props.mealTitle.length > 22 ? (
               this.props.mealTitle
             ) : (
               <div>

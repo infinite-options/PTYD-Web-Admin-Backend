@@ -41,7 +41,7 @@ class Selectmealplan extends Component {
                     padding: "0"
                   }}
                 >
-                  {mealPlan.num_meals == 10 ? (
+                  {mealPlan.num_meals === 10 ? (
                     <p class="rcorners font3">MOST POPULAR</p>
                   ) : (
                     <p style={{ height: "32px" }} />
@@ -55,7 +55,7 @@ class Selectmealplan extends Component {
                     <div
                       class="borderr"
                       style={
-                        mealPlan.num_meals == 10
+                        mealPlan.num_meals === 10
                           ? { height: "110%", color: "green" }
                           : { height: "110%" }
                       }
