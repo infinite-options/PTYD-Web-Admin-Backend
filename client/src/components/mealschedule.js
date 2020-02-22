@@ -43,7 +43,7 @@ class Mealschedule extends Component {
       activeBool: "Yes",
       last_delivery: "2020-02-08",
       referral_source: "Website",
-      user_note: null,
+      delivery_note: null,
       Subscription: null,
       PaymentPlan: null,
       NextCharge: 0,
@@ -151,7 +151,7 @@ class Mealschedule extends Component {
                   City, State ZIP: {this.state.user.user_city},{" "}
                   {this.state.user.user_state} {this.state.user.user_zip}
                 </p>
-                <p>Instructions: {this.state.user.user_note}</p>
+                <p>Instructions: {this.state.user.delivery_note}</p>
               </Cell>{" "}
               <Cell col={9}>
                 <br />

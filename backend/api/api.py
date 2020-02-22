@@ -496,7 +496,7 @@ class Accounts(Resource):
                         activeBool,
                         last_delivery,
                         referral_source,
-                        user_note,
+                        delivery_note,
                         meal_plan_desc AS Subscription,
                         payment_frequency AS PaymentPlan,
                         meal_plan_price AS WeeklyPrice,
@@ -520,7 +520,7 @@ class Accounts(Resource):
                             'user_email', 'phone_number', 'user_address', 'address_unit',
                             'user_city', 'user_state', 'user_zip', 'user_region',
                             'user_gender', 'create_date', 'last_update', 'activeBool',
-                            'last_delivery', 'referral_source', 'user_note', 'Subscription',
+                            'last_delivery', 'referral_source', 'delivery_note', 'Subscription',
                             'PaymentPlan', 'WeeklyPrice', 'payment_time_stamp', 'purchase_status',
                             'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret')
             query = runSelectQuery(queries[0], cur)
