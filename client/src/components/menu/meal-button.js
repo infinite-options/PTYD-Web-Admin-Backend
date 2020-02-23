@@ -75,6 +75,7 @@ export default class MealButton extends Component {
     this.setState({
       buttonSelect: true,
       buttonSurprise: false,
+      buttonAddOn: false,
       buttonSelectKeepColor: true
     });
     console.log("select");
@@ -83,6 +84,7 @@ export default class MealButton extends Component {
     this.setState({
       buttonSelect: false,
       buttonSurprise: true,
+      buttonAddOn: false,
       buttonSelectKeepColor: false
     });
     console.log("surprise");
@@ -90,7 +92,8 @@ export default class MealButton extends Component {
   changeButtonAddOn = () => {
     this.setState({
       buttonAddOn: true,
-      buttonAddOnKeepColor: true
+      buttonAddOnKeepColor: true,
+      buttonSelect: false
     });
   };
   specialRequest = () => {
@@ -257,15 +260,27 @@ export default class MealButton extends Component {
   SelectMealEachMeal = () => {
     return (
       <Card style={{ width: "100%" }}>
+        <Card.Header>
+          <center>
+            <Modal.Title>Select Meal Menu</Modal.Title>
+            <Button variant="secondary" onClick={this.closeButtonSelect}>
+              Close
+            </Button>
+            &nbsp;&nbsp;
+            <Button variant="primary">Save changes</Button>
+          </center>
+        </Card.Header>
         {Object.keys(this.props.menu).map(key => (
           <div>
-            <Card.Header>
-              <center>
-                <Modal.Title>{this.props.menu[key].Category}</Modal.Title>
-              </center>
-            </Card.Header>
             <Card.Body>
               <Grid>
+                <center></center>
+                <Cell col={12}>
+                  <center>
+                    <h4>{this.props.menu[key].Category}</h4>
+                  </center>
+                </Cell>
+                <br />
                 {this.props.menu[key].Menu.map(meal => (
                   <Cell col={4}>
                     <EachMeal
@@ -317,15 +332,16 @@ export default class MealButton extends Component {
   SelectMealEachMealAddOn = () => {
     return (
       <Card style={{ width: "100%" }}>
+        <Card.Header>
+          <center>
+            <Modal.Title>title</Modal.Title>
+          </center>
+        </Card.Header>
         {Object.keys(this.props.addons).map(key => (
           <div>
-            <Card.Header>
-              <center>
-                <Modal.Title>{this.props.addons[key].Category}</Modal.Title>
-              </center>
-            </Card.Header>
             <Card.Body>
               <Grid>
+                <h3>{this.props.addons[key].Category}</h3>
                 {this.props.addons[key].Menu.map(meal => (
                   <Cell col={4}>
                     <EachMeal
