@@ -56,6 +56,7 @@ class EachMeal extends Component {
                     this.setState({
                       countFood: this.state.countFood + 1
                     });
+                    console.log(this.state.countFood);
                   }}
                 />
               </div>
