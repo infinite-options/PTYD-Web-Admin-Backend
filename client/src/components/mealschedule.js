@@ -53,7 +53,8 @@ class Mealschedule extends Component {
       cc_exp_date: null,
       cc_cvv_secret: null,
       password_sha512:
-        "bed5b0364207eb5b8a51b4d8f646f151c0cd3d9b05cd0f405bf1fc4d816b90eb322460d9e5ad8e329e218a402380694fd08fcaf1116b9e48ddb68e1823caf10d"
+        "bed5b0364207eb5b8a51b4d8f646f151c0cd3d9b05cd0f405bf1fc4d816b90eb322460d9e5ad8e329e218a402380694fd08fcaf1116b9e48ddb68e1823caf10d",
+      PaidWeeksRemaining: null
     };
 
     const res = await fetch(this.props.API_URL);
@@ -136,7 +137,7 @@ class Mealschedule extends Component {
                 <br />
                 <h4>Subscription Details</h4> <p>My Subscription: {this.state.user.Subscription}</p>
                 <p>Payment Plan: {this.state.user.PaymentPlan}</p>
-                <p>Paid Weeks Remaining:</p>
+                <p>Paid Weeks Remaining: {this.state.user.PaidWeeksRemaining}</p>
                 <p>Next Charge: ${this.state.user.NextCharge.toFixed(2)}</p>
                 <p>Next Charge Date: {this.state.user.NextChargeDate}</p>
                 <p>Coupons:</p>

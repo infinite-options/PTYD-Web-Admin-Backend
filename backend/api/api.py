@@ -7,6 +7,7 @@ from werkzeug.exceptions import BadRequest, NotFound
 from decimal import Decimal
 from datetime import datetime, date, timedelta
 from hashlib import sha512
+from math import ceil
 
 import decimal
 import sys
@@ -414,6 +415,17 @@ class Accounts(Resource):
             nextPaymentDate = lastPaymentDate + timedelta(weeks=4)
             return nextPaymentDate.strftime("%b %d, %Y")
 
+    # Calculate number of paid weeks remaining
+    def calculatePaidWeeksRemaining(self, nextChargeDate):
+        if nextChargeDate:
+#           now = datetime.now()
+            now = datetime(2020, 2, 2, 15, 59)
+            nextChargeDateObj = datetime.strptime(nextChargeDate, "%b %d, %Y")
+            deltaObj = nextChargeDateObj - now
+            return ceil(deltaObj.days / 7)
+        else:
+            return "N/A"
+
     # Format Monday Zipcodes Query to a list of strings
     def formatMondayZips(self, query):
         zips = []
@@ -451,6 +463,8 @@ class Accounts(Resource):
                 rowDict[key] = value
             rowDict['password_sha512'] = sha512(
                 rowDict['user_name'].encode()).hexdigest()
+
+            rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
 
             ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
             rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
