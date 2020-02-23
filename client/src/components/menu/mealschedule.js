@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { ButtonToolbar, Button } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
-import IMG8 from "../img/img8.jpeg";
+import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 
 class Mealschedule extends Component {
@@ -10,7 +9,7 @@ class Mealschedule extends Component {
     this.state = {
       menu: [],
       user_uid: searchCookie4UserID(document.cookie),
-      user: {}
+      user: { NextCharge: 0 }
     };
 
     function searchCookie4UserID(str) {
@@ -23,43 +22,61 @@ class Mealschedule extends Component {
   async componentDidMount() {
     console.log(this.props);
     console.log(this.state);
-    const res = await fetch(this.props.API_URL);
-    const api = await res.json();
 
     let currUser = {
+      num_meals: null,
       user_uid: "null",
-      user_name: "null",
-      first_name: "null",
-      last_name: "null",
+      user_name: null,
+      first_name: null,
+      last_name: null,
       user_email: "null@gmail.com",
       phone_number: "null",
-      user_address: "null",
+      user_address: null,
       address_unit: null,
-      user_city: "null",
-      user_state: "null",
-      user_zip: "null",
+      user_city: null,
+      user_state: null,
+      user_zip: null,
       user_region: "US",
-      user_gender: "null",
+      user_gender: null,
       create_date: "2018-08-27",
       last_update: "2019-09-14",
       activeBool: "Yes",
+
       last_delivery: "2020-02-08",
       referral_source: "Website",
-      user_note: null,
+      delivery_note: null,
+      Subscription: null,
+      PaymentPlan: null,
+      NextCharge: 0,
+      NextChargeDate: null,
+      purchase_status: null,
+      cc_num_secret: null,
+      cc_exp_date: null,
+      cc_cvv_secret: null,
       password_sha512:
-        "bed5b0364207eb5b8a51b4d8f646f151c0cd3d9b05cd0f405bf1fc4d816b90eb322460d9e5ad8e329e218a402380694fd08fcaf1116b9e48ddb68e1823caf10d"
+        "bed5b0364207eb5b8a51b4d8f646f151c0cd3d9b05cd0f405bf1fc4d816b90eb322460d9e5ad8e329e218a402380694fd08fcaf1116b9e48ddb68e1823caf10d",
+      PaidWeeksRemaining: null
     };
 
-    if (this.user_uid != "null") {
+    const res = await fetch(this.props.API_URL);
+    const api = await res.json();
+
+    if (this.state.user_uid != null) {
+      console.log("tanny2 says");
+      console.log(this.state.user_uid);
+      console.log("tanny3 says");
+
       const users = await fetch(this.props.USERS_API_URL);
       const usersApi = await users.json();
       const Ausers = usersApi.result;
       console.log(Ausers);
       console.log(this.state.user_uid);
       for (let i in Ausers) {
-        // console.log(Ausers[i].user_uid)
+        console.log(Ausers[i]);
         if (Ausers[i].user_uid == this.state.user_uid) {
+          //error bc this.state.user_uid == "hello"
           currUser = Ausers[i];
+          console.log("tanny says");
           console.log(currUser);
         }
       }
@@ -85,10 +102,12 @@ class Mealschedule extends Component {
   }
 
   render() {
+    console.log("max meal testing................................");
+
     return (
       <div>
         <section class="content-section">
-          <div class="container">
+          <div class="container font2">
             <Grid>
               <Cell col={3}>
                 {" "}
@@ -106,12 +125,12 @@ class Mealschedule extends Component {
                     ></img>
                   </Cell>
                   <Cell col={8}>
-                    <h4>Hi, Prashant</h4>
+                    <h4>Hi, {this.state.user.first_name}</h4>
                   </Cell>
                 </Grid>
                 <button
                   type="button"
-                  class="btn2 btn2-primary"
+                  class="btn2 btn2-primary font4"
                   style={{
                     marginTop: "10px",
                     paddingLeft: "10px",
@@ -125,16 +144,20 @@ class Mealschedule extends Component {
                   Make Account Changes
                 </button>
                 <br />
-                <h4>Subscription Details</h4> <p>My Subscription:</p>
-                <p>Payment Plan:</p>
-                <p>Paid Weeks Remaining:</p>
-                <p>Next Charge:</p>
-                <p>Next Charge Date:</p>
+                <h4>Subscription Details</h4>{" "}
+                <p>My Subscription: {this.state.user.Subscription}</p>
+                <p>Payment Plan: {this.state.user.PaymentPlan}</p>
+                <p>
+                  Paid Weeks Remaining: {this.state.user.PaidWeeksRemaining}
+                </p>
+                <p>Next Charge: ${this.state.user.NextCharge.toFixed(2)}</p>
+                <p>Next Charge Date: {this.state.user.NextChargeDate}</p>
                 <p>Coupons:</p>
-                <p>Account Status:</p>
-                <h4>Credit Card Details</h4> <p>Credit Card:</p>
-                <p>Expiration Date:</p>
-                <p>CVV:</p>
+                <p>Account Status: {this.state.user.purchase_status}</p>
+                <h4>Credit Card Details</h4>{" "}
+                <p>Credit Card: {this.state.user.cc_num_secret}</p>
+                <p>Expiration Date: {this.state.user.cc_exp_date}</p>
+                <p>CVV: {this.state.user.cc_cvv_secret}</p>
                 <h4>Delivery Details</h4>{" "}
                 <p>Address: {this.state.user.user_address}</p>
                 <p>Unit: {this.state.user.address_unit}</p>
@@ -142,12 +165,14 @@ class Mealschedule extends Component {
                   City, State ZIP: {this.state.user.user_city},{" "}
                   {this.state.user.user_state} {this.state.user.user_zip}
                 </p>
-                <p>Instructions:</p>
+                <p>Instructions: {this.state.user.delivery_note}</p>
               </Cell>{" "}
               <Cell col={9}>
                 <br />
                 <br />
-                <h3>Select Meals Around Your Schedule</h3>
+                <h3 class="font1">
+                  <b>Select Meals Around Your Schedule</b>
+                </h3>
                 <br />
                 <div class="meals-button">
                   {this.state.menu.map(eachWeek => (
@@ -158,6 +183,7 @@ class Mealschedule extends Component {
                       date2={eachWeek.mon}
                       menu={eachWeek.menu}
                       addons={eachWeek.addons}
+                      maxmeals={this.state.user.MaximumMeals}
                     />
                   ))}
                 </div>

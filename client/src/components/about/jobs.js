@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
+import { Card, CardDeck } from "react-bootstrap";
 
 class Jobs extends Component {
   render() {
     return (
       <section class="content-section">
-        <div class="container">
+        <div class="container font2">
           <center>
             <CardDeck style={{ marginLeft: "90px" }}>
               <Card
@@ -19,7 +19,7 @@ class Jobs extends Component {
                   <br />
                   <br />
                   <br />
-                  <Card.Title>
+                  <Card.Title style={{ fontSize: "20px" }}>
                     <b>Why PTYD?</b>
                     <hr class="two" />
                   </Card.Title>
@@ -59,7 +59,7 @@ class Jobs extends Component {
                   <br />
                   <br />
                   <br />
-                  <Card.Title>
+                  <Card.Title style={{ fontSize: "20px" }}>
                     <b>Hiring</b>
                     <hr class="two" />
                   </Card.Title>
@@ -97,7 +97,7 @@ class Jobs extends Component {
                   <br />
                   <br />
                   <br />
-                  <Card.Title>
+                  <Card.Title style={{ fontSize: "20px" }}>
                     <b>Apply</b>
                     <hr class="two" />
                   </Card.Title>

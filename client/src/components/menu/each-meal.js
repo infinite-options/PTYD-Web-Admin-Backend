@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import FINDUS1 from "../img/findus1.png";
 import { Grid, Cell } from "react-mdl";
+import { Alert } from "react-bootstrap";
 
 //  Replace FINDUS1 below with this.props.imgurl
 
@@ -12,7 +12,17 @@ class EachMeal extends Component {
     return (
       <div>
         <center>
-          <h6>{this.props.mealTitle}</h6>
+          <h6>
+            {this.props.mealTitle.length > 22 ? (
+              this.props.mealTitle
+            ) : (
+              <div>
+                {this.props.mealTitle} <br />
+                <br />
+              </div>
+            )}
+          </h6>
+          {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
 
         <Grid>
@@ -35,6 +45,7 @@ class EachMeal extends Component {
                   value="-"
                   onClick={() => {
                     if (this.state.countFood > 0) {
+                      this.props.incrementMaxMeal();
                       this.setState({
                         countFood: this.state.countFood - 1
                       });
@@ -45,9 +56,15 @@ class EachMeal extends Component {
                   type="button"
                   value="+"
                   onClick={() => {
+                    if (this.props.maxmeals == 0) {
+                      alert("You have selected more meals than your selection");
+                      return;
+                    }
+                    this.props.decrementMaxMeal();
                     this.setState({
                       countFood: this.state.countFood + 1
                     });
+                    console.log(this.state.countFood);
                   }}
                 />
               </div>
