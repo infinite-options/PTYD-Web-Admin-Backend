@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { ButtonToolbar, Button } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
-import IMG8 from "../img/img8.jpeg";
+import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 
 class Mealschedule extends Component {
@@ -110,7 +109,7 @@ class Mealschedule extends Component {
     return (
       <div>
         <section class="content-section">
-          <div class="container">
+          <div class="container font2">
             <Grid>
               <Cell col={3}>
                 {" "}
@@ -133,7 +132,7 @@ class Mealschedule extends Component {
                 </Grid>
                 <button
                   type="button"
-                  class="btn2 btn2-primary"
+                  class="btn2 btn2-primary font4"
                   style={{
                     marginTop: "10px",
                     paddingLeft: "10px",
@@ -173,7 +172,9 @@ class Mealschedule extends Component {
               <Cell col={9}>
                 <br />
                 <br />
-                <h3>Select Meals Around Your Schedule</h3>
+                <h3 class="font1">
+                  <b>Select Meals Around Your Schedule</b>
+                </h3>
                 <br />
                 <div class="meals-button">
                   {this.state.menu.map(eachWeek => (

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import FINDUS1 from "../img/findus1.png";
 import { Grid, Cell } from "react-mdl";
 import { Alert } from "react-bootstrap";
 
@@ -13,7 +12,16 @@ class EachMeal extends Component {
     return (
       <div>
         <center>
-          <h6>{this.props.mealTitle}</h6>
+          <h6>
+            {this.props.mealTitle.length > 22 ? (
+              this.props.mealTitle
+            ) : (
+              <div>
+                {this.props.mealTitle} <br />
+                <br />
+              </div>
+            )}
+          </h6>
           <h4>{this.props.maxmeals}</h4>
         </center>
 
@@ -56,6 +64,7 @@ class EachMeal extends Component {
                     this.setState({
                       countFood: this.state.countFood + 1
                     });
+                    console.log(this.state.countFood);
                   }}
                 />
               </div>

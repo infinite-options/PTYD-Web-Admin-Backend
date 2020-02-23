@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import IMG3 from "../img/img3.jpg";
-import IMG7 from "../img/img7.jpg";
-import IMG8 from "../img/img8.jpeg";
-import HOW1 from "../img/how1.png";
-import HOW2 from "../img/how2.png";
-import HOW3 from "../img/how3.png";
-import HOW4 from "../img/how4.png";
-import TEMP from "../img/temp.jpg";
+import HOW1 from "../../img/how1.png";
+import HOW2 from "../../img/how2.png";
+import HOW3 from "../../img/how3.png";
+import HOW4 from "../../img/how4.png";
+import HUMAN1 from "../../img/human1.png";
+import HUMAN2 from "../../img/human2.png";
+import HUMAN3 from "../../img/human3.png";
 import { Row, Col, Card, CardColumns } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 
@@ -36,7 +35,7 @@ class Howitworks extends Component {
         <br />
         <br />
         <br />
-        <div class="container" style={{ color: "white" }}>
+        <div class="container font2" style={{ color: "white" }}>
           <Row style={{ fontSize: "20px", color: "#888785" }}>
             <Col>
               <b>Build your subscription</b>
@@ -108,7 +107,9 @@ class Howitworks extends Component {
               />
             </Cell>
             <Cell col={7} style={{ color: "black", lineHeight: "55px" }}>
-              <h5>Customize Your Plan</h5>
+              <h4 class="font2" style={{ color: "#4D4D4D" }}>
+                Customize Your Plan
+              </h4>
               <p>
                 Choose which meals you need and how often you need them. Meals
                 start at just $11.99.
@@ -175,35 +176,39 @@ class Howitworks extends Component {
               style={{ fontSize: "15px", color: "#888785", lineHeight: "55px" }}
             >
               <Cell col={11}>
-                <h4 style={{ color: "black" }}>Delivery</h4>
-                <h6>
+                <h4 class="font2" style={{ color: "black" }}>
+                  Delivery
+                </h4>
+                <h6 class="font2">
                   Our delivery experience is seamless. Fresh ready-to-eat food
                   will arrive on your doorstep each week.
                 </h6>
                 <hr class="three" />
-                <h5 style={{ color: "black", lineHeight: "5px" }}>
+                <h5 class="font2" style={{ color: "black", lineHeight: "5px" }}>
                   Where We Deliver
                 </h5>
-                <h6>Right now we are only delivering to Greater Austin, TX</h6>
-                <h5 style={{ color: "black", lineHeight: "5px" }}>
+                <h6 class="font2">
+                  Right now we are only delivering to Greater Austin, TX
+                </h6>
+                <h5 class="font2" style={{ color: "black", lineHeight: "5px" }}>
                   What time?
                 </h5>
-                <h6>
+                <h6 class="font2">
                   Current delivery times are Sunday between 6-9pm and Monday
                   9am-1pm.{" "}
                 </h6>
-                <h5 style={{ color: "black", lineHeight: "5px" }}>
+                <h5 class="font2" style={{ color: "black", lineHeight: "5px" }}>
                   What if I'm not home?
                 </h5>
-                <h6>
+                <h6 class="font2">
                   No worries. Our bags are insulated and keep food fresh for
                   several hours. We will send you text updates before, during,
                   and upon delivery.
                 </h6>
-                <h5 style={{ color: "black", lineHeight: "5px" }}>
+                <h5 class="font2" style={{ color: "black", lineHeight: "5px" }}>
                   Do you deliver in my area?
                 </h5>
-                <h6>
+                <h6 class="font2">
                   Round Rock, Georgetown, Pflugerville, San Marcos, the more of
                   you who show interest the quicker we can service y'all. Send
                   us a message!
@@ -221,8 +226,8 @@ class Howitworks extends Component {
           </Grid>
           <br />
           <br />
-          <div class="container">
-            <h3>What Prepsters love about us...</h3>
+          <div class="container font2">
+            <h3 class="font2">What Prepsters love about us...</h3>
             <CardColumns>
               <Card className="p-3">
                 <p>
@@ -230,7 +235,6 @@ class Howitworks extends Component {
                   affordable price. Hard to beat. As a bonus, the jars are
                   eco-friendly. I can't wait to see PTYD expand.
                 </p>
-                <br />
                 <br />
                 <br />
                 <Grid>
@@ -242,16 +246,13 @@ class Howitworks extends Component {
                         height: "60px",
                         marginTop: "10px"
                       }}
-                      src={IMG8}
+                      src={HUMAN1}
                       alt="Avatar"
                     ></img>
                   </Cell>
                   <Cell col={7}>
-                    <h5>
-                      Prashant
-                      <br />
-                      UX Designer
-                    </h5>
+                    <h5 class="font2">Veronica</h5>
+                    <p>UX Designer</p>
                   </Cell>
                 </Grid>
               </Card>
@@ -272,16 +273,13 @@ class Howitworks extends Component {
                         height: "60px",
                         marginTop: "10px"
                       }}
-                      src={IMG8}
+                      src={HUMAN2}
                       alt="Avatar"
                     ></img>
                   </Cell>
                   <Cell col={7}>
-                    <h5>
-                      Prashant
-                      <br />
-                      Tech
-                    </h5>
+                    <h5>Luke</h5>
+                    <p>Tech</p>
                   </Cell>
                 </Grid>
               </Card>
@@ -303,16 +301,13 @@ class Howitworks extends Component {
                         height: "60px",
                         marginTop: "10px"
                       }}
-                      src={IMG8}
+                      src={HUMAN3}
                       alt="Avatar"
                     ></img>
                   </Cell>
                   <Cell col={7}>
-                    <h5>
-                      Prashant
-                      <br />
-                      Fitness Designer
-                    </h5>
+                    <h5 class="font2">Courtney</h5>
+                    <p>Fitness Designer</p>
                   </Cell>
                 </Grid>
               </Card>
@@ -320,12 +315,14 @@ class Howitworks extends Component {
             <br />
             <button
               type="button"
-              class="btn1 btn1-primary"
+              class="btn1 btn1-primary font4"
               style={{
                 marginTop: "10px",
+                paddingTop: "10px",
+                paddingBottom: "10px",
                 color: "white",
                 size: "10px",
-                fontSize: "20px"
+                fontSize: "17px"
               }}
             >
               TRY US TODAY
@@ -333,21 +330,25 @@ class Howitworks extends Component {
             <br />
             <Grid>
               <center>
-                <Cell col={6}>
-                  <h4 style={{ lineHeight: "50px" }}>
+                <Cell col={8}>
+                  <h3 class="font2" style={{ lineHeight: "50px" }}>
                     "PTYD is so good and we love it so much, it feels like part
                     of our family! It's so thrilling to fill our fridge every
                     week with tasty surprises!"
-                  </h4>
+                  </h3>
                   <br />
                 </Cell>{" "}
                 <div style={{ backgroundColor: "black" }}>
+                  <br />
+                  <br />
+                  <br />
                   <br />
                   <br />
                 </div>
                 <br />
               </center>
             </Grid>
+            <br />
           </div>
         </div>
       </div>

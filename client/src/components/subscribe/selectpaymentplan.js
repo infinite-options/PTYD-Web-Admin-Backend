@@ -1,112 +1,152 @@
 import React, { Component } from "react";
 import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
+import IMG9 from "../../img/img9.webp";
 import { Link } from "react-router-dom";
 
-class Selectmealplan extends Component {
+class SelectPaymentPlan extends Component {
   constructor(props) {
     super(props);
-    this.state = { mealPlans: [] };
+    this.state = { meals: null, obj: null, paymentPlans: [], otherPlans: [] };
   }
 
   async componentDidMount() {
+    console.log(this.props);
+    this.setState({ obj: this.props.objectIndex });
+    this.setState({ meals: this.props.meals });
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
-    const mealPlans = api.result.MealPlans;
-    this.setState({ mealPlans });
+    const plans = api.result[this.state.obj];
+    //  const plans = plansData.Plans;
+    this.setState({ paymentPlans: plans });
+    //  const otherPlans = plansData.OtherPaymentPlans;
+    //  this.setState( {otherPlans: otherPlans} );
   }
 
   render() {
     return (
       <section class="content-section">
-        <div class="container">
+        <div class="container font2">
           <center>
-            <h1>SELECT A MEAL PLAN</h1>
+            <h2 class="font1">{this.state.meals} MEALS PAYMENT OPTIONS</h2>
             <hr class="two" />
-            <h4>
-              LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
+            <h4 class="font1">
+              <b>
+                LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
+              </b>
             </h4>
             <br></br>
+            <hr class="three" />
+            <a href="/5-meals-subscription" style={{ color: "black" }}>
+              5 MEALS
+            </a>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/10-meals-subscription" style={{ color: "black" }}>
+              10 MEALS{" "}
+            </a>{" "}
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/15-meals-subscription" style={{ color: "black" }}>
+              15 MEALS{" "}
+            </a>{" "}
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="/20-meals-subscription" style={{ color: "black" }}>
+              20 MEALS{" "}
+            </a>
+            <hr class="three" />
+            <br></br>
             <CardDeck>
-              {this.state.mealPlans.map(mealPlan => (
+              {this.state.paymentPlans.map(paymentPlan => (
                 <Card
                   style={{
                     maxWidth: "20rem",
                     boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                   }}
                 >
-                  <div class="border border-dark" Style="height:100%">
+                  {" "}
+                  <span class="border border-dark" style={{}}>
                     <Card.Img
-                      class="blackM"
+                      class="black"
                       variant="top"
-                      src={mealPlan.photo_URL}
+                      src={paymentPlan.photo_URL}
                     />
                     <div
-                      class="selectmeal-center"
+                      class="mealoption-center"
                       style={{
                         marginBottom: "10%",
-                        fontSize: "30px",
+                        fontSize: "100px",
                         textShadow: "2px 2px 4px #FFEFB0",
                         lineHeight: "35px",
                         color: "white"
                       }}
                     >
-                      {mealPlan.num_meals} MEALS
+                      {paymentPlan.num_meals}
                     </div>
                     <Card.Body>
                       <Card.Title>
-                        <b>{mealPlan.num_meals} MEALS WEEKLY</b>
+                        <b>{paymentPlan.payment_frequency.toUpperCase()}</b>
                       </Card.Title>
                       <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
-                        from ${mealPlan.meal_plan_price_per_meal.toFixed(2)} per
+                        ${paymentPlan.meal_plan_price_per_meal.toFixed(2)} per
                         meal
                       </Card.Text>
-                      <Card.Text style={{ fontSize: "13px" }}>
-                        {mealPlan.plan_headline}
-                      </Card.Text>
-                      <Card.Text>
-                        STARTING AT ${mealPlan.meal_plan_price.toFixed(2)} /week
-                      </Card.Text>
+                      <br></br>
+                      <Card.Title>
+                        ${paymentPlan.meal_plan_price.toFixed(2)} /week
+                      </Card.Title>
                       <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>
                       <Link
                         style={{ fontFamily: "Kalam", color: "white" }}
-                        to={mealPlan.RouteOnclick}
+                        to={{
+                          pathname: "/checkout",
+                          item: {
+                            name: `${
+                              paymentPlan.meal_plan_desc
+                            } Subscription - $${paymentPlan.meal_plan_price.toFixed(
+                              2
+                            )} /week`,
+                            total: paymentPlan.meal_plan_price.toFixed(2)
+                          }
+                        }}
                       >
                         <button
                           type="button"
-                          class="btn2 btn2-primary"
+                          class="btn2 btn2-primary font4"
                           style={{
                             marginTop: "10px",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
+                            paddingLeft: "30px",
+                            paddingRight: "30px",
                             paddingTop: "5px",
                             paddingBottom: "5px",
                             color: "white",
                             fontSize: "15px"
                           }}
                         >
-                          CHOOSE {mealPlan.num_meals} MEALS
+                          CHECKOUT
                         </button>
                       </Link>
+                      <img
+                        class="img-fluid"
+                        src={IMG9}
+                        alt=""
+                        style={{
+                          width: "90%"
+                        }}
+                      />
                     </Card.Body>
-                    <Card.Footer Style="bottom:0px; ">
-                      <large className="text-muted">
-                        {mealPlan.plan_footer}
-                      </large>
-                    </Card.Footer>
-                  </div>
+                  </span>
                 </Card>
               ))}
             </CardDeck>
-
             <br></br>
             <br></br>
             <hr></hr>
             <br></br>
             <br></br>
-            <h3 style={{ color: "#196F3D" }}>Our Customers Say</h3>
+            <h3 class="font1" style={{ color: "#196F3D" }}>
+              Our Customers Say
+            </h3>
             <Container>
               <Row style={{ fontSize: "20px" }}>
                 <Col>
@@ -201,4 +241,4 @@ class Selectmealplan extends Component {
   }
 }
 
-export default Selectmealplan;
+export default SelectPaymentPlan;

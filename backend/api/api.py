@@ -236,7 +236,7 @@ class Meals(Resource):
 
     def jsonifyAddons(self, query, mealKeys):
         json = {}
-        for key in [('Addons', 'Add-ons'), ('Misc', 'Miscellaneous')]:
+        for key in [('Addons', 'Add-on Loocal Treats')]:
             json[key[0]] = {'Category': key[1], 'Menu': []}
         decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
                        'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
@@ -255,10 +255,9 @@ class Meals(Resource):
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
 #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
-            if 'Add_On' in rowDict['menu_category']:
-                json['Addons']['Menu'].append(rowDict)
-            else:
-                json['Misc']['Menu'].append(rowDict)
+            json['Addons']['Menu'].append(rowDict)
+
+        print(json)
         return json
 
     # HTTP method GET
@@ -379,6 +378,7 @@ class Meals(Resource):
 #               raise BadRequest('Request failed, please try again later.')
 #           finally:
 #               closeRdsConn(cur, conn)
+
 
 class Accounts(Resource):
     global RDS_PW
