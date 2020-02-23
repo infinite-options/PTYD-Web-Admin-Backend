@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Question from "./question";
-import { Card, Accordion, Button } from "react-bootstrap";
+import { Card, Accordion } from "react-bootstrap";
 
 class Faq extends Component {
   render() {

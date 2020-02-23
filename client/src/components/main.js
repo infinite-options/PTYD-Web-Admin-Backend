@@ -4,18 +4,18 @@ import { Switch } from "react-router-dom";
 import AppliedRoute from "./AppliedRoute";
 
 import LandingPage from "./landingpage";
-import SelectMealPlan from "./selectmealplan";
-import SelectPaymentPlan from "./selectpaymentplan";
-import WeeklyMenu from "./weeklymenu";
-import Checkout from "./checkout";
+import SelectMealPlan from "./subscribe/selectmealplan";
+import SelectPaymentPlan from "./subscribe/selectpaymentplan";
+import WeeklyMenu from "./menu/weeklymenu";
+import Checkout from "./subscribe/checkout";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
-import HowItWorks from "./howitworks";
-import OurStory from "./ourstory";
-import FaQ from "./faq";
-import JobS from "./jobs";
+import HowItWorks from "./about/howitworks";
+import OurStory from "./about/ourstory";
+import FaQ from "./about/faq";
+import JobS from "./about/jobs";
 import Get100 from "./get100";
-import MealSchedule from "./mealschedule";
+import MealSchedule from "./menu/mealschedule";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";

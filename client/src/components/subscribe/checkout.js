@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { Button, Form, Row, Col, Container } from "react-bootstrap";
-import TruckIcon from "../img/prepTruckIcon.png";
+import TruckIcon from "../../img/prepTruckIcon.png";
 
 class Checkout extends Component {
   render() {

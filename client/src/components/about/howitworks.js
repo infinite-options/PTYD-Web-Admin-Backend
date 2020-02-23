@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-import IMG3 from "../img/img3.jpg";
-import IMG7 from "../img/img7.jpg";
-import IMG8 from "../img/img8.jpeg";
-import HOW1 from "../img/how1.png";
-import HOW2 from "../img/how2.png";
-import HOW3 from "../img/how3.png";
-import HOW4 from "../img/how4.png";
-import TEMP from "../img/temp.jpg";
-import HUMAN1 from "../img/human1.png";
-import HUMAN2 from "../img/human2.png";
-import HUMAN3 from "../img/human3.png";
+import HOW1 from "../../img/how1.png";
+import HOW2 from "../../img/how2.png";
+import HOW3 from "../../img/how3.png";
+import HOW4 from "../../img/how4.png";
+import HUMAN1 from "../../img/human1.png";
+import HUMAN2 from "../../img/human2.png";
+import HUMAN3 from "../../img/human3.png";
 import { Row, Col, Card, CardColumns } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 

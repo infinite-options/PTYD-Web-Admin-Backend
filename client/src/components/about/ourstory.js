@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { Grid, Cell, Center } from "react-mdl";
-import IMG8 from "../img/img8.jpeg";
-import HEATHER from "../img/heather.png";
-import FAIEZ from "../img/faiez.png";
-import MICHAEL from "../img/Michael.png";
-import KAYLA from "../img/Kayla.png";
-import MAURICE from "../img/Maurice.png";
-import ANNA from "../img/Anna.png";
-import THOMAS from "../img/Thomas.png";
-import JUSTIN from "../img/Justin.png";
-import COMPANY from "../img/company.png";
+import { Grid, Cell } from "react-mdl";
+import HEATHER from "../../img/heather.png";
+import FAIEZ from "../../img/faiez.png";
+import MICHAEL from "../../img/Michael.png";
+import KAYLA from "../../img/Kayla.png";
+import MAURICE from "../../img/Maurice.png";
+import ANNA from "../../img/Anna.png";
+import THOMAS from "../../img/Thomas.png";
+import JUSTIN from "../../img/Justin.png";
+import COMPANY from "../../img/company.png";
 
 class Ourstory extends Component {
   render() {

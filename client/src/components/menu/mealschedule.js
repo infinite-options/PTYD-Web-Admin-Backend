@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { ButtonToolbar, Button } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
-import IMG8 from "../img/img8.jpeg";
+import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 
 class Mealschedule extends Component {

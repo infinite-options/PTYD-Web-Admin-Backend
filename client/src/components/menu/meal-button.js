@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import FINDUS1 from "../img/findus1.png";
 import { Grid, Cell } from "react-mdl";
 import EachMeal from "./each-meal";
 
