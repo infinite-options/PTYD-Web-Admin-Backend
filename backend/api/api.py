@@ -664,7 +664,6 @@ class ActiveSubs(Resource):
             query = runSelectQuery(queries[0], cur)
 
             items = self.jsonifyActiveSubs(query, keys)
-            print(items)
 
             response['message'] = 'Request successful.'
             response['result'] = items
