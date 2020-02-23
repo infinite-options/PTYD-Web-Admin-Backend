@@ -41,7 +41,6 @@ class Mealschedule extends Component {
       create_date: "2018-08-27",
       last_update: "2019-09-14",
       activeBool: "Yes",
-      MaximumMeals: 5,
 
       last_delivery: "2020-02-08",
       referral_source: "Website",
@@ -104,7 +103,6 @@ class Mealschedule extends Component {
 
   render() {
     console.log("max meal testing................................");
-    console.log(this.state.user.MaximumMeals);
 
     return (
       <div>
