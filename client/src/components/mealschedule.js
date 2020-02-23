@@ -25,6 +25,7 @@ class Mealschedule extends Component {
     console.log(this.state);
 
     let currUser = {
+      num_meals: null,
       user_uid: "null",
       user_name: null,
       first_name: null,
@@ -41,6 +42,8 @@ class Mealschedule extends Component {
       create_date: "2018-08-27",
       last_update: "2019-09-14",
       activeBool: "Yes",
+      MaximumMeals: 5,
+
       last_delivery: "2020-02-08",
       referral_source: "Website",
       delivery_note: null,
@@ -60,16 +63,22 @@ class Mealschedule extends Component {
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
 
-    if (this.user_uid != "null") {
+    if (this.state.user_uid != null) {
+      console.log("tanny2 says");
+      console.log(this.state.user_uid);
+      console.log("tanny3 says");
+
       const users = await fetch(this.props.USERS_API_URL);
       const usersApi = await users.json();
       const Ausers = usersApi.result;
       console.log(Ausers);
       console.log(this.state.user_uid);
       for (let i in Ausers) {
-        // console.log(Ausers[i].user_uid)
+        console.log(Ausers[i]);
         if (Ausers[i].user_uid == this.state.user_uid) {
+          //error bc this.state.user_uid == "hello"
           currUser = Ausers[i];
+          console.log("tanny says");
           console.log(currUser);
         }
       }
@@ -95,6 +104,9 @@ class Mealschedule extends Component {
   }
 
   render() {
+    console.log("max meal testing................................");
+    console.log(this.state.user.MaximumMeals);
+
     return (
       <div>
         <section class="content-section">
@@ -135,14 +147,18 @@ class Mealschedule extends Component {
                   Make Account Changes
                 </button>
                 <br />
-                <h4>Subscription Details</h4> <p>My Subscription: {this.state.user.Subscription}</p>
+                <h4>Subscription Details</h4>{" "}
+                <p>My Subscription: {this.state.user.Subscription}</p>
                 <p>Payment Plan: {this.state.user.PaymentPlan}</p>
-                <p>Paid Weeks Remaining: {this.state.user.PaidWeeksRemaining}</p>
+                <p>
+                  Paid Weeks Remaining: {this.state.user.PaidWeeksRemaining}
+                </p>
                 <p>Next Charge: ${this.state.user.NextCharge.toFixed(2)}</p>
                 <p>Next Charge Date: {this.state.user.NextChargeDate}</p>
                 <p>Coupons:</p>
                 <p>Account Status: {this.state.user.purchase_status}</p>
-                <h4>Credit Card Details</h4> <p>Credit Card: {this.state.user.cc_num_secret}</p>
+                <h4>Credit Card Details</h4>{" "}
+                <p>Credit Card: {this.state.user.cc_num_secret}</p>
                 <p>Expiration Date: {this.state.user.cc_exp_date}</p>
                 <p>CVV: {this.state.user.cc_cvv_secret}</p>
                 <h4>Delivery Details</h4>{" "}
@@ -168,6 +184,7 @@ class Mealschedule extends Component {
                       date2={eachWeek.mon}
                       menu={eachWeek.menu}
                       addons={eachWeek.addons}
+                      maxmeals={this.state.user.MaximumMeals}
                     />
                   ))}
                 </div>

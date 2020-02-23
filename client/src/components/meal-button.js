@@ -21,7 +21,8 @@ export default class MealButton extends Component {
     requestModal: false,
     // buttonDisabled: true,
     buttonSelectKeepColor: false,
-    buttonAddOnKeepColor: false
+    buttonAddOnKeepColor: false,
+    maxmeals: this.props.maxmeals
   };
 
   closeButtonSelect = () => {
@@ -288,6 +289,13 @@ export default class MealButton extends Component {
                         meal.meal_sat
                       }
                       imgurl={meal.meal_photo_url}
+                      maxmeals={this.state.maxmeals}
+                      incrementMaxMeal={() => {
+                        this.setState({ maxmeals: this.state.maxmeals + 1 });
+                      }}
+                      decrementMaxMeal={() => {
+                        this.setState({ maxmeals: this.state.maxmeals - 1 });
+                      }}
                     />
                   </Cell>
                 ))}
