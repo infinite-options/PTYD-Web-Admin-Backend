@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Cell } from "react-mdl";
 import EachMeal from "./each-meal";
+import EachAddon from "./each-addon";
 
 import { ButtonToolbar, Button, Modal, Form, Card } from "react-bootstrap";
 
@@ -37,12 +38,12 @@ export default class MealButton extends Component {
     });
     console.log("addon");
   };
-  keepButtonAddOn = () => {
-    this.setState({
-      buttonAddOn: false,
-      buttonAddOnKeepColor: true
-    });
-  };
+  // keepButtonAddOn = () => {
+  //   this.setState({
+  //     buttonAddOn: false,
+  //     buttonAddOnKeepColor: true
+  //   });
+  // };
 
   changeButtonS = () => {
     this.setState({
@@ -355,7 +356,7 @@ export default class MealButton extends Component {
                 </Cell>
                 {this.props.addons[key].Menu.map(meal => (
                   <Cell col={4}>
-                    <EachMeal
+                    <EachAddon
                       mealTitle={meal.meal_desc}
                       ingridents="Ingredients: Not Yet in Database"
                       detail={
@@ -388,9 +389,7 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary" onClick={this.keepButtonAddOn}>
-              Save changes
-            </Button>
+            <Button variant="primary">Save changes</Button>
           </center>
         </Card.Body>
       </Card>
