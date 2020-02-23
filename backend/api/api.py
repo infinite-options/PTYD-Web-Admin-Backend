@@ -624,6 +624,57 @@ class Account(Resource):
         finally:
             closeRdsConn(cur, conn)
 
+class ActiveSubs(Resource):
+    global RDS_PW
+
+    def jsonifyActiveSubs(self, query, rowDictKeys):
+        json = []
+        for row in query:
+            rowDict = {}
+            for element in enumerate(row):
+                key = rowDictKeys[element[0]]
+                value = element[1]
+                rowDict[key] = value
+            json.append(rowDict)
+        return json
+
+    def get(self):
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = []
+
+            response = {}
+
+            queries = [
+                """ SELECT 
+                    S.recipient_id,
+                    CONCAT(U.first_name,\'\',U.last_name) as \'name\',
+                    U.user_email,
+                    U.phone_number,
+                    S.subscription_status
+                    from ptyd_subscription S
+                    left join ptyd_user_account U
+                    on S.recipient_id = U.user_uid
+                    where S.subscription_status = \'active\';"""]
+
+            keys = ('recipient_id', 'name', 'user_email', 'phone_number', 'subscription_status')
+
+            query = runSelectQuery(queries[0], cur)
+
+            items = self.jsonifyActiveSubs(query, keys)
+            print(items)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
+
 class SignUp(Resource):
     global RDS_PW
 
@@ -639,13 +690,14 @@ class SignUp(Resource):
                 'lastname': lastname
             }
         }
-        
+
 # Define API routes
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 api.add_resource(Account, '/api/v1/account/<string:accName>/<string:accPass>')
 api.add_resource(SignUp, '/api/v1/signup/<string:username>/<string:password>/<string:email>/<string:firstname>/<string:lastname>')
+api.add_resource(ActiveSubs, '/api/v1/activesubs')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
