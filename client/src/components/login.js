@@ -42,7 +42,7 @@ export default function Login (props) {
   }
 
   async function grabLoginInfoForUser(userName, userPass) {
-    const res = await fetch('http://127.0.0.1:2000/api/v1/account/'+ userName + '/' + userPass);
+    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + userPass);
     const api = await res.json();
     const login = api.result;
     console.log(login);

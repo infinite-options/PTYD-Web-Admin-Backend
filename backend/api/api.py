@@ -257,7 +257,6 @@ class Meals(Resource):
 #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
             json['Addons']['Menu'].append(rowDict)
 
-        print(json)
         return json
 
     # HTTP method GET

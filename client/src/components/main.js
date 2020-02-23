@@ -165,7 +165,10 @@ export default function Main({ appProps }) {
         exact
         path="/signup"
         component={SignUp}
-        appProps={appProps}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}signup`,
+        }}
       />
       <AppliedRoute
         exact
@@ -173,7 +176,8 @@ export default function Main({ appProps }) {
         component={Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}accounts`
+          API_URL: `${DEV_URL}accounts`,
+          SINGLE_ACC_API_URL: `${DEV_URL}account`
         }}
       />
       <AppliedRoute

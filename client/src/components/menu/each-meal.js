@@ -22,7 +22,7 @@ class EachMeal extends Component {
               </div>
             )}
           </h6>
-          <h4>{this.props.maxmeals}</h4>
+          {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
 
         <Grid>

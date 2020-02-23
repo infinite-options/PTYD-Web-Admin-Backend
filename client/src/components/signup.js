@@ -15,7 +15,7 @@ function SignUp (props)  {
     const [lastname, setLastName] = useState("");
 
     async function sendForm() {
-        window.open("http://127.0.0.1:2000/api/v1/signup/" + username + "/" + password + "/" + email + "/" + firstname + "/" + lastname);
+        window.open(props.API_URL + "/" + username + "/" + password + "/" + email + "/" + firstname + "/" + lastname);
         return "success";
     }
 
