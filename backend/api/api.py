@@ -553,11 +553,100 @@ class Accounts(Resource):
         finally:
             closeRdsConn(cur, conn)
 
+class Account(Resource):
+    global RDS_PW
 
+    # Format queried tuples into JSON
+    def jsonifyAccounts(self, query, rowDictKeys):
+        json = []
+        dateKeys = ['create_date', 'last_update', 'last_delivery']
+        for row in query:
+            rowDict = {}
+            for element in enumerate(row):
+                key = rowDictKeys[element[0]]
+                value = element[1]
+                if key in dateKeys:
+                    value = value.strftime("%Y-%m-%d")
+                rowDict[key] = value
+            rowDict['password_sha512'] = sha512(
+                rowDict['user_name'].encode()).hexdigest()
+            json.append(rowDict)
+        return json
+
+    # HTTP method GET
+    def get(self, accName, accPass):
+        response = {}
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = []
+
+            queries = [
+                """ SELECT
+                        user_uid,
+                        user_name,
+                        first_name,
+                        last_name,
+                        user_email,
+                        phone_number,
+                        user_address,
+                        address_unit,
+                        user_city,
+                        user_state,
+                        user_zip,
+                        user_region,
+                        user_gender,
+                        create_date,
+                        last_update,
+                        activeBool,
+                        last_delivery,
+                        referral_source,
+                        user_note
+                    FROM ptyd_accounts""" +
+                    "\nWHERE user_name = " + "'" + accName + "' AND user_state = 'TX';"]
+
+            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city',
+                           'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
+            query = runSelectQuery(queries[0], cur)
+
+            items = self.jsonifyAccounts(query, accountKeys)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            passCheck = sha512(accPass.encode()).hexdigest()
+            if passCheck == items[0]['password_sha512']:
+                return response, 200
+            else:
+                return "Request failed, wrong password.", 400 
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
+
+class SignUp(Resource):
+    global RDS_PW
+
+    # HTTP method POST
+    def get(self, username, password, email, firstname, lastname):
+        return {
+            'message': 'request successful',
+            'new_user': {
+                'username': username,
+                'email': email,
+                'password': password,
+                'firstname': firstname,
+                'lastname': lastname
+            }
+        }
+        
 # Define API routes
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
+api.add_resource(Account, '/api/v1/account/<string:accName>/<string:accPass>')
+api.add_resource(SignUp, '/api/v1/signup/<string:username>/<string:password>/<string:email>/<string:firstname>/<string:lastname>')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
