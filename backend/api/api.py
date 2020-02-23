@@ -440,7 +440,7 @@ class Account(Resource):
                         referral_source,
                         user_note
                     FROM ptyd_accounts""" +
-                    "\nWHERE user_name = " + "'" + accName + "';"]
+                    "\nWHERE user_name = " + "'" + accName + "' AND user_state = 'TX';"]
 
             accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city',
                            'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
@@ -451,7 +451,11 @@ class Account(Resource):
             response['message'] = 'Request successful.'
             response['result'] = items
 
-            return response, 200
+            passCheck = sha512(accPass.encode()).hexdigest()
+            if passCheck == items[0]['password_sha512']:
+                return response, 200
+            else:
+                return "Request failed, wrong password.", 400 
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -461,10 +465,16 @@ class SignUp(Resource):
     global RDS_PW
 
     # HTTP method POST
-    def get(self, newAccName):
+    def get(self, username, password, email, firstname, lastname):
         return {
             'message': 'request successful',
-            'newAccName': newAccName
+            'new_user': {
+                'username': username,
+                'email': email,
+                'password': password,
+                'firstname': firstname,
+                'lastname': lastname
+            }
         }
         
 
@@ -473,7 +483,7 @@ api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 api.add_resource(Account, '/api/v1/account/<string:accName>/<string:accPass>')
-api.add_resource(SignUp, '/api/v1/signup/<string:newAccName>')
+api.add_resource(SignUp, '/api/v1/signup/<string:username>/<string:password>/<string:email>/<string:firstname>/<string:lastname>')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)

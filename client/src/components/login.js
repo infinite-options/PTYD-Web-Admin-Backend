@@ -41,24 +41,24 @@ export default function Login (props) {
     setUsers(logins);
   }
 
-  async function grabLoginInfoForUser(userName) {
-    const res = await fetch('http://127.0.0.1:2000/api/v1/account/'+ userName + '/bed');
+  async function grabLoginInfoForUser(userName, userPass) {
+    const res = await fetch('http://127.0.0.1:2000/api/v1/account/'+ userName + '/' + userPass);
     const api = await res.json();
     const login = api.result;
     console.log(login);
-    setUsers(login);
-  }
-
-  async function grabLoginInfoForUser2(userName) {
-    const res = await fetch('http://127.0.0.1:2000/api/v1/account/'+ userName + '/bed');
-    const api = await res.json();
-    const login = await api.result;
-    return await login;
+    return login;
   }
 
   function checkLogin() {
-    grabLoginInfoForUser(email);
-    let arr = users
+    let t = []
+    grabLoginInfoForUser(email, password)
+    .then(res => login(res))
+    .catch(err => console.log(err));
+    login(t);
+  }
+
+  function login(user) {
+    let arr = user
     console.log(arr);
     for (var i = 0; i < arr.length; i++) {
       var u = arr[i].user_name;
@@ -88,7 +88,7 @@ export default function Login (props) {
         <div class="row">
             <Col></Col>
 
-            <Container className="justify-content-center">
+            <Container className="justify-content-center bg-success">
               <Row>
                 <Col>               
                   <Form onSubmit={handleSubmit} autoComplete="off">
@@ -118,7 +118,7 @@ export default function Login (props) {
                       />
                     </InputGroup>
 
-                    <Button variant="success" onClick={ checkLogin } disabled={!validateForm()} type="submit" >Sign In</Button>
+                    <Button variant="dark" onClick={ checkLogin } disabled={!validateForm()} type="submit" >Sign In</Button>
 
                   </Form>
                 </Col>
