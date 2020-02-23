@@ -33,9 +33,15 @@ export default class MealButton extends Component {
   closeButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
-      buttonAddOnKeepColor: true
+      buttonAddOnKeepColor: false
     });
     console.log("addon");
+  };
+  keepButtonAddOn = () => {
+    this.setState({
+      buttonAddOn: false,
+      buttonAddOnKeepColor: true
+    });
   };
 
   changeButtonS = () => {
@@ -241,7 +247,7 @@ export default class MealButton extends Component {
             }
             onClick={this.changeButtonAddOn}
           >
-            Add On
+            Add Local Treats
           </Button>
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -267,14 +273,12 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary">Save changes</Button>
           </center>
         </Card.Header>
         {Object.keys(this.props.menu).map(key => (
           <div>
             <Card.Body>
               <Grid>
-                <center></center>
                 <Cell col={12}>
                   <center>
                     <h4>{this.props.menu[key].Category}</h4>
@@ -334,14 +338,21 @@ export default class MealButton extends Component {
       <Card style={{ width: "100%" }}>
         <Card.Header>
           <center>
-            <Modal.Title>title</Modal.Title>
+            <Modal.Title>Add Local Treats</Modal.Title>
+            <Button variant="secondary" onClick={this.closeButtonAddOn}>
+              Close
+            </Button>
           </center>
         </Card.Header>
         {Object.keys(this.props.addons).map(key => (
           <div>
             <Card.Body>
               <Grid>
-                <h3>{this.props.addons[key].Category}</h3>
+                <Cell col={12}>
+                  <center>
+                    <h4>{this.props.addons[key].Category}</h4>
+                  </center>
+                </Cell>
                 {this.props.addons[key].Menu.map(meal => (
                   <Cell col={4}>
                     <EachMeal
@@ -377,7 +388,9 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary">Save changes</Button>
+            <Button variant="primary" onClick={this.keepButtonAddOn}>
+              Save changes
+            </Button>
           </center>
         </Card.Body>
       </Card>
