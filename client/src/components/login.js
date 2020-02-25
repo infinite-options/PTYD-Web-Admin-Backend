@@ -9,6 +9,8 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 
 import crypto from "crypto";
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 export default function Login (props) {
 
@@ -26,20 +28,24 @@ export default function Login (props) {
   }
 
   useEffect(() => {
-    onLoad();
-    //componentDidMount();
+    // onLoad();
+    // componentDidMount();
   }, []);
-
-  async function onLoad() {
-    // fill it up when needed
+ 
+  const responseGoogle = (response) => {
+    console.log(response);
   }
 
-  async function componentDidMount() {
+  const responseFacebook = (response) => {
+    console.log(response);
+  }
+
+  /* async function componentDidMount() {
     const res = await fetch(props.API_URL);
     const api = await res.json();
     const logins = api.result;
     setUsers(logins);
-  }
+  } */
 
   async function grabLoginInfoForUser(userName, userPass) {
     const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + userPass);
@@ -122,6 +128,36 @@ export default function Login (props) {
 
                   </Form>
                 </Col>
+              </Row>
+                <Col>
+                  <h4>
+                    Or Login With Social Media!
+                  </h4>
+                  <Row>
+                    <Col>
+                      <FacebookLogin
+                        appId="1088597931155576"
+                        autoLoad={true}
+                        fields="name,email,picture"
+                        onClick={console.log('test')}
+                        callback={responseFacebook} 
+                        style="width:100px"
+                      />
+                    </Col>
+                    
+                    <Col>
+                      <GoogleLogin
+                        clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                        buttonText="Login"
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        cookiePolicy={'single_host_origin'}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              <Row>
+
               </Row>
             </Container>
 
