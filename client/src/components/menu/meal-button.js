@@ -355,44 +355,53 @@ export default class MealButton extends Component {
             </Button>
           </center>
         </Card.Header>
-        {Object.keys(this.props.addons).map(key => (
+        {this.state.addonActivated ? (
           <div>
-            <Card.Body>
-              {this.state.addonActivated ? (
-                <Grid>
-                  <Cell col={12}>
-                    <center>
-                      <h4>{this.props.addons[key].Category}</h4>
-                    </center>
-                  </Cell>
-
-                  {this.props.addons[key].Menu.map(meal => (
-                    <Cell col={4}>
-                      <EachAddon
-                        mealTitle={meal.meal_desc}
-                        ingridents="Ingredients: Not Yet in Database"
-                        detail={
-                          "Cal " +
-                          meal.meal_calories +
-                          ", Prot " +
-                          meal.meal_protein +
-                          ", Carb " +
-                          meal.meal_carbs +
-                          ", Sug " +
-                          meal.meal_sugar +
-                          ", Fib " +
-                          meal.meal_fiber +
-                          ", Fat " +
-                          meal.meal_fat +
-                          ", Sat " +
-                          meal.meal_sat
-                        }
-                        imgurl={meal.meal_photo_url}
-                      />
+            {Object.keys(this.props.addons).map(key => (
+              <div>
+                <Card.Body>
+                  <Grid>
+                    <Cell col={12}>
+                      <center>
+                        <h4>{this.props.addons[key].Category}</h4>
+                      </center>
                     </Cell>
-                  ))}
-                </Grid>
-              ) : (
+
+                    {this.props.addons[key].Menu.map(meal => (
+                      <Cell col={4}>
+                        <EachAddon
+                          mealTitle={meal.meal_desc}
+                          ingridents="Ingredients: Not Yet in Database"
+                          detail={
+                            "Cal " +
+                            meal.meal_calories +
+                            ", Prot " +
+                            meal.meal_protein +
+                            ", Carb " +
+                            meal.meal_carbs +
+                            ", Sug " +
+                            meal.meal_sugar +
+                            ", Fib " +
+                            meal.meal_fiber +
+                            ", Fat " +
+                            meal.meal_fat +
+                            ", Sat " +
+                            meal.meal_sat
+                          }
+                          imgurl={meal.meal_photo_url}
+                        />
+                      </Cell>
+                    ))}
+                  </Grid>
+                </Card.Body>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>
+            {/* {Object.keys(this.props.addons["Addons"]).map(key => ( */}
+            <div>
+              <Card.Body>
                 <Grid>
                   <Cell col={12}>
                     <center>
@@ -426,10 +435,11 @@ export default class MealButton extends Component {
                     </Cell>
                   ))}
                 </Grid>
-              )}
-            </Card.Body>
+              </Card.Body>
+            </div>
+            {/* ))} */}
           </div>
-        ))}
+        )}
         <Card.Body>
           <center>
             <Button variant="secondary" onClick={this.closeButtonAddOn}>
