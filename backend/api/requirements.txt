@@ -3,3 +3,5 @@ flask-restful
 flask_cors
 pymysql
 zappa
+OAuth
+Authlib

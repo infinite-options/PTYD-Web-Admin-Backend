@@ -14,7 +14,11 @@ import sys
 import json
 import pymysql
 
+# Authentication & Authorization
+from authlib.flask.client import OAuth
+
 app = Flask(__name__)
+oauth = OAuth(app)
 
 # Allow cross-origin resource sharing
 cors = CORS(app, resources={r'/api/*': {'origins': '*'}})
