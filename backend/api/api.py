@@ -40,8 +40,6 @@ def RdsPw():
 RDS_PW = RdsPw()
 
 # Connect to RDS
-
-
 def getRdsConn(RDS_PW):
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
@@ -62,8 +60,6 @@ def getRdsConn(RDS_PW):
         raise Exception("RDS Connection failed.")
 
 # Close RDS connection
-
-
 def closeRdsConn(cur, conn):
     try:
         cur.close()
@@ -74,8 +70,6 @@ def closeRdsConn(cur, conn):
 
 # Runs a select query with the SQL query string and pymysql cursor as arguments
 # Returns a list of Python tuples
-
-
 def runSelectQuery(query, cur):
     try:
         cur.execute(query)
@@ -84,9 +78,106 @@ def runSelectQuery(query, cur):
     except:
         raise Exception("Could not run select query and/or return data")
 
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# ----------------------------------------------
+# Template API
+# ----------------------------------------------
+# Each API is defined in a class and
+# inherits the Resource class from flask_restful.
+#
+# We can define GET and POST APIs in each class
+# with get() and post() functions. Pass self as
+# a parameter to enable recursive use of members.
+#
+# In each function, the try block must connect to
+# the database, run queries, and format them as
+# needed. The queried data can then be returned
+# along with the HTTP response code 200.
+#
+# If the try block fails, we can catch exceptions
+# and raise a BadRequest.
+#
+# Finally, we must close the connection in the
+# finally block.
+# ----------------------------------------------
+
+class NewApiTemplate(Resource):
+    # This fetches the global variable RDS_PW
+    # and stores it in the class's local
+    # instance of RDS_PW
+    #
+    # When running this Python script locally,
+    # we pass the password to the database as
+    # a command line argument. This argument
+    # will be stored into the global variable
+    # RDS_PW.
+    global RDS_PW
+
+    # This is an API that will be called when
+    # HTTP makes a GET request on the URL
+    # for this API
+    def get(self):
+        try:
+            # This will connect to our database
+            # Refer to the function getRdsConn()
+            # above for more info
+            db = getRdsConn(RDS_PW)
+
+            # The above function will create a
+            # Connection object defined in the
+            # pymysql module. We will store it
+            # into the object conn.
+            conn = db[0]
+
+            # getRdsConn() will also initialize
+            # a pymysql cursor object from our
+            # Connection object. This cursor can
+            # run MySQL queries.
+            cur = db[1]
+
+            # Initialize response
+            response = {}
+
+            # runSelectQuery() is a function
+            # written above that will run a
+            # SELECT query and return a tuple of
+            # Python tuples. This will be
+            # stored into query.
+            query = runSelectQuery("SELECT meal_plan_id, meal_plan_desc FROM ptyd_meal_plans;", cur)
+
+            # Successful message
+            response['message'] = 'Request successful.'
+
+            # We can manipulate the query object
+            # from earlier as needed to format
+            # our API data to our liking.
+            response['result'] = query
+
+            # Return the response object and the
+            # HTTP code 200 to indicate the
+            # GET request was successful.
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
+
+# ----------------------------------------------
+# We must also define a route for each API.
+# Follow this template below to do so. Pass the
+# class name and desired route as parameters.
+# ----------------------------------------------
+
+api.add_resource(NewApiTemplate, '/api/v1/newapitemplate')
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 # Plans API
-
-
 class Plans(Resource):
     global RDS_PW
 
@@ -199,8 +290,6 @@ class Plans(Resource):
             closeRdsConn(cur, conn)
 
 # Meals API
-
-
 class Meals(Resource):
     global RDS_PW
 
