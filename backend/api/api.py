@@ -717,24 +717,41 @@ class SignUp(Resource):
     global RDS_PW
 
     # HTTP method POST
-    def get(self, username, password, email, firstname, lastname):
-        return {
-            'message': 'request successful',
-            'new_user': {
-                'username': username,
-                'email': email,
-                'password': password,
-                'firstname': firstname,
-                'lastname': lastname
-            }
-        }
-        
+    def post(self):
+        try:
+            response = {}
+
+            data = request.get_json(force=True)
+
+            Username = data['Username']
+            FirstName = data['FirstName']
+            LastName = data['LastName']
+            Email = data['Email']
+            ConfirmEmail = data['ConfirmEmail']
+            PhoneNumber = data['PhoneNumber']
+            Password = data['Password']
+            ConfirmPassword = data['ConfirmPassword']
+            Address = data['Address']
+            AddressUnit = data['AddressUnit']
+            City = data['City']
+            State = data['State']
+            Zip = data['Zip']
+            Referral = data['Referral']
+
+            response['message'] = 'Request successful.'
+
+            print(data)
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+
 # Define API routes
 api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 api.add_resource(Account, '/api/v1/account/<string:accName>/<string:accPass>')
-api.add_resource(SignUp, '/api/v1/signup/<string:username>/<string:password>/<string:email>/<string:firstname>/<string:lastname>')
+api.add_resource(SignUp, '/api/v1/signup')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
