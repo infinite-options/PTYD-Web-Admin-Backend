@@ -135,14 +135,17 @@ export default function Login (props) {
                   </h4>
                   <Row>
                     <Col>
+                      <div Style="width:150px;"> 
                       <FacebookLogin
                         appId="1088597931155576"
                         autoLoad={true}
                         fields="name,email,picture"
                         onClick={console.log('test')}
                         callback={responseFacebook} 
-                        style="width:100px"
+                        size="small"
+                        textButton="FB Login"
                       />
+                      </div>
                     </Col>
                     
                     <Col>
