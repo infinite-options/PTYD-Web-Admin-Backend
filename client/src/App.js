@@ -214,7 +214,7 @@ const App = props => {
 
         <hr></hr>
 
-        <footer className="container text-center font2">
+        <footer className="container footer text-center font2">
           <div className="row">
             <div className="col">
               <div Style="margin-top:-10px">
