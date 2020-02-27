@@ -35,7 +35,7 @@ class EachAddon extends Component {
                   size="4"
                   value={this.state.countFood}
                   id="count"
-                  style={{ textAlign: "center" }}
+                  style={{ textAlign: "center", width: "67%" }}
                 />
                 &nbsp;
                 <input

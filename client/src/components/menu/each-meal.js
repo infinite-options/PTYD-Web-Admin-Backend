@@ -37,7 +37,7 @@ class EachMeal extends Component {
                   size="4"
                   value={this.state.countFood}
                   id="count"
-                  style={{ textAlign: "center" }}
+                  style={{ textAlign: "center", width: "67%" }}
                 />
                 &nbsp;
                 <input
@@ -57,7 +57,9 @@ class EachMeal extends Component {
                   value="+"
                   onClick={() => {
                     if (this.props.maxmeals == 0) {
-                      alert("You have selected more meals than your selection");
+                      alert(
+                        "You have selected more meals than your selection, if you wish to add more meals, please do so in 'Add Local Treats'."
+                      );
                       return;
                     }
                     this.props.decrementMaxMeal();

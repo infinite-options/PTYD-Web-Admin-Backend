@@ -251,8 +251,8 @@ export default class MealButton extends Component {
           <Button
             variant="outline-dark"
             style={
-              (this.state.buttonAddOn ? green : hide,
-              this.state.buttonAddOnKeepColor ? green : hide)
+              (this.state.buttonAddOn ? orange : hide,
+              this.state.buttonAddOnKeepColor ? orange : hide)
             }
             onClick={this.changeButtonAddOn}
           >
@@ -277,57 +277,62 @@ export default class MealButton extends Component {
       <Card style={{ width: "100%" }}>
         <Card.Header>
           <center>
-            <Modal.Title>Select Meal Menu</Modal.Title>
-            <Button variant="secondary" onClick={this.closeButtonSelect}>
-              Close
-            </Button>
-            &nbsp;&nbsp;
+            <Modal.Title>
+              Select Meal Menu{" "}
+              <Button
+                variant="secondary"
+                onClick={this.closeButtonSelect}
+                style={{ float: "right" }}
+              >
+                Close
+              </Button>
+            </Modal.Title>
           </center>
         </Card.Header>
         {Object.keys(this.props.menu).map(key => (
           <div>
-            <Card.Body>
-              <Grid>
-                <Cell col={12}>
-                  <center>
-                    <h4>{this.props.menu[key].Category}</h4>
-                  </center>
+            <Grid>
+              <Cell col={12}>
+                <center>
+                  <h4 style={{ margin: "0" }}>
+                    {this.props.menu[key].Category}
+                  </h4>
+                </center>
+              </Cell>
+              <br />
+              {this.props.menu[key].Menu.map(meal => (
+                <Cell col={4}>
+                  <EachMeal
+                    mealTitle={meal.meal_desc}
+                    ingridents="Ingredients: Not Yet in Database"
+                    detail={
+                      "Cal " +
+                      meal.meal_calories +
+                      ", Prot " +
+                      meal.meal_protein +
+                      ", Carb " +
+                      meal.meal_carbs +
+                      ", Sug " +
+                      meal.meal_sugar +
+                      ", Fib " +
+                      meal.meal_fiber +
+                      ", Fat " +
+                      meal.meal_fat +
+                      ", Sat " +
+                      meal.meal_sat
+                    }
+                    imgurl={meal.meal_photo_url}
+                    maxmeals={this.state.maxmeals}
+                    incrementMaxMeal={() => {
+                      this.setState({ maxmeals: this.state.maxmeals + 1 });
+                    }}
+                    decrementMaxMeal={() => {
+                      this.setState({ maxmeals: this.state.maxmeals - 1 });
+                    }}
+                  />
                 </Cell>
-                <br />
-                {this.props.menu[key].Menu.map(meal => (
-                  <Cell col={4}>
-                    <EachMeal
-                      mealTitle={meal.meal_desc}
-                      ingridents="Ingredients: Not Yet in Database"
-                      detail={
-                        "Cal " +
-                        meal.meal_calories +
-                        ", Prot " +
-                        meal.meal_protein +
-                        ", Carb " +
-                        meal.meal_carbs +
-                        ", Sug " +
-                        meal.meal_sugar +
-                        ", Fib " +
-                        meal.meal_fiber +
-                        ", Fat " +
-                        meal.meal_fat +
-                        ", Sat " +
-                        meal.meal_sat
-                      }
-                      imgurl={meal.meal_photo_url}
-                      maxmeals={this.state.maxmeals}
-                      incrementMaxMeal={() => {
-                        this.setState({ maxmeals: this.state.maxmeals + 1 });
-                      }}
-                      decrementMaxMeal={() => {
-                        this.setState({ maxmeals: this.state.maxmeals - 1 });
-                      }}
-                    />
-                  </Cell>
-                ))}
-              </Grid>
-            </Card.Body>
+              ))}
+            </Grid>
           </div>
         ))}
         <Card.Body>
@@ -349,67 +354,32 @@ export default class MealButton extends Component {
       <Card style={{ width: "100%" }}>
         <Card.Header>
           <center>
-            <Modal.Title>Add Local Treats</Modal.Title>
-            <Button variant="secondary" onClick={this.closeButtonAddOn}>
-              Close
-            </Button>
+            <Modal.Title>
+              Add Local Treats{" "}
+              <Button
+                variant="secondary"
+                onClick={this.closeButtonAddOn}
+                style={{ float: "right" }}
+              >
+                Close
+              </Button>
+            </Modal.Title>
           </center>
         </Card.Header>
         {this.state.addonActivated ? (
           <div>
             {Object.keys(this.props.addons).map(key => (
               <div>
-                <Card.Body>
-                  <Grid>
-                    <Cell col={12}>
-                      <center>
-                        <h4>{this.props.addons[key].Category}</h4>
-                      </center>
-                    </Cell>
-
-                    {this.props.addons[key].Menu.map(meal => (
-                      <Cell col={4}>
-                        <EachAddon
-                          mealTitle={meal.meal_desc}
-                          ingridents="Ingredients: Not Yet in Database"
-                          detail={
-                            "Cal " +
-                            meal.meal_calories +
-                            ", Prot " +
-                            meal.meal_protein +
-                            ", Carb " +
-                            meal.meal_carbs +
-                            ", Sug " +
-                            meal.meal_sugar +
-                            ", Fib " +
-                            meal.meal_fiber +
-                            ", Fat " +
-                            meal.meal_fat +
-                            ", Sat " +
-                            meal.meal_sat
-                          }
-                          imgurl={meal.meal_photo_url}
-                        />
-                      </Cell>
-                    ))}
-                  </Grid>
-                </Card.Body>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div>
-            {/* {Object.keys(this.props.addons["Addons"]).map(key => ( */}
-            <div>
-              <Card.Body>
                 <Grid>
                   <Cell col={12}>
                     <center>
-                      <h4>{this.props.addons["Addons"].Category}</h4>
+                      <h4 style={{ margin: "0" }}>
+                        {this.props.addons[key].Category}
+                      </h4>
                     </center>
                   </Cell>
 
-                  {this.props.addons["Addons"].Menu.map(meal => (
+                  {this.props.addons[key].Menu.map(meal => (
                     <Cell col={4}>
                       <EachAddon
                         mealTitle={meal.meal_desc}
@@ -435,7 +405,48 @@ export default class MealButton extends Component {
                     </Cell>
                   ))}
                 </Grid>
-              </Card.Body>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>
+            {/* {Object.keys(this.props.addons["Addons"]).map(key => ( */}
+            <div>
+              <Grid>
+                <Cell col={12}>
+                  <center>
+                    <h4 style={{ margin: "0" }}>
+                      {this.props.addons["Addons"].Category}
+                    </h4>
+                  </center>
+                </Cell>
+
+                {this.props.addons["Addons"].Menu.map(meal => (
+                  <Cell col={4}>
+                    <EachAddon
+                      mealTitle={meal.meal_desc}
+                      ingridents="Ingredients: Not Yet in Database"
+                      detail={
+                        "Cal " +
+                        meal.meal_calories +
+                        ", Prot " +
+                        meal.meal_protein +
+                        ", Carb " +
+                        meal.meal_carbs +
+                        ", Sug " +
+                        meal.meal_sugar +
+                        ", Fib " +
+                        meal.meal_fiber +
+                        ", Fat " +
+                        meal.meal_fat +
+                        ", Sat " +
+                        meal.meal_sat
+                      }
+                      imgurl={meal.meal_photo_url}
+                    />
+                  </Cell>
+                ))}
+              </Grid>
             </div>
             {/* ))} */}
           </div>
