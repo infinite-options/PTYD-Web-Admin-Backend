@@ -37,7 +37,7 @@ class EachMeal extends Component {
                   size="4"
                   value={this.state.countFood}
                   id="count"
-                  style={{ textAlign: "center", width: "67%" }}
+                  style={{ textAlign: "center", width: "90%" }}
                 />
                 &nbsp;
                 <input

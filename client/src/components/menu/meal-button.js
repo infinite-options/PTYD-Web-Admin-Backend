@@ -3,7 +3,7 @@ import { Grid, Cell } from "react-mdl";
 import EachMeal from "./each-meal";
 import EachAddon from "./each-addon";
 
-import { ButtonToolbar, Button, Modal, Form, Card } from "react-bootstrap";
+import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -118,73 +118,73 @@ export default class MealButton extends Component {
   };
   render() {
     const orange = {
-      width: "90px",
-      height: "90px",
+      width: "95px",
+      height: "95px",
       backgroundColor: "#cd790c",
       color: "white"
     };
 
     const hide = {
-      width: "90px",
-      height: "90px",
+      width: "95px",
+      height: "95px",
       backgroundColor: "white",
       color: "black"
     };
     const green = {
-      width: "90px",
-      height: "90px",
+      width: "95px",
+      height: "95px",
       backgroundColor: "#427c42",
       color: "white"
     };
 
-    function SpecialRequestModal(props) {
-      return (
-        <Modal
-          {...props}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              Special Request
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form.Group controlId="exampleForm.ControlTextarea1">
-              <Form.Control as="textarea" rows="3" />
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-            <Button onClick={props.onHide}>Close</Button>
-          </Modal.Footer>
-        </Modal>
-      );
-    }
+    // function SpecialRequestModal(props) {
+    //   return (
+    //     <Modal
+    //       {...props}
+    //       size="lg"
+    //       aria-labelledby="contained-modal-title-vcenter"
+    //       centered
+    //     >
+    //       <Modal.Header closeButton>
+    //         <Modal.Title id="contained-modal-title-vcenter">
+    //           Special Request
+    //         </Modal.Title>
+    //       </Modal.Header>
+    //       <Modal.Body>
+    //         <Form.Group controlId="exampleForm.ControlTextarea1">
+    //           <Form.Control as="textarea" rows="3" />
+    //         </Form.Group>
+    //       </Modal.Body>
+    //       <Modal.Footer>
+    //         <Button variant="primary" type="submit">
+    //           Submit
+    //         </Button>
+    //         <Button onClick={props.onHide}>Close</Button>
+    //       </Modal.Footer>
+    //     </Modal>
+    //   );
+    // }
 
-    function SpecialRequestAnimation() {
-      const [modalShow, setModalShow] = React.useState(false);
+    // function SpecialRequestAnimation() {
+    //   const [modalShow, setModalShow] = React.useState(false);
 
-      return (
-        <ButtonToolbar>
-          <Button
-            variant="outline-dark"
-            style={{ width: "90px", height: "90px" }}
-            onClick={() => setModalShow(true)}
-          >
-            Special Requests
-          </Button>
+    //   return (
+    //     <ButtonToolbar>
+    //       <Button
+    //         variant="outline-dark"
+    //         style={{ width: "90px", height: "90px" }}
+    //         onClick={() => setModalShow(true)}
+    //       >
+    //         Special Requests
+    //       </Button>
 
-          <SpecialRequestModal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-          />
-        </ButtonToolbar>
-      );
-    }
+    //       <SpecialRequestModal
+    //         show={modalShow}
+    //         onHide={() => setModalShow(false)}
+    //       />
+    //     </ButtonToolbar>
+    //   );
+    // }
     return (
       <div>
         <ButtonToolbar>
@@ -233,7 +233,8 @@ export default class MealButton extends Component {
             }
             onClick={this.changeButtonSelect}
           >
-            Select Meal
+            Select <br />
+            Meal
           </Button>
           {/* </Link> */}
           &nbsp;
@@ -259,22 +260,20 @@ export default class MealButton extends Component {
             Add Local Treats
           </Button>
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {this.SelectMealEachMeal()}
           </div>
           <div style={this.state.buttonAddOn ? {} : { display: "none" }}>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {this.SelectMealEachMealAddOn()}
           </div>
         </ButtonToolbar>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <br />
       </div>
     );
   }
 
   SelectMealEachMeal = () => {
     return (
-      <Card style={{ width: "100%" }}>
+      <Card style={{ width: "92%" }}>
         <Card.Header>
           <center>
             <Modal.Title>
@@ -351,7 +350,7 @@ export default class MealButton extends Component {
   };
   SelectMealEachMealAddOn = () => {
     return (
-      <Card style={{ width: "100%" }}>
+      <Card style={{ width: "92%" }}>
         <Card.Header>
           <center>
             <Modal.Title>
