@@ -67,7 +67,6 @@ def getRdsConn(RDS_PW):
 
 # Close RDS connection
 
-
 def closeRdsConn(cur, conn):
     try:
         cur.close()
