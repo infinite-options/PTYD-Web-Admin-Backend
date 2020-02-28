@@ -58,7 +58,7 @@ class EachMeal extends Component {
                   onClick={() => {
                     if (this.props.maxmeals == 0) {
                       alert(
-                        "You have selected more meals than your selection, if you wish to add more meals, please do so in 'Add Local Treats'."
+                        "You have selected more meals than your subscription plan allows.  Please select additional meal in the Add-Ons menu or upgrade your Subscription Plan.  Thanks PTYD"
                       );
                       return;
                     }
