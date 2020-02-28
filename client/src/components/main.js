@@ -22,6 +22,8 @@ import SignUp from "./signup";
 import Login from "./login";
 import Logout from "./logout";
 
+import Admin from "./admin";
+
 //  Live API from AWS S3 Bucket
 const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/';
 
@@ -185,6 +187,15 @@ export default function Main({ appProps }) {
         path="/logout"
         component={Logout}
         appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/admin"
+        component={Admin}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}`
+        }}
       />
       <AppliedRoute component={NotFound} />
     </Switch>

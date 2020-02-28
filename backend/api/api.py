@@ -654,3 +654,4 @@ api.add_resource(SignUp, '/api/v1/signup/<string:username>/<string:password>/<st
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=2000)
+
