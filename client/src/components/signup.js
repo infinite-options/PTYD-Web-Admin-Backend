@@ -25,6 +25,14 @@ function SignUp (props)  {
 //  const [newsUpdates, setNewsUpdates] = useState("");
 
     async function sendForm() {
+        if (email != confirmEmail) {
+            return "email mismatch";
+        }
+
+        if (password != confirmPassword) {
+            return "password mismatch";
+        }
+
         fetch(props.API_URL, {
           method: 'POST',
           headers: {
@@ -36,10 +44,8 @@ function SignUp (props)  {
             FirstName: firstname,
             LastName: lastname,
             Email: email,
-            ConfirmEmail: confirmEmail,
             PhoneNumber: phoneNumber,
             Password: password,
-            ConfirmPassword: confirmPassword,
             Address: address,
             AddressUnit: addressUnit,
             City: city,

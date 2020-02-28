@@ -719,6 +719,11 @@ class SignUp(Resource):
     # HTTP method POST
     def post(self):
         try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = []
+
             response = {}
 
             data = request.get_json(force=True)
@@ -727,10 +732,8 @@ class SignUp(Resource):
             FirstName = data['FirstName']
             LastName = data['LastName']
             Email = data['Email']
-            ConfirmEmail = data['ConfirmEmail']
             PhoneNumber = data['PhoneNumber']
             Password = data['Password']
-            ConfirmPassword = data['ConfirmPassword']
             Address = data['Address']
             AddressUnit = data['AddressUnit']
             City = data['City']
@@ -740,11 +743,13 @@ class SignUp(Resource):
 
             response['message'] = 'Request successful.'
 
-            print(data)
+            print("Received:", data)
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
 
 # Define API routes
 api.add_resource(Plans, '/api/v1/plans')

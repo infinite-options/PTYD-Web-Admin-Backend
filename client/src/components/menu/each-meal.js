@@ -49,6 +49,8 @@ class EachMeal extends Component {
                       this.setState({
                         countFood: this.state.countFood - 1
                       });
+                    console.log(this.state);
+                    console.log(this.props);
                     }
                   }}
                 />
@@ -64,7 +66,8 @@ class EachMeal extends Component {
                     this.setState({
                       countFood: this.state.countFood + 1
                     });
-                    console.log(this.state.countFood);
+                    console.log(this.state);
+                    console.log(this.props);
                   }}
                 />
               </div>
