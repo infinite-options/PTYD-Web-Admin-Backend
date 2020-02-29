@@ -5,6 +5,11 @@ class LandingPage extends Component {
     return (
       <div>
         <h1>admin Page</h1>
+        <h1>admin Page</h1>
+        <h1>admin Page</h1>
+        <h1>admin Page</h1>
+        <h1>admin Page</h1>
+        <h1>admin Page</h1>
       </div>
     );
   }

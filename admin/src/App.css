@@ -1,0 +1,52 @@
+/* navagation */
+.sidenav {
+  display: flex;
+}
+.sidenav-space {
+  flex-basis: 225px;
+}
+
+.icon-title {
+  margin-right: 0.5rem;
+}
+
+.menu {
+  padding: 1.75rem 1rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.link {
+  display: flex;
+  align-items: center;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  position: relative;
+}
+
+.sidenav-dark {
+  height: 100%;
+  background-color: #212529;
+  color: rgba(255, 255, 255, 0.5);
+}
+.sidenav-menu .menu {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link {
+  color: rgba(255, 255, 255, 0.5);
+}
+.sidenav-menu .link .icon-title {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link {
+  color: #ffff;
+}
+.sidenav-menu .link:hover {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link.active {
+  color: #fff;
+}
+.sidenav-menu .link.active .icon-title {
+  color: #fff;
+}
