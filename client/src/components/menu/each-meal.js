@@ -6,7 +6,8 @@ import { Alert } from "react-bootstrap";
 
 class EachMeal extends Component {
   state = {
-    countFood: 0
+    countFood: 0,
+    mealselected: [0]
   };
   render() {
     return (
@@ -49,8 +50,13 @@ class EachMeal extends Component {
                       this.setState({
                         countFood: this.state.countFood - 1
                       });
-                    console.log(this.state);
-                    console.log(this.props);
+                      this.setState({
+                        mealselected: this.state.mealselected - 1
+                      });
+                      this.props.mealselected(this.state.mealselected);
+                      // console.log("bbbbbbbbbbbbbb");
+                      // console.log(this.state.mealselected);
+                      // console.log(this.state.countFood);
                     }
                   }}
                 />
@@ -63,11 +69,19 @@ class EachMeal extends Component {
                       return;
                     }
                     this.props.decrementMaxMeal();
+                    // if (this.state.mealselected.length == 0) {
+                    //   this.state.mealselected.push(this.state.countFood + 1);
+                    // } else {
+                    this.setState({
+                      mealselected: this.state.mealselected + 1
+                    });
+                    this.props.mealselected(this.state.mealselected);
+                    // console.log("aaaaaaaaaaaaaaaaaaa");
+                    // console.log(this.state.mealselected);
+                    // console.log(this.state.countFood);
                     this.setState({
                       countFood: this.state.countFood + 1
                     });
-                    console.log(this.state);
-                    console.log(this.props);
                   }}
                 />
               </div>
@@ -75,6 +89,12 @@ class EachMeal extends Component {
           </Cell>
           <p>{this.props.ingridents}</p>
           <p>{this.props.detail}</p>
+          {/* {this.state.mealselected.push(
+            this.props.mealTitle
+            // this.props.ingridents,
+            // this.props.detail
+          )} */}
+          {/* {console.log(this.state.mealselected)} */}
         </Grid>
       </div>
     );

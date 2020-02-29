@@ -21,7 +21,8 @@ export default class MealButton extends Component {
     // buttonDisabled: true,
     buttonSelectKeepColor: false,
     buttonAddOnKeepColor: false,
-    maxmeals: this.props.maxmeals
+    maxmeals: this.props.maxmeals,
+    mealselected: [0]
   };
 
   closeButtonSelect = () => {
@@ -269,6 +270,12 @@ export default class MealButton extends Component {
                 {this.props.menu[key].Menu.map(meal => (
                   <Cell col={4}>
                     <EachMeal
+                      mealselected={arr => {
+                        this.setState({
+                          mealselected: arr
+                        });
+                        console.log(this.state.mealselected);
+                      }}
                       mealTitle={meal.meal_desc}
                       ingridents="Ingredients: Not Yet in Database"
                       detail={
