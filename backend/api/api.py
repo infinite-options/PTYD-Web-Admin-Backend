@@ -719,6 +719,11 @@ class Account(Resource):
 class SignUp(Resource):
     global RDS_PW
 
+    def getNewUserID(self, cur):
+        procedure = "get_new_user_id"
+        cur.execute("CALL " + procedure + ";")
+        return cur.fetchall()
+
     # HTTP method POST
     def post(self):
         try:
@@ -753,6 +758,7 @@ class SignUp(Resource):
             Referral = data['Referral']
 
             NewUserID = "RunStoredProcedure"
+#           NewUserID = self.getNewUserID(cur)
 
             queries = [
                 """ INSERT INTO ptyd_accounts

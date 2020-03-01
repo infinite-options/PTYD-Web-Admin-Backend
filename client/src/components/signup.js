@@ -23,7 +23,6 @@ function SignUp (props)  {
     const [userState, setUserState] = useState("");
     const [referral, setReferral] = useState("Social Media");
     const [weeklyUpdates, setWeeklyUpdates] = useState("");
-//  const [newsUpdates, setNewsUpdates] = useState("");
 
     async function sendForm() {
         if (email != confirmEmail) {
@@ -54,7 +53,6 @@ function SignUp (props)  {
             State: userState,
             Referral: referral,
             WeeklyUpdates: weeklyUpdates,
-//          NewsUpdates: newsUpdates,
           })
         })
 
