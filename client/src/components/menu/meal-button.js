@@ -21,6 +21,7 @@ export default class MealButton extends Component {
     // buttonDisabled: true,
     buttonSelectKeepColor: false,
     buttonAddOnKeepColor: false,
+    mealQuantities: this.props.mealQuantities,
     maxmeals: this.props.maxmeals
   };
 
