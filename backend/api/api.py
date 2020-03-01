@@ -78,6 +78,9 @@ def runSelectQuery(query, cur):
     except:
         raise Exception("Could not run select query and/or return data")
 
+# Runs an insert query with the SQL query string and pymysql cursor as arguments
+runInsertQuery = lambda query, cur : cur.execute(query)
+
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -736,14 +739,76 @@ class SignUp(Resource):
             Password = data['Password']
             Address = data['Address']
             AddressUnit = data['AddressUnit']
+            DeliveryNote = "N/A"
             City = data['City']
             State = data['State']
             Zip = data['Zip']
+            Region = "US"
+            Gender = "F"
+#           WeeklyUpdates = True
+            WeeklyUpdates = data['WeeklyUpdates']
+            CreateDate = datetime.strftime(date.today(), "%Y-%m-%d")
+            LastUpdate = CreateDate
+            ActiveBool = "Yes"
             Referral = data['Referral']
+
+            NewUserID = "RunStoredProcedure"
+
+            queries = [
+                """ INSERT INTO ptyd_accounts
+                    (
+                        user_uid,
+                        user_name,
+                        first_name,
+                        last_name,
+                        user_email,
+                        phone_number,
+                        user_address,
+                        address_unit,
+                        delivery_note,
+                        user_city,
+                        user_state,
+                        user_zip,
+                        user_region,
+                        user_gender,
+                        weekly_updates,
+                        create_date,
+                        last_update,
+                        activeBool,
+                        last_delivery,
+                        referral_source,
+                        user_note,
+                        user_profile_picture
+                    )
+                    VALUES
+                    (""" +
+                        "\'" + NewUserID + "\'," +
+                        "\'" + Username + "\'," +
+                        "\'" + FirstName + "\'," +
+                        "\'" + LastName + "\'," +
+                        "\'" + Email + "\'," +
+                        "\'" + PhoneNumber + "\'," +
+                        "\'" + Address + "\'," +
+                        "\'" + AddressUnit + "\'," +
+                        "\'" + DeliveryNote + "\'," +
+                        "\'" + City + "\'," +
+                        "\'" + State + "\'," +
+                        "\'" + Zip + "\'," +
+                        "\'" + Region + "\'," +
+                        "\'" + Gender + "\'," +
+                        "\'" + WeeklyUpdates + "\'," +
+                        "\'" + CreateDate + "\'," +
+                        "\'" + LastUpdate + "\'," +
+                        "\'" + ActiveBool + "\'," +
+                        "NULL," +
+                        "\'" + Referral + "\'," +
+                        "NULL," +
+                        "NULL);"]
 
             response['message'] = 'Request successful.'
 
             print("Received:", data)
+            print("Query:", queries[0])
 
             return response, 200
         except:

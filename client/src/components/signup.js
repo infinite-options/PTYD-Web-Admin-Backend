@@ -21,7 +21,8 @@ function SignUp (props)  {
     const [city, setCity] = useState("");
     const [zip, setZip] = useState("");
     const [userState, setUserState] = useState("");
-    const [referral, setReferral] = useState("");
+    const [referral, setReferral] = useState("Social Media");
+    const [weeklyUpdates, setWeeklyUpdates] = useState("");
 //  const [newsUpdates, setNewsUpdates] = useState("");
 
     async function sendForm() {
@@ -52,6 +53,7 @@ function SignUp (props)  {
             Zip: zip,
             State: userState,
             Referral: referral,
+            WeeklyUpdates: weeklyUpdates,
 //          NewsUpdates: newsUpdates,
           })
         })
@@ -195,6 +197,12 @@ function SignUp (props)  {
 
                                 <Form.Group id="formGridCheckbox">
                                     <Form.Check type="checkbox" label="Sign Me Up For Weekly Prep To Your Door Updates!" />
+                                    {/*
+                                    <Form.Control
+                                        value={weeklyUpdates}
+                                        onChange={e => setWeeklyUpdates(e.target.value)}
+                                    />
+                                    */}
                                 </Form.Group>
 
                                 <Form.Group id="formGridServiceTerms">
