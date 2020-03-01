@@ -79,7 +79,9 @@ def runSelectQuery(query, cur):
         raise Exception("Could not run select query and/or return data")
 
 # Runs an insert query with the SQL query string and pymysql cursor as arguments
-runInsertQuery = lambda query, cur : cur.execute(query)
+def runInsertQuery(query, cur, conn):
+    cur.execute(query)
+    conn.commit()
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -317,6 +319,9 @@ class Meals(Resource):
                 if key == 'menu_date':
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
+            # Hardcode quantity to 0
+            # Will need to fetch from db eventually
+            rowDict['quantity'] = 0
 #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
             if 'SEAS_FAVE' in rowDict['menu_category']:
                 json['Seasonal']['Menu'].append(rowDict)
@@ -346,10 +351,25 @@ class Meals(Resource):
                 if key == 'menu_date':
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
+            # Hardcode quantity to 0
+            # Will need to fetch from db eventually
+            rowDict['quantity'] = 0
 #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
             json['Addons']['Menu'].append(rowDict)
 
         return json
+
+    def getMealQuantities(self, menu):
+        mealQuantities = {}
+        for key in ['Meals', 'Addons']:
+            for subMenu in menu[key]:
+                for eachMeal in menu[key][subMenu]['Menu']:
+                    meal_id = eachMeal['menu_meal_id']
+                    if meal_id in mealQuantities:
+                        mealQuantities[meal_id] += eachMeal['quantity']
+                    else:
+                        mealQuantities[meal_id] = eachMeal['quantity']
+        return mealQuantities
 
     # HTTP method GET
     def get(self):
@@ -435,6 +455,7 @@ class Meals(Resource):
                 items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
                 items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
                 items[key]['Addons'] = self.jsonifyAddons(query, mealsKeys)
+                items[key]['MealQuantities'] = self.getMealQuantities(items[key])
 
             # Uncomment if you want all meals stored in one key
 #           query = runSelectQuery(queries[0], cur)
@@ -815,6 +836,8 @@ class SignUp(Resource):
                         "\'" + Referral + "\'," +
                         "NULL," +
                         "NULL);"]
+
+            runInsertQuery(queries[0], cur, conn)
 
             response['message'] = 'Request successful.'
 
