@@ -722,7 +722,8 @@ class SignUp(Resource):
     def getNewUserID(self, cur):
         procedure = "get_new_user_id"
         cur.execute("CALL " + procedure + ";")
-        return cur.fetchall()
+        result = cur.fetchall()
+        return result[0][0]
 
     # HTTP method POST
     def post(self):
@@ -750,15 +751,19 @@ class SignUp(Resource):
             Zip = data['Zip']
             Region = "US"
             Gender = "F"
-#           WeeklyUpdates = True
-            WeeklyUpdates = data['WeeklyUpdates']
+            WeeklyUpdates = "TRUE"
+#           WeeklyUpdates = data['WeeklyUpdates']
             CreateDate = datetime.strftime(date.today(), "%Y-%m-%d")
             LastUpdate = CreateDate
             ActiveBool = "Yes"
             Referral = data['Referral']
 
-            NewUserID = "RunStoredProcedure"
-#           NewUserID = self.getNewUserID(cur)
+            print("Received:", data)
+
+#           NewUserID = "RunStoredProcedure"
+            NewUserID = self.getNewUserID(cur)
+
+            print("NewUserID:", NewUserID)
 
             queries = [
                 """ INSERT INTO ptyd_accounts
@@ -802,7 +807,7 @@ class SignUp(Resource):
                         "\'" + Zip + "\'," +
                         "\'" + Region + "\'," +
                         "\'" + Gender + "\'," +
-                        "\'" + WeeklyUpdates + "\'," +
+                        WeeklyUpdates + "," +
                         "\'" + CreateDate + "\'," +
                         "\'" + LastUpdate + "\'," +
                         "\'" + ActiveBool + "\'," +
@@ -813,7 +818,6 @@ class SignUp(Resource):
 
             response['message'] = 'Request successful.'
 
-            print("Received:", data)
             print("Query:", queries[0])
 
             return response, 200
