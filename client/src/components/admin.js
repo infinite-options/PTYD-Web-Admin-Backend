@@ -12,11 +12,20 @@ import Card from "react-bootstrap/Card";
 
 function SignUp (props)  {
 
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstname, setFirstName] = useState("");
-    const [lastname, setLastName] = useState("");
+    const adminHome = (
+        <>
+            <h1>Admin Page</h1>
+        </>
+    );
+
+    function home() {
+
+        ReactDOM.render(
+            adminHome, 
+            document.getElementById('admin-control')
+        );
+
+    }
 
     async function getCustomerInfo() {
         const res = await fetch(props.API_URL + 'accounts');
@@ -25,7 +34,7 @@ function SignUp (props)  {
         return customerInfo;
     }
 
-    function test() {
+    function getAccounts() {
 
         getCustomerInfo()
         .then(res => {
@@ -69,12 +78,13 @@ function SignUp (props)  {
     return (
         <main Style="margin-top:-80px;">
             <div class="container text-center" Style="margin-top:-40px;">
+
                 <h1>Administer Controls</h1>
 
                 <Row>
                     <Col md={3} >
-                        <Nav defaultActiveKey="/home" className="flex-column justify-content-center">
-                            <Nav.Link dsiabled> Admin Home </Nav.Link>
+                        <Nav  className="flex-column justify-content-center">
+                            <Nav.Link onClick={ home } > Admin Home </Nav.Link>
                             <hr />
                             <Nav.Link > Meals Offered Weekly</Nav.Link>
                             <hr />
@@ -82,7 +92,7 @@ function SignUp (props)  {
                             <hr />
                             <Nav.Link > Meal Statistics </Nav.Link>
                             <hr />
-                            <Nav.Link onClick={ test } > Customer Information </Nav.Link>
+                            <Nav.Link onClick={ getAccounts } > Customer Information </Nav.Link>
                         </Nav>
                     </Col>
 
@@ -90,7 +100,7 @@ function SignUp (props)  {
                         <Container className="justify-content-center bg-dark">
 
                             <div id="admin-control">
-
+                                { adminHome }
                             </div>
                             
                         </Container>

@@ -133,7 +133,7 @@ function SignUp (props)  {
                                 </Form.Group>
 
                                 <Form.Group id="formGridCheckbox">
-                                    <Form.Check type="checkbox" label="Sign Me Up For Weekly Prep To Your Door Updates!" />
+                                    <Form.Check type="checkbox" label="Sign Me Up For Weekly Prep To Your Door Updates!" checked />
                                 </Form.Group>
 
                                 <Form.Group id="formGridServiceTerms">
