@@ -862,11 +862,10 @@ class SignUp(Resource):
                         "NULL," +
                         "NULL);"]
 
-            runInsertQuery(queries[0], cur, conn)
+            print("Query:", queries[0])
+#           runInsertQuery(queries[0], cur, conn)
 
             response['message'] = 'Request successful.'
-
-            print("Query:", queries[0])
 
             return response, 200
         except:
