@@ -344,6 +344,9 @@ export default class MealButton extends Component {
                     }
                     imgurl={meal.meal_photo_url}
                     maxmeals={this.state.maxmeals}
+                    mealQuantities={
+                      this.state.mealQuantities[meal.menu_meal_id]
+                    }
                     incrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
                       stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
