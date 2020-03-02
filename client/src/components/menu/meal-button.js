@@ -24,7 +24,9 @@ export default class MealButton extends Component {
     buttonAddOnKeepColor: false,
     mealQuantities: this.props.mealQuantities,
     maxmeals: this.props.maxmeals,
-    addonActivated: false
+    maxmealsCopy: this.props.maxmeals,
+    addonActivated: false,
+    flag: false
   };
 
   sendForm = () => {
@@ -47,7 +49,9 @@ export default class MealButton extends Component {
   closeButtonSelect = () => {
     this.setState({
       buttonSelect: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      flag: false,
+      mealQuantities: this.props.mealQuantities
     });
   };
   closeButtonAddOn = () => {
@@ -299,13 +303,26 @@ export default class MealButton extends Component {
             <Modal.Title>
               <p style={{ float: "left" }}>
                 {" "}
-                total meals left:{this.state.maxmeals}
+                Please select {this.state.maxmeals} meals:
               </p>
               Select Meal Menu{" "}
               <Button
                 variant="secondary"
-                onClick={this.closeButtonSelect}
-                style={{ float: "right" }}
+                onClick={() => {
+                  if (
+                    this.state.maxmealsCopy != this.state.maxmeals &&
+                    this.state.flag == false
+                  ) {
+                    alert(
+                      "Are you sure your want to close without save the changes?"
+                    );
+                    this.setState({
+                      flag: true
+                    });
+                    return;
+                  }
+                  this.closeButtonSelect();
+                }}
               >
                 Close
               </Button>
@@ -346,6 +363,9 @@ export default class MealButton extends Component {
                     }
                     imgurl={meal.meal_photo_url}
                     maxmeals={this.state.maxmeals}
+                    mealQuantities={
+                      this.state.mealQuantities[meal.menu_meal_id]
+                    }
                     incrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
                       stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
@@ -368,13 +388,34 @@ export default class MealButton extends Component {
         ))}
         <Card.Body>
           <center>
-            <Button variant="secondary" onClick={this.closeButtonSelect}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                if (
+                  this.state.maxmealsCopy != this.state.maxmeals &&
+                  this.state.flag == false
+                ) {
+                  alert(
+                    "Are you sure your want to close without save the changes?"
+                  );
+                  this.setState({
+                    flag: true
+                  });
+                  return;
+                }
+                this.closeButtonSelect();
+              }}
+            >
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary" onClick={this.saveButtonActivateAddons}>
-              Save changes
-            </Button>
+            {this.state.maxmeals == 0 ? (
+              <Button variant="primary" onClick={this.saveButtonActivateAddons}>
+                Save changes
+              </Button>
+            ) : (
+              <br />
+            )}
           </center>
         </Card.Body>
       </Card>

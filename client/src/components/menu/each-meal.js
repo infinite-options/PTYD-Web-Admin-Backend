@@ -5,9 +5,6 @@ import { Alert } from "react-bootstrap";
 //  Replace FINDUS1 below with this.props.imgurl
 
 class EachMeal extends Component {
-  state = {
-    countFood: 0
-  };
   render() {
     return (
       <div>
@@ -35,7 +32,7 @@ class EachMeal extends Component {
                 <input
                   type="text"
                   size="4"
-                  value={this.state.countFood}
+                  value={this.props.mealQuantities}
                   id="count"
                   style={{ textAlign: "center", width: "90%" }}
                 />
@@ -46,11 +43,11 @@ class EachMeal extends Component {
                   onClick={() => {
                     if (this.state.countFood > 0) {
                       this.props.incrementMaxMeal();
-                      this.setState({
-                        countFood: this.state.countFood - 1
-                      });
-                    console.log(this.state);
-                    console.log(this.props);
+                      // this.setState({
+                      //   countFood: this.state.countFood - 1
+                      // });
+                      console.log(this.state);
+                      console.log(this.props);
                     }
                   }}
                 />
@@ -65,9 +62,9 @@ class EachMeal extends Component {
                       return;
                     }
                     this.props.decrementMaxMeal();
-                    this.setState({
-                      countFood: this.state.countFood + 1
-                    });
+                    // this.setState({
+                    //   countFood: this.state.countFood + 1
+                    // });
                     console.log(this.state);
                     console.log(this.props);
                   }}
