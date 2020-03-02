@@ -277,6 +277,10 @@ export default class MealButton extends Component {
         <Card.Header>
           <center>
             <Modal.Title>
+              <p style={{ float: "left" }}>
+                {" "}
+                total meals left:{this.state.maxmeals}
+              </p>
               Select Meal Menu{" "}
               <Button
                 variant="secondary"
