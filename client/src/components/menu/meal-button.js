@@ -413,6 +413,18 @@ export default class MealButton extends Component {
                           meal.meal_sat
                         }
                         imgurl={meal.meal_photo_url}
+                        incrementAddon={() => {
+                          var stateCopy = Object.assign({}, this.state);
+                          stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                          this.setState(stateCopy);
+                          console.log(this.state.mealQuantities);
+                        }}
+                        decrementAddon={() => {
+                          var stateCopy = Object.assign({}, this.state);
+                          stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                          this.setState(stateCopy);
+                          console.log(this.state.mealQuantities);
+                        }}
                       />
                     </Cell>
                   ))}
@@ -455,6 +467,18 @@ export default class MealButton extends Component {
                         meal.meal_sat
                       }
                       imgurl={meal.meal_photo_url}
+                      incrementAddon={() => {
+                        var stateCopy = Object.assign({}, this.state);
+                        stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                        this.setState(stateCopy);
+                        console.log(this.state.mealQuantities);
+                      }}
+                      decrementAddon={() => {
+                        var stateCopy = Object.assign({}, this.state);
+                        stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                        this.setState(stateCopy);
+                        console.log(this.state.mealQuantities);
+                      }}
                     />
                   </Cell>
                 ))}

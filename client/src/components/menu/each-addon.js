@@ -43,6 +43,7 @@ class EachAddon extends Component {
                   value="-"
                   onClick={() => {
                     if (this.state.countFood > 0) {
+                      this.props.decrementAddon();
                       this.setState({
                         countFood: this.state.countFood - 1
                       });
@@ -53,6 +54,7 @@ class EachAddon extends Component {
                   type="button"
                   value="+"
                   onClick={() => {
+                    this.props.incrementAddon();
                     this.setState({
                       countFood: this.state.countFood + 1
                     });
