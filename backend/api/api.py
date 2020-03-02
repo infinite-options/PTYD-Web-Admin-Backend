@@ -459,6 +459,7 @@ class Meals(Resource):
                 query = runSelectQuery(queries[eachWeek+1], cur)
                 key = 'MenuForWeek' + str(eachWeek+1)
                 items[key] = {}
+                items[key]['SaturdayDate'] = str(nextSixWeeks[eachWeek]['saturday'])
                 items[key]['Sunday'] = nextSixWeeks[eachWeek]['sundayDate']
                 items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
                 items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
@@ -496,7 +497,7 @@ class Meals(Resource):
             response = {}
 
             data = request.get_json(force=True)
-#           data = {'recipient_id': '100-000001', 'start_date': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday'}
+#           data = {'recipient_id': '100-000001', 'saturday_date': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday'}
             print("Received:", data)
 
             mealSelection = self.formatMealSelection(data['meal_quantities'])

@@ -39,7 +39,7 @@ export default class MealButton extends Component {
       },
       body: JSON.stringify({
         recipient_id: this.props.recipient_id,
-        start_date: "xx",
+        saturday_date: this.props.saturdayDate,
         meal_quantities: this.state.mealQuantities,
         delivery_day: "yy"
       })

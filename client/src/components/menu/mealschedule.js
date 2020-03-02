@@ -181,6 +181,7 @@ class Mealschedule extends Component {
                     <MealButton
                       day1="Sunday"
                       day2="Monday"
+                      saturdayDate={eachWeek.SaturdayDate}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}
                       menu={eachWeek.menu}
