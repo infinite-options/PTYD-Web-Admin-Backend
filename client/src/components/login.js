@@ -143,7 +143,7 @@ export default function Login (props) {
                     
                     <Col>
                       <GoogleLogin
-                        clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                        clientId="333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com"
                         buttonText="Login"
                         onSuccess={responseGoogle}
                         onFailure={responseGoogle}
