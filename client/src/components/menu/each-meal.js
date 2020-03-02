@@ -41,7 +41,7 @@ class EachMeal extends Component {
                   type="button"
                   value="-"
                   onClick={() => {
-                    if (this.state.countFood > 0) {
+                    if (this.props.mealQuantities > 0) {
                       this.props.incrementMaxMeal();
                       // this.setState({
                       //   countFood: this.state.countFood - 1

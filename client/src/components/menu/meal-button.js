@@ -32,18 +32,18 @@ export default class MealButton extends Component {
   sendForm = () => {
     console.log(this.props.API_URL);
     fetch(this.props.API_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        'recipient_id': '??',
-        'start_date': 'xx',
-        'meal_quantities': this.state.mealQuantities,
-        'delivery_day': 'yy',
+        recipient_id: "??",
+        start_date: "xx",
+        meal_quantities: this.state.mealQuantities,
+        delivery_day: "yy"
       })
-    })
+    });
   };
 
   closeButtonSelect = () => {
@@ -53,6 +53,8 @@ export default class MealButton extends Component {
       flag: false,
       mealQuantities: this.props.mealQuantities
     });
+    console.log("dddddd", this.state.mealQuantities);
+    console.log("deeeeeee", this.props.mealQuantities);
   };
   closeButtonAddOn = () => {
     this.setState({
@@ -310,8 +312,8 @@ export default class MealButton extends Component {
                 variant="secondary"
                 onClick={() => {
                   if (
-                    this.state.maxmealsCopy != this.state.maxmeals &&
-                    this.state.flag == false
+                    this.state.maxmealsCopy !== this.state.maxmeals &&
+                    this.state.flag === false
                   ) {
                     alert(
                       "Are you sure your want to close without save the changes?"
@@ -392,8 +394,8 @@ export default class MealButton extends Component {
               variant="secondary"
               onClick={() => {
                 if (
-                  this.state.maxmealsCopy != this.state.maxmeals &&
-                  this.state.flag == false
+                  this.state.maxmealsCopy !== this.state.maxmeals &&
+                  this.state.flag === false
                 ) {
                   alert(
                     "Are you sure your want to close without save the changes?"
@@ -409,7 +411,7 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            {this.state.maxmeals == 0 ? (
+            {this.state.maxmeals === 0 ? (
               <Button variant="primary" onClick={this.saveButtonActivateAddons}>
                 Save changes
               </Button>
