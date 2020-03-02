@@ -26,11 +26,11 @@ export default class MealButton extends Component {
     maxmeals: this.props.maxmeals,
     maxmealsCopy: this.props.maxmeals,
     addonActivated: false,
-    flag: false
+    flag: false,
+    dayToDeliver: "Sunday"
   };
 
   sendForm = () => {
-    console.log(this.props.API_URL);
     fetch(this.props.API_URL, {
       method: "POST",
       headers: {
@@ -41,7 +41,7 @@ export default class MealButton extends Component {
         recipient_id: this.props.recipient_id,
         saturday_date: this.props.saturdayDate,
         meal_quantities: this.state.mealQuantities,
-        delivery_day: "yy"
+        delivery_day: this.state.dayToDeliver,
       })
     });
   };
@@ -75,7 +75,8 @@ export default class MealButton extends Component {
       buttonS: true,
       buttonM: false,
       buttonSkip: false,
-      buttonDisabled: false
+      buttonDisabled: false,
+      dayToDeliver: "Sunday"
     });
   };
 
@@ -84,7 +85,8 @@ export default class MealButton extends Component {
       buttonM: true,
       buttonS: false,
       buttonSkip: false,
-      buttonDisabled: false
+      buttonDisabled: false,
+      dayToDeliver: "Monday"
     });
   };
 
@@ -99,7 +101,8 @@ export default class MealButton extends Component {
       buttonAddOn: false,
       buttonDisabled: true,
       buttonSelectKeepColor: false,
-      buttonAddOnKeepColor: false
+      buttonAddOnKeepColor: false,
+      dayToDeliver: null
     });
   };
 

@@ -88,6 +88,7 @@ class Mealschedule extends Component {
     for (weekNum = 1; weekNum < 7; weekNum++) {
       key = "MenuForWeek" + weekNum;
       let currentWeek = {};
+      currentWeek.sat = api.result[key].SaturdayDate;
       currentWeek.sun = api.result[key].Sunday;
       currentWeek.mon = api.result[key].Monday;
       currentWeek.menu = api.result[key].Meals;
@@ -181,7 +182,7 @@ class Mealschedule extends Component {
                     <MealButton
                       day1="Sunday"
                       day2="Monday"
-                      saturdayDate={eachWeek.SaturdayDate}
+                      saturdayDate={eachWeek.sat}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}
                       menu={eachWeek.menu}
