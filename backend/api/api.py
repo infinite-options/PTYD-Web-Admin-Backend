@@ -852,7 +852,7 @@ class SignUp(Resource):
                         "\'" + Zip + "\'," +
                         "\'" + Region + "\'," +
                         "\'" + Gender + "\'," +
-                        WeeklyUpdates + "," +
+                        "\'" + WeeklyUpdates + "\'," +
                         "\'" + CreateDate + "\'," +
                         "\'" + LastUpdate + "\'," +
                         "\'" + ActiveBool + "\'," +

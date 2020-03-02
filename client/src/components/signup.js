@@ -170,7 +170,7 @@ function SignUp (props)  {
                                     <Form.Label>State</Form.Label>
                                     <Form.Control as="select" value={userState} onChange={e => setUserState(e.target.value)}>
                                         <option>Choose...</option>
-                                        <option>Texas</option>
+                                        <option>TX</option>
                                     </Form.Control>
                                     </Form.Group>
 
