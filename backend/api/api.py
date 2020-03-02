@@ -333,7 +333,7 @@ class Meals(Resource):
 
     def jsonifyAddons(self, query, mealKeys):
         json = {}
-        for key in [('Addons', 'Add-on Loocal Treats')]:
+        for key in [('Addons', 'ADD-ON'),('Weekly', 'ADD MORE MEALS'), ('Smoothies', 'ADD MORE SMOOTHIES')]:
             json[key[0]] = {'Category': key[1], 'Menu': []}
         decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
                        'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
@@ -355,7 +355,15 @@ class Meals(Resource):
             # Will need to fetch from db eventually
             rowDict['quantity'] = 0
 #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
-            json['Addons']['Menu'].append(rowDict)
+            
+            if rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
+                json['Smoothies']['Menu'].append(rowDict)
+            elif 'SEAS_FAVE' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            elif 'WKLY_SPCL' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            else:
+                json['Addons']['Menu'].append(rowDict)
 
         return json
 

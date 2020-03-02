@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { Grid, Cell } from "react-mdl";
-import { Alert } from "react-bootstrap";
 
 //  Replace FINDUS1 below with this.props.imgurl
 
-class EachMeal extends Component {
+class EachAddon extends Component {
   state = {
     countFood: 0
   };
@@ -22,7 +21,6 @@ class EachMeal extends Component {
               </div>
             )}
           </h6>
-          {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
 
         <Grid>
@@ -45,12 +43,9 @@ class EachMeal extends Component {
                   value="-"
                   onClick={() => {
                     if (this.state.countFood > 0) {
-                      this.props.incrementMaxMeal();
                       this.setState({
                         countFood: this.state.countFood - 1
                       });
-                    console.log(this.state);
-                    console.log(this.props);
                     }
                   }}
                 />
@@ -58,18 +53,9 @@ class EachMeal extends Component {
                   type="button"
                   value="+"
                   onClick={() => {
-                    if (this.props.maxmeals == 0) {
-                      alert(
-                        "You have selected more meals than your subscription plan allows.  Please select additional meal in the Add-Ons menu or upgrade your Subscription Plan.  Thanks PTYD"
-                      );
-                      return;
-                    }
-                    this.props.decrementMaxMeal();
                     this.setState({
                       countFood: this.state.countFood + 1
                     });
-                    console.log(this.state);
-                    console.log(this.props);
                   }}
                 />
               </div>
@@ -83,4 +69,4 @@ class EachMeal extends Component {
   }
 }
 
-export default EachMeal;
+export default EachAddon;

@@ -168,7 +168,8 @@ class Mealschedule extends Component {
                 </p>
                 <p>Instructions: {this.state.user.delivery_note}</p>
               </Cell>{" "}
-              <Cell col={9}>
+              <Cell col={1}></Cell>
+              <Cell col={8}>
                 <br />
                 <br />
                 <h3 class="font1">
