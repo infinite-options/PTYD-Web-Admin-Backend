@@ -292,9 +292,17 @@ export default class MealButton extends Component {
                       maxmeals={this.state.maxmeals}
                       incrementMaxMeal={() => {
                         this.setState({ maxmeals: this.state.maxmeals + 1 });
+                        var stateCopy = Object.assign({}, this.state);
+                        stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                        this.setState(stateCopy);
+                        console.log(this.state.mealQuantities);
                       }}
                       decrementMaxMeal={() => {
                         this.setState({ maxmeals: this.state.maxmeals - 1 });
+                        var stateCopy = Object.assign({}, this.state);
+                        stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                        this.setState(stateCopy);
+                        console.log(this.state.mealQuantities);
                       }}
                     />
                   </Cell>

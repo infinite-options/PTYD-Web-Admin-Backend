@@ -470,27 +470,43 @@ class Meals(Resource):
         finally:
             closeRdsConn(cur, conn)
 
-#   class Signup(Resource):
-#       global RDS_PW
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        return mealSelectionString
 
-#       # HTTP method POST
-#       def post(self):
-#           response = {}
-#           try:
-#               db = getRdsConn(RDS_PW)
-#               conn = db[0]
-#               cur = db[1]
+    # HTTP method POST
+    def post(self):
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = []
 
-#               data = request.get_json(force=True)
+            response = {}
 
-#               response['message'] = 'Request successful.'
+#           data = request.get_json(force=True)
+            data = {'recipient_id': '100-000001', 'start_date': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday'}
+            print("Received:", data)
 
-#               return response, 200
-#           except:
-#               raise BadRequest('Request failed, please try again later.')
-#           finally:
-#               closeRdsConn(cur, conn)
+            mealSelection = self.formatMealSelection(data['meal_quantities'])
+            print("Meal Selection String:", mealSelection)
 
+#           queries = []
+
+#           runInsertQuery(queries[0], cur, conn)
+
+            response['message'] = 'Request successful.'
+
+#           print("Query:", queries[0])
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
 
 class Accounts(Resource):
     global RDS_PW
