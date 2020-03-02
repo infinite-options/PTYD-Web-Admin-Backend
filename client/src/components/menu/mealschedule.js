@@ -187,6 +187,7 @@ class Mealschedule extends Component {
                       addons={eachWeek.addons}
                       mealQuantities={eachWeek.mealQuantities}
                       maxmeals={this.state.user.MaximumMeals}
+                      API_URL={this.props.API_URL}
                     />
                   ))}
                 </div>

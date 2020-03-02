@@ -27,6 +27,23 @@ export default class MealButton extends Component {
     addonActivated: false
   };
 
+  sendForm = () => {
+    console.log(this.props.API_URL);
+    fetch(this.props.API_URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'recipient_id': '??',
+        'start_date': 'xx',
+        'meal_quantities': this.state.mealQuantities,
+        'delivery_day': 'yy',
+      })
+    })
+  };
+
   closeButtonSelect = () => {
     this.setState({
       buttonSelect: false,
@@ -116,7 +133,9 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSelectKeepColor: true
     });
+    this.sendForm();
   };
+
   render() {
     const orange = {
       width: "95px",
