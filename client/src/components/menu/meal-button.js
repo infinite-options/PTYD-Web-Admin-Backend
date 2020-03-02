@@ -38,7 +38,7 @@ export default class MealButton extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        recipient_id: "??",
+        recipient_id: this.props.recipient_id,
         start_date: "xx",
         meal_quantities: this.state.mealQuantities,
         delivery_day: "yy"
