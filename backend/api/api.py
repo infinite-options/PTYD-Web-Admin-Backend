@@ -836,8 +836,7 @@ class SignUp(Resource):
             Zip = data['Zip']
             Region = "US"
             Gender = "F"
-            WeeklyUpdates = "TRUE"
-#           WeeklyUpdates = data['WeeklyUpdates']
+            WeeklyUpdates = data['WeeklyUpdates']
             CreateDate = datetime.strftime(date.today(), "%Y-%m-%d")
             LastUpdate = CreateDate
             ActiveBool = "Yes"
