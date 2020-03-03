@@ -22,7 +22,7 @@ function SignUp (props)  {
     const [zip, setZip] = useState("");
     const [userState, setUserState] = useState("");
     const [referral, setReferral] = useState("Social Media");
-    const [weeklyUpdates, setWeeklyUpdates] = useState("");
+    const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
 
     async function sendForm() {
         if (email != confirmEmail) {
@@ -194,7 +194,21 @@ function SignUp (props)  {
                                 </Form.Group>
 
                                 <Form.Group id="formGridCheckbox">
-                                    <Form.Check type="checkbox" label="Sign Me Up For Weekly Prep To Your Door Updates!" />
+                                    <Form.Check 
+                                        id="weeklyUpdateCheck"
+                                        value={ weeklyUpdates } 
+                                        onChange={ e => { 
+                                            if(document.getElementById("weeklyUpdateCheck").checked == true) {
+                                                console.log(document.getElementById("weeklyUpdateCheck").checked)
+                                                setWeeklyUpdates("TRUE")
+                                            }
+                                            else {
+                                                setWeeklyUpdates("FALSE")
+                                            }
+                                        } } 
+                                        type="checkbox" 
+                                        label="Sign Me Up For Weekly Prep To Your Door Updates!"
+                                    />
                                     {/*
                                     <Form.Control
                                         value={weeklyUpdates}
