@@ -53,8 +53,6 @@ export default class MealButton extends Component {
       flag: false,
       mealQuantities: this.props.mealQuantities
     });
-    console.log("dddddd", this.state.mealQuantities);
-    console.log("deeeeeee", this.props.mealQuantities);
   };
   closeButtonAddOn = () => {
     this.setState({
@@ -102,8 +100,10 @@ export default class MealButton extends Component {
       buttonDisabled: true,
       buttonSelectKeepColor: false,
       buttonAddOnKeepColor: false,
-      dayToDeliver: null
+      dayToDeliver: "SKIP"
     });
+    this.sendForm();
+    console.log(this.state);
   };
 
   changeButtonSelect = () => {

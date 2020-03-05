@@ -503,7 +503,10 @@ class Meals(Resource):
 #           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday'}
             print("Received:", data)
 
-            mealSelection = self.formatMealSelection(data['meal_quantities'])
+            if data['delivery_day'] != None:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+            else:
+                mealSelection = 'SKIP'
 #           print("Meal Selection String:", mealSelection)
 
             queries = [
@@ -543,6 +546,7 @@ class Meals(Resource):
                     )
                     ON DUPLICATE KEY UPDATE
                         meal_selection = \'""" + mealSelection + """\',
+                        selection_time = \'""" + selectionTime + """\',
                         delivery_day = \'""" + data['delivery_day'] + "\';")
 
             print("Query:", queries[1])
