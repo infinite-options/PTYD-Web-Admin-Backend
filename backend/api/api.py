@@ -14,11 +14,11 @@ import sys
 import json
 import pymysql
 
-#RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
-RDS_HOST = 'localhost'
+RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
+# RDS_HOST = 'localhost'
 RDS_PORT = 3306
-RDS_USER = 'root'
-#RDS_USER = 'admin'
+# RDS_USER = 'root'
+RDS_USER = 'admin'
 RDS_DB = 'pricing'
 
 app = Flask(__name__)
