@@ -14,6 +14,13 @@ import sys
 import json
 import pymysql
 
+#RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
+RDS_HOST = 'localhost'
+RDS_PORT = 3306
+RDS_USER = 'root'
+#RDS_USER = 'admin'
+RDS_DB = 'pricing'
+
 app = Flask(__name__)
 
 # Allow cross-origin resource sharing
@@ -26,13 +33,10 @@ app.config['DEBUG'] = True
 api = Api(app)
 
 # Get RDS password from command line argument
-
-
 def RdsPw():
     if len(sys.argv) == 2:
         return str(sys.argv[1])
     return ""
-
 
 # RDS PASSWORD
 # When deploying to Zappa, set RDS_PW equal to the password as a string
@@ -41,12 +45,11 @@ RDS_PW = RdsPw()
 
 # Connect to RDS
 def getRdsConn(RDS_PW):
-#   RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
-    RDS_HOST = 'localhost'
-    RDS_PORT = 3306
-    RDS_USER = 'root'
-#   RDS_USER = 'admin'
-    RDS_DB = 'pricing'
+    global RDS_HOST
+    global RDS_PORT
+    global RDS_USER
+    global RDS_DB
+
     print("Trying to connect to RDS...")
     try:
         conn = pymysql.connect(RDS_HOST,
@@ -60,6 +63,80 @@ def getRdsConn(RDS_PW):
     except:
         print("Could not connect to RDS.")
         raise Exception("RDS Connection failed.")
+
+# Connect to MySQL database (API v2)
+def connect():
+    global RDS_PW
+    global RDS_HOST
+    global RDS_PORT
+    global RDS_USER
+    global RDS_DB
+
+    print("Trying to connect to RDS (API v2)...")
+    try:
+        conn = pymysql.connect( RDS_HOST,
+                                user=RDS_USER,
+                                port=RDS_PORT,
+                                passwd=RDS_PW,
+                                db=RDS_DB,
+                                cursorclass=pymysql.cursors.DictCursor)
+        print("Successfully connected to RDS. (API v2)")
+        return conn
+    except:
+        print("Could not connect to RDS. (API v2)")
+        raise Exception("RDS Connection failed. (API v2)")
+
+# Disconnect from MySQL database (API v2)
+def disconnect(conn):
+    try:
+        conn.close()
+        print("Successfully disconnected from MySQL database. (API v2)")
+    except:
+        print("Could not properly disconnect from MySQL database. (API v2)")
+        raise Exception("Failure disconnecting from MySQL database. (API v2)")
+
+# Serialize JSON
+def serializeResponse(response):
+    try:
+        for row in response:
+            for key in row:
+                if type(row[key]) is Decimal:
+                    row[key] = float(row[key])
+                elif type(row[key]) is date or type(row[key]) is datetime:
+                    row[key] = row[key].strftime("%Y-%m-%d")
+        return response
+    except:
+        raise Exception("Bad query JSON")
+
+# Execute an SQL command (API v2)
+# Set cmd parameter to 'get' or 'post'
+# Set conn parameter to connection object
+# OPTIONAL: Set skipSerialization to True to skip default JSON response serialization
+def execute(sql, cmd, conn, skipSerialization = False):
+    response = {}
+    try:
+        with conn.cursor() as cur:
+            cur.execute(sql)
+            if cmd is 'get':
+                result = cur.fetchall()
+                response['message'] = 'Successfully executed SQL query.'
+                response['code'] = 280
+                if not skipSerialization:
+                    result = serializeResponse(result)
+                response['result'] = result
+            elif cmd in 'post':
+                conn.commit()
+                response['message'] = 'Successfully committed SQL command.'
+                response['code'] = 281
+            else:
+                response['message'] = 'Request failed. Unknown or ambiguous instruction given for MySQL command.'
+                response['code'] = 290
+    except:
+        response['message'] = 'Request failed, could not execute MySQL command.'
+        response['code'] = 291
+    finally:
+        print(response['message'])
+        return response
 
 # Close RDS connection
 def closeRdsConn(cur, conn):
@@ -85,133 +162,15 @@ def runInsertQuery(query, cur, conn):
     cur.execute(query)
     conn.commit()
 
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-# ----------------------------------------------
-# Template API
-# ----------------------------------------------
-# Each API is defined in a class and
-# inherits the Resource class from flask_restful.
-#
-# We can define GET and POST APIs in each class
-# with get() and post() functions. Pass self as
-# a parameter to enable recursive use of members.
-#
-# In each function, the try block must connect to
-# the database, run queries, and format them as
-# needed. The queried data can then be returned
-# along with the HTTP response code 200.
-#
-# If the try block fails, we can catch exceptions
-# and raise a BadRequest.
-#
-# Finally, we must close the connection in the
-# finally block.
-# ----------------------------------------------
-
-class NewApiTemplate(Resource):
-    # This fetches the global variable RDS_PW
-    # and stores it in the class's local
-    # instance of RDS_PW
-    #
-    # When running this Python script locally,
-    # we pass the password to the database as
-    # a command line argument. This argument
-    # will be stored into the global variable
-    # RDS_PW.
-    global RDS_PW
-
-    # This is an API that will be called when
-    # HTTP makes a GET request on the URL
-    # for this API
-    def get(self):
-        try:
-            # This will connect to our database
-            # Refer to the function getRdsConn()
-            # above for more info
-            db = getRdsConn(RDS_PW)
-
-            # The above function will create a
-            # Connection object defined in the
-            # pymysql module. We will store it
-            # into the object conn.
-            conn = db[0]
-
-            # getRdsConn() will also initialize
-            # a pymysql cursor object from our
-            # Connection object. This cursor can
-            # run MySQL queries.
-            cur = db[1]
-
-            # Initialize response
-            response = {}
-
-            # runSelectQuery() is a function
-            # written above that will run a
-            # SELECT query and return a tuple of
-            # Python tuples. This will be
-            # stored into query.
-            query = runSelectQuery("SELECT meal_plan_id, meal_plan_desc FROM ptyd_meal_plans;", cur)
-
-            # Successful message
-            response['message'] = 'Request successful.'
-
-            # We can manipulate the query object
-            # from earlier as needed to format
-            # our API data to our liking.
-            response['result'] = query
-
-            # Return the response object and the
-            # HTTP code 200 to indicate the
-            # GET request was successful.
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            closeRdsConn(cur, conn)
-
-# ----------------------------------------------
-# We must also define a route for each API.
-# Follow this template below to do so. Pass the
-# class name and desired route as parameters.
-# ----------------------------------------------
-
-api.add_resource(NewApiTemplate, '/api/v1/newapitemplate')
-
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-# Plans API
+# Plans API (v2)
 class Plans(Resource):
-    global RDS_PW
-
-    # Format queried tuples into JSON
-    def jsonifyMealPlans(self, query, rowDictKeys):
-        json = []
-        for row in query:
-            rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                # Convert all decimal values in row to floats
-                if key == 'meal_plan_price':
-                    value = float(value)
-                    rowDict[key+'_per_meal'] = value / rowDict['num_meals']
-                rowDict[key] = value
-            json.append(rowDict)
-        return json
 
     # HTTP method GET
     def get(self):
         response = {}
+        items = {}
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = {}
+            conn = connect()
 
             queries = [
                 """SELECT
@@ -223,6 +182,7 @@ class Plans(Resource):
                         plan_footer,
                         num_meals,
                         meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal,
                         CONCAT('/', num_meals, '-meals-subscription') AS RouteOnclick
                     FROM ptyd_meal_plans
                     WHERE payment_frequency = \'Monthly\';""",
@@ -232,7 +192,8 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 5;""",
                 """SELECT
@@ -241,7 +202,8 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 10;""",
                 """SELECT
@@ -250,7 +212,8 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 15;""",
                 """SELECT
@@ -259,33 +222,16 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 20;"""]
 
-            mealPlanKeys = ('meal_plan_id', 'meal_plan_desc', 'payment_frequency', 'photo_URL',
-                            'plan_headline', 'plan_footer', 'num_meals', 'meal_plan_price', 'RouteOnclick')
-            paymentPlanKeys = ('meal_plan_id', 'meal_plan_desc',
-                               'payment_frequency', 'photo_URL', 'num_meals', 'meal_plan_price')
-
-            query = runSelectQuery(queries[0], cur)
-            items['MealPlans'] = self.jsonifyMealPlans(query, mealPlanKeys)
-
-            query = runSelectQuery(queries[1], cur)
-            items['FiveMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
-
-            query = runSelectQuery(queries[2], cur)
-            items['TenMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
-
-            query = runSelectQuery(queries[3], cur)
-            items['FifteenMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
-
-            query = runSelectQuery(queries[4], cur)
-            items['TwentyMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
+            items['MealPlans'] = execute(queries[0], 'get', conn)
+            items['FiveMealPaymentPlans'] = execute(queries[1], 'get', conn)
+            items['TenMealPaymentPlans'] = execute(queries[2], 'get', conn)
+            items['FifteenMealPaymentPlans'] = execute(queries[3], 'get', conn)
+            items['TwentyMealPaymentPlans'] = execute(queries[4], 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -294,7 +240,7 @@ class Plans(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
 # Meals API
 class Meals(Resource):
@@ -806,24 +752,12 @@ class Account(Resource):
             closeRdsConn(cur, conn)
 
 class SignUp(Resource):
-    global RDS_PW
-
-    def getNewUserID(self, cur):
-        procedure = "get_new_user_id"
-        cur.execute("CALL " + procedure + ";")
-        result = cur.fetchall()
-        return result[0][0]
-
     # HTTP method POST
     def post(self):
+        response = {}
+        items = []
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = []
-
-            response = {}
-
+            conn = connect()
             data = request.get_json(force=True)
 
             Username = data['Username']
@@ -848,12 +782,14 @@ class SignUp(Resource):
 
             print("Received:", data)
 
-#           NewUserID = "RunStoredProcedure"
-            NewUserID = self.getNewUserID(cur)
+            queries = [" CALL get_new_user_id;"]
+
+#           NewUserID = execute(queries[0], 'get', conn)
+            NewUserID = "100-000193"
 
             print("NewUserID:", NewUserID)
 
-            queries = [
+            queries.append(
                 """ INSERT INTO ptyd_accounts
                     (
                         user_uid,
@@ -902,25 +838,27 @@ class SignUp(Resource):
                         "NULL," +
                         "\'" + Referral + "\'," +
                         "NULL," +
-                        "NULL);"]
+                        "NULL);")
 
-            print("Query:", queries[0])
-#           runInsertQuery(queries[0], cur, conn)
+            print("Query:", queries[1])
+            insertResponse = execute(queries[1], 'post', conn)
 
             response['message'] = 'Request successful.'
+            response['result'] = insertResponse
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
 # Define API routes
-api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 api.add_resource(Account, '/api/v1/account/<string:accName>/<string:accPass>')
-api.add_resource(SignUp, '/api/v1/signup')
+
+api.add_resource(Plans, '/api/v2/plans')
+api.add_resource(SignUp, '/api/v2/signup')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
