@@ -120,6 +120,7 @@ def execute(sql, cmd, conn, skipSerialization = False):
             if cmd is 'get':
                 result = cur.fetchall()
                 response['message'] = 'Successfully executed SQL query.'
+                # Return status code of 280 for successful GET request
                 response['code'] = 280
                 if not skipSerialization:
                     result = serializeResponse(result)
@@ -127,13 +128,16 @@ def execute(sql, cmd, conn, skipSerialization = False):
             elif cmd in 'post':
                 conn.commit()
                 response['message'] = 'Successfully committed SQL command.'
+                # Return status code of 281 for successful POST request
                 response['code'] = 281
             else:
                 response['message'] = 'Request failed. Unknown or ambiguous instruction given for MySQL command.'
-                response['code'] = 290
+                # Return status code of 480 for unknown HTTP method
+                response['code'] = 480
     except:
         response['message'] = 'Request failed, could not execute MySQL command.'
-        response['code'] = 291
+        # Return status code of 490 for unsuccessful HTTP request
+        response['code'] = 490
     finally:
         print(response['message'])
         return response
@@ -516,6 +520,8 @@ class Accounts(Resource):
 
     # Check if subscription plan is a one time order
     def isOneTimePlan(self, subscriptionPlan):
+        if subscriptionPlan == None:
+            return False
         if 'One Time' in subscriptionPlan:
             return True
         return False
@@ -564,18 +570,28 @@ class Accounts(Resource):
         json = []
         dateKeys = ['create_date', 'last_update', 'last_delivery', 'cc_exp_date']
         for row in query:
+            print(row)
             rowDict = {}
             for element in enumerate(row):
                 key = rowDictKeys[element[0]]
                 value = element[1]
+                print(key, value, row[0])
                 if key in dateKeys:
-                    value = value.strftime("%b %d, %Y")
+                    if value:
+                        value = value.strftime("%b %d, %Y")
+                    else:
+                        value = None
                 if key is 'Subscription':
-                    value = self.shortenPlanDesc(value)
+                    if value:
+                        value = self.shortenPlanDesc(value)
+                    else:
+                        value = None
                 # Get weekly price of meal plan and multiply by X
                 if key is 'WeeklyPrice':
                     key = 'NextCharge'
                     if self.isOneTimePlan(rowDict['Subscription']):
+                        value = 0
+                    elif rowDict['Subscription'] == None:
                         value = 0
                     else:
                         value = self.calculateNextCharge(value, rowDict['PaymentPlan'])
@@ -583,6 +599,8 @@ class Accounts(Resource):
                 if key is 'payment_time_stamp':
                     key = 'NextChargeDate'
                     if self.isOneTimePlan(rowDict['Subscription']):
+                        value = None
+                    elif rowDict['Subscription'] == None:
                         value = None
                     else:
                         value = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
@@ -592,10 +610,15 @@ class Accounts(Resource):
 
             rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
 
-            ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
-            rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
-            rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
-            rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
+            try:
+                ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
+                rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
+                rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
+                rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
+            except:
+                rowDict['cc_exp_year'] = None
+                rowDict['cc_exp_month'] = None
+                rowDict['cc_exp_day'] = None
 
             if rowDict['user_zip'] in mondayZips:
                 rowDict['MondayAvailable'] = True
@@ -784,8 +807,8 @@ class SignUp(Resource):
 
             queries = [" CALL get_new_user_id;"]
 
-#           NewUserID = execute(queries[0], 'get', conn)
-            NewUserID = "100-000193"
+            NewUserID = execute(queries[0], 'get', conn)
+#           NewUserID = "100-000193"
 
             print("NewUserID:", NewUserID)
 
