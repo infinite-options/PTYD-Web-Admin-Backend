@@ -14,11 +14,11 @@ import sys
 import json
 import pymysql
 
-#RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
-RDS_HOST = 'localhost'
+RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
+#RDS_HOST = 'localhost'
 RDS_PORT = 3306
-RDS_USER = 'root'
-#RDS_USER = 'admin'
+#RDS_USER = 'root'
+RDS_USER = 'admin'
 RDS_DB = 'pricing'
 
 app = Flask(__name__)
@@ -570,12 +570,10 @@ class Accounts(Resource):
         json = []
         dateKeys = ['create_date', 'last_update', 'last_delivery', 'cc_exp_date']
         for row in query:
-            print(row)
             rowDict = {}
             for element in enumerate(row):
                 key = rowDictKeys[element[0]]
                 value = element[1]
-                print(key, value, row[0])
                 if key in dateKeys:
                     if value:
                         value = value.strftime("%b %d, %Y")
@@ -807,8 +805,8 @@ class SignUp(Resource):
 
             queries = [" CALL get_new_user_id;"]
 
-            NewUserID = execute(queries[0], 'get', conn)
-#           NewUserID = "100-000193"
+            NewUserIDresponse = execute(queries[0], 'get', conn)
+            NewUserID = NewUserIDresponse['result'][0]['new_id']
 
             print("NewUserID:", NewUserID)
 
