@@ -271,16 +271,19 @@ class Meals(Resource):
             now = datetime.now()
 
             # Temporarily setting now to Feb 2 15:59
-            now = datetime(2020, 2, 2, 15, 59)
+            # now = datetime(2020, 3, 4, 20, 59)
 
             # Get meals for the next six weeks
             nextSixWeeks = []
-            if now.weekday() == 0 and now.hour < 16:
-                print("it's monday before 4pm")
-                offset = 0
+            if now.weekday() < 3 :
+                print("it's thursday before 4pm")
+                offset = True
+            elif now.weekday() == 3 and now.hour < 16:
+                print("it's thursday before 4pm")
+                offset = True
             else:
-                print("it's not monday before 4pm")
-                offset = 1
+                print("it's not thursday before 4pm")
+                offset = False
 
             for weekIndex in range(6):
                 weekDict = {}
@@ -290,6 +293,7 @@ class Meals(Resource):
                 weekDict['monday'] = weekDict['saturday'] + timedelta(days=2)
                 weekDict['sundayDate'] = weekDict['sunday'].strftime("%b %-d")
                 weekDict['mondayDate'] = weekDict['monday'].strftime("%b %-d")
+                weekDict['thursdayAfter4'] = offset
                 nextSixWeeks.append(weekDict)
 
             queries = [
@@ -341,6 +345,7 @@ class Meals(Resource):
                 items[key] = {}
                 items[key]['Sunday'] = nextSixWeeks[eachWeek]['sundayDate']
                 items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
+                items[key]['ThursdayAfter4'] = nextSixWeeks[eachWeek]['thursdayAfter4']
                 items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
                 items[key]['Addons'] = self.jsonifyAddons(query, mealsKeys)
 

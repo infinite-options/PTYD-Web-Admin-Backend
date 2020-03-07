@@ -90,6 +90,7 @@ class Mealschedule extends Component {
       let currentWeek = {};
       currentWeek.sun = api.result[key].Sunday;
       currentWeek.mon = api.result[key].Monday;
+      currentWeek.after4 = api.result[key].ThursdayAfter4;
       currentWeek.menu = api.result[key].Meals;
       currentWeek.addons = api.result[key].Addons;
       sixWeekMenu.push(currentWeek);
@@ -181,6 +182,7 @@ class Mealschedule extends Component {
                       day2="Monday"
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}
+                      NoDeliveryAfter4={eachWeek.after4}
                       menu={eachWeek.menu}
                       addons={eachWeek.addons}
                       maxmeals={this.state.user.MaximumMeals}

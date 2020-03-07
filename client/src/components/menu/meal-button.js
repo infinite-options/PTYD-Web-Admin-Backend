@@ -43,7 +43,8 @@ export default class MealButton extends Component {
       buttonS: true,
       buttonM: false,
       buttonSkip: false,
-      buttonDisabled: false
+      buttonDisabled: false,
+      deliveryDisabled: false
     });
   };
 
@@ -52,7 +53,8 @@ export default class MealButton extends Component {
       buttonM: true,
       buttonS: false,
       buttonSkip: false,
-      buttonDisabled: false
+      buttonDisabled: false,
+      deliveryDisabled: false
     });
   };
 
@@ -67,7 +69,20 @@ export default class MealButton extends Component {
       buttonAddOn: false,
       buttonDisabled: true,
       buttonSelectKeepColor: false,
-      buttonAddOnKeepColor: false
+      buttonAddOnKeepColor: false,
+      deliveryDisabled: false
+    });
+  };
+  stopDeliverying = () => {
+    this.setState({
+      buttonM: false,
+      buttonS: false,
+      buttonSkip: false,
+      buttonSelect: false,
+      buttonSurprise: false,
+      buttonAddOn: false,
+      deliveryDisabled: true,
+      buttonDisabled: true
     });
   };
 
@@ -75,7 +90,8 @@ export default class MealButton extends Component {
     this.setState({
       buttonSelect: true,
       buttonSurprise: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      deliveryDisabled: false
     });
     console.log("select");
   };
@@ -172,8 +188,12 @@ export default class MealButton extends Component {
         <ButtonToolbar>
           <div className="radio">
             <Button
+              disabled={this.state.deliveryDisabled}
               variant="outline-dark"
-              onClick={this.changeButtonS}
+              onClick={
+                (this.changeButtonS,
+                this.props.NoDeliveryAfter4 ? "" : this.stopDeliverying)
+              }
               style={this.state.buttonS ? green : hide}
             >
               {this.props.day1}
@@ -182,6 +202,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
+              disabled={this.state.deliveryDisabled}
               variant="outline-dark"
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
@@ -192,6 +213,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
+              disabled={this.state.deliveryDisabled}
               variant="outline-dark"
               onClick={this.changeButtonSkip}
               style={this.state.buttonSkip ? orange : hide}
@@ -206,7 +228,7 @@ export default class MealButton extends Component {
             }}
           > */}
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled && this.state.deliveryDisabled}
             variant="outline-dark"
             ref={button => (this.button = button)}
             style={
@@ -220,7 +242,7 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled && this.state.deliveryDisabled}
             variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
@@ -231,6 +253,7 @@ export default class MealButton extends Component {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {/* <SpecialRequestAnimation /> */}
           <Button
+            disabled={this.state.deliveryDisabled}
             variant="outline-dark"
             style={
               (this.state.buttonAddOn ? green : hide,
