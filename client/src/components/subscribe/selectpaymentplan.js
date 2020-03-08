@@ -16,7 +16,7 @@ class SelectPaymentPlan extends Component {
     this.setState({ meals: this.props.meals });
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
-    const plans = api.result[this.state.obj];
+    const plans = api.result[this.state.obj].result;
     //  const plans = plansData.Plans;
     this.setState({ paymentPlans: plans });
     //  const otherPlans = plansData.OtherPaymentPlans;
