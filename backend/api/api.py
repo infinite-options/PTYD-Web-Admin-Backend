@@ -701,33 +701,12 @@ class Accounts(Resource):
             closeRdsConn(cur, conn)
 
 class Account(Resource):
-    global RDS_PW
-
-    # Format queried tuples into JSON
-    def jsonifyAccounts(self, query, rowDictKeys):
-        json = []
-        dateKeys = ['create_date', 'last_update', 'last_delivery']
-        for row in query:
-            rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                if key in dateKeys:
-                    value = value.strftime("%Y-%m-%d")
-                rowDict[key] = value
-            rowDict['password_sha512'] = sha512(
-                rowDict['user_name'].encode()).hexdigest()
-            json.append(rowDict)
-        return json
 
     # HTTP method GET
     def get(self, accName, accPass):
         response = {}
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = []
+            conn = connect()
 
             queries = [
                 """ SELECT
@@ -753,24 +732,22 @@ class Account(Resource):
                     FROM ptyd_accounts""" +
                     "\nWHERE user_name = " + "'" + accName + "' AND user_state = 'TX';"]
 
-            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city',
-                           'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
-            query = runSelectQuery(queries[0], cur)
-
-            items = self.jsonifyAccounts(query, accountKeys)
+            items = execute(queries[0], 'get', conn)
+            items['result'][0]['password_sha512'] = sha512(items['result'][0]['user_name'].encode()).hexdigest()
 
             response['message'] = 'Request successful.'
             response['result'] = items
 
             passCheck = sha512(accPass.encode()).hexdigest()
-            if passCheck == items[0]['password_sha512']:
+            if passCheck == items['result'][0]['password_sha512']:
                 return response, 200
             else:
-                return "Request failed, wrong password.", 400 
+                print("Wrong password.")
+                return "Request failed, wrong password.", 401 
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
 class SignUp(Resource):
     # HTTP method POST
@@ -803,7 +780,7 @@ class SignUp(Resource):
 
             print("Received:", data)
 
-            queries = [" CALL get_new_user_id;"]
+            queries = ["CALL get_new_user_id;"]
 
             NewUserIDresponse = execute(queries[0], 'get', conn)
             NewUserID = NewUserIDresponse['result'][0]['new_id']
@@ -876,10 +853,10 @@ class SignUp(Resource):
 # Define API routes
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
-api.add_resource(Account, '/api/v1/account/<string:accName>/<string:accPass>')
 
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
+api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)

@@ -177,7 +177,7 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v1/accounts`,
-          SINGLE_ACC_API_URL: `${DEV_URL}v1/account`
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
         }}
       />
       <AppliedRoute
