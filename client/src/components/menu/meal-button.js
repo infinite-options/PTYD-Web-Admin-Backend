@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Grid, Cell } from "react-mdl";
 import EachMeal from "./each-meal";
+import EachAddon from "./each-addon";
 
-import { ButtonToolbar, Button, Modal, Form, Card } from "react-bootstrap";
+import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -21,13 +22,36 @@ export default class MealButton extends Component {
     // buttonDisabled: true,
     buttonSelectKeepColor: false,
     buttonAddOnKeepColor: false,
-    maxmeals: this.props.maxmeals
+    mealQuantities: this.props.mealQuantities,
+    maxmeals: this.props.maxmeals,
+    maxmealsCopy: this.props.maxmeals,
+    addonActivated: false,
+    flag: false,
+    dayToDeliver: "Sunday"
+  };
+
+  sendForm = () => {
+    fetch(this.props.API_URL, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        recipient_id: this.props.recipient_id,
+        week_affected: this.props.saturdayDate,
+        meal_quantities: this.state.mealQuantities,
+        delivery_day: this.state.dayToDeliver,
+      })
+    });
   };
 
   closeButtonSelect = () => {
     this.setState({
       buttonSelect: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      flag: false,
+      mealQuantities: this.props.mealQuantities
     });
   };
   closeButtonAddOn = () => {
@@ -37,13 +61,20 @@ export default class MealButton extends Component {
     });
     console.log("addon");
   };
+  // keepButtonAddOn = () => {
+  //   this.setState({
+  //     buttonAddOn: false,
+  //     buttonAddOnKeepColor: true
+  //   });
+  // };
 
   changeButtonS = () => {
     this.setState({
       buttonS: true,
       buttonM: false,
       buttonSkip: false,
-      buttonDisabled: false
+      buttonDisabled: false,
+      dayToDeliver: "Sunday"
     });
   };
 
@@ -52,7 +83,8 @@ export default class MealButton extends Component {
       buttonM: true,
       buttonS: false,
       buttonSkip: false,
-      buttonDisabled: false
+      buttonDisabled: false,
+      dayToDeliver: "Monday"
     });
   };
 
@@ -67,14 +99,18 @@ export default class MealButton extends Component {
       buttonAddOn: false,
       buttonDisabled: true,
       buttonSelectKeepColor: false,
-      buttonAddOnKeepColor: false
+      buttonAddOnKeepColor: false,
+      dayToDeliver: "SKIP"
     });
+    this.sendForm();
+    console.log(this.state);
   };
 
   changeButtonSelect = () => {
     this.setState({
       buttonSelect: true,
       buttonSurprise: false,
+      buttonAddOn: false,
       buttonSelectKeepColor: true
     });
     console.log("select");
@@ -83,6 +119,7 @@ export default class MealButton extends Component {
     this.setState({
       buttonSelect: false,
       buttonSurprise: true,
+      buttonAddOn: false,
       buttonSelectKeepColor: false
     });
     console.log("surprise");
@@ -90,7 +127,8 @@ export default class MealButton extends Component {
   changeButtonAddOn = () => {
     this.setState({
       buttonAddOn: true,
-      buttonAddOnKeepColor: true
+      buttonAddOnKeepColor: true,
+      buttonSelect: false
     });
   };
   specialRequest = () => {
@@ -98,75 +136,84 @@ export default class MealButton extends Component {
       requestModal: !this.state.requestModal
     });
   };
+  saveButtonActivateAddons = () => {
+    this.setState({
+      addonActivated: true,
+      buttonSelect: false,
+      buttonSelectKeepColor: true
+    });
+    this.sendForm();
+  };
+
   render() {
     const orange = {
-      width: "90px",
-      height: "90px",
+      width: "95px",
+      height: "95px",
       backgroundColor: "#cd790c",
       color: "white"
     };
 
     const hide = {
-      width: "90px",
-      height: "90px",
+      width: "95px",
+      height: "95px",
       backgroundColor: "white",
       color: "black"
     };
     const green = {
-      width: "90px",
-      height: "90px",
+      width: "95px",
+      height: "95px",
       backgroundColor: "#427c42",
       color: "white"
     };
 
-    function SpecialRequestModal(props) {
-      return (
-        <Modal
-          {...props}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              Special Request
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form.Group controlId="exampleForm.ControlTextarea1">
-              <Form.Control as="textarea" rows="3" />
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-            <Button onClick={props.onHide}>Close</Button>
-          </Modal.Footer>
-        </Modal>
-      );
-    }
+    // function SpecialRequestModal(props) {
+    //   return (
+    //     <Modal
+    //       {...props}
+    //       size="lg"
+    //       aria-labelledby="contained-modal-title-vcenter"
+    //       centered
+    //     >
+    //       <Modal.Header closeButton>
+    //         <Modal.Title id="contained-modal-title-vcenter">
+    //           Special Request
+    //         </Modal.Title>
+    //       </Modal.Header>
+    //       <Modal.Body>
+    //         <Form.Group controlId="exampleForm.ControlTextarea1">
+    //           <Form.Control as="textarea" rows="3" />
+    //         </Form.Group>
+    //       </Modal.Body>
+    //       <Modal.Footer>
+    //         <Button variant="primary" type="submit">
+    //           Submit
+    //         </Button>
+    //         <Button onClick={props.onHide}>Close</Button>
+    //       </Modal.Footer>
+    //     </Modal>
+    //   );
+    // }
 
-    function SpecialRequestAnimation() {
-      const [modalShow, setModalShow] = React.useState(false);
+    // function SpecialRequestAnimation() {
+    //   const [modalShow, setModalShow] = React.useState(false);
 
-      return (
-        <ButtonToolbar>
-          <Button
-            variant="outline-dark"
-            style={{ width: "90px", height: "90px" }}
-            onClick={() => setModalShow(true)}
-          >
-            Special Requests
-          </Button>
+    //   return (
+    //     <ButtonToolbar>
+    //       <Button
+    //         variant="outline-dark"
+    //         style={{ width: "90px", height: "90px" }}
+    //         onClick={() => setModalShow(true)}
+    //       >
+    //         Special Requests
+    //       </Button>
 
-          <SpecialRequestModal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-          />
-        </ButtonToolbar>
-      );
-    }
+    //       <SpecialRequestModal
+    //         show={modalShow}
+    //         onHide={() => setModalShow(false)}
+    //       />
+    //     </ButtonToolbar>
+    //   );
+    // }
     return (
       <div>
         <ButtonToolbar>
@@ -215,7 +262,8 @@ export default class MealButton extends Component {
             }
             onClick={this.changeButtonSelect}
           >
-            Select Meal
+            Select <br />
+            Meal
           </Button>
           {/* </Link> */}
           &nbsp;
@@ -233,82 +281,146 @@ export default class MealButton extends Component {
           <Button
             variant="outline-dark"
             style={
-              (this.state.buttonAddOn ? green : hide,
-              this.state.buttonAddOnKeepColor ? green : hide)
+              (this.state.buttonAddOn ? orange : hide,
+              this.state.buttonAddOnKeepColor ? orange : hide)
             }
             onClick={this.changeButtonAddOn}
           >
-            Add On
+            Add Local Treats
           </Button>
           <div style={this.state.buttonSelect ? {} : { display: "none" }}>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {this.SelectMealEachMeal()}
           </div>
           <div style={this.state.buttonAddOn ? {} : { display: "none" }}>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {this.SelectMealEachMealAddOn()}
           </div>
         </ButtonToolbar>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <br />
       </div>
     );
   }
 
   SelectMealEachMeal = () => {
     return (
-      <Card style={{ width: "100%" }}>
+      <Card style={{ width: "92%" }}>
+        <Card.Header>
+          <center>
+            <Modal.Title>
+              <p style={{ float: "left" }}>
+                {" "}
+                Please select {this.state.maxmeals} meals:
+              </p>
+              Select Meal Menu{" "}
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  if (
+                    this.state.maxmealsCopy !== this.state.maxmeals &&
+                    this.state.flag === false
+                  ) {
+                    alert(
+                      "Are you sure your want to close without save the changes?"
+                    );
+                    this.setState({
+                      flag: true
+                    });
+                    return;
+                  }
+                  this.closeButtonSelect();
+                }}
+              >
+                Close
+              </Button>
+            </Modal.Title>
+          </center>
+        </Card.Header>
         {Object.keys(this.props.menu).map(key => (
           <div>
-            <Card.Header>
-              <center>
-                <Modal.Title>{this.props.menu[key].Category}</Modal.Title>
-              </center>
-            </Card.Header>
-            <Card.Body>
-              <Grid>
-                {this.props.menu[key].Menu.map(meal => (
-                  <Cell col={4}>
-                    <EachMeal
-                      mealTitle={meal.meal_desc}
-                      ingridents="Ingredients: Not Yet in Database"
-                      detail={
-                        "Cal " +
-                        meal.meal_calories +
-                        ", Prot " +
-                        meal.meal_protein +
-                        ", Carb " +
-                        meal.meal_carbs +
-                        ", Sug " +
-                        meal.meal_sugar +
-                        ", Fib " +
-                        meal.meal_fiber +
-                        ", Fat " +
-                        meal.meal_fat +
-                        ", Sat " +
-                        meal.meal_sat
-                      }
-                      imgurl={meal.meal_photo_url}
-                      maxmeals={this.state.maxmeals}
-                      incrementMaxMeal={() => {
-                        this.setState({ maxmeals: this.state.maxmeals + 1 });
-                      }}
-                      decrementMaxMeal={() => {
-                        this.setState({ maxmeals: this.state.maxmeals - 1 });
-                      }}
-                    />
-                  </Cell>
-                ))}
-              </Grid>
-            </Card.Body>
+            <Grid>
+              <Cell col={12}>
+                <center>
+                  <h4 style={{ margin: "0" }}>
+                    {this.props.menu[key].Category}
+                  </h4>
+                </center>
+              </Cell>
+              <br />
+              {this.props.menu[key].Menu.map(meal => (
+                <Cell col={4}>
+                  <EachMeal
+                    mealTitle={meal.meal_desc}
+                    ingridents="Ingredients: Not Yet in Database"
+                    detail={
+                      "Cal " +
+                      meal.meal_calories +
+                      ", Prot " +
+                      meal.meal_protein +
+                      ", Carb " +
+                      meal.meal_carbs +
+                      ", Sug " +
+                      meal.meal_sugar +
+                      ", Fib " +
+                      meal.meal_fiber +
+                      ", Fat " +
+                      meal.meal_fat +
+                      ", Sat " +
+                      meal.meal_sat
+                    }
+                    imgurl={meal.meal_photo_url}
+                    maxmeals={this.state.maxmeals}
+                    mealQuantities={
+                      this.state.mealQuantities[meal.menu_meal_id]
+                    }
+                    incrementMaxMeal={() => {
+                      var stateCopy = Object.assign({}, this.state);
+                      stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                      this.setState(stateCopy);
+                      this.setState({ maxmeals: this.state.maxmeals + 1 });
+                      console.log(this.state.mealQuantities);
+                    }}
+                    decrementMaxMeal={() => {
+                      var stateCopy = Object.assign({}, this.state);
+                      stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                      this.setState(stateCopy);
+                      this.setState({ maxmeals: this.state.maxmeals - 1 });
+                      console.log(this.state.mealQuantities);
+                    }}
+                  />
+                </Cell>
+              ))}
+            </Grid>
           </div>
         ))}
         <Card.Body>
           <center>
-            <Button variant="secondary" onClick={this.closeButtonSelect}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                if (
+                  this.state.maxmealsCopy !== this.state.maxmeals &&
+                  this.state.flag === false
+                ) {
+                  alert(
+                    "Are you sure your want to close without save the changes?"
+                  );
+                  this.setState({
+                    flag: true
+                  });
+                  return;
+                }
+                this.closeButtonSelect();
+              }}
+            >
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary">Save changes</Button>
+            {this.state.maxmeals === 0 ? (
+              <Button variant="primary" onClick={this.saveButtonActivateAddons}>
+                Save changes
+              </Button>
+            ) : (
+              <br />
+            )}
           </center>
         </Card.Body>
       </Card>
@@ -316,19 +428,91 @@ export default class MealButton extends Component {
   };
   SelectMealEachMealAddOn = () => {
     return (
-      <Card style={{ width: "100%" }}>
-        {Object.keys(this.props.addons).map(key => (
+      <Card style={{ width: "92%" }}>
+        <Card.Header>
+          <center>
+            <Modal.Title>
+              Add Local Treats{" "}
+              <Button
+                variant="secondary"
+                onClick={this.closeButtonAddOn}
+                style={{ float: "right" }}
+              >
+                Close
+              </Button>
+            </Modal.Title>
+          </center>
+        </Card.Header>
+        {this.state.addonActivated ? (
           <div>
-            <Card.Header>
-              <center>
-                <Modal.Title>{this.props.addons[key].Category}</Modal.Title>
-              </center>
-            </Card.Header>
-            <Card.Body>
+            {Object.keys(this.props.addons).map(key => (
+              <div>
+                <Grid>
+                  <Cell col={12}>
+                    <center>
+                      <h4 style={{ margin: "0" }}>
+                        {this.props.addons[key].Category}
+                      </h4>
+                    </center>
+                  </Cell>
+
+                  {this.props.addons[key].Menu.map(meal => (
+                    <Cell col={4}>
+                      <EachAddon
+                        mealTitle={meal.meal_desc}
+                        ingridents="Ingredients: Not Yet in Database"
+                        detail={
+                          "Cal " +
+                          meal.meal_calories +
+                          ", Prot " +
+                          meal.meal_protein +
+                          ", Carb " +
+                          meal.meal_carbs +
+                          ", Sug " +
+                          meal.meal_sugar +
+                          ", Fib " +
+                          meal.meal_fiber +
+                          ", Fat " +
+                          meal.meal_fat +
+                          ", Sat " +
+                          meal.meal_sat
+                        }
+                        imgurl={meal.meal_photo_url}
+                        incrementAddon={() => {
+                          var stateCopy = Object.assign({}, this.state);
+                          stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                          this.setState(stateCopy);
+                          console.log(this.state.mealQuantities);
+                        }}
+                        decrementAddon={() => {
+                          var stateCopy = Object.assign({}, this.state);
+                          stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                          this.setState(stateCopy);
+                          console.log(this.state.mealQuantities);
+                        }}
+                      />
+                    </Cell>
+                  ))}
+                </Grid>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>
+            {/* {Object.keys(this.props.addons["Addons"]).map(key => ( */}
+            <div>
               <Grid>
-                {this.props.addons[key].Menu.map(meal => (
+                <Cell col={12}>
+                  <center>
+                    <h4 style={{ margin: "0" }}>
+                      {this.props.addons["Addons"].Category}
+                    </h4>
+                  </center>
+                </Cell>
+
+                {this.props.addons["Addons"].Menu.map(meal => (
                   <Cell col={4}>
-                    <EachMeal
+                    <EachAddon
                       mealTitle={meal.meal_desc}
                       ingridents="Ingredients: Not Yet in Database"
                       detail={
@@ -348,13 +532,26 @@ export default class MealButton extends Component {
                         meal.meal_sat
                       }
                       imgurl={meal.meal_photo_url}
+                      incrementAddon={() => {
+                        var stateCopy = Object.assign({}, this.state);
+                        stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                        this.setState(stateCopy);
+                        console.log(this.state.mealQuantities);
+                      }}
+                      decrementAddon={() => {
+                        var stateCopy = Object.assign({}, this.state);
+                        stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                        this.setState(stateCopy);
+                        console.log(this.state.mealQuantities);
+                      }}
                     />
                   </Cell>
                 ))}
               </Grid>
-            </Card.Body>
+            </div>
+            {/* ))} */}
           </div>
-        ))}
+        )}
         <Card.Body>
           <center>
             <Button variant="secondary" onClick={this.closeButtonAddOn}>

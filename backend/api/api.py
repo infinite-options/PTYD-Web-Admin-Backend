@@ -17,6 +17,13 @@ import pymysql
 # Authentication & Authorization
 from authlib.flask.client import OAuth
 
+RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
+#RDS_HOST = 'localhost'
+RDS_PORT = 3306
+#RDS_USER = 'root'
+RDS_USER = 'admin'
+RDS_DB = 'pricing'
+
 app = Flask(__name__)
 oauth = OAuth(app)
 
@@ -30,13 +37,10 @@ app.config['DEBUG'] = True
 api = Api(app)
 
 # Get RDS password from command line argument
-
-
 def RdsPw():
     if len(sys.argv) == 2:
         return str(sys.argv[1])
     return ""
-
 
 # RDS PASSWORD
 # When deploying to Zappa, set RDS_PW equal to the password as a string
@@ -44,13 +48,12 @@ def RdsPw():
 RDS_PW = RdsPw()
 
 # Connect to RDS
-
-
 def getRdsConn(RDS_PW):
-    RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
-    RDS_PORT = 3306
-    RDS_USER = 'admin'
-    RDS_DB = 'pricing'
+    global RDS_HOST
+    global RDS_PORT
+    global RDS_USER
+    global RDS_DB
+
     print("Trying to connect to RDS...")
     try:
         conn = pymysql.connect(RDS_HOST,
@@ -65,8 +68,85 @@ def getRdsConn(RDS_PW):
         print("Could not connect to RDS.")
         raise Exception("RDS Connection failed.")
 
-# Close RDS connection
+# Connect to MySQL database (API v2)
+def connect():
+    global RDS_PW
+    global RDS_HOST
+    global RDS_PORT
+    global RDS_USER
+    global RDS_DB
 
+    print("Trying to connect to RDS (API v2)...")
+    try:
+        conn = pymysql.connect( RDS_HOST,
+                                user=RDS_USER,
+                                port=RDS_PORT,
+                                passwd=RDS_PW,
+                                db=RDS_DB,
+                                cursorclass=pymysql.cursors.DictCursor)
+        print("Successfully connected to RDS. (API v2)")
+        return conn
+    except:
+        print("Could not connect to RDS. (API v2)")
+        raise Exception("RDS Connection failed. (API v2)")
+
+# Disconnect from MySQL database (API v2)
+def disconnect(conn):
+    try:
+        conn.close()
+        print("Successfully disconnected from MySQL database. (API v2)")
+    except:
+        print("Could not properly disconnect from MySQL database. (API v2)")
+        raise Exception("Failure disconnecting from MySQL database. (API v2)")
+
+# Serialize JSON
+def serializeResponse(response):
+    try:
+        for row in response:
+            for key in row:
+                if type(row[key]) is Decimal:
+                    row[key] = float(row[key])
+                elif type(row[key]) is date or type(row[key]) is datetime:
+                    row[key] = row[key].strftime("%Y-%m-%d")
+        return response
+    except:
+        raise Exception("Bad query JSON")
+
+# Execute an SQL command (API v2)
+# Set cmd parameter to 'get' or 'post'
+# Set conn parameter to connection object
+# OPTIONAL: Set skipSerialization to True to skip default JSON response serialization
+def execute(sql, cmd, conn, skipSerialization = False):
+    response = {}
+    try:
+        with conn.cursor() as cur:
+            cur.execute(sql)
+            if cmd is 'get':
+                result = cur.fetchall()
+                response['message'] = 'Successfully executed SQL query.'
+                # Return status code of 280 for successful GET request
+                response['code'] = 280
+                if not skipSerialization:
+                    result = serializeResponse(result)
+                response['result'] = result
+            elif cmd in 'post':
+                conn.commit()
+                response['message'] = 'Successfully committed SQL command.'
+                # Return status code of 281 for successful POST request
+                response['code'] = 281
+            else:
+                response['message'] = 'Request failed. Unknown or ambiguous instruction given for MySQL command.'
+                # Return status code of 480 for unknown HTTP method
+                response['code'] = 480
+    except:
+        response['message'] = 'Request failed, could not execute MySQL command.'
+        # Return status code of 490 for unsuccessful HTTP request
+        response['code'] = 490
+    finally:
+        print(response['message'])
+        return response
+
+# Close RDS connection
 def closeRdsConn(cur, conn):
     try:
         cur.close()
@@ -77,8 +157,6 @@ def closeRdsConn(cur, conn):
 
 # Runs a select query with the SQL query string and pymysql cursor as arguments
 # Returns a list of Python tuples
-
-
 def runSelectQuery(query, cur):
     try:
         cur.execute(query)
@@ -87,36 +165,20 @@ def runSelectQuery(query, cur):
     except:
         raise Exception("Could not run select query and/or return data")
 
-# Plans API
+# Runs an insert query with the SQL query string and pymysql cursor as arguments
+def runInsertQuery(query, cur, conn):
+    cur.execute(query)
+    conn.commit()
 
-
+# Plans API (v2)
 class Plans(Resource):
-    global RDS_PW
-
-    # Format queried tuples into JSON
-    def jsonifyMealPlans(self, query, rowDictKeys):
-        json = []
-        for row in query:
-            rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                # Convert all decimal values in row to floats
-                if key == 'meal_plan_price':
-                    value = float(value)
-                    rowDict[key+'_per_meal'] = value / rowDict['num_meals']
-                rowDict[key] = value
-            json.append(rowDict)
-        return json
 
     # HTTP method GET
     def get(self):
         response = {}
+        items = {}
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = {}
+            conn = connect()
 
             queries = [
                 """SELECT
@@ -128,6 +190,7 @@ class Plans(Resource):
                         plan_footer,
                         num_meals,
                         meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal,
                         CONCAT('/', num_meals, '-meals-subscription') AS RouteOnclick
                     FROM ptyd_meal_plans
                     WHERE payment_frequency = \'Monthly\';""",
@@ -137,7 +200,8 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 5;""",
                 """SELECT
@@ -146,7 +210,8 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 10;""",
                 """SELECT
@@ -155,7 +220,8 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 15;""",
                 """SELECT
@@ -164,33 +230,16 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
-                        meal_plan_price
+                        meal_plan_price,
+                        meal_plan_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 20;"""]
 
-            mealPlanKeys = ('meal_plan_id', 'meal_plan_desc', 'payment_frequency', 'photo_URL',
-                            'plan_headline', 'plan_footer', 'num_meals', 'meal_plan_price', 'RouteOnclick')
-            paymentPlanKeys = ('meal_plan_id', 'meal_plan_desc',
-                               'payment_frequency', 'photo_URL', 'num_meals', 'meal_plan_price')
-
-            query = runSelectQuery(queries[0], cur)
-            items['MealPlans'] = self.jsonifyMealPlans(query, mealPlanKeys)
-
-            query = runSelectQuery(queries[1], cur)
-            items['FiveMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
-
-            query = runSelectQuery(queries[2], cur)
-            items['TenMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
-
-            query = runSelectQuery(queries[3], cur)
-            items['FifteenMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
-
-            query = runSelectQuery(queries[4], cur)
-            items['TwentyMealPaymentPlans'] = self.jsonifyMealPlans(
-                query, paymentPlanKeys)
+            items['MealPlans'] = execute(queries[0], 'get', conn)
+            items['FiveMealPaymentPlans'] = execute(queries[1], 'get', conn)
+            items['TenMealPaymentPlans'] = execute(queries[2], 'get', conn)
+            items['FifteenMealPaymentPlans'] = execute(queries[3], 'get', conn)
+            items['TwentyMealPaymentPlans'] = execute(queries[4], 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -199,11 +248,9 @@ class Plans(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
 # Meals API
-
-
 class Meals(Resource):
     global RDS_PW
 
@@ -228,6 +275,9 @@ class Meals(Resource):
                 if key == 'menu_date':
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
+            # Hardcode quantity to 0
+            # Will need to fetch from db eventually
+            rowDict['quantity'] = 0
 #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
             if 'SEAS_FAVE' in rowDict['menu_category']:
                 json['Seasonal']['Menu'].append(rowDict)
@@ -239,7 +289,7 @@ class Meals(Resource):
 
     def jsonifyAddons(self, query, mealKeys):
         json = {}
-        for key in [('Addons', 'Add-on Loocal Treats')]:
+        for key in [('Addons', 'ADD-ON'),('Weekly', 'ADD MORE MEALS'), ('Smoothies', 'ADD MORE SMOOTHIES')]:
             json[key[0]] = {'Category': key[1], 'Menu': []}
         decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
                        'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
@@ -257,10 +307,33 @@ class Meals(Resource):
                 if key == 'menu_date':
                     value = value.strftime("%Y-%m-%d")
                 rowDict[key] = value
+            # Hardcode quantity to 0
+            # Will need to fetch from db eventually
+            rowDict['quantity'] = 0
 #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
-            json['Addons']['Menu'].append(rowDict)
+            
+            if rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
+                json['Smoothies']['Menu'].append(rowDict)
+            elif 'SEAS_FAVE' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            elif 'WKLY_SPCL' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            else:
+                json['Addons']['Menu'].append(rowDict)
 
         return json
+
+    def getMealQuantities(self, menu):
+        mealQuantities = {}
+        for key in ['Meals', 'Addons']:
+            for subMenu in menu[key]:
+                for eachMeal in menu[key][subMenu]['Menu']:
+                    meal_id = eachMeal['menu_meal_id']
+                    if meal_id in mealQuantities:
+                        mealQuantities[meal_id] += eachMeal['quantity']
+                    else:
+                        mealQuantities[meal_id] = eachMeal['quantity']
+        return mealQuantities
 
     # HTTP method GET
     def get(self):
@@ -342,10 +415,12 @@ class Meals(Resource):
                 query = runSelectQuery(queries[eachWeek+1], cur)
                 key = 'MenuForWeek' + str(eachWeek+1)
                 items[key] = {}
+                items[key]['SaturdayDate'] = str(nextSixWeeks[eachWeek]['saturday'])
                 items[key]['Sunday'] = nextSixWeeks[eachWeek]['sundayDate']
                 items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
                 items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
                 items[key]['Addons'] = self.jsonifyAddons(query, mealsKeys)
+                items[key]['MealQuantities'] = self.getMealQuantities(items[key])
 
             # Uncomment if you want all meals stored in one key
 #           query = runSelectQuery(queries[0], cur)
@@ -360,27 +435,84 @@ class Meals(Resource):
         finally:
             closeRdsConn(cur, conn)
 
-#   class Signup(Resource):
-#       global RDS_PW
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        # Remove last semicolon
+        return mealSelectionString[:-1]
 
-#       # HTTP method POST
-#       def post(self):
-#           response = {}
-#           try:
-#               db = getRdsConn(RDS_PW)
-#               conn = db[0]
-#               cur = db[1]
+    # HTTP method POST
+    def post(self):
+        try:
+            db = getRdsConn(RDS_PW)
+            conn = db[0]
+            cur = db[1]
+            items = []
 
-#               data = request.get_json(force=True)
+            response = {}
 
-#               response['message'] = 'Request successful.'
+            data = request.get_json(force=True)
+#           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday'}
+            print("Received:", data)
 
-#               return response, 200
-#           except:
-#               raise BadRequest('Request failed, please try again later.')
-#           finally:
-#               closeRdsConn(cur, conn)
+            if data['delivery_day'] != None:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+            else:
+                mealSelection = 'SKIP'
+#           print("Meal Selection String:", mealSelection)
 
+            queries = [
+                """ SELECT purchase_id
+                    FROM ptyd_purchases
+                    WHERE recipient_id = \'""" + data['recipient_id'] + "\';"]
+
+            purchaseIdTuple = runSelectQuery(queries[0], cur)
+
+            if purchaseIdTuple == None:
+                response['message'] = 'Recipient has no active purchase_id.'
+                print("Error:", response['message'])
+                return response, 400
+            else:
+                purchaseId = purchaseIdTuple[0][0]
+#               print("purchase_id:", purchaseId)
+
+            selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#           print(selectionTime)
+
+            queries.append(
+                """ INSERT INTO ptyd_meals_selected
+                    (
+                        purchase_id,
+                        selection_time,
+                        week_affected,
+                        meal_selection,
+                        delivery_day
+                    )
+                    VALUES
+                    (
+                        \'""" + purchaseId + """\',
+                        \'""" + selectionTime + """\',
+                        \'""" + data['week_affected'] + """\',
+                        \'""" + mealSelection + """\',
+                        \'""" + data['delivery_day'] + """\'
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        meal_selection = \'""" + mealSelection + """\',
+                        selection_time = \'""" + selectionTime + """\',
+                        delivery_day = \'""" + data['delivery_day'] + "\';")
+
+            print("Query:", queries[1])
+            runInsertQuery(queries[1], cur, conn)
+
+            response['message'] = 'Request successful.'
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            closeRdsConn(cur, conn)
 
 class Accounts(Resource):
     global RDS_PW
@@ -392,6 +524,8 @@ class Accounts(Resource):
 
     # Check if subscription plan is a one time order
     def isOneTimePlan(self, subscriptionPlan):
+        if subscriptionPlan == None:
+            return False
         if 'One Time' in subscriptionPlan:
             return True
         return False
@@ -445,13 +579,21 @@ class Accounts(Resource):
                 key = rowDictKeys[element[0]]
                 value = element[1]
                 if key in dateKeys:
-                    value = value.strftime("%b %d, %Y")
+                    if value:
+                        value = value.strftime("%b %d, %Y")
+                    else:
+                        value = None
                 if key is 'Subscription':
-                    value = self.shortenPlanDesc(value)
+                    if value:
+                        value = self.shortenPlanDesc(value)
+                    else:
+                        value = None
                 # Get weekly price of meal plan and multiply by X
                 if key is 'WeeklyPrice':
                     key = 'NextCharge'
                     if self.isOneTimePlan(rowDict['Subscription']):
+                        value = 0
+                    elif rowDict['Subscription'] == None:
                         value = 0
                     else:
                         value = self.calculateNextCharge(value, rowDict['PaymentPlan'])
@@ -459,6 +601,8 @@ class Accounts(Resource):
                 if key is 'payment_time_stamp':
                     key = 'NextChargeDate'
                     if self.isOneTimePlan(rowDict['Subscription']):
+                        value = None
+                    elif rowDict['Subscription'] == None:
                         value = None
                     else:
                         value = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
@@ -468,10 +612,15 @@ class Accounts(Resource):
 
             rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
 
-            ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
-            rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
-            rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
-            rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
+            try:
+                ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
+                rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
+                rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
+                rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
+            except:
+                rowDict['cc_exp_year'] = None
+                rowDict['cc_exp_month'] = None
+                rowDict['cc_exp_day'] = None
 
             if rowDict['user_zip'] in mondayZips:
                 rowDict['MondayAvailable'] = True
@@ -556,33 +705,12 @@ class Accounts(Resource):
             closeRdsConn(cur, conn)
 
 class Account(Resource):
-    global RDS_PW
-
-    # Format queried tuples into JSON
-    def jsonifyAccounts(self, query, rowDictKeys):
-        json = []
-        dateKeys = ['create_date', 'last_update', 'last_delivery']
-        for row in query:
-            rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                if key in dateKeys:
-                    value = value.strftime("%Y-%m-%d")
-                rowDict[key] = value
-            rowDict['password_sha512'] = sha512(
-                rowDict['user_name'].encode()).hexdigest()
-            json.append(rowDict)
-        return json
 
     # HTTP method GET
     def get(self, accName, accPass):
         response = {}
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = []
+            conn = connect()
 
             queries = [
                 """ SELECT
@@ -608,72 +736,64 @@ class Account(Resource):
                     FROM ptyd_accounts""" +
                     "\nWHERE user_name = " + "'" + accName + "' AND user_state = 'TX';"]
 
-            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city',
-                           'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
-            query = runSelectQuery(queries[0], cur)
-
-            items = self.jsonifyAccounts(query, accountKeys)
+            items = execute(queries[0], 'get', conn)
+            items['result'][0]['password_sha512'] = sha512(items['result'][0]['user_name'].encode()).hexdigest()
 
             response['message'] = 'Request successful.'
             response['result'] = items
 
             passCheck = sha512(accPass.encode()).hexdigest()
-            if passCheck == items[0]['password_sha512']:
+            if passCheck == items['result'][0]['password_sha512']:
                 return response, 200
             else:
-                return "Request failed, wrong password.", 400 
+                print("Wrong password.")
+                return "Request failed, wrong password.", 401 
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
 class SignUp(Resource):
-    global RDS_PW
-
     # HTTP method POST
-    def get(self, username, password, email, firstname, lastname):
-        return {
-            'message': 'request successful',
-            'new_user': {
-                'username': username,
-                'email': email,
-                'password': password,
-                'firstname': firstname,
-                'lastname': lastname
-            }
-        }
-
-class Social(Resource):
-    global RDS_PW
-
-    # Format queried tuples into JSON
-    def jsonifyAccounts(self, query, rowDictKeys):
-        json = []
-        dateKeys = ['create_date', 'last_update', 'last_delivery']
-        for row in query:
-            rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                if key in dateKeys:
-                    value = value.strftime("%Y-%m-%d")
-                rowDict[key] = value
-            rowDict['password_sha512'] = sha512(
-                rowDict['user_name'].encode()).hexdigest()
-            json.append(rowDict)
-        return json
-
-    # HTTP method GET
-    def get(self, email, token):
+    def post(self):
         response = {}
+        items = []
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = []
+            conn = connect()
+            data = request.get_json(force=True)
 
-            queries = [
-                """ SELECT
+            Username = data['Username']
+            FirstName = data['FirstName']
+            LastName = data['LastName']
+            Email = data['Email']
+            PhoneNumber = data['PhoneNumber']
+            Password = data['Password']
+            Address = data['Address']
+            AddressUnit = data['AddressUnit']
+            DeliveryNote = "N/A"
+            City = data['City']
+            State = data['State']
+            Zip = data['Zip']
+            Region = "US"
+            Gender = "F"
+            WeeklyUpdates = data['WeeklyUpdates']
+            CreateDate = datetime.strftime(date.today(), "%Y-%m-%d")
+            LastUpdate = CreateDate
+            ActiveBool = "Yes"
+            Referral = data['Referral']
+
+            print("Received:", data)
+
+            queries = ["CALL get_new_user_id;"]
+
+            NewUserIDresponse = execute(queries[0], 'get', conn)
+            NewUserID = NewUserIDresponse['result'][0]['new_id']
+
+            print("NewUserID:", NewUserID)
+
+            queries.append(
+                """ INSERT INTO ptyd_accounts
+                    (
                         user_uid,
                         user_name,
                         first_name,
@@ -682,47 +802,65 @@ class Social(Resource):
                         phone_number,
                         user_address,
                         address_unit,
+                        delivery_note,
                         user_city,
                         user_state,
                         user_zip,
                         user_region,
                         user_gender,
+                        weekly_updates,
                         create_date,
                         last_update,
                         activeBool,
                         last_delivery,
                         referral_source,
-                        user_note
-                    FROM ptyd_accounts""" +
-                    "\nWHERE user_name = " + "'" + email + "' AND user_state = 'TX';"]
+                        user_note,
+                        user_profile_picture
+                    )
+                    VALUES
+                    (""" +
+                        "\'" + NewUserID + "\'," +
+                        "\'" + Username + "\'," +
+                        "\'" + FirstName + "\'," +
+                        "\'" + LastName + "\'," +
+                        "\'" + Email + "\'," +
+                        "\'" + PhoneNumber + "\'," +
+                        "\'" + Address + "\'," +
+                        "\'" + AddressUnit + "\'," +
+                        "\'" + DeliveryNote + "\'," +
+                        "\'" + City + "\'," +
+                        "\'" + State + "\'," +
+                        "\'" + Zip + "\'," +
+                        "\'" + Region + "\'," +
+                        "\'" + Gender + "\'," +
+                        "\'" + WeeklyUpdates + "\'," +
+                        "\'" + CreateDate + "\'," +
+                        "\'" + LastUpdate + "\'," +
+                        "\'" + ActiveBool + "\'," +
+                        "NULL," +
+                        "\'" + Referral + "\'," +
+                        "NULL," +
+                        "NULL);")
 
-            accountKeys = ('user_uid', 'user_name', 'first_name', 'last_name', 'user_email', 'phone_number', 'user_address', 'address_unit', 'user_city',
-                           'user_state', 'user_zip', 'user_region', 'user_gender', 'create_date', 'last_update', 'activeBool', 'last_delivery', 'referral_source', 'user_note')
-            query = runSelectQuery(queries[0], cur)
-
-            items = self.jsonifyAccounts(query, accountKeys)
+            print("Query:", queries[1])
+            insertResponse = execute(queries[1], 'post', conn)
 
             response['message'] = 'Request successful.'
-            response['result'] = items
+            response['result'] = insertResponse
 
-            passCheck = sha512(token.encode()).hexdigest()
-            if passCheck == items[0]['password_sha512']:
-                return response, 200
-            else:
-                return "Request failed, wrong password.", 400 
+            return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
-        
 # Define API routes
-api.add_resource(Plans, '/api/v1/plans')
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
-api.add_resource(Account, '/api/v1/account/<string:accName>/<string:accPass>')
-api.add_resource(SignUp, '/api/v1/signup/<string:username>/<string:password>/<string:email>/<string:firstname>/<string:lastname>')
-api.add_resource(Social, '/api/v1/social/<string:email>/<string:token>')
+
+api.add_resource(Plans, '/api/v2/plans')
+api.add_resource(SignUp, '/api/v2/signup')
+api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)

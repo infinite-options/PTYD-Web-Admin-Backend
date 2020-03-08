@@ -10,12 +10,52 @@ function SignUp (props)  {
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [confirmEmail, setConfirmEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [firstname, setFirstName] = useState("");
     const [lastname, setLastName] = useState("");
+    const [address, setAddress] = useState("");
+    const [addressUnit, setAddressUnit] = useState("");
+    const [city, setCity] = useState("");
+    const [zip, setZip] = useState("");
+    const [userState, setUserState] = useState("");
+    const [referral, setReferral] = useState("Social Media");
+    const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
 
     async function sendForm() {
-        window.open(props.API_URL + "/" + username + "/" + password + "/" + email + "/" + firstname + "/" + lastname);
+        if (email != confirmEmail) {
+            return "email mismatch";
+        }
+
+        if (password != confirmPassword) {
+            return "password mismatch";
+        }
+
+        fetch(props.API_URL, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Username: username,
+            FirstName: firstname,
+            LastName: lastname,
+            Email: email,
+            PhoneNumber: phoneNumber,
+            Password: password,
+            Address: address,
+            AddressUnit: addressUnit,
+            City: city,
+            Zip: zip,
+            State: userState,
+            Referral: referral,
+            WeeklyUpdates: weeklyUpdates,
+          })
+        })
+
         return "success";
     }
 
@@ -68,12 +108,18 @@ function SignUp (props)  {
 
                                 <Form.Group  controlId="formGridEmailConfirm">
                                 <Form.Label>Confirm Email</Form.Label>
-                                <Form.Control type="email" placeholder="Confirm Email" />
+                                <Form.Control type="email"
+                                    value={confirmEmail}
+                                    onChange={e => setConfirmEmail(e.target.value)}
+                                    placeholder="Confirm Email" />
                                 </Form.Group>
 
                                 <Form.Group  controlId="formGridPhoneNumber">
                                 <Form.Label>Phone Number</Form.Label>
-                                <Form.Control placeholder="Enter Phone Number" />
+                                <Form.Control
+                                    value={phoneNumber}
+                                    onChange={e => setPhoneNumber(e.target.value)}
+                                    placeholder="Enter Phone Number" />
                                 </Form.Group>
 
                                 <Form.Group controlId="formGridPassword">
@@ -86,18 +132,27 @@ function SignUp (props)  {
 
                                 <Form.Group controlId="formGridPasswordConfirm">
                                 <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control type="password" placeholder="Confirm Password" />
+                                <Form.Control type="password"
+                                    value={confirmPassword}
+                                    onChange={e => setConfirmPassword(e.target.value)}
+                                    placeholder="Confirm Password" />
                                 </Form.Group>
 
                                 <Form.Row>
                                     <Form.Group as={Col} sm={9} controlId="formGridAddress">
                                         <Form.Label>Address</Form.Label>
-                                        <Form.Control placeholder="1234 Main St" />
+                                        <Form.Control
+                                            value={address}
+                                            onChange={e => setAddress(e.target.value)}
+                                            placeholder="1234 Main St" />
                                     </Form.Group>
 
                                     <Form.Group as={Col} controlId="formGridAddressUnit">
                                         <Form.Label>Unit</Form.Label>
-                                        <Form.Control placeholder="" />
+                                        <Form.Control
+                                            value={addressUnit}
+                                            onChange={e => setAddressUnit(e.target.value)}
+                                            placeholder="" />
                                     </Form.Group>
                                 </Form.Row>
                                 
@@ -105,26 +160,32 @@ function SignUp (props)  {
                                 <Form.Row>
                                     <Form.Group as={Col} controlId="formGridCity">
                                     <Form.Label>City</Form.Label>
-                                    <Form.Control />
+                                    <Form.Control 
+                                        value={city}
+                                        onChange={e => setCity(e.target.value)}
+                                        />
                                     </Form.Group>
 
                                     <Form.Group as={Col} controlId="formGridState">
                                     <Form.Label>State</Form.Label>
-                                    <Form.Control as="select">
+                                    <Form.Control as="select" value={userState} onChange={e => setUserState(e.target.value)}>
                                         <option>Choose...</option>
-                                        <option>Texas</option>
+                                        <option>TX</option>
                                     </Form.Control>
                                     </Form.Group>
 
                                     <Form.Group as={Col} controlId="formGridZip">
                                     <Form.Label>Zip</Form.Label>
-                                    <Form.Control />
+                                    <Form.Control
+                                        value={zip}
+                                        onChange={e => setZip(e.target.value)}
+                                    />
                                     </Form.Group>
                                 </Form.Row>
 
                                 <Form.Group as={Col} controlId="formGridReferral">
                                     <Form.Label>Referral</Form.Label>
-                                    <Form.Control as="select">
+                                    <Form.Control as="select" value={referral} onChange={e => setReferral(e.target.value)}>
                                         <option>Social Media</option>
                                         <option>Website</option>
                                         <option>Friend</option>
@@ -133,7 +194,27 @@ function SignUp (props)  {
                                 </Form.Group>
 
                                 <Form.Group id="formGridCheckbox">
-                                    <Form.Check type="checkbox" label="Sign Me Up For Weekly Prep To Your Door Updates!" checked />
+                                    <Form.Check 
+                                        id="weeklyUpdateCheck"
+                                        value={ weeklyUpdates } 
+                                        onChange={ e => { 
+                                            if(document.getElementById("weeklyUpdateCheck").checked == true) {
+                                                console.log(document.getElementById("weeklyUpdateCheck").checked)
+                                                setWeeklyUpdates("TRUE")
+                                            }
+                                            else {
+                                                setWeeklyUpdates("FALSE")
+                                            }
+                                        } } 
+                                        type="checkbox" 
+                                        label="Sign Me Up For Weekly Prep To Your Door Updates!"
+                                    />
+                                    {/*
+                                    <Form.Control
+                                        value={weeklyUpdates}
+                                        onChange={e => setWeeklyUpdates(e.target.value)}
+                                    />
+                                    */}
                                 </Form.Group>
 
                                 <Form.Group id="formGridServiceTerms">
