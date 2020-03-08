@@ -19,6 +19,7 @@ export default class MealButton extends Component {
     buttonAddOn: false,
     requestModal: false,
     // buttonDisabled: true,
+    deliveryDisabled: false,
     buttonSelectKeepColor: false,
     buttonAddOnKeepColor: false,
     maxmeals: this.props.maxmeals
@@ -73,18 +74,18 @@ export default class MealButton extends Component {
       deliveryDisabled: false
     });
   };
-  stopDeliverying = () => {
-    this.setState({
-      buttonM: false,
-      buttonS: false,
-      buttonSkip: false,
-      buttonSelect: false,
-      buttonSurprise: false,
-      buttonAddOn: false,
-      deliveryDisabled: true,
-      buttonDisabled: true
-    });
-  };
+  // stopDeliverying = () => {
+  //   this.setState({
+  //     buttonM: false,
+  //     buttonS: false,
+  //     buttonSkip: false,
+  //     buttonSelect: false,
+  //     buttonSurprise: false,
+  //     buttonAddOn: false,
+  //     deliveryDisabled: true,
+  //     buttonDisabled: true
+  //   });
+  // };
 
   changeButtonSelect = () => {
     this.setState({
@@ -187,14 +188,19 @@ export default class MealButton extends Component {
       <div>
         <ButtonToolbar>
           <div className="radio">
+            {this.props.NoDeliveryAfter4
+              ? ""
+              : (this.state.deliveryDisabled = true)}
             <Button
               disabled={this.state.deliveryDisabled}
               variant="outline-dark"
               onClick={
-                (this.changeButtonS,
-                this.props.NoDeliveryAfter4 ? "" : this.stopDeliverying)
+                this.changeButtonS
+                // this.props.NoDeliveryAfter4 ? "" : this.stopDeliverying)
               }
-              style={this.state.buttonS ? green : hide}
+              style={
+                this.state.buttonS && this.props.NoDeliveryAfter4 ? green : hide
+              }
             >
               {this.props.day1}
               <br />
@@ -228,7 +234,7 @@ export default class MealButton extends Component {
             }}
           > */}
           <Button
-            disabled={this.state.buttonDisabled && this.state.deliveryDisabled}
+            disabled={this.state.buttonDisabled || this.state.deliveryDisabled}
             variant="outline-dark"
             ref={button => (this.button = button)}
             style={
@@ -242,11 +248,15 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
-            disabled={this.state.buttonDisabled && this.state.deliveryDisabled}
+            disabled={this.state.buttonDisabled || this.state.deliveryDisabled}
             variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
-            style={this.state.buttonSurprise ? green : hide}
+            style={
+              this.state.buttonSurprise && this.props.NoDeliveryAfter4
+                ? green
+                : hide
+            }
           >
             Surprise Me!
           </Button>
