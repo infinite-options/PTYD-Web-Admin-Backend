@@ -27,17 +27,33 @@ export default function Login (props) {
     event.preventDefault();
   }
 
-  useEffect(() => {
-    // onLoad();
-    // componentDidMount();
-  }, []);
+  useEffect(() => {}, []);
  
   const responseGoogle = (response) => {
-    console.log(response);
+    console.log(response.Qt);
+    const e = response.Qt.zu;
+    const fn = response.Qt.vW;
+    const ln = response.Qt.wU;
+    const u = fn + ln;
+    setEmail(u);
+    console.log(email);
+    setPassword(u);
+    grabLoginInfoForUser(u, u)
+    .then(res => login(res))
+    .catch(err => console.log(err));
   }
 
   const responseFacebook = (response) => {
     console.log(response);
+  }
+
+  async function checkSocialMedia() {
+    try {
+      checkLogin();
+      return "success";
+    } catch {
+      return "err";
+    }
   }
 
   async function grabLoginInfoForUser(userName, userPass) {
@@ -49,11 +65,11 @@ export default function Login (props) {
   }
 
   function checkLogin() {
-    let t = []
+    //let t = []
     grabLoginInfoForUser(email, password)
-    .then(res => login(res))
+    .then(res => {login(res); console.log(res);})
     .catch(err => console.log(err));
-    login(t);
+    //login(t);
   }
 
   function login(user) {
@@ -62,6 +78,7 @@ export default function Login (props) {
     for (var i = 0; i < arr.length; i++) {
       var u = arr[i].user_name;
       var p = arr[i].password_sha512;
+      console.log(i);
       if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
         setLoginStatus("Logged In");
 
@@ -76,7 +93,7 @@ export default function Login (props) {
       else {
         document.cookie = " loginStatus: Sign In , user_uid: null , ";
       }
-    
+    console.log('end of login');
     }
   }
 
