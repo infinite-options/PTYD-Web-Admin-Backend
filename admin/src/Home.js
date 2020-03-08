@@ -144,7 +144,9 @@
 
 import React from 'react'
 import { Table, Button, Card, Container, Row, Col } from 'react-bootstrap'
-
+import MaterialTable from 'material-table';
+import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
+import { MenuCreation } from './components/MenuCreation';
 
 
 export const Home = () => (
@@ -154,22 +156,22 @@ export const Home = () => (
     </Row>
 
     <Row>
-        <Col sm={4}>
-            <Card style={{ width: '18rem' }}>
+        <Col>
+            <Card style={{ width: '24rem' }}>
                 <Card.Body>
                     <Card.Title>Week 1</Card.Title> 
                     <Card.Subtitle className="mb-2 text-muted">3/1 - 3/7</Card.Subtitle>
                     <Card.Text>
                     
-                    <Table responsive striped bordered hover size="sm" style={{ overflowY: 'hidden'}}>
-                        <thead>
+                    <Table responsive striped bordered style={{ textAlign: 'center'}}>
+                        <thead style={{'overflow': 'scroll', 'display': 'block'}}>
                             <tr>
                             <th>Menu</th>
                             <th>Meal</th>
                             <th>Quantity Ordered</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style={{'height': '300px','overflowY': 'scroll', 'display': 'block'}}>
                             <tr>
                             <td>Weekly Special 1</td>
                             <td>Saag</td>
@@ -185,31 +187,59 @@ export const Home = () => (
                             <td>Veggie Medley Soup</td>
                             <td>33</td>
                             </tr>
+                            <tr>
+                            <td>Seasonal Favorite 1</td>
+                            <td>Roasted Cauliflower Curry</td>
+                            <td>60</td>
+                            </tr>
+                            <tr>
+                            <td>Seasonal Favorite 2</td>
+                            <td>Holiday Salad w/ Poppyseed Dressing</td>
+                            <td>57</td>
+                            </tr>
+                            <tr>
+                            <td>Seasonal Favorite 3</td>
+                            <td>Gingerbread Oats</td>
+                            <td>19</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 1</td>
+                            <td>Energizer Smoothie</td>
+                            <td>42</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 2</td>
+                            <td>Original Smoothie</td>
+                            <td>35</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 3</td>
+                            <td>Almond Butter Smoothie</td>
+                            <td>64</td>
+                            </tr>
                         </tbody>
                         </Table>
 
                     </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
                 </Card.Body>
             </Card>
         </Col>
-        <Col sm={4}>
-        <Card style={{ width: '18rem' }}>
+        <Col>
+        <Card style={{ width: '24rem' }}>
                 <Card.Body>
                     <Card.Title>Week 2</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">3/8 - 3/14</Card.Subtitle>
                     <Card.Text>
                     
-                    <Table responsive striped bordered hover size="sm">
-                        <thead>
+                    <Table responsive striped bordered style={{ textAlign: 'center'}}>
+                    <thead style={{'overflow': 'scroll', 'display': 'block'}}>
                             <tr>
                             <th>Menu</th>
                             <th>Meal</th>
                             <th>Quantity Ordered</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style={{'height': '300px','overflowY': 'scroll', 'display': 'block'}}>
                             <tr>
                             <td>Weekly Special 1</td>
                             <td>Saag</td>
@@ -225,31 +255,59 @@ export const Home = () => (
                             <td>Veggie Medley Soup</td>
                             <td>33</td>
                             </tr>
+                            <tr>
+                            <td>Seasonal Favorite 1</td>
+                            <td>Roasted Cauliflower Curry</td>
+                            <td>60</td>
+                            </tr>
+                            <tr>
+                            <td>Seasonal Favorite 2</td>
+                            <td>Holiday Salad w/ Poppyseed Dressing</td>
+                            <td>57</td>
+                            </tr>
+                            <tr>
+                            <td>Seasonal Favorite 3</td>
+                            <td>Gingerbread Oats</td>
+                            <td>19</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 1</td>
+                            <td>Energizer Smoothie</td>
+                            <td>42</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 2</td>
+                            <td>Original Smoothie</td>
+                            <td>35</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 3</td>
+                            <td>Almond Butter Smoothie</td>
+                            <td>64</td>
+                            </tr>
                         </tbody>
                         </Table>
 
                     </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
                 </Card.Body>
             </Card>
         </Col>
-        <Col sm={4}>
-        <Card style={{ width: '18rem' }}>
+        <Col>
+        <Card style={{ width: '24rem' }}>
                 <Card.Body>
                     <Card.Title>Week 3</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">3/15 - 3/21</Card.Subtitle>
                     <Card.Text>
                     
-                    <Table responsive striped bordered hover size="sm">
-                        <thead>
+                    <Table responsive striped bordered style={{ textAlign: 'center'}}>
+                    <thead style={{'overflow': 'scroll', 'display': 'block'}}>
                             <tr>
                             <th>Menu</th>
                             <th>Meal</th>
                             <th>Quantity Ordered</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style={{'height': '300px','overflowY': 'scroll', 'display': 'block'}}>
                             <tr>
                             <td>Weekly Special 1</td>
                             <td>Saag</td>
@@ -265,52 +323,40 @@ export const Home = () => (
                             <td>Veggie Medley Soup</td>
                             <td>33</td>
                             </tr>
-                        </tbody>
-                        </Table>
-
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                </Card.Body>
-            </Card>
-        </Col>
-        <Col sm={4}>
-        <Card style={{ width: '18rem' }}>
-                <Card.Body>
-                    <Card.Title>Week 4</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">3/22 - 3/28</Card.Subtitle>
-                    <Card.Text>
-                    
-                    <Table responsive striped bordered hover size="sm">
-                        <thead>
                             <tr>
-                            <th>Menu</th>
-                            <th>Meal</th>
-                            <th>Quantity Ordered</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                            <td>Weekly Special 1</td>
-                            <td>Saag</td>
-                            <td>45</td>
+                            <td>Seasonal Favorite 1</td>
+                            <td>Roasted Cauliflower Curry</td>
+                            <td>60</td>
                             </tr>
                             <tr>
-                            <td>Weekly Special 2</td>
-                            <td>Rainbow Chopped Salad w/ Red Curry Dressing</td>
-                            <td>23</td>
+                            <td>Seasonal Favorite 2</td>
+                            <td>Holiday Salad w/ Poppyseed Dressing</td>
+                            <td>57</td>
                             </tr>
                             <tr>
-                            <td>Weekly Special 3</td>
-                            <td>Veggie Medley Soup</td>
-                            <td>33</td>
+                            <td>Seasonal Favorite 3</td>
+                            <td>Gingerbread Oats</td>
+                            <td>19</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 1</td>
+                            <td>Energizer Smoothie</td>
+                            <td>42</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 2</td>
+                            <td>Original Smoothie</td>
+                            <td>35</td>
+                            </tr>
+                            <tr>
+                            <td>Smoothie 3</td>
+                            <td>Almond Butter Smoothie</td>
+                            <td>64</td>
                             </tr>
                         </tbody>
                         </Table>
 
                     </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
                 </Card.Body>
             </Card>
         </Col>
@@ -319,66 +365,59 @@ export const Home = () => (
     <br></br>
 
     <Row>
-        <h2>Next Week's Meals</h2>
+        <h2>Menu Creation</h2>
     </Row>   
 
     <Row>
-    <Col>
-            <Card style={{ width: '15rem' }}>
-                <Card.Body>
-                    <Card.Title>Meal 1</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                </Card.Body>
-            </Card>
-        </Col>
-        <Col>
-        <Card style={{ width: '15rem' }}>
-                <Card.Body>
-                    <Card.Title>Meal 2</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                </Card.Body>
-            </Card>
-        </Col>
-        <Col>
-        <Card style={{ width: '15rem' }}>
-                <Card.Body>
-                    <Card.Title>Meal 3</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                </Card.Body>
-            </Card>
-        </Col>
-        <Col>
-        <Card style={{ width: '15rem' }}>
-                <Card.Body>
-                    <Card.Title>Meal 4</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                </Card.Body>
-            </Card>
-        </Col>
+    
+    {/* <MaterialTable style={{width: '100rem'}}
+      title="Editable Example"
+      columns= [
+               { title: "Subscription", field: "name" },
+               { title: "Meal Name", field: "surname" },
+               { title: "Qty", field: "birthYear", type: "numeric" }
+                ] 
+      data={state.data}
+      editable={{
+        onRowAdd: newData =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              setState(prevState => {
+                const data = [...prevState.data];
+                data.push(newData);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+        onRowUpdate: (newData, oldData) =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              if (oldData) {
+                setState(prevState => {
+                  const data = [...prevState.data];
+                  data[data.indexOf(oldData)] = newData;
+                  return { ...prevState, data };
+                });
+              }
+            }, 600);
+          }),
+        onRowDelete: oldData =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              setState(prevState => {
+                const data = [...prevState.data];
+                data.splice(data.indexOf(oldData), 1);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+      }}
+    /> */}
+    <MaterialTable style={{width: '100rem'}}></MaterialTable>
+
     </Row>
 
     <br></br>
