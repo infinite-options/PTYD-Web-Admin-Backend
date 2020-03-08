@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    x:Class="InfiniteMeals.SelectMealOptions"
+    Title="{Binding kitchen_name}"
+    ios:Page.UseSafeArea="true">
+
+    <!--<ContentPage.Content>
+    </ContentPage.Content>-->
+    
+   <!-- <ScrollView>
+        <Grid RowSpacing="0">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="AUTO"/>
+        </Grid.RowDefinitions>
+        
+        <Image x:Name ="mealPhoto" Source="pexels-photo-461198.jpeg" Aspect="AspectFill" HeightRequest="250" HorizontalOptions="FillAndExpand" VerticalOptions="Start" Grid.Row="0" BackgroundColor="Gray"/>
+        
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.Row="1"/>
+        
+        <StackLayout Grid.Row="1" Orientation="Vertical">
+            
+            <StackLayout x:Name="op1" Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="10">
+                <Label x:Name="op1Title" HorizontalTextAlignment="Center" Text="Option One" Grid.Row="1" FontSize="18"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Label x:Name="op1c1" HorizontalOptions="StartAndExpand" Text="Bhaji"/>
+                    <Label x:Name="op1Price" HorizontalOptions="EndAndExpand" Text="$20" FontSize="20"/>
+                </StackLayout>
+                <Label x:Name="op1c2" HorizontalOptions="StartAndExpand" Text="Daal"/>
+                <Label x:Name="op1c3" HorizontalOptions="StartAndExpand" Text="2 Chapatis"/>
+                <Label x:Name="op1c4" HorizontalOptions="StartAndExpand" Text="Rice"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button Text="-" HorizontalOptions="CenterAndExpand" HeightRequest="30" BorderColor="Gray" BorderWidth="0.5" WidthRequest="30" Clicked="reduceOrdersForMealOptionOne"/>
+                    <Entry x:Name="op1qty" HorizontalTextAlignment="Center" Text="0" Placeholder="0" HorizontalOptions="CenterAndExpand" HeightRequest="30" WidthRequest="35"/>
+                    <Button Text="+" HorizontalOptions="CenterAndExpand" HeightRequest="30" BorderColor="Gray" BorderWidth="0.5" WidthRequest="30" Clicked="addOrdersForMealOptionOne"/>                
+                </StackLayout>
+                    </StackLayout>
+            
+            
+            <Image BackgroundColor="Silver" HeightRequest="0.5"/>
+            
+            <StackLayout x:Name="op2" Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="10">
+                <Label x:Name="op2Title" HorizontalTextAlignment="Center" Text="Option Two" Grid.Row="1" FontSize="18"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Label x:Name="op2c1" HorizontalOptions="StartAndExpand" Text="Bhaji"/>
+                    <Label x:Name="op2Price" HorizontalOptions="EndAndExpand" Text="$24" FontSize="20"/>
+                </StackLayout>
+                <Label x:Name="op2c2" HorizontalOptions="StartAndExpand" Text="Daal"/>
+                <Label x:Name="op2c3" HorizontalOptions="StartAndExpand" Text="4 Chapatis"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button Text="-" HorizontalOptions="CenterAndExpand" HeightRequest="30" BorderColor="Gray" BorderWidth="0.5" WidthRequest="30" Clicked="reduceOrdersForMealOptionTwo"/>
+                    <Entry x:Name="op2qty" HorizontalTextAlignment="Center" Text="0" Placeholder="0" HorizontalOptions="CenterAndExpand" HeightRequest="30" WidthRequest="35"/>
+                    <Button Text="+" HorizontalOptions="CenterAndExpand" HeightRequest="30" BorderColor="Gray" BorderWidth="0.5" WidthRequest="30" Clicked="addOrdersForMealOptionTwo"/>                
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+        
+        <StackLayout Grid.Row="2" Padding="40">
+            <Button Text="Proceed to Checkout" Grid.Row="2" HeightRequest="50" BorderColor="Gray" BorderWidth="0.5" x:Name="checkout" Clicked="Handle_Clicked"/>
+        </StackLayout>
+        
+        </Grid>
+    </ScrollView>-->
+
+    <StackLayout Orientation="Vertical">
+        <Label XAlign="Center" Margin="5, 10, 5, 10" x:Name="NoMealsLabel" Text="No produce have been posted today for this Business."/>
+        <ListView x:Name="mealsListView" HasUnevenRows="True" IsPullToRefreshEnabled="true" SelectionMode="None" Footer="">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        
+                        <StackLayout Orientation="Horizontal" Margin="10, 10, 10, 10" HorizontalOptions="FillAndExpand">
+                            <StackLayout Orientation="Vertical" HeightRequest="50" WidthRequest="50">
+                                 <Image Source="{Binding imageString}" HeightRequest="50" WidthRequest="50" Aspect="AspectFill"></Image>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Vertical" WidthRequest="200">
+                                <Label Text="{Binding title}" FontAttributes="Bold" FontSize="Default"></Label>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="$" FontSize="Small" Margin="0,0,0,0"></Label>
+                                    <Label Text="{Binding price}" FontSize="Small" Margin="0,0,0,0"></Label>
+                                </StackLayout>
+                                <Label Text="{Binding description}" WidthRequest="200" FontAttributes="Italic" FontSize="Small"></Label>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal">
+                                <Button Text="-" FontSize="40" HeightRequest="10" BorderColor="Gray" BorderWidth="0" Clicked="reduceOrders" CommandParameter="{Binding .}"/>
+                                <Label HorizontalTextAlignment="Center" Text="{Binding order_qty}" WidthRequest="30" VerticalTextAlignment="Center"/>
+                                <Button Text="+" FontSize="30" HeightRequest="10" BorderColor="Gray" BorderWidth="0" Clicked="addOrders" CommandParameter="{Binding .}"/>
+                            </StackLayout>
+                            
+                        </StackLayout>
+                        
+                    </ViewCell>
+                </DataTemplate>
+                
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        
+        <Button Text="Proceed to Checkout" Margin="20, 10, 20, 10" HeightRequest="40" BorderColor="Gray" BorderWidth="0.5" x:Name="checkout" Clicked="Handle_Clicked"/>
+    </StackLayout>
+</ContentPage>

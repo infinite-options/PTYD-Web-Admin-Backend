@@ -1,0 +1,35 @@
+﻿<Properties StartupConfiguration="{69727BA4-AE22-4D90-8110-410E8487C39D}|Default">
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android PreferredExecutionTarget="Android.Android_Accelerated_Oreo" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/Meals/SelectMealOptions.xaml">
+    <Files>
+      <File FileName="InfiniteMeals/Meals/SelectMealOptions.xaml" Line="42" Column="13" />
+      <File FileName="InfiniteMeals/Kitchens/Controller/MainPage.xaml" />
+      <File FileName="InfiniteMeals.Android/Assets/AboutAssets.txt" />
+      <File FileName="InfiniteMeals/App.xaml" />
+      <File FileName="InfiniteMeals/Kitchens/Controller/MainPage.xaml.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="InfiniteMeals" expanded="True">
+            <Node name="InfiniteMeals.Android" expanded="True">
+              <Node name="Assets" expanded="True" />
+            </Node>
+            <Node name="InfiniteMeals.iOS" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>InfiniteMeals/InfiniteMeals.csproj</String>
+    <String>InfiniteMeals.iOS/InfiniteMeals.iOS.csproj</String>
+    <String>InfiniteMeals.UITests/InfiniteMeals.UITests.csproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
