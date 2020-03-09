@@ -854,6 +854,84 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
+# Social Media Login API
+class Social(Resource):
+
+    # HTTP method GET
+    def get(self, user, token):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [
+                """ SELECT
+                        user_id,
+                        user_email,
+                        user_social,
+                        user_token
+                    FROM ptyd_social""" +
+                    "\nWHERE user_email = " + "'" + user + "' AND user_token = '" + token + "';"]
+
+            items = execute(queries[0], 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            print( response['result']['result'][0]['user_id'] )
+            email = response['result']['result'][0]['user_email']
+
+            restest = SocialAccount().get(email)
+
+
+            return response, 200 #restest, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class SocialAccount(Resource):
+
+    # HTTP method GET
+    def get(self, uid):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [
+                """ SELECT
+                        user_uid,
+                        user_name,
+                        first_name,
+                        last_name,
+                        user_email,
+                        phone_number,
+                        user_address,
+                        address_unit,
+                        user_city,
+                        user_state,
+                        user_zip,
+                        user_region,
+                        user_gender,
+                        create_date,
+                        last_update,
+                        activeBool,
+                        last_delivery,
+                        referral_source,
+                        user_note
+                    FROM ptyd_accounts""" +
+                    "\nWHERE user_email = " + "'" + uid + "';"]
+
+            items = execute(queries[0], 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 # Define API routes
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
@@ -861,6 +939,9 @@ api.add_resource(Accounts, '/api/v1/accounts')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
+api.add_resource(Social, '/api/v2/social/<string:user>/<string:token>')
+api.add_resource(SocialAccount, '/api/v2/social/<string:uid>')
+
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)

@@ -17,7 +17,7 @@ export default function Login (props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
-  const [users, setUsers] = useState([]);
+  //const [users, setUsers] = useState([]);
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -27,19 +27,28 @@ export default function Login (props) {
     event.preventDefault();
   }
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
  
+  // Social Media Login
+
+  // API GET Request for Social Media User Data
+  async function grabLoginInfoForSocial(user, token) {
+    const res = await fetch(props.SOCIAL_API_URL + '/' + user + '/' + token);
+    const api = await res.json();
+    const login = api.result.result;
+    return login;
+  }
+
   const responseGoogle = (response) => {
-    console.log(response.Qt);
+    console.log(response);
     const e = response.Qt.zu;
     const fn = response.Qt.vW;
     const ln = response.Qt.wU;
+    const tok = response.accessToken;
     const u = fn + ln;
-    setEmail(u);
-    console.log(email);
-    setPassword(u);
-    grabLoginInfoForUser(u, u)
-    .then(res => login(res))
+
+    grabLoginInfoForSocial(e, tok)
+    .then(res => socialLogin(res, u, u))
     .catch(err => console.log(err));
   }
 
@@ -47,29 +56,46 @@ export default function Login (props) {
     console.log(response);
   }
 
-  async function checkSocialMedia() {
-    try {
-      checkLogin();
-      return "success";
-    } catch {
-      return "err";
+  function socialLogin(user, testUser, testPass) {
+    let arr = user
+    console.log(arr);
+    for (var i = 0; i < arr.length; i++) {
+      var u = arr[i].user_name;
+      var p = arr[i].password_sha512;
+      console.log(i, u, p);
+      if (u === testUser && p === ( crypto.createHash('sha512').update( testPass ).digest('hex')) ) {
+        setLoginStatus("Logged In");
+
+        document.cookie = " loginStatus: Hello " + arr[i].first_name  + "! , " + " user_uid: " + arr[i].user_uid + " , ";
+        console.log(document.cookie)
+        i = arr.length;
+
+        // redirect & reload page for buttons and login status
+        props.history.push("/");
+        window.location.reload(false);
+      } 
+      else {
+        document.cookie = " loginStatus: Sign In , user_uid: null , ";
+      }
     }
+    console.log('end of login');
   }
 
+  // Direct Login
+
+  // API GET Request for User Data
   async function grabLoginInfoForUser(userName, userPass) {
     const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + userPass);
     const api = await res.json();
     const login = api.result.result;
-    console.log(login);
     return login;
   }
 
+  // Direct User Login
   function checkLogin() {
-    //let t = []
     grabLoginInfoForUser(email, password)
-    .then(res => {login(res); console.log(res);})
+    .then(res => login(res))
     .catch(err => console.log(err));
-    //login(t);
   }
 
   function login(user) {
