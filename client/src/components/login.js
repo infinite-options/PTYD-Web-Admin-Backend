@@ -44,9 +44,7 @@ export default function Login (props) {
   async function grabLoginInfoForUser(userName, userPass) {
     const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + userPass);
     const api = await res.json();
-    const login = api.result.result;
-    console.log(login);
-    return login;
+    return api;
   }
 
   function checkLogin() {
@@ -57,27 +55,19 @@ export default function Login (props) {
     login(t);
   }
 
-  function login(user) {
-    let arr = user
-    console.log(arr);
-    for (var i = 0; i < arr.length; i++) {
-      var u = arr[i].user_name;
-      var p = arr[i].password_sha512;
-      if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
-        setLoginStatus("Logged In");
+  function login(response) {
+    if (response.auth_success == true) {
+      setLoginStatus("Logged In");
 
-        document.cookie = " loginStatus: Hello " + arr[i].first_name  + "! , " + " user_uid: " + arr[i].user_uid + " , ";
-        console.log(document.cookie)
-        i = arr.length;
+      document.cookie = " loginStatus: Hello " + response.result.result[0].first_name  + "! , " + " user_uid: " + response.result.result[0].user_uid + " , ";
+      console.log(document.cookie)
 
-        // redirect & reload page for buttons and login status
-        props.history.push("/");
-        window.location.reload(false);
-      } 
-      else {
-        document.cookie = " loginStatus: Sign In , user_uid: null , ";
-      }
-    
+      // redirect & reload page for buttons and login status
+      props.history.push("/");
+      window.location.reload(false);
+    } 
+    else {
+      document.cookie = " loginStatus: Sign In , user_uid: null , ";
     }
   }
 

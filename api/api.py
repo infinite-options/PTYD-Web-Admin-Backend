@@ -139,7 +139,8 @@ def execute(sql, cmd, conn, skipSerialization = False):
         # Return status code of 490 for unsuccessful HTTP request
         response['code'] = 490
     finally:
-        print(response['message'])
+        response['sql'] = sql
+        print(response)
         return response
 
 # Close RDS connection
@@ -733,17 +734,24 @@ class Account(Resource):
                     "\nWHERE user_name = " + "'" + accName + "' AND user_state = 'TX';"]
 
             items = execute(queries[0], 'get', conn)
-            items['result'][0]['password_sha512'] = sha512(items['result'][0]['user_name'].encode()).hexdigest()
+            user_uid = items['result'][0]['user_uid']
 
-            response['message'] = 'Request successful.'
-            response['result'] = items
+            queries.append("SELECT * FROM ptyd_passwords WHERE password_user_uid = \'" + user_uid + "\';")
+            password_response = execute(queries[1], 'get', conn)
+            salt = password_response['result'][0]['password_salt']
 
-            passCheck = sha512(accPass.encode()).hexdigest()
-            if passCheck == items['result'][0]['password_sha512']:
+            passCheck = sha512((accPass + salt).encode()).hexdigest()
+
+            if passCheck == password_response['result'][0]['password_hash']:
+                response['message'] = 'Request successful.'
+                response['result'] = items
+                response['auth_success'] = True
                 return response, 200
             else:
                 print("Wrong password.")
-                return "Request failed, wrong password.", 401 
+                response['message'] = 'Request failed, wrong password.'
+                response['auth_success'] = False
+                return response, 401 
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
