@@ -857,10 +857,19 @@ class TemplateApi(Resource):
         try:
             conn = connect()
 
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_meal_plans;""", 'get', conn)
+            items['UpcomingMealPlans'] = execute(""" SELECT 
+	M.menu_date "Entered Menu Date" ,
+    M.menu_category AS "Menu Category",
+	A.meal_desc "Meal option" ,
+    M.menu_num_sold AS "How many to make"
+FROM 
+	ptyd_menu M
+JOIN 
+	ptyd_meals A ON M.menu_meal_id = A.meal_id
+WHERE 
+	-- ENTER THE WEEK IN QUESTION IN “2020-02-01”
+M.menu_date = "2020-02-01";
+""", 'get', conn)
 
             response['message'] = 'successful'
             response['result'] = items
