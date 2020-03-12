@@ -7,10 +7,16 @@ import NoMatch from "./NoMatch";
 import Jumbotron from "./Jumbotron";
 import UpcomingMeals from "./UpcomingMeals";
 
-const Main = () => (
+const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/';
+
+const Main = ({ appProps }) => (
   <Switch>
     <Route exact path="/" component={Home} />
-    <Route exact path="/UpcomingMeals" component={UpcomingMeals} />
+    <Route exact path="/UpcomingMeals" 
+      component={UpcomingMeals} appProps={{
+      appProps,
+      API_URL: `${DEV_URL}templateapi`
+        }}/>
     <Route exact path="/about" component={About} />
     <Route exact path="/contact" component={Contact} />
     <Route component={NoMatch} />
