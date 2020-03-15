@@ -440,39 +440,49 @@ class Meals(Resource):
         # Remove last semicolon
         return mealSelectionString[:-1]
 
-    # HTTP method POST
+    # HTTP method POST (v2)
     def post(self):
+        response = {}
+        items = []
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = []
-
-            response = {}
+            conn = connect()
 
             data = request.get_json(force=True)
-#           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday'}
+#           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday', 'default_selected': False, 'num_meals': 5}
             print("Received:", data)
-
-            if data['delivery_day'] != None:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
-            else:
-                mealSelection = 'SKIP'
-#           print("Meal Selection String:", mealSelection)
 
             queries = [
                 """ SELECT purchase_id
                     FROM ptyd_purchases
-                    WHERE recipient_id = \'""" + data['recipient_id'] + "\';"]
+                    WHERE recipient_id = \'""" + data['recipient_id'] + "\';",
+                """ SELECT default_meal_plan
+                    FROM ptyd_default_meal_selection
+                    WHERE num_meals = """ + str(data['num_meals']) + ";"]
 
-            purchaseIdTuple = runSelectQuery(queries[0], cur)
+            if data['delivery_day'] == 'SKIP':
+                mealSelection = 'SKIP'
+            elif data['default_selected'] is True:
+                getDefault = execute(queries[1], 'get', conn)
+                if getDefault['code'] == 280:
+                    mealSelection = getDefault['result'][0]['default_meal_plan']
+                else:
+                    response['message'] = 'Could not retrieve default meal selections.'
+                    response['error'] = getDefault
+                    print("Error:", response['message'])
+                    return response, 501
+            else:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+#           print("Meal Selection String:", mealSelection)
 
-            if purchaseIdTuple == None:
+            getPurchaseId = execute(queries[0], 'get', conn)
+
+            if getPurchaseId['code'] == 280:
+                purchaseId = getPurchaseId['result'][0]['purchase_id']
+            else:
                 response['message'] = 'Recipient has no active purchase_id.'
+                response['error'] = getPurchaseId
                 print("Error:", response['message'])
                 return response, 400
-            else:
-                purchaseId = purchaseIdTuple[0][0]
 #               print("purchase_id:", purchaseId)
 
             selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -500,8 +510,8 @@ class Meals(Resource):
                         selection_time = \'""" + selectionTime + """\',
                         delivery_day = \'""" + data['delivery_day'] + "\';")
 
-            print("Query:", queries[1])
-            runInsertQuery(queries[1], cur, conn)
+            print("Query:", queries[2])
+            execute(queries[2], 'post', conn)
 
             response['message'] = 'Request successful.'
 
@@ -509,7 +519,7 @@ class Meals(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
 class Accounts(Resource):
     global RDS_PW
