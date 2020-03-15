@@ -451,6 +451,11 @@ class Meals(Resource):
 #           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday', 'default_selected': False, 'num_meals': 5}
 #           print("Received:", data)
 
+            if data['num_meals'] == None:
+                response['message'] = 'User not subscribed.'
+                print("Error:", response['message'])
+                return response, 400
+
             queries = [
                 """ SELECT purchase_id
                     FROM ptyd_purchases
@@ -459,35 +464,48 @@ class Meals(Resource):
                     FROM ptyd_default_meal_selection
                     WHERE num_meals = """ + str(data['num_meals']) + ";"]
 
+            # Handle SKIP request
             if data['delivery_day'] == 'SKIP':
                 mealSelection = 'SKIP'
+            # Handle default meal selection
             elif data['default_selected'] is True:
                 getDefault = execute(queries[1], 'get', conn)
-                if getDefault['code'] == 280:
+                # Handle successful default selection query
+                if getDefault['code'] == 280 and len(getDefault['result']) > 0:
                     mealSelection = getDefault['result'][0]['default_meal_plan']
+                # Handle unsuccessful default selection query
                 else:
                     response['message'] = 'Could not retrieve default meal selections.'
                     response['error'] = getDefault
                     print("Error:", response['message'])
+                    print("Error JSON:", response['error'])
+                    # 501: Not implemented in server
                     return response, 501
+            # Handle custom meal selection
             else:
                 mealSelection = self.formatMealSelection(data['meal_quantities'])
 #           print("Meal Selection String:", mealSelection)
 
+            # Retrieve purchase ID
             getPurchaseId = execute(queries[0], 'get', conn)
 
+            # Handle successful purchase ID query
             if getPurchaseId['code'] == 280:
                 if len(getPurchaseId['result']) > 0:
                     purchaseId = getPurchaseId['result'][0]['purchase_id']
+                # If user has no purchase ID
                 else:
                     response['message'] = 'Recipient has no active purchase_id.'
                     response['error'] = getPurchaseId
                     print("Error:", response['message'])
+                    # 400: Client side bad request
                     return response, 400
+            # Handle unsuccessful purchase ID query
             else:
                 response['message'] = 'Could not retrieve purchase_id.'
                 response['error'] = getPurchaseId
                 print("Error:", response['message'])
+                # 500: Internal server error
                 return response, 500
 #               print("purchase_id:", purchaseId)
 
