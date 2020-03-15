@@ -161,12 +161,13 @@ class Admin_db(Resource):
 
     def jsonify_admin(self,query, col_names):
         result =[]
-        decimalKeys=["Amount","Quantity of Ingredient Required","Amount of ingredient needed this week","quantity of ingredients needed to buy (Negative Surplus)"]
+        decimalKeys=["Quantity of Ingredient Required","A package of this much","Amount of ingredient needed this week","quantity of ingredients needed to buy (Negative Surplus)"]
         for row in query:
             row_dict ={}
             for ind, val in enumerate(row):
                 key = col_names[ind]
                 if "Date" in key:
+                    print(val)
                     val = val.strftime("%b %d, %Y")
                 if key in decimalKeys:
                     if val is None:
@@ -219,15 +220,15 @@ class Admin_db(Resource):
                         M.menu_date "Entered Menu Date" ,
                         M.menu_category AS "Menu Category",
                         A.meal_desc "Meal option selected" ,
-                        M.menu_num_sold AS "How amany to make",
+                        M.menu_num_sold AS "How many to make",
                         I.ingredient_desc AS "Ingredient Required Per meal",
-                        R.ingredient_qty AS "Quantity of Ingredient Required",
-                        (M.menu_num_sold * R.ingredient_qty) AS "Amount of ingredient needed this week",
+                        R.recipe_ingredient_qty AS "Quantity of Ingredient Required",
+                        (M.menu_num_sold * R.recipe_ingredient_qty) AS "Amount of ingredient needed this week",
                         CONCAT(inventory_qty," ", inventory_unit) AS "Amount of ingredient on hand",
                         inventory_location AS "location of ingredient",
                         I.package_size AS "A package of this much",
                         I.ingredient_cost AS "Will cost this much in $USD",
-                        ((M.menu_num_sold * R.ingredient_qty) - inventory_qty  ) AS "quantity of ingredients needed to buy (Negative Surplus)" 
+                        ((M.menu_num_sold * R.recipe_ingredient_qty) - inventory_qty  ) AS "quantity of ingredients needed to buy (Negative Surplus)" 
                     FROM 
                         ptyd_menu M
                     JOIN 
@@ -235,16 +236,16 @@ class Admin_db(Resource):
                     JOIN 
                         ptyd_recipes R ON M.menu_meal_id = R.recipe_meal_id
                     JOIN 
-                        ptyd_ingredients I ON R.ingredient_id = I.ingredient_id
+                        ptyd_ingredients I ON R.recipe_ingredient_id = I.ingredient_id
                     JOIN
-                        ptyd_inventory AS inv ON R.ingredient_id = inv.ingredient_id
+                        ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
                     -- WHERE 
                         -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
                     -- M.menu_date = "2020-02-01";"""
                     ]
 
             query1_col = ["Date","Category","Meal Option","Amount"]
-            query2_col = ["Menu Number","Entered Menu Date","Menu Category","Meal option selected","How amany to make","Ingredient Required Per meal",
+            query2_col = ["Menu Number","Entered Menu Date","Menu Category","Meal option selected","How many to make","Ingredient Required Per meal",
             "Quantity of Ingredient Required","Amount of ingredient needed this week","Amount of ingredient on hand","location of ingredient",
             "A package of this much","Will cost this much in $USD","quantity of ingredients needed to buy (Negative Surplus)"]
             col_names = [query1_col,query2_col]
@@ -260,6 +261,7 @@ class Admin_db(Resource):
             # stored into query.
             for ind,query in enumerate(queries):
                 query1 = runSelectQuery(query, cur)
+                # print(query1[1])
                 items[queries_key[ind]] = self.jsonify_admin(query1, col_names[ind])
             # Successful message
             response['message'] = 'Request successful.'
