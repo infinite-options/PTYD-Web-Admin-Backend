@@ -8,6 +8,7 @@ import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
+    this.changeButtonSkip = this.changeButtonSkip.bind(this);
   }
 
   state = {
@@ -88,8 +89,8 @@ export default class MealButton extends Component {
     });
   };
 
-  changeButtonSkip = () => {
-    this.setState({
+  async changeButtonSkip () {
+    await this.setState({
       buttonM: false,
       buttonS: false,
       buttonSkip: true,
@@ -103,7 +104,6 @@ export default class MealButton extends Component {
       dayToDeliver: "SKIP"
     });
     this.sendForm();
-    console.log(this.state);
   };
 
   changeButtonSelect = () => {
@@ -166,54 +166,6 @@ export default class MealButton extends Component {
       color: "white"
     };
 
-    // function SpecialRequestModal(props) {
-    //   return (
-    //     <Modal
-    //       {...props}
-    //       size="lg"
-    //       aria-labelledby="contained-modal-title-vcenter"
-    //       centered
-    //     >
-    //       <Modal.Header closeButton>
-    //         <Modal.Title id="contained-modal-title-vcenter">
-    //           Special Request
-    //         </Modal.Title>
-    //       </Modal.Header>
-    //       <Modal.Body>
-    //         <Form.Group controlId="exampleForm.ControlTextarea1">
-    //           <Form.Control as="textarea" rows="3" />
-    //         </Form.Group>
-    //       </Modal.Body>
-    //       <Modal.Footer>
-    //         <Button variant="primary" type="submit">
-    //           Submit
-    //         </Button>
-    //         <Button onClick={props.onHide}>Close</Button>
-    //       </Modal.Footer>
-    //     </Modal>
-    //   );
-    // }
-
-    // function SpecialRequestAnimation() {
-    //   const [modalShow, setModalShow] = React.useState(false);
-
-    //   return (
-    //     <ButtonToolbar>
-    //       <Button
-    //         variant="outline-dark"
-    //         style={{ width: "90px", height: "90px" }}
-    //         onClick={() => setModalShow(true)}
-    //       >
-    //         Special Requests
-    //       </Button>
-
-    //       <SpecialRequestModal
-    //         show={modalShow}
-    //         onHide={() => setModalShow(false)}
-    //       />
-    //     </ButtonToolbar>
-    //   );
-    // }
     return (
       <div>
         <ButtonToolbar>
@@ -240,8 +192,8 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
-              onClick={this.changeButtonSkip}
               style={this.state.buttonSkip ? orange : hide}
+              onClick={ this.changeButtonSkip }
             >
               Skip This Week
             </Button>

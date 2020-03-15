@@ -32,6 +32,20 @@ class Checkout extends Component {
     }
   }
 
+  async checkout() {
+    fetch(this.props.CHECKOUT_URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: this.state.user.user_uid,
+        FirstName: this.state.user.first_name,
+      })
+    })
+  }
+
   render() {
     try {
       return (

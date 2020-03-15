@@ -859,6 +859,30 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
+class Checkout(Resource):
+    def post(self):
+        response = {}
+        reply = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+#           reply = execute(""" SELECT
+#                               *
+#                               FROM
+#                               ptyd_meal_plans;""", 'get', conn)
+
+            print(data)
+
+            response['message'] = 'Request successful.'
+            response['result'] = reply
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -871,7 +895,7 @@ class TemplateApi(Resource):
                                 FROM
                                 ptyd_meal_plans;""", 'get', conn)
 
-            response['message'] = 'successful'
+            response['message'] = 'Request successful.'
             response['result'] = items
 
             return response, 200
@@ -887,6 +911,7 @@ api.add_resource(Accounts, '/api/v1/accounts')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
+api.add_resource(Checkout, '/api/v2/checkout')
 
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 

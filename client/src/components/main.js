@@ -80,7 +80,8 @@ export default function Main({ appProps }) {
         component={Checkout}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/accounts`
+          API_URL: `${DEV_URL}v1/accounts`,
+          CHECKOUT_URL: `${DEV_URL}v2/checkout`,
         }}
       />
 
