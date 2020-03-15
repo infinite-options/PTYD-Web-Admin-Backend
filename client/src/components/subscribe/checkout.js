@@ -99,7 +99,6 @@ class Checkout extends Component {
                   <Form.Group as={Col} controlId="formGridFirstName">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control
-                      type="email"
                       placeholder="Enter First Name"
                       value={this.state.user.first_name}
                     />
