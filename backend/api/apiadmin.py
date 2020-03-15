@@ -42,7 +42,6 @@ def RdsPw():
 RDS_PW = RdsPw()
 # print(RDS_PW)
 # Connect to RDS
-
 def getRdsConn(RDS_PW):
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
@@ -73,7 +72,6 @@ def closeRdsConn(cur, conn):
 
 # Runs a select query with the SQL query string and pymysql cursor as arguments
 # Returns a list of Python tuples
-
 def runSelectQuery(query, cur):
     try:
         cur.execute(query)
@@ -128,7 +126,6 @@ class NewApiTemplate(Resource):
             # SELECT query and return a tuple of
             # Python tuples. This will be
             # stored into query.
-
             query = runSelectQuery("SELECT meal_plan_id, meal_plan_desc FROM ptyd_meal_plans;", cur)
 
             # Successful message
@@ -138,6 +135,7 @@ class NewApiTemplate(Resource):
             # from earlier as needed to format
             # our API data to our liking.
             response['result'] = query
+            
             # Return the response object and the
             # HTTP code 200 to indicate the
             # GET request was successful.
@@ -169,8 +167,8 @@ class Admin_db(Resource):
             for ind, val in enumerate(row):
                 key = col_names[ind]
                 if "Date" in key:
-                    print(val)
-                    val = val.strftime("%b %d, %Y")
+                    # print(val)
+                    val = val.strftime("%b %d")
                 if key in decimalKeys:
                     if val is None:
                         val = 0
@@ -179,6 +177,7 @@ class Admin_db(Resource):
                 row_dict[key] = val
             result.append(row_dict)
         return result
+
 
     # This is an API that will be called when
     # HTTP makes a GET request on the URL
@@ -201,7 +200,6 @@ class Admin_db(Resource):
             # a pymysql cursor object from our
             # Connection object. This cursor can
             # run MySQL queries.
-
             cur = db[1]     
             
             queries = [
@@ -222,7 +220,6 @@ class Admin_db(Resource):
                         M.menu_date "Entered Menu Date" ,
                         M.menu_category AS "Menu Category",
                         A.meal_desc "Meal option selected" ,
-
                         M.menu_num_sold AS "How many to make",
                         I.ingredient_desc AS "Ingredient Required Per meal",
                         R.recipe_ingredient_qty AS "Quantity of Ingredient Required",
@@ -231,7 +228,6 @@ class Admin_db(Resource):
                         inventory_location AS "location of ingredient",
                         I.package_size AS "A package of this much",
                         I.ingredient_cost AS "Will cost this much in $USD",
-
                         ((M.menu_num_sold * R.recipe_ingredient_qty) - inventory_qty  ) AS "quantity of ingredients needed to buy (Negative Surplus)" 
                     FROM 
                         ptyd_menu M
@@ -240,7 +236,6 @@ class Admin_db(Resource):
                     JOIN 
                         ptyd_recipes R ON M.menu_meal_id = R.recipe_meal_id
                     JOIN 
-
                         ptyd_ingredients I ON R.recipe_ingredient_id = I.ingredient_id
                     JOIN
                         ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
@@ -254,7 +249,7 @@ class Admin_db(Resource):
             "Quantity of Ingredient Required","Amount of ingredient needed this week","Amount of ingredient on hand","location of ingredient",
             "A package of this much","Will cost this much in $USD","quantity of ingredients needed to buy (Negative Surplus)"]
             col_names = [query1_col,query2_col]
-            queries_key = ["Meals by week", "Inventory DB"]
+            queries_key = ["Meals_by_week", "Inventory DB"]
             items={}
             # Initialize response
             response = {}
@@ -275,8 +270,8 @@ class Admin_db(Resource):
             # from earlier as needed to format
             # our API data to our liking.
             response['result'] = items
-
-                        # Return the response object and the
+            
+            # Return the response object and the
             # HTTP code 200 to indicate the
             # GET request was successful.
             return response, 200
@@ -324,7 +319,6 @@ class MealCustomerLifeReport(Resource):
                         ORDER BY p.menu_meal_id ASC
                         ;
                         """,
-
                         """SELECT 
                         CONCAT(first_name, " " , last_name) AS "Customer Name",
                         create_date AS "Account creation Date",
@@ -343,7 +337,7 @@ class MealCustomerLifeReport(Resource):
             col_names = [query1_col,query2_col]
             decimal_cols =["Average/listing","Total number sold"]
             date_cols = ["Account Creation Date","Last account Update","Last Delivery"]
-            queries_key = ["Meals report", "Customer Lifetime"]
+            queries_key = ["Meals_report", "Customer Lifetime"]
             items={}
             response = {}
 

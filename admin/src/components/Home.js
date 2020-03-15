@@ -13,7 +13,7 @@ class Home extends Component {
   async componentDidMount() {
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
-    const upcomingMeals = api.result.Meals_report;
+    const upcomingMeals = api.result.Meals_by_week;
     this.setState({ upcomingMeals });
   }
 
@@ -24,245 +24,59 @@ class Home extends Component {
         <Row>
           <h2>Upcoming Meal Orders</h2>
         </Row>
-
+        {this.state.upcomingMeals.map(upcomingMeal => (
+          <div
+            style={{
+              width: "25%",
+              margin: "0",
+              padding: "0"
+            }}
+          >
+            {upcomingMeal.Category}
+          </div>
+        ))}
         <Row>
-          <Col>
-            <Card style={{ width: "24rem" }}>
-              <Card.Body>
-                <Card.Title>Week 1</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  3/1 - 3/7
-                </Card.Subtitle>
-                <Card.Text>
-                  <Table
-                    responsive
-                    striped
-                    bordered
-                    style={{ textAlign: "center" }}
-                  >
-                    <thead style={{ overflow: "scroll", display: "block" }}>
-                      <tr>
-                        <th>Menu</th>
-                        <th>Meal</th>
-                        <th>Quantity Ordered</th>
-                      </tr>
-                    </thead>
-                    <tbody
-                      style={{
-                        height: "300px",
-                        overflowY: "scroll",
-                        display: "block"
-                      }}
+          {this.state.upcomingMeals.map(upcomingMeal => (
+            <Col>
+              <Card style={{ width: "24rem" }}>
+                <Card.Body>
+                  <Card.Title>Week 1</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    3/1 - 3/7
+                  </Card.Subtitle>
+                  <Card.Text>
+                    <Table
+                      responsive
+                      striped
+                      bordered
+                      style={{ textAlign: "center" }}
                     >
-                      <tr>
-                        <td>Weekly Special 1</td>
-                        <td>Saag</td>
-                        <td>45</td>
-                      </tr>
-                      <tr>
-                        <td>Weekly Special 2</td>
-                        <td>Rainbow Chopped Salad w/ Red Curry Dressing</td>
-                        <td>23</td>
-                      </tr>
-                      <tr>
-                        <td>Weekly Special 3</td>
-                        <td>Veggie Medley Soup</td>
-                        <td>33</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 1</td>
-                        <td>Roasted Cauliflower Curry</td>
-                        <td>60</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 2</td>
-                        <td>Holiday Salad w/ Poppyseed Dressing</td>
-                        <td>57</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 3</td>
-                        <td>Gingerbread Oats</td>
-                        <td>19</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 1</td>
-                        <td>Energizer Smoothie</td>
-                        <td>42</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 2</td>
-                        <td>Original Smoothie</td>
-                        <td>35</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 3</td>
-                        <td>Almond Butter Smoothie</td>
-                        <td>64</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col>
-            <Card style={{ width: "24rem" }}>
-              <Card.Body>
-                <Card.Title>Week 2</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  3/8 - 3/14
-                </Card.Subtitle>
-                <Card.Text>
-                  <Table
-                    responsive
-                    striped
-                    bordered
-                    style={{ textAlign: "center" }}
-                  >
-                    <thead style={{ overflow: "scroll", display: "block" }}>
-                      <tr>
-                        <th>Menu</th>
-                        <th>Meal</th>
-                        <th>Quantity Ordered</th>
-                      </tr>
-                    </thead>
-                    <tbody
-                      style={{
-                        height: "300px",
-                        overflowY: "scroll",
-                        display: "block"
-                      }}
-                    >
-                      <tr>
-                        <td>Weekly Special 1</td>
-                        <td>Saag</td>
-                        <td>45</td>
-                      </tr>
-                      <tr>
-                        <td>Weekly Special 2</td>
-                        <td>Rainbow Chopped Salad w/ Red Curry Dressing</td>
-                        <td>23</td>
-                      </tr>
-                      <tr>
-                        <td>Weekly Special 3</td>
-                        <td>Veggie Medley Soup</td>
-                        <td>33</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 1</td>
-                        <td>Roasted Cauliflower Curry</td>
-                        <td>60</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 2</td>
-                        <td>Holiday Salad w/ Poppyseed Dressing</td>
-                        <td>57</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 3</td>
-                        <td>Gingerbread Oats</td>
-                        <td>19</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 1</td>
-                        <td>Energizer Smoothie</td>
-                        <td>42</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 2</td>
-                        <td>Original Smoothie</td>
-                        <td>35</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 3</td>
-                        <td>Almond Butter Smoothie</td>
-                        <td>64</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col>
-            <Card style={{ width: "24rem" }}>
-              <Card.Body>
-                <Card.Title>Week 3</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  3/15 - 3/21
-                </Card.Subtitle>
-                <Card.Text>
-                  <Table
-                    responsive
-                    striped
-                    bordered
-                    style={{ textAlign: "center" }}
-                  >
-                    <thead style={{ overflow: "scroll", display: "block" }}>
-                      <tr>
-                        <th>Menu</th>
-                        <th>Meal</th>
-                        <th>Quantity Ordered</th>
-                      </tr>
-                    </thead>
-                    <tbody
-                      style={{
-                        height: "300px",
-                        overflowY: "scroll",
-                        display: "block"
-                      }}
-                    >
-                      <tr>
-                        <td>Weekly Special 1</td>
-                        <td>Saag</td>
-                        <td>45</td>
-                      </tr>
-                      <tr>
-                        <td>Weekly Special 2</td>
-                        <td>Rainbow Chopped Salad w/ Red Curry Dressing</td>
-                        <td>23</td>
-                      </tr>
-                      <tr>
-                        <td>Weekly Special 3</td>
-                        <td>Veggie Medley Soup</td>
-                        <td>33</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 1</td>
-                        <td>Roasted Cauliflower Curry</td>
-                        <td>60</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 2</td>
-                        <td>Holiday Salad w/ Poppyseed Dressing</td>
-                        <td>57</td>
-                      </tr>
-                      <tr>
-                        <td>Seasonal Favorite 3</td>
-                        <td>Gingerbread Oats</td>
-                        <td>19</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 1</td>
-                        <td>Energizer Smoothie</td>
-                        <td>42</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 2</td>
-                        <td>Original Smoothie</td>
-                        <td>35</td>
-                      </tr>
-                      <tr>
-                        <td>Smoothie 3</td>
-                        <td>Almond Butter Smoothie</td>
-                        <td>64</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
+                      <thead style={{ overflow: "scroll", display: "block" }}>
+                        <tr>
+                          <th>Menu</th>
+                          <th>Meal</th>
+                          <th>Quantity Ordered</th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        style={{
+                          height: "300px",
+                          overflowY: "scroll",
+                          display: "block"
+                        }}
+                      >
+                        <tr>
+                          <td>{upcomingMeal.Category}</td>
+                          <td>Saag</td>
+                          <td>45</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
         </Row>
 
         <br></br>

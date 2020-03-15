@@ -14,14 +14,22 @@ const DEV_URL = "http://localhost:2020/api/v1/";
 
 const Main = ({ appProps }) => (
   <Switch>
-    <AppliedRoute exact path="/" component={Home} />
+    <AppliedRoute
+      exact
+      path="/"
+      component={Home}
+      appProps={{
+        appProps,
+        API_URL: `${DEV_URL}admindb`
+      }}
+    />
     <AppliedRoute
       exact
       path="/UpcomingMeals"
       component={UpcomingMeals}
       appProps={{
         appProps,
-        API_URL: `${DEV_URL}MealCustomerLifeReport`
+        API_URL: `${DEV_URL}admindb`
       }}
     />
     <AppliedRoute exact path="/about" component={About} />

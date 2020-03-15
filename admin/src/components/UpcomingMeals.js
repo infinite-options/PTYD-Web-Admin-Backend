@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Card, CardDeck } from "react-bootstrap";
 
 class UpcomingMeals extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class UpcomingMeals extends Component {
   async componentDidMount() {
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
-    const upcomingMeals = api.result.Meals_report;
+    const upcomingMeals = api.result.Meals_by_week;
     this.setState({ upcomingMeals });
   }
 
@@ -25,7 +26,7 @@ class UpcomingMeals extends Component {
               padding: "0"
             }}
           >
-            {upcomingMeal.Meal_id}
+            {upcomingMeal.Category}
           </div>
         ))}
       </div>
