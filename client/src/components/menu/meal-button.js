@@ -9,6 +9,7 @@ export default class MealButton extends Component {
   constructor(props) {
     super(props);
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
+    this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
   }
 
   state = {
@@ -43,6 +44,8 @@ export default class MealButton extends Component {
         week_affected: this.props.saturdayDate,
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
+        default_selected: this.state.buttonSurprise,
+        num_meals: this.props.maxmeals,
       })
     });
   };
@@ -115,13 +118,14 @@ export default class MealButton extends Component {
     });
     console.log("select");
   };
-  changeButtonSurprise = () => {
-    this.setState({
+  async changeButtonSurprise () {
+    await this.setState({
       buttonSelect: false,
       buttonSurprise: true,
       buttonAddOn: false,
       buttonSelectKeepColor: false
     });
+    this.sendForm();
     console.log("surprise");
   };
   changeButtonAddOn = () => {
@@ -193,7 +197,7 @@ export default class MealButton extends Component {
             <Button
               variant="outline-dark"
               style={this.state.buttonSkip ? orange : hide}
-              onClick={ this.changeButtonSkip }
+              onClick={this.changeButtonSkip}
             >
               Skip This Week
             </Button>
