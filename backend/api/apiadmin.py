@@ -167,7 +167,7 @@ class Admin_db(Resource):
             for ind, val in enumerate(row):
                 key = col_names[ind]
                 if "Date" in key:
-                    print(val)
+                    # print(val)
                     val = val.strftime("%b %d, %Y")
                 if key in decimalKeys:
                     if val is None:
