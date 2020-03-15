@@ -32,6 +32,10 @@ export default function Login (props) {
 
   async function onLoad() {
     // fill it up when needed
+    const res = await fetch(props.API_URL);
+    const api = await res.json();
+    const logins = api.result;
+    setUsers(logins);
   }
 
   async function componentDidMount() {
@@ -42,42 +46,32 @@ export default function Login (props) {
   }
 
   async function grabLoginInfoForUser(userName, userPass) {
-    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + userPass);
+    const salt = users.find(user => user.user_name === userName).password_salt;
+    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
     const api = await res.json();
-    const login = api.result;
-    console.log(login);
-    return login;
+    return api;
   }
 
   function checkLogin() {
-    let t = []
+    let t = [];
     grabLoginInfoForUser(email, password)
     .then(res => login(res))
     .catch(err => console.log(err));
     login(t);
   }
 
-  function login(user) {
-    let arr = user
-    console.log(arr);
-    for (var i = 0; i < arr.length; i++) {
-      var u = arr[i].user_name;
-      var p = arr[i].password_sha512;
-      if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
-        setLoginStatus("Logged In");
+  function login(response) {
+    if (response.auth_success == true) {
+      setLoginStatus("Logged In");
 
-        document.cookie = " loginStatus: Hello " + arr[i].first_name  + "! , " + " user_uid: " + arr[i].user_uid + " , ";
-        console.log(document.cookie)
-        i = arr.length;
+      document.cookie = " loginStatus: Hello " + response.result.result[0].first_name  + "! , " + " user_uid: " + response.result.result[0].user_uid + " , ";
 
-        // redirect & reload page for buttons and login status
-        props.history.push("/");
-        window.location.reload(false);
-      } 
-      else {
-        document.cookie = " loginStatus: Sign In , user_uid: null , ";
-      }
-    
+      // redirect & reload page for buttons and login status
+      props.history.push("/");
+      window.location.reload(false);
+    } 
+    else {
+      document.cookie = " loginStatus: Sign In , user_uid: null , ";
     }
   }
 
