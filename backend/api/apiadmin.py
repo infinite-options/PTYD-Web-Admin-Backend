@@ -42,11 +42,7 @@ def RdsPw():
 RDS_PW = RdsPw()
 # print(RDS_PW)
 # Connect to RDS
-<<<<<<< HEAD
 
-
-=======
->>>>>>> api12
 def getRdsConn(RDS_PW):
     RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
     RDS_PORT = 3306
@@ -67,11 +63,6 @@ def getRdsConn(RDS_PW):
         raise Exception("RDS Connection failed.")
 
 # Close RDS connection
-<<<<<<< HEAD
-
-
-=======
->>>>>>> api12
 def closeRdsConn(cur, conn):
     try:
         cur.close()
@@ -82,11 +73,7 @@ def closeRdsConn(cur, conn):
 
 # Runs a select query with the SQL query string and pymysql cursor as arguments
 # Returns a list of Python tuples
-<<<<<<< HEAD
 
-
-=======
->>>>>>> api12
 def runSelectQuery(query, cur):
     try:
         cur.execute(query)
@@ -118,11 +105,7 @@ class NewApiTemplate(Resource):
             # This will connect to our database
             # Refer to the function getRdsConn()
             # above for more info
-<<<<<<< HEAD
-
-=======
             
->>>>>>> api12
             db = getRdsConn(RDS_PW)
 
             # The above function will create a
@@ -145,12 +128,8 @@ class NewApiTemplate(Resource):
             # SELECT query and return a tuple of
             # Python tuples. This will be
             # stored into query.
-<<<<<<< HEAD
-            query = runSelectQuery(
-                "SELECT meal_plan_id, meal_plan_desc FROM ptyd_meal_plans;", cur)
-=======
+
             query = runSelectQuery("SELECT meal_plan_id, meal_plan_desc FROM ptyd_meal_plans;", cur)
->>>>>>> api12
 
             # Successful message
             response['message'] = 'Request successful.'
@@ -159,11 +138,6 @@ class NewApiTemplate(Resource):
             # from earlier as needed to format
             # our API data to our liking.
             response['result'] = query
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> api12
             # Return the response object and the
             # HTTP code 200 to indicate the
             # GET request was successful.
@@ -186,17 +160,6 @@ class Admin_db(Resource):
     # RDS_PW.
     global RDS_PW
 
-<<<<<<< HEAD
-    def jsonify_admin(self, query, col_names):
-        result = []
-        decimalKeys = ["Amount", "Quantity of Ingredient Required", "Amount of ingredient needed this week",
-                       "quantity of ingredients needed to buy (Negative Surplus)"]
-        for row in query:
-            row_dict = {}
-            for ind, val in enumerate(row):
-                key = col_names[ind]
-                if "Date" in key:
-=======
 
     def jsonify_admin(self,query, col_names):
         result =[]
@@ -207,46 +170,27 @@ class Admin_db(Resource):
                 key = col_names[ind]
                 if "Date" in key:
                     print(val)
->>>>>>> api12
                     val = val.strftime("%b %d, %Y")
                 if key in decimalKeys:
                     if val is None:
                         val = 0
                     else:
-<<<<<<< HEAD
-                        val = float(val)
-=======
                         val =float(val)
->>>>>>> api12
                 row_dict[key] = val
             result.append(row_dict)
         return result
 
-<<<<<<< HEAD
     # This is an API that will be called when
     # HTTP makes a GET request on the URL
     # for this API
-
-=======
-
-    # This is an API that will be called when
-    # HTTP makes a GET request on the URL
-    # for this API
->>>>>>> api12
     def get(self):
         try:
             # This will connect to our database
             # Refer to the function getRdsConn()
             # above for more info
-<<<<<<< HEAD
-
-            db = getRdsConn(RDS_PW)
-
-=======
             
             db = getRdsConn(RDS_PW)
             
->>>>>>> api12
             # The above function will create a
             # Connection object defined in the
             # pymysql module. We will store it
@@ -257,17 +201,11 @@ class Admin_db(Resource):
             # a pymysql cursor object from our
             # Connection object. This cursor can
             # run MySQL queries.
-<<<<<<< HEAD
-            cur = db[1]
 
-            queries = [
-                """SELECT 
-=======
             cur = db[1]     
             
             queries = [
                         """SELECT 
->>>>>>> api12
                             M.menu_date "Entered Menu Date" ,
                             M.menu_category AS "Menu Category",
                             A.meal_desc "Meal option" ,
@@ -278,37 +216,23 @@ class Admin_db(Resource):
                             ptyd_meals A ON M.menu_meal_id = A.meal_id
                         -- WHERE 
                             -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-<<<<<<< HEAD
-                        -- M.menu_date = "2020-02-01";""",
-                """SELECT 
-=======
                         -- M.menu_date = "2020-02-01";""", 
                         """SELECT 
->>>>>>> api12
                         M.menu_meal_id AS "Menu Number",
                         M.menu_date "Entered Menu Date" ,
                         M.menu_category AS "Menu Category",
                         A.meal_desc "Meal option selected" ,
-<<<<<<< HEAD
-                        M.menu_num_sold AS "How amany to make",
-                        I.ingredient_desc AS "Ingredient Required Per meal",
-                        R.ingredient_qty AS "Quantity of Ingredient Required",
-                        (M.menu_num_sold * R.ingredient_qty) AS "Amount of ingredient needed this week",
-=======
+
                         M.menu_num_sold AS "How many to make",
                         I.ingredient_desc AS "Ingredient Required Per meal",
                         R.recipe_ingredient_qty AS "Quantity of Ingredient Required",
                         (M.menu_num_sold * R.recipe_ingredient_qty) AS "Amount of ingredient needed this week",
->>>>>>> api12
                         CONCAT(inventory_qty," ", inventory_unit) AS "Amount of ingredient on hand",
                         inventory_location AS "location of ingredient",
                         I.package_size AS "A package of this much",
                         I.ingredient_cost AS "Will cost this much in $USD",
-<<<<<<< HEAD
-                        ((M.menu_num_sold * R.ingredient_qty) - inventory_qty  ) AS "quantity of ingredients needed to buy (Negative Surplus)" 
-=======
+
                         ((M.menu_num_sold * R.recipe_ingredient_qty) - inventory_qty  ) AS "quantity of ingredients needed to buy (Negative Surplus)" 
->>>>>>> api12
                     FROM 
                         ptyd_menu M
                     JOIN 
@@ -316,23 +240,7 @@ class Admin_db(Resource):
                     JOIN 
                         ptyd_recipes R ON M.menu_meal_id = R.recipe_meal_id
                     JOIN 
-<<<<<<< HEAD
-                        ptyd_ingredients I ON R.ingredient_id = I.ingredient_id
-                    JOIN
-                        ptyd_inventory AS inv ON R.ingredient_id = inv.ingredient_id
-                    -- WHERE 
-                        -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                    -- M.menu_date = "2020-02-01";"""
-            ]
 
-            query1_col = ["Date", "Category", "Meal Option", "Amount"]
-            query2_col = ["Menu Number", "Entered Menu Date", "Menu Category", "Meal option selected", "How amany to make", "Ingredient Required Per meal",
-                          "Quantity of Ingredient Required", "Amount of ingredient needed this week", "Amount of ingredient on hand", "location of ingredient",
-                          "A package of this much", "Will cost this much in $USD", "quantity of ingredients needed to buy (Negative Surplus)"]
-            col_names = [query1_col, query2_col]
-            queries_key = ["Meals by week", "Inventory DB"]
-            items = {}
-=======
                         ptyd_ingredients I ON R.recipe_ingredient_id = I.ingredient_id
                     JOIN
                         ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
@@ -348,7 +256,6 @@ class Admin_db(Resource):
             col_names = [query1_col,query2_col]
             queries_key = ["Meals by week", "Inventory DB"]
             items={}
->>>>>>> api12
             # Initialize response
             response = {}
 
@@ -357,17 +264,10 @@ class Admin_db(Resource):
             # SELECT query and return a tuple of
             # Python tuples. This will be
             # stored into query.
-<<<<<<< HEAD
-            for ind, query in enumerate(queries):
-                query1 = runSelectQuery(query, cur)
-                items[queries_key[ind]] = self.jsonify_admin(
-                    query1, col_names[ind])
-=======
             for ind,query in enumerate(queries):
                 query1 = runSelectQuery(query, cur)
                 # print(query1[1])
                 items[queries_key[ind]] = self.jsonify_admin(query1, col_names[ind])
->>>>>>> api12
             # Successful message
             response['message'] = 'Request successful.'
 
@@ -375,12 +275,8 @@ class Admin_db(Resource):
             # from earlier as needed to format
             # our API data to our liking.
             response['result'] = items
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> api12
-            # Return the response object and the
+                        # Return the response object and the
             # HTTP code 200 to indicate the
             # GET request was successful.
             return response, 200
@@ -393,20 +289,6 @@ class Admin_db(Resource):
 class MealCustomerLifeReport(Resource):
     global RDS_PW
 
-<<<<<<< HEAD
-    def jsonify_adminMEALlife(self, query, col_names, decimal_cols, date_cols):
-        result = []
-        for row in query:
-            row_dict = {}
-            for ind, val in enumerate(row):
-                key = col_names[ind]
-                if val is None:
-                    val = 0
-                elif key in date_cols:
-                    val = val.strftime("%b %d, %Y")
-                elif key in decimal_cols:
-                    val = float(val)
-=======
     def jsonify_adminMEALlife(self,query, col_names,decimal_cols,date_cols):
         result =[]
         for row in query:
@@ -419,7 +301,6 @@ class MealCustomerLifeReport(Resource):
                     val = val.strftime("%b %d, %Y")
                 elif key in decimal_cols:
                     val =float(val)
->>>>>>> api12
                 row_dict[key] = val
             result.append(row_dict)
         return result
@@ -443,11 +324,8 @@ class MealCustomerLifeReport(Resource):
                         ORDER BY p.menu_meal_id ASC
                         ;
                         """,
-<<<<<<< HEAD
-                       """SELECT 
-=======
+
                         """SELECT 
->>>>>>> api12
                         CONCAT(first_name, " " , last_name) AS "Customer Name",
                         create_date AS "Account creation Date",
                         last_update AS "Last account Update",
@@ -456,28 +334,6 @@ class MealCustomerLifeReport(Resource):
                         timestampdiff(MONTH, create_date, last_delivery) AS "Customer Lifetime in months"
                         FROM
                             ptyd_accounts;"""
-<<<<<<< HEAD
-                       ]
-
-            # query1 = runSelectQuery(queries[1], cur)
-            query1_col = ["Meal_id", "Meal name",
-                          "Average/listing", "Total number sold"]
-            query2_col = ["Customer Name", "Account Creation Date", "Last account Update", "Last Delivery", "Customer Lifetime in days",
-                          "Customer Lifetime in months"]
-            col_names = [query1_col, query2_col]
-            decimal_cols = ["Average/listing", "Total number sold"]
-            date_cols = ["Account Creation Date",
-                         "Last account Update", "Last Delivery"]
-            queries_key = ["Meals_report", "Customer Lifetime"]
-            items = {}
-            response = {}
-
-            for ind, query in enumerate(queries):
-                query1 = runSelectQuery(query, cur)
-                items[queries_key[ind]] = self.jsonify_adminMEALlife(
-                    query1, col_names[ind], decimal_cols, date_cols)
-
-=======
                         ]
                         
             # query1 = runSelectQuery(queries[1], cur)
@@ -495,7 +351,6 @@ class MealCustomerLifeReport(Resource):
                 query1 = runSelectQuery(query, cur)
                 items[queries_key[ind]] = self.jsonify_adminMEALlife(query1, col_names[ind],decimal_cols,date_cols)
             
->>>>>>> api12
             # Successful message
             response['message'] = 'Request successful.'
 
@@ -503,11 +358,7 @@ class MealCustomerLifeReport(Resource):
             # from earlier as needed to format
             # our API data to our liking.
             response['result'] = items
-<<<<<<< HEAD
-
-=======
             
->>>>>>> api12
             # Return the response object and the
             # HTTP code 200 to indicate the
             # GET request was successful.
@@ -518,24 +369,12 @@ class MealCustomerLifeReport(Resource):
             closeRdsConn(cur, conn)
 
         # print(query1[0])
-<<<<<<< HEAD
-
-# obj1 = MealCustomerLifeReport()
-# print(obj1.get())
-
-
-=======
         
 # obj1 = MealCustomerLifeReport()
 # print(obj1.get())
 
->>>>>>> api12
 api.add_resource(Admin_db, '/api/v1/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v1/MealCustomerLifeReport')
 
 if __name__ == '__main__':
-<<<<<<< HEAD
     app.run(host='127.0.0.1', port=2020)
-=======
-    app.run(host='127.0.0.1', port=3000)
->>>>>>> api12
