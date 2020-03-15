@@ -140,7 +140,7 @@ def execute(sql, cmd, conn, skipSerialization = False):
         response['code'] = 490
     finally:
         response['sql'] = sql
-        print(response)
+#       print(response)
         return response
 
 # Close RDS connection
@@ -449,7 +449,7 @@ class Meals(Resource):
 
             data = request.get_json(force=True)
 #           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday', 'default_selected': False, 'num_meals': 5}
-            print("Received:", data)
+#           print("Received:", data)
 
             queries = [
                 """ SELECT purchase_id
@@ -477,12 +477,18 @@ class Meals(Resource):
             getPurchaseId = execute(queries[0], 'get', conn)
 
             if getPurchaseId['code'] == 280:
-                purchaseId = getPurchaseId['result'][0]['purchase_id']
+                if len(getPurchaseId['result']) > 0:
+                    purchaseId = getPurchaseId['result'][0]['purchase_id']
+                else:
+                    response['message'] = 'Recipient has no active purchase_id.'
+                    response['error'] = getPurchaseId
+                    print("Error:", response['message'])
+                    return response, 400
             else:
-                response['message'] = 'Recipient has no active purchase_id.'
+                response['message'] = 'Could not retrieve purchase_id.'
                 response['error'] = getPurchaseId
                 print("Error:", response['message'])
-                return response, 400
+                return response, 500
 #               print("purchase_id:", purchaseId)
 
             selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -510,7 +516,7 @@ class Meals(Resource):
                         selection_time = \'""" + selectionTime + """\',
                         delivery_day = \'""" + data['delivery_day'] + "\';")
 
-            print("Query:", queries[2])
+#           print("Query:", queries[2])
             execute(queries[2], 'post', conn)
 
             response['message'] = 'Request successful.'
