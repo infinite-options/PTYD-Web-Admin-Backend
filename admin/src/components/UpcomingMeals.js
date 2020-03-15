@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Card, CardDeck } from "react-bootstrap";
 
 class UpcomingMeals extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ class UpcomingMeals extends Component {
               padding: "0"
             }}
           >
-            {upcomingMeal.Meal_id} MEALS
+            {upcomingMeal.Meal_id}
           </div>
         ))}
       </div>
