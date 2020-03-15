@@ -604,8 +604,8 @@ class Accounts(Resource):
                     else:
                         value = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
                 rowDict[key] = value
-            rowDict['password_sha512'] = sha512(
-                rowDict['user_name'].encode()).hexdigest()
+#           rowDict['password_sha512'] = sha512(
+#               rowDict['user_name'].encode()).hexdigest()
 
             rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
 
@@ -667,7 +667,8 @@ class Accounts(Resource):
                         num_meals AS MaximumMeals,
                         CONCAT('XXXX-XXXX-XXXX-', RIGHT(cc_num, 4) ) AS cc_num_secret,
                         cc_exp_date,
-                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret
+                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret,
+                        password_salt
                     FROM ptyd_accounts a1
                     LEFT JOIN ptyd_payments p1
                     ON user_uid = p1.buyer_id
@@ -675,6 +676,8 @@ class Accounts(Resource):
                     ON user_uid = recipient_id
                     LEFT JOIN ptyd_meal_plans
                     ON ptyd_purchases.meal_plan_id = ptyd_meal_plans.meal_plan_id
+                    INNER JOIN ptyd_passwords
+                    ON user_uid = password_user_uid
                     ORDER BY payment_time_stamp, user_uid DESC;""",
                     "SELECT * FROM ptyd_monday_zipcodes;"]
 
@@ -684,7 +687,7 @@ class Accounts(Resource):
                             'user_gender', 'create_date', 'last_update', 'activeBool',
                             'last_delivery', 'referral_source', 'delivery_note', 'Subscription',
                             'PaymentPlan', 'WeeklyPrice', 'payment_time_stamp', 'purchase_status',
-                            'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret')
+                            'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret', 'password_salt')
             query = runSelectQuery(queries[0], cur)
 
             mondayZipsQuery = runSelectQuery(queries[1], cur)
@@ -738,11 +741,9 @@ class Account(Resource):
 
             queries.append("SELECT * FROM ptyd_passwords WHERE password_user_uid = \'" + user_uid + "\';")
             password_response = execute(queries[1], 'get', conn)
-            salt = password_response['result'][0]['password_salt']
 
-            passCheck = sha512((accPass + salt).encode()).hexdigest()
-
-            if passCheck == password_response['result'][0]['password_hash']:
+            if accPass == password_response['result'][0]['password_hash']:
+                print("Successful authentication.")
                 response['message'] = 'Request successful.'
                 response['result'] = items
                 response['auth_success'] = True

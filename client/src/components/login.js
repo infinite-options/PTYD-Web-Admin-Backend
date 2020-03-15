@@ -32,6 +32,10 @@ export default function Login (props) {
 
   async function onLoad() {
     // fill it up when needed
+    const res = await fetch(props.API_URL);
+    const api = await res.json();
+    const logins = api.result;
+    setUsers(logins);
   }
 
   async function componentDidMount() {
@@ -42,13 +46,14 @@ export default function Login (props) {
   }
 
   async function grabLoginInfoForUser(userName, userPass) {
-    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + userPass);
+    const salt = users.find(user => user.user_name === userName).password_salt;
+    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
     const api = await res.json();
     return api;
   }
 
   function checkLogin() {
-    let t = []
+    let t = [];
     grabLoginInfoForUser(email, password)
     .then(res => login(res))
     .catch(err => console.log(err));
@@ -60,7 +65,6 @@ export default function Login (props) {
       setLoginStatus("Logged In");
 
       document.cookie = " loginStatus: Hello " + response.result.result[0].first_name  + "! , " + " user_uid: " + response.result.result[0].user_uid + " , ";
-      console.log(document.cookie)
 
       // redirect & reload page for buttons and login status
       props.history.push("/");
