@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* navagation */
+.sidenav {
   display: flex;
-  flex-direction: column;
+}
+.sidenav-space {
+  flex-basis: 225px;
+}
+
+.icon-title {
+  margin-right: 0.5rem;
+}
+
+.menu {
+  padding: 1.75rem 1rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.link {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.sidenav-dark {
+  height: 100%;
+  background-color: #212529;
+  color: rgba(255, 255, 255, 0.5);
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.sidenav-menu .menu {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link {
+  color: rgba(255, 255, 255, 0.5);
+}
+.sidenav-menu .link .icon-title {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link {
+  color: #ffff;
+}
+.sidenav-menu .link:hover {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link.active {
+  color: #fff;
+}
+.sidenav-menu .link.active .icon-title {
+  color: #fff;
 }
