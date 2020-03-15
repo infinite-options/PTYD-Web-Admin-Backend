@@ -7,5 +7,5 @@ This is where the frontend lies. It is done in React, and can be run within the 
 
 Once Node is running the app, you can access it on your browser at `localhost:3000`.
 
-### backend/
+### api/
 This is where all the server-side stuff is. You'll find code for APIs, database schemas, and other backend code not included in the React app.
