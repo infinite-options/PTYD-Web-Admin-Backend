@@ -6,6 +6,17 @@ import { MenuCreation } from "./MenuCreation";
 import Jumbotron from "./Jumbotron";
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { upcomingMeals: [] };
+  }
+  async componentDidMount() {
+    const res = await fetch(this.props.API_URL);
+    const api = await res.json();
+    const upcomingMeals = api.result.Meals_report;
+    this.setState({ upcomingMeals });
+  }
+
   render() {
     return (
       <Container>
