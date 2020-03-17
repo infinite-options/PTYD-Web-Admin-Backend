@@ -80,70 +80,6 @@ def runSelectQuery(query, cur):
     except:
         raise Exception("Could not run select query and/or return data")
 
-# --------------------------------------------------- Api template-----------------------------------------------------------
-
-
-class NewApiTemplate(Resource):
-    # This fetches the global variable RDS_PW
-    # and stores it in the class's local
-    # instance of RDS_PW
-    #
-    # When running this Python script locally,
-    # we pass the password to the database as
-    # a command line argument. This argument
-    # will be stored into the global variable
-    # RDS_PW.
-    global RDS_PW
-
-    # This is an API that will be called when
-    # HTTP makes a GET request on the URL
-    # for this API
-    def get(self):
-        try:
-            # This will connect to our database
-            # Refer to the function getRdsConn()
-            # above for more info
-            
-            db = getRdsConn(RDS_PW)
-
-            # The above function will create a
-            # Connection object defined in the
-            # pymysql module. We will store it
-            # into the object conn.
-            conn = db[0]
-
-            # getRdsConn() will also initialize
-            # a pymysql cursor object from our
-            # Connection object. This cursor can
-            # run MySQL queries.
-            cur = db[1]
-
-            # Initialize response
-            response = {}
-
-            # runSelectQuery() is a function
-            # written above that will run a
-            # SELECT query and return a tuple of
-            # Python tuples. This will be
-            # stored into query.
-            query = runSelectQuery("SELECT meal_plan_id, meal_plan_desc FROM ptyd_meal_plans;", cur)
-
-            # Successful message
-            response['message'] = 'Request successful.'
-
-            # We can manipulate the query object
-            # from earlier as needed to format
-            # our API data to our liking.
-            response['result'] = query
-            
-            # Return the response object and the
-            # HTTP code 200 to indicate the
-            # GET request was successful.
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            closeRdsConn(cur, conn)
 
 
 class Admin_db(Resource):
@@ -202,6 +138,7 @@ class Admin_db(Resource):
             # run MySQL queries.
             cur = db[1]     
             
+            ## -------- needs to be formated  -------------
             queries = [
                         """SELECT 
                             M.menu_date "Entered Menu Date" ,
@@ -212,9 +149,7 @@ class Admin_db(Resource):
                             ptyd_menu M
                         JOIN 
                             ptyd_meals A ON M.menu_meal_id = A.meal_id
-                        -- WHERE 
-                            -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                        -- M.menu_date = "2020-02-01";""", 
+                        ;""", 
                         """SELECT 
                         M.menu_meal_id AS "Menu Number",
                         M.menu_date "Entered Menu Date" ,
@@ -239,9 +174,7 @@ class Admin_db(Resource):
                         ptyd_ingredients I ON R.recipe_ingredient_id = I.ingredient_id
                     JOIN
                         ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
-                    -- WHERE 
-                        -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                    -- M.menu_date = "2020-02-01";"""
+                    ;"""
                     ]
 
             query1_col = ["Date","Category","Meal Option","Amount"]
@@ -363,12 +296,72 @@ class MealCustomerLifeReport(Resource):
             closeRdsConn(cur, conn)
 
         # print(query1[0])
-        
+
+class AdminMenu(Resource):
+    global RDS_PW
+    
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(
+                    """ SELECT 
+                        menu_date,
+                        menu_category,
+                        meal_desc,
+                        menu_num_sold
+                        FROM 
+                        ptyd_menu
+                        JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+                           
+                            
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
+    # HTTP method POST to update the menu
+    # def post(self):
+    #     response = {}
+    #     items = {}
+    #     try:
+    #         conn = connect()
+    #         data = request.get_json(force=True)
+
+    #         MenuDate = data['MenuDate']
+    #         MenuCategory = data['MenuCategory]
+    #         Meal = data['Meal']
+    #         NumberSold = 0
+
+    #         print("Received:", data)
+
+    #         items = execute(""" SELECT
+    #                             *
+    #                             FROM
+    #                             ptyd_meal_plans;""", 'get', conn)
+
+    #         response['message'] = 'successful'
+    #         response['result'] = items
+
+    #         return response, 200
+    #     except:
+    #         raise BadRequest('Request failed, please try again later.')
+    #     finally:
+    #         disconnect(conn)
+
 # obj1 = MealCustomerLifeReport()
 # print(obj1.get())
 
 api.add_resource(Admin_db, '/api/v1/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v1/MealCustomerLifeReport')
+api.add_resource(AdminMenu, '/api/v2/menu_display')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=3000)
+    app.run(host='127.0.0.1', port=4000)
