@@ -19,12 +19,13 @@ class Home extends Component {
 
   render() {
     return (
-      <Container>
-        <Jumbotron />
-        <Row>
-          <h2>Upcoming Meal Orders</h2>
-        </Row>
-        {this.state.upcomingMeals.map(upcomingMeal => (
+      <div class="container" style={{ marginTop: "10%" }}>
+        <center>
+          <h1>PTYD Admin Site</h1>
+        </center>
+        {/* <Jumbotron /> */}
+        <h2>Upcoming Meal Orders</h2>
+        {/* {this.state.upcomingMeals.map(upcomingMeal => (
           <div
             style={{
               width: "25%",
@@ -34,7 +35,7 @@ class Home extends Component {
           >
             {upcomingMeal.Category}
           </div>
-        ))}
+        ))} */}
         <Row>
           {this.state.upcomingMeals.map(upcomingMeal => (
             <Col>
@@ -166,7 +167,7 @@ class Home extends Component {
             </Card.Body>
           </Card>
         </Row>
-      </Container>
+      </div>
     );
   }
 }
