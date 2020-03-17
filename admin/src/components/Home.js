@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Table, Button, Card, Container, Row, Col } from "react-bootstrap";
 import MaterialTable from "material-table";
-import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
-import { MenuCreation } from "./MenuCreation";
+// import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
+// import { MenuCreation } from "./MenuCreation";
 import Jumbotron from "./Jumbotron";
-
+import Typography from "@material-ui/core/Typography";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Link from "@material-ui/core/Link";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -16,15 +18,26 @@ class Home extends Component {
     const upcomingMeals = api.result.Meals_by_week;
     this.setState({ upcomingMeals });
   }
+  handleClick(event) {
+    event.preventDefault();
+    console.info("You clicked a breadcrumb.");
+  }
 
   render() {
     return (
       <div class="container" style={{ marginTop: "10%" }}>
+        {/* <Jumbotron /> */}
         <center>
           <h1>PTYD Admin Site</h1>
         </center>
-        {/* <Jumbotron /> */}
-        <h2>Upcoming Meal Orders</h2>
+
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link color="inherit" onClick={this.handleClick}>
+            Admin Site
+          </Link>
+          <Typography color="textPrimary">Upcoming Meals Order</Typography>
+        </Breadcrumbs>
+        <br />
         {/* {this.state.upcomingMeals.map(upcomingMeal => (
           <div
             style={{
@@ -37,51 +50,64 @@ class Home extends Component {
           </div>
         ))} */}
         <Row>
-          {this.state.upcomingMeals.map(upcomingMeal => (
-            <Col>
-              <Card style={{ width: "24rem" }}>
-                <Card.Body>
-                  <Card.Title>Week 1</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    3/1 - 3/7
-                  </Card.Subtitle>
-                  <Card.Text>
-                    <Table
-                      responsive
-                      striped
-                      bordered
-                      style={{ textAlign: "center" }}
+          {/* {this.state.upcomingMeals.map(upcomingMeal => ( */}
+          <Col>
+            <Card
+              style={{
+                width: "24rem",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              }}
+            >
+              <Card.Body>
+                <Card.Title>Week 1</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                  The week of:
+                </Card.Subtitle>
+                <Card.Text>
+                  <Table
+                    responsive
+                    striped
+                    bordered
+                    style={{ textAlign: "center" }}
+                  >
+                    <thead style={{ overflow: "scroll", display: "block" }}>
+                      <tr>
+                        <th>Menu</th>
+                        <th>Meal</th>
+                        <th>Quantity Ordered</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      style={{
+                        height: "300px",
+                        overflowY: "scroll",
+                        display: "block"
+                      }}
                     >
-                      <thead style={{ overflow: "scroll", display: "block" }}>
-                        <tr>
-                          <th>Menu</th>
-                          <th>Meal</th>
-                          <th>Quantity Ordered</th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        style={{
-                          height: "300px",
-                          overflowY: "scroll",
-                          display: "block"
-                        }}
-                      >
-                        <tr>
-                          <td>{upcomingMeal.Category}</td>
-                          <td>Saag</td>
-                          <td>45</td>
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+                      <tr>
+                        {/* <td>{upcomingMeal.Category}</td> */}
+                        <td>aaaaaaa</td>
+                        <td>Saag</td>
+                        <td>45</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          {/* ))} */}
         </Row>
 
-        <br></br>
-
+        <br />
+        <br />
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link color="inherit" onClick={this.handleClick}>
+            Admin Site
+          </Link>
+          <Typography color="textPrimary">Weekly Purchases</Typography>
+        </Breadcrumbs>
+        <br />
         <Row>
           <h2>Menu Creation</h2>
         </Row>

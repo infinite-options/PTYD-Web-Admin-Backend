@@ -5,7 +5,6 @@ import { Nav } from "react-bootstrap";
 import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { Header } from "react-mdl";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "muicss/lib/react/button";
 
 const Styles = styled.div`
