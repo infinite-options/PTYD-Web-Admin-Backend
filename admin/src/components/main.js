@@ -7,7 +7,6 @@ import NoMatch from "./NoMatch";
 import Jumbotron from "./Jumbotron";
 import UpcomingMeals from "./UpcomingMeals";
 import AppliedRoute from "./AppliedRoute";
-
 // const DEV_URL =
 //   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/";
 const DEV_URL = "http://localhost:2020/api/v1/";

@@ -5,7 +5,7 @@ import PTYDBanner from "../assets/PTYD_Banner.jpg";
 const Styles = styled.div`
   .jumbo {
     background: url(${PTYDBanner}) no-repeat fixed bottom;
-    background-size: cover;
+    background-size: contain;
     color: #ccc;
     height: 200px;
     position: relative;
@@ -30,8 +30,9 @@ class NoMatch extends Component {
         <Jumbo fluid className="jumbo">
           <div className="overlay"></div>
           <Container>
-            <h1>Admin Page</h1>
-            <p>Prep To Your Door Admin Page</p>
+            <center>
+              <h1> Prep To Your Door Admin Page</h1>
+            </center>
           </Container>
         </Jumbo>
       </Styles>

@@ -7,6 +7,8 @@ import Jumbotron from "./Jumbotron";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
+import ItemToPurchase from "./ItemToPurchase";
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -26,15 +28,14 @@ class Home extends Component {
   render() {
     return (
       <div class="container" style={{ marginTop: "10%" }}>
-        {/* <Jumbotron /> */}
-        <center>
-          <h1>PTYD Admin Site</h1>
-        </center>
-
+        {/* title for the site ----------------------------------------- */}
+        <Jumbotron />
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
           </Link>
+
+          {/* upcoming meal order ----------------------------------------- */}
           <Typography color="textPrimary">Upcoming Meals Order</Typography>
         </Breadcrumbs>
         <br />
@@ -54,7 +55,7 @@ class Home extends Component {
           <Col>
             <Card
               style={{
-                width: "24rem",
+                width: "30%",
                 boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
               }}
             >
@@ -101,6 +102,8 @@ class Home extends Component {
 
         <br />
         <br />
+
+        {/* weekly purchase ----------------------------------------- */}
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
@@ -108,6 +111,66 @@ class Home extends Component {
           <Typography color="textPrimary">Weekly Purchases</Typography>
         </Breadcrumbs>
         <br />
+        <Card
+          style={{
+            width: "30%",
+            boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+          }}
+        >
+          <Card.Body>
+            <Card.Title>Week 1</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">
+              The week of:
+            </Card.Subtitle>
+            <ItemToPurchase />
+          </Card.Body>
+        </Card>
+        <br />
+        <br />
+
+        {/* Meal info ----------------------------------------- */}
+
+        <br />
+        <Row>
+          <Col>
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link color="inherit" onClick={this.handleClick}>
+                Admin Site
+              </Link>
+              <Typography color="textPrimary">Meal Info</Typography>
+            </Breadcrumbs>
+            <Card
+              style={{
+                width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              }}
+            >
+              <Card.Body></Card.Body>
+            </Card>
+          </Col>
+          <Col>
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link color="inherit" onClick={this.handleClick}>
+                Admin Site
+              </Link>
+              <Link color="inherit" onClick={this.handleClick}>
+                Meal Info
+              </Link>
+              <Typography color="textPrimary">Graph</Typography>
+            </Breadcrumbs>
+            <Card
+              style={{
+                width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              }}
+            >
+              <Card.Body></Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <br />
+
+        {/* Menu Creation  ----------------------------------------- */}
         <Row>
           <h2>Menu Creation</h2>
         </Row>
