@@ -33,26 +33,25 @@ class Checkout extends Component {
         }
       }
     }
-    console.log(this.state);
   }
 
   async sendForm() {
-    console.log("Sending checkout form");
-    console.log(this.state);
     const post_response = await fetch(this.props.CHECKOUT_URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.state.user)
+      body: JSON.stringify({
+        ...this.state.user,
+        item: this.props.location.item.name,
+        item_price: this.props.location.item.total,
+      })
     })
-    console.log(post_response);
     return post_response;
   }
 
   async checkout() {
-    console.log("Checking out...");
     this.sendForm()
     .then(res => this.handleApi(res))
     .catch(err => console.log(err));
@@ -65,15 +64,12 @@ class Checkout extends Component {
   handleChange(event) {
     const target = event.target;
     const name = target.name;
-    console.log(target.value);
-    console.log(name);
     this.setState(prevState => ({
       user: {
         ...prevState.user,
         [name]: target.value
       }
     }));
-    console.log(this.state);
   }
 
   render() {

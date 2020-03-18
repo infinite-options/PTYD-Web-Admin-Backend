@@ -906,7 +906,12 @@ class Checkout(Resource):
 #                               FROM
 #                               ptyd_meal_plans;""", 'get', conn)
 
-            print(data)
+            print("Received:", data)
+
+            queries = [
+                """ INSERT INTO ptyd_purchases
+
+                """]
 
             response['message'] = 'Request successful.'
             response['result'] = reply
