@@ -16,7 +16,10 @@ class Checkout extends Component {
       let i = arr.indexOf("user_uid:");
       return arr[i + 1];
     }
-
+    this.sendForm = this.sendForm.bind(this);
+    this.checkout = this.checkout.bind(this);
+    this.handleApi = this.handleApi.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
@@ -30,20 +33,47 @@ class Checkout extends Component {
         }
       }
     }
+    console.log(this.state);
   }
 
-  async checkout() {
-    fetch(this.props.CHECKOUT_URL, {
+  async sendForm() {
+    console.log("Sending checkout form");
+    console.log(this.state);
+    const post_response = await fetch(this.props.CHECKOUT_URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        Username: this.state.user.user_uid,
-        FirstName: this.state.user.first_name,
-      })
+      body: JSON.stringify(this.state.user)
     })
+    console.log(post_response);
+    return post_response;
+  }
+
+  async checkout() {
+    console.log("Checking out...");
+    this.sendForm()
+    .then(res => this.handleApi(res))
+    .catch(err => console.log(err));
+  }
+
+  handleApi(response) {
+    console.log("handle api");
+  }
+
+  handleChange(event) {
+    const target = event.target;
+    const name = target.name;
+    console.log(target.value);
+    console.log(name);
+    this.setState(prevState => ({
+      user: {
+        ...prevState.user,
+        [name]: target.value
+      }
+    }));
+    console.log(this.state);
   }
 
   render() {
@@ -101,6 +131,8 @@ class Checkout extends Component {
                     <Form.Control
                       placeholder="Enter First Name"
                       value={this.state.user.first_name}
+                      name="first_name"
+                      onChange={this.handleChange}
                     />
                   </Form.Group>
 
@@ -109,6 +141,8 @@ class Checkout extends Component {
                     <Form.Control
                       placeholder="Enter Last Name"
                       value={this.state.user.last_name}
+                      name="last_name"
+                      onChange={this.handleChange}
                     />
                   </Form.Group>
                 </Form.Row>
@@ -117,6 +151,9 @@ class Checkout extends Component {
                   <Form.Label>Delivery Notes</Form.Label>
                   <Form.Control
                     placeholder="Enter Notes or N/A" />
+                      value={this.state.user.delivery_notes}
+                      name="delivery_notes"
+                      onChange={this.handleChange}
                 </Form.Group>
 
                 <Form.Row>
@@ -126,6 +163,8 @@ class Checkout extends Component {
                       type="email"
                       placeholder="Enter Email"
                       value={this.state.user.user_email}
+                      name="user_email"
+                      onChange={this.handleChange}
                     />
                   </Form.Group>
 
@@ -134,6 +173,9 @@ class Checkout extends Component {
                     <Form.Control
                       type="password"
                       placeholder="Enter Password"
+                      value={this.state.user.password}
+                      name="password"
+                      onChange={this.handleChange}
                     />
                   </Form.Group>
                 </Form.Row>
@@ -143,6 +185,8 @@ class Checkout extends Component {
                   <Form.Control
                     placeholder="1234 Main St"
                     value={this.state.user.user_address}
+                    name="user_address"
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -158,6 +202,8 @@ class Checkout extends Component {
                   <Form.Control
                     placeholder="Apartment, studio, or floor"
                     value={this.state.user.address_unit}
+                    name="address_unit"
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -167,12 +213,14 @@ class Checkout extends Component {
                     <Form.Control
                       placeholder="Prep City"
                       value={this.state.user.user_city}
+                      name="user_city"
+                      onChange={this.handleChange}
                     />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridState">
                     <Form.Label>State</Form.Label>
-                    <Form.Control as="select" value={this.state.user.user_state}>
+                    <Form.Control as="select" value={this.state.user.user_state} name="user_state" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>TX</option>
                     </Form.Control>
@@ -183,6 +231,8 @@ class Checkout extends Component {
                     <Form.Control
                       placeholder="12345"
                       value={this.state.user.user_zip}
+                      name="user_zip"
+                      onChange={this.handleChange}
                     />
                   </Form.Group>
                 </Form.Row>
@@ -194,7 +244,7 @@ class Checkout extends Component {
                   controlId="formGridCountry"
                 >
                   <Form.Label>Country</Form.Label>
-                  <Form.Control as="select" value={this.state.user.user_region}>
+                  <Form.Control as="select" value={this.state.user.user_region} name="user_region" onChange={this.handleChange}>
                     <option>Choose...</option>
                     <option>US</option>
                   </Form.Control>
@@ -204,6 +254,8 @@ class Checkout extends Component {
                   <Form.Control
                     placeholder="Phone Number"
                     value={this.state.user.phone_number}
+                    name="phone_number"
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -216,19 +268,29 @@ class Checkout extends Component {
                 <Form.Row>
                   <Form.Group as={Col} md={6} controlId="formGridCardNumber">
                     <Form.Label>Credit Card Number</Form.Label>
-                    <Form.Control placeholder="Enter Card Number" />
+                    <Form.Control
+                      placeholder="Enter Card Number"
+                      value={this.state.user.cc_num_secret}
+                      name="cc_num_secret"
+                      onChange={this.handleChange}
+                    />
                   </Form.Group>
                 </Form.Row>
 
                 <Form.Row>
                   <Form.Group as={Col} md={3} controlId="formGridCardCvc">
                     <Form.Label>CVC</Form.Label>
-                    <Form.Control placeholder="123" />
+                    <Form.Control
+                      placeholder="123"
+                      value={this.state.user.cc_cvv_secret}
+                      name="cc_cvv_secret"
+                      onChange={this.handleChange}
+                    />
                   </Form.Group>
 
                   <Form.Group as={Col} md={3} controlId="formGridCardMonth">
                     <Form.Label>Month</Form.Label>
-                    <Form.Control as="select" value={this.state.user.cc_exp_month}>
+                    <Form.Control as="select" value={this.state.user.cc_exp_month} name="cc_exp_month" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>01</option>
                       <option>02</option>
@@ -247,7 +309,7 @@ class Checkout extends Component {
 
                   <Form.Group as={Col} md={3} controlId="formGridCardYear">
                     <Form.Label>Year</Form.Label>
-                    <Form.Control as="select" value={this.state.user.cc_exp_year}>
+                    <Form.Control as="select" value={this.state.user.cc_exp_year} name="cc_exp_year" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>2020</option>
                       <option>2021</option>
@@ -266,19 +328,24 @@ class Checkout extends Component {
                 <Form.Row>
                   <Form.Group as={Col} md={4} controlId="formGridBillingZip">
                     <Form.Label>Postal Code</Form.Label>
-                    <Form.Control placeholder="12345" />
+                    <Form.Control
+                      placeholder="12345"
+                      value={this.state.user.user_zip}
+                      name="user_zip"
+                      onChange={this.handleChange}
+                    />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridBillingCountry">
                     <Form.Label>Country</Form.Label>
                     <Form.Control as="select">
                       <option>Choose...</option>
-                      <option>United States</option>
+                      <option>US</option>
                     </Form.Control>
                   </Form.Group>
                 </Form.Row>
 
-                <Button variant="success" type="submit">
+                <Button onClick={ this.checkout } variant="success" type="submit">
                   Checkout
                 </Button>
               </Form>
@@ -287,6 +354,7 @@ class Checkout extends Component {
         </Container>
       );
     } catch (err) {
+      console.log(err);
       return (
         <div class="container text-center">
           <h1>Cart Lost: Select Another Plan</h1>

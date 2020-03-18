@@ -72,6 +72,7 @@ export default function Login (props) {
     } 
     else {
       document.cookie = " loginStatus: Sign In , user_uid: null , ";
+      // need code for failed authentication here
     }
   }
 
