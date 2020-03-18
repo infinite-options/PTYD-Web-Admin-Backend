@@ -12,8 +12,33 @@ import ItemToPurchase from "./ItemToPurchase";
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { upcomingMeals: [] };
+    this.state = {
+      upcomingMeals: [],
+      MealName1: "Tomato",
+      MealName2: "cake",
+
+      columns: [
+        { title: "Subscription", field: "name" },
+        { title: "Meal Name", field: "surname" },
+        { title: "Qty", field: "birthYear", type: "numeric" }
+        // {
+        //   title: "Birth Place",
+        //   field: "birthCity",
+        //   lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
+        // }
+      ],
+      data: [
+        { name: "Wkly Spcl 1", surname: "	Tomato", birthYear: 1 },
+
+        {
+          name: "Wkly Spcl 2",
+          surname: "cake",
+          birthYear: 2
+        }
+      ]
+    };
   }
+
   async componentDidMount() {
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
@@ -145,7 +170,15 @@ class Home extends Component {
                 boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
               }}
             >
-              <Card.Body></Card.Body>
+              <Card.Body>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+              </Card.Body>
             </Card>
           </Col>
           <Col>
@@ -164,19 +197,67 @@ class Home extends Component {
                 boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
               }}
             >
-              <Card.Body></Card.Body>
+              <Card.Body>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+              </Card.Body>
             </Card>
           </Col>
         </Row>
         <br />
+        <br />
 
         {/* Menu Creation  ----------------------------------------- */}
-        <Row>
-          <h2>Menu Creation</h2>
-        </Row>
+        <MaterialTable
+          style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
+          title="Meal Creation"
+          columns={this.state.columns}
+          data={this.state.data}
+          editable={{
+            onRowAdd: newData =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  this.setState(prevState => {
+                    const data = [...prevState.data];
+                    data.push(newData);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  if (oldData) {
+                    this.setState(prevState => {
+                      const data = [...prevState.data];
+                      data[data.indexOf(oldData)] = newData;
+                      return { ...prevState, data };
+                    });
+                  }
+                }, 600);
+              }),
+            onRowDelete: oldData =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  this.setState(prevState => {
+                    const data = [...prevState.data];
+                    data.splice(data.indexOf(oldData), 1);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              })
+          }}
+        />
 
-        <Row>
-          {/* <MaterialTable style={{width: '100rem'}}
+        {/* <MaterialTable style={{width: '100rem'}}
       title="Editable Example"
       columns= [
                { title: "Subscription", field: "name" },
@@ -222,8 +303,6 @@ class Home extends Component {
           }),
       }}
     /> */}
-          <MaterialTable style={{ width: "100rem" }}></MaterialTable>
-        </Row>
 
         <br></br>
 
