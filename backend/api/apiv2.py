@@ -920,4 +920,4 @@ api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=2000)
+    app.run(host='127.0.0.1', port=2002)

@@ -8,12 +8,14 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import ItemToPurchase from "./ItemToPurchase";
+import ScrollMenu from "react-horizontal-scrolling-menu";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       upcomingMeals: [],
+      mealInfo: [],
       MealName1: "Tomato",
       MealName2: "cake",
 
@@ -40,10 +42,15 @@ class Home extends Component {
   }
 
   async componentDidMount() {
+    // upcoming meals
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const upcomingMeals = api.result.Meals_by_week;
-    this.setState({ upcomingMeals });
+    // customer info
+    const res2 = await fetch(this.props.API_URL_MEALINFO);
+    const api2 = await res2.json();
+    const mealInfo = api2.result.CustomerInfo.result;
+    this.setState({ upcomingMeals, mealInfo });
   }
   handleClick(event) {
     event.preventDefault();
@@ -53,6 +60,26 @@ class Home extends Component {
   render() {
     return (
       <div class="container" style={{ marginTop: "10%" }}>
+        <ScrollMenu
+          style={{ width: "100px", backgroundColor: "pink", height: "300px" }}
+        >
+          <div class="d-flex flex-row flex-nowrap">
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+            <div class="card card-body">Card</div>
+          </div>
+        </ScrollMenu>
         {/* title for the site ----------------------------------------- */}
         <Jumbotron />
         <Breadcrumbs aria-label="breadcrumb">
@@ -188,6 +215,88 @@ class Home extends Component {
               </Link>
               <Link color="inherit" onClick={this.handleClick}>
                 Meal Info
+              </Link>
+              <Typography color="textPrimary">Graph</Typography>
+            </Breadcrumbs>
+            <Card
+              style={{
+                width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              }}
+            >
+              <Card.Body>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <br />
+        <br />
+
+        {/* Customer info  ----------------------------------------- */}
+        <br />
+        <Row>
+          <Col>
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link color="inherit" onClick={this.handleClick}>
+                Admin Site
+              </Link>
+              <Typography color="textPrimary">Customer Info</Typography>
+            </Breadcrumbs>
+            <Row>
+              <Col>
+                <Card
+                  style={{
+                    width: "100%",
+                    boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+                  }}
+                >
+                  <Card.Body>
+                    <Table striped bordered hover>
+                      <thead style={{ overflow: "scroll", display: "block" }}>
+                        <tr>
+                          <th>Name</th>
+                          <th>Length of Time on App</th>
+                          <th>Total Number of Meals Ordered</th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        style={{
+                          height: "300px",
+                          overflow: "scroll",
+                          display: "block"
+                        }}
+                      >
+                        {this.state.mealInfo.map(eachMeal => (
+                          <tr>
+                            <td>{eachMeal.Full_name}</td>
+                            <td>{eachMeal.Full_name}</td>
+                            <td>{eachMeal.Full_name}</td>
+                            {/* <td>Name</td>
+                            <td>Length of Time on App</td>
+                            <td>Total Number of Meals Ordered</td> */}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+          <Col>
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link color="inherit" onClick={this.handleClick}>
+                Admin Site
+              </Link>
+              <Link color="inherit" onClick={this.handleClick}>
+                Customer Info
               </Link>
               <Typography color="textPrimary">Graph</Typography>
             </Breadcrumbs>

@@ -371,4 +371,4 @@ api.add_resource(Admin_db, '/api/v1/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v1/MealCustomerLifeReport')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=2020)
+    app.run(host='127.0.0.1', port=2001)
