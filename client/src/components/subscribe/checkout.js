@@ -3,12 +3,16 @@ import React, { Component } from "react";
 import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import TruckIcon from "../../img/prepTruckIcon.png";
 
+import crypto from "crypto";
+
 class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       user_uid: searchCookie4UserID(document.cookie),
-      user: {}
+      user: {},
+      password: null,
+      salt: null
     };
 
     function searchCookie4UserID(str) {
@@ -20,6 +24,7 @@ class Checkout extends Component {
     this.checkout = this.checkout.bind(this);
     this.handleApi = this.handleApi.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handlePwChange = this.handlePwChange.bind(this);
   }
 
   async componentDidMount() {
@@ -44,6 +49,8 @@ class Checkout extends Component {
       },
       body: JSON.stringify({
         ...this.state.user,
+        password: this.state.password,
+        salt: this.state.salt,
         item: this.props.location.item.name,
         item_price: this.props.location.item.total,
       })
@@ -52,6 +59,7 @@ class Checkout extends Component {
   }
 
   async checkout() {
+    this.state.salt = await crypto.createHash('sha512').update(this.state.password + this.state.user.password_salt).digest('hex')
     this.sendForm()
     .then(res => this.handleApi(res))
     .catch(err => console.log(err));
@@ -70,6 +78,12 @@ class Checkout extends Component {
         [name]: target.value
       }
     }));
+  }
+
+  handlePwChange(event) {
+    this.setState({
+      password: event.target.value
+    });
   }
 
   render() {
@@ -146,10 +160,11 @@ class Checkout extends Component {
                 <Form.Group controlId="formGridNotes">
                   <Form.Label>Delivery Notes</Form.Label>
                   <Form.Control
-                    placeholder="Enter Notes or N/A" />
-                      value={this.state.user.delivery_notes}
-                      name="delivery_notes"
-                      onChange={this.handleChange}
+                    placeholder="Enter Notes or N/A"
+                    value={this.state.user.delivery_notes}
+                    name="delivery_notes"
+                    onChange={this.handleChange}
+                  />
                 </Form.Group>
 
                 <Form.Row>
@@ -169,9 +184,9 @@ class Checkout extends Component {
                     <Form.Control
                       type="password"
                       placeholder="Enter Password"
-                      value={this.state.user.password}
+                      value={this.state.password}
                       name="password"
-                      onChange={this.handleChange}
+                      onChange={this.handlePwChange}
                     />
                   </Form.Group>
                 </Form.Row>
