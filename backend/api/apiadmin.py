@@ -249,7 +249,7 @@ class Admin_db(Resource):
             "Quantity of Ingredient Required","Amount of ingredient needed this week","Amount of ingredient on hand","location of ingredient",
             "A package of this much","Will cost this much in $USD","quantity of ingredients needed to buy (Negative Surplus)"]
             col_names = [query1_col,query2_col]
-            queries_key = ["Meals by week", "Inventory DB"]
+            queries_key = ["Meals_by_week", "Inventory_DB"]
             items={}
             # Initialize response
             response = {}

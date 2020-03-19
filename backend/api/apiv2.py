@@ -907,6 +907,118 @@ class CustomerInfo(Resource):
         finally:
             disconnect(conn)
 
+
+class AdminDBv2(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        results = {}
+        try:
+            conn = connect()
+            queries_name = ["Meals_by_week", "Inventory_DB"]
+            queries = [
+                        """SELECT 
+                            M.menu_date as "Entered Menu Date" ,
+                            M.menu_category AS "Menu Category",
+                            A.meal_desc as "Meal option" ,
+                            M.menu_num_sold AS "How many to make"
+                        FROM 
+                            ptyd_menu M
+                        JOIN 
+                            ptyd_meals A ON M.menu_meal_id = A.meal_id
+                        -- WHERE 
+                            -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
+                        -- M.menu_date = "2020-02-01";""", 
+                        """SELECT 
+                        M.menu_meal_id AS "Menu Number",
+                        M.menu_date "Entered Menu Date" ,
+                        M.menu_category AS "Menu Category",
+                        A.meal_desc "Meal option selected" ,
+                        M.menu_num_sold AS "How many to make",
+                        I.ingredient_desc AS "Ingredient Required Per meal",
+                        R.recipe_ingredient_qty AS "Quantity of Ingredient Required",
+                        (M.menu_num_sold * R.recipe_ingredient_qty) AS "Amount of ingredient needed this week",
+                        CONCAT(inventory_qty," ", inventory_unit) AS "Amount of ingredient on hand",
+                        inventory_location AS "location of ingredient",
+                        I.package_size AS "A package of this much",
+                        I.ingredient_cost AS "Will cost this much in $USD",
+                        ((M.menu_num_sold * R.recipe_ingredient_qty) - inventory_qty  ) AS "quantity of ingredients needed to buy (Negative Surplus)" 
+                    FROM 
+                        ptyd_menu M
+                    JOIN 
+                        ptyd_meals A ON M.menu_meal_id = A.meal_id
+                    JOIN 
+                        ptyd_recipes R ON M.menu_meal_id = R.recipe_meal_id
+                    JOIN 
+                        ptyd_ingredients I ON R.recipe_ingredient_id = I.ingredient_id
+                    JOIN
+                        ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
+                    -- WHERE 
+                        -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
+                    -- M.menu_date = "2020-02-01";"""
+                    ]
+            
+            for ind1,query in enumerate(queries):
+                results[queries_name[ind1]] = execute(query, 'get', conn)
+            
+            # print(results["Meals_by_week"])
+
+            response['message'] = 'Request successful.'
+            response['result'] = results
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class MealCustomerLifeReport(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        results = {}
+        try:
+            conn = connect()
+            queries_name = ["Meals report", "Customer Lifetime"]
+            queries = [
+                        """SELECT 
+                        p.menu_meal_id,
+                        M.meal_desc AS "Meal Name",
+                        ROUND(AVG(p.menu_num_sold),2) AS "Average number sold per listing",
+                        SUM(p.menu_num_sold) AS "Total Number Sold"
+                        FROM
+                            ptyd_menu p
+                        JOIN 
+                            ptyd_meals M ON p.menu_meal_id = M.meal_id
+                        GROUP BY p.menu_meal_id
+                        ORDER BY p.menu_meal_id ASC
+                        ;
+                        """,
+                        """SELECT 
+                        CONCAT(first_name, " " , last_name) AS "Customer Name",
+                        create_date AS "Account creation Date",
+                        last_update AS "Last account Update",
+                        last_delivery AS "Last Delivery",
+                        datediff(last_delivery, create_date) AS "Customer Lifetime in days",
+                        timestampdiff(MONTH, create_date, last_delivery) AS "Customer Lifetime in months"
+                        FROM
+                            ptyd_accounts;"""
+                    ]
+            
+            for ind1,query in enumerate(queries):
+                results[queries_name[ind1]] = execute(query, 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = results
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 # Define API routes
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
@@ -917,6 +1029,9 @@ api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
+
+api.add_resource(AdminDBv2, '/api/v2/admindb')
+api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
