@@ -70,7 +70,37 @@
   border: 1px green solid;
 }
 
-.scroll-menu-arrow {
-  padding: 20px;
-  cursor: pointer;
+/* Scroll bar properties below */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lightblue;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: gray;
+}
+
+/* Horizontal scroll below  */
+
+.scrollMenu {
+  /* background-color: #333; */
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.scrollItem {
+  display: inline-block;
+  margin: 2px;
+  padding: 14px;
 }

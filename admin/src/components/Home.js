@@ -60,35 +60,20 @@ class Home extends Component {
   render() {
     return (
       <div class="container" style={{ marginTop: "10%" }}>
-        <ScrollMenu
-          style={{ width: "100px", backgroundColor: "pink", height: "300px" }}
-        >
-          <div class="d-flex flex-row flex-nowrap">
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-            <div class="card card-body">Card</div>
-          </div>
-        </ScrollMenu>
+        {/* <div className="scrollItem">Card</div> */}
+
         {/* title for the site ----------------------------------------- */}
         <Jumbotron />
+
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
           </Link>
-
-          {/* upcoming meal order ----------------------------------------- */}
           <Typography color="textPrimary">Upcoming Meals Order</Typography>
+          <Link color="inherit" onClick={this.handleClick}>
+            Weekly Purchases
+          </Link>
+          {/* upcoming meal order ----------------------------------------- */}
         </Breadcrumbs>
         <br />
         {/* {this.state.upcomingMeals.map(upcomingMeal => (
@@ -102,84 +87,13 @@ class Home extends Component {
             {upcomingMeal.Category}
           </div>
         ))} */}
-        <Row>
-          {/* {this.state.upcomingMeals.map(upcomingMeal => ( */}
-          <Col>
-            <Card
-              style={{
-                width: "30%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <Card.Title>Week 1</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  The week of:
-                </Card.Subtitle>
-                <Card.Text>
-                  <Table
-                    responsive
-                    striped
-                    bordered
-                    style={{ textAlign: "center" }}
-                  >
-                    <thead style={{ overflow: "scroll", display: "block" }}>
-                      <tr>
-                        <th>Menu</th>
-                        <th>Meal</th>
-                        <th>Quantity Ordered</th>
-                      </tr>
-                    </thead>
-                    <tbody
-                      style={{
-                        height: "300px",
-                        overflowY: "scroll",
-                        display: "block"
-                      }}
-                    >
-                      <tr>
-                        {/* <td>{upcomingMeal.Category}</td> */}
-                        <td>aaaaaaa</td>
-                        <td>Saag</td>
-                        <td>45</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          {/* ))} */}
-        </Row>
 
-        <br />
-        <br />
-
-        {/* weekly purchase ----------------------------------------- */}
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link color="inherit" onClick={this.handleClick}>
-            Admin Site
-          </Link>
-          <Typography color="textPrimary">Weekly Purchases</Typography>
-        </Breadcrumbs>
-        <br />
-        <Card
-          style={{
-            width: "30%",
-            boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-          }}
-        >
-          <Card.Body>
-            <Card.Title>Week 1</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">
-              The week of:
-            </Card.Subtitle>
-            <ItemToPurchase />
-          </Card.Body>
-        </Card>
-        <br />
-        <br />
-
+        <div className="scrollMenu">
+          <div className="scrollItem">{this.tempcard()}</div>
+          <div className="scrollItem">{this.tempcard()}</div>
+          <div className="scrollItem">{this.tempcard()}</div>
+          <div className="scrollItem">{this.tempcard()}</div>
+        </div>
         {/* Meal info ----------------------------------------- */}
 
         <br />
@@ -447,5 +361,90 @@ class Home extends Component {
       </div>
     );
   }
+  tempcard = () => {
+    return (
+      <Container>
+        <Row>
+          {/* {this.state.upcomingMeals.map(upcomingMeal => ( */}
+          <Col>
+            <Card
+              style={{
+                // width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              }}
+            >
+              <Card.Body>
+                <Card.Title>Week 1</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                  The week of:
+                </Card.Subtitle>
+                <Card.Text>
+                  <Table
+                    responsive
+                    striped
+                    bordered
+                    style={{ textAlign: "center" }}
+                  >
+                    <thead style={{ overflow: "scroll", display: "block" }}>
+                      <tr>
+                        <th>Menu</th>
+                        <th>Meal</th>
+                        <th>Quantity Ordered</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      style={{
+                        height: "300px",
+                        overflowY: "scroll",
+                        display: "block"
+                      }}
+                    >
+                      <tr>
+                        {/* <td>{upcomingMeal.Category}</td> */}
+                        <td>aaaaaaa</td>
+                        <td>Saag</td>
+                        <td>45</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          {/* ))} */}
+        </Row>
+
+        <br />
+        <br />
+
+        {/* weekly purchase ----------------------------------------- */}
+        {/* <Breadcrumbs aria-label="breadcrumb">
+                  <Link color="inherit" onClick={this.handleClick}>
+                    Admin Site
+                  </Link>
+                  <Typography color="textPrimary">Weekly Purchases</Typography>
+                </Breadcrumbs>
+                <br /> */}
+        <Row>
+          <Col>
+            <Card
+              style={{
+                // width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              }}
+            >
+              <Card.Body>
+                <Card.Title>Week 1</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                  The week of:
+                </Card.Subtitle>
+                <ItemToPurchase />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    );
+  };
 }
 export default Home;
