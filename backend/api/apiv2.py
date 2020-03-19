@@ -890,11 +890,12 @@ class CustomerInfo(Resource):
         try:
             conn = connect()
 
-            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name, concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_city,', ',
-                    ptyd_accounts.user_state,' ',ptyd_accounts.user_zip) as Address, ptyd_accounts.phone_number as Mobile_number, 
-                    ptyd_accounts.user_region as Region, ptyd_accounts.user_gender as Gender, ptyd_accounts.phone_number as Mobile_number,
-                    ptyd_accounts.create_date as Account_create_date, ptyd_accounts.last_update as Last_update, ptyd_accounts.activeBool as Active,
-                    ptyd_accounts.last_delivery as Last_delivery from ptyd_accounts"""
+            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                            DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days', count(*) as Number_of_meals
+                            from ptyd_accounts
+                            inner join 
+                            ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
+                            group by pay.buyer_id"""
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
             response['message'] = 'Request successful.'
