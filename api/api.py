@@ -43,6 +43,8 @@ def RdsPw():
 # When pushing to GitHub, set RDS_PW equal to RdsPw()
 RDS_PW = RdsPw()
 
+getTodayDate = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
+
 # Connect to RDS
 def getRdsConn(RDS_PW):
     global RDS_HOST
@@ -816,7 +818,7 @@ class SignUp(Resource):
             Region = "US"
             Gender = "F"
             WeeklyUpdates = data['WeeklyUpdates']
-            CreateDate = datetime.strftime(date.today(), "%Y-%m-%d")
+            CreateDate = getTodayDate()
             LastUpdate = CreateDate
             ActiveBool = "Yes"
             Referral = data['Referral']
@@ -901,20 +903,82 @@ class Checkout(Resource):
             conn = connect()
             data = request.get_json(force=True)
 
-#           reply = execute(""" SELECT
-#                               *
-#                               FROM
-#                               ptyd_meal_plans;""", 'get', conn)
-
             print("Received:", data)
 
-            queries = [
-                """ INSERT INTO ptyd_purchases
+            purchaseId = "TEST_NEW_PURCHASE_ID"
 
-                """]
+            mealPlan = data['item'].split(' Subscription')[0]
+
+            queries = ["""
+                SELECT
+                    password_user_uid
+                FROM
+                    ptyd_passwords
+                WHERE
+                    password_user_uid = \'""" + data['user_uid'] + """\'
+                AND
+                    password_hash = \'""" + data['salt'] + "\'", """
+                SELECT
+                    meal_plan_id
+                FROM
+                    ptyd_meal_plans
+                WHERE
+                    meal_plan_desc = \'""" + mealPlan + "\'"]
+
+            userAuth = execute(queries[0], 'get', conn)
+
+            if userAuth['code'] != 280 or len(userAuth['result']) != 1:
+                response['message'] = 'Could not authenticate user.'
+                response['error'] = userAuth
+                print("Error:", response['message'])
+                print("Error JSON:", response['error'])
+                if userAuth['code'] == 280:
+                    statusCode = 400
+                else:
+                    statusCode = 500
+                return response, statusCode
+            else:
+                print("Successfully authenticated user.")
+
+            mealPlanQuery = execute(queries[1], 'get', conn)
+
+            if mealPlanQuery['code'] == 280:
+                print("Getting meal plan ID...")
+                mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
+                print("Meal Plan ID:", mealPlanId)
+            else:
+                response['message'] = 'Could not retrieve meal ID of requested plan.'
+                response['error'] = mealPlanQuery
+                print("Error:", response['message'])
+                print("Error JSON:", response['error'])
+                return response, 501
+
+            queries.append(
+                """ INSERT INTO ptyd_purchases
+                    (
+                        purchase_id,
+                        purchase_status,
+                        meal_plan_id,
+                        recipient_id,
+                        start_date,
+                        purchase_instructions
+                    )
+                    VALUES
+                    (
+                        \'""" + purchaseId + """\',
+                        \'active\',
+                        \'""" + mealPlanId + """\',
+                        \'""" + data['user_uid'] + """\',
+                        \'""" + getTodayDate() + """\',
+                        NULL
+                    )""")
+
+            reply = execute(queries[2], 'post', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = reply
+
+            print(response)
 
             return response, 200
         except:

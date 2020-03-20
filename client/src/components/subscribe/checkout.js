@@ -49,7 +49,6 @@ class Checkout extends Component {
       },
       body: JSON.stringify({
         ...this.state.user,
-        password: this.state.password,
         salt: this.state.salt,
         item: this.props.location.item.name,
         item_price: this.props.location.item.total,
