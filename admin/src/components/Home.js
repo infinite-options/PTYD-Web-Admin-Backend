@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Button, Card, Container, Row, Col } from "react-bootstrap";
+import { Table, Card, Container, Row, Col } from "react-bootstrap";
 import MaterialTable from "material-table";
 // import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 // import { MenuCreation } from "./MenuCreation";
@@ -8,7 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import ItemToPurchase from "./ItemToPurchase";
-import ScrollMenu from "react-horizontal-scrolling-menu";
 
 class Home extends Component {
   constructor(props) {
@@ -59,7 +58,7 @@ class Home extends Component {
 
   render() {
     return (
-      <div class="container" style={{ marginTop: "10%" }}>
+      <div className="container" style={{ marginTop: "10%" }}>
         {/* <div className="scrollItem">Card</div> */}
 
         {/* title for the site ----------------------------------------- */}
@@ -226,34 +225,35 @@ class Home extends Component {
                   The week of:
                 </Card.Subtitle>
                 <Card.Text>
-                  <Table
-                    responsive
-                    striped
-                    bordered
-                    style={{ textAlign: "center" }}
-                  >
-                    <thead style={{ overflow: "scroll", display: "block" }}>
-                      <tr>
-                        <th>Menu</th>
-                        <th>Meal</th>
-                        <th>Quantity Ordered</th>
-                      </tr>
-                    </thead>
-                    <tbody
-                      style={{
-                        height: "300px",
-                        overflowY: "scroll",
-                        display: "block"
-                      }}
+                  <div className="vertical-menu">
+                    <Table
+                      responsive
+                      striped
+                      bordered
+                      style={{ textAlign: "center" }}
                     >
-                      <tr>
-                        {/* <td>{upcomingMeal.Category}</td> */}
-                        <td>aaaaaaa</td>
-                        <td>Saag</td>
-                        <td>45</td>
-                      </tr>
-                    </tbody>
-                  </Table>
+                      <thead style={{ overflow: "scroll" }}>
+                        <tr>
+                          <th>Menu</th>
+                          <th>Meal</th>
+                          <th>Quantity Ordered</th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        style={{
+                          height: "300px",
+                          overflowY: "scroll"
+                        }}
+                      >
+                        <tr>
+                          {/* <td>{upcomingMeal.Category}</td> */}
+                          <td>aaaaaaa</td>
+                          <td>Saag</td>
+                          <td>45</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </div>
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -344,8 +344,8 @@ class Home extends Component {
             }}
           >
             <Card.Body>
-              <Table striped bordered hover>
-                <div class="vertical-menu">
+              <div className="vertical-menu">
+                <Table striped bordered hover>
                   <thead style={{ overflow: "scroll" }}>
                     <tr>
                       <th>Name</th>
@@ -369,8 +369,8 @@ class Home extends Component {
                       </tr>
                     ))}
                   </tbody>
-                </div>
-              </Table>
+                </Table>
+              </div>
             </Card.Body>
           </Card>
         </Col>

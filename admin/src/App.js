@@ -2,22 +2,22 @@ import React from "react";
 import "./App.css";
 import Main from "./components/main";
 import { Nav } from "react-bootstrap";
-import styled from "styled-components";
+// import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { Header } from "react-mdl";
 import Button from "muicss/lib/react/button";
 
-const Styles = styled.div`
-  navbar {
-    background-color: #222;
-  }
-  .navbar-brand .navbar-nav .nav-link {
-    color: #bbb;
-    &:hover {
-      color: withTheme;
-    }
-  }
-`;
+// const Styles = styled.div`
+//   navbar {
+//     background-color: #222;
+//   }
+//   .navbar-brand .navbar-nav .nav-link {
+//     color: #bbb;
+//     &:hover {
+//       color: withTheme;
+//     }
+//   }
+// `;
 function App() {
   return (
     <div>
