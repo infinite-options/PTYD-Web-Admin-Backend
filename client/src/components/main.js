@@ -8,6 +8,7 @@ import SelectMealPlan from "./subscribe/selectmealplan";
 import SelectPaymentPlan from "./subscribe/selectpaymentplan";
 import WeeklyMenu from "./menu/weeklymenu";
 import Checkout from "./subscribe/checkout";
+import CheckoutSuccess from "./subscribe/checkout-success";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./about/howitworks";
@@ -180,6 +181,12 @@ export default function Main({ appProps }) {
           API_URL: `${DEV_URL}v1/accounts`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
         }}
+      />
+      <AppliedRoute
+        exact
+        path="/checkoutsuccess"
+        component={CheckoutSuccess}
+        appProps={appProps}
       />
       <AppliedRoute
         exact

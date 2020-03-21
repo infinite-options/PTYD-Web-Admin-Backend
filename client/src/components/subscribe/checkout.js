@@ -41,7 +41,7 @@ class Checkout extends Component {
   }
 
   async sendForm() {
-    const post_response = await fetch(this.props.CHECKOUT_URL, {
+    const res = await fetch(this.props.CHECKOUT_URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -54,18 +54,27 @@ class Checkout extends Component {
         item_price: this.props.location.item.total,
       })
     })
-    return post_response;
+    const api = await res.json();
+    console.log(api);
+    return api;
   }
 
-  async checkout() {
-    this.state.salt = await crypto.createHash('sha512').update(this.state.password + this.state.user.password_salt).digest('hex')
+  async checkout(event) {
+    event.preventDefault();
+    this.state.salt = await crypto.createHash('sha512').update(this.state.password + this.state.user.password_salt).digest('hex');
     this.sendForm()
     .then(res => this.handleApi(res))
     .catch(err => console.log(err));
   }
 
   handleApi(response) {
-    console.log("handle api");
+    console.log(response);
+    if (response.result.code == 281) {
+      this.props.history.push("/checkoutsuccess");
+    }
+    else {
+      this.props.history.push("/checkout");
+    }
   }
 
   handleChange(event) {
