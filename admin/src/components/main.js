@@ -1,7 +1,6 @@
 import React from "react";
 import { Switch } from "react-router-dom";
-import Home from "./Home";
-import UpcomingMeals from "./UpcomingMeals";
+import Home from "./Homepage/Home";
 import AppliedRoute from "./AppliedRoute";
 
 // const DEV_URL =
@@ -20,15 +19,6 @@ const Main = ({ appProps }) => (
         appProps,
         API_URL: `${APIADMIN_URL}admindb`,
         API_URL_MEALINFO: `${APIV2_URL}customerinfo`
-      }}
-    />
-    <AppliedRoute
-      exact
-      path="/UpcomingMeals"
-      component={UpcomingMeals}
-      appProps={{
-        appProps,
-        API_URL: `${APIADMIN_URL}admindb`
       }}
     />
   </Switch>

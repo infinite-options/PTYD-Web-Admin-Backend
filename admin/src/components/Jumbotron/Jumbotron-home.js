@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Jumbotron as Jumbo, Container } from "react-bootstrap";
 import styled from "styled-components";
-import PTYDBanner from "../assets/PTYD_Banner.jpg";
+import PTYDBanner from "../../assets/PTYD_Banner.jpeg";
 const Styles = styled.div`
   .jumbo {
     background: url(${PTYDBanner}) no-repeat fixed bottom;
@@ -23,7 +23,7 @@ const Styles = styled.div`
     z-index: -1;
   }
 `;
-class NoMatch extends Component {
+class JumbotronHome extends Component {
   render() {
     return (
       <Styles>
@@ -31,7 +31,7 @@ class NoMatch extends Component {
           <div className="overlay"></div>
           <Container>
             <center>
-              <h1> Prep To Your Door Admin Page</h1>
+              <h1 style={{ color: "white" }}> Prep To Your Door Admin Page</h1>
             </center>
           </Container>
         </Jumbo>
@@ -39,4 +39,4 @@ class NoMatch extends Component {
     );
   }
 }
-export default NoMatch;
+export default JumbotronHome;

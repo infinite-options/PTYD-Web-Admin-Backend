@@ -3,7 +3,7 @@ import { Table, Card, Container, Row, Col } from "react-bootstrap";
 import MaterialTable from "material-table";
 // import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 // import { MenuCreation } from "./MenuCreation";
-import Jumbotron from "./Jumbotron";
+import Jumbotron from "../Jumbotron/Jumbotron-home";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
@@ -14,29 +14,29 @@ class Home extends Component {
     super(props);
     this.state = {
       upcomingMeals: [],
-      mealInfo: [],
-      MealName1: "Tomato",
-      MealName2: "cake",
+      mealInfo: []
+      // MealName1: "Tomato",
+      // MealName2: "cake",
 
-      columns: [
-        { title: "Subscription", field: "name" },
-        { title: "Meal Name", field: "surname" },
-        { title: "Qty", field: "birthYear", type: "numeric" }
-        // {
-        //   title: "Birth Place",
-        //   field: "birthCity",
-        //   lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
-        // }
-      ],
-      data: [
-        { name: "Wkly Spcl 1", surname: "	Tomato", birthYear: 1 },
+      // columns: [
+      //   { title: "Subscription", field: "name" },
+      //   { title: "Meal Name", field: "surname" },
+      //   { title: "Qty", field: "birthYear", type: "numeric" }
+      //   // {
+      //   //   title: "Birth Place",
+      //   //   field: "birthCity",
+      //   //   lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
+      //   // }
+      // ],
+      // data: [
+      //   { name: "Wkly Spcl 1", surname: "	Tomato", birthYear: 1 },
 
-        {
-          name: "Wkly Spcl 2",
-          surname: "cake",
-          birthYear: 2
-        }
-      ]
+      //   {
+      //     name: "Wkly Spcl 2",
+      //     surname: "cake",
+      //     birthYear: 2
+      //   }
+      // ]
     };
   }
 
@@ -75,17 +75,6 @@ class Home extends Component {
           {/* upcoming meal order ----------------------------------------- */}
         </Breadcrumbs>
         <br />
-        {/* {this.state.upcomingMeals.map(upcomingMeal => (
-          <div
-            style={{
-              width: "25%",
-              margin: "0",
-              padding: "0"
-            }}
-          >
-            {upcomingMeal.Category}
-          </div>
-        ))} */}
 
         <div className="scrollMenu">
           <div className="scrollItem">
@@ -159,7 +148,7 @@ class Home extends Component {
         <br />
 
         {/* Menu Creation  ----------------------------------------- */}
-        <MaterialTable
+        {/* <MaterialTable
           style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
           title="Meal Creation"
           columns={this.state.columns}
@@ -203,7 +192,7 @@ class Home extends Component {
           }}
         />
 
-        <br></br>
+        <br></br> */}
       </div>
     );
   }
