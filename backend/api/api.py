@@ -858,7 +858,7 @@ class SignUp(Resource):
 class Social(Resource):
 
     # HTTP method GET
-    def get(self, user, token):
+    def get(self, user):
         response = {}
         try:
             conn = connect()
@@ -870,7 +870,7 @@ class Social(Resource):
                         user_social,
                         user_token
                     FROM ptyd_social""" +
-                    "\nWHERE user_email = " + "'" + user + "' AND user_token = '" + token + "';"]
+                    "\nWHERE user_email = " + "'" + user + "';"]# + "' AND user_token = '" + token + "';"]
 
             items = execute(queries[0], 'get', conn)
 
@@ -896,32 +896,33 @@ class SocialAccount(Resource):
         response = {}
         try:
             conn = connect()
-
+            print(uid)
             queries = [
-                """ SELECT
-                        user_uid,
-                        user_name,
-                        first_name,
-                        last_name,
-                        user_email,
-                        phone_number,
-                        user_address,
-                        address_unit,
-                        user_city,
-                        user_state,
-                        user_zip,
-                        user_region,
-                        user_gender,
-                        create_date,
-                        last_update,
-                        activeBool,
-                        last_delivery,
-                        referral_source,
-                        user_note
-                    FROM ptyd_accounts""" +
-                    "\nWHERE user_email = " + "'" + uid + "';"]
+"""             SELECT
+                    user_uid,
+                    user_name,
+                    first_name,
+                    last_name,
+                    user_email,
+                    phone_number,
+                    user_address,
+                    address_unit,
+                    user_city,
+                    user_state,
+                    user_zip,
+                    user_region,
+                    user_gender,
+                    create_date,
+                    last_update,
+                    activeBool,
+                    last_delivery,
+                    referral_source,
+                    user_note
+                FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]# + uid + "';"]
 
             items = execute(queries[0], 'get', conn)
+            print(queries[0])
+            print(items)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -939,8 +940,8 @@ api.add_resource(Accounts, '/api/v1/accounts')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
-api.add_resource(Social, '/api/v2/social/<string:user>/<string:token>')
-api.add_resource(SocialAccount, '/api/v2/social/<string:uid>')
+api.add_resource(Social, '/api/v2/social/<string:user>')
+api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 
 
 # Run on below IP address and port

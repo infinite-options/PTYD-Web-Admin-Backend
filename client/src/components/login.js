@@ -16,7 +16,7 @@ export default function Login (props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState("");
+  //const [loginStatus, setLoginStatus] = useState("");
   //const [users, setUsers] = useState([]);
 
   function validateForm() {
@@ -32,10 +32,17 @@ export default function Login (props) {
   // Social Media Login
 
   // API GET Request for Social Media User Data
-  async function grabLoginInfoForSocial(user, token) {
-    const res = await fetch(props.SOCIAL_API_URL + '/' + user + '/' + token);
+  async function checkForSocial(user) {
+    const res = await fetch(props.SOCIAL_API_URL + '/' + user );
     const api = await res.json();
-    const login = api.result.result;
+    const social = api.result.result[0];
+    return social;
+  }
+
+  async function grabSocialUserInfor(uid) {
+    const res = await fetch(props.SOCIAL_API_URL + 'acc/' + uid );
+    const api = await res.json();
+    const login = api.result.result[0];
     return login;
   }
 
@@ -46,10 +53,25 @@ export default function Login (props) {
     const ln = response.Qt.wU;
     const tok = response.accessToken;
     const u = fn + ln;
+    console.log(e)
 
-    grabLoginInfoForSocial(e, tok)
-    .then(res => socialLogin(res, u, u))
-    .catch(err => console.log(err));
+    checkForSocial(e)
+    .then(res => { console.log(res.user_id)
+      grabSocialUserInfor(res.user_id)
+      .then(res => socialLogin(res))
+      .catch(err => console.log(err)) }
+    )
+    .catch(err => {
+      console.log(err)
+      props.history.push({
+        pathname: "/socialsignup",
+        state: {
+          email: e,
+          social: "google"
+        }
+      });
+      window.location.reload(false);
+    });
   }
 
   const responseFacebook = (response) => {
@@ -57,27 +79,16 @@ export default function Login (props) {
   }
 
   function socialLogin(user, testUser, testPass) {
-    let arr = user
-    console.log(arr);
-    for (var i = 0; i < arr.length; i++) {
-      var u = arr[i].user_name;
-      var p = arr[i].password_sha512;
-      console.log(i, u, p);
-      if (u === testUser && p === ( crypto.createHash('sha512').update( testPass ).digest('hex')) ) {
-        setLoginStatus("Logged In");
+    let uid = user.user_uid
+    let name = user.first_name
+      
+    document.cookie = " loginStatus: Hello " + name  + "! , " + " user_uid: " + uid + " , ";
+    console.log(document.cookie)
 
-        document.cookie = " loginStatus: Hello " + arr[i].first_name  + "! , " + " user_uid: " + arr[i].user_uid + " , ";
-        console.log(document.cookie)
-        i = arr.length;
-
-        // redirect & reload page for buttons and login status
-        props.history.push("/");
-        window.location.reload(false);
-      } 
-      else {
-        document.cookie = " loginStatus: Sign In , user_uid: null , ";
-      }
-    }
+    // redirect & reload page for buttons and login status
+    props.history.push("/");
+    window.location.reload(false);
+    
     console.log('end of login');
   }
 
@@ -106,7 +117,7 @@ export default function Login (props) {
       var p = arr[i].password_sha512;
       console.log(i);
       if (u === email && p === ( crypto.createHash('sha512').update( password ).digest('hex')) ) {
-        setLoginStatus("Logged In");
+        // setLoginStatus("Logged In");
 
         document.cookie = " loginStatus: Hello " + arr[i].first_name  + "! , " + " user_uid: " + arr[i].user_uid + " , ";
         console.log(document.cookie)

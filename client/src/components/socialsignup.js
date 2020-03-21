@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-function SignUp (props)  {
+function SocialSignUp (props)  {
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -25,8 +25,8 @@ function SignUp (props)  {
     const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
 
     useEffect(() => { 
-        //console.log(props) 
-        //typeof props.location.state === "undefined" ? console.log("undefined") :  ( typeof props.location.state.email === "undefined" ? console.log("undefined") : setEmail(props.location.state.email) )
+        console.log(props) 
+        typeof props.location.state === "undefined" ? console.log("undefined") :  ( typeof props.location.state.email === "undefined" ? console.log("undefined") : setEmail(props.location.state.email) )
         //props.location.state.email == undefined ? console.log("empty") : console.log(props.location.state.email)
     }, []);
 
@@ -70,7 +70,7 @@ function SignUp (props)  {
     return (
         <main Style="margin-top:-80px;">
             <div class="container text-center" Style="margin-top:-40px;">
-                <h1>Sign Up</h1>
+                <h1>Social Media Sign Up</h1>
             <div class="row">
                 <Col></Col>
 
@@ -242,4 +242,4 @@ function SignUp (props)  {
     );
 };
 
-export default SignUp;
+export default SocialSignUp;
