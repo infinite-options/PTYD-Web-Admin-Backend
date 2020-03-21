@@ -89,10 +89,18 @@ class Home extends Component {
         ))} */}
 
         <div className="scrollMenu">
-          <div className="scrollItem">{this.tempcard()}</div>
-          <div className="scrollItem">{this.tempcard()}</div>
-          <div className="scrollItem">{this.tempcard()}</div>
-          <div className="scrollItem">{this.tempcard()}</div>
+          <div className="scrollItem">
+            {this.upcomingMeals_and_weeklyPurchase()}
+          </div>
+          <div className="scrollItem">
+            {this.upcomingMeals_and_weeklyPurchase()}
+          </div>
+          <div className="scrollItem">
+            {this.upcomingMeals_and_weeklyPurchase()}
+          </div>
+          <div className="scrollItem">
+            {this.upcomingMeals_and_weeklyPurchase()}
+          </div>
         </div>
         {/* Meal info ----------------------------------------- */}
 
@@ -105,22 +113,7 @@ class Home extends Component {
               </Link>
               <Typography color="textPrimary">Meal Info</Typography>
             </Breadcrumbs>
-            <Card
-              style={{
-                width: "100%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-              </Card.Body>
-            </Card>
+            {this.mealInfo_function()}
           </Col>
           <Col>
             <Breadcrumbs aria-label="breadcrumb">
@@ -132,22 +125,7 @@ class Home extends Component {
               </Link>
               <Typography color="textPrimary">Graph</Typography>
             </Breadcrumbs>
-            <Card
-              style={{
-                width: "100%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-              </Card.Body>
-            </Card>
+            {this.mealInfo_graph_function()}
           </Col>
         </Row>
         <br />
@@ -163,46 +141,7 @@ class Home extends Component {
               </Link>
               <Typography color="textPrimary">Customer Info</Typography>
             </Breadcrumbs>
-            <Row>
-              <Col>
-                <Card
-                  style={{
-                    width: "100%",
-                    boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-                  }}
-                >
-                  <Card.Body>
-                    <Table striped bordered hover>
-                      <thead style={{ overflow: "scroll", display: "block" }}>
-                        <tr>
-                          <th>Name</th>
-                          <th>Length of Time on App</th>
-                          <th>Total Number of Meals Ordered</th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        style={{
-                          height: "300px",
-                          overflow: "scroll",
-                          display: "block"
-                        }}
-                      >
-                        {this.state.mealInfo.map(eachMeal => (
-                          <tr>
-                            <td>{eachMeal.Full_name}</td>
-                            <td>{eachMeal.Full_name}</td>
-                            <td>{eachMeal.Full_name}</td>
-                            {/* <td>Name</td>
-                            <td>Length of Time on App</td>
-                            <td>Total Number of Meals Ordered</td> */}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+            {this.customerInfo_function()}
           </Col>
           <Col>
             <Breadcrumbs aria-label="breadcrumb">
@@ -214,22 +153,7 @@ class Home extends Component {
               </Link>
               <Typography color="textPrimary">Graph</Typography>
             </Breadcrumbs>
-            <Card
-              style={{
-                width: "100%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-              </Card.Body>
-            </Card>
+            {this.customerInfo_graph_function()}
           </Col>
         </Row>
         <br />
@@ -280,88 +204,11 @@ class Home extends Component {
           }}
         />
 
-        {/* <MaterialTable style={{width: '100rem'}}
-      title="Editable Example"
-      columns= [
-               { title: "Subscription", field: "name" },
-               { title: "Meal Name", field: "surname" },
-               { title: "Qty", field: "birthYear", type: "numeric" }
-                ] 
-      data={state.data}
-      editable={{
-        onRowAdd: newData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),
-        onRowDelete: oldData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-      }}
-    /> */}
-
         <br></br>
-
-        <Row>
-          <Card style={{ width: "100rem" }}>
-            <Card.Header as="h2">Meal Info</Card.Header>
-            <Card.Body>
-              <Card.Title>Special title treatment</Card.Title>
-              <Card.Text>
-                With supporting text below as a natural lead-in to additional
-                content.
-              </Card.Text>
-              <Button variant="primary">Go somewhere</Button>
-            </Card.Body>
-          </Card>
-        </Row>
-
-        <br></br>
-
-        <Row>
-          <Card style={{ width: "100rem" }}>
-            <Card.Header as="h2">Customer Info</Card.Header>
-            <Card.Body>
-              <Card.Title>Special title treatment</Card.Title>
-              <Card.Text>
-                With supporting text below as a natural lead-in to additional
-                content.
-              </Card.Text>
-              <Button variant="primary">Go somewhere</Button>
-            </Card.Body>
-          </Card>
-        </Row>
       </div>
     );
   }
-  tempcard = () => {
+  upcomingMeals_and_weeklyPurchase = () => {
     return (
       <Container>
         <Row>
@@ -444,6 +291,110 @@ class Home extends Component {
           </Col>
         </Row>
       </Container>
+    );
+  };
+  mealInfo_function = () => {
+    return (
+      <Card
+        style={{
+          width: "100%",
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+        }}
+      >
+        <Card.Body>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </Card.Body>
+      </Card>
+    );
+  };
+  mealInfo_graph_function = () => {
+    return (
+      <Card
+        style={{
+          width: "100%",
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+        }}
+      >
+        <Card.Body>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </Card.Body>
+      </Card>
+    );
+  };
+  customerInfo_function = () => {
+    return (
+      <Row>
+        <Col>
+          <Card
+            style={{
+              width: "100%",
+              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+            }}
+          >
+            <Card.Body>
+              <Table striped bordered hover>
+                <div class="vertical-menu">
+                  <thead style={{ overflow: "scroll" }}>
+                    <tr>
+                      <th>Name</th>
+                      <th>Length of Time on App</th>
+                      <th>Total Number of Meals Ordered</th>
+                    </tr>
+                  </thead>
+
+                  <tbody
+                    className="vertical-menu"
+                    style={{
+                      height: "300px",
+                      overflow: "scroll"
+                    }}
+                  >
+                    {this.state.mealInfo.map(eachMeal => (
+                      <tr>
+                        <td>{eachMeal.Full_name}</td>
+                        <td>{eachMeal.Num_of_days}</td>
+                        <td>{eachMeal.Number_of_meals}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </div>
+              </Table>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    );
+  };
+  customerInfo_graph_function = () => {
+    return (
+      <Card
+        style={{
+          width: "100%",
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+        }}
+      >
+        <Card.Body>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </Card.Body>
+      </Card>
     );
   };
 }

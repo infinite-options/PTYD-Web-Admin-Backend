@@ -72,8 +72,8 @@
 
 /* Scroll bar properties below */
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
+  width: 7px;
+  height: 7px;
 }
 
 /* Track */
@@ -83,7 +83,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: lightblue;
+  background: lightgray;
 }
 
 /* Handle on hover */
@@ -91,8 +91,7 @@
   background: gray;
 }
 
-/* Horizontal scroll below  */
-
+/* Horizontal scroll */
 .scrollMenu {
   /* background-color: #333; */
   overflow: auto;
@@ -103,4 +102,27 @@
   display: inline-block;
   margin: 2px;
   padding: 14px;
+}
+
+/* scroll vertically */
+.vertical-menu {
+  height: 400px;
+  overflow-y: auto;
+}
+
+.vertical-menu a {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+}
+
+.vertical-menu a.active {
+  background-color: #4caf50;
+  color: white;
 }
