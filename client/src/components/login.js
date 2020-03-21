@@ -12,13 +12,13 @@ import crypto from "crypto";
 
 export default function Login (props) {
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
   const [users, setUsers] = useState([]);
 
   function validateForm() {
-    return email.length > 0 && password.length > 0;
+    return username.length > 0 && password.length > 0;
   }
 
   function handleSubmit(event) {
@@ -54,7 +54,7 @@ export default function Login (props) {
 
   function checkLogin() {
     let t = [];
-    grabLoginInfoForUser(email, password)
+    grabLoginInfoForUser(username, password)
     .then(res => login(res))
     .catch(err => console.log(err));
     login(t);
@@ -88,13 +88,13 @@ export default function Login (props) {
                 <Col>               
                   <Form onSubmit={handleSubmit} autoComplete="off">
 
-                    <Form.Label>Email</Form.Label>
+                    <Form.Label>Username</Form.Label>
                     <InputGroup className="mb-3">
                       <FormControl
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
                         id="userForm"
-                        placeholder="Enter Email"
+                        placeholder="Enter Username"
                         aria-label="Username"
                         aria-describedby="basic-addon1"
                       />
