@@ -147,6 +147,34 @@ class Home extends Component {
         <br />
         <br />
 
+        {/* profit graph */}
+        <br />
+
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link color="inherit" onClick={this.handleClick}>
+            Admin Site
+          </Link>
+          <Typography color="textPrimary">Profit Graphs</Typography>
+        </Breadcrumbs>
+        {this.profit_graph_function()}
+
+        <br />
+        <br />
+
+        {/* delivery info*/}
+        <br />
+
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link color="inherit" onClick={this.handleClick}>
+            Admin Site
+          </Link>
+          <Typography color="textPrimary">Delivery Info</Typography>
+        </Breadcrumbs>
+        {this.deliveryInfo_function()}
+
+        <br />
+        <br />
+
         {/* Menu Creation  ----------------------------------------- */}
         {/* <MaterialTable
           style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
@@ -371,6 +399,46 @@ class Home extends Component {
       <Card
         style={{
           width: "100%",
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+        }}
+      >
+        <Card.Body>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </Card.Body>
+      </Card>
+    );
+  };
+  profit_graph_function = () => {
+    return (
+      <Card
+        style={{
+          width: "100%",
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+        }}
+      >
+        <Card.Body>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </Card.Body>
+      </Card>
+    );
+  };
+  deliveryInfo_function = () => {
+    return (
+      <Card
+        style={{
+          width: "50%",
           boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
         }}
       >
