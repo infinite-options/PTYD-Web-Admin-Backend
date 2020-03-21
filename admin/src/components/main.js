@@ -1,6 +1,8 @@
 import React from "react";
 import { Switch } from "react-router-dom";
 import Home from "./Homepage/Home";
+import CustomerProfile from "./Customer-Profile/customer-profile";
+import UserMap from "./User-Map/user-map";
 import AppliedRoute from "./AppliedRoute";
 
 // const DEV_URL =
@@ -21,6 +23,8 @@ const Main = ({ appProps }) => (
         API_URL_MEALINFO: `${APIV2_URL}customerinfo`
       }}
     />
+    <AppliedRoute exact path="/customerProfile" component={CustomerProfile} />
+    <AppliedRoute exact path="/userMap" component={UserMap} />
   </Switch>
 );
 export default Main;

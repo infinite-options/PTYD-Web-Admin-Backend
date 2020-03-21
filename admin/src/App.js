@@ -68,13 +68,13 @@ function App() {
             </div>
 
             <Nav.Item Style="margin-top:30px">
-              <Nav.Link Style="color:black" href="/">
+              <Nav.Link Style="color:black" href="/customerProfile">
                 customer profile
               </Nav.Link>
             </Nav.Item>
 
             <Nav.Item Style="margin-top:30px">
-              <Nav.Link Style="color:black" href="/">
+              <Nav.Link Style="color:black" href="/userMap">
                 user map
               </Nav.Link>
             </Nav.Item>
