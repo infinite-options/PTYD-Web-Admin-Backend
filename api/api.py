@@ -43,7 +43,8 @@ def RdsPw():
 # When pushing to GitHub, set RDS_PW equal to RdsPw()
 RDS_PW = RdsPw()
 
-getTodayDate = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
+getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
+getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
 # Connect to RDS
 def getRdsConn(RDS_PW):
@@ -818,7 +819,7 @@ class SignUp(Resource):
             Region = "US"
             Gender = "F"
             WeeklyUpdates = data['WeeklyUpdates']
-            CreateDate = getTodayDate()
+            CreateDate = getToday()
             LastUpdate = CreateDate
             ActiveBool = "Yes"
             Referral = data['Referral']
@@ -896,6 +897,34 @@ class SignUp(Resource):
             disconnect(conn)
 
 class Checkout(Resource):
+    def getPaymentQuery(self, data, paymentId, purchaseId):
+        query = """ INSERT INTO ptyd_payments
+                    (
+                        payment_id,
+                        purchase_id,
+                        buyer_id,
+                        amount_paid,
+                        coupon_id,
+                        payment_time_stamp,
+                        payment_type,
+                        cc_num,
+                        cc_exp_date,
+                        cc_cvv
+                    )
+                    VALUES
+                    (
+                        \'""" + paymentId + """\',
+                        \'""" + purchaseId + """\',
+                        \'""" + data['user_uid'] + """\',
+                        """ + data['item_price'] + """,
+                        NULL,
+                        \'""" + getNow() + """\',
+                        \'unknown\',
+                        \'""" + data['cc_num_secret'] + """\',
+                        \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
+                        \'""" + data['cc_cvv_secret'] + "\');"
+        return query
+
     def post(self):
         response = {}
         reply = {}
@@ -906,6 +935,7 @@ class Checkout(Resource):
             print("Received:", data)
 
             purchaseId = "TEST_NEW_PURCHASE_ID"
+            paymentId = "TEST_NEW_PAYMENT_ID"
 
             mealPlan = data['item'].split(' Subscription')[0]
 
@@ -923,7 +953,13 @@ class Checkout(Resource):
                 FROM
                     ptyd_meal_plans
                 WHERE
-                    meal_plan_desc = \'""" + mealPlan + "\'"]
+                    meal_plan_desc = \'""" + mealPlan + "\'", """
+                SELECT
+                    RIGHT(cc_num, 4) AS cc_num_last4
+                FROM
+                    ptyd_payments
+                WHERE
+                    buyer_id = \'""" + data['user_uid'] + "\';"]
 
             userAuth = execute(queries[0], 'get', conn)
 
@@ -953,6 +989,54 @@ class Checkout(Resource):
                 print("Error JSON:", response['error'])
                 return response, 501
 
+            ccNumQuery = execute(queries[2], 'get', conn)
+            print(ccNumQuery)
+
+            if ccNumQuery['code'] == 280 and len(ccNumQuery['result']) > 0:
+                print("Checking for existing credit cards...")
+                ccNumLastFour = ccNumQuery['result'][0]['cc_num_last4']
+                print(data['cc_num_secret'][-4:])
+                if data['cc_num_secret'][-4:] == ccNumLastFour:
+                    queries.append("""
+                        INSERT INTO ptyd_payments
+                        (
+                            payment_id,
+                            purchase_id,
+                            buyer_id,
+                            amount_paid,
+                            coupon_id,
+                            payment_time_stamp,
+                            payment_type,
+                            cc_num,
+                            cc_exp_date,
+                            cc_cvv
+                        )
+                        SELECT
+                            \'""" + paymentId + """\',
+                            \'""" + purchaseId + """\',
+                            \'""" + data['user_uid'] + """\',
+                            """ + data['item_price'] + """,
+                            NULL,
+                            \'""" + getNow() + """\',
+                            payment_type,
+                            cc_num,
+                            cc_exp_date,
+                            cc_cvv
+                        FROM
+                            ptyd_payments
+                        WHERE
+                            RIGHT(cc_num, 4) = \'""" + ccNumLastFour + """\'
+                        ORDER BY
+                            payment_time_stamp
+                        LIMIT 1;""")
+                    print("Credit card exists, using previous card.")
+                else:
+                    print('No matching credit cards found. Using user input.')
+                    queries.append(self.getPaymentQuery(paymentId, purchaseId))
+            else:
+                print('No matching credit cards found. Using user input.')
+                queries.append(self.getPaymentQuery(paymentId, purchaseId))
+
             queries.append(
                 """ INSERT INTO ptyd_purchases
                     (
@@ -969,11 +1053,14 @@ class Checkout(Resource):
                         \'active\',
                         \'""" + mealPlanId + """\',
                         \'""" + data['user_uid'] + """\',
-                        \'""" + getTodayDate() + """\',
+                        \'""" + getToday() + """\',
                         NULL
                     )""")
 
-            reply = execute(queries[2], 'post', conn)
+            reply['payment'] = execute(queries[3], 'post', conn)
+            # Add credit card verification code here
+
+            reply['purchase'] = execute(queries[4], 'post', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = reply

@@ -69,7 +69,7 @@ class Checkout extends Component {
 
   handleApi(response) {
     console.log(response);
-    if (response.result.code == 281) {
+    if (response.result.purchase.code == 281 && response.result.payment.code == 281) {
       this.props.history.push("/checkoutsuccess");
     }
     else {
