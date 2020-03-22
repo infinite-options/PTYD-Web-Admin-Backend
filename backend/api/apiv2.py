@@ -4,6 +4,7 @@ from flask_cors import CORS
 
 from werkzeug.exceptions import BadRequest, NotFound
 
+from dateutil.relativedelta import *
 from decimal import Decimal
 from datetime import datetime, date, timedelta
 from hashlib import sha512
@@ -140,7 +141,7 @@ def execute(sql, cmd, conn, skipSerialization = False):
         response['code'] = 490
     finally:
         response['sql'] = sql
-        print(response)
+        # print(response)
         return response
 
 # Close RDS connection
@@ -452,7 +453,7 @@ class Meals(Resource):
 
             data = request.get_json(force=True)
 #           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday'}
-            print("Received:", data)
+            # print("Received:", data)
 
             if data['delivery_day'] != None:
                 mealSelection = self.formatMealSelection(data['meal_quantities'])
@@ -847,7 +848,7 @@ class SignUp(Resource):
                         "NULL," +
                         "NULL);")
 
-            print("Query:", queries[1])
+            # print("Query:", queries[1])
             insertResponse = execute(queries[1], 'post', conn)
 
             response['message'] = 'Request successful.'
@@ -880,8 +881,88 @@ class TemplateApi(Resource):
         finally:
             disconnect(conn)
 
-
 class CustomerInfo(Resource):
+
+    # def ___inti__(self):
+    #     self.dict1 = {"Full_name":None,"Current_subscription":None,"Start_date":None,"End_date":None}
+
+    def jsonify_one(self,dict1):
+        map_subs = {"Weekly":7,"Bi-Weekly":14}
+        res = {}
+        for key,vals in dict1.items():
+            if key == "Full_name" or key == "Current_subscription" or key == "start_date":
+                res[key] = vals
+                continue
+            else:
+                date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
+                if dict1["frequency"]=="Monthly":
+                    end_date = date + relativedelta(months=1)
+                else:
+                    end_date = date + timedelta(days=map_subs[dict1["frequency"]])
+                res["end_date"] = end_date.strftime('%Y-%m-%d')
+        return res
+            
+    # HTTP method GET
+    def get(self):
+        response = {}
+        cus_info = {}
+        try:
+            conn = connect()
+
+            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                        pur.start_date as start_date, meal.payment_frequency as frequency, meal.meal_plan_desc as Current_subscription
+                        from ptyd_accounts
+                        inner join 
+                        ptyd_purchases pur ON ptyd_accounts.user_uid = pur.recipient_id
+                        inner join 
+                        ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
+
+            cus_info['CustomerInfo'] = execute(queries, 'get', conn)
+            list1 = list(map(self.jsonify_one,cus_info['CustomerInfo']['result']))
+            
+            cus_info['CustomerInfo']['result'] = list1
+            response['message'] = 'Request successful.'
+            response['result'] = cus_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class CustomerProfile(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        cus_info = {}
+        try:
+            conn = connect()
+
+            # -- select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name, concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_city,', ',
+            # -- ptyd_accounts.user_state,' ',ptyd_accounts.user_zip) as Address, 
+            # -- ptyd_accounts.user_gender as Gender, DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days' from ptyd_accounts
+            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                            ptyd_accounts.user_gender as Gender,
+                            concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_zip) as Address,
+                            count(*) as Meals_ordered,
+                            ptyd_accounts.create_date AS 'Customer Since' 
+                            from ptyd_accounts
+                            inner join 
+                            ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
+                            group by pay.buyer_id"""
+
+            cus_info['CustomerInfo'] = execute(queries, 'get', conn)
+            response['message'] = 'Request successful.'
+            response['result'] = cus_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class CustomerInfo2(Resource):
 
     # HTTP method GET
     def get(self):
@@ -906,6 +987,7 @@ class CustomerInfo(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 
 class AdminDBv2(Resource):
@@ -1029,6 +1111,7 @@ api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
+api.add_resource(CustomerProfile,'/api/v2/customerprofile')
 
 api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
