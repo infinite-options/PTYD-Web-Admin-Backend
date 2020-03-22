@@ -40,7 +40,8 @@ function SocialSignUp (props)  {
         }
 
         fetch(props.API_URL, {
-          method: 'POST',
+          method: '[OPTIONS, POST]',
+          mode: 'cors',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -66,6 +67,25 @@ function SocialSignUp (props)  {
     }
 
     const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
+
+    async function addSocial() {
+
+        fetch(props.API_URL, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_email: "swoog@ucsc.edu",
+            user_social: "google"
+          })
+        })
+
+        return "success";
+    }
+
+    const socializing = () => addSocial().then(mes => console.log(mes)).catch(err => console.log(err))
 
     return (
         <main Style="margin-top:-80px;">
@@ -227,7 +247,7 @@ function SocialSignUp (props)  {
                                     <Form.Check type="checkbox" label="Agree To Prep To Your Door Terms Of Service." />
                                 </Form.Group>
 
-                                <Button onClick={ sending } variant="dark" type="submit">
+                                <Button onClick={ socializing } variant="dark" type="submit">
                                     Submit
                                 </Button>
                                 </Form>

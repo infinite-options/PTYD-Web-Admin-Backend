@@ -5,6 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 function SignUp (props)  {
 
@@ -26,9 +28,11 @@ function SignUp (props)  {
 
     useEffect(() => { 
         //console.log(props) 
-        //typeof props.location.state === "undefined" ? console.log("undefined") :  ( typeof props.location.state.email === "undefined" ? console.log("undefined") : setEmail(props.location.state.email) )
-        //props.location.state.email == undefined ? console.log("empty") : console.log(props.location.state.email)
     }, []);
+
+    function validateForm() {
+        return (email.length > 0 && password.length > 0) && (email == confirmEmail) && (password == confirmPassword)
+    }
 
     async function sendForm() {
         if (email != confirmEmail) {
@@ -42,7 +46,7 @@ function SignUp (props)  {
         fetch(props.API_URL, {
           method: 'POST',
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -112,13 +116,24 @@ function SignUp (props)  {
                                     placeholder="Enter Email" />
                                 </Form.Group>
 
-                                <Form.Group  controlId="formGridEmailConfirm">
-                                <Form.Label>Confirm Email</Form.Label>
-                                <Form.Control type="email"
-                                    value={confirmEmail}
-                                    onChange={e => setConfirmEmail(e.target.value)}
-                                    placeholder="Confirm Email" />
-                                </Form.Group>
+                                <OverlayTrigger 
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                        <Tooltip >
+                                            { email == confirmEmail ? <p>Emails Match!</p> : <p>Mismatched Emails!</p> }
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Form.Group  controlId="formGridEmailConfirm">
+                                        <Form.Label>Confirm Email</Form.Label>
+                                        <Form.Control type="email"
+                                            value={confirmEmail}
+                                            onChange={e => setConfirmEmail(e.target.value)}
+                                            placeholder="Confirm Email" 
+                                        />
+                                    </Form.Group>
+                                </OverlayTrigger>
 
                                 <Form.Group  controlId="formGridPhoneNumber">
                                 <Form.Label>Phone Number</Form.Label>
@@ -136,13 +151,23 @@ function SignUp (props)  {
                                     placeholder="Enter Password" />
                                 </Form.Group>
 
-                                <Form.Group controlId="formGridPasswordConfirm">
-                                <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control type="password"
-                                    value={confirmPassword}
-                                    onChange={e => setConfirmPassword(e.target.value)}
-                                    placeholder="Confirm Password" />
-                                </Form.Group>
+                                <OverlayTrigger 
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                        <Tooltip >
+                                            { password == confirmPassword ? <p>Passwords Match!</p> : <p>Mismatched Passwords!</p> }
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Form.Group controlId="formGridPasswordConfirm">
+                                        <Form.Label>Confirm Password</Form.Label>
+                                        <Form.Control type="password"
+                                            value={confirmPassword}
+                                            onChange={e => setConfirmPassword(e.target.value)}
+                                            placeholder="Confirm Password" />
+                                    </Form.Group>
+                                </OverlayTrigger>
 
                                 <Form.Row>
                                     <Form.Group as={Col} sm={9} controlId="formGridAddress">
@@ -215,21 +240,21 @@ function SignUp (props)  {
                                         type="checkbox" 
                                         label="Sign Me Up For Weekly Prep To Your Door Updates!"
                                     />
-                                    {/*
-                                    <Form.Control
-                                        value={weeklyUpdates}
-                                        onChange={e => setWeeklyUpdates(e.target.value)}
-                                    />
-                                    */}
                                 </Form.Group>
 
                                 <Form.Group id="formGridServiceTerms">
                                     <Form.Check type="checkbox" label="Agree To Prep To Your Door Terms Of Service." />
                                 </Form.Group>
 
-                                <Button onClick={ sending } variant="dark" type="submit">
-                                    Submit
-                                </Button>
+                                    <Button 
+                                        onClick={ sending } 
+                                        disabled={!validateForm()} 
+                                        variant="dark" 
+                                        type="submit" 
+                                    >
+                                        Submit
+                                    </Button>
+
                                 </Form>
                             </Col>
                         </Row>

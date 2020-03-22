@@ -179,7 +179,7 @@ export default function Main({ appProps }) {
         component={SocialSignUp}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v2/signup`
+          API_URL: `${DEV_URL}v2/social_signup`
         }}
       />
       <AppliedRoute

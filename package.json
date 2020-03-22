@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "backend": "(cd backend/api && .\\env\\Scripts\\activate && py api.py prashant)",
+        "backend": "(cd backend/api && .\\env\\Scripts\\activate && py api.py)",
         "client": "(cd client && npm run start)",
         "start": "run-p backend client"
     },

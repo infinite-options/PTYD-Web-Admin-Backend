@@ -759,6 +759,7 @@ class SignUp(Resource):
         response = {}
         items = []
         try:
+            print("connected")
             conn = connect()
             data = request.get_json(force=True)
 
@@ -777,7 +778,7 @@ class SignUp(Resource):
             Region = "US"
             Gender = "F"
             WeeklyUpdates = data['WeeklyUpdates']
-            CreateDate = datetime.strftime(date.today(), "%Y-%m-%d")
+            CreateDate = getToday()
             LastUpdate = CreateDate
             ActiveBool = "Yes"
             Referral = data['Referral']
@@ -844,6 +845,54 @@ class SignUp(Resource):
 
             print("Query:", queries[1])
             insertResponse = execute(queries[1], 'post', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = insertResponse
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class SocialSignUp(Resource):
+    # HTTP method POST
+    def post(self):
+        response = {}
+        items = []
+        try:
+            print("connected")
+            conn = connect()
+            data = request.get_json(force=True)
+
+            Email = data['user_email']
+            Social = data['user_social']
+            Token = "test_token"
+
+            print("Received:", data)
+
+            NewUserID = "100-001999"
+
+            print("NewUserID:", NewUserID)
+
+            queries = []
+            queries.append(
+                """ INSERT INTO ptyd_social
+                    (
+                        user_id,
+                        user_email,
+                        user_social,
+                        user_token
+                    )
+                    VALUES
+                    (""" +
+                        "\'" + NewUserID + "\'," +
+                        "\'" + Email + "\'," +
+                        "\'" + Social + "\'," +
+                        "\'" + Token + "\');" )
+
+            print("Query:", queries[0])
+            insertResponse = execute(queries[0], 'post', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = insertResponse
@@ -927,6 +976,7 @@ class SocialAccount(Resource):
             response['message'] = 'Request successful.'
             response['result'] = items
 
+            print(response)
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -939,6 +989,7 @@ api.add_resource(Accounts, '/api/v1/accounts')
 
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
+api.add_resource(SocialSignUp, '/api/v2/social_signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 api.add_resource(Social, '/api/v2/social/<string:user>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
