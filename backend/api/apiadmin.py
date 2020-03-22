@@ -328,33 +328,37 @@ class AdminMenu(Resource):
             disconnect(conn)
     
     # HTTP method POST to update the menu
-    # def post(self):
-    #     response = {}
-    #     items = {}
-    #     try:
-    #         conn = connect()
-    #         data = request.get_json(force=True)
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
 
-    #         MenuDate = data['MenuDate']
-    #         MenuCategory = data['MenuCategory]
-    #         Meal = data['Meal']
-    #         NumberSold = 0
+            MenuDate = data['MenuDate']
+            MenuCategory = data['MenuCategory']
+            Meal = data['Meal']
+            NumberSold = 0
 
-    #         print("Received:", data)
+            print("Received:", data)
 
-    #         items = execute(""" SELECT
-    #                             *
-    #                             FROM
-    #                             ptyd_meal_plans;""", 'get', conn)
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_meal_plans;""", 'get', conn)
 
-    #         response['message'] = 'successful'
-    #         response['result'] = items
+            response['message'] = 'successful'
+            response['result'] = items
 
-    #         return response, 200
-    #     except:
-    #         raise BadRequest('Request failed, please try again later.')
-    #     finally:
-    #         disconnect(conn)
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
+    def formatDictionary(menuDict):
+        newdicts = []
+        for ind in enumerate(menuDict):
 
 # obj1 = MealCustomerLifeReport()
 # print(obj1.get())
