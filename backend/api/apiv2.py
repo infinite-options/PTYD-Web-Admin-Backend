@@ -1024,6 +1024,21 @@ class MealCustomerLifeReport(Resource):
 class AdminMenu(Resource):
     global RDS_PW
     
+    #formats dictionary
+    # def formatDictionary(self,menuDicts):
+    #     menuDates = []
+        
+    #     for index in range(len(menuDicts)):
+    #         if menuDicts[index]['menu_date'] != menuDates[index]:
+    #             menuDates[index].append(menuDicts[index]['menu_date']) 
+        
+    #     return menuDates
+
+
+
+    
+    
+    
     def get(self):
         response = {}
         items = {}
@@ -1040,10 +1055,63 @@ class AdminMenu(Resource):
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
                            
-                            
+            print('Items --------------------------------------------')         
+            print(items['result'][0]['menu_date'])
+
+            print('Test Code ---------------------------------------')
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            menuDates = list( dict.fromkeys(menuDates) )
+            
+            print(menuDates)
+
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            print('new dictionary-------------------------------')
+            print(d)
+
+            print('test-------------')
+            
+            index2 = 0
+            for index in range(len(menuDates)):
+                dictValues = []
+                menuEntries = 14
+                while menuEntries != 0:
+                    menu_cat = items['result'][index2]['menu_category']
+                    menu_cat = "Menu Category: " + menu_cat
+                    dictValues.append(menu_cat)
+                    
+                    menu_descript =  items['result'][index2]['meal_desc']
+                    menu_descript = "Meal Description: " + menu_descript
+                    dictValues.append(menu_descript)
+
+                    menu_num = items['result'][index2]['menu_num_sold']
+                    menu_num = str(menu_num)
+                    menu_num = "Number Sold: " + menu_num
+                    dictValues.append(menu_num)
+
+                    menuEntries -=1
+                    index2 +=1
+                
+                d[menuDates[index]] = dictValues
+
+            
+            
+            
+        
+            print ('Dictionary part 2 --------------')
+            print(d)
+
+
 
             response['message'] = 'successful'
-            response['result'] = items
+            response['result'] = d
 
             return response, 200
         except:
@@ -1080,9 +1148,10 @@ class AdminMenu(Resource):
         finally:
             disconnect(conn)
     
-    # def formatDictionary(menuDict):
-    #     newdicts = []
-    #     for ind in enumerate(menuDict):
+    
+
+
+        
 
 
 
