@@ -890,16 +890,26 @@ class CustomerInfo(Resource):
         map_subs = {"Weekly":7,"Bi-Weekly":14}
         res = {}
         for key,vals in dict1.items():
-            if key == "Full_name" or key == "Current_subscription" or key == "start_date":
+            if key == "Full_name" or key == "Current_subscription":
                 res[key] = vals
                 continue
-            else:
-                date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
+            elif key == "start_date":
+                start_date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
                 if dict1["frequency"]=="Monthly":
-                    end_date = date + relativedelta(months=1)
+                    end_date = start_date + relativedelta(months=1)
                 else:
-                    end_date = date + timedelta(days=map_subs[dict1["frequency"]])
-                res["end_date"] = end_date.strftime('%Y-%m-%d')
+                    end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
+                
+                # res["end_date"] = end_date.strftime('%Y-%m-%d')
+                curr_date = datetime.now()
+                # curr_date = datetime.strptime("2020-02-15", '%Y-%m-%d')
+                delta = end_date - curr_date
+                if delta.days<0:
+                    res["weeks_left"] = "Expired"
+                else:    
+                    res["weeks_left"] = delta.days//7
+            else:
+                continue
         return res
             
     # HTTP method GET
