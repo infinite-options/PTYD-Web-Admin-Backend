@@ -343,7 +343,7 @@ class Home extends Component {
                       <tr>
                         <td>{eachMeal.Full_name}</td>
                         <td>{eachMeal.Current_subscription}</td>
-                        <td>{eachMeal.end_date}</td>
+                        <td>{eachMeal.weeks_left}</td>
                       </tr>
                     ))}
                   </tbody>

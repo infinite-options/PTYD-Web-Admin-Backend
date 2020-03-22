@@ -9,35 +9,13 @@ class CustomerProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mealInfo: [],
+      custInfo: [],
       columns: [
-        { title: "Name", field: "name" },
-        { title: "Gender", field: "gender" },
-        { title: "Address", field: "address" },
-        { title: "Meals Ordered", field: "mealsOrdered" },
-        { title: "Customer Since", field: "customerSince" }
-        // {
-        //   title: "Birth Place",
-        //   field: "birthCity",
-        //   lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
-        // }
-      ],
-      data: [
-        {
-          name: "Wkly Spcl 1",
-          gender: "	Tomato",
-          address: "sdasdasdsada",
-          mealsOrdered: "1",
-          customerSince: "dasdadsada"
-        },
-
-        {
-          name: "Wkly Spcl 1",
-          gender: "	Tomato",
-          address: "sdasdasdsada",
-          mealsOrdered: "1",
-          customerSince: "dasdadsada"
-        }
+        { title: "Name", field: "Full_name" },
+        { title: "Gender", field: "Gender" },
+        { title: "Address", field: "Address" },
+        { title: "Meals Ordered", field: "Meals_ordered" },
+        { title: "Customer Since", field: "Customer_Since" }
       ]
     };
   }
@@ -45,8 +23,9 @@ class CustomerProfile extends Component {
     // customer info
     const res = await fetch(this.props.API_URL_CUSTPROF);
     const api = await res.json();
-    const mealInfo = api.result.CustomerInfo.result;
-    this.setState({ mealInfo });
+    const custInfo = api.result.CustomerInfo.result;
+    console.log("custinfo", custInfo);
+    this.setState({ custInfo });
   }
   render() {
     return (
@@ -60,7 +39,7 @@ class CustomerProfile extends Component {
           style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
           title="Meal Creation"
           columns={this.state.columns}
-          data={this.state.data}
+          data={this.state.custInfo}
           editable={{
             onRowAdd: newData =>
               new Promise(resolve => {
@@ -102,7 +81,7 @@ class CustomerProfile extends Component {
 
         <br></br>
 
-        <Table responsive bordered hover>
+        {/* <Table responsive bordered hover>
           <thead>
             <tr>
               <th>Image</th>
@@ -114,19 +93,19 @@ class CustomerProfile extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.mealInfo.map(eachMeal => (
+            {this.state.custInfo.map(eachMeal => (
               <tr>
                 <td>#</td>
                 <td>{eachMeal.Full_name}</td>
                 <td>{eachMeal.Gender}</td>
-                {/* <Button variant="raised">View Map</Button> */}
+                <Button variant="raised">View Map</Button>
                 <td>{eachMeal.Address}</td>
                 <td>{eachMeal.Meals_ordered}</td>
                 <td>{eachMeal.Customer_Since}</td>
               </tr>
             ))}
           </tbody>
-        </Table>
+        </Table> */}
       </div>
     );
   }
