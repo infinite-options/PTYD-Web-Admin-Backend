@@ -342,8 +342,8 @@ class Home extends Component {
                     {this.state.custInfo.map(eachMeal => (
                       <tr>
                         <td>{eachMeal.Full_name}</td>
-                        <td>{eachMeal.Num_of_days}</td>
-                        <td>{eachMeal.Number_of_meals}</td>
+                        <td>{eachMeal.Current_subscription}</td>
+                        <td>{eachMeal.end_date}</td>
                       </tr>
                     ))}
                   </tbody>

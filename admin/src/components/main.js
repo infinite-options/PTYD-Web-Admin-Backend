@@ -28,7 +28,7 @@ const Main = ({ appProps }) => (
       component={CustomerProfile}
       appProps={{
         appProps,
-        API_URL_MEALINFO: `${APIV2_URL}customerinfo`
+        API_URL_CUSTPROF: `${APIV2_URL}customerprofile`
       }}
     />
     <AppliedRoute exact path="/userMap" component={UserMap} />

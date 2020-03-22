@@ -10,13 +10,12 @@ class CustomerProfile extends Component {
     super(props);
     this.state = {
       mealInfo: [],
-      MealName1: "Tomato",
-      MealName2: "cake",
-
       columns: [
-        { title: "Subscription", field: "name" },
-        { title: "Meal Name", field: "surname" },
-        { title: "Qty", field: "birthYear", type: "numeric" }
+        { title: "Name", field: "name" },
+        { title: "Gender", field: "gender" },
+        { title: "Address", field: "address" },
+        { title: "Meals Ordered", field: "mealsOrdered" },
+        { title: "Customer Since", field: "customerSince" }
         // {
         //   title: "Birth Place",
         //   field: "birthCity",
@@ -24,19 +23,27 @@ class CustomerProfile extends Component {
         // }
       ],
       data: [
-        { name: "Wkly Spcl 1", surname: "	Tomato", birthYear: 1 },
+        {
+          name: "Wkly Spcl 1",
+          gender: "	Tomato",
+          address: "sdasdasdsada",
+          mealsOrdered: "1",
+          customerSince: "dasdadsada"
+        },
 
         {
-          name: "Wkly Spcl 2",
-          surname: "cake",
-          birthYear: 2
+          name: "Wkly Spcl 1",
+          gender: "	Tomato",
+          address: "sdasdasdsada",
+          mealsOrdered: "1",
+          customerSince: "dasdadsada"
         }
       ]
     };
   }
   async componentDidMount() {
     // customer info
-    const res = await fetch(this.props.API_URL_MEALINFO);
+    const res = await fetch(this.props.API_URL_CUSTPROF);
     const api = await res.json();
     const mealInfo = api.result.CustomerInfo.result;
     this.setState({ mealInfo });
@@ -111,10 +118,11 @@ class CustomerProfile extends Component {
               <tr>
                 <td>#</td>
                 <td>{eachMeal.Full_name}</td>
-                <td>Gender</td>
-                <Button variant="raised">View Map</Button>
-                <td>{eachMeal.Number_of_meals}</td>
-                <td>{eachMeal.Num_of_days}</td>
+                <td>{eachMeal.Gender}</td>
+                {/* <Button variant="raised">View Map</Button> */}
+                <td>{eachMeal.Address}</td>
+                <td>{eachMeal.Meals_ordered}</td>
+                <td>{eachMeal.Customer_Since}</td>
               </tr>
             ))}
           </tbody>
