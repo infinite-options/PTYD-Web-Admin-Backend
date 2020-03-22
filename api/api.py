@@ -713,7 +713,7 @@ class Accounts(Resource):
                     ON user_uid = recipient_id
                     LEFT JOIN ptyd_meal_plans
                     ON ptyd_purchases.meal_plan_id = ptyd_meal_plans.meal_plan_id
-                    INNER JOIN ptyd_passwords
+                    LEFT JOIN ptyd_passwords
                     ON user_uid = password_user_uid
                     ORDER BY payment_time_stamp, user_uid DESC;""",
                     "SELECT * FROM ptyd_monday_zipcodes;"]
@@ -934,8 +934,10 @@ class Checkout(Resource):
 
             print("Received:", data)
 
-            purchaseId = "TEST_NEW_PURCHASE_ID"
-            paymentId = "TEST_NEW_PAYMENT_ID"
+            purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
+            paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
+            purchaseId = purchaseIDresponse['result'][0]['new_id']
+            paymentId = paymentIDresponse['result'][0]['new_id']
 
             mealPlan = data['item'].split(' Subscription')[0]
 
@@ -1032,10 +1034,10 @@ class Checkout(Resource):
                     print("Credit card exists, using previous card.")
                 else:
                     print('No matching credit cards found. Using user input.')
-                    queries.append(self.getPaymentQuery(paymentId, purchaseId))
+                    queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
             else:
                 print('No matching credit cards found. Using user input.')
-                queries.append(self.getPaymentQuery(paymentId, purchaseId))
+                queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
 
             queries.append(
                 """ INSERT INTO ptyd_purchases
