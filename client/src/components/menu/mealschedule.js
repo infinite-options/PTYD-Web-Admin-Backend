@@ -91,6 +91,7 @@ class Mealschedule extends Component {
       currentWeek.sat = api.result[key].SaturdayDate;
       currentWeek.sun = api.result[key].Sunday;
       currentWeek.mon = api.result[key].Monday;
+      currentWeek.after4 = api.result[key].ThursdayAfter4;
       currentWeek.menu = api.result[key].Meals;
       currentWeek.addons = api.result[key].Addons;
       currentWeek.mealQuantities= api.result[key].MealQuantities;
@@ -185,6 +186,7 @@ class Mealschedule extends Component {
                       saturdayDate={eachWeek.sat}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}
+                      NoDeliveryAfter4={eachWeek.after4}
                       menu={eachWeek.menu}
                       addons={eachWeek.addons}
                       mealQuantities={eachWeek.mealQuantities}

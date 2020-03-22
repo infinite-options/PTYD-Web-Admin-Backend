@@ -22,6 +22,7 @@ export default class MealButton extends Component {
     buttonAddOn: false,
     requestModal: false,
     // buttonDisabled: true,
+    // deliveryDisabled: false,
     buttonSelectKeepColor: false,
     buttonAddOnKeepColor: false,
     mealQuantities: this.props.mealQuantities,
@@ -78,7 +79,8 @@ export default class MealButton extends Component {
       buttonM: false,
       buttonSkip: false,
       buttonDisabled: false,
-      dayToDeliver: "Sunday"
+      dayToDeliver: "Sunday",
+      deliveryDisabled: false
     });
   };
 
@@ -88,7 +90,8 @@ export default class MealButton extends Component {
       buttonS: false,
       buttonSkip: false,
       buttonDisabled: false,
-      dayToDeliver: "Monday"
+      dayToDeliver: "Monday",
+      deliveryDisabled: false
     });
   };
 
@@ -104,7 +107,20 @@ export default class MealButton extends Component {
       buttonDisabled: true,
       buttonSelectKeepColor: false,
       buttonAddOnKeepColor: false,
-      dayToDeliver: "SKIP"
+      dayToDeliver: "SKIP",
+      deliveryDisabled: false
+    });
+  };
+  stopDeliverying = () => {
+    this.setState({
+      buttonM: false,
+      buttonS: false,
+      buttonSkip: false,
+      buttonSelect: false,
+      buttonSurprise: false,
+      buttonAddOn: false,
+      deliveryDisabled: true,
+      buttonDisabled: true
     });
     this.sendForm();
   };
@@ -114,7 +130,8 @@ export default class MealButton extends Component {
       buttonSelect: true,
       buttonSurprise: false,
       buttonAddOn: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      deliveryDisabled: false
     });
     console.log("select");
   };
@@ -174,9 +191,22 @@ export default class MealButton extends Component {
       <div>
         <ButtonToolbar>
           <div className="radio">
+            {/* {this.props.NoDeliveryAfter4
+              ? ""
+              : (this.state.deliveryDisabled = true)} */}
             <Button
+              disabled={this.state.deliveryDisabled}
               variant="outline-dark"
-              onClick={this.changeButtonS}
+              onClick={
+                //   this.changeButtonS
+                //   // this.props.NoDeliveryAfter4 ? "" : this.stopDeliverying)
+                // }
+                // style={
+                //   this.state.buttonS && this.props.NoDeliveryAfter4 ? green : hide
+                // }
+                (this.changeButtonS,
+                this.props.NoDeliveryAfter4 ? "" : this.stopDeliverying)
+              }
               style={this.state.buttonS ? green : hide}
             >
               {this.props.day1}
@@ -185,6 +215,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
+              disabled={this.state.deliveryDisabled}
               variant="outline-dark"
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
@@ -195,6 +226,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
+              disabled={this.state.deliveryDisabled}
               variant="outline-dark"
               style={this.state.buttonSkip ? orange : hide}
               onClick={this.changeButtonSkip}
@@ -209,7 +241,7 @@ export default class MealButton extends Component {
             }}
           > */}
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled || this.state.deliveryDisabled}
             variant="outline-dark"
             ref={button => (this.button = button)}
             style={
@@ -224,17 +256,23 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled || this.state.deliveryDisabled}
             variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
             style={this.state.buttonSurprise ? green : hide}
+            // style={
+            //   this.state.buttonSurprise && this.props.NoDeliveryAfter4
+            //     ? green
+            //     : hide
+            // }
           >
             Surprise Me!
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {/* <SpecialRequestAnimation /> */}
           <Button
+            disabled={this.state.deliveryDisabled}
             variant="outline-dark"
             style={
               (this.state.buttonAddOn ? orange : hide,
