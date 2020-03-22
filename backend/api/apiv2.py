@@ -956,7 +956,7 @@ class CustomerProfile(Resource):
                             ptyd_accounts.user_gender as Gender,
                             concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_zip) as Address,
                             count(*) as Meals_ordered,
-                            ptyd_accounts.create_date AS 'Customer Since' 
+                            ptyd_accounts.create_date AS 'Customer_Since' 
                             from ptyd_accounts
                             inner join 
                             ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
