@@ -3,34 +3,35 @@ import React, { Component } from "react";
 import Jumbotron from "../Jumbotron/Jumbotron-customer";
 import { Table } from "react-bootstrap";
 import Button from "muicss/lib/react/button";
+import MaterialTable from "material-table";
 
 class CustomerProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mealInfo: []
-      // MealName1: "Tomato",
-      // MealName2: "cake",
+      mealInfo: [],
+      MealName1: "Tomato",
+      MealName2: "cake",
 
-      // columns: [
-      //   { title: "Subscription", field: "name" },
-      //   { title: "Meal Name", field: "surname" },
-      //   { title: "Qty", field: "birthYear", type: "numeric" }
-      //   // {
-      //   //   title: "Birth Place",
-      //   //   field: "birthCity",
-      //   //   lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
-      //   // }
-      // ],
-      // data: [
-      //   { name: "Wkly Spcl 1", surname: "	Tomato", birthYear: 1 },
+      columns: [
+        { title: "Subscription", field: "name" },
+        { title: "Meal Name", field: "surname" },
+        { title: "Qty", field: "birthYear", type: "numeric" }
+        // {
+        //   title: "Birth Place",
+        //   field: "birthCity",
+        //   lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
+        // }
+      ],
+      data: [
+        { name: "Wkly Spcl 1", surname: "	Tomato", birthYear: 1 },
 
-      //   {
-      //     name: "Wkly Spcl 2",
-      //     surname: "cake",
-      //     birthYear: 2
-      //   }
-      // ]
+        {
+          name: "Wkly Spcl 2",
+          surname: "cake",
+          birthYear: 2
+        }
+      ]
     };
   }
   async componentDidMount() {
@@ -48,7 +49,7 @@ class CustomerProfile extends Component {
         {/* title for the site ----------------------------------------- */}
         <Jumbotron />
 
-        {/* <MaterialTable
+        <MaterialTable
           style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
           title="Meal Creation"
           columns={this.state.columns}
@@ -92,7 +93,7 @@ class CustomerProfile extends Component {
           }}
         />
 
-        <br></br> */}
+        <br></br>
 
         <Table responsive bordered hover>
           <thead>

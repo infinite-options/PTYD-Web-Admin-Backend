@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Table, Card, Container, Row, Col } from "react-bootstrap";
-import MaterialTable from "material-table";
 // import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 // import { MenuCreation } from "./MenuCreation";
 import Jumbotron from "../Jumbotron/Jumbotron-home";
@@ -15,29 +14,7 @@ class Home extends Component {
     this.state = {
       upcomingMeals: [],
       mealInfo: [],
-      custInfo: [],
-      MealName1: "Tomato",
-      MealName2: "cake",
-
-      columns: [
-        { title: "Subscription", field: "name" },
-        { title: "Meal Name", field: "surname" },
-        { title: "Qty", field: "birthYear", type: "numeric" }
-        // {
-        //   title: "Birth Place",
-        //   field: "birthCity",
-        //   lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
-        // }
-      ],
-      data: [
-        { name: "Wkly Spcl 1", surname: "	Tomato", birthYear: 1 },
-
-        {
-          name: "Wkly Spcl 2",
-          surname: "cake",
-          birthYear: 2
-        }
-      ]
+      custInfo: []
     };
   }
 
@@ -179,53 +156,6 @@ class Home extends Component {
 
         <br />
         <br />
-
-        {/* Menu Creation  ----------------------------------------- */}
-        <MaterialTable
-          style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
-          title="Meal Creation"
-          columns={this.state.columns}
-          data={this.state.data}
-          editable={{
-            onRowAdd: newData =>
-              new Promise(resolve => {
-                setTimeout(() => {
-                  resolve();
-                  this.setState(prevState => {
-                    const data = [...prevState.data];
-                    data.push(newData);
-                    return { ...prevState, data };
-                  });
-                }, 600);
-              }),
-            onRowUpdate: (newData, oldData) =>
-              new Promise(resolve => {
-                setTimeout(() => {
-                  resolve();
-                  if (oldData) {
-                    this.setState(prevState => {
-                      const data = [...prevState.data];
-                      data[data.indexOf(oldData)] = newData;
-                      return { ...prevState, data };
-                    });
-                  }
-                }, 600);
-              }),
-            onRowDelete: oldData =>
-              new Promise(resolve => {
-                setTimeout(() => {
-                  resolve();
-                  this.setState(prevState => {
-                    const data = [...prevState.data];
-                    data.splice(data.indexOf(oldData), 1);
-                    return { ...prevState, data };
-                  });
-                }, 600);
-              })
-          }}
-        />
-
-        <br></br>
       </div>
     );
   }
