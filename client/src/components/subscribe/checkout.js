@@ -115,12 +115,12 @@ class Checkout extends Component {
               <p>Estimated Shipping - $15.00</p>
               <p>
                 Estimated Tax - $
-                {(this.props.location.item.total * 0.075).toFixed(2)}
+                {(this.props.location.item.total * 0.0825).toFixed(2)}
               </p>
               <hr />
               <h3>
                 Total: $
-                {(this.props.location.item.total * 1.075 + 15.0).toFixed(2)}
+                {(this.props.location.item.total * 1.0825 + 15.0).toFixed(2)}
               </h3>
               <Form>
                 <Form.Row>

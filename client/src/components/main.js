@@ -97,7 +97,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v1/meals`,
-          USERS_API_URL: `${DEV_URL}v1/accounts`
+          USERS_API_URL: `${DEV_URL}v1/accounts`,
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`
         }}
       />
 

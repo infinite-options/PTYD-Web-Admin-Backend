@@ -472,18 +472,19 @@ class Meals(Resource):
                 mealSelection = 'SKIP'
             # Handle default meal selection
             elif data['default_selected'] is True:
-                getDefault = execute(queries[1], 'get', conn)
-                # Handle successful default selection query
-                if getDefault['code'] == 280 and len(getDefault['result']) > 0:
-                    mealSelection = getDefault['result'][0]['default_meal_plan']
-                # Handle unsuccessful default selection query
-                else:
-                    response['message'] = 'Could not retrieve default meal selections.'
-                    response['error'] = getDefault
-                    print("Error:", response['message'])
-                    print("Error JSON:", response['error'])
-                    # 501: Not implemented in server
-                    return response, 501
+                mealSelection = 'SURPRISE'
+#               getDefault = execute(queries[1], 'get', conn)
+#               # Handle successful default selection query
+#               if getDefault['code'] == 280 and len(getDefault['result']) > 0:
+#                   mealSelection = getDefault['result'][0]['default_meal_plan']
+#               # Handle unsuccessful default selection query
+#               else:
+#                   response['message'] = 'Could not retrieve default meal selections.'
+#                   response['error'] = getDefault
+#                   print("Error:", response['message'])
+#                   print("Error JSON:", response['error'])
+#                   # 501: Not implemented in server
+#                   return response, 501
             # Handle custom meal selection
             else:
                 mealSelection = self.formatMealSelection(data['meal_quantities'])
@@ -1109,6 +1110,50 @@ class Checkout(Resource):
         finally:
             disconnect(conn)
 
+class MealSelection(Resource):
+    def readQuery(self, items):
+        for item in items:
+            item['meals_selected'] = {}
+            if item['meal_selection'] == 'SKIP':
+                continue
+            if item['meal_selection'] == 'SURPRISE':
+                continue
+            selectedMeals = item['meal_selection'].split(';')
+            for selectedMeal in selectedMeals:
+                if selectedMeal in item['meals_selected']:
+                    item['meals_selected'][selectedMeal] += 1
+                else:
+                    item['meals_selected'][selectedMeal] = 1
+        return items
+
+    def get(self, userUid):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            query = """ SELECT
+                            week_affected,
+                            meal_selection,
+                            delivery_day
+                        FROM ptyd_meals_selected AS m
+                        INNER JOIN ptyd_purchases AS p
+                        ON m.purchase_id = p.purchase_id
+                        WHERE
+                        p.recipient_id = \'""" + userUid + "\';"
+
+            items = execute(query, 'get', conn)
+            items = self.readQuery(items['result'])
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -1138,6 +1183,7 @@ api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 api.add_resource(Checkout, '/api/v2/checkout')
+api.add_resource(MealSelection, '/api/v2/mealselection/<string:userUid>')
 
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 

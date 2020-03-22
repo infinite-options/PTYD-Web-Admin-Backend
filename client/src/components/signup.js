@@ -61,6 +61,11 @@ function SignUp (props)  {
 
     const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
 
+    function handleUsername(event) {
+      setUsername(event.target.value);
+      console.log(username);
+    }
+
     return (
         <main Style="margin-top:-80px;">
             <div class="container text-center" Style="margin-top:-40px;">
@@ -76,7 +81,7 @@ function SignUp (props)  {
                                 <Form.Label>Username</Form.Label>
                                 <Form.Control 
                                     value={username}
-                                    onChange={e => setUsername(e.target.value)}
+                                    onChange={handleUsername}
                                     placeholder="Enter Username" />
                                 </Form.Group>
 

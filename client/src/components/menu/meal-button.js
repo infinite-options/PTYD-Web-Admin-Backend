@@ -10,27 +10,69 @@ export default class MealButton extends Component {
     super(props);
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
     this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
+
+    console.log("meal-button");
+    console.log(this.props.deliverDay);
+
+    this.state = {
+      count: 0,
+      buttonS: false,
+      buttonM: false,
+      buttonSkip: false,
+      buttonSelect: false,
+      buttonSurprise: true,
+      buttonAddOn: false,
+      requestModal: false,
+      // buttonDisabled: true,
+      buttonSelectKeepColor: false,
+      buttonAddOnKeepColor: false,
+      mealQuantities: this.props.mealQuantities,
+      maxmeals: this.props.maxmeals,
+      maxmealsCopy: this.props.maxmeals,
+      addonActivated: false,
+      flag: false,
+      dayToDeliver: this.props.deliverDay,
+    };
+
+    console.log(this.state);
+
   }
 
-  state = {
-    count: 0,
-    buttonS: true,
-    buttonM: false,
-    buttonSkip: false,
-    buttonSelect: false,
-    buttonSurprise: true,
-    buttonAddOn: false,
-    requestModal: false,
-    // buttonDisabled: true,
-    buttonSelectKeepColor: false,
-    buttonAddOnKeepColor: false,
-    mealQuantities: this.props.mealQuantities,
-    maxmeals: this.props.maxmeals,
-    maxmealsCopy: this.props.maxmeals,
-    addonActivated: false,
-    flag: false,
-    dayToDeliver: "Sunday"
-  };
+  async componentDidMount(){
+    if (this.props.surprise == false) {
+      this.setState({
+        buttonSurprise: false,
+        buttonSelectKeepColor: true,
+      });
+    }
+
+    switch (this.props.deliverDay) {
+      case 'SKIP':
+        this.setState({
+          buttonS: false,
+          buttonM: false,
+          buttonSkip: true,
+          buttonSurprise: false,
+          buttonDisabled: true,
+        });
+        break;
+      case 'Monday':
+        this.setState({
+          buttonS: false,
+          buttonM: true,
+          buttonSkip: false,
+          buttonDisabled: false,
+        });
+        break;
+      case 'Sunday':
+        this.setState({
+          buttonS: true,
+          buttonM: false,
+          buttonSkip: false,
+          buttonDisabled: false,
+        });
+    }
+  }
 
   sendForm = () => {
     fetch(this.props.API_URL, {
