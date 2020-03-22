@@ -7,9 +7,7 @@ import AppliedRoute from "./AppliedRoute";
 
 // const DEV_URL =
 //   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/";
-const API_URL = "http://localhost:2000/api/v1/";
-const APIADMIN_URL = "http://localhost:2001/api/v1/";
-const APIV2_URL = "http://localhost:2002/api/v2/";
+const APIV2_URL = "http://localhost:2001/api/v2/";
 
 const Main = ({ appProps }) => (
   <Switch>
@@ -19,11 +17,20 @@ const Main = ({ appProps }) => (
       component={Home}
       appProps={{
         appProps,
-        API_URL: `${APIADMIN_URL}admindb`,
+        API_URL_MEALSELECT: `${APIV2_URL}admindb`,
+        API_URL_CUSTINFO: `${APIV2_URL}customerinfo`,
+        API_URL_MEALINFO: `${APIV2_URL}meal_info`
+      }}
+    />
+    <AppliedRoute
+      exact
+      path="/customerProfile"
+      component={CustomerProfile}
+      appProps={{
+        appProps,
         API_URL_MEALINFO: `${APIV2_URL}customerinfo`
       }}
     />
-    <AppliedRoute exact path="/customerProfile" component={CustomerProfile} />
     <AppliedRoute exact path="/userMap" component={UserMap} />
   </Switch>
 );

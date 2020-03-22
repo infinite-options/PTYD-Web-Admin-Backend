@@ -368,8 +368,45 @@ class MealCustomerLifeReport(Resource):
 # obj1 = MealCustomerLifeReport()
 # print(obj1.get())
 
+class MealInfo(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        meal_info = {}
+        conn = connect()
+        try:
+            
+
+            queries = """select A1.menu_meal_id,A3.meal_desc, A1.total_sold,A2.post_count, (A1.total_sold/A2.post_count) as "Number sold per posting(avg)"
+                        from
+                        (select menu_meal_id, sum(menu_num_sold) as "total_sold" from ptyd_menu
+                        #where month(menu_date) = 2
+                        group by menu_meal_id) A1 
+                        join
+                        (select distinct menu_meal_id, count(menu_meal_id) "post_count"
+                        from ptyd_menu
+                        #where month(menu_date) = 2
+                        group by menu_meal_id) A2
+                        on A1.menu_meal_id = A2.menu_meal_id
+                        join
+                        (select meal_id, meal_desc from ptyd_meals)A3
+                        on A1.menu_meal_id = A3.meal_id;
+                        """
+
+            meal_info['meal_info'] = execute(queries, 'get', conn)
+            response['message'] = 'Request successful.'
+            response['result'] = meal_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 api.add_resource(Admin_db, '/api/v1/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v1/MealCustomerLifeReport')
+api.add_resource(MealInfo, '/api/v1/meal_info')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=2001)
