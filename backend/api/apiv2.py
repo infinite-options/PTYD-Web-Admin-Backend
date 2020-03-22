@@ -927,6 +927,7 @@ class CustomerInfo(Resource):
                         inner join 
                         ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
 
+
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
             list1 = list(map(self.jsonify_one,cus_info['CustomerInfo']['result']))
             
@@ -999,7 +1000,6 @@ class CustomerInfo2(Resource):
             disconnect(conn)
 
 
-
 class AdminDBv2(Resource):
 
     # HTTP method GET
@@ -1022,6 +1022,7 @@ class AdminDBv2(Resource):
                         -- WHERE 
                             -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
                         -- M.menu_date = "2020-02-01";""", 
+
                         """SELECT 
                         M.menu_meal_id AS "Menu Number",
                         M.menu_date "Entered Menu Date" ,
@@ -1049,6 +1050,7 @@ class AdminDBv2(Resource):
                     -- WHERE 
                         -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
                     -- M.menu_date = "2020-02-01";"""
+
                     ]
             
             for ind1,query in enumerate(queries):
@@ -1140,12 +1142,133 @@ class MealInfo(Resource):
             meal_info['meal_info'] = execute(queries, 'get', conn)
             response['message'] = 'Request successful.'
             response['result'] = meal_info
+class AdminMenu(Resource):
+    global RDS_PW
+    
+    #formats dictionary
+    # def formatDictionary(self,menuDicts):
+    #     menuDates = []
+        
+    #     for index in range(len(menuDicts)):
+    #         if menuDicts[index]['menu_date'] != menuDates[index]:
+    #             menuDates[index].append(menuDicts[index]['menu_date']) 
+        
+    #     return menuDates
+
+
+
+    
+    
+    
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(
+                    """ SELECT 
+                        menu_date,
+                        menu_category,
+                        meal_desc,
+                        menu_num_sold
+                        FROM 
+                        ptyd_menu
+                        JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+                           
+            print('Items --------------------------------------------')         
+            print(items['result'][0]['menu_date'])
+
+            print('Test Code ---------------------------------------')
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            menuDates = list( dict.fromkeys(menuDates) )
+            
+            print(menuDates)
+
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            print('new dictionary-------------------------------')
+            print(d)
+
+            print('test-------------')
+            
+            index2 = 0
+            for index in range(len(menuDates)):
+                dictValues = []
+                menuEntries = 14
+                while menuEntries != 0:
+                    menu_cat = items['result'][index2]['menu_category']
+                    menu_cat = "Menu Category: " + menu_cat
+                    dictValues.append(menu_cat)
+                    
+                    menu_descript =  items['result'][index2]['meal_desc']
+                    menu_descript = "Meal Description: " + menu_descript
+                    dictValues.append(menu_descript)
+
+                    menu_num = items['result'][index2]['menu_num_sold']
+                    menu_num = str(menu_num)
+                    menu_num = "Number Sold: " + menu_num
+                    dictValues.append(menu_num)
+
+                    menuEntries -=1
+                    index2 +=1
+                
+                d[menuDates[index]] = dictValues
+
+            
+            
+            
+        
+            print ('Dictionary part 2 --------------')
+            print(d)
+
+
+
+            response['message'] = 'successful'
+            response['result'] = d
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+    
+    # HTTP method POST to update the menu
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            MenuDate = data['MenuDate']
+            MenuCategory = data['MenuCategory']
+            Meal = data['Meal']
+            NumberSold = 0
+
+            print("Received:", data)
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_meal_plans;""", 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
 
 
 # Define API routes
@@ -1165,7 +1288,12 @@ api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 
 api.add_resource(MealInfo, '/api/v2/meal_info')
 
+api.add_resource(AdminDBv2, '/api/v2/admindb')
+api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
+api.add_resource(AdminMenu, '/api/v2/menu_display')
+
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=2001)
+
