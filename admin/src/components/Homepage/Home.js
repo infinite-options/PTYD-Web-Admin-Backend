@@ -22,7 +22,7 @@ class Home extends Component {
     // upcoming meals
     const res = await fetch(this.props.API_URL_MEALSELECT);
     const api = await res.json();
-    const upcomingMeals = api.result.Meals_by_week;
+    const upcomingMeals = api.result;
     // customer info
     const res2 = await fetch(this.props.API_URL_CUSTINFO);
     const api2 = await res2.json();
@@ -32,12 +32,30 @@ class Home extends Component {
     const api3 = await res3.json();
     const mealInfo = api3.result.meal_info.result;
     this.setState({ upcomingMeals, custInfo, mealInfo });
+    console.log("meals", this.state.upcomingMeals);
   }
   handleClick(event) {
     event.preventDefault();
     console.info("You clicked a breadcrumb.");
   }
 
+  makeTable = () => {
+    if (this.state.upcomingMeals == null) {
+      return <div></div>;
+    }
+    let a = [];
+    for (var key in this.state.upcomingMeals) {
+      a.push(
+        <div className="scrollItem">
+          {this.upcomingMeals_and_weeklyPurchase(
+            this.state.upcomingMeals[key],
+            key
+          )}
+        </div>
+      );
+    }
+    return a;
+  };
   render() {
     return (
       <div className="container" style={{ marginTop: "10%" }}>
@@ -58,20 +76,7 @@ class Home extends Component {
         </Breadcrumbs>
         <br />
 
-        <div className="scrollMenu">
-          <div className="scrollItem">
-            {this.upcomingMeals_and_weeklyPurchase()}
-          </div>
-          <div className="scrollItem">
-            {this.upcomingMeals_and_weeklyPurchase()}
-          </div>
-          <div className="scrollItem">
-            {this.upcomingMeals_and_weeklyPurchase()}
-          </div>
-          <div className="scrollItem">
-            {this.upcomingMeals_and_weeklyPurchase()}
-          </div>
-        </div>
+        <div className="scrollMenu">{this.makeTable()}</div>
         {/* Meal info ----------------------------------------- */}
 
         <br />
@@ -159,11 +164,22 @@ class Home extends Component {
       </div>
     );
   }
-  upcomingMeals_and_weeklyPurchase = () => {
+  upcomingMeals_and_weeklyPurchase = (weekArgument, date) => {
+    let arr = [];
+    for (let i = 0; i < weekArgument.length; i += 3) {
+      let first = weekArgument[i];
+      let second = weekArgument[i + 1];
+      let third = weekArgument[i + 2];
+
+      let a = first.split(":")[1];
+      let b = second.split(":")[1];
+      let c = third.split(":")[1];
+
+      arr.push(this.single_item(a, b, c));
+    }
     return (
       <Container>
         <Row>
-          {/* {this.state.upcomingMeals.map(upcomingMeal => ( */}
           <Col>
             <Card
               style={{
@@ -172,10 +188,10 @@ class Home extends Component {
               }}
             >
               <Card.Body>
-                <Card.Title>Week 1</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
+                <Card.Title>The week of:</Card.Title>
+                {/* <Card.Subtitle className="mb-2 text-muted">
                   The week of:
-                </Card.Subtitle>
+                </Card.Subtitle> */}
                 <Card.Text>
                   <div className="vertical-menu">
                     <Table
@@ -197,12 +213,15 @@ class Home extends Component {
                           overflowY: "scroll"
                         }}
                       >
-                        <tr>
-                          {/* <td>{upcomingMeal.Category}</td> */}
-                          <td>aaaaaaa</td>
-                          <td>Saag</td>
-                          <td>45</td>
-                        </tr>
+                        {arr}
+                        {/* {this.state.mealInfo.map(meal => (
+                      <tr>
+                        <td>{meal.meal_desc}</td>
+                        <td>{meal.post_count}</td>
+                        <td>{meal.Number_sold_per_posting}</td>
+                        <td>{meal.total_sold}</td>
+                      </tr>
+                    ))} */}
                       </tbody>
                     </Table>
                   </div>
@@ -235,7 +254,7 @@ class Home extends Component {
               <Card.Body>
                 <Card.Title>Week 1</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
-                  The week of:
+                  The week of:{date}
                 </Card.Subtitle>
                 <ItemToPurchase />
               </Card.Body>
@@ -243,6 +262,15 @@ class Home extends Component {
           </Col>
         </Row>
       </Container>
+    );
+  };
+  single_item = (category, description, quantity) => {
+    return (
+      <tr>
+        <td>{category}</td>
+        <td>{description}</td>
+        <td>{quantity}</td>
+      </tr>
     );
   };
   mealInfo_function = () => {

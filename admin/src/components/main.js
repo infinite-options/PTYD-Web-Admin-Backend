@@ -17,7 +17,7 @@ const Main = ({ appProps }) => (
       component={Home}
       appProps={{
         appProps,
-        API_URL_MEALSELECT: `${APIV2_URL}admindb`,
+        API_URL_MEALSELECT: `${APIV2_URL}menu_display`,
         API_URL_CUSTINFO: `${APIV2_URL}customerinfo`,
         API_URL_MEALINFO: `${APIV2_URL}meal_info`
       }}
