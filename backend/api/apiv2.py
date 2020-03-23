@@ -1142,6 +1142,14 @@ class MealInfo(Resource):
             meal_info['meal_info'] = execute(queries, 'get', conn)
             response['message'] = 'Request successful.'
             response['result'] = meal_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
 class AdminMenu(Resource):
     global RDS_PW
     
@@ -1282,9 +1290,6 @@ api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile,'/api/v2/customerprofile')
-
-api.add_resource(AdminDBv2, '/api/v2/admindb')
-api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 
 api.add_resource(MealInfo, '/api/v2/meal_info')
 
