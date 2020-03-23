@@ -365,14 +365,12 @@ export default class MealButton extends Component {
                       stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
                       this.setState(stateCopy);
                       this.setState({ maxmeals: this.state.maxmeals + 1 });
-                      console.log(this.state.mealQuantities);
                     }}
                     decrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
                       stateCopy.mealQuantities[meal.menu_meal_id] += 1;
                       this.setState(stateCopy);
                       this.setState({ maxmeals: this.state.maxmeals - 1 });
-                      console.log(this.state.mealQuantities);
                     }}
                   />
                 </Cell>
@@ -471,13 +469,11 @@ export default class MealButton extends Component {
                           var stateCopy = Object.assign({}, this.state);
                           stateCopy.mealQuantities[meal.menu_meal_id] += 1;
                           this.setState(stateCopy);
-                          console.log(this.state.mealQuantities);
                         }}
                         decrementAddon={() => {
                           var stateCopy = Object.assign({}, this.state);
                           stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
                           this.setState(stateCopy);
-                          console.log(this.state.mealQuantities);
                         }}
                       />
                     </Cell>
@@ -525,13 +521,11 @@ export default class MealButton extends Component {
                         var stateCopy = Object.assign({}, this.state);
                         stateCopy.mealQuantities[meal.menu_meal_id] += 1;
                         this.setState(stateCopy);
-                        console.log(this.state.mealQuantities);
                       }}
                       decrementAddon={() => {
                         var stateCopy = Object.assign({}, this.state);
                         stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
                         this.setState(stateCopy);
-                        console.log(this.state.mealQuantities);
                       }}
                     />
                   </Cell>

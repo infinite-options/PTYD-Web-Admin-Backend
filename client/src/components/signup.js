@@ -63,7 +63,6 @@ function SignUp (props)  {
 
     function handleUsername(event) {
       setUsername(event.target.value);
-      console.log(username);
     }
 
     return (
@@ -204,7 +203,6 @@ function SignUp (props)  {
                                         value={ weeklyUpdates } 
                                         onChange={ e => { 
                                             if(document.getElementById("weeklyUpdateCheck").checked == true) {
-                                                console.log(document.getElementById("weeklyUpdateCheck").checked)
                                                 setWeeklyUpdates("TRUE")
                                             }
                                             else {

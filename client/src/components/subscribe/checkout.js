@@ -55,7 +55,6 @@ class Checkout extends Component {
       })
     })
     const api = await res.json();
-    console.log(api);
     return api;
   }
 
@@ -68,7 +67,6 @@ class Checkout extends Component {
   }
 
   handleApi(response) {
-    console.log(response);
     if (response.result.purchase.code == 281 && response.result.payment.code == 281) {
       this.props.history.push("/checkoutsuccess");
     }

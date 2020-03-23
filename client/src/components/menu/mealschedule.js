@@ -114,8 +114,6 @@ class Mealschedule extends Component {
   }
 
   render() {
-    console.log("max meal testing................................");
-
     return (
       <div>
         <section class="content-section">

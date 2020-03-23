@@ -20,7 +20,6 @@ class WeeklyMenu extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props);
     this.setState({ currentWeek: this.props.objectIndex });
     const res = await fetch(this.props.API_URL);
     const api = await res.json();

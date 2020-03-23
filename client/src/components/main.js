@@ -32,9 +32,6 @@ const DEV_URL = "http://localhost:2000/api/";
 export default function Main({ appProps }) {
   const [objectIndex, setObjectIndex] = useState(0);
 
-  console.log('main.js: appProps');
-  console.log(appProps);
-
   return (
     <Switch>
       <AppliedRoute

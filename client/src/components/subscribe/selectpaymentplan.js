@@ -11,7 +11,6 @@ class SelectPaymentPlan extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props);
     this.setState({ obj: this.props.objectIndex });
     this.setState({ meals: this.props.meals });
     const res = await fetch(this.props.API_URL);
