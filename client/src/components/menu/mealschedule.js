@@ -6,6 +6,7 @@ import MealButton from "./meal-button";
 class Mealschedule extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       menu: [],
       user_uid: searchCookie4UserID(document.cookie),
@@ -20,9 +21,6 @@ class Mealschedule extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props);
-    console.log(this.state);
-
     let currUser = {
       num_meals: null,
       user_uid: "null",
@@ -95,11 +93,9 @@ class Mealschedule extends Component {
       for (let week in mselect_api.result) {
         if (mselect_api.result[week].week_affected == currentWeek.sat) {
           if (mselect_api.result[week].meal_selection == 'SKIP') {
-            console.log('SKIP');
             currentWeek.deliverDay = 'SKIP';
           }
           else if (mselect_api.result[week].meal_selection == 'SURPRISE') {
-            console.log('SURPRISE');
             currentWeek.deliverDay = mselect_api.result[week].delivery_day;
           }
           else {
@@ -114,7 +110,6 @@ class Mealschedule extends Component {
       }
       sixWeekMenu.push(currentWeek);
     }
-    console.log("Done pushing six weeks");
     this.setState({ menu: sixWeekMenu, user: currUser });
   }
 

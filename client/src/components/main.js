@@ -32,6 +32,9 @@ const DEV_URL = "http://localhost:2000/api/";
 export default function Main({ appProps }) {
   const [objectIndex, setObjectIndex] = useState(0);
 
+  console.log('main.js: appProps');
+  console.log(appProps);
+
   return (
     <Switch>
       <AppliedRoute
@@ -93,7 +96,7 @@ export default function Main({ appProps }) {
       <AppliedRoute
         exact
         path="/mealschedule"
-        component={MealSchedule}
+        component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v1/meals`,

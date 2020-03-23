@@ -11,9 +11,6 @@ export default class MealButton extends Component {
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
     this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
 
-    console.log("meal-button");
-    console.log(this.props.deliverDay);
-
     this.state = {
       count: 0,
       buttonS: false,
@@ -33,9 +30,6 @@ export default class MealButton extends Component {
       flag: false,
       dayToDeliver: this.props.deliverDay,
     };
-
-    console.log(this.state);
-
   }
 
   async componentDidMount(){
@@ -105,7 +99,6 @@ export default class MealButton extends Component {
       buttonAddOn: false,
       buttonAddOnKeepColor: true
     });
-    console.log("addon");
   };
   // keepButtonAddOn = () => {
   //   this.setState({
@@ -158,7 +151,6 @@ export default class MealButton extends Component {
       buttonAddOn: false,
       buttonSelectKeepColor: true
     });
-    console.log("select");
   };
   async changeButtonSurprise () {
     await this.setState({
@@ -168,7 +160,6 @@ export default class MealButton extends Component {
       buttonSelectKeepColor: false
     });
     this.sendForm();
-    console.log("surprise");
   };
   changeButtonAddOn = () => {
     this.setState({
