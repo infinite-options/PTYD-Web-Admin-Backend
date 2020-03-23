@@ -759,7 +759,6 @@ class SignUp(Resource):
         response = {}
         items = []
         try:
-            print("connected")
             conn = connect()
             data = request.get_json(force=True)
 
@@ -768,7 +767,6 @@ class SignUp(Resource):
             LastName = data['LastName']
             Email = data['Email']
             PhoneNumber = data['PhoneNumber']
-            Password = data['Password']
             Address = data['Address']
             AddressUnit = data['AddressUnit']
             DeliveryNote = "N/A"
@@ -843,11 +841,46 @@ class SignUp(Resource):
                         "NULL," +
                         "NULL);")
 
-            print("Query:", queries[1])
-            insertResponse = execute(queries[1], 'post', conn)
+            DatetimeStamp = getNow()
+            salt = getNow()
+            hashed = sha512((data['Password'] + salt).encode()).hexdigest()
+
+            queries.append("""
+                INSERT INTO ptyd_passwords
+                (
+                    password_user_uid,
+                    password_hash,
+                    password_salt,
+                    password_hash_algorithm,
+                    datetime_created,
+                    password_last_changed
+                )
+                VALUES
+                (
+                    \'""" + NewUserID + """\',
+                    \'""" + hashed + """\',
+                    \'""" + salt + """\',
+                    \'SHA512\',
+                    \'""" + DatetimeStamp + """\',
+                    \'""" + DatetimeStamp + "\');")
+
+            usnInsert = execute(queries[1], 'post', conn)
+
+            if usnInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit username.'
+                print(response['message'], response['result'], usnInsert['code'])
+                return response, 400
+
+            pwInsert = execute(queries[2], 'post', conn)
+
+            if usnInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit password.'
+                print(response['message'], response['result'], pwInsert['code'])
+                return response, 500
 
             response['message'] = 'Request successful.'
-            response['result'] = insertResponse
 
             return response, 200
         except:
@@ -855,9 +888,12 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
+
 class SocialSignUp(Resource):
     # HTTP method POST
     def post(self):
+        if request.method == 'OPTIONS':
+            print('getting pretty posty in here')
         response = {}
         items = []
         try:
@@ -989,7 +1025,7 @@ api.add_resource(Accounts, '/api/v1/accounts')
 
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
-api.add_resource(SocialSignUp, '/api/v2/social_signup')
+api.add_resource(SocialSignUp, '/api/v2/social_signup', methods=['POST'])
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 api.add_resource(Social, '/api/v2/social/<string:user>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')

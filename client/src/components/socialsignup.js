@@ -40,7 +40,7 @@ function SocialSignUp (props)  {
         }
 
         fetch(props.API_URL, {
-          method: '[OPTIONS, POST]',
+          method: 'POST',
           mode: 'cors',
           headers: {
             'Accept': 'application/json',
