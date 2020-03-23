@@ -179,7 +179,7 @@ export default function Main({ appProps }) {
       <AppliedRoute
         exact
         path="/login"
-        component={Login}
+        component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v1/accounts`,

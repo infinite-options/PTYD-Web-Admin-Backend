@@ -67,7 +67,7 @@ export default function Login (props) {
       document.cookie = " loginStatus: Hello " + response.result.result[0].first_name  + "! , " + " user_uid: " + response.result.result[0].user_uid + " , ";
 
       // redirect & reload page for buttons and login status
-      props.history.push("/");
+      props.history.push('/');
       window.location.reload(false);
     } 
     else {
