@@ -8,6 +8,7 @@ import SelectMealPlan from "./subscribe/selectmealplan";
 import SelectPaymentPlan from "./subscribe/selectpaymentplan";
 import WeeklyMenu from "./menu/weeklymenu";
 import Checkout from "./subscribe/checkout";
+import CheckoutSuccess from "./subscribe/checkout-success";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./about/howitworks";
@@ -83,7 +84,8 @@ export default function Main({ appProps }) {
         component={Checkout}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/accounts`
+          API_URL: `${DEV_URL}v1/accounts`,
+          CHECKOUT_URL: `${DEV_URL}v2/checkout`,
         }}
       />
 
@@ -98,7 +100,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v1/meals`,
-          USERS_API_URL: `${DEV_URL}v1/accounts`
+          USERS_API_URL: `${DEV_URL}v1/accounts`,
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`
         }}
       />
 
@@ -192,6 +195,12 @@ export default function Main({ appProps }) {
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
           SOCIAL_API_URL: `${DEV_URL}v2/social`
         }}
+      />
+      <AppliedRoute
+        exact
+        path="/checkoutsuccess"
+        component={CheckoutSuccess}
+        appProps={appProps}
       />
       <AppliedRoute
         exact

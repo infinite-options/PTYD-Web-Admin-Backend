@@ -8,27 +8,71 @@ import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
+    this.changeButtonSkip = this.changeButtonSkip.bind(this);
+    this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
+
+    console.log("meal-button");
+    console.log(this.props.deliverDay);
+
+    this.state = {
+      count: 0,
+      buttonS: false,
+      buttonM: false,
+      buttonSkip: false,
+      buttonSelect: false,
+      buttonSurprise: true,
+      buttonAddOn: false,
+      requestModal: false,
+      // buttonDisabled: true,
+      buttonSelectKeepColor: false,
+      buttonAddOnKeepColor: false,
+      mealQuantities: this.props.mealQuantities,
+      maxmeals: this.props.maxmeals,
+      maxmealsCopy: this.props.maxmeals,
+      addonActivated: false,
+      flag: false,
+      dayToDeliver: this.props.deliverDay,
+    };
+
+    console.log(this.state);
+
   }
 
-  state = {
-    count: 0,
-    buttonS: true,
-    buttonM: false,
-    buttonSkip: false,
-    buttonSelect: false,
-    buttonSurprise: true,
-    buttonAddOn: false,
-    requestModal: false,
-    // buttonDisabled: true,
-    buttonSelectKeepColor: false,
-    buttonAddOnKeepColor: false,
-    mealQuantities: this.props.mealQuantities,
-    maxmeals: this.props.maxmeals,
-    maxmealsCopy: this.props.maxmeals,
-    addonActivated: false,
-    flag: false,
-    dayToDeliver: "Sunday"
-  };
+  async componentDidMount(){
+    if (this.props.surprise == false) {
+      this.setState({
+        buttonSurprise: false,
+        buttonSelectKeepColor: true,
+      });
+    }
+
+    switch (this.props.deliverDay) {
+      case 'SKIP':
+        this.setState({
+          buttonS: false,
+          buttonM: false,
+          buttonSkip: true,
+          buttonSurprise: false,
+          buttonDisabled: true,
+        });
+        break;
+      case 'Monday':
+        this.setState({
+          buttonS: false,
+          buttonM: true,
+          buttonSkip: false,
+          buttonDisabled: false,
+        });
+        break;
+      case 'Sunday':
+        this.setState({
+          buttonS: true,
+          buttonM: false,
+          buttonSkip: false,
+          buttonDisabled: false,
+        });
+    }
+  }
 
   sendForm = () => {
     fetch(this.props.API_URL, {
@@ -42,6 +86,8 @@ export default class MealButton extends Component {
         week_affected: this.props.saturdayDate,
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
+        default_selected: this.state.buttonSurprise,
+        num_meals: this.props.maxmeals,
       })
     });
   };
@@ -88,8 +134,8 @@ export default class MealButton extends Component {
     });
   };
 
-  changeButtonSkip = () => {
-    this.setState({
+  async changeButtonSkip () {
+    await this.setState({
       buttonM: false,
       buttonS: false,
       buttonSkip: true,
@@ -103,7 +149,6 @@ export default class MealButton extends Component {
       dayToDeliver: "SKIP"
     });
     this.sendForm();
-    console.log(this.state);
   };
 
   changeButtonSelect = () => {
@@ -115,13 +160,14 @@ export default class MealButton extends Component {
     });
     console.log("select");
   };
-  changeButtonSurprise = () => {
-    this.setState({
+  async changeButtonSurprise () {
+    await this.setState({
       buttonSelect: false,
       buttonSurprise: true,
       buttonAddOn: false,
       buttonSelectKeepColor: false
     });
+    this.sendForm();
     console.log("surprise");
   };
   changeButtonAddOn = () => {
@@ -166,54 +212,6 @@ export default class MealButton extends Component {
       color: "white"
     };
 
-    // function SpecialRequestModal(props) {
-    //   return (
-    //     <Modal
-    //       {...props}
-    //       size="lg"
-    //       aria-labelledby="contained-modal-title-vcenter"
-    //       centered
-    //     >
-    //       <Modal.Header closeButton>
-    //         <Modal.Title id="contained-modal-title-vcenter">
-    //           Special Request
-    //         </Modal.Title>
-    //       </Modal.Header>
-    //       <Modal.Body>
-    //         <Form.Group controlId="exampleForm.ControlTextarea1">
-    //           <Form.Control as="textarea" rows="3" />
-    //         </Form.Group>
-    //       </Modal.Body>
-    //       <Modal.Footer>
-    //         <Button variant="primary" type="submit">
-    //           Submit
-    //         </Button>
-    //         <Button onClick={props.onHide}>Close</Button>
-    //       </Modal.Footer>
-    //     </Modal>
-    //   );
-    // }
-
-    // function SpecialRequestAnimation() {
-    //   const [modalShow, setModalShow] = React.useState(false);
-
-    //   return (
-    //     <ButtonToolbar>
-    //       <Button
-    //         variant="outline-dark"
-    //         style={{ width: "90px", height: "90px" }}
-    //         onClick={() => setModalShow(true)}
-    //       >
-    //         Special Requests
-    //       </Button>
-
-    //       <SpecialRequestModal
-    //         show={modalShow}
-    //         onHide={() => setModalShow(false)}
-    //       />
-    //     </ButtonToolbar>
-    //   );
-    // }
     return (
       <div>
         <ButtonToolbar>
@@ -240,8 +238,8 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
-              onClick={this.changeButtonSkip}
               style={this.state.buttonSkip ? orange : hide}
+              onClick={this.changeButtonSkip}
             >
               Skip This Week
             </Button>
