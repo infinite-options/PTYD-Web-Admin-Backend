@@ -1024,21 +1024,6 @@ class MealCustomerLifeReport(Resource):
 class AdminMenu(Resource):
     global RDS_PW
     
-    #formats dictionary
-    # def formatDictionary(self,menuDicts):
-    #     menuDates = []
-        
-    #     for index in range(len(menuDicts)):
-    #         if menuDicts[index]['menu_date'] != menuDates[index]:
-    #             menuDates[index].append(menuDicts[index]['menu_date']) 
-        
-    #     return menuDates
-
-
-
-    
-    
-    
     def get(self):
         response = {}
         items = {}
@@ -1050,7 +1035,7 @@ class AdminMenu(Resource):
                         menu_date,
                         menu_category,
                         meal_desc,
-                        menu_num_sold
+                        IFNULL(menu_num_sold,0) AS menu_num_sold 
                         FROM 
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
