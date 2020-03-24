@@ -1134,7 +1134,91 @@ class AdminMenu(Resource):
             disconnect(conn)
     
     
+class displayIngredients(Resource):
+    global RDS_PW
+    
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
 
+            items = execute(
+                    """ SELECT 
+                            menu_date,
+                            ingredient_desc,
+                            IFNULL(CONCAT( menu_num_sold*recipe_ingredient_qty ,' ',
+                            recipe_qty_type), 0) AS quantity
+                        FROM 
+                            ptyd_menu
+                        JOIN
+                            ptyd_recipes ON menu_meal_id=recipe_meal_id
+                        JOIN 
+                            ptyd_ingredients ON recipe_ingredient_id = ingredient_id
+                        JOIN 
+                            ptyd_meals ON recipe_meal_id = meal_id
+                        GROUP BY ingredient_desc,menu_date
+                        ORDER BY menu_date, menu_category ASC;
+                        """, 'get', conn)
+                        
+            print('Items --------------------------------------------')         
+            print(items['result'][0]['menu_date'])
+            
+            print('Test Code ---------------------------------------')
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            menuDates = list( dict.fromkeys(menuDates) )
+            
+            print(menuDates)
+
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            print('new dictionary-------------------------------')
+            print(d)
+
+            print('test-------------')
+
+            index2 = 0
+            for index in range(len(menuDates)):
+                dictValues = []
+                menuEntries = 14
+                print(menuEntries)
+                while menuEntries != 0:
+                    print(menuEntries)
+                    ingredient_description = items['result'][index2]['ingredient_desc']
+                    ingredient_description = "Ingredient: " + ingredient_description
+                    dictValues.append(ingredient_description)
+                    print(menuEntries)
+
+                    ingredients_needed =  items['result'][index2]['quantity']
+                    ingredients_needed = "Amount needed to use: " + ingredients_needed
+                    dictValues.append(ingredients_needed)
+
+                    menuEntries -=1
+                    index2 +=1
+                    print(menuEntries)
+                
+                d[menuDates[index]] = dictValues
+        
+            print ('Dictionary part 2 --------------')
+            print(d)
+
+
+
+            response['message'] = 'successful'
+            response['result'] = d
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
         
 
@@ -1155,6 +1239,7 @@ api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
+api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
 # Run on below IP address and port
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
