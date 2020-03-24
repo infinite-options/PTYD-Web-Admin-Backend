@@ -82,19 +82,9 @@ def runSelectQuery(query, cur):
 
 
 
-class Admin_db(Resource):
-    # This fetches the global variable RDS_PW
-    # and stores it in the class's local
-    # instance of RDS_PW
-    #
-    # When running this Python script locally,
-    # we pass the password to the database as
-    # a command line argument. This argument
-    # will be stored into the global variable
-    # RDS_PW.
-    global RDS_PW
 
 
+<<<<<<< HEAD
     def jsonify_admin(self,query, col_names):
         result =[]
         decimalKeys=["Quantity of Ingredient Required","A package of this much","Amount of ingredient needed this week","quantity of ingredients needed to buy (Negative Surplus)"]
@@ -118,34 +108,25 @@ class Admin_db(Resource):
     # This is an API that will be called when
     # HTTP makes a GET request on the URL
     # for this API
+=======
+class AdminMenu(Resource):
+    global RDS_PW
+    
+>>>>>>> admin_menu_api
     def get(self):
+        response = {}
+        items = {}
         try:
-            # This will connect to our database
-            # Refer to the function getRdsConn()
-            # above for more info
-            
-            db = getRdsConn(RDS_PW)
-            
-            # The above function will create a
-            # Connection object defined in the
-            # pymysql module. We will store it
-            # into the object conn.
-            conn = db[0]
+            conn = connect()
 
-            # getRdsConn() will also initialize
-            # a pymysql cursor object from our
-            # Connection object. This cursor can
-            # run MySQL queries.
-            cur = db[1]     
-            
-            ## -------- needs to be formated  -------------
-            queries = [
-                        """SELECT 
-                            M.menu_date "Entered Menu Date" ,
-                            M.menu_category AS "Menu Category",
-                            A.meal_desc "Meal option" ,
-                            M.menu_num_sold AS "How many to make"
+            items = execute(
+                    """ SELECT 
+                        menu_date,
+                        menu_category,
+                        meal_desc,
+                        menu_num_sold
                         FROM 
+<<<<<<< HEAD
                             ptyd_menu M
                         JOIN 
                             ptyd_meals A ON M.menu_meal_id = A.meal_id
@@ -203,37 +184,38 @@ class Admin_db(Resource):
             # We can manipulate the query object
             # from earlier as needed to format
             # our API data to our liking.
+=======
+                        ptyd_menu
+                        JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+                           
+                            
+
+            response['message'] = 'successful'
+>>>>>>> admin_menu_api
             response['result'] = items
-            
-            # Return the response object and the
-            # HTTP code 200 to indicate the
-            # GET request was successful.
+
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
+    
+    # HTTP method POST to update the menu
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
 
+            MenuDate = data['MenuDate']
+            MenuCategory = data['MenuCategory']
+            Meal = data['Meal']
+            NumberSold = 0
 
-class MealCustomerLifeReport(Resource):
-    global RDS_PW
+            print("Received:", data)
 
-    def jsonify_adminMEALlife(self,query, col_names,decimal_cols,date_cols):
-        result =[]
-        for row in query:
-            row_dict ={}
-            for ind, val in enumerate(row):
-                key = col_names[ind]
-                if val is None:
-                    val=0
-                elif key in date_cols:
-                    val = val.strftime("%b %d, %Y")
-                elif key in decimal_cols:
-                    val =float(val)
-                row_dict[key] = val
-            result.append(row_dict)
-        return result
-
+<<<<<<< HEAD
     def get(self):
         try:
             db = getRdsConn(RDS_PW)
@@ -281,23 +263,22 @@ class MealCustomerLifeReport(Resource):
             
             # Successful message
             response['message'] = 'Request successful.'
+=======
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_meal_plans;""", 'get', conn)
+>>>>>>> admin_menu_api
 
-            # We can manipulate the query object
-            # from earlier as needed to format
-            # our API data to our liking.
+            response['message'] = 'successful'
             response['result'] = items
-            
-            # Return the response object and the
-            # HTTP code 200 to indicate the
-            # GET request was successful.
+
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
-
-        # print(query1[0])
-
+            disconnect(conn)
+    
 class AdminMenu(Resource):
     global RDS_PW
     
@@ -312,15 +293,68 @@ class AdminMenu(Resource):
                         menu_date,
                         menu_category,
                         meal_desc,
-                        menu_num_sold
+                        IFNULL(menu_num_sold,0) AS menu_num_sold 
                         FROM 
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
                            
-                            
+            print('Items --------------------------------------------')         
+            print(items['result'][0]['menu_date'])
+
+            print('Test Code ---------------------------------------')
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            menuDates = list( dict.fromkeys(menuDates) )
+            
+            print(menuDates)
+
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            print('new dictionary-------------------------------')
+            print(d)
+
+            print('test-------------')
+            
+            index2 = 0
+            for index in range(len(menuDates)):
+                dictValues = []
+                menuEntries = 14
+                while menuEntries != 0:
+                    menu_cat = items['result'][index2]['menu_category']
+                    menu_cat = "Menu Category: " + menu_cat
+                    dictValues.append(menu_cat)
+                    
+                    menu_descript =  items['result'][index2]['meal_desc']
+                    menu_descript = "Meal Description: " + menu_descript
+                    dictValues.append(menu_descript)
+
+                    menu_num = items['result'][index2]['menu_num_sold']
+                    menu_num = str(menu_num)
+                    menu_num = "Number Sold: " + menu_num
+                    dictValues.append(menu_num)
+
+                    menuEntries -=1
+                    index2 +=1
+                
+                d[menuDates[index]] = dictValues
+
+            
+            
+            
+        
+            print ('Dictionary part 2 --------------')
+            print(d)
+
+
 
             response['message'] = 'successful'
-            response['result'] = items
+            response['result'] = d
 
             return response, 200
         except:
@@ -357,13 +391,11 @@ class AdminMenu(Resource):
         finally:
             disconnect(conn)
     
-    def formatDictionary(menuDict):
-        newdicts = []
-        for ind in enumerate(menuDict):
 
 # obj1 = MealCustomerLifeReport()
 # print(obj1.get())
 
+<<<<<<< HEAD
 class MealInfo(Resource):
 
     # HTTP method GET
@@ -403,6 +435,11 @@ class MealInfo(Resource):
 api.add_resource(Admin_db, '/api/v1/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v1/MealCustomerLifeReport')
 api.add_resource(MealInfo, '/api/v1/meal_info')
+=======
+
+api.add_resource(AdminMenu, '/api/v2/menu_display')
+api.add_resource(AdminMenu, '/api/v2/menu_display')
+>>>>>>> admin_menu_api
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=2001)
