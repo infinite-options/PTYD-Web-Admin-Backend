@@ -119,8 +119,11 @@ export default function Login (props) {
                 </Col>
               </Row>
             </Container>
-
-            <Col></Col>
+            <Col>
+            </Col>
+          </div>
+          <div className="text-center">
+            <a href="/signup">New User? Sign Up Here</a>
           </div>
         </div>
     </main>
