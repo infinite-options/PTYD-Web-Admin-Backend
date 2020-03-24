@@ -188,7 +188,7 @@ class Home extends Component {
               }}
             >
               <Card.Body>
-                <Card.Title>The week of:</Card.Title>
+                <Card.Title>The week of: {date}</Card.Title>
                 {/* <Card.Subtitle className="mb-2 text-muted">
                   The week of:
                 </Card.Subtitle> */}
