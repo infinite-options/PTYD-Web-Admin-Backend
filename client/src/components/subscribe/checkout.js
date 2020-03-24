@@ -8,6 +8,7 @@ import crypto from "crypto";
 class Checkout extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       user_uid: searchCookie4UserID(document.cookie),
       user: {},

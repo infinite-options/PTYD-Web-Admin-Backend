@@ -12,6 +12,8 @@ import crypto from "crypto";
 
 export default function Login (props) {
 
+  console.log(props);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
@@ -67,8 +69,15 @@ export default function Login (props) {
       document.cookie = " loginStatus: Hello " + response.result.result[0].first_name  + "! , " + " user_uid: " + response.result.result[0].user_uid + " , ";
 
       // redirect & reload page for buttons and login status
-      props.history.push('/');
-      window.location.reload(false);
+      if (props.redirect_after_login !== null) {
+        props.history.push(props.redirect_after_login);
+        window.location.reload(false);
+      }
+      else {
+        props.history.push('/');
+        window.location.reload(false);
+      }
+
     } 
     else {
       document.cookie = " loginStatus: Sign In , user_uid: null , ";
