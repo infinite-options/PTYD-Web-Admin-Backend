@@ -26,6 +26,8 @@ function SignUp (props)  {
     const [referral, setReferral] = useState("Social Media");
     const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
 
+    const [usernameTaken, setUsernameTaken] = useState(true);
+
     useEffect(() => { 
         //console.log(props) 
     }, []);
@@ -71,9 +73,17 @@ function SignUp (props)  {
 
     const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
 
-    function handleUsername(event) {
-      setUsername(event.target.value);
-      console.log(username);
+    async function checkUsername(user) {
+        const res = await fetch(props.CHECK_USERNAME_API_URL + '/' + user);
+        const api = await res.json();
+        const names = api.result;
+        return names;
+    }
+
+    const handleUsername = (user) => {
+        checkUsername(user)
+        .then( res => res.length > 0 ? ( res[0]['user_name'] == user ? setUsernameTaken(true) : setUsernameTaken(false) ) : setUsernameTaken(false) )
+        .catch(err => console.log(err))
     }
 
     return (
@@ -87,13 +97,27 @@ function SignUp (props)  {
                     <Row>
                         <Col size={6} >               
                             <Form >
-                                <Form.Group  controlId="formGridUsername">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control 
-                                    value={username}
-                                    onChange={handleUsername}
-                                    placeholder="Enter Username" />
-                                </Form.Group>
+                                <OverlayTrigger 
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                        <Tooltip>
+                                            { usernameTaken ? <p>Username Taken!</p> : <p>Username is Open!</p> }
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Form.Group  controlId="formGridUsername">
+                                        <Form.Label>Username</Form.Label>
+                                        <Form.Control 
+                                            value={username}
+                                            onChange={e => {
+                                                setUsername(e.target.value)
+                                                handleUsername(e.target.value)
+                                            }}
+                                            placeholder="Enter Username" />
+                                    </Form.Group>
+                                </OverlayTrigger>
+
 
                                 <Form.Row>
                                     <Form.Group as={Col} controlId="formGridFirstName">

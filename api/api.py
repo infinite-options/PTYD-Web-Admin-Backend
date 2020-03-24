@@ -1310,13 +1310,51 @@ class SocialAccount(Resource):
         finally:
             disconnect(conn)
 
+class CheckUsername(Resource):
+
+    # HTTP method GET
+    def get(self, username):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = []
+            queries.append( "SELECT user_name FROM ptyd_accounts WHERE user_name = '" + username + "';" )
+
+            users = execute(queries[0], 'get', conn)
+
+            if users['result'] != []:
+                response = users
+                return response, 200
+            else:
+                response = { result: [] }
+                return response, 401
+
+
+            """if accPass == password_response['result'][0]['password_hash']:
+                print("Successful authentication.")
+                response['message'] = 'Request successful.'
+                response['result'] = items
+                response['auth_success'] = True
+                return response, 200
+            else:
+                print("Wrong password.")
+                response['message'] = 'Request failed, wrong password.'
+                response['auth_success'] = False
+                return response, 401 """
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
 # Define API routes
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
-api.add_resource(SocialSignUp, '/api/v2/social_signup', methods=['POST'])
+api.add_resource(SocialSignUp, '/api/v2/social_signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 
 api.add_resource(Social, '/api/v2/social/<string:user>')
@@ -1324,6 +1362,8 @@ api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:userUid>')
+
+api.add_resource(CheckUsername, '/api/v2/checkuser/<string:username>')
 
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 

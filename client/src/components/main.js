@@ -173,7 +173,8 @@ export default function Main({ appProps }) {
         component={SignUp}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v2/signup`
+          API_URL: `${DEV_URL}v2/signup`,
+          CHECK_USERNAME_API_URL: `${DEV_URL}v2/checkuser`
         }}
       />
       <AppliedRoute
