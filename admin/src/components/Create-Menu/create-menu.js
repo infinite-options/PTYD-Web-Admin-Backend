@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 
-class UserMap extends Component {
+class CreateMenu extends Component {
   render() {
     return (
       <div className="container" style={{ marginTop: "10%" }}>
@@ -18,7 +18,7 @@ class UserMap extends Component {
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
           </Link>
-          <Typography color="textPrimary">Upcoming Meals Order</Typography>
+          <Typography color="textPrimary">Edit/Create Meal</Typography>
           <Link color="inherit" onClick={this.handleClick}>
             Weekly Purchases
           </Link>
@@ -27,4 +27,4 @@ class UserMap extends Component {
     );
   }
 }
-export default UserMap;
+export default CreateMenu;

@@ -12,6 +12,8 @@ class CustomerProfile extends Component {
       custInfo: [],
       columns: [
         { title: "Name", field: "Full_name" },
+        { title: "Current Subscription", field: "Current_subscription" },
+        { title: "Number of Meals Remaining", field: "Weeks_left" },
         { title: "Gender", field: "Gender" },
         { title: "Address", field: "Address" },
         { title: "Meals Ordered", field: "Meals_ordered" },

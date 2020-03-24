@@ -85,12 +85,12 @@ function App() {
             </Nav.Item>
 
             <Nav.Item Style="margin-top:30px;">
-              <Nav.Link Style="color:black" href="/">
+              <Nav.Link Style="color:black" href="/editCreateMeal">
                 edit/create meals
               </Nav.Link>
             </Nav.Item>
             <Nav.Item Style="margin-top:30px;">
-              <Nav.Link Style="color:black" href="/">
+              <Nav.Link Style="color:black" href="/createMenu">
                 create menus
               </Nav.Link>
             </Nav.Item>

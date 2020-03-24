@@ -114,7 +114,9 @@ class Home extends Component {
               <Link color="inherit" onClick={this.handleClick}>
                 Admin Site
               </Link>
-              <Typography color="textPrimary">Customer Info</Typography>
+              <Typography color="textPrimary">
+                <a href="/customerProfile">Customer Info</a>
+              </Typography>
             </Breadcrumbs>
             {this.customerInfo_function()}
           </Col>
