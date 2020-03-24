@@ -885,32 +885,52 @@ class CustomerInfo(Resource):
 
     # def ___inti__(self):
     #     self.dict1 = {"Full_name":None,"Current_subscription":None,"Start_date":None,"End_date":None}
-
-    def jsonify_one(self,dict1):
+    @staticmethod
+    def jsonify_one(dict1):
         map_subs = {"Weekly":7,"Bi-Weekly":14}
-        res = {}
-        for key,vals in dict1.items():
-            if key == "Full_name" or key == "Current_subscription":
-                res[key] = vals
-                continue
-            elif key == "start_date":
-                start_date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
-                if dict1["frequency"]=="Monthly":
-                    end_date = start_date + relativedelta(months=1)
-                else:
-                    end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
+        # res = {}
+        # res = None
+        start_date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
+        if dict1["frequency"]=="Monthly":
+            end_date = start_date + relativedelta(months=1)
+        else:
+            end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
+        
+        curr_date = datetime.now()
+        delta = end_date - curr_date
+        if delta.days<0:
+            # res["weeks_left"] = "Expired"
+            dict1["Weeks_left"] = "Expired"
+        else:    
+            # res["weeks_left"] = delta.days//7
+            dict1["Weeks_left"]=delta.days//7
+
+        del dict1['start_date']
+        del dict1['frequency']
+        # for key,vals in dict1.items():
+        #     if key == "Full_name" or key == "Current_subscription":
+        #         # res[key] = vals
+        #         continue
+        #     elif key == "start_date":
+        #         start_date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
+        #         if dict1["frequency"]=="Monthly":
+        #             end_date = start_date + relativedelta(months=1)
+        #         else:
+        #             end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
                 
-                # res["end_date"] = end_date.strftime('%Y-%m-%d')
-                curr_date = datetime.now()
-                # curr_date = datetime.strptime("2020-02-15", '%Y-%m-%d')
-                delta = end_date - curr_date
-                if delta.days<0:
-                    res["weeks_left"] = "Expired"
-                else:    
-                    res["weeks_left"] = delta.days//7
-            else:
-                continue
-        return res
+        #         # res["end_date"] = end_date.strftime('%Y-%m-%d')
+        #         curr_date = datetime.now()
+        #         # curr_date = datetime.strptime("2020-02-15", '%Y-%m-%d')
+        #         delta = end_date - curr_date
+        #         if delta.days<0:
+        #             # res["weeks_left"] = "Expired"
+        #             res = "Expired"
+        #         else:    
+        #             # res["weeks_left"] = delta.days//7
+        #             res=delta.days//7
+        #     else:
+        #         continue
+        return dict1
             
     # HTTP method GET
     def get(self):
@@ -926,7 +946,6 @@ class CustomerInfo(Resource):
                         ptyd_purchases pur ON ptyd_accounts.user_uid = pur.recipient_id
                         inner join 
                         ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
-
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
             list1 = list(map(self.jsonify_one,cus_info['CustomerInfo']['result']))
@@ -954,6 +973,7 @@ class CustomerProfile(Resource):
             # -- ptyd_accounts.user_state,' ',ptyd_accounts.user_zip) as Address, 
             # -- ptyd_accounts.user_gender as Gender, DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days' from ptyd_accounts
             queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                            pur.start_date as start_date, meal.payment_frequency as frequency, meal.meal_plan_desc as Current_subscription,
                             ptyd_accounts.user_gender as Gender,
                             concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_zip) as Address,
                             count(*) as Meals_ordered,
@@ -961,9 +981,14 @@ class CustomerProfile(Resource):
                             from ptyd_accounts
                             inner join 
                             ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
+                            inner join
+                            ptyd_purchases pur ON ptyd_accounts.user_uid = pur.recipient_id
+                            inner join 
+                            ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id
                             group by pay.buyer_id"""
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
+            list1 = list(map(CustomerInfo.jsonify_one,cus_info['CustomerInfo']['result']))
             response['message'] = 'Request successful.'
             response['result'] = cus_info
 
@@ -1148,7 +1173,6 @@ class MealInfo(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
 
 class AdminMenu(Resource):
     global RDS_PW
