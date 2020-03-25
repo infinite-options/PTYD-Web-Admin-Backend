@@ -8,7 +8,6 @@ import Link from "@material-ui/core/Link";
 class EditCreateMeal extends Component {
   render() {
     return (
-      <h1>fsdfhskfhkjsd</h1>
       <div className="container" style={{ marginTop: "10%" }}>
         {/* <div className="scrollItem">Card</div> */}
 
@@ -25,7 +24,7 @@ class EditCreateMeal extends Component {
           </Link>
         </Breadcrumbs>
       </div>
-    )
+    );
   }
 }
 export default EditCreateMeal;

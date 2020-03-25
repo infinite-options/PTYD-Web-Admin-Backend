@@ -13,6 +13,7 @@ class Home extends Component {
     super(props);
     this.state = {
       upcomingMeals: [],
+      ingredients: [],
       mealInfo: [],
       custInfo: []
     };
@@ -23,6 +24,10 @@ class Home extends Component {
     const res = await fetch(this.props.API_URL_MEALSELECT);
     const api = await res.json();
     const upcomingMeals = api.result;
+    // upcoming meals
+    const res4 = await fetch(this.props.API_URL_INGREDIENTS);
+    const api4 = await res4.json();
+    const ingredients = api4.result;
     // customer info
     const res2 = await fetch(this.props.API_URL_CUSTINFO);
     const api2 = await res2.json();
@@ -31,8 +36,7 @@ class Home extends Component {
     const res3 = await fetch(this.props.API_URL_MEALINFO);
     const api3 = await res3.json();
     const mealInfo = api3.result.meal_info.result;
-    this.setState({ upcomingMeals, custInfo, mealInfo });
-    console.log("meals", this.state.upcomingMeals);
+    this.setState({ upcomingMeals, ingredients, custInfo, mealInfo });
   }
   handleClick(event) {
     event.preventDefault();
@@ -40,15 +44,16 @@ class Home extends Component {
   }
 
   makeTable = () => {
-    if (this.state.upcomingMeals == null) {
-      return <div></div>;
-    }
+    // if (this.state.upcomingMeals == null) {
+    //   return <div></div>;
+    // }
     let a = [];
     for (var key in this.state.upcomingMeals) {
       a.push(
         <div className="scrollItem">
           {this.upcomingMeals_and_weeklyPurchase(
             this.state.upcomingMeals[key],
+            this.state.ingredients[key],
             key
           )}
         </div>
@@ -166,8 +171,13 @@ class Home extends Component {
       </div>
     );
   }
-  upcomingMeals_and_weeklyPurchase = (weekArgument, date) => {
+  upcomingMeals_and_weeklyPurchase = (
+    weekArgument,
+    ingredientArgument,
+    date
+  ) => {
     let arr = [];
+    let arr2 = [];
     for (let i = 0; i < weekArgument.length; i += 3) {
       let first = weekArgument[i];
       let second = weekArgument[i + 1];
@@ -178,6 +188,15 @@ class Home extends Component {
       let c = third.split(":")[1];
 
       arr.push(this.single_item(a, b, c));
+    }
+    for (let i = 0; i < ingredientArgument.length; i += 2) {
+      let one = ingredientArgument[i];
+      let two = ingredientArgument[i + 1];
+
+      let c = one.split(":")[1];
+      let d = two.split(":")[1];
+
+      arr2.push(this.single_item_ingredients(c, d));
     }
     return (
       <Container>
@@ -216,14 +235,6 @@ class Home extends Component {
                         }}
                       >
                         {arr}
-                        {/* {this.state.mealInfo.map(meal => (
-                      <tr>
-                        <td>{meal.meal_desc}</td>
-                        <td>{meal.post_count}</td>
-                        <td>{meal.Number_sold_per_posting}</td>
-                        <td>{meal.total_sold}</td>
-                      </tr>
-                    ))} */}
                       </tbody>
                     </Table>
                   </div>
@@ -254,11 +265,35 @@ class Home extends Component {
               }}
             >
               <Card.Body>
-                <Card.Title>Week 1</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  The week of:{date}
-                </Card.Subtitle>
-                <ItemToPurchase />
+                <Card.Title>The week of: {date}</Card.Title>
+                {/* <Card.Subtitle className="mb-2 text-muted">
+                  The week of:
+                </Card.Subtitle> */}
+                <Card.Text>
+                  <div className="vertical-menu">
+                    <Table
+                      responsive
+                      striped
+                      bordered
+                      style={{ textAlign: "center" }}
+                    >
+                      <thead style={{ overflow: "scroll" }}>
+                        <tr>
+                          <th>Menu</th>
+                          <th>Meal</th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        style={{
+                          height: "300px",
+                          overflowY: "scroll"
+                        }}
+                      >
+                        {arr2}
+                      </tbody>
+                    </Table>
+                  </div>
+                </Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -272,6 +307,14 @@ class Home extends Component {
         <td>{category}</td>
         <td>{description}</td>
         <td>{quantity}</td>
+      </tr>
+    );
+  };
+  single_item_ingredients = (ingredient, amount) => {
+    return (
+      <tr>
+        <td>{ingredient}</td>
+        <td>{amount}</td>
       </tr>
     );
   };
@@ -373,7 +416,7 @@ class Home extends Component {
                       <tr>
                         <td>{eachMeal.Full_name}</td>
                         <td>{eachMeal.Current_subscription}</td>
-                        <td>{eachMeal.weeks_left}</td>
+                        <td>{eachMeal.Weeks_left}</td>
                       </tr>
                     ))}
                   </tbody>
