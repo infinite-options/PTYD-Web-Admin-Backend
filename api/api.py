@@ -4,6 +4,7 @@ from flask_cors import CORS
 
 from werkzeug.exceptions import BadRequest, NotFound
 
+from dateutil.relativedelta import *
 from decimal import Decimal
 from datetime import datetime, date, timedelta
 from hashlib import sha512
@@ -143,7 +144,6 @@ def execute(sql, cmd, conn, skipSerialization = False):
         response['code'] = 490
     finally:
         response['sql'] = sql
-#       print(response)
         return response
 
 # Close RDS connection
@@ -443,7 +443,7 @@ class Meals(Resource):
         # Remove last semicolon
         return mealSelectionString[:-1]
 
-    # HTTP method POST (v2)
+    # HTTP method POST
     def post(self):
         response = {}
         items = []
@@ -451,8 +451,6 @@ class Meals(Resource):
             conn = connect()
 
             data = request.get_json(force=True)
-#           data = {'recipient_id': '300-000001', 'week_affected': '2020-02-01', 'meal_quantities': {'700-000001': 2, '700-000002': 1, '700-000011': 2}, 'delivery_day': 'Sunday', 'default_selected': False, 'num_meals': 5}
-#           print("Received:", data)
 
             if data['num_meals'] == None:
                 response['message'] = 'User not subscribed.'
@@ -1154,6 +1152,497 @@ class MealSelection(Resource):
         finally:
             disconnect(conn)
 
+class CustomerInfo(Resource):
+
+    # def ___inti__(self):
+    #     self.dict1 = {"Full_name":None,"Current_subscription":None,"Start_date":None,"End_date":None}
+    @staticmethod
+    def jsonify_one(dict1):
+        map_subs = {"Weekly":7,"Bi-Weekly":14}
+        # res = {}
+        # res = None
+        start_date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
+        if dict1["frequency"]=="Monthly":
+            end_date = start_date + relativedelta(months=1)
+        else:
+            end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
+        
+        curr_date = datetime.now()
+        delta = end_date - curr_date
+        if delta.days<0:
+            # res["weeks_left"] = "Expired"
+            dict1["Weeks_left"] = "Expired"
+        else:    
+            # res["weeks_left"] = delta.days//7
+            dict1["Weeks_left"]=delta.days//7
+
+        del dict1['start_date']
+        del dict1['frequency']
+        # for key,vals in dict1.items():
+        #     if key == "Full_name" or key == "Current_subscription":
+        #         # res[key] = vals
+        #         continue
+        #     elif key == "start_date":
+        #         start_date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
+        #         if dict1["frequency"]=="Monthly":
+        #             end_date = start_date + relativedelta(months=1)
+        #         else:
+        #             end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
+                
+        #         # res["end_date"] = end_date.strftime('%Y-%m-%d')
+        #         curr_date = datetime.now()
+        #         # curr_date = datetime.strptime("2020-02-15", '%Y-%m-%d')
+        #         delta = end_date - curr_date
+        #         if delta.days<0:
+        #             # res["weeks_left"] = "Expired"
+        #             res = "Expired"
+        #         else:    
+        #             # res["weeks_left"] = delta.days//7
+        #             res=delta.days//7
+        #     else:
+        #         continue
+        return dict1
+            
+    # HTTP method GET
+    def get(self):
+        response = {}
+        cus_info = {}
+        try:
+            conn = connect()
+
+            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                        pur.start_date as start_date, meal.payment_frequency as frequency, meal.meal_plan_desc as Current_subscription
+                        from ptyd_accounts
+                        inner join 
+                        ptyd_purchases pur ON ptyd_accounts.user_uid = pur.recipient_id
+                        inner join 
+                        ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
+
+            cus_info['CustomerInfo'] = execute(queries, 'get', conn)
+            list1 = list(map(self.jsonify_one,cus_info['CustomerInfo']['result']))
+            
+            cus_info['CustomerInfo']['result'] = list1
+            response['message'] = 'Request successful.'
+            response['result'] = cus_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class CustomerProfile(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        cus_info = {}
+        try:
+            conn = connect()
+
+            # -- select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name, concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_city,', ',
+            # -- ptyd_accounts.user_state,' ',ptyd_accounts.user_zip) as Address, 
+            # -- ptyd_accounts.user_gender as Gender, DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days' from ptyd_accounts
+            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                            pur.start_date as start_date, meal.payment_frequency as frequency, meal.meal_plan_desc as Current_subscription,
+                            ptyd_accounts.user_gender as Gender,
+                            concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_zip) as Address,
+                            count(*) as Meals_ordered,
+                            ptyd_accounts.create_date AS 'Customer_Since' 
+                            from ptyd_accounts
+                            inner join 
+                            ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
+                            inner join
+                            ptyd_purchases pur ON ptyd_accounts.user_uid = pur.recipient_id
+                            inner join 
+                            ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id
+                            group by pay.buyer_id"""
+
+            cus_info['CustomerInfo'] = execute(queries, 'get', conn)
+            list1 = list(map(CustomerInfo.jsonify_one,cus_info['CustomerInfo']['result']))
+            response['message'] = 'Request successful.'
+            response['result'] = cus_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class CustomerInfo2(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        cus_info = {}
+        try:
+            conn = connect()
+
+            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                            DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days', count(*) as Number_of_meals
+                            from ptyd_accounts
+                            inner join 
+                            ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
+                            group by pay.buyer_id"""
+
+            cus_info['CustomerInfo'] = execute(queries, 'get', conn)
+            response['message'] = 'Request successful.'
+            response['result'] = cus_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+class AdminDBv2(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        results = {}
+        try:
+            conn = connect()
+            queries_name = ["Meals_by_week", "Inventory_DB"]
+            queries = [
+                        """SELECT 
+                            M.menu_date as "Entered Menu Date" ,
+                            M.menu_category AS "Menu Category",
+                            A.meal_desc as "Meal option" ,
+                            M.menu_num_sold AS "How many to make"
+                        FROM 
+                            ptyd_menu M
+                        JOIN 
+                            ptyd_meals A ON M.menu_meal_id = A.meal_id
+                        -- WHERE 
+                            -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
+                        -- M.menu_date = "2020-02-01";""", 
+
+                        """SELECT 
+                        M.menu_meal_id AS "Menu Number",
+                        M.menu_date "Entered Menu Date" ,
+                        M.menu_category AS "Menu Category",
+                        A.meal_desc "Meal option selected" ,
+                        M.menu_num_sold AS "How many to make",
+                        I.ingredient_desc AS "Ingredient Required Per meal",
+                        R.recipe_ingredient_qty AS "Quantity of Ingredient Required",
+                        (M.menu_num_sold * R.recipe_ingredient_qty) AS "Amount of ingredient needed this week",
+                        CONCAT(inventory_qty," ", inventory_unit) AS "Amount of ingredient on hand",
+                        inventory_location AS "location of ingredient",
+                        I.package_size AS "A package of this much",
+                        I.ingredient_cost AS "Will cost this much in $USD",
+                        ((M.menu_num_sold * R.recipe_ingredient_qty) - inventory_qty  ) AS "quantity of ingredients needed to buy (Negative Surplus)" 
+                    FROM 
+                        ptyd_menu M
+                    JOIN 
+                        ptyd_meals A ON M.menu_meal_id = A.meal_id
+                    JOIN 
+                        ptyd_recipes R ON M.menu_meal_id = R.recipe_meal_id
+                    JOIN 
+                        ptyd_ingredients I ON R.recipe_ingredient_id = I.ingredient_id
+                    JOIN
+                        ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
+                    -- WHERE 
+                        -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
+                    -- M.menu_date = "2020-02-01";"""
+
+                    ]
+            
+            for ind1,query in enumerate(queries):
+                results[queries_name[ind1]] = execute(query, 'get', conn)
+            
+            # print(results["Meals_by_week"])
+
+            response['message'] = 'Request successful.'
+            response['result'] = results
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class MealCustomerLifeReport(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        results = {}
+        try:
+            conn = connect()
+            queries_name = ["Meals report", "Customer Lifetime"]
+            queries = [
+                        """SELECT 
+                        p.menu_meal_id,
+                        M.meal_desc AS "Meal Name",
+                        ROUND(AVG(p.menu_num_sold),2) AS "Average number sold per listing",
+                        SUM(p.menu_num_sold) AS "Total Number Sold"
+                        FROM
+                            ptyd_menu p
+                        JOIN 
+                            ptyd_meals M ON p.menu_meal_id = M.meal_id
+                        GROUP BY p.menu_meal_id
+                        ORDER BY p.menu_meal_id ASC
+                        ;
+                        """,
+                        """SELECT 
+                        CONCAT(first_name, " " , last_name) AS "Customer Name",
+                        create_date AS "Account creation Date",
+                        last_update AS "Last account Update",
+                        last_delivery AS "Last Delivery",
+                        datediff(last_delivery, create_date) AS "Customer Lifetime in days",
+                        timestampdiff(MONTH, create_date, last_delivery) AS "Customer Lifetime in months"
+                        FROM
+                            ptyd_accounts;"""
+                    ]
+            
+            for ind1,query in enumerate(queries):
+                results[queries_name[ind1]] = execute(query, 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = results
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class MealInfo(Resource):
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        meal_info = {}
+        conn = connect()
+        try:
+            
+
+            queries = """select A1.menu_meal_id,A3.meal_desc, A1.total_sold,A2.post_count, (A1.total_sold/A2.post_count) as "Number_sold_per_posting"
+                        from
+                        (select menu_meal_id, sum(menu_num_sold) as "total_sold" from ptyd_menu
+                        #where month(menu_date) = 2
+                        group by menu_meal_id) A1 
+                        join
+                        (select distinct menu_meal_id, count(menu_meal_id) "post_count"
+                        from ptyd_menu
+                        #where month(menu_date) = 2
+                        group by menu_meal_id) A2
+                        on A1.menu_meal_id = A2.menu_meal_id
+                        join
+                        (select meal_id, meal_desc from ptyd_meals)A3
+                        on A1.menu_meal_id = A3.meal_id;
+                        """
+
+            meal_info['meal_info'] = execute(queries, 'get', conn)
+            response['message'] = 'Request successful.'
+            response['result'] = meal_info
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class AdminMenu(Resource):
+    global RDS_PW
+    
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(
+                    """ SELECT 
+                        menu_date,
+                        menu_category,
+                        meal_desc,
+                        IFNULL(menu_num_sold,0) AS menu_num_sold 
+                        FROM 
+                        ptyd_menu
+                        JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+                           
+            print('Items --------------------------------------------')         
+            print(items['result'][0]['menu_date'])
+
+            print('Test Code ---------------------------------------')
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            menuDates = list( dict.fromkeys(menuDates) )
+            
+            print(menuDates)
+
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            print('new dictionary-------------------------------')
+            print(d)
+
+            print('test-------------')
+            
+            index2 = 0
+            for index in range(len(menuDates)):
+                dictValues = []
+                menuEntries = 14
+                while menuEntries != 0:
+                    menu_cat = items['result'][index2]['menu_category']
+                    menu_cat = "Menu Category: " + menu_cat
+                    dictValues.append(menu_cat)
+                    
+                    menu_descript =  items['result'][index2]['meal_desc']
+                    menu_descript = "Meal Description: " + menu_descript
+                    dictValues.append(menu_descript)
+
+                    menu_num = items['result'][index2]['menu_num_sold']
+                    menu_num = str(menu_num)
+                    menu_num = "Number Sold: " + menu_num
+                    dictValues.append(menu_num)
+
+                    menuEntries -=1
+                    index2 +=1
+                
+                d[menuDates[index]] = dictValues
+
+            
+            
+            
+        
+            print ('Dictionary part 2 --------------')
+            print(d)
+
+
+
+            response['message'] = 'successful'
+            response['result'] = d
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
+    # HTTP method POST to update the menu
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            MenuDate = data['MenuDate']
+            MenuCategory = data['MenuCategory']
+            Meal = data['Meal']
+            NumberSold = 0
+
+            print("Received:", data)
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_meal_plans;""", 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
+class displayIngredients(Resource):
+    global RDS_PW
+    
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(
+                    """ SELECT 
+                            menu_date,
+                            ingredient_desc,
+                            IFNULL(CONCAT(TRIM(ROUND(SUM((menu_num_sold*recipe_ingredient_qty)*(SELECT conversion_ratio FROM ptyd_measure_conversion WHERE from_measure_unit_id=recipe_measure_id AND to_measure_unit_id=ingredient_measure_id)  ),6))+0, " ",
+                            ingredient_measure),0) AS quantity
+                        FROM 
+                            ptyd_menu
+                        JOIN
+                            ptyd_recipes ON menu_meal_id=recipe_meal_id
+                        JOIN 
+                            ptyd_ingredients ON recipe_ingredient_id = ingredient_id
+                        JOIN 
+                            ptyd_meals ON recipe_meal_id = meal_id
+                        GROUP BY ingredient_desc, menu_date
+                        ORDER BY menu_date, menu_category ASC;
+                        """, 'get', conn)
+                        
+            print('Items --------------------------------------------')         
+            print(items['result'][0]['menu_date'])
+            
+            print('Test Code ---------------------------------------')
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            menuDates = list( dict.fromkeys(menuDates) )
+            
+            print(menuDates)
+
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            print('new dictionary-------------------------------')
+            print(d)
+
+            print('test-------------')
+
+            index2 = 0
+            for index in range(len(menuDates)):
+                dictValues = []
+                menuEntries = 14
+                print(menuEntries)
+                while menuEntries != 0:
+                    print(menuEntries)
+                    ingredient_description = items['result'][index2]['ingredient_desc']
+                    ingredient_description = "Ingredient: " + ingredient_description
+                    dictValues.append(ingredient_description)
+                    print(menuEntries)
+
+                    ingredients_needed =  items['result'][index2]['quantity']
+                    ingredients_needed = "Amount needed to use: " + ingredients_needed
+                    dictValues.append(ingredients_needed)
+
+                    menuEntries -=1
+                    index2 +=1
+                    print(menuEntries)
+                
+                d[menuDates[index]] = dictValues
+        
+            print ('Dictionary part 2 --------------')
+            print(d)
+
+
+
+            response['message'] = 'successful'
+            response['result'] = d
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -1166,7 +1655,7 @@ class TemplateApi(Resource):
                                 FROM
                                 ptyd_meal_plans;""", 'get', conn)
 
-            response['message'] = 'Request successful.'
+            response['message'] = 'successful'
             response['result'] = items
 
             return response, 200
@@ -1176,14 +1665,28 @@ class TemplateApi(Resource):
             disconnect(conn)
 
 # Define API routes
+
+# Still uses getRdsConn()
+# Needs to be converted to V2 APIs
 api.add_resource(Meals, '/api/v1/meals')
 api.add_resource(Accounts, '/api/v1/accounts')
 
+# New APIs, uses connect() and disconnect()
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:userUid>')
+
+api.add_resource(CustomerInfo, '/api/v2/customerinfo')
+api.add_resource(CustomerProfile,'/api/v2/customerprofile')
+
+api.add_resource(MealInfo, '/api/v2/meal_info')
+
+api.add_resource(AdminDBv2, '/api/v2/admindb')
+api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
+api.add_resource(AdminMenu, '/api/v2/menu_display')
+api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 

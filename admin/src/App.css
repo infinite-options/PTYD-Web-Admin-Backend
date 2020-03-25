@@ -1,38 +1,128 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* navagation */
+.sidenav {
   display: flex;
-  flex-direction: column;
+}
+.sidenav-space {
+  flex-basis: 225px;
+}
+
+.icon-title {
+  margin-right: 0.5rem;
+}
+
+.menu {
+  padding: 1.75rem 1rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.link {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  position: relative;
+}
+
+.sidenav-dark {
+  height: 100%;
+  background-color: #212529;
+  color: rgba(255, 255, 255, 0.5);
+}
+.sidenav-menu .menu {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link {
+  color: rgba(255, 255, 255, 0.5);
+}
+.sidenav-menu .link .icon-title {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link {
+  color: #ffff;
+}
+.sidenav-menu .link:hover {
+  color: rgba(255, 255, 255, 0.25);
+}
+.sidenav-menu .link.active {
+  color: #fff;
+}
+.sidenav-menu .link.active .icon-title {
+  color: #fff;
+}
+
+.card-body {
+  min-height: 300px;
+  min-width: 300px;
+  margin-right: 5px;
+}
+.menu-item {
+  padding: 0 40px;
+  margin: 5px 10px;
+  user-select: none;
+  cursor: pointer;
+  border: none;
+}
+.menu-item-wrapper.active {
+  border: 1px blue solid;
+}
+.menu-item.active {
+  border: 1px green solid;
+}
+
+/* Scroll bar properties below */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lightgray;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: gray;
+}
+
+/* Horizontal scroll */
+.scrollMenu {
+  /* background-color: #333; */
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.scrollItem {
+  display: inline-block;
+  margin: 2px;
+  padding: 14px;
+}
+
+/* scroll vertically */
+.vertical-menu {
+  height: 400px;
+  overflow-y: auto;
+}
+
+.vertical-menu a {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+}
+
+.vertical-menu a.active {
+  background-color: #4caf50;
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
