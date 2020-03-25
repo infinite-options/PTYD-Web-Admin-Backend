@@ -56,9 +56,9 @@ export default function Login (props) {
     console.log(e)
 
     checkForSocial(e)
-    .then(res => { console.log(res.user_id)
-      grabSocialUserInfor(res.user_id)
-      .then(res => socialLogin(res))
+    .then(res1 => { console.log(res1)
+      grabSocialUserInfor(res1.user_id)
+      .then(res2 => socialLogin(res2))
       .catch(err => console.log(err)) }
     )
     .catch(err => {
@@ -67,7 +67,8 @@ export default function Login (props) {
         pathname: "/socialsignup",
         state: {
           email: e,
-          social: "google"
+          social: "Google",
+          token: 'token_placeholder'
         }
       });
       window.location.reload(false);
@@ -78,7 +79,8 @@ export default function Login (props) {
     console.log(response);
   }
 
-  function socialLogin(user, testUser, testPass) {
+  function socialLogin(user) {
+    console.log("socialLogin: " + user)
     let uid = user.user_uid
     let name = user.first_name
       

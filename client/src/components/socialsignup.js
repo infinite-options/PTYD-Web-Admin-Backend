@@ -23,11 +23,12 @@ function SocialSignUp (props)  {
     const [userState, setUserState] = useState("");
     const [referral, setReferral] = useState("Social Media");
     const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
+    const [socialMedia, setSocialMedia] = useState("")
 
     useEffect(() => { 
-        console.log(props) 
+        console.log(props.location.state)
         typeof props.location.state === "undefined" ? console.log("undefined") :  ( typeof props.location.state.email === "undefined" ? console.log("undefined") : setEmail(props.location.state.email) )
-        //props.location.state.email == undefined ? console.log("empty") : console.log(props.location.state.email)
+        typeof props.location.state === "undefined" ? console.log("undefined") :  ( typeof props.location.state.social === "undefined" ? console.log("undefined") : setSocialMedia(props.location.state.social) )
     }, []);
 
     async function sendForm() {
@@ -39,14 +40,7 @@ function SocialSignUp (props)  {
             return "password mismatch";
         }
 
-        fetch(props.API_URL, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        let b = JSON.stringify({
             Username: username,
             FirstName: firstname,
             LastName: lastname,
@@ -60,7 +54,18 @@ function SocialSignUp (props)  {
             State: userState,
             Referral: referral,
             WeeklyUpdates: weeklyUpdates,
-          })
+            SocialMedia: socialMedia,
+            Token: 'token_placeholder'
+        })
+
+        fetch(props.API_URL, {
+            mode: 'no-cors',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: b
         })
 
         return "success";
@@ -235,19 +240,13 @@ function SocialSignUp (props)  {
                                         type="checkbox" 
                                         label="Sign Me Up For Weekly Prep To Your Door Updates!"
                                     />
-                                    {/*
-                                    <Form.Control
-                                        value={weeklyUpdates}
-                                        onChange={e => setWeeklyUpdates(e.target.value)}
-                                    />
-                                    */}
                                 </Form.Group>
 
                                 <Form.Group id="formGridServiceTerms">
                                     <Form.Check type="checkbox" label="Agree To Prep To Your Door Terms Of Service." />
                                 </Form.Group>
 
-                                <Button onClick={ socializing } variant="dark" type="submit">
+                                <Button onClick={ sending } variant="dark" type="submit">
                                     Submit
                                 </Button>
                                 </Form>

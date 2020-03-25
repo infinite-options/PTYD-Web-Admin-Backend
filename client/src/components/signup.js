@@ -45,13 +45,7 @@ function SignUp (props)  {
             return "password mismatch";
         }
 
-        fetch(props.API_URL, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        let b = JSON.stringify({
             Username: username,
             FirstName: firstname,
             LastName: lastname,
@@ -65,7 +59,16 @@ function SignUp (props)  {
             State: userState,
             Referral: referral,
             WeeklyUpdates: weeklyUpdates,
-          })
+        })
+
+        await fetch(props.API_URL, {
+            mode: 'no-cors',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: b
         })
 
         return "success";

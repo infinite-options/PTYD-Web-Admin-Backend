@@ -806,7 +806,7 @@ class SignUp(Resource):
         response = {}
         items = []
         try:
-            conn = connect()
+            conn = connect()     
             data = request.get_json(force=True)
 
             Username = data['Username']
@@ -939,46 +939,128 @@ class SignUp(Resource):
 class SocialSignUp(Resource):
     # HTTP method POST
     def post(self):
-        if request.method == 'OPTIONS':
-            print('getting pretty posty in here')
         response = {}
         items = []
         try:
-            print("connected")
-            conn = connect()
+            conn = connect()     
             data = request.get_json(force=True)
 
-            Email = data['user_email']
-            Social = data['user_social']
-            Token = "test_token"
+            Username = data['Username']
+            FirstName = data['FirstName']
+            LastName = data['LastName']
+            Email = data['Email']
+            PhoneNumber = data['PhoneNumber']
+            Address = data['Address']
+            AddressUnit = data['AddressUnit']
+            DeliveryNote = "N/A"
+            City = data['City']
+            State = data['State']
+            Zip = data['Zip']
+            Region = "US"
+            Gender = "F"
+            WeeklyUpdates = data['WeeklyUpdates']
+            CreateDate = getToday()
+            LastUpdate = CreateDate
+            ActiveBool = "Yes"
+            Referral = data['Referral']
+            Social = data['SocialMedia']
+            Token = data['Token']
 
             print("Received:", data)
 
-            NewUserID = "100-001999"
+            # Query [0]
+            queries = ["CALL get_new_user_id;"]
+
+            NewUserIDresponse = execute(queries[0], 'get', conn)
+            NewUserID = NewUserIDresponse['result'][0]['new_id']
 
             print("NewUserID:", NewUserID)
 
-            queries = []
+            # Query [1]
             queries.append(
-                """ INSERT INTO ptyd_social
+                """ INSERT INTO ptyd_accounts
                     (
-                        user_id,
+                        user_uid,
+                        user_name,
+                        first_name,
+                        last_name,
                         user_email,
-                        user_social,
-                        user_token
+                        phone_number,
+                        user_address,
+                        address_unit,
+                        delivery_note,
+                        user_city,
+                        user_state,
+                        user_zip,
+                        user_region,
+                        user_gender,
+                        weekly_updates,
+                        create_date,
+                        last_update,
+                        activeBool,
+                        last_delivery,
+                        referral_source,
+                        user_note,
+                        user_profile_picture
                     )
                     VALUES
                     (""" +
                         "\'" + NewUserID + "\'," +
+                        "\'" + Username + "\'," +
+                        "\'" + FirstName + "\'," +
+                        "\'" + LastName + "\'," +
                         "\'" + Email + "\'," +
-                        "\'" + Social + "\'," +
-                        "\'" + Token + "\');" )
+                        "\'" + PhoneNumber + "\'," +
+                        "\'" + Address + "\'," +
+                        "\'" + AddressUnit + "\'," +
+                        "\'" + DeliveryNote + "\'," +
+                        "\'" + City + "\'," +
+                        "\'" + State + "\'," +
+                        "\'" + Zip + "\'," +
+                        "\'" + Region + "\'," +
+                        "\'" + Gender + "\'," +
+                        "\'" + WeeklyUpdates + "\'," +
+                        "\'" + CreateDate + "\'," +
+                        "\'" + LastUpdate + "\'," +
+                        "\'" + ActiveBool + "\'," +
+                        "NULL," +
+                        "\'" + Referral + "\'," +
+                        "NULL," +
+                        "NULL);")
 
-            print("Query:", queries[0])
-            insertResponse = execute(queries[0], 'post', conn)
+            # Query [2]
+            queries.append("""
+                INSERT INTO ptyd_social
+                (
+                    user_id,
+                    user_email,
+                    user_social,
+                    user_token
+                )
+                VALUES
+                (
+                    \'""" + NewUserID + """\',
+                    \'""" + Email + """\',
+                    \'""" + Social + """\',
+                    \'""" + Token + "\');")
+
+            usnInsert = execute(queries[1], 'post', conn)
+
+            if usnInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit username.'
+                print(response['message'], response['result'], usnInsert['code'])
+                return response, 400
+
+            socialInsert = execute(queries[2], 'post', conn)
+
+            if socialInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit social.'
+                print(responsresponsee['message'], response['result'], socialInsert['code'])
+                return response, 500
 
             response['message'] = 'Request successful.'
-            response['result'] = insertResponse
 
             return response, 200
         except:
@@ -1256,10 +1338,9 @@ class Social(Resource):
             print( response['result']['result'][0]['user_id'] )
             email = response['result']['result'][0]['user_email']
 
-            restest = SocialAccount().get(email)
+            # restest = SocialAccount().get(email)
 
-
-            return response, 200 #restest, 200
+            return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -1294,7 +1375,7 @@ class SocialAccount(Resource):
                     last_delivery,
                     referral_source,
                     user_note
-                FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]# + uid + "';"]
+                FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
 
             items = execute(queries[0], 'get', conn)
             print(queries[0])
@@ -1354,11 +1435,12 @@ api.add_resource(Accounts, '/api/v1/accounts')
 
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
-api.add_resource(SocialSignUp, '/api/v2/social_signup')
 api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
 
 api.add_resource(Social, '/api/v2/social/<string:user>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
+api.add_resource(SocialSignUp, '/api/v2/social_signup')
+
 
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:userUid>')
