@@ -12,8 +12,6 @@ import crypto from "crypto";
 
 export default function Login (props) {
 
-  console.log(props);
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");

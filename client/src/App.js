@@ -22,7 +22,7 @@ const App = props => {
 
   async function onLoad() {
     try {
-      if (searchCookie4UserID(document.cookie) !== "null"){
+      if (searchCookie4UserID(document.cookie).includes('100-')){
         userHasAuthenticated(true);
       }
     } catch (e) {
