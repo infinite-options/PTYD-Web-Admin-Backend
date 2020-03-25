@@ -9,7 +9,7 @@ import CreateMenu from "./Create-Menu/create-menu";
 
 // const DEV_URL =
 //   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/";
-const APIV2_URL = "http://localhost:2001/api/v2/";
+const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
   <Switch>
@@ -19,10 +19,10 @@ const Main = ({ appProps }) => (
       component={Home}
       appProps={{
         appProps,
-        API_URL_MEALSELECT: `${APIV2_URL}menu_display`,
-        API_URL_INGREDIENTS: `${APIV2_URL}displayIngredients`,
-        API_URL_CUSTINFO: `${APIV2_URL}customerinfo`,
-        API_URL_MEALINFO: `${APIV2_URL}meal_info`
+        API_URL_MEALSELECT: `${DEV_URL}menu_display`,
+        API_URL_INGREDIENTS: `${DEV_URL}displayIngredients`,
+        API_URL_CUSTINFO: `${DEV_URL}customerinfo`,
+        API_URL_MEALINFO: `${DEV_URL}meal_info`
       }}
     />
     <AppliedRoute
@@ -31,7 +31,7 @@ const Main = ({ appProps }) => (
       component={CustomerProfile}
       appProps={{
         appProps,
-        API_URL_CUSTPROF: `${APIV2_URL}customerprofile`
+        API_URL_CUSTPROF: `${DEV_URL}customerprofile`
       }}
     />
     <AppliedRoute exact path="/userMap" component={UserMap} />

@@ -334,7 +334,7 @@ class Home extends Component {
                   <thead style={{ overflow: "scroll" }}>
                     <tr>
                       <th>Meal Name</th>
-                      <th>Number of Time Posted</th>
+                      <th>Number of Times Posted</th>
                       <th>Number Sold per Posting</th>
                       <th>Total Number Sold</th>
                     </tr>
