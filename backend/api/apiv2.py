@@ -1299,8 +1299,8 @@ class displayIngredients(Resource):
                     """ SELECT 
                             menu_date,
                             ingredient_desc,
-                            IFNULL(CONCAT( menu_num_sold*recipe_ingredient_qty ,' ',
-                            recipe_qty_type), 0) AS quantity
+                            IFNULL(CONCAT(TRIM(ROUND(SUM((menu_num_sold*recipe_ingredient_qty)*(SELECT conversion_ratio FROM ptyd_measure_conversion WHERE from_measure_unit_id=recipe_measure_id AND to_measure_unit_id=ingredient_measure_id)  ),6))+0, " ",
+                            ingredient_measure),0) AS quantity
                         FROM 
                             ptyd_menu
                         JOIN
@@ -1309,7 +1309,7 @@ class displayIngredients(Resource):
                             ptyd_ingredients ON recipe_ingredient_id = ingredient_id
                         JOIN 
                             ptyd_meals ON recipe_meal_id = meal_id
-                        GROUP BY ingredient_desc,menu_date
+                        GROUP BY ingredient_desc, menu_date
                         ORDER BY menu_date, menu_category ASC;
                         """, 'get', conn)
                         
