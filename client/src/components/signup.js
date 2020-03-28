@@ -8,7 +8,6 @@ import Button from "react-bootstrap/Button";
 
 function SignUp (props)  {
 
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [confirmEmail, setConfirmEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -40,7 +39,6 @@ function SignUp (props)  {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            Username: username,
             FirstName: firstname,
             LastName: lastname,
             Email: email,
@@ -61,10 +59,6 @@ function SignUp (props)  {
 
     const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
 
-    function handleUsername(event) {
-      setUsername(event.target.value);
-    }
-
     return (
         <main Style="margin-top:-80px;">
             <div class="container text-center" Style="margin-top:-40px;">
@@ -76,14 +70,6 @@ function SignUp (props)  {
                     <Row>
                         <Col size={6} >               
                             <Form >
-                                <Form.Group  controlId="formGridUsername">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control 
-                                    value={username}
-                                    onChange={handleUsername}
-                                    placeholder="Enter Username" />
-                                </Form.Group>
-
                                 <Form.Row>
                                     <Form.Group as={Col} controlId="formGridFirstName">
                                     <Form.Label>First Name</Form.Label>
