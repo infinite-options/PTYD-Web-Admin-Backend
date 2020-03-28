@@ -743,7 +743,7 @@ class Accounts(Resource):
 class Account(Resource):
 
     # HTTP method GET
-    def get(self, accName, accPass):
+    def get(self, accEmail, accPass):
         response = {}
         try:
             conn = connect()
@@ -751,7 +751,6 @@ class Account(Resource):
             queries = [
                 """ SELECT
                         user_uid,
-                        user_name,
                         first_name,
                         last_name,
                         user_email,
@@ -770,7 +769,7 @@ class Account(Resource):
                         referral_source,
                         user_note
                     FROM ptyd_accounts""" +
-                    "\nWHERE user_name = " + "'" + accName + "' AND user_state = 'TX';"]
+                    "\nWHERE user_email = " + "'" + accEmail + "' AND user_state = 'TX';"]
 
             items = execute(queries[0], 'get', conn)
             user_uid = items['result'][0]['user_uid']
@@ -1674,7 +1673,7 @@ api.add_resource(Accounts, '/api/v1/accounts')
 # New APIs, uses connect() and disconnect()
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
-api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
+api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:userUid>')
 

@@ -12,13 +12,13 @@ import crypto from "crypto";
 
 export default function Login (props) {
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
   const [users, setUsers] = useState([]);
 
   function validateForm() {
-    return username.length > 0 && password.length > 0;
+    return email.length > 0 && password.length > 0;
   }
 
   function handleSubmit(event) {
@@ -45,16 +45,16 @@ export default function Login (props) {
     setUsers(logins);
   }
 
-  async function grabLoginInfoForUser(userName, userPass) {
-    const salt = users.find(user => user.user_name === userName).password_salt;
-    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userName + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
+  async function grabLoginInfoForUser(userEmail, userPass) {
+    const salt = users.find(user => user.user_name === userEmail).password_salt;
+    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userEmail + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
     const api = await res.json();
     return api;
   }
 
   function checkLogin() {
     let t = [];
-    grabLoginInfoForUser(username, password)
+    grabLoginInfoForUser(email, password)
     .then(res => login(res))
     .catch(err => console.log(err));
     login(t);
@@ -95,14 +95,15 @@ export default function Login (props) {
                 <Col>               
                   <Form onSubmit={handleSubmit} autoComplete="off">
 
-                    <Form.Label>Username</Form.Label>
+                    <Form.Label>Email</Form.Label>
                     <InputGroup className="mb-3">
                       <FormControl
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
+                        type="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                         id="userForm"
-                        placeholder="Enter Username"
-                        aria-label="Username"
+                        placeholder="Enter Email"
+                        aria-label="Email"
                         aria-describedby="basic-addon1"
                       />
                     </InputGroup>
