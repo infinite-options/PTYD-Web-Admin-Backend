@@ -547,7 +547,171 @@ class Meals(Resource):
         finally:
             disconnect(conn)
 
+# V2 Accounts
 class Accounts(Resource):
+    # Split by dashes and return whatever is on the left side of it
+    # Also remove any whitespaces at the end
+    def shortenPlanDesc(self, planDesc):
+        return planDesc.split('-')[0].rstrip()
+
+    # Check if subscription plan is a one time order
+    def isOneTimePlan(self, subscriptionPlan):
+        if subscriptionPlan == None:
+            return False
+        if 'One Time' in subscriptionPlan:
+            return True
+        return False
+
+    # Calculate amount to charge based on weekly price and subscription
+    def calculateNextCharge(self, weeklyPrice, subscriptionPlan):
+        if 'Bi-Weekly' in subscriptionPlan:
+            return float(weeklyPrice) * 2
+        elif 'Weekly' in subscriptionPlan:
+            return float(weeklyPrice)
+        elif 'Monthly' in subscriptionPlan:
+            return float(weeklyPrice) * 4
+
+    # Calculate next charge date based on most recent payment and subscription
+    def calculateNextChargeDate(self, lastPaymentDate, subscriptionPlan):
+        if 'Bi-Weekly' in subscriptionPlan:
+            nextPaymentDate = lastPaymentDate + timedelta(weeks=2)
+            return nextPaymentDate.strftime("%b %d, %Y")
+        elif 'Weekly' in subscriptionPlan:
+            nextPaymentDate = lastPaymentDate + timedelta(weeks=1)
+            return nextPaymentDate.strftime("%b %d, %Y")
+        elif 'Monthly' in subscriptionPlan:
+            nextPaymentDate = lastPaymentDate + timedelta(weeks=4)
+            return nextPaymentDate.strftime("%b %d, %Y")
+
+    # Calculate number of paid weeks remaining
+    def calculatePaidWeeksRemaining(self, nextChargeDate):
+        if nextChargeDate and nextChargeDate != 'N/A':
+#           now = datetime.now()
+            now = datetime(2020, 2, 2, 15, 59)
+            nextChargeDateObj = datetime.strptime(nextChargeDate, "%b %d, %Y")
+            deltaObj = nextChargeDateObj - now
+            return ceil(deltaObj.days / 7)
+        else:
+            return "N/A"
+
+    # Format Monday Zipcodes Query to a list of strings
+    def formatMondayZips(self, query):
+        zips = []
+        for row in query['result']:
+            zips.append(row['zipcode'])
+        return zips
+
+    # Format query
+    def formatQuery(self, query, mondayZips):
+        json = []
+        for row in query['result']:
+            rowDict = {}
+            for key in row:
+                value = row[key]
+                if key == 'Subscription':
+                    if value:
+                        value = self.shortenPlanDesc(value)
+                    else:
+                        value = None
+                # Get weekly price of meal plan and multiply by X
+                if key == 'WeeklyPrice':
+                    if self.isOneTimePlan(rowDict['Subscription']):
+                        rowDict['NextCharge'] = 0
+                    elif rowDict['Subscription'] == None:
+                        rowDict['NextCharge'] = 0
+                    else:
+                        rowDict['NextCharge'] = self.calculateNextCharge(value, rowDict['PaymentPlan'])
+                # Get user's most recent payment date and offset by X weeks
+                if key == 'payment_time_stamp':
+                    if self.isOneTimePlan(rowDict['Subscription']):
+                        rowDict['NextChargeDate'] = None
+                    elif rowDict['Subscription'] == None:
+                        rowDict['NextChargeDate'] = None
+                    elif value == None:
+                        rowDict['NextChargeDate'] = 'N/A'
+                    else:
+                        rowDict['NextChargeDate'] = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
+                rowDict[key] = value
+
+            rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
+
+            try:
+                ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%Y-%m-%d")
+                rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
+                rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
+                rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
+            except:
+                rowDict['cc_exp_year'] = None
+                rowDict['cc_exp_month'] = None
+                rowDict['cc_exp_day'] = None
+
+            if rowDict['billing_zip'] in mondayZips:
+                rowDict['MondayAvailable'] = True
+            else:
+                rowDict['MondayAvailable'] = False
+
+            json.append(rowDict)
+
+        return json
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            # Needs password salt
+            queries = [
+                """ SELECT DISTINCT
+                        user_uid,
+                        user_email,
+                        first_name,
+                        last_name,
+                        phone_number,
+                        create_date,
+                        last_update,
+                        referral_source,
+                        password_salt,
+                        mp.meal_plan_desc AS Subscription,
+                        mp.payment_frequency AS PaymentPlan,
+                        mp.meal_plan_price AS WeeklyPrice,
+                        p1.payment_time_stamp,
+                        p1.billing_zip,
+                        mp.num_meals AS MaximumMeals,
+                        p1.cc_num AS cc_num_secret,
+                        cc_exp_date,
+                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret
+                    FROM ptyd_accounts a1
+                    LEFT JOIN ptyd_payments p1
+                    ON user_uid = p1.buyer_id
+                    LEFT JOIN ptyd_purchases p2
+                    ON p1.purchase_id = p2.purchase_id
+                    LEFT JOIN ptyd_meal_plans mp
+                    ON p2.meal_plan_id = mp.meal_plan_id
+                    LEFT JOIN ptyd_passwords
+                    ON user_uid = password_user_uid;""",
+                    "SELECT * FROM ptyd_monday_zipcodes;"]
+
+            query = execute(queries[0], 'get', conn)
+
+            mondayZipsQuery = execute(queries[1], 'get', conn)
+            mondayZips = self.formatMondayZips(mondayZipsQuery)
+
+            items['MondayZips'] = mondayZips
+            items['Accounts'] = self.formatQuery(query, mondayZips)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+# SOON TO BE DEPRECATED
+class AccountsV1(Resource):
     global RDS_PW
 
     # Split by dashes and return whatever is on the left side of it
@@ -705,14 +869,14 @@ class Accounts(Resource):
                         cc_exp_date,
                         CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret,
                         password_salt
-                    FROM ptyd_accounts a1
-                    LEFT JOIN ptyd_payments p1
+                    FROM mock_accounts a1
+                    LEFT JOIN mock_payments p1
                     ON user_uid = p1.buyer_id
-                    LEFT JOIN ptyd_purchases
+                    LEFT JOIN mock_purchases
                     ON user_uid = recipient_id
-                    LEFT JOIN ptyd_meal_plans
-                    ON ptyd_purchases.meal_plan_id = ptyd_meal_plans.meal_plan_id
-                    LEFT JOIN ptyd_passwords
+                    LEFT JOIN mock_meal_plans
+                    ON mock_purchases.meal_plan_id = mock_meal_plans.meal_plan_id
+                    LEFT JOIN mock_passwords
                     ON user_uid = password_user_uid
                     ORDER BY payment_time_stamp, user_uid DESC;""",
                     "SELECT * FROM ptyd_monday_zipcodes;"]
@@ -755,21 +919,11 @@ class Account(Resource):
                         last_name,
                         user_email,
                         phone_number,
-                        user_address,
-                        address_unit,
-                        user_city,
-                        user_state,
-                        user_zip,
-                        user_region,
-                        user_gender,
                         create_date,
                         last_update,
-                        activeBool,
-                        last_delivery,
-                        referral_source,
-                        user_note
+                        referral_source
                     FROM ptyd_accounts""" +
-                    "\nWHERE user_email = " + "'" + accEmail + "' AND user_state = 'TX';"]
+                    "\nWHERE user_email = " + "\'" + accEmail + "\';"]
 
             items = execute(queries[0], 'get', conn)
             user_uid = items['result'][0]['user_uid']
@@ -802,23 +956,13 @@ class SignUp(Resource):
             conn = connect()
             data = request.get_json(force=True)
 
-            Username = data['Username']
+            Email = data['Email']
             FirstName = data['FirstName']
             LastName = data['LastName']
-            Email = data['Email']
             PhoneNumber = data['PhoneNumber']
-            Address = data['Address']
-            AddressUnit = data['AddressUnit']
-            DeliveryNote = "N/A"
-            City = data['City']
-            State = data['State']
-            Zip = data['Zip']
-            Region = "US"
-            Gender = "F"
             WeeklyUpdates = data['WeeklyUpdates']
             CreateDate = getToday()
             LastUpdate = CreateDate
-            ActiveBool = "Yes"
             Referral = data['Referral']
 
             print("Received:", data)
@@ -830,56 +974,31 @@ class SignUp(Resource):
 
             print("NewUserID:", NewUserID)
 
+            # Not storing customer addresses
             queries.append(
                 """ INSERT INTO ptyd_accounts
                     (
                         user_uid,
-                        user_name,
+                        user_email,
                         first_name,
                         last_name,
-                        user_email,
                         phone_number,
-                        user_address,
-                        address_unit,
-                        delivery_note,
-                        user_city,
-                        user_state,
-                        user_zip,
-                        user_region,
-                        user_gender,
                         weekly_updates,
                         create_date,
                         last_update,
-                        activeBool,
-                        last_delivery,
-                        referral_source,
-                        user_note,
-                        user_profile_picture
+                        referral_source
                     )
                     VALUES
                     (""" +
                         "\'" + NewUserID + "\'," +
-                        "\'" + Username + "\'," +
+                        "\'" + Email + "\'," +
                         "\'" + FirstName + "\'," +
                         "\'" + LastName + "\'," +
-                        "\'" + Email + "\'," +
                         "\'" + PhoneNumber + "\'," +
-                        "\'" + Address + "\'," +
-                        "\'" + AddressUnit + "\'," +
-                        "\'" + DeliveryNote + "\'," +
-                        "\'" + City + "\'," +
-                        "\'" + State + "\'," +
-                        "\'" + Zip + "\'," +
-                        "\'" + Region + "\'," +
-                        "\'" + Gender + "\'," +
                         "\'" + WeeklyUpdates + "\'," +
                         "\'" + CreateDate + "\'," +
                         "\'" + LastUpdate + "\'," +
-                        "\'" + ActiveBool + "\'," +
-                        "NULL," +
-                        "\'" + Referral + "\'," +
-                        "NULL," +
-                        "NULL);")
+                        "\'" + Referral + "\');")
 
             DatetimeStamp = getNow()
             salt = getNow()
@@ -908,7 +1027,7 @@ class SignUp(Resource):
 
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit username.'
+                response['result'] = 'Could not commit account.'
                 print(response['message'], response['result'], usnInsert['code'])
                 return response, 400
 
@@ -1668,9 +1787,10 @@ class TemplateApi(Resource):
 # Still uses getRdsConn()
 # Needs to be converted to V2 APIs
 api.add_resource(Meals, '/api/v1/meals')
-api.add_resource(Accounts, '/api/v1/accounts')
+api.add_resource(AccountsV1, '/api/v1/accounts')
 
 # New APIs, uses connect() and disconnect()
+api.add_resource(Accounts, '/api/v2/accounts')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')

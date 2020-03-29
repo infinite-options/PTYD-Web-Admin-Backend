@@ -182,7 +182,7 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/accounts`,
+          API_URL: `${DEV_URL}v2/accounts`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
         }}
       />

@@ -34,19 +34,20 @@ export default function Login (props) {
     // fill it up when needed
     const res = await fetch(props.API_URL);
     const api = await res.json();
-    const logins = api.result;
+    const logins = api.result.Accounts;
     setUsers(logins);
   }
 
   async function componentDidMount() {
     const res = await fetch(props.API_URL);
     const api = await res.json();
-    const logins = api.result;
+    console.log(api);
+    const logins = api.result.Accounts;
     setUsers(logins);
   }
 
   async function grabLoginInfoForUser(userEmail, userPass) {
-    const salt = users.find(user => user.user_name === userEmail).password_salt;
+    const salt = users.find(user => user.user_email === userEmail).password_salt;
     const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userEmail + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
     const api = await res.json();
     return api;
