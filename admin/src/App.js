@@ -7,6 +7,11 @@ import { Container } from "react-bootstrap";
 import { Header } from "react-mdl";
 import Button from "muicss/lib/react/button";
 
+import BarGraph from './components/chart';
+import LineGraph from './components/lineChart'
+import PieGraph from './components/pieChart'
+import UpcomingMeals from './components/test'
+
 // const Styles = styled.div`
 //   navbar {
 //     background-color: #222;
@@ -105,6 +110,18 @@ function App() {
         <Main />
       </Container>
     </div>
+
+<div>
+<BarGraph/>
+<hr></hr>
+<LineGraph />
+<hr></hr>
+<PieGraph />
+<hr></hr>
+<hr></hr>
+<UpcomingMeals />
+</div>
+    
   );
 }
 export default App;
