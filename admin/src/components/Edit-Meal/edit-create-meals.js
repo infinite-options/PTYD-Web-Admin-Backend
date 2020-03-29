@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 
-import Jumbotron from "../Jumbotron/Jumbotron-user";
+import Jumbotron from "../Jumbotron/Jumbotron-edit-meal";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
+import MaterialTable from "material-table";
 
 class EditCreateMeal extends Component {
   render() {
@@ -19,9 +20,6 @@ class EditCreateMeal extends Component {
             Admin Site
           </Link>
           <Typography color="textPrimary">Edit/Create Meal</Typography>
-          <Link color="inherit" onClick={this.handleClick}>
-            Weekly Purchases
-          </Link>
         </Breadcrumbs>
       </div>
     );

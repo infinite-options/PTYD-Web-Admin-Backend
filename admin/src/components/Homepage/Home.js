@@ -29,14 +29,14 @@ class Home extends Component {
     const api4 = await res4.json();
     const ingredients = api4.result;
     // customer info
-    const res2 = await fetch(this.props.API_URL_CUSTINFO);
-    const api2 = await res2.json();
-    const custInfo = api2.result.CustomerInfo.result;
+    // const res2 = await fetch(this.props.API_URL_CUSTINFO);
+    // const api2 = await res2.json();
+    // const custInfo = api2.result.CustomerInfo.result;
     // meal info
     const res3 = await fetch(this.props.API_URL_MEALINFO);
     const api3 = await res3.json();
     const mealInfo = api3.result.meal_info.result;
-    this.setState({ upcomingMeals, ingredients, custInfo, mealInfo });
+    this.setState({ upcomingMeals, ingredients, mealInfo });
   }
   handleClick(event) {
     event.preventDefault();
