@@ -32,7 +32,7 @@ class Checkout extends Component {
     if (this.state.user_uid) {
       const res = await fetch(this.props.API_URL);
       const api = await res.json();
-      const allUsers = api.result;
+      const allUsers = api.result.Accounts;
       for (let userIter in allUsers) {
         if (allUsers[userIter].user_uid == this.state.user_uid) {
           this.setState({ user: allUsers[userIter] });

@@ -947,6 +947,64 @@ class Account(Resource):
         finally:
             disconnect(conn)
 
+class AccountPurchases(Resource):
+
+    # HTTP method GET
+    def get(self, buyerId):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [ """
+                SELECT DISTINCT
+                    payment_id,
+                    buyer_id,
+                    coupon_id,
+                    amount_due,
+                    amount_paid,
+                    p1.purchase_id,
+                    MAX(payment_time_stamp) AS last_payment_time_stamp,
+                    payment_type,
+                    CONCAT(\'XXXXXXXXXXXX\', cc_num) AS cc_num,
+                    cc_exp_date,
+                    cc_cvv,
+                    billing_zip,
+                    p2.meal_plan_id,
+                    meal_plan_desc,
+                    payment_frequency,
+                    start_date,
+                    delivery_name,
+                    delivery_email,
+                    delivery_phone,
+                    delivery_address,
+                    delivery_address_unit,
+                    delivery_city,
+                    delivery_state,
+                    delivery_zip,
+                    delivery_region,
+                    delivery_instructions
+                FROM
+                    ptyd_payments p1
+                INNER JOIN
+                    ptyd_purchases p2
+                ON
+                    p1.purchase_id = p2.purchase_id
+                INNER JOIN
+                    ptyd_meal_plans mp
+                ON p2.meal_plan_id = mp.meal_plan_id
+                WHERE buyer_id = \'""" + buyerId + """\'
+                GROUP BY purchase_id;"""]
+
+            items = execute(queries[0], 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items['result']
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class SignUp(Resource):
     # HTTP method POST
     def post(self):
@@ -1229,10 +1287,13 @@ class Checkout(Resource):
 class MealSelection(Resource):
     def readQuery(self, items):
         for item in items:
+            print(item)
             item['meals_selected'] = {}
             if item['meal_selection'] == 'SKIP':
                 continue
             if item['meal_selection'] == 'SURPRISE':
+                continue
+            if item['meal_selection'] == None:
                 continue
             selectedMeals = item['meal_selection'].split(';')
             for selectedMeal in selectedMeals:
@@ -1242,7 +1303,7 @@ class MealSelection(Resource):
                     item['meals_selected'][selectedMeal] = 1
         return items
 
-    def get(self, userUid):
+    def get(self, purchaseId):
         response = {}
         items = {}
         try:
@@ -1251,14 +1312,14 @@ class MealSelection(Resource):
             query = """ SELECT
                             week_affected,
                             meal_selection,
-                            delivery_day
-                        FROM ptyd_meals_selected AS m
-                        INNER JOIN ptyd_purchases AS p
-                        ON m.purchase_id = p.purchase_id
+                            \'Sunday\' AS delivery_day
+                            -- delivery_day
+                        FROM ptyd_meals_selected
                         WHERE
-                        p.recipient_id = \'""" + userUid + "\';"
+                        purchase_id = \'""" + purchaseId + "\';"
 
             items = execute(query, 'get', conn)
+            print(items)
             items = self.readQuery(items['result'])
 
             response['message'] = 'Request successful.'
@@ -1794,8 +1855,9 @@ api.add_resource(Accounts, '/api/v2/accounts')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
+api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
-api.add_resource(MealSelection, '/api/v2/mealselection/<string:userUid>')
+api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile,'/api/v2/customerprofile')

@@ -81,7 +81,7 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? Checkout : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/accounts`,
+          API_URL: `${DEV_URL}v2/accounts`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
           redirect_after_login: '/checkout'
@@ -99,8 +99,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v1/meals`,
-          USERS_API_URL: `${DEV_URL}v1/accounts`,
-          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          USERS_API_URL: `${DEV_URL}v2/accounts`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`
         }}
       />
