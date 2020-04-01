@@ -39,7 +39,7 @@ class CustomerProfile extends Component {
 
         <MaterialTable
           style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
-          title="Meal Creation"
+          title="Customer Profile"
           columns={this.state.columns}
           data={this.state.custInfo}
           editable={{
