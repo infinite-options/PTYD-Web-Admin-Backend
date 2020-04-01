@@ -8,6 +8,7 @@ import SelectMealPlan from "./subscribe/selectmealplan";
 import SelectPaymentPlan from "./subscribe/selectpaymentplan";
 import WeeklyMenu from "./menu/weeklymenu";
 import Checkout from "./subscribe/checkout";
+import CheckoutSuccess from "./subscribe/checkout-success";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./about/howitworks";
@@ -23,11 +24,10 @@ import Login from "./login";
 import Logout from "./logout";
 
 //  Live API from AWS S3 Bucket
-//const DEV_URL =
-// "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v1/";
+//const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
 
 //  Localhost API that can be run from /backend/api directory
-const DEV_URL = "http://localhost:2000/api/v2/";
+const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({ appProps }) {
   const [objectIndex, setObjectIndex] = useState(0);
@@ -46,7 +46,7 @@ export default function Main({ appProps }) {
         component={SelectMealPlan}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}plans`
+          API_URL: `${DEV_URL}v2/plans`
         }}
       />
       <AppliedRoute
@@ -55,7 +55,7 @@ export default function Main({ appProps }) {
         component={WeeklyMenu}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}meals`,
+          API_URL: `${DEV_URL}v1/meals`,
           header_label: "MENU THIS WEEK",
           header_link_label: "NEXT WEEK",
           header_link_url: "/menunextweek",
@@ -68,7 +68,7 @@ export default function Main({ appProps }) {
         component={WeeklyMenu}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}meals`,
+          API_URL: `${DEV_URL}v1/meals`,
           header_label: "COMING NEXT WEEK",
           header_link_label: "THIS WEEK",
           header_link_url: "/menuthisweek",
@@ -78,10 +78,14 @@ export default function Main({ appProps }) {
       <AppliedRoute
         exact
         path="/checkout"
-        component={Checkout}
+        component={appProps.isAuthenticated ? Checkout : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}accounts`
+          API_URL: `${DEV_URL}v2/accounts`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
+          CHECKOUT_URL: `${DEV_URL}v2/checkout`,
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          redirect_after_login: '/checkout'
         }}
       />
 
@@ -92,11 +96,13 @@ export default function Main({ appProps }) {
       <AppliedRoute
         exact
         path="/mealschedule"
-        component={MealSchedule}
+        component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}meals`,
-          USERS_API_URL: `${DEV_URL}accounts`
+          API_URL: `${DEV_URL}v1/meals`,
+          USERS_API_URL: `${DEV_URL}v2/accounts`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`
         }}
       />
 
@@ -106,7 +112,7 @@ export default function Main({ appProps }) {
         component={SelectPaymentPlan}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}plans`,
+          API_URL: `${DEV_URL}v2/plans`,
           objectIndex: "FiveMealPaymentPlans",
           meals: 5
         }}
@@ -117,7 +123,7 @@ export default function Main({ appProps }) {
         component={SelectPaymentPlan}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}plans`,
+          API_URL: `${DEV_URL}v2/plans`,
           objectIndex: "TenMealPaymentPlans",
           meals: 10
         }}
@@ -128,7 +134,7 @@ export default function Main({ appProps }) {
         component={SelectPaymentPlan}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}plans`,
+          API_URL: `${DEV_URL}v2/plans`,
           objectIndex: "FifteenMealPaymentPlans",
           meals: 15
         }}
@@ -139,7 +145,7 @@ export default function Main({ appProps }) {
         component={SelectPaymentPlan}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}plans`,
+          API_URL: `${DEV_URL}v2/plans`,
           objectIndex: "TwentyMealPaymentPlans",
           meals: 20
         }}
@@ -168,18 +174,24 @@ export default function Main({ appProps }) {
         component={SignUp}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}signup`
+          API_URL: `${DEV_URL}v2/signup`
         }}
       />
       <AppliedRoute
         exact
         path="/login"
-        component={Login}
+        component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}accounts`,
-          SINGLE_ACC_API_URL: `${DEV_URL}account`
+          API_URL: `${DEV_URL}v2/accounts`,
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
         }}
+      />
+      <AppliedRoute
+        exact
+        path="/checkoutsuccess"
+        component={CheckoutSuccess}
+        appProps={appProps}
       />
       <AppliedRoute
         exact
