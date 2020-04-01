@@ -114,7 +114,6 @@ class Checkout extends Component {
         gift: "FALSE"
       });
     }
-    console.log(this.state.gift);
   }
 
   render() {
