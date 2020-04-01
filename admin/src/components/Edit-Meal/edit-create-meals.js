@@ -19,28 +19,29 @@ class EditCreateMeal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columns: [
-        { title: "Meal", field: "meal" },
-        {
-          title: "Drop Down",
-          field: "dropdown",
-          lookup: { 1: "Spicy Chicken", 2: "salad" }
-        },
-        { title: "Avg Sales", field: "sales" }
-      ],
-      data: [
-        { meal: "Special_1", dropdown: 1, sales: 99 },
-        {
-          meal: "Secial_2",
-          dropdown: 2,
-          sales: 32
-        }
-      ],
-      query: {
-        page: 1,
-        pageSize: 10
-      },
-      age: "default"
+      // columns: [
+      //   { title: "Meal", field: "meal" },
+      //   {
+      //     title: "Drop Down",
+      //     field: "dropdown",
+      //     lookup: { 1: "Spicy Chicken", 2: "salad" }
+      //   },
+      //   { title: "Avg Sales", field: "sales" }
+      // ],
+      // data: [
+      //   { meal: "Special_1", dropdown: 1, sales: 99 },
+      //   {
+      //     meal: "Secial_2",
+      //     dropdown: 2,
+      //     sales: 32
+      //   }
+      // ],
+      // query: {
+      //   page: 1,
+      //   pageSize: 10
+      // },
+      age: "default",
+      temp: []
     };
   }
 
@@ -107,12 +108,20 @@ class EditCreateMeal extends Component {
               <td>Black Rice Salad</td>
               <td>50</td>
             </tr>
+            {console.log(this.state.temp)}
+            {this.state.temp}
           </tbody>
-          <Button variant="primary" onclick={this.addRow}>
-            Add Meal
-          </Button>
         </Table>
-        <Dropdown>
+        <Button
+          variant="primary"
+          onClick={() => {
+            this.addRow();
+          }}
+        >
+          Add Meal
+        </Button>
+
+        {/* <Dropdown>
           <Dropdown.Toggle variant="success" id="dropdown-basic">
             Dropdown Button
           </Dropdown.Toggle>
@@ -122,90 +131,84 @@ class EditCreateMeal extends Component {
             <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
             <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
           </Dropdown.Menu>
-        </Dropdown>
-        <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-          <Tab eventKey="home" title="Home">
-            <Card style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}>
-              <MaterialTable
-                title={this.date()}
-                columns={this.state.columns}
-                data={this.state.data}
-                options={{
-                  selection: true,
-                  actionsColumnIndex: -1,
-                  pageSize: this.state.query.pageSize
-                }}
-                actions={[
-                  {
-                    tooltip: "Remove All Selected Users",
-                    icon: "delete",
-                    onClick: (evt, data) =>
-                      alert("You want to delete " + data.length + " rows")
-                  }
-                ]}
-                editable={{
-                  onRowUpdate: (newData, oldData) =>
-                    new Promise(resolve => {
-                      setTimeout(() => {
-                        resolve();
-                        if (oldData) {
-                          this.setState(prevState => {
-                            const data = [...prevState.data];
-                            data[data.indexOf(oldData)] = newData;
-                            return { ...prevState, data };
-                          });
-                        }
-                      }, 600);
-                    }),
-                  onRowDelete: oldData =>
-                    new Promise(resolve => {
-                      setTimeout(() => {
-                        resolve();
-                        this.setState(prevState => {
-                          const data = [...prevState.data];
-                          data.splice(data.indexOf(oldData), 1);
-                          return { ...prevState, data };
-                        });
-                      }, 600);
-                    }),
-                  onRowAdd: newData =>
-                    new Promise(resolve => {
-                      setTimeout(() => {
-                        resolve();
-                        this.setState(prevState => {
-                          const data = [...prevState.data];
-                          data.push(newData);
-                          return { ...prevState, data };
-                        });
-                      }, 600);
-                    })
-                }}
-              />
-              <TableRow>
-                <TableCell>Expect Number of Sales (Total)</TableCell>
-                {/* <TableCell align="right">{this.state.data.map(salesd => ({salesd.sales}))}</TableCell> */}
-              </TableRow>
-            </Card>
-          </Tab>
-        </Tabs>
+        </Dropdown> */}
+
+        {/* <Card style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}>
+          <MaterialTable
+            title={this.date()}
+            columns={this.state.columns}
+            data={this.state.data}
+            options={{
+              selection: true,
+              actionsColumnIndex: -1,
+              pageSize: this.state.query.pageSize
+            }}
+            actions={[
+              {
+                tooltip: "Remove All Selected Users",
+                icon: "delete",
+                onClick: (evt, data) =>
+                  alert("You want to delete " + data.length + " rows")
+              }
+            ]}
+            editable={{
+              onRowUpdate: (newData, oldData) =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
+                    if (oldData) {
+                      this.setState(prevState => {
+                        const data = [...prevState.data];
+                        data[data.indexOf(oldData)] = newData;
+                        return { ...prevState, data };
+                      });
+                    }
+                  }, 600);
+                }),
+              onRowDelete: oldData =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
+                    this.setState(prevState => {
+                      const data = [...prevState.data];
+                      data.splice(data.indexOf(oldData), 1);
+                      return { ...prevState, data };
+                    });
+                  }, 600);
+                }),
+              onRowAdd: newData =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
+                    this.setState(prevState => {
+                      const data = [...prevState.data];
+                      data.push(newData);
+                      return { ...prevState, data };
+                    });
+                  }, 600);
+                })
+            }}
+          />
+          <TableRow>
+            <TableCell>Expect Number of Sales (Total)</TableCell>
+          </TableRow>
+        </Card> */}
       </div>
     );
   }
-  date = () => {
-    return (
-      <FormControl>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={this.state.age}
-          onChange={this.handleChange}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
+  addRow = () => {
+    console.log("fsdfhksjfhkjskfjsdhfkshfjs");
+    let x = (
+      <tr>
+        <td>Weekly Salad</td>
+        <td>Black Rice Salad</td>
+        <td>50</td>
+      </tr>
     );
+    this.state.temp.push(x);
+    this.setState({
+      temp: this.state.temp
+    });
   };
 }
 export default EditCreateMeal;
