@@ -14,6 +14,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import TextField from "@material-ui/core/TextField";
 
 class EditCreateMeal extends Component {
   constructor(props) {
@@ -40,11 +41,52 @@ class EditCreateMeal extends Component {
       //   page: 1,
       //   pageSize: 10
       // },
-      age: "default",
+      age: 10,
       temp: []
     };
   }
-
+  componentWillMount() {
+    this.state.temp.push(
+      <tr>
+        <td>Weekly Entree</td>
+        <td>
+          <FormControl>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={this.state.age}
+              onChange={this.handleChange}
+              style={{ color: "white" }}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </td>
+        <td>25</td>
+      </tr>,
+      <tr>
+        <td>Weekly Salad</td>
+        <td>
+          <FormControl>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={this.state.age}
+              onChange={this.handleChange}
+              style={{ color: "white" }}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </td>
+        <td>50</td>
+      </tr>
+    );
+  }
   handleChange = event => {
     this.setState({ age: event.target.value });
   };
@@ -76,7 +118,27 @@ class EditCreateMeal extends Component {
             <MenuItem value={30}>Thirty</MenuItem>
           </Select>
         </FormControl> */}
-        <Table striped bordered hover>
+        <Table striped bordered hover variant="dark">
+          <thead style={{ backgroundColor: "blue", color: "white" }}>
+            <tr>
+              <th>Meal Category</th>
+              <th colSpan="2">
+                <FormControl>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={this.state.age}
+                    onChange={this.handleChange}
+                    style={{ color: "white" }}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </th>
+            </tr>
+          </thead>
           <thead>
             <tr>
               <th>Meal Category</th>
@@ -84,33 +146,7 @@ class EditCreateMeal extends Component {
               <th>Avg Sales/Posting</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Weekly Entree</td>
-              <td>
-                <FormControl>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={this.state.age}
-                    onChange={this.handleChange}
-                  >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </td>
-              <td>25</td>
-            </tr>
-            <tr>
-              <td>Weekly Salad</td>
-              <td>Black Rice Salad</td>
-              <td>50</td>
-            </tr>
-            {console.log(this.state.temp)}
-            {this.state.temp}
-          </tbody>
+          <tbody>{this.state.temp}</tbody>
         </Table>
         <Button
           variant="primary"
@@ -197,15 +233,31 @@ class EditCreateMeal extends Component {
     );
   }
   addRow = () => {
-    console.log("fsdfhksjfhkjskfjsdhfkshfjs");
-    let x = (
+    this.state.temp.push(
       <tr>
-        <td>Weekly Salad</td>
-        <td>Black Rice Salad</td>
+        <td>
+          <form noValidate autoComplete="off">
+            <TextField id="standard-basic" />
+          </form>
+        </td>
+        <td>
+          <FormControl>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={this.state.age}
+              onChange={this.handleChange}
+              style={{ color: "white" }}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </td>
         <td>50</td>
       </tr>
     );
-    this.state.temp.push(x);
     this.setState({
       temp: this.state.temp
     });
