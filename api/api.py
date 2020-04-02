@@ -1478,10 +1478,10 @@ class Checkout(Resource):
                         """ + data['item_price'] + """,
                         \'""" + purchaseId + """\',
                         \'""" + getNow() + """\',
-                        \'unknown\',
-                        \'""" + data['cc_num_secret'] + """\',
+                        \'STRIPE\',
+                        \'""" + data['cc_num'] + """\',
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
-                        \'""" + data['cc_cvv_secret'] + """\',
+                        \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + "\');"
 #       query = """ INSERT INTO ptyd_payments
 #                   (
@@ -1518,6 +1518,11 @@ class Checkout(Resource):
             data = request.get_json(force=True)
 
             print("Received:", data)
+
+            if 'delivery_address_unit' in data:
+                DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
+            else:
+                DeliveryUnit = 'NULL'
 
             purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
             paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
@@ -1660,7 +1665,7 @@ class Checkout(Resource):
                         \'""" + data['delivery_email'] + """\',
                         \'""" + data['delivery_phone'] + """\',
                         \'""" + data['delivery_address'] + """\',
-                        \'""" + data['delivery_address_unit'] + """\',
+                        """ + DeliveryUnit + """,
                         \'""" + data['delivery_city'] + """\',
                         \'""" + data['delivery_state'] + """\',
                         \'""" + data['delivery_zip'] + """\',
@@ -1719,7 +1724,6 @@ class MealSelection(Resource):
                         purchase_id = \'""" + purchaseId + "\';"
 
             items = execute(query, 'get', conn)
-            print(items)
             items = self.readQuery(items['result'])
 
             response['message'] = 'Request successful.'
@@ -2015,6 +2019,7 @@ class MealInfo(Resource):
                         """
 
             meal_info['meal_info'] = execute(queries, 'get', conn)
+            print(meal_info)
             response['message'] = 'Request successful.'
             response['result'] = meal_info
 
@@ -2042,6 +2047,7 @@ class AdminMenu(Resource):
                         FROM 
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+
                            
             print('Items --------------------------------------------')         
             print(items['result'][0]['menu_date'])
