@@ -335,6 +335,8 @@ export default class MealButton extends Component {
               </Cell>
               <br />
               {this.props.menu[key].Menu.map(meal => (
+                console.log(meal),
+                console.log(this.state.mealQuantities),
                 <Cell col={4}>
                   <EachMeal
                     mealTitle={meal.meal_desc}
@@ -358,7 +360,8 @@ export default class MealButton extends Component {
                     imgurl={meal.meal_photo_url}
                     maxmeals={this.state.maxmeals}
                     mealQuantities={
-                      this.state.mealQuantities[meal.menu_meal_id]
+                      // broken
+                      0 //this.state.mealQuantities[meal.menu_meal_id]
                     }
                     incrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
@@ -490,12 +493,13 @@ export default class MealButton extends Component {
                 <Cell col={12}>
                   <center>
                     <h4 style={{ margin: "0" }}>
-                      {this.props.addons["Addons"].Category}
+                        { 0 // this.props.addons["Addons"].Category
+                        }
                     </h4>
                   </center>
                 </Cell>
 
-                {this.props.addons["Addons"].Menu.map(meal => (
+                {/*this.props.addons["Addons"].Menu.map(meal => (
                   <Cell col={4}>
                     <EachAddon
                       mealTitle={meal.meal_desc}
@@ -529,7 +533,7 @@ export default class MealButton extends Component {
                       }}
                     />
                   </Cell>
-                ))}
+                ))*/}
               </Grid>
             </div>
             {/* ))} */}

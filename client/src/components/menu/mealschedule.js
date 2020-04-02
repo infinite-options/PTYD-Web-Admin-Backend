@@ -49,6 +49,8 @@ class Mealschedule extends Component {
 //    }
     }
 
+    console.log(api)
+
     const mselect_res = await fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseId}`);
     const mselect_api = await mselect_res.json();
 
@@ -57,6 +59,8 @@ class Mealschedule extends Component {
     let weekNum;
     for (weekNum = 1; weekNum < 7; weekNum++) {
       key = "MenuForWeek" + weekNum;
+      if(!(key in api.result)) break
+
       let currentWeek = {};
       currentWeek.sat = api.result[key].SaturdayDate;
       currentWeek.sun = api.result[key].Sunday;
