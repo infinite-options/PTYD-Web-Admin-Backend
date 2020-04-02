@@ -373,7 +373,7 @@ class Meals(Resource):
                         menu_date,
                         menu_category,
                         menu_meal_id,
-                        meal_desc,
+                        meal_name,
                         meal_category,
                         meal_photo_url,
                         extra_meal_price,
@@ -393,7 +393,7 @@ class Meals(Resource):
                             menu_date,
                             menu_category,
                             menu_meal_id,
-                            meal_desc,
+                            meal_name,
                             meal_category,
                             meal_photo_url,
                             extra_meal_price,
@@ -408,7 +408,7 @@ class Meals(Resource):
                         LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                         WHERE menu_date = \'""" + str(eachWeek['saturday']) + """\';""")
 
-            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url',
+            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_name', 'meal_category', 'meal_photo_url',
                          'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
 
             for eachWeek in range(6):
@@ -1544,7 +1544,7 @@ class AdminDBv2(Resource):
                         """SELECT 
                             M.menu_date as "Entered Menu Date" ,
                             M.menu_category AS "Menu Category",
-                            A.meal_desc as "Meal option" ,
+                            A.meal_name as "Meal option" ,
                             M.menu_num_sold AS "How many to make"
                         FROM 
                             ptyd_menu M
@@ -1552,13 +1552,14 @@ class AdminDBv2(Resource):
                             ptyd_meals A ON M.menu_meal_id = A.meal_id
                         -- WHERE 
                             -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                        -- M.menu_date = "2020-02-01";""", 
+                        -- M.menu_date = "2020-02-01";
+                        """, 
 
                         """SELECT 
                         M.menu_meal_id AS "Menu Number",
                         M.menu_date "Entered Menu Date" ,
                         M.menu_category AS "Menu Category",
-                        A.meal_desc "Meal option selected" ,
+                        A.meal_name "Meal option selected" ,
                         M.menu_num_sold AS "How many to make",
                         I.ingredient_desc AS "Ingredient Required Per meal",
                         R.recipe_ingredient_qty AS "Quantity of Ingredient Required",
@@ -1580,7 +1581,8 @@ class AdminDBv2(Resource):
                         ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
                     -- WHERE 
                         -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                    -- M.menu_date = "2020-02-01";"""
+                    -- M.menu_date = "2020-02-01";
+                    """
 
                     ]
             
@@ -1610,7 +1612,7 @@ class MealCustomerLifeReport(Resource):
             queries = [
                         """SELECT 
                         p.menu_meal_id,
-                        M.meal_desc AS "Meal Name",
+                        M.meal_name AS "Meal Name",
                         ROUND(AVG(p.menu_num_sold),2) AS "Average number sold per listing",
                         SUM(p.menu_num_sold) AS "Total Number Sold"
                         FROM
@@ -1629,7 +1631,8 @@ class MealCustomerLifeReport(Resource):
                         datediff(last_delivery, create_date) AS "Customer Lifetime in days",
                         timestampdiff(MONTH, create_date, last_delivery) AS "Customer Lifetime in months"
                         FROM
-                            ptyd_accounts;"""
+                            ptyd_accounts;
+                            """
                     ]
             
             for ind1,query in enumerate(queries):
@@ -1654,7 +1657,7 @@ class MealInfo(Resource):
         try:
             
 
-            queries = """select A1.menu_meal_id,A3.meal_desc, A1.total_sold,A2.post_count, (A1.total_sold/A2.post_count) as "Number_sold_per_posting"
+            queries = """select A1.menu_meal_id,A3.meal_name, A1.total_sold,A2.post_count, (A1.total_sold/A2.post_count) as "Number_sold_per_posting"
                         from
                         (select menu_meal_id, sum(menu_num_sold) as "total_sold" from ptyd_menu
                         #where month(menu_date) = 2
@@ -1666,7 +1669,7 @@ class MealInfo(Resource):
                         group by menu_meal_id) A2
                         on A1.menu_meal_id = A2.menu_meal_id
                         join
-                        (select meal_id, meal_desc from ptyd_meals)A3
+                        (select meal_id, meal_name from ptyd_meals)A3
                         on A1.menu_meal_id = A3.meal_id;
                         """
 
@@ -1693,7 +1696,7 @@ class AdminMenu(Resource):
                     """ SELECT 
                         menu_date,
                         menu_category,
-                        meal_desc,
+                        meal_name,
                         IFNULL(menu_num_sold,0) AS menu_num_sold 
                         FROM 
                         ptyd_menu
@@ -1731,7 +1734,7 @@ class AdminMenu(Resource):
                     menu_cat = "Menu Category: " + menu_cat
                     dictValues.append(menu_cat)
                     
-                    menu_descript =  items['result'][index2]['meal_desc']
+                    menu_descript =  items['result'][index2]['meal_name']
                     menu_descript = "Meal Description: " + menu_descript
                     dictValues.append(menu_descript)
 
