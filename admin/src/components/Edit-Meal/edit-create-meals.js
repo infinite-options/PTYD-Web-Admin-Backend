@@ -73,7 +73,22 @@ class EditCreateMeal extends Component {
             </Select>
           </FormControl>
         </td>
-        <td>25</td>
+        <td>4</td>
+        <td>
+          <FormControl>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={this.state.age}
+              onChange={this.handleChange}
+              style={{ color: "white" }}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </td>
       </tr>,
       <tr>
         <td>Weekly Salad</td>
@@ -92,7 +107,22 @@ class EditCreateMeal extends Component {
             </Select>
           </FormControl>
         </td>
-        <td>50</td>
+        <td>1</td>
+        <td>
+          <FormControl>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={this.state.age}
+              onChange={this.handleChange}
+              style={{ color: "white" }}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </td>
       </tr>
     );
   }
@@ -132,8 +162,8 @@ class EditCreateMeal extends Component {
             <Table striped bordered hover variant="dark">
               <thead style={{ backgroundColor: "blue", color: "white" }}>
                 <tr>
-                  <th>Meal Category</th>
-                  <th colSpan="2">
+                  <th>Meal Name</th>
+                  <th colSpan="3">
                     <FormControl>
                       <Select
                         labelId="demo-simple-select-label"
@@ -152,9 +182,10 @@ class EditCreateMeal extends Component {
               </thead>
               <thead>
                 <tr>
-                  <th>Meal Category</th>
-                  <th>Meal</th>
-                  <th>Avg Sales/Posting</th>
+                  <th>Number</th>
+                  <th>Ingredient</th>
+                  <th>Qty</th>
+                  <th>Units</th>
                 </tr>
               </thead>
               <tbody>{this.state.temp}</tbody>
@@ -165,7 +196,7 @@ class EditCreateMeal extends Component {
                 this.addRow();
               }}
             >
-              Add Meal
+              Add Ingredient
             </Button>
 
             {/* <Dropdown>
@@ -269,7 +300,22 @@ class EditCreateMeal extends Component {
             </Select>
           </FormControl>
         </td>
-        <td>50</td>
+        <td>5</td>
+        <td>
+          <FormControl>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={this.state.age}
+              onChange={this.handleChange}
+              style={{ color: "white" }}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </td>
       </tr>
     );
     this.setState({
