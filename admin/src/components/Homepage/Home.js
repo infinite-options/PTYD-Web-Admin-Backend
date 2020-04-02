@@ -350,7 +350,7 @@ class Home extends Component {
                   >
                     {this.state.mealInfo.map(meal => (
                       <tr>
-                        <td>{meal.meal_desc}</td>
+                        <td>{meal.meal_name}</td>
                         <td>{meal.post_count}</td>
                         <td>{meal.Number_sold_per_posting}</td>
                         <td>{meal.total_sold}</td>
