@@ -5,7 +5,16 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import MaterialTable from "material-table";
-import { Dropdown, Table, Card, Button, Tabs, Tab } from "react-bootstrap";
+import {
+  Dropdown,
+  Table,
+  Card,
+  Button,
+  Tabs,
+  Tab,
+  Row,
+  Col
+} from "react-bootstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -92,11 +101,11 @@ class EditCreateMeal extends Component {
   };
   render() {
     return (
-      <div className="container" style={{ marginTop: "10%", padding: "50px" }}>
+      <div style={{ margin: "1%" }}>
         {/* <div className="scrollItem">Card</div> */}
 
         {/* title for the site ----------------------------------------- */}
-        <Jumbotron />
+        {/* <Jumbotron /> */}
 
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
@@ -118,46 +127,48 @@ class EditCreateMeal extends Component {
             <MenuItem value={30}>Thirty</MenuItem>
           </Select>
         </FormControl> */}
-        <Table striped bordered hover variant="dark">
-          <thead style={{ backgroundColor: "blue", color: "white" }}>
-            <tr>
-              <th>Meal Category</th>
-              <th colSpan="2">
-                <FormControl>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={this.state.age}
-                    onChange={this.handleChange}
-                    style={{ color: "white" }}
-                  >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </th>
-            </tr>
-          </thead>
-          <thead>
-            <tr>
-              <th>Meal Category</th>
-              <th>Meal</th>
-              <th>Avg Sales/Posting</th>
-            </tr>
-          </thead>
-          <tbody>{this.state.temp}</tbody>
-        </Table>
-        <Button
-          variant="primary"
-          onClick={() => {
-            this.addRow();
-          }}
-        >
-          Add Meal
-        </Button>
+        <Row>
+          <Col>
+            <Table striped bordered hover variant="dark">
+              <thead style={{ backgroundColor: "blue", color: "white" }}>
+                <tr>
+                  <th>Meal Category</th>
+                  <th colSpan="2">
+                    <FormControl>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={this.state.age}
+                        onChange={this.handleChange}
+                        style={{ color: "white" }}
+                      >
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th>Meal Category</th>
+                  <th>Meal</th>
+                  <th>Avg Sales/Posting</th>
+                </tr>
+              </thead>
+              <tbody>{this.state.temp}</tbody>
+            </Table>
+            <Button
+              variant="primary"
+              onClick={() => {
+                this.addRow();
+              }}
+            >
+              Add Meal
+            </Button>
 
-        {/* <Dropdown>
+            {/* <Dropdown>
           <Dropdown.Toggle variant="success" id="dropdown-basic">
             Dropdown Button
           </Dropdown.Toggle>
@@ -169,7 +180,7 @@ class EditCreateMeal extends Component {
           </Dropdown.Menu>
         </Dropdown> */}
 
-        {/* <Card style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}>
+            {/* <Card style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}>
           <MaterialTable
             title={this.date()}
             columns={this.state.columns}
@@ -229,6 +240,9 @@ class EditCreateMeal extends Component {
             <TableCell>Expect Number of Sales (Total)</TableCell>
           </TableRow>
         </Card> */}
+          </Col>
+          <Col></Col>
+        </Row>
       </div>
     );
   }

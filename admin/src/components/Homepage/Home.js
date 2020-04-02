@@ -63,11 +63,12 @@ class Home extends Component {
   };
   render() {
     return (
-      <div className="container" style={{ marginTop: "10%" }}>
+      // <div className="container" style={{ marginTop: "10%" }}>
+      <div style={{ margin: "1%" }}>
         {/* <div className="scrollItem">Card</div> */}
 
         {/* title for the site ----------------------------------------- */}
-        <Jumbotron />
+        {/* <Jumbotron /> */}
 
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
