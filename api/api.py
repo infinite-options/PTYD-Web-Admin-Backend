@@ -1728,7 +1728,7 @@ class AdminMenu(Resource):
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
-                menuEntries = 14
+                menuEntries = 6
                 while menuEntries != 0:
                     menu_cat = items['result'][index2]['menu_category']
                     menu_cat = "Menu Category: " + menu_cat
