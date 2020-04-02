@@ -34,6 +34,7 @@ function SignUp (props)  {
 
         fetch(props.API_URL, {
           method: 'POST',
+          mode: 'no-cors',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

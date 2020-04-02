@@ -547,6 +547,319 @@ class Meals(Resource):
         finally:
             disconnect(conn)
 
+# V2 Meals API
+class Meals2(Resource):
+    global RDS_PW
+
+    # Format queried tuples into JSON
+    def jsonifyMeals(self, query, mealKeys):
+        json = {}
+        for key in [('Weekly', 'WEEKLY SPECIALS'), ('Seasonal', 'SEASONAL FAVORITES'), ('Smoothies', 'SMOOTHIES')]:
+            json[key[0]] = {'Category': key[1], 'Menu': []}
+        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
+                       'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
+        indexOfMealId = mealKeys.index('menu_meal_id')
+        for row in query:
+            if row[indexOfMealId] is None:
+                continue
+            rowDict = {}
+            for element in enumerate(row):
+                key = mealKeys[element[0]]
+                value = element[1]
+                # Convert all decimal values in row to floats
+                if key in decimalKeys:
+                    value = float(value)
+                if key == 'menu_date':
+                    value = value.strftime("%Y-%m-%d")
+                rowDict[key] = value
+            # Hardcode quantity to 0
+            # Will need to fetch from db eventually
+            rowDict['quantity'] = 0
+#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
+            if 'SEAS_FAVE' in rowDict['menu_category']:
+                json['Seasonal']['Menu'].append(rowDict)
+            elif 'WKLY_SPCL' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            elif rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
+                json['Smoothies']['Menu'].append(rowDict)
+        return json
+
+    def jsonifyAddons(self, query, mealKeys):
+        json = {}
+        for key in [('Addons', 'ADD-ON'),('Weekly', 'ADD MORE MEALS'), ('Smoothies', 'ADD MORE SMOOTHIES')]:
+            json[key[0]] = {'Category': key[1], 'Menu': []}
+        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
+                       'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
+        indexOfMealId = mealKeys.index('menu_meal_id')
+        for row in query:
+            if row[indexOfMealId] is None:
+                continue
+            rowDict = {}
+            for element in enumerate(row):
+                key = mealKeys[element[0]]
+                value = element[1]
+                # Convert all decimal values in row to floats
+                if key in decimalKeys:
+                    value = float(value)
+                if key == 'menu_date':
+                    value = value.strftime("%Y-%m-%d")
+                rowDict[key] = value
+            # Hardcode quantity to 0
+            # Will need to fetch from db eventually
+            rowDict['quantity'] = 0
+#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
+            
+            if rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
+                json['Smoothies']['Menu'].append(rowDict)
+            elif 'SEAS_FAVE' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            elif 'WKLY_SPCL' in rowDict['menu_category']:
+                json['Weekly']['Menu'].append(rowDict)
+            else:
+                json['Addons']['Menu'].append(rowDict)
+
+        return json
+
+    def getMealQuantities(self, menu):
+        mealQuantities = {}
+        for key in ['Meals', 'Addons']:
+            for subMenu in menu[key]:
+                for eachMeal in menu[key][subMenu]['Menu']:
+                    meal_id = eachMeal['menu_meal_id']
+                    if meal_id in mealQuantities:
+                        mealQuantities[meal_id] += eachMeal['quantity']
+                    else:
+                        mealQuantities[meal_id] = eachMeal['quantity']
+        return mealQuantities
+
+    # HTTP method GET
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            now = datetime.now()
+
+            dates = execute("SELECT DISTINCT menu_date FROM ptyd_menu;", 'get', conn)
+
+            i = 1
+            for date in dates['result']:
+                stamp = datetime.strptime(date['menu_date'], '%m/%d/%Y')
+                if now - timedelta(days=7) < stamp:
+
+                    weekly_special = execute(
+                        """ 
+                        SELECT
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE (menu_category = 'WKLY_SPCL_1' OR menu_category = 'WKLY_SPCL_2' OR menu_category = 'WKLY_SPCL_3')
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+
+                    seasonal_special = execute(
+                        """ 
+                        SELECT
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE (menu_category = 'SEAS_FAVE_1' OR menu_category = 'SEAS_FAVE_2' OR menu_category = 'SEAS_FAVE_3')
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+
+                    smoothies = execute(
+                        """ 
+                        SELECT
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE (menu_category = 'SMOOTHIE_1' OR menu_category = 'SMOOTHIE_2' OR menu_category = 'SMOOTHIE_3')
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+
+                    week = {
+                        'SaturdayDate': "1",
+                        'Sunday': "2",
+                        'Monday': "3",
+                        'Meals': {
+                            'Weekly': {
+                                'Category': "WEEKLY SPECIALS",
+                                'Menu': weekly_special['result']
+                            },
+                            'Seasonal': {
+                                'Category': "SEASONAL FAVORITES",
+                                'Menu': seasonal_special['result']
+                            },
+                            'Smoothies': {
+                                'Category': "SMOOTHIES",
+                                'Menu': smoothies['result']
+                            }
+                        }
+                    }
+
+                    index = 'MenuForWeek' + str(i)
+                    items[index] = week
+
+                    i += 1
+
+            # Finish Line
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        # Remove last semicolon
+        return mealSelectionString[:-1]
+
+    # HTTP method POST
+    def post(self):
+        response = {}
+        items = []
+        try:
+            conn = connect()
+
+            data = request.get_json(force=True)
+
+            if data['num_meals'] == None:
+                response['message'] = 'User not subscribed.'
+                print("Error:", response['message'])
+                return response, 400
+
+            queries = [
+                """ SELECT purchase_id
+                    FROM ptyd_purchases
+                    WHERE recipient_id = \'""" + data['recipient_id'] + "\';",
+                """ SELECT default_meal_plan
+                    FROM ptyd_default_meal_selection
+                    WHERE num_meals = """ + str(data['num_meals']) + ";"]
+
+            # Handle SKIP request
+            if data['delivery_day'] == 'SKIP':
+                mealSelection = 'SKIP'
+            # Handle default meal selection
+            elif data['default_selected'] is True:
+                mealSelection = 'SURPRISE'
+#               getDefault = execute(queries[1], 'get', conn)
+#               # Handle successful default selection query
+#               if getDefault['code'] == 280 and len(getDefault['result']) > 0:
+#                   mealSelection = getDefault['result'][0]['default_meal_plan']
+#               # Handle unsuccessful default selection query
+#               else:
+#                   response['message'] = 'Could not retrieve default meal selections.'
+#                   response['error'] = getDefault
+#                   print("Error:", response['message'])
+#                   print("Error JSON:", response['error'])
+#                   # 501: Not implemented in server
+#                   return response, 501
+            # Handle custom meal selection
+            else:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+#           print("Meal Selection String:", mealSelection)
+
+            # Retrieve purchase ID
+            getPurchaseId = execute(queries[0], 'get', conn)
+
+            # Handle successful purchase ID query
+            if getPurchaseId['code'] == 280:
+                if len(getPurchaseId['result']) > 0:
+                    purchaseId = getPurchaseId['result'][0]['purchase_id']
+                # If user has no purchase ID
+                else:
+                    response['message'] = 'Recipient has no active purchase_id.'
+                    response['error'] = getPurchaseId
+                    print("Error:", response['message'])
+                    # 400: Client side bad request
+                    return response, 400
+            # Handle unsuccessful purchase ID query
+            else:
+                response['message'] = 'Could not retrieve purchase_id.'
+                response['error'] = getPurchaseId
+                print("Error:", response['message'])
+                # 500: Internal server error
+                return response, 500
+#               print("purchase_id:", purchaseId)
+
+            selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#           print(selectionTime)
+
+            queries.append(
+                """ INSERT INTO ptyd_meals_selected
+                    (
+                        purchase_id,
+                        selection_time,
+                        week_affected,
+                        meal_selection,
+                        delivery_day
+                    )
+                    VALUES
+                    (
+                        \'""" + purchaseId + """\',
+                        \'""" + selectionTime + """\',
+                        \'""" + data['week_affected'] + """\',
+                        \'""" + mealSelection + """\',
+                        \'""" + data['delivery_day'] + """\'
+                    )
+                    ON DUPLICATE KEY UPDATE
+                        meal_selection = \'""" + mealSelection + """\',
+                        selection_time = \'""" + selectionTime + """\',
+                        delivery_day = \'""" + data['delivery_day'] + "\';")
+
+#           print("Query:", queries[2])
+            execute(queries[2], 'post', conn)
+
+            response['message'] = 'Request successful.'
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 # V2 Accounts
 class Accounts(Resource):
     # Split by dashes and return whatever is on the left side of it
@@ -1925,6 +2238,7 @@ api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile,'/api/v2/customerprofile')
 
 api.add_resource(MealInfo, '/api/v2/meal_info')
+api.add_resource(Meals2, '/api/v2/meals')
 
 api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')

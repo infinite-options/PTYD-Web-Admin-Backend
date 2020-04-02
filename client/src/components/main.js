@@ -55,7 +55,7 @@ export default function Main({ appProps }) {
         component={WeeklyMenu}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/meals`,
+          API_URL: `${DEV_URL}v2/meals`,
           header_label: "MENU THIS WEEK",
           header_link_label: "NEXT WEEK",
           header_link_url: "/menunextweek",
@@ -68,7 +68,7 @@ export default function Main({ appProps }) {
         component={WeeklyMenu}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/meals`,
+          API_URL: `${DEV_URL}v2/meals`,
           header_label: "COMING NEXT WEEK",
           header_link_label: "THIS WEEK",
           header_link_url: "/menuthisweek",
