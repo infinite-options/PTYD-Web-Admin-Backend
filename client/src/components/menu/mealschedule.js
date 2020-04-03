@@ -40,16 +40,7 @@ class Mealschedule extends Component {
         currUser = usersApi.result[0];
         purchaseId = usersApi.result[0].purchase_id;
       }
-//    const Ausers = usersApi.result.Accounts;
-//    for (let i in Ausers) {
-//      if (Ausers[i].user_uid == this.state.user_uid) {
-//        //error bc this.state.user_uid == "hello"
-//        currUser = Ausers[i];
-//      }
-//    }
     }
-
-    console.log(api)
 
     const mselect_res = await fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseId}`);
     const mselect_api = await mselect_res.json();
