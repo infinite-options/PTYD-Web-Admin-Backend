@@ -220,6 +220,51 @@ const App = props => {
               <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
             </NavDropdown>
             <a href="/get100">GET $100</a>
+            <div className="sideNavLogin">
+              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
+                <div>
+                  <a href="/logout">
+                    <Button
+                      id="logoutButton"
+                      variant="success"
+                      size="sm"
+                      onClick={() => {
+                        document.cookie =
+                          " loginStatus: Sign In , user_uid: null , ";
+                        window.location.reload(false);
+                      }}
+                    >
+                      Log Out
+                    </Button>
+                  </a>
+                  <p
+                    id="loginStatus"
+                    Style="font-size:20px; text-align:right; color:black;"
+                  >
+                    {searchCookie4Login(document.cookie)}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <a href="/login">
+                    <Button
+                      id="loginButton"
+                      variant="success"
+                      size="sm"
+                      onClick={() => window.location.reload(false)}
+                    >
+                      Login
+                    </Button>
+                  </a>
+                  <p
+                    id="loginStatus"
+                    Style="font-size:12px; text-align:right; color:black;"
+                  >
+                    {searchCookie4Login(document.cookie)}
+                  </p>
+                </>
+              )}
+            </div>
           </Navigation>
         </Drawer>
 
