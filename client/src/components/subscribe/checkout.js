@@ -8,7 +8,6 @@ import crypto from "crypto";
 class Checkout extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       user_uid: searchCookie4UserID(document.cookie),
       password_salt: null,
@@ -33,9 +32,10 @@ class Checkout extends Component {
 
   async componentDidMount() {
     if (this.state.user_uid) {
-      const res = await fetch(`${this.props.SALT_API_URL}/${this.state.user_uid}`);
+      const res = await fetch(`${this.props.SALT_URL}/${this.state.user_uid}`);
       const api = await res.json();
-      this.setState({ user: api[0].password_salt });
+      console.log(api);
+      this.setState({ password_salt: api.result[0].password_salt });
 
       const users = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
       const usersApi = await users.json();
@@ -67,7 +67,7 @@ class Checkout extends Component {
 
   async checkout(event) {
     event.preventDefault();
-    this.state.salt = await crypto.createHash('sha512').update(this.state.password + this.state.user.password_salt).digest('hex');
+    this.state.salt = await crypto.createHash('sha512').update(this.state.password + this.state.password_salt).digest('hex');
     this.sendForm()
     .then(res => this.handleApi(res))
     .catch(err => console.log(err));

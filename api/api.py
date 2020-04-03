@@ -1044,6 +1044,25 @@ class Accounts(Resource):
         finally:
             disconnect(conn)
 
+class AccountSaltById(Resource):
+    def get(self, userUid):
+        response = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT password_salt
+                                FROM ptyd_passwords
+                                WHERE password_user_uid = \'""" + userUid + "\';", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items['result']
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class AccountSalt(Resource):
     def get(self, accEmail):
         response = {}
@@ -2079,6 +2098,7 @@ api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
+api.add_resource(AccountSaltById, '/api/v2/accountsaltbyid/<string:userUid>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
