@@ -48,7 +48,7 @@ class Mealschedule extends Component {
     let key;
     let sixWeekMenu = [];
     let weekNum;
-    for (weekNum = 1; weekNum < 2; weekNum++) {
+    for (weekNum = 1; weekNum < 7; weekNum++) {
       key = "MenuForWeek" + weekNum;
       if(!(key in api.result)) break
 
