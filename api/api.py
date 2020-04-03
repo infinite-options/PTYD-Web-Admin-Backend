@@ -648,7 +648,7 @@ class Meals2(Resource):
                 if i == 7:
                     break
                 # convert string to datetime
-                stamp = datetime.strptime(date['menu_date'], '%m/%d/%Y')
+                stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
                 # run query for menu if stamp is the current week or future week menu
                 if now - timedelta(days=7) < stamp:
 
@@ -770,6 +770,7 @@ class Meals2(Resource):
 
                     i += 1
 
+            print('Finish Query of Menus')
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
