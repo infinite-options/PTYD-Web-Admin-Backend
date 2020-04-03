@@ -28,6 +28,7 @@ class Home extends Component {
     const res4 = await fetch(this.props.API_URL_INGREDIENTS);
     const api4 = await res4.json();
     const ingredients = api4.result;
+    console.log(ingredients);
     // customer info
     // const res2 = await fetch(this.props.API_URL_CUSTINFO);
     // const api2 = await res2.json();
@@ -48,12 +49,16 @@ class Home extends Component {
     //   return <div></div>;
     // }
     let a = [];
+
     for (var key in this.state.upcomingMeals) {
+      // console.log(this.state.upcomingMeals[key]);
+      // console.log(key);
+
       a.push(
         <div className="scrollItem">
           {this.upcomingMeals_and_weeklyPurchase(
             this.state.upcomingMeals[key],
-            this.state.ingredients[key],
+            // this.state.ingredients[key],
             key
           )}
         </div>
@@ -174,7 +179,7 @@ class Home extends Component {
   }
   upcomingMeals_and_weeklyPurchase = (
     weekArgument,
-    ingredientArgument,
+    // ingredientArgument,
     date
   ) => {
     let arr = [];
@@ -190,15 +195,15 @@ class Home extends Component {
 
       arr.push(this.single_item(a, b, c));
     }
-    for (let i = 0; i < ingredientArgument.length; i += 2) {
-      let one = ingredientArgument[i];
-      let two = ingredientArgument[i + 1];
+    // for (let i = 0; i < ingredientArgument.length; i += 2) {
+    //   let one = ingredientArgument[i];
+    //   let two = ingredientArgument[i + 1];
 
-      let c = one.split(":")[1];
-      let d = two.split(":")[1];
+    //   let c = one.split(":")[1];
+    //   let d = two.split(":")[1];
 
-      arr2.push(this.single_item_ingredients(c, d));
-    }
+    //   arr2.push(this.single_item_ingredients(c, d));
+    // }
     return (
       <Container>
         <Row>
