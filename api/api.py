@@ -644,7 +644,12 @@ class Meals2(Resource):
 
             i = 1
             for date in dates['result']:
+                # only grab 6 weeks worth of menus
+                if i == 7:
+                    break
+                # convert string to datetime
                 stamp = datetime.strptime(date['menu_date'], '%m/%d/%Y')
+                # run query for menu if stamp is the current week or future week menu
                 if now - timedelta(days=7) < stamp:
 
                     weekly_special = execute(
@@ -713,24 +718,33 @@ class Meals2(Resource):
                         WHERE (menu_category = 'SMOOTHIE_1' OR menu_category = 'SMOOTHIE_2' OR menu_category = 'SMOOTHIE_3')
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
+                    addon = execute(
+                        """ 
+                        SELECT
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE (menu_category = 'SMOOTHIE_1' OR menu_category = 'SMOOTHIE_2' OR menu_category = 'SMOOTHIE_3')
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+
                     week = {
-                        'SaturdayDate': "3/29/2020",
-                        'Sunday': "Feb 2",
-                        'Monday': "Feb 3",
-                        'Addons': {
-                            'Weekly': {
-                                'Category': "WEEKLY SPECIALS",
-                                'Menu': weekly_special['result']
-                            },
-                            'Addons': {
-                                'Category': "SEASONAL FAVORITES",
-                                'Menu': seasonal_special['result']
-                            },
-                            'Smoothies': {
-                                'Category': "SMOOTHIES",
-                                'Menu': smoothies['result']
-                            }
-                        },
+                        'SaturdayDate': str((stamp - timedelta(days=1)).date()),
+                        'SundayDate': str(stamp.date()),
+                        'Sunday': str(stamp.date()),
+                        'Monday': str((stamp + timedelta(days=1)).date()),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -743,6 +757,10 @@ class Meals2(Resource):
                             'Smoothies': {
                                 'Category': "SMOOTHIES",
                                 'Menu': smoothies['result']
+                            },
+                            'Addons': {
+                                'Category': "EXTRAS",
+                                'Menu': addon['result']
                             }
                         }
                     }

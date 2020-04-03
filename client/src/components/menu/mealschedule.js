@@ -40,13 +40,6 @@ class Mealschedule extends Component {
         currUser = usersApi.result[0];
         purchaseId = usersApi.result[0].purchase_id;
       }
-//    const Ausers = usersApi.result.Accounts;
-//    for (let i in Ausers) {
-//      if (Ausers[i].user_uid == this.state.user_uid) {
-//        //error bc this.state.user_uid == "hello"
-//        currUser = Ausers[i];
-//      }
-//    }
     }
 
     const mselect_res = await fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseId}`);
@@ -57,13 +50,15 @@ class Mealschedule extends Component {
     let weekNum;
     for (weekNum = 1; weekNum < 7; weekNum++) {
       key = "MenuForWeek" + weekNum;
+      if(!(key in api.result)) break
+
       let currentWeek = {};
       currentWeek.sat = api.result[key].SaturdayDate;
       currentWeek.sun = api.result[key].Sunday;
       currentWeek.mon = api.result[key].Monday;
       currentWeek.menu = api.result[key].Meals;
-      currentWeek.addons = api.result[key].Addons;
-      currentWeek.mealQuantities = {};
+      currentWeek.addons = api.result[key].Meals.Addons;
+      currentWeek.mealQuantities = 5 //currUser.mealQuantities;
       currentWeek.maxmeals = currUser.MaximumMeals;
       currentWeek.deliverDay = 'Sunday';
       currentWeek.surprise = true;
@@ -163,8 +158,12 @@ class Mealschedule extends Component {
                   <b>Select Meals Around Your Schedule</b>
                 </h3>
                 <br />
+                <div>
+                  { console.log(this.state.menu) }
+                </div>
                 <div class="meals-button">
-                  {this.state.menu.map(eachWeek => (
+                  {
+                  this.state.menu.map(eachWeek => 
                     <MealButton
                       day1="Sunday"
                       day2="Monday"
@@ -180,7 +179,8 @@ class Mealschedule extends Component {
                       surprise={eachWeek.surprise}
                       API_URL={this.props.API_URL}
                     />
-                  ))}
+                  )
+                  }
                 </div>
               </Cell>
             </Grid>

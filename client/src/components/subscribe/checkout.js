@@ -31,6 +31,7 @@ class Checkout extends Component {
   }
 
   async componentDidMount() {
+    console.log(this.state.user_uid)
     if (this.state.user_uid) {
       const res = await fetch(`${this.props.SALT_URL}/${this.state.user_uid}`);
       const api = await res.json();
@@ -43,6 +44,7 @@ class Checkout extends Component {
         this.setState({ purchase: usersApi.result[0] });
       }
     }
+    console.log('help me')
   }
 
   async sendForm() {
