@@ -203,8 +203,23 @@ const App = props => {
             <a href="/menuthisweek">MENU</a>
             <a href="/findus">FIND US</a>
             <a href="/giftcards">GIFT CARDS</a>
-            <a href="/">ABOUT</a>
-            <a href="/">GET $100</a>
+            <NavDropdown
+              title="ABOUT"
+              id="nav-dropdown"
+              Style="margin-left:-10px; color:black;"
+            >
+              <NavDropdown.Item href="/howitworks">HOW IT WORKS</NavDropdown.Item>
+              <NavDropdown.Item href="/ourstory">OUR STORY</NavDropdown.Item>
+              <NavDropdown.Item href="/faq">FAQ</NavDropdown.Item>
+              <NavDropdown.Item
+                href="https://www.messenger.com/t/preptoyourdoor"
+                target="_blank"
+              >
+                CONTACT
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
+            </NavDropdown>
+            <a href="/get100">GET $100</a>
           </Navigation>
         </Drawer>
 
