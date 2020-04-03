@@ -714,9 +714,23 @@ class Meals2(Resource):
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
                     week = {
-                        'SaturdayDate': "1",
-                        'Sunday': "2",
-                        'Monday': "3",
+                        'SaturdayDate': "3/29/2020",
+                        'Sunday': "Feb 2",
+                        'Monday': "Feb 3",
+                        'Addons': {
+                            'Weekly': {
+                                'Category': "WEEKLY SPECIALS",
+                                'Menu': weekly_special['result']
+                            },
+                            'Addons': {
+                                'Category': "SEASONAL FAVORITES",
+                                'Menu': seasonal_special['result']
+                            },
+                            'Smoothies': {
+                                'Category': "SMOOTHIES",
+                                'Menu': smoothies['result']
+                            }
+                        },
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -764,6 +778,7 @@ class Meals2(Resource):
             conn = connect()
 
             data = request.get_json(force=True)
+            print("Received:", data)
 
             if data['num_meals'] == None:
                 response['message'] = 'User not subscribed.'
@@ -773,7 +788,7 @@ class Meals2(Resource):
             queries = [
                 """ SELECT purchase_id
                     FROM ptyd_purchases
-                    WHERE recipient_id = \'""" + data['recipient_id'] + "\';",
+                    WHERE purchase_id = \'""" + data['purchase_id'] + "\';",
                 """ SELECT default_meal_plan
                     FROM ptyd_default_meal_selection
                     WHERE num_meals = """ + str(data['num_meals']) + ";"]
@@ -920,6 +935,7 @@ class Accounts(Resource):
         for row in query['result']:
             rowDict = {}
             for key in row:
+                print(key)
                 value = row[key]
                 if key == 'Subscription':
                     if value:
@@ -946,7 +962,9 @@ class Accounts(Resource):
                         rowDict['NextChargeDate'] = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
                 rowDict[key] = value
 
+            print(1)
             rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
+            print(2)
 
             try:
                 ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%Y-%m-%d")
@@ -958,13 +976,16 @@ class Accounts(Resource):
                 rowDict['cc_exp_month'] = None
                 rowDict['cc_exp_day'] = None
 
+            print(3)
             if rowDict['billing_zip'] in mondayZips:
                 rowDict['MondayAvailable'] = True
             else:
                 rowDict['MondayAvailable'] = False
 
+            print(4)
             json.append(rowDict)
 
+        print(5)
         return json
 
     # HTTP method GET
@@ -1023,199 +1044,26 @@ class Accounts(Resource):
         finally:
             disconnect(conn)
 
-# SOON TO BE DEPRECATED
-class AccountsV1(Resource):
-    global RDS_PW
-
-    # Split by dashes and return whatever is on the left side of it
-    # Also remove any whitespaces at the end
-    def shortenPlanDesc(self, planDesc):
-        return planDesc.split('-')[0].rstrip()
-
-    # Check if subscription plan is a one time order
-    def isOneTimePlan(self, subscriptionPlan):
-        if subscriptionPlan == None:
-            return False
-        if 'One Time' in subscriptionPlan:
-            return True
-        return False
-
-    # Calculate amount to charge based on weekly price and subscription
-    def calculateNextCharge(self, weeklyPrice, subscriptionPlan):
-        if 'Bi-Weekly' in subscriptionPlan:
-            return float(weeklyPrice) * 2
-        elif 'Weekly' in subscriptionPlan:
-            return float(weeklyPrice)
-        elif 'Monthly' in subscriptionPlan:
-            return float(weeklyPrice) * 4
-
-    # Calculate next charge date based on most recent payment and subscription
-    def calculateNextChargeDate(self, lastPaymentDate, subscriptionPlan):
-        if 'Bi-Weekly' in subscriptionPlan:
-            nextPaymentDate = lastPaymentDate + timedelta(weeks=2)
-            return nextPaymentDate.strftime("%b %d, %Y")
-        elif 'Weekly' in subscriptionPlan:
-            nextPaymentDate = lastPaymentDate + timedelta(weeks=1)
-            return nextPaymentDate.strftime("%b %d, %Y")
-        elif 'Monthly' in subscriptionPlan:
-            nextPaymentDate = lastPaymentDate + timedelta(weeks=4)
-            return nextPaymentDate.strftime("%b %d, %Y")
-
-    # Calculate number of paid weeks remaining
-    def calculatePaidWeeksRemaining(self, nextChargeDate):
-        if nextChargeDate:
-#           now = datetime.now()
-            now = datetime(2020, 2, 2, 15, 59)
-            nextChargeDateObj = datetime.strptime(nextChargeDate, "%b %d, %Y")
-            deltaObj = nextChargeDateObj - now
-            return ceil(deltaObj.days / 7)
-        else:
-            return "N/A"
-
-    # Format Monday Zipcodes Query to a list of strings
-    def formatMondayZips(self, query):
-        zips = []
-        for row in query:
-            zips.append(row[0])
-        return zips
-
-    # Format queried tuples into JSON
-    def jsonifyAccounts(self, query, rowDictKeys, mondayZips):
-        json = []
-        dateKeys = ['create_date', 'last_update', 'last_delivery', 'cc_exp_date']
-        for row in query:
-            rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                if key in dateKeys:
-                    if value:
-                        value = value.strftime("%b %d, %Y")
-                    else:
-                        value = None
-                if key is 'Subscription':
-                    if value:
-                        value = self.shortenPlanDesc(value)
-                    else:
-                        value = None
-                # Get weekly price of meal plan and multiply by X
-                if key is 'WeeklyPrice':
-                    key = 'NextCharge'
-                    if self.isOneTimePlan(rowDict['Subscription']):
-                        value = 0
-                    elif rowDict['Subscription'] == None:
-                        value = 0
-                    else:
-                        value = self.calculateNextCharge(value, rowDict['PaymentPlan'])
-                # Get user's most recent payment date and offset by X weeks
-                if key is 'payment_time_stamp':
-                    key = 'NextChargeDate'
-                    if self.isOneTimePlan(rowDict['Subscription']):
-                        value = None
-                    elif rowDict['Subscription'] == None:
-                        value = None
-                    else:
-                        value = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
-                rowDict[key] = value
-#           rowDict['password_sha512'] = sha512(
-#               rowDict['user_name'].encode()).hexdigest()
-
-            rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
-
-            try:
-                ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
-                rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
-                rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
-                rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
-            except:
-                rowDict['cc_exp_year'] = None
-                rowDict['cc_exp_month'] = None
-                rowDict['cc_exp_day'] = None
-
-            if rowDict['user_zip'] in mondayZips:
-                rowDict['MondayAvailable'] = True
-            else:
-                rowDict['MondayAvailable'] = False
-            json.append(rowDict)
-        return json
-
-    # HTTP method GET
-    def get(self):
+class AccountSalt(Resource):
+    def get(self, accEmail):
         response = {}
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = []
+            conn = connect()
 
-            # Select last digits of credit card info only
-            # to avoid storing sensitive info in
-            # Python objects
-            queries = [
-                """ SELECT DISTINCT
-                        user_uid,
-                        user_name,
-                        first_name,
-                        last_name,
-                        user_email,
-                        phone_number,
-                        user_address,
-                        address_unit,
-                        user_city,
-                        user_state,
-                        user_zip,
-                        user_region,
-                        user_gender,
-                        create_date,
-                        last_update,
-                        activeBool,
-                        last_delivery,
-                        referral_source,
-                        delivery_note,
-                        meal_plan_desc AS Subscription,
-                        payment_frequency AS PaymentPlan,
-                        meal_plan_price AS WeeklyPrice,
-                        payment_time_stamp,
-                        purchase_status,
-                        num_meals AS MaximumMeals,
-                        CONCAT('XXXX-XXXX-XXXX-', RIGHT(cc_num, 4) ) AS cc_num_secret,
-                        cc_exp_date,
-                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret,
-                        password_salt
-                    FROM mock_accounts a1
-                    LEFT JOIN mock_payments p1
-                    ON user_uid = p1.buyer_id
-                    LEFT JOIN mock_purchases
-                    ON user_uid = recipient_id
-                    LEFT JOIN mock_meal_plans
-                    ON mock_purchases.meal_plan_id = mock_meal_plans.meal_plan_id
-                    LEFT JOIN mock_passwords
-                    ON user_uid = password_user_uid
-                    ORDER BY payment_time_stamp, user_uid DESC;""",
-                    "SELECT * FROM ptyd_monday_zipcodes;"]
-
-            accountKeys = ( 'user_uid', 'user_name', 'first_name', 'last_name',
-                            'user_email', 'phone_number', 'user_address', 'address_unit',
-                            'user_city', 'user_state', 'user_zip', 'user_region',
-                            'user_gender', 'create_date', 'last_update', 'activeBool',
-                            'last_delivery', 'referral_source', 'delivery_note', 'Subscription',
-                            'PaymentPlan', 'WeeklyPrice', 'payment_time_stamp', 'purchase_status',
-                            'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret', 'password_salt')
-            query = runSelectQuery(queries[0], cur)
-
-            mondayZipsQuery = runSelectQuery(queries[1], cur)
-            mondayZips = self.formatMondayZips(mondayZipsQuery)
-
-            items = self.jsonifyAccounts(query, accountKeys, mondayZips)
+            items = execute(""" SELECT password_salt
+                                FROM ptyd_passwords
+                                INNER JOIN ptyd_accounts
+                                ON password_user_uid = user_uid
+                                WHERE user_email = \'""" + accEmail + "\';", 'get', conn)
 
             response['message'] = 'Request successful.'
-            response['result'] = items
+            response['result'] = items['result']
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
 
 class Account(Resource):
 
@@ -1284,6 +1132,7 @@ class AccountPurchases(Resource):
                     cc_cvv,
                     billing_zip,
                     p2.meal_plan_id,
+                    num_meals AS MaximumMeals,
                     meal_plan_desc,
                     payment_frequency,
                     start_date,
@@ -2223,13 +2072,13 @@ class TemplateApi(Resource):
 # Still uses getRdsConn()
 # Needs to be converted to V2 APIs
 api.add_resource(Meals, '/api/v1/meals')
-api.add_resource(AccountsV1, '/api/v1/accounts')
 
 # New APIs, uses connect() and disconnect()
 api.add_resource(Accounts, '/api/v2/accounts')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
+api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')

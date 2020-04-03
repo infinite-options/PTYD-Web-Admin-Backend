@@ -55,7 +55,7 @@ class Mealschedule extends Component {
     let key;
     let sixWeekMenu = [];
     let weekNum;
-    for (weekNum = 1; weekNum < 7; weekNum++) {
+    for (weekNum = 1; weekNum < 2; weekNum++) {
       key = "MenuForWeek" + weekNum;
       let currentWeek = {};
       currentWeek.sat = api.result[key].SaturdayDate;
@@ -63,7 +63,7 @@ class Mealschedule extends Component {
       currentWeek.mon = api.result[key].Monday;
       currentWeek.menu = api.result[key].Meals;
       currentWeek.addons = api.result[key].Addons;
-      currentWeek.mealQuantities = api.result[key].MealQuantities;
+      currentWeek.mealQuantities = {};
       currentWeek.maxmeals = currUser.MaximumMeals;
       currentWeek.deliverDay = 'Sunday';
       currentWeek.surprise = true;
@@ -175,7 +175,7 @@ class Mealschedule extends Component {
                       addons={eachWeek.addons}
                       mealQuantities={eachWeek.mealQuantities}
                       maxmeals={eachWeek.maxmeals}
-                      recipient_id={this.state.user.user_uid}
+                      purchase_id={this.state.user.purchase_id}
                       deliverDay={eachWeek.deliverDay}
                       surprise={eachWeek.surprise}
                       API_URL={this.props.API_URL}
