@@ -1375,9 +1375,13 @@ class Checkout(Resource):
             print("Received:", data)
 
             if 'delivery_address_unit' in data:
-                DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
+                if data['delivery_address_unit'] == None:
+                    DeliveryUnit = 'NULL'
+                else:
+                    DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
             else:
                 DeliveryUnit = 'NULL'
+            print(DeliveryUnit)
 
             purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
             paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
