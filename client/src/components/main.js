@@ -81,7 +81,7 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? Checkout : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v2/accounts`,
+          SALT_URL: `${DEV_URL}v2/accountsalt`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
@@ -183,7 +183,7 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v2/accounts`,
+          API_URL: `${DEV_URL}v2/accountsalt`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
         }}
       />

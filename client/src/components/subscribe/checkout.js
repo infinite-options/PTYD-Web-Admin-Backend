@@ -11,7 +11,7 @@ class Checkout extends Component {
     console.log(props);
     this.state = {
       user_uid: searchCookie4UserID(document.cookie),
-      user: {},
+      password_salt: null,
       purchase: {},
       gift: "FALSE",
       password: null,
@@ -33,14 +33,10 @@ class Checkout extends Component {
 
   async componentDidMount() {
     if (this.state.user_uid) {
-      const res = await fetch(this.props.API_URL);
+      const res = await fetch(`${this.props.SALT_API_URL}/${this.state.user_uid}`);
       const api = await res.json();
-      const allUsers = api.result.Accounts;
-      for (let userIter in allUsers) {
-        if (allUsers[userIter].user_uid == this.state.user_uid) {
-          this.setState({ user: allUsers[userIter] });
-        }
-      }
+      this.setState({ user: api[0].password_salt });
+
       const users = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
       const usersApi = await users.json();
       if (usersApi.result.length != 0) {
