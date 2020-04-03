@@ -23,6 +23,7 @@ class WeeklyMenu extends Component {
     this.setState({ currentWeek: this.props.objectIndex });
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
+    console.log(api)
     const sundayDate = api.result[this.state.currentWeek].Sunday;
     const mondayDate = api.result[this.state.currentWeek].Monday;
     const deliveryDates = sundayDate + " & " + mondayDate;
