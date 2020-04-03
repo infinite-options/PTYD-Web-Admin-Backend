@@ -441,7 +441,7 @@ export default class MealButton extends Component {
                   <Cell col={12}>
                     <center>
                       <h4 style={{ margin: "0" }}>
-                        {this.props.addons[key].Category}
+                        { "addon cat1" /*this.props.addons[key].Category*/}
                       </h4>
                     </center>
                   </Cell>
@@ -493,7 +493,7 @@ export default class MealButton extends Component {
                 <Cell col={12}>
                   <center>
                     <h4 style={{ margin: "0" }}>
-                        { this.props.addons["Addons"].Category }
+                        { this.props.addons.Category }
                     </h4>
                   </center>
                 </Cell>

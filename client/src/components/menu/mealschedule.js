@@ -57,8 +57,8 @@ class Mealschedule extends Component {
       currentWeek.sun = api.result[key].Sunday;
       currentWeek.mon = api.result[key].Monday;
       currentWeek.menu = api.result[key].Meals;
-      currentWeek.addons = api.result[key].Addons;
-      currentWeek.mealQuantities = {};
+      currentWeek.addons = api.result[key].Meals.Addons;
+      currentWeek.mealQuantities = 5 //currUser.mealQuantities;
       currentWeek.maxmeals = currUser.MaximumMeals;
       currentWeek.deliverDay = 'Sunday';
       currentWeek.surprise = true;
@@ -158,8 +158,12 @@ class Mealschedule extends Component {
                   <b>Select Meals Around Your Schedule</b>
                 </h3>
                 <br />
+                <div>
+                  { console.log(this.state.menu) }
+                </div>
                 <div class="meals-button">
-                  {this.state.menu.map(eachWeek => (
+                  {
+                  this.state.menu.map(eachWeek => 
                     <MealButton
                       day1="Sunday"
                       day2="Monday"
@@ -175,7 +179,8 @@ class Mealschedule extends Component {
                       surprise={eachWeek.surprise}
                       API_URL={this.props.API_URL}
                     />
-                  ))}
+                  )
+                  }
                 </div>
               </Cell>
             </Grid>
