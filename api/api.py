@@ -1316,7 +1316,7 @@ class Checkout(Resource):
                         \'""" + purchaseId + """\',
                         \'""" + getNow() + """\',
                         \'STRIPE\',
-                        \'""" + data['cc_num'] + """\',
+                        \'""" + data['cc_num'][-4:] + """\',
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + "\');"
