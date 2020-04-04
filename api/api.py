@@ -47,27 +47,6 @@ RDS_PW = RdsPw()
 getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
 getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
-# Connect to RDS
-def getRdsConn(RDS_PW):
-    global RDS_HOST
-    global RDS_PORT
-    global RDS_USER
-    global RDS_DB
-
-    print("Trying to connect to RDS...")
-    try:
-        conn = pymysql.connect(RDS_HOST,
-                               user=RDS_USER,
-                               port=RDS_PORT,
-                               passwd=RDS_PW,
-                               db=RDS_DB)
-        cur = conn.cursor()
-        print("Successfully connected to RDS.")
-        return [conn, cur]
-    except:
-        print("Could not connect to RDS.")
-        raise Exception("RDS Connection failed.")
-
 # Connect to MySQL database (API v2)
 def connect():
     global RDS_PW
@@ -146,30 +125,6 @@ def execute(sql, cmd, conn, skipSerialization = False):
         response['sql'] = sql
         return response
 
-# Close RDS connection
-def closeRdsConn(cur, conn):
-    try:
-        cur.close()
-        conn.close()
-        print("Successfully closed RDS connection.")
-    except:
-        print("Could not close RDS connection.")
-
-# Runs a select query with the SQL query string and pymysql cursor as arguments
-# Returns a list of Python tuples
-def runSelectQuery(query, cur):
-    try:
-        cur.execute(query)
-        queriedData = cur.fetchall()
-        return queriedData
-    except:
-        raise Exception("Could not run select query and/or return data")
-
-# Runs an insert query with the SQL query string and pymysql cursor as arguments
-def runInsertQuery(query, cur, conn):
-    cur.execute(query)
-    conn.commit()
-
 # Plans API (v2)
 class Plans(Resource):
 
@@ -243,303 +198,6 @@ class Plans(Resource):
 
             response['message'] = 'Request successful.'
             response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-# Meals API
-class Meals(Resource):
-    global RDS_PW
-
-    # Format queried tuples into JSON
-    def jsonifyMeals(self, query, mealKeys):
-        json = {}
-        for key in [('Weekly', 'WEEKLY SPECIALS'), ('Seasonal', 'SEASONAL FAVORITES'), ('Smoothies', 'SMOOTHIES')]:
-            json[key[0]] = {'Category': key[1], 'Menu': []}
-        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
-                       'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
-        indexOfMealId = mealKeys.index('menu_meal_id')
-        for row in query:
-            if row[indexOfMealId] is None:
-                continue
-            rowDict = {}
-            for element in enumerate(row):
-                key = mealKeys[element[0]]
-                value = element[1]
-                # Convert all decimal values in row to floats
-                if key in decimalKeys:
-                    value = float(value)
-                if key == 'menu_date':
-                    value = value.strftime("%Y-%m-%d")
-                rowDict[key] = value
-            # Hardcode quantity to 0
-            # Will need to fetch from db eventually
-            rowDict['quantity'] = 0
-#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
-            if 'SEAS_FAVE' in rowDict['menu_category']:
-                json['Seasonal']['Menu'].append(rowDict)
-            elif 'WKLY_SPCL' in rowDict['menu_category']:
-                json['Weekly']['Menu'].append(rowDict)
-            elif rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
-                json['Smoothies']['Menu'].append(rowDict)
-        return json
-
-    def jsonifyAddons(self, query, mealKeys):
-        json = {}
-        for key in [('Addons', 'ADD-ON'),('Weekly', 'ADD MORE MEALS'), ('Smoothies', 'ADD MORE SMOOTHIES')]:
-            json[key[0]] = {'Category': key[1], 'Menu': []}
-        decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
-                       'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
-        indexOfMealId = mealKeys.index('menu_meal_id')
-        for row in query:
-            if row[indexOfMealId] is None:
-                continue
-            rowDict = {}
-            for element in enumerate(row):
-                key = mealKeys[element[0]]
-                value = element[1]
-                # Convert all decimal values in row to floats
-                if key in decimalKeys:
-                    value = float(value)
-                if key == 'menu_date':
-                    value = value.strftime("%Y-%m-%d")
-                rowDict[key] = value
-            # Hardcode quantity to 0
-            # Will need to fetch from db eventually
-            rowDict['quantity'] = 0
-#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
-            
-            if rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
-                json['Smoothies']['Menu'].append(rowDict)
-            elif 'SEAS_FAVE' in rowDict['menu_category']:
-                json['Weekly']['Menu'].append(rowDict)
-            elif 'WKLY_SPCL' in rowDict['menu_category']:
-                json['Weekly']['Menu'].append(rowDict)
-            else:
-                json['Addons']['Menu'].append(rowDict)
-
-        return json
-
-    def getMealQuantities(self, menu):
-        mealQuantities = {}
-        for key in ['Meals', 'Addons']:
-            for subMenu in menu[key]:
-                for eachMeal in menu[key][subMenu]['Menu']:
-                    meal_id = eachMeal['menu_meal_id']
-                    if meal_id in mealQuantities:
-                        mealQuantities[meal_id] += eachMeal['quantity']
-                    else:
-                        mealQuantities[meal_id] = eachMeal['quantity']
-        return mealQuantities
-
-    # HTTP method GET
-    def get(self):
-        response = {}
-        try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = {}
-
-            now = datetime.now()
-
-            # Temporarily setting now to Feb 2 15:59
-            now = datetime(2020, 2, 2, 15, 59)
-
-            # Get meals for the next six weeks
-            nextSixWeeks = []
-            if now.weekday() == 0 and now.hour < 16:
-                print("it's monday before 4pm")
-                offset = 0
-            else:
-                print("it's not monday before 4pm")
-                offset = 1
-
-            for weekIndex in range(6):
-                weekDict = {}
-                weekDict['saturday'] = (
-                    now + timedelta(days=-now.weekday()-2, weeks=weekIndex+offset)).date()
-                weekDict['sunday'] = weekDict['saturday'] + timedelta(days=1)
-                weekDict['monday'] = weekDict['saturday'] + timedelta(days=2)
-                weekDict['sundayDate'] = weekDict['sunday'].strftime("%b %-d")
-                weekDict['mondayDate'] = weekDict['monday'].strftime("%b %-d")
-                nextSixWeeks.append(weekDict)
-
-            queries = [
-                """ SELECT
-                        menu_date,
-                        menu_category,
-                        menu_meal_id,
-                        meal_desc,
-                        meal_category,
-                        meal_photo_url,
-                        extra_meal_price,
-                        meal_calories,
-                        meal_protein,
-                        meal_carbs,
-                        meal_fiber,
-                        meal_sugar,
-                        meal_fat,
-                        meal_sat
-                    FROM ptyd_menu
-                    LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id"""]
-
-            for eachWeek in nextSixWeeks:
-                queries.append(
-                    """ SELECT
-                            menu_date,
-                            menu_category,
-                            menu_meal_id,
-                            meal_desc,
-                            meal_category,
-                            meal_photo_url,
-                            extra_meal_price,
-                            meal_calories,
-                            meal_protein,
-                            meal_carbs,
-                            meal_fiber,
-                            meal_sugar,
-                            meal_fat,
-                            meal_sat
-                        FROM ptyd_menu
-                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
-                        WHERE menu_date = \'""" + str(eachWeek['saturday']) + """\';""")
-
-            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url',
-                         'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
-
-            for eachWeek in range(6):
-                query = runSelectQuery(queries[eachWeek+1], cur)
-                key = 'MenuForWeek' + str(eachWeek+1)
-                items[key] = {}
-                items[key]['SaturdayDate'] = str(nextSixWeeks[eachWeek]['saturday'])
-                items[key]['Sunday'] = nextSixWeeks[eachWeek]['sundayDate']
-                items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
-                items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
-                items[key]['Addons'] = self.jsonifyAddons(query, mealsKeys)
-                items[key]['MealQuantities'] = self.getMealQuantities(items[key])
-
-            # Uncomment if you want all meals stored in one key
-#           query = runSelectQuery(queries[0], cur)
-#           items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            closeRdsConn(cur, conn)
-
-    def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
-
-    # HTTP method POST
-    def post(self):
-        response = {}
-        items = []
-        try:
-            conn = connect()
-
-            data = request.get_json(force=True)
-
-            if data['num_meals'] == None:
-                response['message'] = 'User not subscribed.'
-                print("Error:", response['message'])
-                return response, 400
-
-            queries = [
-                """ SELECT purchase_id
-                    FROM ptyd_purchases
-                    WHERE recipient_id = \'""" + data['recipient_id'] + "\';",
-                """ SELECT default_meal_plan
-                    FROM ptyd_default_meal_selection
-                    WHERE num_meals = """ + str(data['num_meals']) + ";"]
-
-            # Handle SKIP request
-            if data['delivery_day'] == 'SKIP':
-                mealSelection = 'SKIP'
-            # Handle default meal selection
-            elif data['default_selected'] is True:
-                mealSelection = 'SURPRISE'
-#               getDefault = execute(queries[1], 'get', conn)
-#               # Handle successful default selection query
-#               if getDefault['code'] == 280 and len(getDefault['result']) > 0:
-#                   mealSelection = getDefault['result'][0]['default_meal_plan']
-#               # Handle unsuccessful default selection query
-#               else:
-#                   response['message'] = 'Could not retrieve default meal selections.'
-#                   response['error'] = getDefault
-#                   print("Error:", response['message'])
-#                   print("Error JSON:", response['error'])
-#                   # 501: Not implemented in server
-#                   return response, 501
-            # Handle custom meal selection
-            else:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
-#           print("Meal Selection String:", mealSelection)
-
-            # Retrieve purchase ID
-            getPurchaseId = execute(queries[0], 'get', conn)
-
-            # Handle successful purchase ID query
-            if getPurchaseId['code'] == 280:
-                if len(getPurchaseId['result']) > 0:
-                    purchaseId = getPurchaseId['result'][0]['purchase_id']
-                # If user has no purchase ID
-                else:
-                    response['message'] = 'Recipient has no active purchase_id.'
-                    response['error'] = getPurchaseId
-                    print("Error:", response['message'])
-                    # 400: Client side bad request
-                    return response, 400
-            # Handle unsuccessful purchase ID query
-            else:
-                response['message'] = 'Could not retrieve purchase_id.'
-                response['error'] = getPurchaseId
-                print("Error:", response['message'])
-                # 500: Internal server error
-                return response, 500
-#               print("purchase_id:", purchaseId)
-
-            selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-#           print(selectionTime)
-
-            queries.append(
-                """ INSERT INTO ptyd_meals_selected
-                    (
-                        purchase_id,
-                        selection_time,
-                        week_affected,
-                        meal_selection,
-                        delivery_day
-                    )
-                    VALUES
-                    (
-                        \'""" + purchaseId + """\',
-                        \'""" + selectionTime + """\',
-                        \'""" + data['week_affected'] + """\',
-                        \'""" + mealSelection + """\',
-                        \'""" + data['delivery_day'] + """\'
-                    )
-                    ON DUPLICATE KEY UPDATE
-                        meal_selection = \'""" + mealSelection + """\',
-                        selection_time = \'""" + selectionTime + """\',
-                        delivery_day = \'""" + data['delivery_day'] + "\';")
-
-#           print("Query:", queries[2])
-            execute(queries[2], 'post', conn)
-
-            response['message'] = 'Request successful.'
 
             return response, 200
         except:
@@ -721,31 +379,29 @@ class Meals2(Resource):
                         WHERE (menu_category = 'SMOOTHIE_1' OR menu_category = 'SMOOTHIE_2' OR menu_category = 'SMOOTHIE_3')
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
-                    # REPLACE WITH ADDON QUERY WHEN ADDONS ARE IN DB
-                    addon = {'result': []}
-
-#                   addon = execute(
-#                       """ 
-#                       SELECT
-#                           meal_id,
-#                           meal_name,
-#                           menu_date,
-#                           menu_category,
-#                           menu_meal_id,
-#                           meal_desc,
-#                           meal_category,
-#                           meal_photo_url,
-#                           extra_meal_price,
-#                           meal_calories,
-#                           meal_protein,
-#                           meal_carbs,
-#                           meal_fiber,
-#                           meal_sugar,
-#                           meal_fat,
-#                           meal_sat
-#                       FROM ptyd_menu 
-#                       LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
-#                       WHERE menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+                    addon = execute(
+                        """ 
+                        SELECT
+                            meal_id,
+                            meal_name,
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE menu_category LIKE 'ADD_ON_%'
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
                     week = {
                         'SaturdayDate': str((stamp - timedelta(days=1)).date()),
@@ -768,7 +424,7 @@ class Meals2(Resource):
                         },
                         'Addons': {
                             'Addons': {
-                                'Category': "EXTRAS",
+                                'Category': "ADD ONS",
                                 'Menu': addon['result']
                             },
                             'Weekly': {
@@ -913,7 +569,7 @@ class Meals2(Resource):
         finally:
             disconnect(conn)
 
-# V2 Accounts
+# NO LONGER USED
 class Accounts(Resource):
     # Split by dashes and return whatever is on the left side of it
     # Also remove any whitespaces at the end
@@ -2137,13 +1793,7 @@ class TemplateApi(Resource):
             disconnect(conn)
 
 # Define API routes
-
-# Still uses getRdsConn()
-# Needs to be converted to V2 APIs
-api.add_resource(Meals, '/api/v1/meals')
-
 # New APIs, uses connect() and disconnect()
-api.add_resource(Accounts, '/api/v2/accounts')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
