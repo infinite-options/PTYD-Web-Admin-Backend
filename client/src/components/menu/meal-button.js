@@ -339,8 +339,8 @@ export default class MealButton extends Component {
                 console.log(this.state.mealQuantities),
                 <Cell col={4}>
                   <EachMeal
-                    mealTitle={meal.meal_desc}
-                    ingridents="Ingredients: Not Yet in Database"
+                    mealTitle={meal.meal_name}
+                    ingridents={"Ingredients: " + meal.meal_desc}
                     detail={
                       "Cal " +
                       meal.meal_calories +
@@ -360,18 +360,17 @@ export default class MealButton extends Component {
                     imgurl={meal.meal_photo_url}
                     maxmeals={this.state.maxmeals}
                     mealQuantities={
-                      // broken
-                      0 //this.state.mealQuantities[meal.menu_meal_id]
+                      this.state.mealQuantities[meal.meal_id]
                     }
                     incrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
-                      stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                      stateCopy.mealQuantities[meal.meal_id] -= 1;
                       this.setState(stateCopy);
                       this.setState({ maxmeals: this.state.maxmeals + 1 });
                     }}
                     decrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
-                      stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                      stateCopy.mealQuantities[meal.meal_id] += 1;
                       this.setState(stateCopy);
                       this.setState({ maxmeals: this.state.maxmeals - 1 });
                     }}
@@ -391,7 +390,7 @@ export default class MealButton extends Component {
                   this.state.flag === false
                 ) {
                   alert(
-                    "Are you sure your want to close without save the changes?"
+                    "Are you sure you want to close without saving?"
                   );
                   this.setState({
                     flag: true
@@ -441,7 +440,7 @@ export default class MealButton extends Component {
                   <Cell col={12}>
                     <center>
                       <h4 style={{ margin: "0" }}>
-                        { "addon cat1" /*this.props.addons[key].Category*/}
+                        {this.props.addons[key].Category}
                       </h4>
                     </center>
                   </Cell>
@@ -449,8 +448,8 @@ export default class MealButton extends Component {
                   {this.props.addons[key].Menu.map(meal => (
                     <Cell col={4}>
                       <EachAddon
-                        mealTitle={meal.meal_desc}
-                        ingridents="Ingredients: Not Yet in Database"
+                        mealTitle={meal.meal_name}
+                        ingridents={"Ingredients: " + meal.meal_desc}
                         detail={
                           "Cal " +
                           meal.meal_calories +
@@ -501,7 +500,7 @@ export default class MealButton extends Component {
                 {/*this.props.addons["Addons"].Menu.map(meal => (
                   <Cell col={4}>
                     <EachAddon
-                      mealTitle={meal.meal_desc}
+                      mealTitle={meal.meal_name}
                       ingridents="Ingredients: Not Yet in Database"
                       detail={
                         "Cal " +

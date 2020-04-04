@@ -625,11 +625,8 @@ class Meals2(Resource):
         for key in ['Meals', 'Addons']:
             for subMenu in menu[key]:
                 for eachMeal in menu[key][subMenu]['Menu']:
-                    meal_id = eachMeal['menu_meal_id']
-                    if meal_id in mealQuantities:
-                        mealQuantities[meal_id] += eachMeal['quantity']
-                    else:
-                        mealQuantities[meal_id] = eachMeal['quantity']
+                    meal_id = eachMeal['meal_id']
+                    mealQuantities[meal_id] = 0
         return mealQuantities
 
     # HTTP method GET
@@ -655,6 +652,8 @@ class Meals2(Resource):
                     weekly_special = execute(
                         """ 
                         SELECT
+                            meal_id,
+                            meal_name,
                             menu_date,
                             menu_category,
                             menu_meal_id,
@@ -677,6 +676,8 @@ class Meals2(Resource):
                     seasonal_special = execute(
                         """ 
                         SELECT
+                            meal_id,
+                            meal_name,
                             menu_date,
                             menu_category,
                             menu_meal_id,
@@ -699,6 +700,8 @@ class Meals2(Resource):
                     smoothies = execute(
                         """ 
                         SELECT
+                            meal_id,
+                            meal_name,
                             menu_date,
                             menu_category,
                             menu_meal_id,
@@ -718,33 +721,37 @@ class Meals2(Resource):
                         WHERE (menu_category = 'SMOOTHIE_1' OR menu_category = 'SMOOTHIE_2' OR menu_category = 'SMOOTHIE_3')
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
-                    addon = execute(
-                        """ 
-                        SELECT
-                            menu_date,
-                            menu_category,
-                            menu_meal_id,
-                            meal_desc,
-                            meal_category,
-                            meal_photo_url,
-                            extra_meal_price,
-                            meal_calories,
-                            meal_protein,
-                            meal_carbs,
-                            meal_fiber,
-                            meal_sugar,
-                            meal_fat,
-                            meal_sat
-                        FROM ptyd_menu 
-                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
-                        WHERE (menu_category = 'SMOOTHIE_1' OR menu_category = 'SMOOTHIE_2' OR menu_category = 'SMOOTHIE_3')
-                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+                    # REPLACE WITH ADDON QUERY WHEN ADDONS ARE IN DB
+                    addon = {'result': []}
+
+#                   addon = execute(
+#                       """ 
+#                       SELECT
+#                           meal_id,
+#                           meal_name,
+#                           menu_date,
+#                           menu_category,
+#                           menu_meal_id,
+#                           meal_desc,
+#                           meal_category,
+#                           meal_photo_url,
+#                           extra_meal_price,
+#                           meal_calories,
+#                           meal_protein,
+#                           meal_carbs,
+#                           meal_fiber,
+#                           meal_sugar,
+#                           meal_fat,
+#                           meal_sat
+#                       FROM ptyd_menu 
+#                       LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+#                       WHERE menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
                     week = {
                         'SaturdayDate': str((stamp - timedelta(days=1)).date()),
                         'SundayDate': str(stamp.date()),
-                        'Sunday': str(stamp.date()),
-                        'Monday': str((stamp + timedelta(days=1)).date()),
+                        'Sunday': str(stamp.date().strftime("%b %-d")),
+                        'Monday': str((stamp + timedelta(days=1)).date().strftime("%b %-d")),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -757,13 +764,25 @@ class Meals2(Resource):
                             'Smoothies': {
                                 'Category': "SMOOTHIES",
                                 'Menu': smoothies['result']
-                            },
+                            }
+                        },
+                        'Addons': {
                             'Addons': {
                                 'Category': "EXTRAS",
                                 'Menu': addon['result']
+                            },
+                            'Weekly': {
+                                'Category': "ADD MORE MEALS",
+                                'Menu': weekly_special['result'] + seasonal_special['result']
+                            },
+                            'Smoothies': {
+                                'Category': "ADD MORE SMOOTHIES",
+                                'Menu': smoothies['result']
                             }
                         }
                     }
+
+                    week['MealQuantities'] = self.getMealQuantities(week)
 
                     index = 'MenuForWeek' + str(i)
                     items[index] = week
@@ -1575,13 +1594,21 @@ class MealSelection(Resource):
             conn = connect()
 
             query = """ SELECT
-                            week_affected,
-                            meal_selection,
-                            \'Sunday\' AS delivery_day
-                            -- delivery_day
-                        FROM ptyd_meals_selected
+                            ms1.week_affected,
+                            ms1.meal_selection,
+                            ms1.selection_time,
+                            ms1.delivery_day
+                        FROM ptyd_meals_selected AS ms1
+                        INNER JOIN (
+                            SELECT
+                                week_affected,
+                                MAX(selection_time) AS latest_selection
+                            FROM ptyd_meals_selected
+                            GROUP BY week_affected
+                        ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
                         WHERE
-                        purchase_id = \'""" + purchaseId + "\';"
+                        purchase_id = \'""" + purchaseId + """\'
+                        ;"""
 
             items = execute(query, 'get', conn)
             items = self.readQuery(items['result'])

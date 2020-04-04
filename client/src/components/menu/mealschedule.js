@@ -57,8 +57,8 @@ class Mealschedule extends Component {
       currentWeek.sun = api.result[key].Sunday;
       currentWeek.mon = api.result[key].Monday;
       currentWeek.menu = api.result[key].Meals;
-      currentWeek.addons = api.result[key].Meals.Addons;
-      currentWeek.mealQuantities = 5 //currUser.mealQuantities;
+      currentWeek.addons = api.result[key].Addons;
+      currentWeek.mealQuantities = api.result[key].MealQuantities;
       currentWeek.maxmeals = currUser.MaximumMeals;
       currentWeek.deliverDay = 'Sunday';
       currentWeek.surprise = true;
@@ -82,6 +82,7 @@ class Mealschedule extends Component {
         }
       }
       sixWeekMenu.push(currentWeek);
+      console.log(currentWeek.mealQuantities);
     }
     this.setState({ menu: sixWeekMenu, user: currUser });
   }

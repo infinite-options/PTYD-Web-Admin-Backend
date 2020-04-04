@@ -77,7 +77,7 @@ class WeeklyMenu extends Component {
                         alt="meal pic"
                       />
                       <Card.Body class="font2">
-                        <Card.Title>{meal.meal_desc}</Card.Title>
+                        <Card.Title>{meal.meal_name}</Card.Title>
                         <Card.Text>
                           Cal {meal.meal_calories}, Prot {meal.protein}, Carb{" "}
                           {meal.meal_carbs}, Sug {meal.meal_sugar}, Fat{" "}
