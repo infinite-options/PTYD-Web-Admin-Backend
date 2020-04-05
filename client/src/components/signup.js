@@ -8,7 +8,6 @@ import Button from "react-bootstrap/Button";
 
 function SignUp (props)  {
 
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [confirmEmail, setConfirmEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -35,22 +34,22 @@ function SignUp (props)  {
 
         fetch(props.API_URL, {
           method: 'POST',
+          mode: 'no-cors',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            Username: username,
             FirstName: firstname,
             LastName: lastname,
             Email: email,
             PhoneNumber: phoneNumber,
             Password: password,
-            Address: address,
-            AddressUnit: addressUnit,
-            City: city,
-            Zip: zip,
-            State: userState,
+//          Address: address,
+//          AddressUnit: addressUnit,
+//          City: city,
+//          Zip: zip,
+//          State: userState,
             Referral: referral,
             WeeklyUpdates: weeklyUpdates,
           })
@@ -60,10 +59,6 @@ function SignUp (props)  {
     }
 
     const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
-
-    function handleUsername(event) {
-      setUsername(event.target.value);
-    }
 
     return (
         <main Style="margin-top:-80px;">
@@ -76,14 +71,6 @@ function SignUp (props)  {
                     <Row>
                         <Col size={6} >               
                             <Form >
-                                <Form.Group  controlId="formGridUsername">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control 
-                                    value={username}
-                                    onChange={handleUsername}
-                                    placeholder="Enter Username" />
-                                </Form.Group>
-
                                 <Form.Row>
                                     <Form.Group as={Col} controlId="formGridFirstName">
                                     <Form.Label>First Name</Form.Label>
@@ -141,52 +128,6 @@ function SignUp (props)  {
                                     onChange={e => setConfirmPassword(e.target.value)}
                                     placeholder="Confirm Password" />
                                 </Form.Group>
-
-                                <Form.Row>
-                                    <Form.Group as={Col} sm={9} controlId="formGridAddress">
-                                        <Form.Label>Address</Form.Label>
-                                        <Form.Control
-                                            value={address}
-                                            onChange={e => setAddress(e.target.value)}
-                                            placeholder="1234 Main St" />
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridAddressUnit">
-                                        <Form.Label>Unit</Form.Label>
-                                        <Form.Control
-                                            value={addressUnit}
-                                            onChange={e => setAddressUnit(e.target.value)}
-                                            placeholder="" />
-                                    </Form.Group>
-                                </Form.Row>
-                                
-
-                                <Form.Row>
-                                    <Form.Group as={Col} controlId="formGridCity">
-                                    <Form.Label>City</Form.Label>
-                                    <Form.Control 
-                                        value={city}
-                                        onChange={e => setCity(e.target.value)}
-                                        />
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>State</Form.Label>
-                                    <Form.Control as="select" value={userState} onChange={e => setUserState(e.target.value)}>
-                                        <option>Choose...</option>
-                                        <option>TX</option>
-                                    </Form.Control>
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                    <Form.Label>Zip</Form.Label>
-                                    <Form.Control
-                                        value={zip}
-                                        onChange={e => setZip(e.target.value)}
-                                    />
-                                    </Form.Group>
-                                </Form.Row>
-
                                 <Form.Group as={Col} controlId="formGridReferral">
                                     <Form.Label>Referral</Form.Label>
                                     <Form.Control as="select" value={referral} onChange={e => setReferral(e.target.value)}>

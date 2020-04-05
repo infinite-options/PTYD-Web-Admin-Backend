@@ -47,27 +47,6 @@ RDS_PW = RdsPw()
 getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
 getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
-# Connect to RDS
-def getRdsConn(RDS_PW):
-    global RDS_HOST
-    global RDS_PORT
-    global RDS_USER
-    global RDS_DB
-
-    print("Trying to connect to RDS...")
-    try:
-        conn = pymysql.connect(RDS_HOST,
-                               user=RDS_USER,
-                               port=RDS_PORT,
-                               passwd=RDS_PW,
-                               db=RDS_DB)
-        cur = conn.cursor()
-        print("Successfully connected to RDS.")
-        return [conn, cur]
-    except:
-        print("Could not connect to RDS.")
-        raise Exception("RDS Connection failed.")
-
 # Connect to MySQL database (API v2)
 def connect():
     global RDS_PW
@@ -145,30 +124,6 @@ def execute(sql, cmd, conn, skipSerialization = False):
     finally:
         response['sql'] = sql
         return response
-
-# Close RDS connection
-def closeRdsConn(cur, conn):
-    try:
-        cur.close()
-        conn.close()
-        print("Successfully closed RDS connection.")
-    except:
-        print("Could not close RDS connection.")
-
-# Runs a select query with the SQL query string and pymysql cursor as arguments
-# Returns a list of Python tuples
-def runSelectQuery(query, cur):
-    try:
-        cur.execute(query)
-        queriedData = cur.fetchall()
-        return queriedData
-    except:
-        raise Exception("Could not run select query and/or return data")
-
-# Runs an insert query with the SQL query string and pymysql cursor as arguments
-def runInsertQuery(query, cur, conn):
-    cur.execute(query)
-    conn.commit()
 
 # Plans API (v2)
 class Plans(Resource):
@@ -250,7 +205,7 @@ class Plans(Resource):
         finally:
             disconnect(conn)
 
-# Meals API
+# V2 Meals API
 class Meals(Resource):
     global RDS_PW
 
@@ -328,68 +283,35 @@ class Meals(Resource):
         for key in ['Meals', 'Addons']:
             for subMenu in menu[key]:
                 for eachMeal in menu[key][subMenu]['Menu']:
-                    meal_id = eachMeal['menu_meal_id']
-                    if meal_id in mealQuantities:
-                        mealQuantities[meal_id] += eachMeal['quantity']
-                    else:
-                        mealQuantities[meal_id] = eachMeal['quantity']
+                    meal_id = eachMeal['meal_id']
+                    mealQuantities[meal_id] = 0
         return mealQuantities
 
     # HTTP method GET
     def get(self):
         response = {}
+        items = {}
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = {}
-
+            conn = connect()
             now = datetime.now()
 
-            # Temporarily setting now to Feb 2 15:59
-            now = datetime(2020, 2, 2, 15, 59)
+            dates = execute("SELECT DISTINCT menu_date FROM ptyd_menu;", 'get', conn)
 
-            # Get meals for the next six weeks
-            nextSixWeeks = []
-            if now.weekday() == 0 and now.hour < 16:
-                print("it's monday before 4pm")
-                offset = 0
-            else:
-                print("it's not monday before 4pm")
-                offset = 1
+            i = 1
+            for date in dates['result']:
+                # only grab 6 weeks worth of menus
+                if i == 7:
+                    break
+                # convert string to datetime
+                stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
+                # Roll calendar at 4PM Monday
+                if now - timedelta(days=1, hours=16) < stamp:
 
-            for weekIndex in range(6):
-                weekDict = {}
-                weekDict['saturday'] = (
-                    now + timedelta(days=-now.weekday()-2, weeks=weekIndex+offset)).date()
-                weekDict['sunday'] = weekDict['saturday'] + timedelta(days=1)
-                weekDict['monday'] = weekDict['saturday'] + timedelta(days=2)
-                weekDict['sundayDate'] = weekDict['sunday'].strftime("%b %-d")
-                weekDict['mondayDate'] = weekDict['monday'].strftime("%b %-d")
-                nextSixWeeks.append(weekDict)
-
-            queries = [
-                """ SELECT
-                        menu_date,
-                        menu_category,
-                        menu_meal_id,
-                        meal_desc,
-                        meal_category,
-                        meal_photo_url,
-                        extra_meal_price,
-                        meal_calories,
-                        meal_protein,
-                        meal_carbs,
-                        meal_fiber,
-                        meal_sugar,
-                        meal_fat,
-                        meal_sat
-                    FROM ptyd_menu
-                    LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id"""]
-
-            for eachWeek in nextSixWeeks:
-                queries.append(
-                    """ SELECT
+                    weekly_special = execute(
+                        """ 
+                        SELECT
+                            meal_id,
+                            meal_name,
                             menu_date,
                             menu_category,
                             menu_meal_id,
@@ -404,28 +326,127 @@ class Meals(Resource):
                             meal_sugar,
                             meal_fat,
                             meal_sat
-                        FROM ptyd_menu
+                        FROM ptyd_menu 
                         LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
-                        WHERE menu_date = \'""" + str(eachWeek['saturday']) + """\';""")
+                        WHERE (menu_category = 'WKLY_SPCL_1' OR menu_category = 'WKLY_SPCL_2' OR menu_category = 'WKLY_SPCL_3')
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
-            mealsKeys = ('menu_date', 'menu_category', 'menu_meal_id', 'meal_desc', 'meal_category', 'meal_photo_url',
-                         'extra_meal_price', 'meal_calories', 'meal_protein', 'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat')
+                    seasonal_special = execute(
+                        """ 
+                        SELECT
+                            meal_id,
+                            meal_name,
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE (menu_category = 'SEAS_FAVE_1' OR menu_category = 'SEAS_FAVE_2' OR menu_category = 'SEAS_FAVE_3')
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
-            for eachWeek in range(6):
-                query = runSelectQuery(queries[eachWeek+1], cur)
-                key = 'MenuForWeek' + str(eachWeek+1)
-                items[key] = {}
-                items[key]['SaturdayDate'] = str(nextSixWeeks[eachWeek]['saturday'])
-                items[key]['Sunday'] = nextSixWeeks[eachWeek]['sundayDate']
-                items[key]['Monday'] = nextSixWeeks[eachWeek]['mondayDate']
-                items[key]['Meals'] = self.jsonifyMeals(query, mealsKeys)
-                items[key]['Addons'] = self.jsonifyAddons(query, mealsKeys)
-                items[key]['MealQuantities'] = self.getMealQuantities(items[key])
+                    smoothies = execute(
+                        """ 
+                        SELECT
+                            meal_id,
+                            meal_name,
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE (menu_category = 'SMOOTHIE_1' OR menu_category = 'SMOOTHIE_2' OR menu_category = 'SMOOTHIE_3')
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
-            # Uncomment if you want all meals stored in one key
-#           query = runSelectQuery(queries[0], cur)
-#           items['AllMeals'] = self.jsonifyMeals(query, mealsKeys)
+                    addon = execute(
+                        """ 
+                        SELECT
+                            meal_id,
+                            meal_name,
+                            menu_date,
+                            menu_category,
+                            menu_meal_id,
+                            meal_desc,
+                            meal_category,
+                            meal_photo_url,
+                            extra_meal_price,
+                            meal_calories,
+                            meal_protein,
+                            meal_carbs,
+                            meal_fiber,
+                            meal_sugar,
+                            meal_fat,
+                            meal_sat
+                        FROM ptyd_menu 
+                        LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
+                        WHERE menu_category LIKE 'ADD_ON_%'
+                        AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
+                    week = {
+                        'SaturdayDate': str((stamp - timedelta(days=1)).date()),
+                        'SundayDate': str(stamp.date()),
+                        'Sunday': str(stamp.date().strftime("%b %-d")),
+                        'Monday': str((stamp + timedelta(days=1)).date().strftime("%b %-d")),
+                        'Meals': {
+                            'Weekly': {
+                                'Category': "WEEKLY SPECIALS",
+                                'Menu': weekly_special['result']
+                            },
+                            'Seasonal': {
+                                'Category': "SEASONAL FAVORITES",
+                                'Menu': seasonal_special['result']
+                            },
+                            'Smoothies': {
+                                'Category': "SMOOTHIES",
+                                'Menu': smoothies['result']
+                            }
+                        },
+                        'Addons': {
+                            'Addons': {
+                                'Category': "ADD ONS",
+                                'Menu': addon['result']
+                            },
+                            'Weekly': {
+                                'Category': "ADD MORE MEALS",
+                                'Menu': weekly_special['result'] + seasonal_special['result']
+                            },
+                            'Smoothies': {
+                                'Category': "ADD MORE SMOOTHIES",
+                                'Menu': smoothies['result']
+                            }
+                        }
+                    }
+
+                    week['MealQuantities'] = self.getMealQuantities(week)
+
+                    index = 'MenuForWeek' + str(i)
+                    items[index] = week
+
+                    i += 1
+
+            print('Finish Query of Menus')
+            # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
 
@@ -433,123 +454,10 @@ class Meals(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
-
-    def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
-
-    # HTTP method POST
-    def post(self):
-        response = {}
-        items = []
-        try:
-            conn = connect()
-
-            data = request.get_json(force=True)
-
-            if data['num_meals'] == None:
-                response['message'] = 'User not subscribed.'
-                print("Error:", response['message'])
-                return response, 400
-
-            queries = [
-                """ SELECT purchase_id
-                    FROM ptyd_purchases
-                    WHERE recipient_id = \'""" + data['recipient_id'] + "\';",
-                """ SELECT default_meal_plan
-                    FROM ptyd_default_meal_selection
-                    WHERE num_meals = """ + str(data['num_meals']) + ";"]
-
-            # Handle SKIP request
-            if data['delivery_day'] == 'SKIP':
-                mealSelection = 'SKIP'
-            # Handle default meal selection
-            elif data['default_selected'] is True:
-                mealSelection = 'SURPRISE'
-#               getDefault = execute(queries[1], 'get', conn)
-#               # Handle successful default selection query
-#               if getDefault['code'] == 280 and len(getDefault['result']) > 0:
-#                   mealSelection = getDefault['result'][0]['default_meal_plan']
-#               # Handle unsuccessful default selection query
-#               else:
-#                   response['message'] = 'Could not retrieve default meal selections.'
-#                   response['error'] = getDefault
-#                   print("Error:", response['message'])
-#                   print("Error JSON:", response['error'])
-#                   # 501: Not implemented in server
-#                   return response, 501
-            # Handle custom meal selection
-            else:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
-#           print("Meal Selection String:", mealSelection)
-
-            # Retrieve purchase ID
-            getPurchaseId = execute(queries[0], 'get', conn)
-
-            # Handle successful purchase ID query
-            if getPurchaseId['code'] == 280:
-                if len(getPurchaseId['result']) > 0:
-                    purchaseId = getPurchaseId['result'][0]['purchase_id']
-                # If user has no purchase ID
-                else:
-                    response['message'] = 'Recipient has no active purchase_id.'
-                    response['error'] = getPurchaseId
-                    print("Error:", response['message'])
-                    # 400: Client side bad request
-                    return response, 400
-            # Handle unsuccessful purchase ID query
-            else:
-                response['message'] = 'Could not retrieve purchase_id.'
-                response['error'] = getPurchaseId
-                print("Error:", response['message'])
-                # 500: Internal server error
-                return response, 500
-#               print("purchase_id:", purchaseId)
-
-            selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-#           print(selectionTime)
-
-            queries.append(
-                """ INSERT INTO ptyd_meals_selected
-                    (
-                        purchase_id,
-                        selection_time,
-                        week_affected,
-                        meal_selection,
-                        delivery_day
-                    )
-                    VALUES
-                    (
-                        \'""" + purchaseId + """\',
-                        \'""" + selectionTime + """\',
-                        \'""" + data['week_affected'] + """\',
-                        \'""" + mealSelection + """\',
-                        \'""" + data['delivery_day'] + """\'
-                    )
-                    ON DUPLICATE KEY UPDATE
-                        meal_selection = \'""" + mealSelection + """\',
-                        selection_time = \'""" + selectionTime + """\',
-                        delivery_day = \'""" + data['delivery_day'] + "\';")
-
-#           print("Query:", queries[2])
-            execute(queries[2], 'post', conn)
-
-            response['message'] = 'Request successful.'
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
             disconnect(conn)
 
+# NO LONGER USED
 class Accounts(Resource):
-    global RDS_PW
-
     # Split by dashes and return whatever is on the left side of it
     # Also remove any whitespaces at the end
     def shortenPlanDesc(self, planDesc):
@@ -586,7 +494,7 @@ class Accounts(Resource):
 
     # Calculate number of paid weeks remaining
     def calculatePaidWeeksRemaining(self, nextChargeDate):
-        if nextChargeDate:
+        if nextChargeDate and nextChargeDate != 'N/A':
 #           now = datetime.now()
             now = datetime(2020, 2, 2, 15, 59)
             nextChargeDateObj = datetime.strptime(nextChargeDate, "%b %d, %Y")
@@ -598,55 +506,49 @@ class Accounts(Resource):
     # Format Monday Zipcodes Query to a list of strings
     def formatMondayZips(self, query):
         zips = []
-        for row in query:
-            zips.append(row[0])
+        for row in query['result']:
+            zips.append(row['zipcode'])
         return zips
 
-    # Format queried tuples into JSON
-    def jsonifyAccounts(self, query, rowDictKeys, mondayZips):
+    # Format query
+    def formatQuery(self, query, mondayZips):
         json = []
-        dateKeys = ['create_date', 'last_update', 'last_delivery', 'cc_exp_date']
-        for row in query:
+        for row in query['result']:
             rowDict = {}
-            for element in enumerate(row):
-                key = rowDictKeys[element[0]]
-                value = element[1]
-                if key in dateKeys:
-                    if value:
-                        value = value.strftime("%b %d, %Y")
-                    else:
-                        value = None
-                if key is 'Subscription':
+            for key in row:
+                print(key)
+                value = row[key]
+                if key == 'Subscription':
                     if value:
                         value = self.shortenPlanDesc(value)
                     else:
                         value = None
                 # Get weekly price of meal plan and multiply by X
-                if key is 'WeeklyPrice':
-                    key = 'NextCharge'
+                if key == 'WeeklyPrice':
                     if self.isOneTimePlan(rowDict['Subscription']):
-                        value = 0
+                        rowDict['NextCharge'] = 0
                     elif rowDict['Subscription'] == None:
-                        value = 0
+                        rowDict['NextCharge'] = 0
                     else:
-                        value = self.calculateNextCharge(value, rowDict['PaymentPlan'])
+                        rowDict['NextCharge'] = self.calculateNextCharge(value, rowDict['PaymentPlan'])
                 # Get user's most recent payment date and offset by X weeks
-                if key is 'payment_time_stamp':
-                    key = 'NextChargeDate'
+                if key == 'payment_time_stamp':
                     if self.isOneTimePlan(rowDict['Subscription']):
-                        value = None
+                        rowDict['NextChargeDate'] = None
                     elif rowDict['Subscription'] == None:
-                        value = None
+                        rowDict['NextChargeDate'] = None
+                    elif value == None:
+                        rowDict['NextChargeDate'] = 'N/A'
                     else:
-                        value = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
+                        rowDict['NextChargeDate'] = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
                 rowDict[key] = value
-#           rowDict['password_sha512'] = sha512(
-#               rowDict['user_name'].encode()).hexdigest()
 
+            print(1)
             rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
+            print(2)
 
             try:
-                ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%b %d, %Y")
+                ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%Y-%m-%d")
                 rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
                 rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
                 rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
@@ -655,81 +557,64 @@ class Accounts(Resource):
                 rowDict['cc_exp_month'] = None
                 rowDict['cc_exp_day'] = None
 
-            if rowDict['user_zip'] in mondayZips:
+            print(3)
+            if rowDict['billing_zip'] in mondayZips:
                 rowDict['MondayAvailable'] = True
             else:
                 rowDict['MondayAvailable'] = False
+
+            print(4)
             json.append(rowDict)
+
+        print(5)
         return json
 
     # HTTP method GET
     def get(self):
         response = {}
+        items = {}
         try:
-            db = getRdsConn(RDS_PW)
-            conn = db[0]
-            cur = db[1]
-            items = []
+            conn = connect()
 
-            # Select last digits of credit card info only
-            # to avoid storing sensitive info in
-            # Python objects
+            # Needs password salt
             queries = [
                 """ SELECT DISTINCT
                         user_uid,
-                        user_name,
+                        user_email,
                         first_name,
                         last_name,
-                        user_email,
                         phone_number,
-                        user_address,
-                        address_unit,
-                        user_city,
-                        user_state,
-                        user_zip,
-                        user_region,
-                        user_gender,
                         create_date,
                         last_update,
-                        activeBool,
-                        last_delivery,
                         referral_source,
-                        delivery_note,
-                        meal_plan_desc AS Subscription,
-                        payment_frequency AS PaymentPlan,
-                        meal_plan_price AS WeeklyPrice,
-                        payment_time_stamp,
-                        purchase_status,
-                        num_meals AS MaximumMeals,
-                        CONCAT('XXXX-XXXX-XXXX-', RIGHT(cc_num, 4) ) AS cc_num_secret,
+                        password_salt,
+                        mp.meal_plan_desc AS Subscription,
+                        mp.payment_frequency AS PaymentPlan,
+                        mp.meal_plan_price AS WeeklyPrice,
+                        p1.payment_time_stamp,
+                        p1.billing_zip,
+                        mp.num_meals AS MaximumMeals,
+                        p1.cc_num AS cc_num_secret,
                         cc_exp_date,
-                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret,
-                        password_salt
+                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret
                     FROM ptyd_accounts a1
                     LEFT JOIN ptyd_payments p1
                     ON user_uid = p1.buyer_id
-                    LEFT JOIN ptyd_purchases
-                    ON user_uid = recipient_id
-                    LEFT JOIN ptyd_meal_plans
-                    ON ptyd_purchases.meal_plan_id = ptyd_meal_plans.meal_plan_id
+                    LEFT JOIN ptyd_purchases p2
+                    ON p1.purchase_id = p2.purchase_id
+                    LEFT JOIN ptyd_meal_plans mp
+                    ON p2.meal_plan_id = mp.meal_plan_id
                     LEFT JOIN ptyd_passwords
-                    ON user_uid = password_user_uid
-                    ORDER BY payment_time_stamp, user_uid DESC;""",
+                    ON user_uid = password_user_uid;""",
                     "SELECT * FROM ptyd_monday_zipcodes;"]
 
-            accountKeys = ( 'user_uid', 'user_name', 'first_name', 'last_name',
-                            'user_email', 'phone_number', 'user_address', 'address_unit',
-                            'user_city', 'user_state', 'user_zip', 'user_region',
-                            'user_gender', 'create_date', 'last_update', 'activeBool',
-                            'last_delivery', 'referral_source', 'delivery_note', 'Subscription',
-                            'PaymentPlan', 'WeeklyPrice', 'payment_time_stamp', 'purchase_status',
-                            'MaximumMeals', 'cc_num_secret', 'cc_exp_date', 'cc_cvv_secret', 'password_salt')
-            query = runSelectQuery(queries[0], cur)
+            query = execute(queries[0], 'get', conn)
 
-            mondayZipsQuery = runSelectQuery(queries[1], cur)
+            mondayZipsQuery = execute(queries[1], 'get', conn)
             mondayZips = self.formatMondayZips(mondayZipsQuery)
 
-            items = self.jsonifyAccounts(query, accountKeys, mondayZips)
+            items['MondayZips'] = mondayZips
+            items['Accounts'] = self.formatQuery(query, mondayZips)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -738,12 +623,52 @@ class Accounts(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            closeRdsConn(cur, conn)
+            disconnect(conn)
+
+class AccountSaltById(Resource):
+    def get(self, userUid):
+        response = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT password_salt
+                                FROM ptyd_passwords
+                                WHERE password_user_uid = \'""" + userUid + "\';", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items['result']
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class AccountSalt(Resource):
+    def get(self, accEmail):
+        response = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT password_salt
+                                FROM ptyd_passwords
+                                INNER JOIN ptyd_accounts
+                                ON password_user_uid = user_uid
+                                WHERE user_email = \'""" + accEmail + "\';", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items['result']
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class Account(Resource):
 
     # HTTP method GET
-    def get(self, accName, accPass):
+    def get(self, accEmail, accPass):
         response = {}
         try:
             conn = connect()
@@ -751,26 +676,15 @@ class Account(Resource):
             queries = [
                 """ SELECT
                         user_uid,
-                        user_name,
                         first_name,
                         last_name,
                         user_email,
                         phone_number,
-                        user_address,
-                        address_unit,
-                        user_city,
-                        user_state,
-                        user_zip,
-                        user_region,
-                        user_gender,
                         create_date,
                         last_update,
-                        activeBool,
-                        last_delivery,
-                        referral_source,
-                        user_note
+                        referral_source
                     FROM ptyd_accounts""" +
-                    "\nWHERE user_name = " + "'" + accName + "' AND user_state = 'TX';"]
+                    "\nWHERE user_email = " + "\'" + accEmail + "\';"]
 
             items = execute(queries[0], 'get', conn)
             user_uid = items['result'][0]['user_uid']
@@ -794,6 +708,81 @@ class Account(Resource):
         finally:
             disconnect(conn)
 
+class AccountPurchases(Resource):
+
+    # HTTP method GET
+    def get(self, buyerId):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [ """
+                SELECT DISTINCT
+                    payment_id,
+                    buyer_id,
+                    coupon_id,
+                    gift,
+                    amount_due,
+                    amount_paid,
+                    p1.purchase_id,
+                    MAX(payment_time_stamp) AS last_payment_time_stamp,
+                    payment_type,
+                    CONCAT(\'XXXXXXXXXXXX\', cc_num) AS cc_num,
+                    cc_exp_date,
+                    cc_cvv,
+                    billing_zip,
+                    p2.meal_plan_id,
+                    num_meals AS MaximumMeals,
+                    meal_plan_desc,
+                    payment_frequency,
+                    start_date,
+                    delivery_first_name,
+                    delivery_last_name,
+                    delivery_email,
+                    delivery_phone,
+                    delivery_address,
+                    delivery_address_unit,
+                    delivery_city,
+                    delivery_state,
+                    delivery_zip,
+                    delivery_region,
+                    delivery_instructions
+                FROM
+                    ptyd_payments p1
+                INNER JOIN
+                    ptyd_purchases p2
+                ON
+                    p1.purchase_id = p2.purchase_id
+                INNER JOIN
+                    ptyd_meal_plans mp
+                ON p2.meal_plan_id = mp.meal_plan_id
+                WHERE buyer_id = \'""" + buyerId + """\'
+                GROUP BY purchase_id;"""]
+
+            items = execute(queries[0], 'get', conn)
+
+            for eachItem in items['result']:
+                last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
+                next_charge_date = None
+
+                if eachItem['payment_frequency'] == 'Weekly':
+                    next_charge_date = last_charge_date + timedelta(days=7)
+                elif eachItem['payment_frequency'] == 'Bi-Weekly':
+                    next_charge_date = last_charge_date + timedelta(days=14)
+                elif eachItem['payment_frequency'] == 'Monthly':
+                    next_charge_date = last_charge_date + timedelta(days=28)
+
+                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
+                eachItem['next_charge_date'] = str( next_charge_date.date() )            
+
+            response['message'] = 'Request successful.'
+            response['result'] = items['result']
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class SignUp(Resource):
     # HTTP method POST
     def post(self):
@@ -803,23 +792,13 @@ class SignUp(Resource):
             conn = connect()
             data = request.get_json(force=True)
 
-            Username = data['Username']
+            Email = data['Email']
             FirstName = data['FirstName']
             LastName = data['LastName']
-            Email = data['Email']
             PhoneNumber = data['PhoneNumber']
-            Address = data['Address']
-            AddressUnit = data['AddressUnit']
-            DeliveryNote = "N/A"
-            City = data['City']
-            State = data['State']
-            Zip = data['Zip']
-            Region = "US"
-            Gender = "F"
             WeeklyUpdates = data['WeeklyUpdates']
             CreateDate = getToday()
             LastUpdate = CreateDate
-            ActiveBool = "Yes"
             Referral = data['Referral']
 
             print("Received:", data)
@@ -831,56 +810,31 @@ class SignUp(Resource):
 
             print("NewUserID:", NewUserID)
 
+            # Not storing customer addresses
             queries.append(
                 """ INSERT INTO ptyd_accounts
                     (
                         user_uid,
-                        user_name,
+                        user_email,
                         first_name,
                         last_name,
-                        user_email,
                         phone_number,
-                        user_address,
-                        address_unit,
-                        delivery_note,
-                        user_city,
-                        user_state,
-                        user_zip,
-                        user_region,
-                        user_gender,
                         weekly_updates,
                         create_date,
                         last_update,
-                        activeBool,
-                        last_delivery,
-                        referral_source,
-                        user_note,
-                        user_profile_picture
+                        referral_source
                     )
                     VALUES
                     (""" +
                         "\'" + NewUserID + "\'," +
-                        "\'" + Username + "\'," +
+                        "\'" + Email + "\'," +
                         "\'" + FirstName + "\'," +
                         "\'" + LastName + "\'," +
-                        "\'" + Email + "\'," +
                         "\'" + PhoneNumber + "\'," +
-                        "\'" + Address + "\'," +
-                        "\'" + AddressUnit + "\'," +
-                        "\'" + DeliveryNote + "\'," +
-                        "\'" + City + "\'," +
-                        "\'" + State + "\'," +
-                        "\'" + Zip + "\'," +
-                        "\'" + Region + "\'," +
-                        "\'" + Gender + "\'," +
                         "\'" + WeeklyUpdates + "\'," +
                         "\'" + CreateDate + "\'," +
                         "\'" + LastUpdate + "\'," +
-                        "\'" + ActiveBool + "\'," +
-                        "NULL," +
-                        "\'" + Referral + "\'," +
-                        "NULL," +
-                        "NULL);")
+                        "\'" + Referral + "\');")
 
             DatetimeStamp = getNow()
             salt = getNow()
@@ -909,7 +863,7 @@ class SignUp(Resource):
 
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit username.'
+                response['result'] = 'Could not commit account.'
                 print(response['message'], response['result'], usnInsert['code'])
                 return response, 400
 
@@ -934,28 +888,58 @@ class Checkout(Resource):
         query = """ INSERT INTO ptyd_payments
                     (
                         payment_id,
-                        purchase_id,
                         buyer_id,
-                        amount_paid,
+                        gift,
                         coupon_id,
+                        amount_due,
+                        amount_paid,
+                        purchase_id,
                         payment_time_stamp,
                         payment_type,
                         cc_num,
                         cc_exp_date,
-                        cc_cvv
+                        cc_cvv,
+                        billing_zip
                     )
-                    VALUES
-                    (
+                    VALUES (
                         \'""" + paymentId + """\',
-                        \'""" + purchaseId + """\',
                         \'""" + data['user_uid'] + """\',
-                        """ + data['item_price'] + """,
+                        \'""" + data['is_gift'] + """\',
                         NULL,
+                        """ + data['item_price'] + """,
+                        """ + data['item_price'] + """,
+                        \'""" + purchaseId + """\',
                         \'""" + getNow() + """\',
-                        \'unknown\',
-                        \'""" + data['cc_num_secret'] + """\',
+                        \'STRIPE\',
+                        \'""" + data['cc_num'][-4:] + """\',
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
-                        \'""" + data['cc_cvv_secret'] + "\');"
+                        \'""" + data['cc_cvv'] + """\',
+                        \'""" + data['billing_zip'] + "\');"
+#       query = """ INSERT INTO ptyd_payments
+#                   (
+#                       payment_id,
+#                       purchase_id,
+#                       buyer_id,
+#                       amount_paid,
+#                       coupon_id,
+#                       payment_time_stamp,
+#                       payment_type,
+#                       cc_num,
+#                       cc_exp_date,
+#                       cc_cvv
+#                   )
+#                   VALUES
+#                   (
+#                       \'""" + paymentId + """\',
+#                       \'""" + purchaseId + """\',
+#                       \'""" + data['user_uid'] + """\',
+#                       """ + data['item_price'] + """,
+#                       NULL,
+#                       \'""" + getNow() + """\',
+#                       \'unknown\',
+#                       \'""" + data['cc_num_secret'] + """\',
+#                       \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
+#                       \'""" + data['cc_cvv_secret'] + "\');"
         return query
 
     def post(self):
@@ -966,6 +950,15 @@ class Checkout(Resource):
             data = request.get_json(force=True)
 
             print("Received:", data)
+
+            if 'delivery_address_unit' in data:
+                if data['delivery_address_unit'] == None:
+                    DeliveryUnit = 'NULL'
+                else:
+                    DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
+            else:
+                DeliveryUnit = 'NULL'
+            print(DeliveryUnit)
 
             purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
             paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
@@ -990,7 +983,7 @@ class Checkout(Resource):
                 WHERE
                     meal_plan_desc = \'""" + mealPlan + "\'", """
                 SELECT
-                    RIGHT(cc_num, 4) AS cc_num_last4
+                    cc_num
                 FROM
                     ptyd_payments
                 WHERE
@@ -1024,73 +1017,97 @@ class Checkout(Resource):
                 print("Error JSON:", response['error'])
                 return response, 501
 
-            ccNumQuery = execute(queries[2], 'get', conn)
-            print(ccNumQuery)
+#           ccNumQuery = execute(queries[2], 'get', conn)
+#           print(ccNumQuery)
 
-            if ccNumQuery['code'] == 280 and len(ccNumQuery['result']) > 0:
-                print("Checking for existing credit cards...")
-                ccNumLastFour = ccNumQuery['result'][0]['cc_num_last4']
-                print(data['cc_num_secret'][-4:])
-                if data['cc_num_secret'][-4:] == ccNumLastFour:
-                    queries.append("""
-                        INSERT INTO ptyd_payments
-                        (
-                            payment_id,
-                            purchase_id,
-                            buyer_id,
-                            amount_paid,
-                            coupon_id,
-                            payment_time_stamp,
-                            payment_type,
-                            cc_num,
-                            cc_exp_date,
-                            cc_cvv
-                        )
-                        SELECT
-                            \'""" + paymentId + """\',
-                            \'""" + purchaseId + """\',
-                            \'""" + data['user_uid'] + """\',
-                            """ + data['item_price'] + """,
-                            NULL,
-                            \'""" + getNow() + """\',
-                            payment_type,
-                            cc_num,
-                            cc_exp_date,
-                            cc_cvv
-                        FROM
-                            ptyd_payments
-                        WHERE
-                            RIGHT(cc_num, 4) = \'""" + ccNumLastFour + """\'
-                        ORDER BY
-                            payment_time_stamp
-                        LIMIT 1;""")
-                    print("Credit card exists, using previous card.")
-                else:
-                    print('No matching credit cards found. Using user input.')
-                    queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
-            else:
-                print('No matching credit cards found. Using user input.')
-                queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
+            queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
+
+#           if ccNumQuery['code'] == 280 and len(ccNumQuery['result']) > 0:
+#               print("Checking for existing credit cards...")
+#               ccNumLastFour = ccNumQuery['result'][0]['cc_num']
+#               print(data['cc_num'][-4:])
+#               if data['cc_num'][-4:] == ccNumLastFour:
+#                   queries.append("""
+#                       INSERT INTO ptyd_payments
+#                       (
+#                           payment_id,
+#                           buyer_id,
+#                           gift,
+#                           coupon_id,
+#                           amount_due,
+#                           amount_paid,
+#                           purchase_id,
+#                           payment_time_stamp,
+#                           payment_type,
+#                           cc_num,
+#                           cc_exp_date,
+#                           cc_cvv,
+#                           billing_zip
+#                       )
+#                       SELECT
+#                           \'""" + paymentId + """\',
+#                           \'""" + data['user_uid'] + """\',
+#                           \'""" + data['is_gift'] + """\',
+#                           NULL,
+#                           """ + data['item_price'] + """,
+#                           """ + data['item_price'] + """,
+#                           \'""" + purchaseId + """\',
+#                           \'""" + getNow() + """\',
+#                           payment_type,
+#                           cc_num,
+#                           cc_exp_date,
+#                           cc_cvv,
+#                           \'""" + data['billing_zip'] + """\'
+#                       FROM
+#                           ptyd_payments
+#                       WHERE
+#                           RIGHT(cc_num, 4) = \'""" + ccNumLastFour + """\'
+#                       ORDER BY
+#                           payment_time_stamp
+#                       LIMIT 1;""")
+#                   print("Credit card exists, using previous card.")
+#               else:
+#                   print('No matching credit cards found. Using user input.')
+#                   queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
+#           else:
+#               print('No matching credit cards found. Using user input.')
+#               queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
 
             queries.append(
                 """ INSERT INTO ptyd_purchases
                     (
                         purchase_id,
-                        purchase_status,
                         meal_plan_id,
-                        recipient_id,
                         start_date,
-                        purchase_instructions
+                        delivery_first_name,
+                        delivery_last_name,
+                        delivery_email,
+                        delivery_phone,
+                        delivery_address,
+                        delivery_address_unit,
+                        delivery_city,
+                        delivery_state,
+                        delivery_zip,
+                        delivery_region,
+                        delivery_instructions
                     )
                     VALUES
                     (
                         \'""" + purchaseId + """\',
-                        \'active\',
                         \'""" + mealPlanId + """\',
-                        \'""" + data['user_uid'] + """\',
                         \'""" + getToday() + """\',
-                        NULL
-                    )""")
+                        \'""" + data['delivery_first_name'] + """\',
+                        \'""" + data['delivery_last_name'] + """\',
+                        \'""" + data['delivery_email'] + """\',
+                        \'""" + data['delivery_phone'] + """\',
+                        \'""" + data['delivery_address'] + """\',
+                        """ + DeliveryUnit + """,
+                        \'""" + data['delivery_city'] + """\',
+                        \'""" + data['delivery_state'] + """\',
+                        \'""" + data['delivery_zip'] + """\',
+                        \'""" + data['delivery_region'] + """\',
+                        \'""" + data['delivery_instructions'] + """\'
+                    );""")
 
             reply['payment'] = execute(queries[3], 'post', conn)
             # Add credit card verification code here
@@ -1111,10 +1128,13 @@ class Checkout(Resource):
 class MealSelection(Resource):
     def readQuery(self, items):
         for item in items:
+            print(item)
             item['meals_selected'] = {}
             if item['meal_selection'] == 'SKIP':
                 continue
             if item['meal_selection'] == 'SURPRISE':
+                continue
+            if item['meal_selection'] == None:
                 continue
             selectedMeals = item['meal_selection'].split(';')
             for selectedMeal in selectedMeals:
@@ -1124,27 +1144,155 @@ class MealSelection(Resource):
                     item['meals_selected'][selectedMeal] = 1
         return items
 
-    def get(self, userUid):
+    def get(self, purchaseId):
         response = {}
         items = {}
         try:
             conn = connect()
 
-            query = """ SELECT
-                            week_affected,
-                            meal_selection,
-                            delivery_day
-                        FROM ptyd_meals_selected AS m
-                        INNER JOIN ptyd_purchases AS p
-                        ON m.purchase_id = p.purchase_id
-                        WHERE
-                        p.recipient_id = \'""" + userUid + "\';"
+            queries = ["""
+                SELECT
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time,
+                    ms1.delivery_day
+                FROM ptyd_meals_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
+                    FROM ptyd_meals_selected
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                WHERE
+                purchase_id = \'""" + purchaseId + "\';", """
+                SELECT
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time
+                FROM ptyd_addons_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
+                    FROM ptyd_addons_selected
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                WHERE
+                purchase_id = \'""" + purchaseId + "\';"]
 
-            items = execute(query, 'get', conn)
-            items = self.readQuery(items['result'])
+            meals = execute(queries[0], 'get', conn)
+            addons = execute(queries[1], 'get', conn)
+
+            items['Meals'] = self.readQuery(meals['result'])
+            items['Addons'] = self.readQuery(addons['result'])
 
             response['message'] = 'Request successful.'
             response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        # Remove last semicolon
+        return mealSelectionString[:-1]
+
+    def postQuery(self, purchaseId, data):
+        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if data['is_addons'] == True:
+            mealSelection = self.formatMealSelection(data['addon_quantities'])
+            query = """
+                INSERT INTO ptyd_addons_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + "\');"
+        else:
+            # Handle SKIP request
+            if data['delivery_day'] == 'SKIP':
+                mealSelection = 'SKIP'
+            # Handle default meal selection
+            elif data['default_selected'] is True:
+                mealSelection = 'SURPRISE'
+            # Handle custom meal selection
+            else:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+
+            query = """
+                INSERT INTO ptyd_meals_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection,
+                    delivery_day
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + """\',
+                    \'""" + data['delivery_day'] + "\');"
+
+        return query
+
+    # HTTP method POST
+    def post(self, purchaseId):
+        response = {}
+        items = []
+        try:
+            conn = connect()
+
+            data = request.get_json(force=True)
+            print("Received:", data)
+
+            queries = [
+                """ SELECT purchase_id
+                    FROM ptyd_purchases
+                    WHERE purchase_id = \'""" + purchaseId + "\';"]
+
+            # Retrieve purchase ID
+            getPurchaseId = execute(queries[0], 'get', conn)
+
+            # Handle successful purchase ID query
+            if getPurchaseId['code'] == 280:
+                if not len(getPurchaseId['result']) > 0:
+                    response['message'] = 'Recipient has no active purchase_id.'
+                    response['error'] = getPurchaseId
+                    print("Error:", response['message'])
+                    # 400: Client side bad request
+                    return response, 400
+            # Handle unsuccessful purchase ID query
+            else:
+                response['message'] = 'Could not retrieve purchase_id.'
+                response['error'] = getPurchaseId
+                print("Error:", response['message'])
+                # 500: Internal server error
+                return response, 500
+#               print("purchase_id:", purchaseId)
+
+            queries.append(self.postQuery(purchaseId, data))
+
+            execute(queries[1], 'post', conn)
+
+            response['message'] = 'Request successful.'
 
             return response, 200
         except:
@@ -1436,6 +1584,7 @@ class MealInfo(Resource):
                         """
 
             meal_info['meal_info'] = execute(queries, 'get', conn)
+            print(meal_info)
             response['message'] = 'Request successful.'
             response['result'] = meal_info
 
@@ -1463,6 +1612,7 @@ class AdminMenu(Resource):
                         FROM 
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+
                            
             print('Items --------------------------------------------')         
             print(items['result'][0]['menu_date'])
@@ -1665,19 +1815,18 @@ class TemplateApi(Resource):
             disconnect(conn)
 
 # Define API routes
-
-# Still uses getRdsConn()
-# Needs to be converted to V2 APIs
-api.add_resource(Meals, '/api/v1/meals')
-api.add_resource(Accounts, '/api/v1/accounts')
-
-# New APIs, uses connect() and disconnect()
+# Customer page
+api.add_resource(Meals, '/api/v2/meals')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
-api.add_resource(Account, '/api/v2/account/<string:accName>/<string:accPass>')
+api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
+api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
+api.add_resource(AccountSaltById, '/api/v2/accountsaltbyid/<string:userUid>')
+api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
-api.add_resource(MealSelection, '/api/v2/mealselection/<string:userUid>')
+api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 
+# Admin page
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile,'/api/v2/customerprofile')
 
@@ -1688,6 +1837,7 @@ api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
+# Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 
 # Run on below IP address and port

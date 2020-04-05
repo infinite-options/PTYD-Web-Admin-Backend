@@ -55,7 +55,7 @@ export default function Main({ appProps }) {
         component={WeeklyMenu}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/meals`,
+          API_URL: `${DEV_URL}v2/meals`,
           header_label: "MENU THIS WEEK",
           header_link_label: "NEXT WEEK",
           header_link_url: "/menunextweek",
@@ -68,7 +68,7 @@ export default function Main({ appProps }) {
         component={WeeklyMenu}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/meals`,
+          API_URL: `${DEV_URL}v2/meals`,
           header_label: "COMING NEXT WEEK",
           header_link_label: "THIS WEEK",
           header_link_url: "/menuthisweek",
@@ -81,7 +81,8 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? Checkout : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/accounts`,
+          SALT_URL: `${DEV_URL}v2/accountsaltbyid`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
           redirect_after_login: '/checkout'
@@ -98,9 +99,8 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/meals`,
-          USERS_API_URL: `${DEV_URL}v1/accounts`,
-          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          API_URL: `${DEV_URL}v2/meals`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`
         }}
       />
@@ -182,7 +182,7 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v1/accounts`,
+          API_URL: `${DEV_URL}v2/accountsalt`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
         }}
       />
