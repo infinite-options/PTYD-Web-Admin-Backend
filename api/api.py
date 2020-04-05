@@ -1898,9 +1898,9 @@ class MenuCreation(Resource):
                 #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
                 menuEntries = 6
                 while menuEntries != 0:
-                    menu_cat = items['result'][index2]['meal_category']
-                    menu_cat = "Meal Category: " + menu_cat
-                    dictValues.append(menu_cat)
+                    menu_type = items['result'][index2]['menu_category']
+                    menu_type = "Menu Type: " + menu_type
+                    dictValues.append(menu_type)
                     
                     menu_descript =  items['result'][index2]['meal_name']
                     menu_descript = "Meal Name: " + menu_descript
