@@ -1513,12 +1513,15 @@ class CustomerInfo2(Resource):
         try:
             conn = connect()
 
-            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
-                            DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days', count(*) as Number_of_meals
-                            from ptyd_accounts
+            queries = """
+                            SELECT
+                                concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+                                DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days', count(*) as Number_of_meals
+                            FROM ptyd_accounts
                             inner join 
-                            ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
-                            group by pay.buyer_id"""
+                                ptyd_payments pay ON ptyd_accounts.user_uid = pay.buyer_id
+                            group by pay.buyer_id;
+                            """
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
             response['message'] = 'Request successful.'
@@ -1696,8 +1699,7 @@ class AdminMenu(Resource):
                     """ SELECT 
                         menu_date,
                         menu_category,
-                        meal_name,
-                        IFNULL(menu_num_sold,0) AS menu_num_sold 
+                        meal_name
                         FROM 
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
@@ -1728,6 +1730,7 @@ class AdminMenu(Resource):
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
+                #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
                 menuEntries = 6
                 while menuEntries != 0:
                     menu_cat = items['result'][index2]['menu_category']
@@ -1735,22 +1738,14 @@ class AdminMenu(Resource):
                     dictValues.append(menu_cat)
                     
                     menu_descript =  items['result'][index2]['meal_name']
-                    menu_descript = "Meal Description: " + menu_descript
+                    menu_descript = "Meal Name: " + menu_descript
                     dictValues.append(menu_descript)
-
-                    menu_num = items['result'][index2]['menu_num_sold']
-                    menu_num = str(menu_num)
-                    menu_num = "Number Sold: " + menu_num
-                    dictValues.append(menu_num)
 
                     menuEntries -=1
                     index2 +=1
                 
                 d[menuDates[index]] = dictValues
 
-            
-            
-            
         
             print ('Dictionary part 2 --------------')
             print(d)
@@ -1766,38 +1761,13 @@ class AdminMenu(Resource):
         finally:
             disconnect(conn)
     
-    # HTTP method POST to update the menu
-    def post(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-            MenuDate = data['MenuDate']
-            MenuCategory = data['MenuCategory']
-            Meal = data['Meal']
-            NumberSold = 0
-
-            print("Received:", data)
-
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_meal_plans;""", 'get', conn)
-
-            response['message'] = 'successful'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
+    
     
 class displayIngredients(Resource):
     global RDS_PW
     
+    #not working because we need a new querie to calculate number sold 
+
     def get(self):
         response = {}
         items = {}
@@ -1848,7 +1818,8 @@ class displayIngredients(Resource):
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
-                menuEntries = 14
+                #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
+                menuEntries = 6
                 print(menuEntries)
                 while menuEntries != 0:
                     print(menuEntries)
@@ -1881,6 +1852,185 @@ class displayIngredients(Resource):
         finally:
             disconnect(conn)
 
+class MenuCreation(Resource):
+    global RDS_PW
+    
+    #----------------- 
+    # POST for 1. pulling up the menu dates available. 2. Populating the menu type and meal if there is an existing one. 3. providing a list of meals and their
+    # average sold per posting
+    # ----------------
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(
+                    """ SELECT 
+                        menu_date,
+                        menu_type,
+                        meal_category,
+                        meal_name
+                        FROM 
+                        ptyd_menu
+                        JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+
+            # generated all of the menu dates available                
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            
+            # formated the menu dates into a list
+            menuDates = list( dict.fromkeys(menuDates) )
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            # creates a dictionary with the categories and meal names
+            index2 = 0
+            for index in range(len(menuDates)):
+                dictValues = []
+                
+                #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
+                menuEntries = 6
+                while menuEntries != 0:
+                    menu_type = items['result'][index2]['menu_type']
+                    menu_type = "Menu Type: " + menu_type
+                    dictValues.append(menu_type)
+                    
+                    menu_descript =  items['result'][index2]['meal_name']
+                    menu_descript = "Meal Name: " + menu_descript
+                    dictValues.append(menu_descript)
+
+                    menuEntries -=1
+                    index2 +=1
+                
+                d[menuDates[index]] = dictValues
+
+            # ------ not sure if this query is right but correct idea -----
+            items = execute(
+                """ SELECT
+                        meal_category AS Meal_Category,
+                        meal_name AS Meal_Name,
+                        ROUND(AVG(n),2) as "Avg_Sales" from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                    FROM 
+                        ptyd_meals_selected 
+                    JOIN
+                        numbers
+                    ON char_length(meal_selection)
+                        - char_length(replace(meal_selection, ';', ''))
+                        >= n - 1) sub1
+                    JOIN 
+                        ptyd_meals
+                    ON sub1.meal_selected=meal_id
+                    GROUP BY meal_name ;
+                """, 'get', conn)
+            
+            #creating list of meal categories to isolate unique values
+
+            mealCategories = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['Meal_Category']
+                mealCategories.append(placeHolder)
+
+            mealCategories = list( dict.fromkeys(mealCategories) )
+          
+            # initializing empty dictionary with the meal categories as keys
+            d2 ={}
+            for index in range(len(mealCategories)):
+                key = mealCategories[index]
+                d2[key] = 'value'
+
+           #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
+
+            for index in range(len(mealCategories)):
+                categoryList = []
+
+                for index2 in range(len(items['result'])):
+                    if (items['result'][index2]['Meal_Category'] == mealCategories[index]):
+                        mealName= items['result'][index2]['Meal_Name']
+                        averageSales = items['result'][index2]['Avg_Sales']
+                        averageSales = str(averageSales)
+                        tempdict ={'Meal_Name': mealName, 'Avg_Sales': averageSales}
+                        categoryList.append(tempdict)
+                
+                d2[mealCategories[index]] = categoryList
+            
+
+            items = d2
+
+            response['message'] = 'successful'
+            
+            response['menu_dates'] = menuDates
+            response['menus'] = d
+            response['result'] = items
+            
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
+    def post(self):
+        response = {}
+        
+
+        Date = data['MenuDate']
+        Type = data['MenuType']
+        MealName= data['MealName']
+        MenuMealID = ''
+
+        try:
+            conn = connect()
+
+            MenuMealID = execute(
+                            """ SELECT 
+                                    meal_id
+                                FROM 
+                                    ptyd_meals
+                                WHERE meal_name = \'""" + MealName + "\';"
+                                , 'get', conn)
+           
+            items = execute(""" INSERT INTO ptyd_menu
+                    (
+                        menu_date,
+                        menu_type,
+                        menu_meal_id
+                    )
+                    VALUES
+                    (""" +
+                        "\'" + Date + "\'," +
+                        "\'" + Type + "\'," +
+                        "\'" + MenuMealID+ "\');", 'get', conn)
+
+
+            print('TEST POST-------------------')
+            print(items)
+            
+            
+            response['message'] = 'successful'
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+   
+
+            
+
+
+
+
+
+
+
+
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -1901,6 +2051,10 @@ class TemplateApi(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
+
+
+
 
 # Define API routes
 
@@ -1924,9 +2078,12 @@ api.add_resource(CustomerProfile,'/api/v2/customerprofile')
 api.add_resource(MealInfo, '/api/v2/meal_info')
 
 api.add_resource(AdminDBv2, '/api/v2/admindb')
+
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
+
+api.add_resource(MenuCreation, '/api/v2/create-menu')
 
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 
