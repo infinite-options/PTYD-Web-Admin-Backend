@@ -4,16 +4,7 @@ import Jumbotron from "../Jumbotron/Jumbotron-create-menu";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
-import {
-  Dropdown,
-  Table,
-  Card,
-  Button,
-  Tabs,
-  Tab,
-  Row,
-  Col
-} from "react-bootstrap";
+import { Table, Button, Row, Col } from "react-bootstrap";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -44,9 +35,17 @@ class CreateMenu extends Component {
       //   page: 1,
       //   pageSize: 10
       // },
-      age: 10,
-      temp: []
+      // age: 10,
+      temp: [],
+      createMenu: []
     };
+  }
+  async componentDidMount() {
+    const res = await fetch(this.props.API_URL_CREATEMENU);
+    const api = await res.json();
+    const createMenu = api.menus;
+    this.setState({ createMenu });
+    console.log(createMenu);
   }
   componentWillMount() {
     this.state.temp.push(
@@ -93,6 +92,20 @@ class CreateMenu extends Component {
   handleChange = event => {
     this.setState({ age: event.target.value });
   };
+  makeTable = () => {
+    let a = [];
+
+    for (var key in this.state.createMenu) {
+      console.log("sdsfdsfsdfsdf", this.state.createMenu[key]);
+      console.log("key", key);
+      a.push(
+        <div className="scrollItem">
+          {this.getDate(this.state.createMenu[key], key)}
+        </div>
+      );
+    }
+    return a;
+  };
   render() {
     return (
       <div style={{ margin: "1%" }}>
@@ -107,49 +120,7 @@ class CreateMenu extends Component {
           </Link>
           <Typography color="textPrimary">Create Menu</Typography>
         </Breadcrumbs>
-        <Row>
-          <Col>
-            <Table striped bordered hover variant="dark">
-              <thead style={{ backgroundColor: "blue", color: "white" }}>
-                <tr>
-                  <th>Meal Category</th>
-                  <th colSpan="2">
-                    <FormControl>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={this.state.age}
-                        onChange={this.handleChange}
-                        style={{ color: "white" }}
-                      >
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </th>
-                </tr>
-              </thead>
-              <thead>
-                <tr>
-                  <th>Meal Category</th>
-                  <th>Meal</th>
-                  <th>Avg Sales/Posting</th>
-                </tr>
-              </thead>
-              <tbody>{this.state.temp}</tbody>
-            </Table>
-            <Button
-              variant="primary"
-              onClick={() => {
-                this.addRow();
-              }}
-            >
-              Add Meal
-            </Button>
-          </Col>
-          <Col></Col>
-        </Row>
+        {this.makeTable()}
       </div>
     );
   }
@@ -182,6 +153,83 @@ class CreateMenu extends Component {
     this.setState({
       temp: this.state.temp
     });
+  };
+  // getdate = () =>{
+  //   let dates=[];
+  //   for (let i = 0; i < createMenu.menu_dates.length; i += 1) {
+  //     dates.push()
+  // }
+  getDate = (weekArgument, date) => {
+    let arr = [];
+    let arr2 = [];
+    for (let i = 0; i < weekArgument.length; i += 2) {
+      let first = weekArgument[i];
+      let second = weekArgument[i + 1];
+
+      let a = first.split(":")[1];
+      let b = second.split(":")[1];
+
+      arr.push(this.single_item(a, b));
+    }
+    return (
+      <Row>
+        <Col>
+          <Table striped bordered hover variant="dark">
+            <thead style={{ backgroundColor: "blue", color: "white" }}>
+              <tr>
+                <th>Menu For</th>
+                <th colSpan="2">
+                  {/* {this.state.createMenu.map(eachRow => ({ eachRow.menu_dates }))} */}
+                  {/* {this.getdate()} */}
+
+                  {/* {this.state.createMenu.menu_dates} */}
+                  {date}
+                  <FormControl>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      // value={this.state.age}
+                      onChange={this.handleChange}
+                      style={{ color: "white" }}
+                    >
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </th>
+              </tr>
+            </thead>
+            <thead>
+              <tr>
+                <th>Meal Category</th>
+                <th>Meal</th>
+                <th>Avg Sales/Posting</th>
+              </tr>
+            </thead>
+            {/* <tbody>{this.state.temp}</tbody> */}
+            <tbody>{arr}</tbody>
+          </Table>
+          <Button
+            variant="primary"
+            onClick={() => {
+              this.addRow();
+            }}
+          >
+            Add Meal
+          </Button>
+        </Col>
+        <Col></Col>
+      </Row>
+    );
+  };
+  single_item = (menuType, mealName) => {
+    return (
+      <tr>
+        <td>{menuType}</td>
+        <td>{mealName}</td>
+      </tr>
+    );
   };
 }
 export default CreateMenu;

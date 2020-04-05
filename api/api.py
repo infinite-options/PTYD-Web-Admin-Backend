@@ -1965,7 +1965,7 @@ class MenuCreation(Resource):
 
             response['message'] = 'successful'
             
-            response['menu_dates'] = menuDates
+            # response['menu_dates'] = menuDates
             response['menus'] = d
             response['result'] = items
             

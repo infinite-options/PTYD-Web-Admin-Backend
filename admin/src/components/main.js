@@ -36,7 +36,15 @@ const Main = ({ appProps }) => (
     />
     <AppliedRoute exact path="/userMap" component={UserMap} />
     <AppliedRoute exact path="/editCreateMeal" component={EditCreateMeal} />
-    <AppliedRoute exact path="/createMenu" component={CreateMenu} />
+    <AppliedRoute
+      exact
+      path="/createMenu"
+      component={CreateMenu}
+      appProps={{
+        appProps,
+        API_URL_CREATEMENU: `${DEV_URL}create-menu`
+      }}
+    />
   </Switch>
 );
 export default Main;
