@@ -1930,23 +1930,22 @@ class MenuCreation(Resource):
                     GROUP BY meal_name ;
                 """, 'get', conn)
             
+            #creating list of meal categories to isolate unique values
 
             mealCategories = []
             for index in range(len(items['result'])):
                 placeHolder = items['result'][index]['Meal_Category']
                 mealCategories.append(placeHolder)
 
-            print("meal categories-------------------------")
             mealCategories = list( dict.fromkeys(mealCategories) )
-            print(mealCategories)
-
+          
+            # initializing empty dictionary with the meal categories as keys
             d2 ={}
             for index in range(len(mealCategories)):
                 key = mealCategories[index]
                 d2[key] = 'value'
 
-            print("meal categories dictionary-----------")
-            print(d2)
+           #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
 
             for index in range(len(mealCategories)):
                 categoryList = []
@@ -1961,13 +1960,8 @@ class MenuCreation(Resource):
                 
                 d2[mealCategories[index]] = categoryList
             
-            print("new dict --------------------")
-            print(d2)
-
-                    
 
             items = d2
-
 
             response['message'] = 'successful'
             
