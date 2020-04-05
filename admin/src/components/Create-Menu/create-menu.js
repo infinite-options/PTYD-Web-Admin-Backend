@@ -37,15 +37,16 @@ class CreateMenu extends Component {
       // },
       // age: 10,
       temp: [],
-      createMenu: []
+      createMenu: [],
+      details: []
     };
   }
   async componentDidMount() {
     const res = await fetch(this.props.API_URL_CREATEMENU);
     const api = await res.json();
     const createMenu = api.menus;
-    this.setState({ createMenu });
-    console.log(createMenu);
+    const details = api.result;
+    this.setState({ createMenu, details });
   }
   componentWillMount() {
     this.state.temp.push(
@@ -207,8 +208,8 @@ class CreateMenu extends Component {
                 <th>Avg Sales/Posting</th>
               </tr>
             </thead>
-            {/* <tbody>{this.state.temp}</tbody> */}
-            <tbody>{arr}</tbody>
+            <tbody>{this.state.temp}</tbody>
+            {/* <tbody>{arr}</tbody> */}
           </Table>
           <Button
             variant="primary"
