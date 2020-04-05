@@ -1978,18 +1978,42 @@ class MenuCreation(Resource):
     
     def post(self):
         response = {}
-        items = {}
+        
+
+        Date = data['MenuDate']
+        Type = data['MenuType']
+        MealName= data['MealName']
+        MenuMealID = ''
+
         try:
             conn = connect()
 
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_meal_plans;""", 'get', conn)
+            MenuMealID = execute(
+                            """ SELECT 
+                                    meal_id
+                                FROM 
+                                    ptyd_meals
+                                WHERE meal_name = \'""" + MealName + "\';"
+                                , 'get', conn)
+           
+            items = execute(""" INSERT INTO ptyd_menu
+                    (
+                        menu_date,
+                        menu_type,
+                        menu_meal_id
+                    )
+                    VALUES
+                    (""" +
+                        "\'" + Date + "\'," +
+                        "\'" + Type + "\'," +
+                        "\'" + MenuMealID+ "\');", 'get', conn)
 
-            response['message'] = 'successful'
+
+            print('TEST POST-------------------')
+            print(items)
             
-
+            
+            response['message'] = 'successful'
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
