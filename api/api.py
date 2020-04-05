@@ -1972,7 +1972,7 @@ class MenuCreation(Resource):
             
             for index in range(len(mealNames)):
                 tempDict = {}
-                key1 = "Meal Name: "
+                key1 = "Meal Name"
                 key2 = "Avg Sales/Posting"
                 key3 = "Total Posts"
                 key4 = "Total Sold"
