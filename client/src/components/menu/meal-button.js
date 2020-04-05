@@ -8,6 +8,10 @@ import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
+
+    console.log("Props");
+    console.log(this.props);
+
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
     this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
 
@@ -22,8 +26,9 @@ export default class MealButton extends Component {
       requestModal: false,
       // buttonDisabled: true,
       buttonSelectKeepColor: false,
-      buttonAddOnKeepColor: false,
+      buttonAddOnKeepColor: this.props.addonsSelected,
       mealQuantities: this.props.mealQuantities,
+      addonQuantities: this.props.addonQuantities,
       maxmeals: this.props.maxmeals,
       maxmealsCopy: this.props.maxmeals,
       addonActivated: false,
@@ -69,7 +74,7 @@ export default class MealButton extends Component {
   }
 
   sendForm = () => {
-    fetch(this.props.API_URL, {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -81,7 +86,23 @@ export default class MealButton extends Component {
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
         default_selected: this.state.buttonSurprise,
-        num_meals: this.props.maxmeals,
+        is_addons: false,
+      })
+    });
+  };
+
+  sendAddonForm = () => {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        purchase_id: this.props.purchase_id,
+        week_affected: this.props.saturdayDate,
+        addon_quantities: this.state.addonQuantities,
+        is_addons: true,
       })
     });
   };
@@ -97,15 +118,17 @@ export default class MealButton extends Component {
   closeButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
-      buttonAddOnKeepColor: true
+      buttonAddOnKeepColor: false,
+      addonQuantities: this.props.addonQuantities
     });
   };
-  // keepButtonAddOn = () => {
-  //   this.setState({
-  //     buttonAddOn: false,
-  //     buttonAddOnKeepColor: true
-  //   });
-  // };
+  saveButtonAddOn = () => {
+    this.setState({
+      buttonAddOn: false,
+      buttonAddOnKeepColor: true
+    });
+    this.sendAddonForm();
+  };
 
   changeButtonS = () => {
     this.setState({
@@ -335,8 +358,6 @@ export default class MealButton extends Component {
               </Cell>
               <br />
               {this.props.menu[key].Menu.map(meal => (
-                console.log(meal),
-                console.log(this.state.mealQuantities),
                 <Cell col={4}>
                   <EachMeal
                     mealTitle={meal.meal_name}
@@ -467,14 +488,17 @@ export default class MealButton extends Component {
                           meal.meal_sat
                         }
                         imgurl={meal.meal_photo_url}
+                        addonQuantities={
+                          this.state.addonQuantities[meal.meal_id]
+                        }
                         incrementAddon={() => {
                           var stateCopy = Object.assign({}, this.state);
-                          stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                          stateCopy.addonQuantities[meal.menu_meal_id] += 1;
                           this.setState(stateCopy);
                         }}
                         decrementAddon={() => {
                           var stateCopy = Object.assign({}, this.state);
-                          stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                          stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
                           this.setState(stateCopy);
                         }}
                       />
@@ -492,16 +516,16 @@ export default class MealButton extends Component {
                 <Cell col={12}>
                   <center>
                     <h4 style={{ margin: "0" }}>
-                        { this.props.addons.Category }
+                        { this.props.addons["Addons"].Category }
                     </h4>
                   </center>
                 </Cell>
 
-                {/*this.props.addons["Addons"].Menu.map(meal => (
+                {this.props.addons["Addons"].Menu.map(meal => (
                   <Cell col={4}>
                     <EachAddon
                       mealTitle={meal.meal_name}
-                      ingridents="Ingredients: Not Yet in Database"
+                      ingridents={"Ingredients: " + meal.meal_desc}
                       detail={
                         "Cal " +
                         meal.meal_calories +
@@ -519,19 +543,22 @@ export default class MealButton extends Component {
                         meal.meal_sat
                       }
                       imgurl={meal.meal_photo_url}
+                      addonQuantities={
+                        this.state.addonQuantities[meal.meal_id]
+                      }
                       incrementAddon={() => {
                         var stateCopy = Object.assign({}, this.state);
-                        stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                        stateCopy.addonQuantities[meal.menu_meal_id] += 1;
                         this.setState(stateCopy);
                       }}
                       decrementAddon={() => {
                         var stateCopy = Object.assign({}, this.state);
-                        stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                        stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
                         this.setState(stateCopy);
                       }}
                     />
                   </Cell>
-                ))*/}
+                ))}
               </Grid>
             </div>
             {/* ))} */}
@@ -543,7 +570,7 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary">Save changes</Button>
+            <Button variant="primary" onClick={this.saveButtonAddOn}>Save changes</Button>
           </center>
         </Card.Body>
       </Card>
