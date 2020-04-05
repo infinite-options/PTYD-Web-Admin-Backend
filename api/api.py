@@ -2078,35 +2078,46 @@ class MealCreation(Resource):
         finally:
             disconnect(conn)
 
-#   def post(self):
-#       try:
-#           conn = connect()
-#           data = request.get_json(force=True)
+    def post(self):
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
 
-#           query = """
-#               INSERT INTO ptyd_recipes
-#               (
-#                   recipe_meal_id,
-#                   recipe_ingredient_id,
-#                   recipe_ingredient_qty,
-#                   recipe_qty_type,
-#                   recipe_measure_id
-#               )
-#               VALUES (
+            # Post JSON needs to be in this format
+#           data = {
+#               'meal_id': '1',
+#               'ingredient_id': '2',
+#               'ingredient_qty': 3,
+#               'qty_type': 'tsp',
+#               'measure_id': '4'
+#           }
 
-#               )
-#               ON DUPLICATE KEY UPDATE
-#                   ;
-#               """
+            query = """
+                INSERT INTO ptyd_recipes (
+                    recipe_meal_id,
+                    recipe_ingredient_id,
+                    recipe_ingredient_qty,
+                    recipe_qty_type,
+                    recipe_measure_id )
+                VALUES (
+                    \'""" + data['meal_id'] + """\',
+                    \'""" + data['ingredient_id'] + """\',
+                    \'""" + data['ingredient_qty'] + """\',
+                    \'""" + data['qty_type'] + """\',
+                    \'""" + data['measure_id'] + """\')
+                ON DUPLICATE KEY UPDATE
+                    recipe_ingredient_qty = \'""" + data['ingredient_qty'] + """\',
+                    recipe_qty_type = \'""" + data['qty_type'] + """\',
+                    recipe_measure_id = \'""" + data['measure_id'] + "\';"
 
-#           response['message'] = 'Request successful.'
-#           response['result'] = items
+            response['message'] = 'Request successful.'
+            response['result'] = items
 
-#           return response, 200
-#       except:
-#           raise BadRequest('Request failed, please try again later.')
-#       finally:
-#           disconnect(conn)
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
             
 
 
