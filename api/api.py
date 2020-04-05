@@ -2030,9 +2030,9 @@ class MealCreation(Resource):
                 response[key]['meal_name'] = meal['meal_name']
                 response[key]['ingredients'] = []
             ingredient = {}
-            ingredient['ingredient_desc'] = meal['ingredient_desc']
+            ingredient['name'] = meal['ingredient_desc']
             ingredient['qty'] = meal['recipe_ingredient_qty']
-            ingredient['qty_type'] = meal['recipe_qty_type']
+            ingredient['units'] = meal['measure_name']
             ingredient['ingredient_id'] = meal['ingredient_id']
             ingredient['measure_id'] = meal['recipe_measure_id']
             response[key]['ingredients'].append(ingredient)
@@ -2052,7 +2052,7 @@ class MealCreation(Resource):
                     ingredient_id,
                     ingredient_desc,
                     recipe_ingredient_qty,
-                    recipe_qty_type,
+                    measure_name,
                     recipe_measure_id
                 FROM
                     ptyd_recipes
@@ -2063,7 +2063,11 @@ class MealCreation(Resource):
                 JOIN
                     ptyd_ingredients
                 ON
-                    ingredient_id = recipe_ingredient_id;"""
+                    ingredient_id = recipe_ingredient_id
+                JOIN
+                    ptyd_measure_unit
+                ON
+                    recipe_measure_id = measure_unit_id;"""
 
             sql = execute(query, 'get', conn)
 
@@ -2085,11 +2089,10 @@ class MealCreation(Resource):
 
             # Post JSON needs to be in this format
 #           data = {
-#               'meal_id': '1',
-#               'ingredient_id': '2',
+#               'meal_id': '700-000001',
+#               'ingredient_id': '110-000002',
 #               'ingredient_qty': 3,
-#               'qty_type': 'tsp',
-#               'measure_id': '4'
+#               'measure_id': '130-000004'
 #           }
 
             query = """
@@ -2097,17 +2100,14 @@ class MealCreation(Resource):
                     recipe_meal_id,
                     recipe_ingredient_id,
                     recipe_ingredient_qty,
-                    recipe_qty_type,
                     recipe_measure_id )
                 VALUES (
                     \'""" + data['meal_id'] + """\',
                     \'""" + data['ingredient_id'] + """\',
                     \'""" + data['ingredient_qty'] + """\',
-                    \'""" + data['qty_type'] + """\',
                     \'""" + data['measure_id'] + """\')
                 ON DUPLICATE KEY UPDATE
                     recipe_ingredient_qty = \'""" + data['ingredient_qty'] + """\',
-                    recipe_qty_type = \'""" + data['qty_type'] + """\',
                     recipe_measure_id = \'""" + data['measure_id'] + "\';"
 
             response['message'] = 'Request successful.'
