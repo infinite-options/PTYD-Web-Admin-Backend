@@ -1869,7 +1869,7 @@ class MenuCreation(Resource):
             items = execute(
                     """ SELECT 
                         menu_date,
-                        menu_category,
+                        menu_type,
                         meal_category,
                         meal_name
                         FROM 
@@ -1898,7 +1898,7 @@ class MenuCreation(Resource):
                 #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
                 menuEntries = 6
                 while menuEntries != 0:
-                    menu_type = items['result'][index2]['menu_category']
+                    menu_type = items['result'][index2]['menu_type']
                     menu_type = "Menu Type: " + menu_type
                     dictValues.append(menu_type)
                     
