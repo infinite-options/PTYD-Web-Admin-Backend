@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:InfiniteMeals" x:Class="InfiniteMeals.MainPage" Title="Serving Now">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:InfiniteMeals" x:Class="InfiniteMeals.MainPage" Title="Prep To your Door">
+
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Subscribe" Clicked="ClickedSubscribe"/>
+        <ToolbarItem Text="Menu" Clicked="ClickedMealSchedule"/>
+        <ToolbarItem Text="User Profile" Clicked="ClickedUserProfile" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        
+
+        <Button  HorizontalOptions="Center" Text="click to signup" Clicked="ClickedSignUp"/>
+
+        <Image x:Name="homepage" HorizontalOptions="Center"/>
+
+    </StackLayout>
+
+    <!--
     <ListView x:Name="kitchensListView" VerticalOptions="StartAndExpand" Footer="" HasUnevenRows="true" IsPullToRefreshEnabled="true">
         <ListView.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate> 
                 <ViewCell>
                     <StackLayout Margin="15, 15, 15, 15" Orientation="Vertical">
                         <Label Text="{Binding title}" HorizontalOptions="StartAndExpand" FontSize="Large" FontAttributes="Bold" Opacity="{Binding opacity}"/>
@@ -22,5 +39,6 @@
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
-    </ListView>
+    </ListView>-->
+    
 </ContentPage>

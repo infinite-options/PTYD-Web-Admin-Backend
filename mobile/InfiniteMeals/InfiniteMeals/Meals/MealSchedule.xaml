@@ -4,12 +4,59 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="InfiniteMeals.Meals.MealSchedule">
+             x:Class="InfiniteMeals.Meals.MealSchedule" Title="Select Meals Around Your Schedule">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+
+        <Grid ColumnSpacing="8" HorizontalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="16.66*" />
+                <ColumnDefinition Width="16.66*" />
+                <ColumnDefinition Width="16.66*" />
+                <ColumnDefinition Width="16.66*" />
+                <ColumnDefinition Width="16.66*" />
+                <ColumnDefinition Width="16.66*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="15*" />
+            </Grid.RowDefinitions>
+            <Button Text="Sunday" Grid.Column="0"/>
+            <Button Text="Monday" Grid.Column="1"/>
+            <Button Text="Skip This Week" Grid.Column="2"/>
+            <Button Text="Select Meal" Grid.Column="3"/>
+            <Button Text="Surprise Me" Grid.Column="4"/>
+            <Button Text="Add on" Grid.Column="5"/>
+
+            <Button Text="Sunday" Grid.Column="0" Grid.Row="1"/>
+            <Button Text="Monday" Grid.Column="1" Grid.Row="1"/>
+            <Button Text="Skip This Week" Grid.Column="2" Grid.Row="1"/>
+            <Button Text="Select Meal" Grid.Column="3" Grid.Row="1"/>
+            <Button Text="Surprise Me" Grid.Column="4" Grid.Row="1"/>
+            <Button Text="Add on" Grid.Column="5" Grid.Row="1"/>
+
+            <Button Text="Sunday" Grid.Column="0" Grid.Row="2"/>
+            <Button Text="Monday" Grid.Column="1" Grid.Row="2"/>
+            <Button Text="Skip This Week" Grid.Column="2" Grid.Row="2"/>
+            <Button Text="Select Meal" Grid.Column="3" Grid.Row="2"/>
+            <Button Text="Surprise Me" Grid.Column="4" Grid.Row="2"/>
+            <Button Text="Add on" Grid.Column="5" Grid.Row="2"/>
+
+            <Button Text="Sunday" Grid.Column="0" Grid.Row="3"/>
+            <Button Text="Monday" Grid.Column="1" Grid.Row="3"/>
+            <Button Text="Skip This Week" Grid.Column="2" Grid.Row="3"/>
+            <Button Text="Select Meal" Grid.Column="3" Grid.Row="3"/>
+            <Button Text="Surprise Me" Grid.Column="4" Grid.Row="3"/>
+            <Button Text="Add on" Grid.Column="5" Grid.Row="3"/>
+
+
+
+        </Grid>
+
+
+
     </ContentPage.Content>
 </ContentPage>

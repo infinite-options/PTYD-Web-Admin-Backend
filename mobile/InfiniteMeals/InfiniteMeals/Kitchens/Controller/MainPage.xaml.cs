@@ -17,6 +17,28 @@ namespace InfiniteMeals
 
         ObservableCollection<KitchensModel> Kitchens = new ObservableCollection<KitchensModel>();
 
+
+        private async void ClickedSignUp(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Signup.SignUp());
+        }
+
+        private async void ClickedMealSchedule(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Meals.MealSchedule());
+        }
+
+        private async void ClickedUserProfile(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Profile.UserProfile());
+        }
+
+        private async void ClickedSubscribe(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Subscribe.Subscribe());
+        }
+
+
         protected async void GetKitchens()
         {
             var request = new HttpRequestMessage();
@@ -74,7 +96,7 @@ namespace InfiniteMeals
                     ) ;
                 }
 
-                kitchensListView.ItemsSource = Kitchens;
+              //  kitchensListView.ItemsSource = Kitchens;
             }
 
         }
@@ -85,8 +107,10 @@ namespace InfiniteMeals
 
             GetKitchens();
 
-            //Kitchens.Clear();
+            homepage.Source = ImageSource.FromFile("homepage.jpg");
 
+            //Kitchens.Clear();
+            /*
             kitchensListView.RefreshCommand = new Command(() =>
             {
                GetKitchens();
@@ -94,7 +118,7 @@ namespace InfiniteMeals
             });
 
             kitchensListView.ItemSelected += Handle_ItemTapped();
-
+            */
         }
 
         private EventHandler<SelectedItemChangedEventArgs> Handle_ItemTapped()
