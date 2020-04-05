@@ -1913,7 +1913,7 @@ class MenuCreation(Resource):
 
             # ------ not sure if this query is right but correct idea -----
             items = execute(
-                        """ SELECT A.menu_meal_id, B.meal_name, total_sold/times_posted AS "Avg Sales/Posting"
+                        """ SELECT A.menu_meal_id, B.meal_name, B.total_sold, A.times_posted, total_sold/times_posted AS "Avg Sales/Posting"
                             FROM 
                                 (SELECT 
                                     menu_meal_id,
@@ -1949,11 +1949,18 @@ class MenuCreation(Resource):
             
             mealAvg = []
             mealNames = []
+            mealPostings = []
+            mealTotalSold = []
             for index in range(len(items['result'])):
                 placeHolder = items['result'][index]['meal_name']
                 mealNames.append(placeHolder)
                 placeHolder = items['result'][index]['Avg Sales/Posting']
                 mealAvg.append(placeHolder)
+                placeHolder = items['result'][index]['total_sold']
+                mealTotalSold.append(placeHolder)
+                placeHolder = items['result'][index]['times_posted']
+                mealPostings.append(placeHolder)
+
             
             print('Averages --------------------')
             print(mealAvg)
@@ -1967,8 +1974,12 @@ class MenuCreation(Resource):
                 tempDict = {}
                 key1 = "Meal Name: "
                 key2 = "Avg Sales/Posting"
+                key3 = "Total Posts"
+                key4 = "Total Sold"
                 tempDict[key1] = mealNames[index]
                 tempDict[key2] = str(mealAvg[index])
+                tempDict[key3] = str(mealPostings[index])
+                tempDict[key4] = str(mealTotalSold[index])
                 mealList.append(tempDict)
                 
             
@@ -1980,7 +1991,7 @@ class MenuCreation(Resource):
 
             
             
-
+        
           
 
             response['message'] = 'successful'
