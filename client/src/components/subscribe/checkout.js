@@ -44,7 +44,6 @@ class Checkout extends Component {
         this.setState({ purchase: usersApi.result[0] });
       }
     }
-    console.log('help me')
   }
 
   async sendForm() {

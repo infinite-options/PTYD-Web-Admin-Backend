@@ -206,7 +206,7 @@ class Plans(Resource):
             disconnect(conn)
 
 # V2 Meals API
-class Meals2(Resource):
+class Meals(Resource):
     global RDS_PW
 
     # Format queried tuples into JSON
@@ -304,8 +304,8 @@ class Meals2(Resource):
                     break
                 # convert string to datetime
                 stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
-                # run query for menu if stamp is the current week or future week menu
-                if now - timedelta(days=7) < stamp:
+                # Roll calendar at 4PM Monday
+                if now - timedelta(days=1, hours=16) < stamp:
 
                     weekly_special = execute(
                         """ 
@@ -406,8 +406,8 @@ class Meals2(Resource):
                     week = {
                         'SaturdayDate': str((stamp - timedelta(days=1)).date()),
                         'SundayDate': str(stamp.date()),
-                        'Sunday': str(stamp.date()),
-                        'Monday': str((stamp + timedelta(days=1)).date()),
+                        'Sunday': str(stamp.date().strftime("%b %-d")),
+                        'Monday': str((stamp + timedelta(days=1)).date().strftime("%b %-d")),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -449,119 +449,6 @@ class Meals2(Resource):
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-    def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
-
-    # HTTP method POST
-    def post(self):
-        response = {}
-        items = []
-        try:
-            conn = connect()
-
-            data = request.get_json(force=True)
-            print("Received:", data)
-
-            if data['num_meals'] == None:
-                response['message'] = 'User not subscribed.'
-                print("Error:", response['message'])
-                return response, 400
-
-            queries = [
-                """ SELECT purchase_id
-                    FROM ptyd_purchases
-                    WHERE purchase_id = \'""" + data['purchase_id'] + "\';",
-                """ SELECT default_meal_plan
-                    FROM ptyd_default_meal_selection
-                    WHERE num_meals = """ + str(data['num_meals']) + ";"]
-
-            # Handle SKIP request
-            if data['delivery_day'] == 'SKIP':
-                mealSelection = 'SKIP'
-            # Handle default meal selection
-            elif data['default_selected'] is True:
-                mealSelection = 'SURPRISE'
-#               getDefault = execute(queries[1], 'get', conn)
-#               # Handle successful default selection query
-#               if getDefault['code'] == 280 and len(getDefault['result']) > 0:
-#                   mealSelection = getDefault['result'][0]['default_meal_plan']
-#               # Handle unsuccessful default selection query
-#               else:
-#                   response['message'] = 'Could not retrieve default meal selections.'
-#                   response['error'] = getDefault
-#                   print("Error:", response['message'])
-#                   print("Error JSON:", response['error'])
-#                   # 501: Not implemented in server
-#                   return response, 501
-            # Handle custom meal selection
-            else:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
-#           print("Meal Selection String:", mealSelection)
-
-            # Retrieve purchase ID
-            getPurchaseId = execute(queries[0], 'get', conn)
-
-            # Handle successful purchase ID query
-            if getPurchaseId['code'] == 280:
-                if len(getPurchaseId['result']) > 0:
-                    purchaseId = getPurchaseId['result'][0]['purchase_id']
-                # If user has no purchase ID
-                else:
-                    response['message'] = 'Recipient has no active purchase_id.'
-                    response['error'] = getPurchaseId
-                    print("Error:", response['message'])
-                    # 400: Client side bad request
-                    return response, 400
-            # Handle unsuccessful purchase ID query
-            else:
-                response['message'] = 'Could not retrieve purchase_id.'
-                response['error'] = getPurchaseId
-                print("Error:", response['message'])
-                # 500: Internal server error
-                return response, 500
-#               print("purchase_id:", purchaseId)
-
-            selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-#           print(selectionTime)
-
-            queries.append(
-                """ INSERT INTO ptyd_meals_selected
-                    (
-                        purchase_id,
-                        selection_time,
-                        week_affected,
-                        meal_selection,
-                        delivery_day
-                    )
-                    VALUES
-                    (
-                        \'""" + purchaseId + """\',
-                        \'""" + selectionTime + """\',
-                        \'""" + data['week_affected'] + """\',
-                        \'""" + mealSelection + """\',
-                        \'""" + data['delivery_day'] + """\'
-                    )
-                    ON DUPLICATE KEY UPDATE
-                        meal_selection = \'""" + mealSelection + """\',
-                        selection_time = \'""" + selectionTime + """\',
-                        delivery_day = \'""" + data['delivery_day'] + "\';")
-
-#           print("Query:", queries[2])
-            execute(queries[2], 'post', conn)
-
-            response['message'] = 'Request successful.'
 
             return response, 200
         except:
@@ -874,18 +761,19 @@ class AccountPurchases(Resource):
 
             items = execute(queries[0], 'get', conn)
 
-            last_charge_date = datetime.strptime(items['result'][0]['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
-            next_charge_date = None
+            for eachItem in items['result']:
+                last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
+                next_charge_date = None
 
-            if items['result'][0]['payment_frequency'] == 'Weekly':
-                next_charge_date = last_charge_date + timedelta(days=7)
-            elif items['result'][0]['payment_frequency'] == 'Bi-Weekly':
-                next_charge_date = last_charge_date + timedelta(days=14)
-            elif items['result'][0]['payment_frequency'] == 'Monthly':
-                next_charge_date = last_charge_date + timedelta(days=28)
+                if eachItem['payment_frequency'] == 'Weekly':
+                    next_charge_date = last_charge_date + timedelta(days=7)
+                elif eachItem['payment_frequency'] == 'Bi-Weekly':
+                    next_charge_date = last_charge_date + timedelta(days=14)
+                elif eachItem['payment_frequency'] == 'Monthly':
+                    next_charge_date = last_charge_date + timedelta(days=28)
 
-            items['result'][0]['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
-            items['result'][0]['next_charge_date'] = str( next_charge_date.date() )            
+                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
+                eachItem['next_charge_date'] = str( next_charge_date.date() )            
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
@@ -1262,28 +1150,149 @@ class MealSelection(Resource):
         try:
             conn = connect()
 
-            query = """ SELECT
-                            ms1.week_affected,
-                            ms1.meal_selection,
-                            ms1.selection_time,
-                            ms1.delivery_day
-                        FROM ptyd_meals_selected AS ms1
-                        INNER JOIN (
-                            SELECT
-                                week_affected,
-                                MAX(selection_time) AS latest_selection
-                            FROM ptyd_meals_selected
-                            GROUP BY week_affected
-                        ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
-                        WHERE
-                        purchase_id = \'""" + purchaseId + """\'
-                        ;"""
+            queries = ["""
+                SELECT
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time,
+                    ms1.delivery_day
+                FROM ptyd_meals_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
+                    FROM ptyd_meals_selected
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                WHERE
+                purchase_id = \'""" + purchaseId + "\';", """
+                SELECT
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time
+                FROM ptyd_addons_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
+                    FROM ptyd_addons_selected
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                WHERE
+                purchase_id = \'""" + purchaseId + "\';"]
 
-            items = execute(query, 'get', conn)
-            items = self.readQuery(items['result'])
+            meals = execute(queries[0], 'get', conn)
+            addons = execute(queries[1], 'get', conn)
+
+            items['Meals'] = self.readQuery(meals['result'])
+            items['Addons'] = self.readQuery(addons['result'])
 
             response['message'] = 'Request successful.'
             response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        # Remove last semicolon
+        return mealSelectionString[:-1]
+
+    def postQuery(self, purchaseId, data):
+        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if data['is_addons'] == True:
+            mealSelection = self.formatMealSelection(data['addon_quantities'])
+            query = """
+                INSERT INTO ptyd_addons_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + "\');"
+        else:
+            # Handle SKIP request
+            if data['delivery_day'] == 'SKIP':
+                mealSelection = 'SKIP'
+            # Handle default meal selection
+            elif data['default_selected'] is True:
+                mealSelection = 'SURPRISE'
+            # Handle custom meal selection
+            else:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+
+            query = """
+                INSERT INTO ptyd_meals_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection,
+                    delivery_day
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + """\',
+                    \'""" + data['delivery_day'] + "\');"
+
+        return query
+
+    # HTTP method POST
+    def post(self, purchaseId):
+        response = {}
+        items = []
+        try:
+            conn = connect()
+
+            data = request.get_json(force=True)
+            print("Received:", data)
+
+            queries = [
+                """ SELECT purchase_id
+                    FROM ptyd_purchases
+                    WHERE purchase_id = \'""" + purchaseId + "\';"]
+
+            # Retrieve purchase ID
+            getPurchaseId = execute(queries[0], 'get', conn)
+
+            # Handle successful purchase ID query
+            if getPurchaseId['code'] == 280:
+                if not len(getPurchaseId['result']) > 0:
+                    response['message'] = 'Recipient has no active purchase_id.'
+                    response['error'] = getPurchaseId
+                    print("Error:", response['message'])
+                    # 400: Client side bad request
+                    return response, 400
+            # Handle unsuccessful purchase ID query
+            else:
+                response['message'] = 'Could not retrieve purchase_id.'
+                response['error'] = getPurchaseId
+                print("Error:", response['message'])
+                # 500: Internal server error
+                return response, 500
+#               print("purchase_id:", purchaseId)
+
+            queries.append(self.postQuery(purchaseId, data))
+
+            execute(queries[1], 'post', conn)
+
+            response['message'] = 'Request successful.'
 
             return response, 200
         except:
@@ -1999,7 +2008,8 @@ class CheckEmail(Resource):
             disconnect(conn)
 
 # Define API routes
-# New APIs, uses connect() and disconnect()
+# Customer page
+api.add_resource(Meals, '/api/v2/meals')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
@@ -2009,11 +2019,11 @@ api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 
+# Admin page
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile,'/api/v2/customerprofile')
 
 api.add_resource(MealInfo, '/api/v2/meal_info')
-api.add_resource(Meals2, '/api/v2/meals')
 
 api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
@@ -2024,6 +2034,7 @@ api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 
+# Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 
 # Run on below IP address and port

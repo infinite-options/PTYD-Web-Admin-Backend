@@ -4,9 +4,6 @@ import { Grid, Cell } from "react-mdl";
 //  Replace FINDUS1 below with this.props.imgurl
 
 class EachAddon extends Component {
-  state = {
-    countFood: 0
-  };
   render() {
     return (
       <div>
@@ -33,7 +30,7 @@ class EachAddon extends Component {
                 <input
                   type="text"
                   size="4"
-                  value={this.state.countFood}
+                  value={this.props.addonQuantities}
                   id="count"
                   style={{ textAlign: "center", width: "90%" }}
                 />
@@ -42,11 +39,8 @@ class EachAddon extends Component {
                   type="button"
                   value="-"
                   onClick={() => {
-                    if (this.state.countFood > 0) {
+                    if (this.props.addonQuantities > 0) {
                       this.props.decrementAddon();
-                      this.setState({
-                        countFood: this.state.countFood - 1
-                      });
                     }
                   }}
                 />
@@ -55,9 +49,6 @@ class EachAddon extends Component {
                   value="+"
                   onClick={() => {
                     this.props.incrementAddon();
-                    this.setState({
-                      countFood: this.state.countFood + 1
-                    });
                   }}
                 />
               </div>

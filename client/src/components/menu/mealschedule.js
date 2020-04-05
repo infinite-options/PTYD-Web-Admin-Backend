@@ -59,30 +59,41 @@ class Mealschedule extends Component {
       currentWeek.menu = api.result[key].Meals;
       currentWeek.addons = api.result[key].Addons;
       currentWeek.mealQuantities = api.result[key].MealQuantities;
+      currentWeek.addonQuantities = Object.assign({}, currentWeek.mealQuantities);
       currentWeek.maxmeals = currUser.MaximumMeals;
       currentWeek.deliverDay = 'Sunday';
       currentWeek.surprise = true;
+      currentWeek.addonsSelected = false;
 
-      for (let week in mselect_api.result) {
-        if (mselect_api.result[week].week_affected == currentWeek.sat) {
-          if (mselect_api.result[week].meal_selection == 'SKIP') {
+      for (let week in mselect_api.result.Meals) {
+        if (mselect_api.result.Meals[week].week_affected == currentWeek.sat) {
+          if (mselect_api.result.Meals[week].meal_selection == 'SKIP') {
             currentWeek.deliverDay = 'SKIP';
           }
-          else if (mselect_api.result[week].meal_selection == 'SURPRISE') {
-            currentWeek.deliverDay = mselect_api.result[week].delivery_day;
+          else if (mselect_api.result.Meals[week].meal_selection == 'SURPRISE') {
+            currentWeek.deliverDay = mselect_api.result.Meals[week].delivery_day;
           }
           else {
-            for (let mealId in mselect_api.result[week].meals_selected) {
-              currentWeek.mealQuantities[mealId] = mselect_api.result[week].meals_selected[mealId];
-              currentWeek.maxmeals -= mselect_api.result[week].meals_selected[mealId];
-              currentWeek.deliverDay = mselect_api.result[week].delivery_day;
+            for (let mealId in mselect_api.result.Meals[week].meals_selected) {
+              currentWeek.mealQuantities[mealId] = mselect_api.result.Meals[week].meals_selected[mealId];
+              currentWeek.maxmeals -= mselect_api.result.Meals[week].meals_selected[mealId];
+              currentWeek.deliverDay = mselect_api.result.Meals[week].delivery_day;
               currentWeek.surprise = false;
             }
           }
         }
       }
+
+      for (let week in mselect_api.result.Addons) {
+        if (mselect_api.result.Addons[week].week_affected == currentWeek.sat) {
+          for (let mealId in mselect_api.result.Addons[week].meals_selected) {
+            currentWeek.addonQuantities[mealId] = mselect_api.result.Addons[week].meals_selected[mealId];
+            currentWeek.addonsSelected = true;
+          }
+        }
+      }
+
       sixWeekMenu.push(currentWeek);
-      console.log(currentWeek.mealQuantities);
     }
     this.setState({ menu: sixWeekMenu, user: currUser });
   }
@@ -174,11 +185,13 @@ class Mealschedule extends Component {
                       menu={eachWeek.menu}
                       addons={eachWeek.addons}
                       mealQuantities={eachWeek.mealQuantities}
+                      addonQuantities={eachWeek.addonQuantities}
                       maxmeals={eachWeek.maxmeals}
                       purchase_id={this.state.user.purchase_id}
                       deliverDay={eachWeek.deliverDay}
                       surprise={eachWeek.surprise}
-                      API_URL={this.props.API_URL}
+                      addonsSelected={eachWeek.addonsSelected}
+                      MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
                     />
                   )
                   }
