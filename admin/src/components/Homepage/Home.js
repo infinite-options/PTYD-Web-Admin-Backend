@@ -353,14 +353,14 @@ class Home extends Component {
                       overflow: "scroll"
                     }}
                   >
-                    {this.state.mealInfo.map(meal => (
+                    {/* {this.state.mealInfo.map(meal => (
                       <tr>
                         <td>{meal.meal_name}</td>
                         <td>{meal.post_count}</td>
                         <td>{meal.Number_sold_per_posting}</td>
                         <td>{meal.total_sold}</td>
                       </tr>
-                    ))}
+                    ))} */}
                   </tbody>
                 </Table>
               </div>
