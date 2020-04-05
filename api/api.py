@@ -1730,6 +1730,7 @@ class AdminMenu(Resource):
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
+                #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
                 menuEntries = 6
                 while menuEntries != 0:
                     menu_cat = items['result'][index2]['menu_category']
@@ -1817,6 +1818,7 @@ class displayIngredients(Resource):
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
+                #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
                 menuEntries = 6
                 print(menuEntries)
                 while menuEntries != 0:
@@ -1853,6 +1855,11 @@ class displayIngredients(Resource):
 class MenuCreation(Resource):
     global RDS_PW
     
+    #----------------- 
+    # POST for 1. pulling up the menu dates available. 2. Populating the menu type and meal if there is an existing one. 3. providing a list of meals and their
+    # average sold per posting
+    # ----------------
+
     def get(self):
         response = {}
         items = {}
@@ -1863,15 +1870,19 @@ class MenuCreation(Resource):
                     """ SELECT 
                         menu_date,
                         menu_category,
+                        meal_category,
                         meal_name
                         FROM 
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
-                           
+
+            # generated all of the menu dates available                
             menuDates = []
             for index in range(len(items['result'])):
                 placeHolder = items['result'][index]['menu_date']
                 menuDates.append(placeHolder)
+            
+            # formated the menu dates into a list
             menuDates = list( dict.fromkeys(menuDates) )
 
             d ={}
@@ -1879,13 +1890,16 @@ class MenuCreation(Resource):
                 key = menuDates[index]
                 d[key] = 'value'
             
+            # creates a dictionary with the categories and meal names
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
+                
+                #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
                 menuEntries = 6
                 while menuEntries != 0:
-                    menu_cat = items['result'][index2]['menu_category']
-                    menu_cat = "Menu Category: " + menu_cat
+                    menu_cat = items['result'][index2]['meal_category']
+                    menu_cat = "Meal Category: " + menu_cat
                     dictValues.append(menu_cat)
                     
                     menu_descript =  items['result'][index2]['meal_name']
@@ -1897,9 +1911,10 @@ class MenuCreation(Resource):
                 
                 d[menuDates[index]] = dictValues
 
-            # not sure if this query is right but correct idea
+            # ------ not sure if this query is right but correct idea -----
             items = execute(
                 """ SELECT
+                        meal_category AS Meal_Category,
                         meal_name AS Meal_Name,
                         ROUND(AVG(n),2) as "Avg_Sales" from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
                     FROM 
@@ -1914,13 +1929,51 @@ class MenuCreation(Resource):
                     ON sub1.meal_selected=meal_id
                     GROUP BY meal_name ;
                 """, 'get', conn)
+            
+
+            mealCategories = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['Meal_Category']
+                mealCategories.append(placeHolder)
+
+            print("meal categories-------------------------")
+            mealCategories = list( dict.fromkeys(mealCategories) )
+            print(mealCategories)
+
+            d2 ={}
+            for index in range(len(mealCategories)):
+                key = mealCategories[index]
+                d2[key] = 'value'
+
+            print("meal categories dictionary-----------")
+            print(d2)
+
+            for index in range(len(mealCategories)):
+                categoryList = []
+
+                for index2 in range(len(items['result'])):
+                    if (items['result'][index2]['Meal_Category'] == mealCategories[index]):
+                        mealName= items['result'][index2]['Meal_Name']
+                        averageSales = items['result'][index2]['Avg_Sales']
+                        averageSales = str(averageSales)
+                        tempdict ={'Meal_Name': mealName, 'Avg_Sales': averageSales}
+                        categoryList.append(tempdict)
+                
+                d2[mealCategories[index]] = categoryList
+            
+            print("new dict --------------------")
+            print(d2)
+
+                    
+
+            items = d2
 
 
             response['message'] = 'successful'
             
             response['menu_dates'] = menuDates
             response['menus'] = d
-            response['meals'] = items
+            response['result'] = items
             
 
             return response, 200
@@ -1929,6 +1982,25 @@ class MenuCreation(Resource):
         finally:
             disconnect(conn)
     
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_meal_plans;""", 'get', conn)
+
+            response['message'] = 'successful'
+            
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
    
 
             
