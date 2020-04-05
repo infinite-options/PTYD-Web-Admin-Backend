@@ -2020,7 +2020,93 @@ class MenuCreation(Resource):
         finally:
             disconnect(conn)
    
+class MealCreation(Resource):
+    def listIngredients(self, result):
+        response = {}
+        for meal in result:
+            key = meal['recipe_meal_id']
+            if key not in response:
+                response[key] = {}
+                response[key]['meal_name'] = meal['meal_name']
+                response[key]['ingredients'] = []
+            ingredient = {}
+            ingredient['ingredient_desc'] = meal['ingredient_desc']
+            ingredient['qty'] = meal['recipe_ingredient_qty']
+            ingredient['qty_type'] = meal['recipe_qty_type']
+            ingredient['ingredient_id'] = meal['ingredient_id']
+            ingredient['measure_id'] = meal['recipe_measure_id']
+            response[key]['ingredients'].append(ingredient)
 
+        return response
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            query = """
+                SELECT
+                    recipe_meal_id,
+                    meal_name,
+                    ingredient_id,
+                    ingredient_desc,
+                    recipe_ingredient_qty,
+                    recipe_qty_type,
+                    recipe_measure_id
+                FROM
+                    ptyd_recipes
+                RIGHT JOIN
+                    ptyd_meals
+                ON
+                    recipe_meal_id = meal_id
+                JOIN
+                    ptyd_ingredients
+                ON
+                    ingredient_id = recipe_ingredient_id;"""
+
+            sql = execute(query, 'get', conn)
+
+            items = self.listIngredients(sql['result'])
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+#   def post(self):
+#       try:
+#           conn = connect()
+#           data = request.get_json(force=True)
+
+#           query = """
+#               INSERT INTO ptyd_recipes
+#               (
+#                   recipe_meal_id,
+#                   recipe_ingredient_id,
+#                   recipe_ingredient_qty,
+#                   recipe_qty_type,
+#                   recipe_measure_id
+#               )
+#               VALUES (
+
+#               )
+#               ON DUPLICATE KEY UPDATE
+#                   ;
+#               """
+
+#           response['message'] = 'Request successful.'
+#           response['result'] = items
+
+#           return response, 200
+#       except:
+#           raise BadRequest('Request failed, please try again later.')
+#       finally:
+#           disconnect(conn)
             
 
 
@@ -2043,7 +2129,7 @@ class TemplateApi(Resource):
                                 FROM
                                 ptyd_meal_plans;""", 'get', conn)
 
-            response['message'] = 'successful'
+            response['message'] = 'Request successful.'
             response['result'] = items
 
             return response, 200
@@ -2076,6 +2162,7 @@ api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile,'/api/v2/customerprofile')
 
 api.add_resource(MealInfo, '/api/v2/meal_info')
+api.add_resource(MealCreation, '/api/v2/mealcreation')
 
 api.add_resource(AdminDBv2, '/api/v2/admindb')
 
