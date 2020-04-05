@@ -143,12 +143,12 @@ class Mealschedule extends Component {
                 <p>My Subscription: {this.state.user.meal_plan_desc}</p>
                 <p>Payment Plan: {this.state.user.payment_frequency}</p>
                 <p>
-                  Paid Weeks Remaining: {this.state.user.PaidWeeksRemaining}
+                  Paid Weeks Remaining: {this.state.user.paid_weeks_remaining}
                 </p>
                 <p>Next Charge: ${this.state.user.amount_due}</p>
-                <p>Next Charge Date: {this.state.user.NextChargeDate}</p>
-                <p>Coupons:</p>
-                <p>Account Status: {this.state.user.purchase_status}</p>
+                <p>Next Charge Date: {this.state.user.next_charge_date}</p>
+                <p>Coupons: { this.state.user.coupon_id ? this.state.user.coupon_id : 'None' }</p>
+                { /* <p>Account Status: {this.state.user.purchase_status}</p> */ }
                 <h4>Credit Card Details</h4>{" "}
                 <p>Credit Card: {this.state.user.cc_num}</p>
                 <p>Expiration Date: {this.state.user.cc_exp_date}</p>

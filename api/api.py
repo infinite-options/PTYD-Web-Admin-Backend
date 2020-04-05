@@ -406,8 +406,8 @@ class Meals(Resource):
                     week = {
                         'SaturdayDate': str((stamp - timedelta(days=1)).date()),
                         'SundayDate': str(stamp.date()),
-                        'Sunday': str(stamp.date().strftime("%b %-d")),
-                        'Monday': str((stamp + timedelta(days=1)).date().strftime("%b %-d")),
+                        'Sunday': str(stamp.date()),
+                        'Monday': str((stamp + timedelta(days=1)).date()),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -760,6 +760,19 @@ class AccountPurchases(Resource):
                 GROUP BY purchase_id;"""]
 
             items = execute(queries[0], 'get', conn)
+
+            last_charge_date = datetime.strptime(items['result'][0]['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
+            next_charge_date = None
+
+            if items['result'][0]['payment_frequency'] == 'Weekly':
+                next_charge_date = last_charge_date + timedelta(days=7)
+            elif items['result'][0]['payment_frequency'] == 'Bi-Weekly':
+                next_charge_date = last_charge_date + timedelta(days=14)
+            elif items['result'][0]['payment_frequency'] == 'Monthly':
+                next_charge_date = last_charge_date + timedelta(days=28)
+
+            items['result'][0]['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
+            items['result'][0]['next_charge_date'] = str( next_charge_date.date() )            
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
