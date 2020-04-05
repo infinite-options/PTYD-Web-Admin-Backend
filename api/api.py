@@ -1913,61 +1913,81 @@ class MenuCreation(Resource):
 
             # ------ not sure if this query is right but correct idea -----
             items = execute(
-                """ SELECT
-                        meal_category AS Meal_Category,
-                        meal_name AS Meal_Name,
-                        ROUND(AVG(n),2) as "Avg_Sales" from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
-                    FROM 
-                        ptyd_meals_selected 
-                    JOIN
-                        numbers
-                    ON char_length(meal_selection)
-                        - char_length(replace(meal_selection, ';', ''))
-                        >= n - 1) sub1
-                    JOIN 
-                        ptyd_meals
-                    ON sub1.meal_selected=meal_id
-                    GROUP BY meal_name ;
-                """, 'get', conn)
+                        """ SELECT A.menu_meal_id, B.meal_name, total_sold/times_posted AS "Avg Sales/Posting"
+                            FROM 
+                                (SELECT 
+                                    menu_meal_id,
+                                    count(menu_meal_id) AS times_posted
+                                FROM 
+                                    ptyd_menu
+                                GROUP BY menu_meal_id) AS A
+                            JOIN 
+
+                            (SELECT
+                                meal_selected,
+                                
+                                meal_name AS Meal_Name,
+                                count(n) as total_sold from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                            FROM 
+                                ptyd_meals_selected 
+                            JOIN
+                                numbers
+                            ON char_length(meal_selection)
+                                - char_length(replace(meal_selection, ';', ''))
+                                >= n - 1) sub1
+                            JOIN 
+                                ptyd_meals
+
+                            ON sub1.meal_selected=meal_id
+                            GROUP BY sub1.meal_selected ) AS B
+
+                            ON
+                                B.meal_selected = A.menu_meal_id ;
+                        """, 'get', conn)
             
             #creating list of meal categories to isolate unique values
-
-            mealCategories = []
+            
+            mealAvg = []
+            mealNames = []
             for index in range(len(items['result'])):
-                placeHolder = items['result'][index]['Meal_Category']
-                mealCategories.append(placeHolder)
+                placeHolder = items['result'][index]['meal_name']
+                mealNames.append(placeHolder)
+                placeHolder = items['result'][index]['Avg Sales/Posting']
+                mealAvg.append(placeHolder)
+            
+            print('Averages --------------------')
+            print(mealAvg)
 
-            mealCategories = list( dict.fromkeys(mealCategories) )
+            #mealNames = list( dict.fromkeys(mealNames) )
           
             # initializing empty dictionary with the meal categories as keys
-            d2 ={}
-            for index in range(len(mealCategories)):
-                key = mealCategories[index]
-                d2[key] = 'value'
-
-           #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
-
-            for index in range(len(mealCategories)):
-                categoryList = []
-
-                for index2 in range(len(items['result'])):
-                    if (items['result'][index2]['Meal_Category'] == mealCategories[index]):
-                        mealName= items['result'][index2]['Meal_Name']
-                        averageSales = items['result'][index2]['Avg_Sales']
-                        averageSales = str(averageSales)
-                        tempdict ={'Meal_Name': mealName, 'Avg_Sales': averageSales}
-                        categoryList.append(tempdict)
+            mealList =[]
+            
+            for index in range(len(mealNames)):
+                tempDict = {}
+                key1 = "Meal Name: "
+                key2 = "Avg Sales/Posting"
+                tempDict[key1] = mealNames[index]
+                tempDict[key2] = str(mealAvg[index])
+                mealList.append(tempDict)
                 
-                d2[mealCategories[index]] = categoryList
             
 
-            items = d2
+
+
+            print (mealList)
+           #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
+
+            
+            
+
+          
 
             response['message'] = 'successful'
             
             response['menu_dates'] = menuDates
             response['menus'] = d
-            response['result'] = items
+            response['result'] = mealList
             
 
             return response, 200
