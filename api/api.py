@@ -304,8 +304,8 @@ class Meals(Resource):
                     break
                 # convert string to datetime
                 stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
-                # run query for menu if stamp is the current week or future week menu
-                if now - timedelta(days=7) < stamp:
+                # Roll calendar at 4PM Monday
+                if now - timedelta(days=1, hours=16) < stamp:
 
                     weekly_special = execute(
                         """ 
@@ -406,8 +406,8 @@ class Meals(Resource):
                     week = {
                         'SaturdayDate': str((stamp - timedelta(days=1)).date()),
                         'SundayDate': str(stamp.date()),
-                        'Sunday': str(stamp.date()),
-                        'Monday': str((stamp + timedelta(days=1)).date()),
+                        'Sunday': str(stamp.date().strftime("%b %-d")),
+                        'Monday': str((stamp + timedelta(days=1)).date().strftime("%b %-d")),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -761,18 +761,19 @@ class AccountPurchases(Resource):
 
             items = execute(queries[0], 'get', conn)
 
-            last_charge_date = datetime.strptime(items['result'][0]['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
-            next_charge_date = None
+            for eachItem in items['result']:
+                last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
+                next_charge_date = None
 
-            if items['result'][0]['payment_frequency'] == 'Weekly':
-                next_charge_date = last_charge_date + timedelta(days=7)
-            elif items['result'][0]['payment_frequency'] == 'Bi-Weekly':
-                next_charge_date = last_charge_date + timedelta(days=14)
-            elif items['result'][0]['payment_frequency'] == 'Monthly':
-                next_charge_date = last_charge_date + timedelta(days=28)
+                if eachItem['payment_frequency'] == 'Weekly':
+                    next_charge_date = last_charge_date + timedelta(days=7)
+                elif eachItem['payment_frequency'] == 'Bi-Weekly':
+                    next_charge_date = last_charge_date + timedelta(days=14)
+                elif eachItem['payment_frequency'] == 'Monthly':
+                    next_charge_date = last_charge_date + timedelta(days=28)
 
-            items['result'][0]['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
-            items['result'][0]['next_charge_date'] = str( next_charge_date.date() )            
+                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
+                eachItem['next_charge_date'] = str( next_charge_date.date() )            
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
