@@ -20,6 +20,7 @@ import MealSchedule from "./menu/mealschedule";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
+import SocialSignUp from "./socialsignup"
 import Login from "./login";
 import Logout from "./logout";
 
@@ -178,12 +179,22 @@ export default function Main({ appProps }) {
       />
       <AppliedRoute
         exact
+        path="/socialsignup"
+        component={SocialSignUp}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}v2/socialSignup`
+        }}
+      />
+      <AppliedRoute
+        exact
         path="/login"
         component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/accountsalt`,
-          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          SOCIAL_API_URL: `${DEV_URL}v2/social`
         }}
       />
       <AppliedRoute

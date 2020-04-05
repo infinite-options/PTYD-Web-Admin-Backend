@@ -13,6 +13,8 @@
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.12.0",
+    "react-facebook-login": "^4.1.1",
+    "react-google-login": "^5.1.3",
     "react-mdl": "^1.11.0",
     "react-modal": "^3.11.1",
     "react-router-dom": "^5.1.2",
