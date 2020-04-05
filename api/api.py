@@ -1879,8 +1879,6 @@ class MenuCreation(Resource):
                 key = menuDates[index]
                 d[key] = 'value'
             
-            
-            
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
@@ -1899,15 +1897,30 @@ class MenuCreation(Resource):
                 
                 d[menuDates[index]] = dictValues
 
-        
-            
+            # not sure if this query is right but correct idea
+            items = execute(
+                """ SELECT
+                        meal_name AS Meal_Name,
+                        ROUND(AVG(n),2) as "Avg_Sales" from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                    FROM 
+                        ptyd_meals_selected 
+                    JOIN
+                        numbers
+                    ON char_length(meal_selection)
+                        - char_length(replace(meal_selection, ';', ''))
+                        >= n - 1) sub1
+                    JOIN 
+                        ptyd_meals
+                    ON sub1.meal_selected=meal_id
+                    GROUP BY meal_name ;
+                """, 'get', conn)
 
-            
 
             response['message'] = 'successful'
             
             response['menu_dates'] = menuDates
             response['menus'] = d
+            response['meals'] = items
             
 
             return response, 200
@@ -1916,6 +1929,10 @@ class MenuCreation(Resource):
         finally:
             disconnect(conn)
     
+   
+
+            
+
 
 
 
