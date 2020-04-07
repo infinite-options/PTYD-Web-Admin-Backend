@@ -7,9 +7,9 @@ import AppliedRoute from "./AppliedRoute";
 import EditCreateMeal from "./Edit-Meal/edit-create-meals";
 import CreateMenu from "./Create-Menu/create-menu";
 
-//const DEV_URL =
-//"https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
-const DEV_URL = "http://localhost:2000/api/v2/";
+const DEV_URL =
+"https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
+//const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
   <Switch>

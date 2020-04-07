@@ -15,7 +15,7 @@ export default function Login (props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
-  const [users, setUsers] = useState([]);
+  const [salt, setSalt] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -32,22 +32,19 @@ export default function Login (props) {
 
   async function onLoad() {
     // fill it up when needed
-    const res = await fetch(props.API_URL);
-    const api = await res.json();
-    const logins = api.result.Accounts;
-    setUsers(logins);
   }
 
-  async function componentDidMount() {
-    const res = await fetch(props.API_URL);
-    const api = await res.json();
-    console.log(api);
-    const logins = api.result.Accounts;
-    setUsers(logins);
-  }
+//async function componentDidMount() {
+//  const res = await fetch(props.API_URL);
+//  const api = await res.json();
+//  setSalt(api.result[0].password_salt);
+//}
 
   async function grabLoginInfoForUser(userEmail, userPass) {
-    const salt = users.find(user => user.user_email === userEmail).password_salt;
+    const saltres = await fetch(props.API_URL + '/' + userEmail);
+    const saltapi = await saltres.json();
+    const salt = saltapi.result[0].password_salt;
+    console.log(salt);
     const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userEmail + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
     const api = await res.json();
     return api;
