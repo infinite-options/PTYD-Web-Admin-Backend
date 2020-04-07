@@ -772,7 +772,7 @@ class AccountPurchases(Resource):
                 elif eachItem['payment_frequency'] == 'Monthly':
                     next_charge_date = last_charge_date + timedelta(days=28)
 
-                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
+                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) + 1)
                 eachItem['next_charge_date'] = str( next_charge_date.date() )            
 
             response['message'] = 'Request successful.'
