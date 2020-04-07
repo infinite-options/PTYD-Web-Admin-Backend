@@ -2150,7 +2150,6 @@ class MealCreation(Resource):
                     recipe_ingredient_qty = \'""" + data['ingredient_qty'] + """\',
                     recipe_measure_id = \'""" + data['measure_id'] + "\';"
 
-<<<<<<< HEAD
             response['message'] = 'Request successful.'
             response['result'] = items
 
@@ -2159,19 +2158,7 @@ class MealCreation(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-            
 
-
-
-
-
-
-
-
-
-=======
-           
->>>>>>> feature/admin-menu-creation
 class TemplateApi(Resource):
     def get(self):
         response = {}
