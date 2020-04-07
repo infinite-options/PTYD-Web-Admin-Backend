@@ -101,7 +101,7 @@ class CreateMenu extends Component {
       console.log("key", key);
       a.push(
         <div className="scrollItem">
-          {this.getDate(this.state.createMenu[key], key)}
+          {this.getData(this.state.createMenu[key], key)}
         </div>
       );
     }
@@ -160,9 +160,8 @@ class CreateMenu extends Component {
   //   for (let i = 0; i < createMenu.menu_dates.length; i += 1) {
   //     dates.push()
   // }
-  getDate = (weekArgument, date) => {
+  getData = (weekArgument, date) => {
     let arr = [];
-    let arr2 = [];
     for (let i = 0; i < weekArgument.length; i += 2) {
       let first = weekArgument[i];
       let second = weekArgument[i + 1];
@@ -185,7 +184,7 @@ class CreateMenu extends Component {
 
                   {/* {this.state.createMenu.menu_dates} */}
                   {date}
-                  <FormControl>
+                  {/* <FormControl>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
@@ -197,7 +196,7 @@ class CreateMenu extends Component {
                       <MenuItem value={20}>Twenty</MenuItem>
                       <MenuItem value={30}>Thirty</MenuItem>
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                 </th>
               </tr>
             </thead>
@@ -208,8 +207,8 @@ class CreateMenu extends Component {
                 <th>Avg Sales/Posting</th>
               </tr>
             </thead>
-            <tbody>{this.state.temp}</tbody>
-            {/* <tbody>{arr}</tbody> */}
+            {/* <tbody>{this.state.temp}</tbody> */}
+            <tbody>{arr}</tbody>
           </Table>
           <Button
             variant="primary"
