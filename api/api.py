@@ -991,7 +991,17 @@ class Checkout(Resource):
 
             userAuth = execute(queries[0], 'get', conn)
 
-            if userAuth['code'] != 280 or len(userAuth['result']) != 1:
+            possSocialAcc = execute("SELECT user_uid FROM ptyd_social_accounts WHERE user_email = '" + data['delivery_email'] + "';", 'get', conn)
+            print(json.dumps(possSocialAcc, indent=1))
+
+            if len(possSocialAcc['result']) != 0:
+                if possSocialAcc['result'][0]['user_uid'] == data['user_uid']:
+                    print('Very Cool Kanye!')
+                    print("Successfully authenticated user.")
+                else:
+                    response['message'] = 'Could not authenticate user.'
+                    return response, 400 
+            elif userAuth['code'] != 280 or len(userAuth['result']) != 1:
                 response['message'] = 'Could not authenticate user.'
                 response['error'] = userAuth
                 print("Error:", response['message'])
