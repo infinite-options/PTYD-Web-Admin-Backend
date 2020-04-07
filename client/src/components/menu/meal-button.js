@@ -53,6 +53,7 @@ export default class MealButton extends Component {
           buttonSkip: true,
           buttonSurprise: false,
           buttonDisabled: true,
+          buttonAddOnKeepColor: false,
         });
         break;
       case 'Monday':
@@ -291,6 +292,7 @@ export default class MealButton extends Component {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {/* <SpecialRequestAnimation /> */}
           <Button
+            disabled={this.state.buttonDisabled}
             variant="outline-dark"
             style={
               (this.state.buttonAddOn ? orange : hide,
