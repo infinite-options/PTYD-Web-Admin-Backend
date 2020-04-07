@@ -35,7 +35,16 @@ const Main = ({ appProps }) => (
       }}
     />
     <AppliedRoute exact path="/userMap" component={UserMap} />
-    <AppliedRoute exact path="/editCreateMeal" component={EditCreateMeal} />
+    <AppliedRoute
+      exact
+      path="/editCreateMeal"
+      component={EditCreateMeal}
+      appProps={{
+        appProps,
+        API_URL_CREATEMEAL: `${DEV_URL}mealcreation`,
+        API_URL_TEMP: `${DEV_URL}templateapi`
+      }}
+    />
     <AppliedRoute
       exact
       path="/createMenu"

@@ -51,8 +51,21 @@ class EditCreateMeal extends Component {
       //   pageSize: 10
       // },
       age: 10,
-      temp: []
+      temp: [],
+      createMeal: [],
+      temp2: []
     };
+  }
+  async componentDidMount() {
+    const res = await fetch(this.props.API_URL_CREATEMEAL);
+    const api = await res.json();
+    const createMeal = api.result;
+
+    const res2 = await fetch(this.props.API_URL_TEMP);
+    const api2 = await res2.json();
+    const temp2 = api2.result.result;
+    this.setState({ createMeal, temp2 });
+    console.log(createMeal);
   }
   componentWillMount() {
     this.state.temp.push(
@@ -143,6 +156,8 @@ class EditCreateMeal extends Component {
           </Link>
           <Typography color="textPrimary">Edit/Create Meal</Typography>
         </Breadcrumbs>
+        {/* {this.state.createMeal} */}
+        {this.state.temp2.meal_plan_id}
         <br />
         {/* <FormControl>
           <InputLabel id="demo-simple-select-label">Age</InputLabel>

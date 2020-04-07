@@ -9,119 +9,191 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
+import MaterialTable from "material-table";
+import { display } from "@material-ui/system";
 
 class CreateMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
       // columns: [
-      //   { title: "Meal", field: "meal" },
-      //   {
-      //     title: "Drop Down",
-      //     field: "dropdown",
-      //     lookup: { 1: "Spicy Chicken", 2: "salad" }
-      //   },
-      //   { title: "Avg Sales", field: "sales" }
+      //   { title: "Name", field: "" },
+      //   { title: "Current Subscription", field: "Current_subscription" },
+      //   { title: "Number of Meals Remaining", field: "Weeks_left" },
+      //   { title: "Gender", field: "Gender" },
+      //   { title: "Address", field: "Address" },
+      //   { title: "Meals Ordered", field: "Meals_ordered" },
+      //   { title: "Customer Since", field: "Customer_Since" }
       // ],
-      // data: [
-      //   { meal: "Special_1", dropdown: 1, sales: 99 },
-      //   {
-      //     meal: "Secial_2",
-      //     dropdown: 2,
-      //     sales: 32
-      //   }
-      // ],
-      // query: {
-      //   page: 1,
-      //   pageSize: 10
-      // },
-      // age: 10,
-      temp: [],
-      createMenu: [],
-      details: []
+      datekeys: [],
+      details: [],
+      selection: 0
     };
   }
-  async componentDidMount() {
+  async componentWillMount() {
     const res = await fetch(this.props.API_URL_CREATEMENU);
     const api = await res.json();
     const createMenu = api.menus;
-    const details = api.result;
-    this.setState({ createMenu, details });
-  }
-  componentWillMount() {
-    this.state.temp.push(
-      <tr>
-        <td>Weekly Entree</td>
-        <td>
-          <FormControl>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={this.state.age}
-              onChange={this.handleChange}
-              style={{ color: "white" }}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </td>
-        <td>25</td>
-      </tr>,
-      <tr>
-        <td>Weekly Salad</td>
-        <td>
-          <FormControl>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={this.state.age}
-              onChange={this.handleChange}
-              style={{ color: "white" }}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </td>
-        <td>50</td>
-      </tr>
-    );
+    let tempkeys = [];
+
+    for (var key of Object.keys(createMenu)) {
+      tempkeys.push(key);
+    }
+    this.setState({ datekeys: tempkeys, createMenu });
+    // this.state.temp.push(
+    //   <tr>
+    //     <td>Weekly Entree</td>
+    //     <td>
+    //       <FormControl>
+    //         <Select
+    //           labelId="demo-simple-select-label"
+    //           id="demo-simple-select"
+    //           value={this.state.age}
+    //           onChange={this.handleChange}
+    //           style={{ color: "white" }}
+    //         >
+    //           <MenuItem value={10}>Ten</MenuItem>
+    //           <MenuItem value={20}>Twenty</MenuItem>
+    //           <MenuItem value={30}>Thirty</MenuItem>
+    //         </Select>
+    //       </FormControl>
+    //     </td>
+    //     <td>25</td>
+    //   </tr>,
+    //   <tr>
+    //     <td>Weekly Salad</td>
+    //     <td>
+    //       <FormControl>
+    //         <Select
+    //           labelId="demo-simple-select-label"
+    //           id="demo-simple-select"
+    //           value={this.state.age}
+    //           onChange={this.handleChange}
+    //           style={{ color: "white" }}
+    //         >
+    //           <MenuItem value={10}>Ten</MenuItem>
+    //           <MenuItem value={20}>Twenty</MenuItem>
+    //           <MenuItem value={30}>Thirty</MenuItem>
+    //         </Select>
+    //       </FormControl>
+    //     </td>
+    //     <td>50</td>
+    //   </tr>
+    // );
   }
   handleChange = event => {
-    this.setState({ age: event.target.value });
-  };
-  makeTable = () => {
-    let a = [];
-
-    for (var key in this.state.createMenu) {
-      console.log("sdsfdsfsdfsdf", this.state.createMenu[key]);
-      console.log("key", key);
-      a.push(
-        <div className="scrollItem">
-          {this.getData(this.state.createMenu[key], key)}
-        </div>
-      );
-    }
-    return a;
+    this.setState({ selection: event.target.value });
   };
   render() {
+    let displaykeys = [];
+    let enterDate = this.state.datekeys[this.state.selection];
+    if (enterDate == null) {
+      return <div></div>;
+    }
+    let arr = this.state.createMenu[enterDate];
+    if (arr == null) {
+      return <div></div>;
+    }
+    for (let i = 0; i < arr.length; i++) {
+      let tempelement = (
+        <tr>
+          <td>{arr[i].Menu_Type}</td>
+          <td>{arr[i].Meal_Name}</td>
+          <td>{this.example()}</td>
+        </tr>
+      );
+      displaykeys.push(tempelement);
+    }
     return (
       <div style={{ margin: "1%" }}>
-        {/* <div className="scrollItem">Card</div> */}
-
-        {/* title for the site ----------------------------------------- */}
-        {/* <Jumbotron /> */}
-
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
           </Link>
           <Typography color="textPrimary">Create Menu</Typography>
         </Breadcrumbs>
-        {this.makeTable()}
+        <Row>
+          <Col>
+            <Table striped bordered hover variant="dark">
+              <thead style={{ backgroundColor: "blue", color: "white" }}>
+                <tr>
+                  <th>Menu For</th>
+                  <th colSpan="2">{this.dateDropdown()}</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th>Meal Category</th>
+                  <th>Meal</th>
+                  <th>Avg Sales/Posting</th>
+                </tr>
+              </thead>
+              <tbody>{displaykeys}</tbody>
+            </Table>
+            <Button
+              variant="primary"
+              onClick={() => {
+                this.addRow();
+              }}
+            >
+              Add Meal
+            </Button>
+          </Col>
+          <Col></Col>
+        </Row>
+
+        {/* {this.state.createMenu.map(eachMeal => (
+          <tr>
+            <td>{eachMeal.Menu_Type}</td>
+            <td>{eachMeal.Meal_Name}</td>
+          </tr>
+
+
+
+          <MaterialTable
+            style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
+            title="Customer Profile"
+            columns={this.state.columns}
+            data={eachItem.createMenu}
+            editable={{
+              onRowAdd: newData =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
+                    this.setState(prevState => {
+                      const data = [...prevState.data];
+                      data.push(newData);
+                      return { ...prevState, data };
+                    });
+                  }, 600);
+                }),
+              onRowUpdate: (newData, oldData) =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
+                    if (oldData) {
+                      this.setState(prevState => {
+                        const data = [...prevState.data];
+                        data[data.indexOf(oldData)] = newData;
+                        return { ...prevState, data };
+                      });
+                    }
+                  }, 600);
+                }),
+              onRowDelete: oldData =>
+                new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve();
+                    this.setState(prevState => {
+                      const data = [...prevState.data];
+                      data.splice(data.indexOf(oldData), 1);
+                      return { ...prevState, data };
+                    });
+                  }, 600);
+                })
+            }}
+          />
+        ))} */}
       </div>
     );
   }
@@ -134,21 +206,15 @@ class CreateMenu extends Component {
           </form>
         </td>
         <td>
-          <FormControl>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={this.state.age}
-              onChange={this.handleChange}
-              style={{ color: "white" }}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
+          <form noValidate autoComplete="off">
+            <TextField id="standard-basic" />
+          </form>
         </td>
-        <td>50</td>
+        <td>
+          <form noValidate autoComplete="off">
+            <TextField id="standard-basic" />
+          </form>
+        </td>
       </tr>
     );
     this.setState({
@@ -160,76 +226,27 @@ class CreateMenu extends Component {
   //   for (let i = 0; i < createMenu.menu_dates.length; i += 1) {
   //     dates.push()
   // }
-  getData = (weekArgument, date) => {
-    let arr = [];
-    for (let i = 0; i < weekArgument.length; i += 2) {
-      let first = weekArgument[i];
-      let second = weekArgument[i + 1];
-
-      let a = first.split(":")[1];
-      let b = second.split(":")[1];
-
-      arr.push(this.single_item(a, b));
+  dateDropdown = () => {
+    let tempdate = [];
+    for (let i = 0; i < this.state.datekeys.length; i++) {
+      tempdate.push(<MenuItem value={i}>{this.state.datekeys[i]}</MenuItem>);
     }
     return (
-      <Row>
-        <Col>
-          <Table striped bordered hover variant="dark">
-            <thead style={{ backgroundColor: "blue", color: "white" }}>
-              <tr>
-                <th>Menu For</th>
-                <th colSpan="2">
-                  {/* {this.state.createMenu.map(eachRow => ({ eachRow.menu_dates }))} */}
-                  {/* {this.getdate()} */}
-
-                  {/* {this.state.createMenu.menu_dates} */}
-                  {date}
-                  {/* <FormControl>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      // value={this.state.age}
-                      onChange={this.handleChange}
-                      style={{ color: "white" }}
-                    >
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                  </FormControl> */}
-                </th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th>Meal Category</th>
-                <th>Meal</th>
-                <th>Avg Sales/Posting</th>
-              </tr>
-            </thead>
-            {/* <tbody>{this.state.temp}</tbody> */}
-            <tbody>{arr}</tbody>
-          </Table>
-          <Button
-            variant="primary"
-            onClick={() => {
-              this.addRow();
-            }}
-          >
-            Add Meal
-          </Button>
-        </Col>
-        <Col></Col>
-      </Row>
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.selection}
+          onChange={this.handleChange}
+          style={{ color: "white" }}
+        >
+          {tempdate}
+        </Select>
+      </FormControl>
     );
   };
-  single_item = (menuType, mealName) => {
-    return (
-      <tr>
-        <td>{menuType}</td>
-        <td>{mealName}</td>
-      </tr>
-    );
+  example = () => {
+    return "stringggg";
   };
 }
 export default CreateMenu;

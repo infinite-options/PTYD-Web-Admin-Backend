@@ -1903,8 +1903,8 @@ class MenuCreation(Resource):
                     tempDict = {}
                     if (items['result'][index2]['menu_date'] == menuDates[index]):
                         
-                        key1 = "Menu Type"
-                        key2 = "Meal Name"
+                        key1 = "Menu_Type"
+                        key2 = "Meal_Name"
                         
                         menuType = items['result'][index2]['menu_type']
                         mealNames = items['result'][index2]['meal_name']
