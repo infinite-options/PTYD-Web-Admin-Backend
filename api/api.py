@@ -1885,31 +1885,44 @@ class MenuCreation(Resource):
             # formated the menu dates into a list
             menuDates = list( dict.fromkeys(menuDates) )
 
+            
+
             d ={}
             for index in range(len(menuDates)):
                 key = menuDates[index]
                 d[key] = 'value'
             
-            # creates a dictionary with the categories and meal names
-            index2 = 0
-            for index in range(len(menuDates)):
-                dictValues = []
-                
-                #------------ 6/menuEntries is hard coded, need to add logic to calculate ---------
-                menuEntries = 6
-                while menuEntries != 0:
-                    menu_type = items['result'][index2]['menu_type']
-                    menu_type = "Menu Type: " + menu_type
-                    dictValues.append(menu_type)
-                    
-                    menu_descript =  items['result'][index2]['meal_name']
-                    menu_descript = "Meal Name: " + menu_descript
-                    dictValues.append(menu_descript)
+            
 
-                    menuEntries -=1
-                    index2 +=1
+            for index in range(len(menuDates)):
                 
-                d[menuDates[index]] = dictValues
+                
+
+                menuInfo =[]
+                for index2 in range(len(items['result'])):
+                    tempDict = {}
+                    if (items['result'][index2]['menu_date'] == menuDates[index]):
+                        
+                        key1 = "Menu Type"
+                        key2 = "Meal Name"
+                        
+                        menuType = items['result'][index2]['menu_type']
+                        mealNames = items['result'][index2]['meal_name']
+
+                        tempDict[key1] = menuType
+                        tempDict[key2] = mealNames
+                        
+                        menuInfo.append(tempDict)
+
+                
+                d[menuDates[index]] = menuInfo
+
+            
+                    
+
+                        
+            
+
 
             # ------ not sure if this query is right but correct idea -----
             items = execute(
@@ -1962,8 +1975,7 @@ class MenuCreation(Resource):
                 mealPostings.append(placeHolder)
 
             
-            print('Averages --------------------')
-            print(mealAvg)
+            
 
             #mealNames = list( dict.fromkeys(mealNames) )
           
@@ -1972,7 +1984,7 @@ class MenuCreation(Resource):
             
             for index in range(len(mealNames)):
                 tempDict = {}
-                key1 = "Meal Name: "
+                key1 = "Meal Name"
                 key2 = "Avg Sales/Posting"
                 key3 = "Total Posts"
                 key4 = "Total Sold"
@@ -1982,11 +1994,8 @@ class MenuCreation(Resource):
                 tempDict[key4] = str(mealTotalSold[index])
                 mealList.append(tempDict)
                 
+
             
-
-
-
-            print (mealList)
            #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
 
             
@@ -2141,6 +2150,7 @@ class MealCreation(Resource):
                     recipe_ingredient_qty = \'""" + data['ingredient_qty'] + """\',
                     recipe_measure_id = \'""" + data['measure_id'] + "\';"
 
+<<<<<<< HEAD
             response['message'] = 'Request successful.'
             response['result'] = items
 
@@ -2159,6 +2169,9 @@ class MealCreation(Resource):
 
 
 
+=======
+           
+>>>>>>> feature/admin-menu-creation
 class TemplateApi(Resource):
     def get(self):
         response = {}
