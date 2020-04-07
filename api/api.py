@@ -1445,13 +1445,24 @@ class CustomerInfo(Resource):
         try:
             conn = connect()
 
-            queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
-                        pur.start_date as start_date, meal.payment_frequency as frequency, meal.meal_plan_desc as Current_subscription
-                        from ptyd_accounts
-                        inner join 
-                        ptyd_purchases pur ON ptyd_accounts.user_uid = pur.recipient_id
-                        inner join 
-                        ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
+#           queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
+#                       pur.start_date as start_date, meal.payment_frequency as frequency, meal.meal_plan_desc as Current_subscription
+#                       from ptyd_accounts
+#                       inner join 
+#                       ptyd_purchases pur ON ptyd_accounts.user_uid = pur.recipient_id
+#                       inner join 
+#                       ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
+
+            queries = """
+                select concat(acct.first_name,' ',acct.last_name) as Full_name
+                , pur.start_date as start_date
+                    , meal.payment_frequency as frequency
+                    , meal.meal_plan_desc as Current_subscription
+                from ptyd_accounts acct
+                join ptyd_payments pay ON acct.user_uid = pay.buyer_id
+                join ptyd_purchases pur ON pay.purchase_id = pur.purchase_id
+                join ptyd_meal_plans meal ON pur.meal_plan_id = meal.meal_plan_id;
+                """
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
             list1 = list(map(self.jsonify_one,cus_info['CustomerInfo']['result']))
@@ -1612,12 +1623,14 @@ class MealCustomerLifeReport(Resource):
         try:
             conn = connect()
             queries_name = ["Meals report", "Customer Lifetime"]
+
+            # First query not working because of menu_num_sold
             queries = [
                         """SELECT 
                         p.menu_meal_id,
-                        M.meal_name AS "Meal Name",
-                        ROUND(AVG(p.menu_num_sold),2) AS "Average number sold per listing",
-                        SUM(p.menu_num_sold) AS "Total Number Sold"
+                        M.meal_name AS "Meal Name"-- ,
+                        -- ROUND(AVG(p.menu_num_sold),2) AS "Average number sold per listing",
+                        -- SUM(p.menu_num_sold) AS "Total Number Sold"
                         FROM
                             ptyd_menu p
                         JOIN 
@@ -1630,13 +1643,11 @@ class MealCustomerLifeReport(Resource):
                         CONCAT(first_name, " " , last_name) AS "Customer Name",
                         create_date AS "Account creation Date",
                         last_update AS "Last account Update",
-                        last_delivery AS "Last Delivery",
-                        datediff(last_delivery, create_date) AS "Customer Lifetime in days",
-                        timestampdiff(MONTH, create_date, last_delivery) AS "Customer Lifetime in months"
+                        -- last_delivery AS "Last Delivery",
+                        datediff(CURDATE(), create_date) AS "Customer Lifetime in days",
+                        timestampdiff(MONTH, create_date, CURDATE()) AS "Customer Lifetime in months"
                         FROM
-                            ptyd_accounts;
-                            """
-                    ]
+                            ptyd_accounts;"""]
             
             for ind1,query in enumerate(queries):
                 results[queries_name[ind1]] = execute(query, 'get', conn)
@@ -1659,22 +1670,22 @@ class MealInfo(Resource):
         conn = connect()
         try:
             
-
-            queries = """select A1.menu_meal_id,A3.meal_name, A1.total_sold,A2.post_count, (A1.total_sold/A2.post_count) as "Number_sold_per_posting"
-                        from
-                        (select menu_meal_id, sum(menu_num_sold) as "total_sold" from ptyd_menu
+            queries = """
+                select A1.menu_meal_id,A3.meal_name
+                    ,A2.post_count
+                from (
+                    select menu_meal_id
+                        from ptyd_menu
                         #where month(menu_date) = 2
-                        group by menu_meal_id) A1 
+                        group by menu_meal_id) A1
                         join
                         (select distinct menu_meal_id, count(menu_meal_id) "post_count"
                         from ptyd_menu
-                        #where month(menu_date) = 2
                         group by menu_meal_id) A2
                         on A1.menu_meal_id = A2.menu_meal_id
                         join
                         (select meal_id, meal_name from ptyd_meals)A3
-                        on A1.menu_meal_id = A3.meal_id;
-                        """
+                        on A1.menu_meal_id = A3.meal_id;"""
 
             meal_info['meal_info'] = execute(queries, 'get', conn)
             response['message'] = 'Request successful.'
