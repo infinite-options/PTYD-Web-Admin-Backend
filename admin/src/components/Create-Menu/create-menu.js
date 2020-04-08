@@ -32,6 +32,7 @@ class CreateMenu extends Component {
     for (var key of Object.keys(createMenu)) {
       tempkeys.push(key);
     }
+    tempkeys = tempkeys.reverse();
     this.setState({ datekeys: tempkeys, createMenu, avg });
   }
   handleChange = event => {
@@ -44,7 +45,7 @@ class CreateMenu extends Component {
       return <div></div>;
     }
     let arr = this.state.createMenu[enterDate];
-
+    arr = arr.reverse();
     if (arr == null) {
       return <div></div>;
     }
