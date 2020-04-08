@@ -33,6 +33,7 @@ export default class MealButton extends Component {
       maxmealsCopy: this.props.maxmeals,
       addonActivated: false,
       flag: false,
+      mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
     };
   }
@@ -243,6 +244,7 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
+              disabled={!this.state.mondayAvailable}
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >

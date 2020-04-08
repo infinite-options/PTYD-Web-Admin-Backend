@@ -588,9 +588,16 @@ class AccountPurchases(Resource):
                     ptyd_meal_plans mp
                 ON p2.meal_plan_id = mp.meal_plan_id
                 WHERE buyer_id = \'""" + buyerId + """\'
-                GROUP BY purchase_id;"""]
+                GROUP BY purchase_id;""",
+                "   SELECT * FROM ptyd_monday_zipcodes;"]
 
             items = execute(queries[0], 'get', conn)
+            mondayZipsQuery = execute(queries[1], 'get', conn)
+
+            mondayZips = []
+            for eachZip in mondayZipsQuery['result']:
+                mondayZips.append(eachZip['zipcode'])
+            del mondayZipsQuery
 
             for eachItem in items['result']:
                 last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
@@ -604,7 +611,12 @@ class AccountPurchases(Resource):
                     next_charge_date = last_charge_date + timedelta(days=28)
 
                 eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) + 1)
-                eachItem['next_charge_date'] = str( next_charge_date.date() )            
+                eachItem['next_charge_date'] = str( next_charge_date.date() ) 
+
+                if eachItem['delivery_zip'] in mondayZips:
+                    eachItem['monday_available'] = True
+                else:
+                    eachItem['monday_available'] = False
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
@@ -993,7 +1005,6 @@ class Checkout(Resource):
 class MealSelection(Resource):
     def readQuery(self, items):
         for item in items:
-            print(item)
             item['meals_selected'] = {}
             if item['meal_selection'] == 'SKIP':
                 continue
