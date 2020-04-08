@@ -694,20 +694,54 @@ class SignUp(Resource):
 
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit account.'
+
+                query = """
+                    SELECT user_email FROM ptyd_accounts
+                    WHERE user_email = \'""" + Email + "\';"
+
+                emailExists = execute(query, 'get', conn)
+
+                if emailExists['code'] == 280 and len(emailExists['result']) > 0:
+                    statusCode = 400
+                    response['result'] = 'Email address taken.'
+                else:
+                    statusCode = 500
+                    response['result'] = 'Internal server error.'
+
+                response['code'] = usnInsert['code']
                 print(response['message'], response['result'], usnInsert['code'])
-                return response, 400
+                return response, statusCode
 
             pwInsert = execute(queries[2], 'post', conn)
 
-            if usnInsert['code'] != 281:
+            if pwInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit password.'
+                response['result'] = 'Internal server error.'
+                response['code'] = pwInsert['code']
+
+                # Make sure to delete signed up user
+                # New user was added to db from first MySQL cmd
+                query = """
+                    DELETE FROM ptyd_accounts
+                    WHERE user_email = \'""" + Email + "\';"
+
+                deleteUser = execute(query, 'post', conn)
+
+                # Handle error for successful user account signup
+                # but failed password storing to the db
+                if deleteUser['code'] != 281:
+                    response['WARNING'] = "This user was signed up to the database but did not properly store their password. Their account cannot be logged into and must be reset by a system administrator."
+                    response['code'] = 590
+
                 print(response['message'], response['result'], pwInsert['code'])
                 return response, 500
 
             response['message'] = 'Request successful.'
+            response['code'] = usnInsert['code']
+            response['first_name'] = FirstName
+            response['user_uid'] = NewUserID
 
+            print(response)
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')

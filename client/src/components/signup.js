@@ -25,14 +25,14 @@ function SignUp (props)  {
 
     async function sendForm() {
         if (email != confirmEmail) {
-            return "email mismatch";
+            return {'code': 470, 'result': "Email mismatch."};
         }
 
         if (password != confirmPassword) {
-            return "password mismatch";
+            return {'code': 471, 'result': "Password mismatch."};
         }
 
-        fetch(props.API_URL, {
+        const res = await fetch(props.API_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: {
@@ -53,12 +53,37 @@ function SignUp (props)  {
             Referral: referral,
             WeeklyUpdates: weeklyUpdates,
           })
-        })
+        });
 
-        return "success";
+        const response = await res.json();
+        console.log("response.code");
+        console.log(response.code);
+
+        return response;
     }
 
-    const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
+    function handleSubmit(event) {
+      event.preventDefault();
+    }
+
+    function handleSignup (response) {
+      console.log(response);
+      if (response.code == 281) {
+        document.cookie = " loginStatus: Hello " + response.first_name + "! , " + " user_uid: " + response.user_uid + " , ";
+
+        // NOT WORKING
+        // redirect & reload page for buttons and login status
+        props.history.push('/');
+        window.location.reload(false);
+      }
+      else {
+        // DISPLAY ERROR MSG
+//      props.history.push('/signup');
+        window.location.reload(false);
+      }
+    }
+
+    const sending = () => sendForm().then(mes => handleSignup(mes)).catch(err => console.log(err))
 
     return (
         <main Style="margin-top:-80px;">
@@ -70,7 +95,7 @@ function SignUp (props)  {
                 <Container className="justify-content-center bg-success">
                     <Row>
                         <Col size={6} >               
-                            <Form >
+                            <Form onSubmit={handleSubmit}>
                                 <Form.Row>
                                     <Form.Group as={Col} controlId="formGridFirstName">
                                     <Form.Label>First Name</Form.Label>
