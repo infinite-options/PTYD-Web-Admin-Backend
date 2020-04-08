@@ -4,6 +4,7 @@ import EachMeal from "./each-meal";
 import EachAddon from "./each-addon";
 
 import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -35,6 +36,7 @@ export default class MealButton extends Component {
       flag: false,
       mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
+      subscribed: this.props.subscribed,
     };
   }
 
@@ -428,12 +430,18 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            {this.state.maxmeals === 0 ? (
-              <Button variant="primary" onClick={this.saveButtonActivateAddons}>
-                Save changes
-              </Button>
+            {this.state.subscribed ? (
+              (this.state.maxmeals === 0 ? (
+                <Button variant="primary" onClick={this.saveButtonActivateAddons}>
+                  Save changes
+                </Button>
+              ) : (
+                <br />
+              ))
             ) : (
-              <br />
+              <Link to="/selectmealplan" className="btn btn-danger" >
+                Subscribe Now
+              </Link>
             )}
           </center>
         </Card.Body>
@@ -574,7 +582,13 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary" onClick={this.saveButtonAddOn}>Save changes</Button>
+            {this.state.subscribed ? (
+              <Button variant="primary" onClick={this.saveButtonAddOn}>Save changes</Button>
+            ) : (
+              <Link to="/selectmealplan" className="btn btn-danger" >
+                Subscribe Now
+              </Link>
+            )}
           </center>
         </Card.Body>
       </Card>

@@ -11,6 +11,7 @@ class Mealschedule extends Component {
       menu: [],
       user_uid: searchCookie4UserID(document.cookie),
       purchase: { NextCharge: 0 },
+      subscribed: false,
       monday_available: false
     };
 
@@ -37,11 +38,14 @@ class Mealschedule extends Component {
     if (this.state.user_uid !== null) {
       const purchases = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
       const purchasesApi = await purchases.json();
+
+      // Check if user has any active subscriptions
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
+        this.setState({ subscribed: true });
+        this.setState({ monday_available: purchasesApi.result[0].monday_available });
       }
-      this.setState({ monday_available: purchasesApi.result[0].monday_available });
     }
 
     const mselect_res = await fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseId}`);
@@ -191,6 +195,7 @@ class Mealschedule extends Component {
                       maxmeals={eachWeek.maxmeals}
                       purchase_id={this.state.purchase.purchase_id}
                       deliverDay={eachWeek.deliverDay}
+                      subscribed={this.state.subscribed}
                       surprise={eachWeek.surprise}
                       addonsSelected={eachWeek.addonsSelected}
                       monday_available={this.state.monday_available}
