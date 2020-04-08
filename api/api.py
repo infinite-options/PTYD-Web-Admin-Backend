@@ -1660,20 +1660,36 @@ class MealInfo(Resource):
         try:
             
 
-            queries = """select A1.menu_meal_id,A3.meal_name, A1.total_sold,A2.post_count, (A1.total_sold/A2.post_count) as "Number_sold_per_posting"
-                        from
-                        (select menu_meal_id, sum(menu_num_sold) as "total_sold" from ptyd_menu
-                        #where month(menu_date) = 2
-                        group by menu_meal_id) A1 
-                        join
-                        (select distinct menu_meal_id, count(menu_meal_id) "post_count"
-                        from ptyd_menu
-                        #where month(menu_date) = 2
-                        group by menu_meal_id) A2
-                        on A1.menu_meal_id = A2.menu_meal_id
-                        join
-                        (select meal_id, meal_name from ptyd_meals)A3
-                        on A1.menu_meal_id = A3.meal_id;
+            queries = """SELECT A.menu_meal_id, B.meal_name, total_sold, times_posted,total_sold/times_posted AS "Avg Sales/Posting"
+                        FROM 
+                            (SELECT 
+                                menu_meal_id,
+                                count(menu_meal_id) AS times_posted
+                            FROM 
+                                ptyd_menu
+                            GROUP BY menu_meal_id) AS A
+                        JOIN 
+
+                        (SELECT
+                            meal_selected,
+                            
+                            meal_name AS Meal_Name,
+                            count(n) as total_sold from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                        FROM 
+                            ptyd_meals_selected 
+                        JOIN
+                            numbers
+                        ON char_length(meal_selection)
+                            - char_length(replace(meal_selection, ';', ''))
+                            >= n - 1) sub1
+                        JOIN 
+                            ptyd_meals
+
+                        ON sub1.meal_selected=meal_id
+                        GROUP BY sub1.meal_selected ) AS B
+
+                        ON
+                            B.meal_selected = A.menu_meal_id
                         """
 
             meal_info['meal_info'] = execute(queries, 'get', conn)
@@ -1938,13 +1954,6 @@ class MenuCreation(Resource):
                 d[menuDates[index]] = menuInfo
 
             
-                    
-
-                        
-            
-
-
-            # ------ not sure if this query is right but correct idea -----
             items = execute(
                         """ SELECT A.menu_meal_id, B.meal_name, B.total_sold, A.times_posted, total_sold/times_posted AS "Avg Sales/Posting"
                             FROM 
