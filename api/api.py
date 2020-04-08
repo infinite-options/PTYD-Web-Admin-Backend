@@ -406,8 +406,8 @@ class Meals(Resource):
                     week = {
                         'SaturdayDate': str((stamp - timedelta(days=1)).date()),
                         'SundayDate': str(stamp.date()),
-                        'Sunday': str(stamp.date()),
-                        'Monday': str((stamp + timedelta(days=1)).date()),
+                        'Sunday': stamp.strftime('%B %d'),
+                        'Monday': (stamp + timedelta(days=1)).strftime('%B %d'),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -445,7 +445,6 @@ class Meals(Resource):
 
                     i += 1
 
-            print('Finish Query of Menus')
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -2003,13 +2002,10 @@ class CheckEmail(Resource):
             queries.append( "SELECT user_email FROM ptyd_accounts WHERE user_email = '" + email + "';" )
 
             users = execute(queries[0], 'get', conn)
-            print(users['result'])
 
             if users['result'] == ():
-                # print('shabooya')
                 return {'result': False}, 401
             elif len(users['result']) > 0:
-                # print('goo squad')
                 return {'result': True}, 200
 
         except:
@@ -2022,6 +2018,7 @@ class CheckEmail(Resource):
 api.add_resource(Meals, '/api/v2/meals')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
+api.add_resource(CheckEmail, '/api/v2/checkemail/<string:email>')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(AccountSaltById, '/api/v2/accountsaltbyid/<string:userUid>')

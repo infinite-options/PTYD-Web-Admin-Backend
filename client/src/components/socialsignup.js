@@ -61,25 +61,6 @@ export default function SocialSignUp (props)  {
 
     const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
 
-    async function addSocial() {
-
-        fetch(props.API_URL, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_email: "swoog@ucsc.edu",
-            user_social: "google"
-          })
-        })
-
-        return "success";
-    }
-
-    const socializing = () => addSocial().then(mes => console.log(mes)).catch(err => console.log(err))
-
     return (
         <main Style="margin-top:-80px;">
             <div class="container text-center" Style="margin-top:-40px;">

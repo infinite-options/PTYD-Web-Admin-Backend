@@ -5,6 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 function SignUp (props)  {
 
@@ -22,6 +24,8 @@ function SignUp (props)  {
     const [userState, setUserState] = useState("");
     const [referral, setReferral] = useState("Social Media");
     const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
+
+    const [emailTaken, setEmailTaken] = useState(false);
 
     async function sendForm() {
         if (email != confirmEmail) {
@@ -60,6 +64,23 @@ function SignUp (props)  {
 
     const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
 
+    // Handling Available Emails 
+    async function checkEmail(user) {
+        const res = await fetch(props.CHECK_EMAIL_API_URL + '/' + user);
+        const api = await res.json();
+        const names = api.result;
+        return names;
+    }
+
+    const handleEmail = (user) => {
+        console.log(user)
+        checkEmail(user)
+        .then( res => {
+            console.log('res', res)
+            setEmailTaken(res) }) //res.length > 0 ? ( res[0]['user_name'] == user ? setUsernameTaken(true) : setUsernameTaken(false) ) : setUsernameTaken(false) )
+        .catch( err => console.log(err) )
+    }
+
     return (
         <main Style="margin-top:-80px;">
             <div class="container text-center" Style="margin-top:-40px;">
@@ -89,21 +110,45 @@ function SignUp (props)  {
                                     </Form.Group>
                                 </Form.Row>
 
-                                <Form.Group  controlId="formGridEmail">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" 
-                                    value={email}
-                                    onChange={e => setEmail(e.target.value)}
-                                    placeholder="Enter Email" />
-                                </Form.Group>
+                                <OverlayTrigger 
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                        <Tooltip >
+                                            { emailTaken ? <p>Email Taken!</p> : <p>Email is Available!</p> }
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Form.Group  controlId="formGridEmail">
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type="email" 
+                                            value={email}
+                                            onChange={e => {
+                                                setEmail(e.target.value)
+                                                handleEmail(e.target.value)
+                                            }}
+                                            placeholder="Enter Email" />
+                                    </Form.Group>
+                                </OverlayTrigger>
 
-                                <Form.Group  controlId="formGridEmailConfirm">
-                                <Form.Label>Confirm Email</Form.Label>
-                                <Form.Control type="email"
-                                    value={confirmEmail}
-                                    onChange={e => setConfirmEmail(e.target.value)}
-                                    placeholder="Confirm Email" />
-                                </Form.Group>
+                                <OverlayTrigger 
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                        <Tooltip >
+                                            { email == confirmEmail ? <p>Emails Match!</p> : <p>Mismatched Emails!</p> }
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Form.Group  controlId="formGridEmailConfirm">
+                                        <Form.Label>Confirm Email</Form.Label>
+                                        <Form.Control type="email"
+                                            value={confirmEmail}
+                                            onChange={e => setConfirmEmail(e.target.value)}
+                                            placeholder="Confirm Email" 
+                                        />
+                                    </Form.Group>
+                                </OverlayTrigger>
 
                                 <Form.Group  controlId="formGridPhoneNumber">
                                 <Form.Label>Phone Number</Form.Label>
@@ -121,13 +166,24 @@ function SignUp (props)  {
                                     placeholder="Enter Password" />
                                 </Form.Group>
 
-                                <Form.Group controlId="formGridPasswordConfirm">
-                                <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control type="password"
-                                    value={confirmPassword}
-                                    onChange={e => setConfirmPassword(e.target.value)}
-                                    placeholder="Confirm Password" />
-                                </Form.Group>
+                                <OverlayTrigger 
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                        <Tooltip >
+                                            { password == confirmPassword ? <p>Passwords Match!</p> : <p>Mismatched Passwords!</p> }
+                                        </Tooltip>
+                                    }
+                                >
+                                    <Form.Group controlId="formGridPasswordConfirm">
+                                        <Form.Label>Confirm Password</Form.Label>
+                                        <Form.Control type="password"
+                                            value={confirmPassword}
+                                            onChange={e => setConfirmPassword(e.target.value)}
+                                            placeholder="Confirm Password" />
+                                    </Form.Group>
+                                </OverlayTrigger>
+
                                 <Form.Group as={Col} controlId="formGridReferral">
                                     <Form.Label>Referral</Form.Label>
                                     <Form.Control as="select" value={referral} onChange={e => setReferral(e.target.value)}>
