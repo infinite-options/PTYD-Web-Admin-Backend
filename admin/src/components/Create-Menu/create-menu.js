@@ -16,81 +16,35 @@ class CreateMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // columns: [
-      //   { title: "Name", field: "" },
-      //   { title: "Current Subscription", field: "Current_subscription" },
-      //   { title: "Number of Meals Remaining", field: "Weeks_left" },
-      //   { title: "Gender", field: "Gender" },
-      //   { title: "Address", field: "Address" },
-      //   { title: "Meals Ordered", field: "Meals_ordered" },
-      //   { title: "Customer Since", field: "Customer_Since" }
-      // ],
       datekeys: [],
       details: [],
-      selection: 0
+      selection: 0,
+      showAdd: false
     };
   }
   async componentWillMount() {
     const res = await fetch(this.props.API_URL_CREATEMENU);
     const api = await res.json();
     const createMenu = api.menus;
+    const avg = api.result;
     let tempkeys = [];
 
     for (var key of Object.keys(createMenu)) {
       tempkeys.push(key);
     }
-    this.setState({ datekeys: tempkeys, createMenu });
-    // this.state.temp.push(
-    //   <tr>
-    //     <td>Weekly Entree</td>
-    //     <td>
-    //       <FormControl>
-    //         <Select
-    //           labelId="demo-simple-select-label"
-    //           id="demo-simple-select"
-    //           value={this.state.age}
-    //           onChange={this.handleChange}
-    //           style={{ color: "white" }}
-    //         >
-    //           <MenuItem value={10}>Ten</MenuItem>
-    //           <MenuItem value={20}>Twenty</MenuItem>
-    //           <MenuItem value={30}>Thirty</MenuItem>
-    //         </Select>
-    //       </FormControl>
-    //     </td>
-    //     <td>25</td>
-    //   </tr>,
-    //   <tr>
-    //     <td>Weekly Salad</td>
-    //     <td>
-    //       <FormControl>
-    //         <Select
-    //           labelId="demo-simple-select-label"
-    //           id="demo-simple-select"
-    //           value={this.state.age}
-    //           onChange={this.handleChange}
-    //           style={{ color: "white" }}
-    //         >
-    //           <MenuItem value={10}>Ten</MenuItem>
-    //           <MenuItem value={20}>Twenty</MenuItem>
-    //           <MenuItem value={30}>Thirty</MenuItem>
-    //         </Select>
-    //       </FormControl>
-    //     </td>
-    //     <td>50</td>
-    //   </tr>
-    // );
+    this.setState({ datekeys: tempkeys, createMenu, avg });
   }
   handleChange = event => {
     this.setState({ selection: event.target.value });
   };
   render() {
-    let displaykeys = [];
+    let displayrows = [];
     let enterDate = this.state.datekeys[this.state.selection];
     if (enterDate == null) {
       return <div></div>;
     }
     let arr = this.state.createMenu[enterDate];
+
     if (arr == null) {
       return <div></div>;
     }
@@ -99,11 +53,12 @@ class CreateMenu extends Component {
         <tr>
           <td>{arr[i].Menu_Type}</td>
           <td>{arr[i].Meal_Name}</td>
-          <td>{this.example()}</td>
+          <td>{this.avgpost(arr[i].Meal_Name)}</td>
         </tr>
       );
-      displaykeys.push(tempelement);
+      displayrows.push(tempelement);
     }
+
     return (
       <div style={{ margin: "1%" }}>
         <Breadcrumbs aria-label="breadcrumb">
@@ -114,8 +69,9 @@ class CreateMenu extends Component {
         </Breadcrumbs>
         <Row>
           <Col>
-            <Table striped bordered hover variant="dark">
-              <thead style={{ backgroundColor: "blue", color: "white" }}>
+            <Table striped bordered hover>
+              {/* variant="dark" */}
+              <thead>
                 <tr>
                   <th>Menu For</th>
                   <th colSpan="2">{this.dateDropdown()}</th>
@@ -128,12 +84,13 @@ class CreateMenu extends Component {
                   <th>Avg Sales/Posting</th>
                 </tr>
               </thead>
-              <tbody>{displaykeys}</tbody>
+              <tbody>{displayrows}</tbody>
+              {this.state.addShow ? this.addRowTemplate() : <div></div>}
             </Table>
             <Button
               variant="primary"
               onClick={() => {
-                this.addRow();
+                this.setState({ addShow: !this.state.addShow });
               }}
             >
               Add Meal
@@ -197,8 +154,8 @@ class CreateMenu extends Component {
       </div>
     );
   }
-  addRow = () => {
-    this.state.temp.push(
+  addRowTemplate = () => {
+    return (
       <tr>
         <td>
           <form noValidate autoComplete="off">
@@ -217,10 +174,10 @@ class CreateMenu extends Component {
         </td>
       </tr>
     );
-    this.setState({
-      temp: this.state.temp
-    });
   };
+  // this.setState({
+  //   temp: this.state.temp
+  // });
   // getdate = () =>{
   //   let dates=[];
   //   for (let i = 0; i < createMenu.menu_dates.length; i += 1) {
@@ -238,15 +195,20 @@ class CreateMenu extends Component {
           id="demo-simple-select"
           value={this.state.selection}
           onChange={this.handleChange}
-          style={{ color: "white" }}
+          // style={{ color: "white" }}
         >
           {tempdate}
         </Select>
       </FormControl>
     );
   };
-  example = () => {
-    return "stringggg";
+  avgpost = mealName => {
+    for (let i = 0; i < this.state.avg.length; i++) {
+      if (this.state.avg[i]["Meal_Name"] == mealName) {
+        return this.state.avg[i]["Avg_Sales_Posting"];
+      }
+    }
+    return "N/A";
   };
 }
 export default CreateMenu;

@@ -1984,10 +1984,10 @@ class MenuCreation(Resource):
             
             for index in range(len(mealNames)):
                 tempDict = {}
-                key1 = "Meal Name"
-                key2 = "Avg Sales/Posting"
-                key3 = "Total Posts"
-                key4 = "Total Sold"
+                key1 = "Meal_Name"
+                key2 = "Avg_Sales_Posting"
+                key3 = "Total_Posts"
+                key4 = "Total_Sold"
                 tempDict[key1] = mealNames[index]
                 tempDict[key2] = str(mealAvg[index])
                 tempDict[key3] = str(mealPostings[index])
