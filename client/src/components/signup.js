@@ -20,7 +20,7 @@ function SignUp (props)  {
     const [city, setCity] = useState("");
     const [zip, setZip] = useState("");
     const [userState, setUserState] = useState("");
-    const [referral, setReferral] = useState("Social Media");
+    const [referral, setReferral] = useState("Website");
     const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
 
     async function sendForm() {
@@ -156,8 +156,8 @@ function SignUp (props)  {
                                 <Form.Group as={Col} controlId="formGridReferral">
                                     <Form.Label>Referral</Form.Label>
                                     <Form.Control as="select" value={referral} onChange={e => setReferral(e.target.value)}>
-                                        <option>Social Media</option>
                                         <option>Website</option>
+                                        <option>Social Media</option>
                                         <option>Friend</option>
                                         <option>Event</option>
                                     </Form.Control>
@@ -185,7 +185,16 @@ function SignUp (props)  {
                                     />
                                     */}
                                 </Form.Group>
-
+                                <Form.Group>
+                                  <Form.Control
+                                    as="textarea"
+                                    size="sm"
+                                    rows="4"
+                                    disabled
+                                  >
+                                    Add Terms of Service to signup.js - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ultrices ligula in venenatis iaculis. Nunc et rutrum nisl. Aliquam libero ligula, tempus sit amet libero vel, tincidunt iaculis odio. Aliquam sed ipsum nulla. Nulla accumsan, est a sodales cursus, lacus elit fermentum dui, ac ullamcorper tortor nisi eget massa. Suspendisse eu massa varius, feugiat augue vitae, venenatis libero. Aliquam varius ligula turpis, non elementum mauris mattis id. Vestibulum ultrices quam iaculis justo porttitor tempor. Pellentesque fringilla tempus nisi sit amet facilisis. Donec sed interdum tellus, non interdum massa. Donec lectus ex, varius vitae tincidunt in, pulvinar nec ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam scelerisque massa gravida sollicitudin rutrum.
+                                  </Form.Control>
+                                </Form.Group>
                                 <Form.Group id="formGridServiceTerms">
                                     <Form.Check type="checkbox" label="Agree To Prep To Your Door Terms Of Service." />
                                 </Form.Group>
