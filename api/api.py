@@ -728,7 +728,7 @@ class SignUp(Resource):
 
             if pwInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Internal server error.'
+                response['result'] = 'Internal server error (Password write).'
                 response['code'] = pwInsert['code']
 
                 # Make sure to delete signed up user
