@@ -1910,7 +1910,8 @@ class MenuCreation(Resource):
                         meal_name
                         FROM 
                         ptyd_menu
-                        JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+                        JOIN ptyd_meals ON menu_meal_id=meal_id
+                        ORDER BY menu_date DESC ;""", 'get', conn)
 
             # generated all of the menu dates available                
             menuDates = []
@@ -2027,9 +2028,7 @@ class MenuCreation(Resource):
             
            #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
 
-            
-            
-        
+
           
 
             response['message'] = 'successful'
