@@ -406,8 +406,8 @@ class Meals(Resource):
                     week = {
                         'SaturdayDate': str((stamp - timedelta(days=1)).date()),
                         'SundayDate': str(stamp.date()),
-                        'Sunday': str(stamp.date().strftime("%b %-d")),
-                        'Monday': str((stamp + timedelta(days=1)).date().strftime("%b %-d")),
+                        'Sunday': stamp.strftime('%B %d'),
+                        'Monday': (stamp + timedelta(days=1)).strftime('%B %d'),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -445,7 +445,6 @@ class Meals(Resource):
 
                     i += 1
 
-            print('Finish Query of Menus')
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -868,7 +867,17 @@ class Checkout(Resource):
 
             userAuth = execute(queries[0], 'get', conn)
 
-            if userAuth['code'] != 280 or len(userAuth['result']) != 1:
+            possSocialAcc = execute("SELECT user_uid FROM ptyd_social_accounts WHERE user_email = '" + data['delivery_email'] + "';", 'get', conn)
+            print(json.dumps(possSocialAcc, indent=1))
+
+            if len(possSocialAcc['result']) != 0:
+                if possSocialAcc['result'][0]['user_uid'] == data['user_uid']:
+                    print('Very Cool Kanye!')
+                    print("Successfully authenticated user.")
+                else:
+                    response['message'] = 'Could not authenticate user.'
+                    return response, 400 
+            elif userAuth['code'] != 280 or len(userAuth['result']) != 1:
                 response['message'] = 'Could not authenticate user.'
                 response['error'] = userAuth
                 print("Error:", response['message'])
@@ -1690,11 +1699,202 @@ class TemplateApi(Resource):
         finally:
             disconnect(conn)
 
+class SocialSignUp(Resource):
+    # HTTP method POST
+    def post(self):
+        response = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            Email = data['Email']
+            FirstName = data['FirstName']
+            LastName = data['LastName']
+            PhoneNumber = data['PhoneNumber']
+            WeeklyUpdates = data['WeeklyUpdates']
+            CreateDate = getToday()
+            LastUpdate = CreateDate
+            Referral = data['Referral']
+            SocialMedia = data['SocialMedia']
+            AccessToken = data['AccessToken']
+            RefreshToken = data['RefreshToken']
+
+            print("Received:", data)
+
+            # Query [0]
+            queries = ["CALL get_new_user_id;"]
+
+            NewUserIDresponse = execute(queries[0], 'get', conn)
+            NewUserID = NewUserIDresponse['result'][0]['new_id']
+
+            print("NewUserID:", NewUserID)
+
+            # Query [1]
+            queries.append(
+                """ INSERT INTO ptyd_accounts
+                    (
+                        user_uid,
+                        user_email,
+                        first_name,
+                        last_name,
+                        phone_number,
+                        weekly_updates,
+                        create_date,
+                        last_update,
+                        referral_source
+                    )
+                    VALUES
+                    (""" +
+                        "\'" + NewUserID + "\'," +
+                        "\'" + Email + "\'," +
+                        "\'" + FirstName + "\'," +
+                        "\'" + LastName + "\'," +
+                        "\'" + PhoneNumber + "\'," +
+                        "\'" + WeeklyUpdates + "\'," +
+                        "\'" + CreateDate + "\'," +
+                        "\'" + LastUpdate + "\'," +
+                        "\'" + Referral + "\');")
+
+            # Query [2]
+            queries.append("""
+                INSERT INTO ptyd_social_accounts
+                (
+                    user_uid,
+                    user_email,
+                    user_social_media,
+                    user_access_token,
+                    user_refresh_token
+                )
+                VALUES
+                (
+                    \'""" + NewUserID + """\',
+                    \'""" + Email + """\',
+                    \'""" + SocialMedia + """\',
+                    \'""" + AccessToken + """\',
+                    \'""" + RefreshToken + "\');")
+
+            usnInsert = execute(queries[1], 'post', conn)
+
+            if usnInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit account.'
+                print(response['message'], response['result'], usnInsert['code'])
+                return response, 400
+
+            socInsert = execute(queries[2], 'post', conn)
+
+            if socInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit password.'
+                print(response['message'], response['result'], socInsert['code'])
+                return response, 500
+
+            response['message'] = 'Request successful.'
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+# Social Media Login API
+class Social(Resource):
+
+    # HTTP method GET
+    def get(self, email):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [
+            """     SELECT
+                        user_uid,
+                        user_email,
+                        user_social_media,
+                        user_access_token,
+                        user_refresh_token
+                    FROM ptyd_social_accounts WHERE user_email = '""" + email + "';"
+            ]
+
+            items = execute(queries[0], 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            print( items )
+
+            # restest = SocialAccount().get(email)
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class SocialAccount(Resource):
+
+    # HTTP method GET
+    def get(self, uid):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [
+            """     SELECT
+                        user_uid,
+                        first_name,
+                        last_name,
+                        user_email,
+                        phone_number,
+                        create_date,
+                        last_update,
+                        referral_source
+                    FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
+
+            items = execute(queries[0], 'get', conn)
+
+            print(items)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class CheckEmail(Resource):
+
+    # HTTP method GET
+    def get(self, email):
+        if email == None:
+            return {'result': False}, 401
+
+        try:
+            conn = connect()
+
+            queries = []
+            queries.append( "SELECT user_email FROM ptyd_accounts WHERE user_email = '" + email + "';" )
+
+            users = execute(queries[0], 'get', conn)
+
+            if users['result'] == ():
+                return {'result': False}, 401
+            elif len(users['result']) > 0:
+                return {'result': True}, 200
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
+api.add_resource(CheckEmail, '/api/v2/checkemail/<string:email>')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(AccountSaltById, '/api/v2/accountsaltbyid/<string:userUid>')
@@ -1712,6 +1912,10 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
+
+api.add_resource(SocialSignUp, '/api/v2/socialSignup')
+api.add_resource(Social, '/api/v2/social/<string:email>')
+api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 
 # Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')
