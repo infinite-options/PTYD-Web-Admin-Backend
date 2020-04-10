@@ -20,7 +20,7 @@ RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
 RDS_PORT = 3306
 #RDS_USER = 'root'
 RDS_USER = 'admin'
-RDS_DB = 'pricing'
+RDS_DB = 'ptyd'
 
 app = Flask(__name__)
 
