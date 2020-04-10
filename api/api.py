@@ -404,10 +404,10 @@ class Meals(Resource):
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
                     week = {
-                        'SaturdayDate': str((stamp - timedelta(days=1)).date()),
-                        'SundayDate': str(stamp.date()),
-                        'Sunday': stamp.strftime('%B %d'),
-                        'Monday': (stamp + timedelta(days=1)).strftime('%B %d'),
+                        'SaturdayDate': str(stamp.date()),
+                        'SundayDate': str((stamp + timedelta(days=1)).date()),
+                        'Sunday': (stamp + timedelta(days=1)).strftime('%b %-d'),
+                        'Monday': (stamp + timedelta(days=2)).strftime('%b %-d'),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
