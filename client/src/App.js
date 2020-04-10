@@ -25,6 +25,11 @@ const App = props => {
       if (searchCookie4UserID(document.cookie).includes('100-')){
         userHasAuthenticated(true);
       }
+      else if (!document.cookie.includes("loginStatus")){
+        document.cookie =
+          " loginStatus: Sign In , user_uid: null , ";
+        console.log("First time? Resetting document cookie");
+      }
     } catch (e) {
       console.log("No user?");
       if (e !== "No current user") {

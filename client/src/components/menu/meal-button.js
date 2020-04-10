@@ -4,6 +4,7 @@ import EachMeal from "./each-meal";
 import EachAddon from "./each-addon";
 
 import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -33,7 +34,9 @@ export default class MealButton extends Component {
       maxmealsCopy: this.props.maxmeals,
       addonActivated: false,
       flag: false,
+      mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
+      subscribed: this.props.subscribed,
     };
   }
 
@@ -53,6 +56,7 @@ export default class MealButton extends Component {
           buttonSkip: true,
           buttonSurprise: false,
           buttonDisabled: true,
+          buttonAddOnKeepColor: false,
         });
         break;
       case 'Monday':
@@ -242,6 +246,7 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
+              disabled={!this.state.mondayAvailable}
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
@@ -251,6 +256,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
+              disabled={!this.state.subscribed}
               variant="outline-dark"
               style={this.state.buttonSkip ? orange : hide}
               onClick={this.changeButtonSkip}
@@ -280,7 +286,7 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled || !this.state.subscribed}
             variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
@@ -291,6 +297,7 @@ export default class MealButton extends Component {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {/* <SpecialRequestAnimation /> */}
           <Button
+            disabled={this.state.buttonDisabled}
             variant="outline-dark"
             style={
               (this.state.buttonAddOn ? orange : hide,
@@ -424,12 +431,18 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            {this.state.maxmeals === 0 ? (
-              <Button variant="primary" onClick={this.saveButtonActivateAddons}>
-                Save changes
-              </Button>
+            {this.state.subscribed ? (
+              (this.state.maxmeals === 0 ? (
+                <Button variant="primary" onClick={this.saveButtonActivateAddons}>
+                  Save changes
+                </Button>
+              ) : (
+                <br />
+              ))
             ) : (
-              <br />
+              <Link to="/selectmealplan" className="btn btn-danger" >
+                Subscribe Now
+              </Link>
             )}
           </center>
         </Card.Body>
@@ -570,7 +583,13 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary" onClick={this.saveButtonAddOn}>Save changes</Button>
+            {this.state.subscribed ? (
+              <Button variant="primary" onClick={this.saveButtonAddOn}>Save changes</Button>
+            ) : (
+              <Link to="/selectmealplan" className="btn btn-danger" >
+                Subscribe Now
+              </Link>
+            )}
           </center>
         </Card.Body>
       </Card>

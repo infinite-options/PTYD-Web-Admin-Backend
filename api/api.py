@@ -20,7 +20,7 @@ RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
 RDS_PORT = 3306
 #RDS_USER = 'root'
 RDS_USER = 'admin'
-RDS_DB = 'pricing'
+RDS_DB = 'ptyd'
 
 app = Flask(__name__)
 
@@ -456,175 +456,6 @@ class Meals(Resource):
         finally:
             disconnect(conn)
 
-# NO LONGER USED
-class Accounts(Resource):
-    # Split by dashes and return whatever is on the left side of it
-    # Also remove any whitespaces at the end
-    def shortenPlanDesc(self, planDesc):
-        return planDesc.split('-')[0].rstrip()
-
-    # Check if subscription plan is a one time order
-    def isOneTimePlan(self, subscriptionPlan):
-        if subscriptionPlan == None:
-            return False
-        if 'One Time' in subscriptionPlan:
-            return True
-        return False
-
-    # Calculate amount to charge based on weekly price and subscription
-    def calculateNextCharge(self, weeklyPrice, subscriptionPlan):
-        if 'Bi-Weekly' in subscriptionPlan:
-            return float(weeklyPrice) * 2
-        elif 'Weekly' in subscriptionPlan:
-            return float(weeklyPrice)
-        elif 'Monthly' in subscriptionPlan:
-            return float(weeklyPrice) * 4
-
-    # Calculate next charge date based on most recent payment and subscription
-    def calculateNextChargeDate(self, lastPaymentDate, subscriptionPlan):
-        if 'Bi-Weekly' in subscriptionPlan:
-            nextPaymentDate = lastPaymentDate + timedelta(weeks=2)
-            return nextPaymentDate.strftime("%b %d, %Y")
-        elif 'Weekly' in subscriptionPlan:
-            nextPaymentDate = lastPaymentDate + timedelta(weeks=1)
-            return nextPaymentDate.strftime("%b %d, %Y")
-        elif 'Monthly' in subscriptionPlan:
-            nextPaymentDate = lastPaymentDate + timedelta(weeks=4)
-            return nextPaymentDate.strftime("%b %d, %Y")
-
-    # Calculate number of paid weeks remaining
-    def calculatePaidWeeksRemaining(self, nextChargeDate):
-        if nextChargeDate and nextChargeDate != 'N/A':
-#           now = datetime.now()
-            now = datetime(2020, 2, 2, 15, 59)
-            nextChargeDateObj = datetime.strptime(nextChargeDate, "%b %d, %Y")
-            deltaObj = nextChargeDateObj - now
-            return ceil(deltaObj.days / 7)
-        else:
-            return "N/A"
-
-    # Format Monday Zipcodes Query to a list of strings
-    def formatMondayZips(self, query):
-        zips = []
-        for row in query['result']:
-            zips.append(row['zipcode'])
-        return zips
-
-    # Format query
-    def formatQuery(self, query, mondayZips):
-        json = []
-        for row in query['result']:
-            rowDict = {}
-            for key in row:
-                print(key)
-                value = row[key]
-                if key == 'Subscription':
-                    if value:
-                        value = self.shortenPlanDesc(value)
-                    else:
-                        value = None
-                # Get weekly price of meal plan and multiply by X
-                if key == 'WeeklyPrice':
-                    if self.isOneTimePlan(rowDict['Subscription']):
-                        rowDict['NextCharge'] = 0
-                    elif rowDict['Subscription'] == None:
-                        rowDict['NextCharge'] = 0
-                    else:
-                        rowDict['NextCharge'] = self.calculateNextCharge(value, rowDict['PaymentPlan'])
-                # Get user's most recent payment date and offset by X weeks
-                if key == 'payment_time_stamp':
-                    if self.isOneTimePlan(rowDict['Subscription']):
-                        rowDict['NextChargeDate'] = None
-                    elif rowDict['Subscription'] == None:
-                        rowDict['NextChargeDate'] = None
-                    elif value == None:
-                        rowDict['NextChargeDate'] = 'N/A'
-                    else:
-                        rowDict['NextChargeDate'] = self.calculateNextChargeDate(value, rowDict['PaymentPlan'])
-                rowDict[key] = value
-
-            print(1)
-            rowDict['PaidWeeksRemaining'] = self.calculatePaidWeeksRemaining(rowDict['NextChargeDate'])
-            print(2)
-
-            try:
-                ccExpDateObj = datetime.strptime(rowDict['cc_exp_date'], "%Y-%m-%d")
-                rowDict['cc_exp_year'] = ccExpDateObj.strftime("%Y")
-                rowDict['cc_exp_month'] = ccExpDateObj.strftime("%m")
-                rowDict['cc_exp_day'] = ccExpDateObj.strftime("%d")
-            except:
-                rowDict['cc_exp_year'] = None
-                rowDict['cc_exp_month'] = None
-                rowDict['cc_exp_day'] = None
-
-            print(3)
-            if rowDict['billing_zip'] in mondayZips:
-                rowDict['MondayAvailable'] = True
-            else:
-                rowDict['MondayAvailable'] = False
-
-            print(4)
-            json.append(rowDict)
-
-        print(5)
-        return json
-
-    # HTTP method GET
-    def get(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-
-            # Needs password salt
-            queries = [
-                """ SELECT DISTINCT
-                        user_uid,
-                        user_email,
-                        first_name,
-                        last_name,
-                        phone_number,
-                        create_date,
-                        last_update,
-                        referral_source,
-                        password_salt,
-                        mp.meal_plan_desc AS Subscription,
-                        mp.payment_frequency AS PaymentPlan,
-                        mp.meal_plan_price AS WeeklyPrice,
-                        p1.payment_time_stamp,
-                        p1.billing_zip,
-                        mp.num_meals AS MaximumMeals,
-                        p1.cc_num AS cc_num_secret,
-                        cc_exp_date,
-                        CONCAT('XX', RIGHT(cc_cvv, 1) ) AS cc_cvv_secret
-                    FROM ptyd_accounts a1
-                    LEFT JOIN ptyd_payments p1
-                    ON user_uid = p1.buyer_id
-                    LEFT JOIN ptyd_purchases p2
-                    ON p1.purchase_id = p2.purchase_id
-                    LEFT JOIN ptyd_meal_plans mp
-                    ON p2.meal_plan_id = mp.meal_plan_id
-                    LEFT JOIN ptyd_passwords
-                    ON user_uid = password_user_uid;""",
-                    "SELECT * FROM ptyd_monday_zipcodes;"]
-
-            query = execute(queries[0], 'get', conn)
-
-            mondayZipsQuery = execute(queries[1], 'get', conn)
-            mondayZips = self.formatMondayZips(mondayZipsQuery)
-
-            items['MondayZips'] = mondayZips
-            items['Accounts'] = self.formatQuery(query, mondayZips)
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
 class AccountSaltById(Resource):
     def get(self, userUid):
         response = {}
@@ -757,9 +588,16 @@ class AccountPurchases(Resource):
                     ptyd_meal_plans mp
                 ON p2.meal_plan_id = mp.meal_plan_id
                 WHERE buyer_id = \'""" + buyerId + """\'
-                GROUP BY purchase_id;"""]
+                GROUP BY purchase_id;""",
+                "   SELECT * FROM ptyd_monday_zipcodes;"]
 
             items = execute(queries[0], 'get', conn)
+            mondayZipsQuery = execute(queries[1], 'get', conn)
+
+            mondayZips = []
+            for eachZip in mondayZipsQuery['result']:
+                mondayZips.append(eachZip['zipcode'])
+            del mondayZipsQuery
 
             for eachItem in items['result']:
                 last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
@@ -772,8 +610,13 @@ class AccountPurchases(Resource):
                 elif eachItem['payment_frequency'] == 'Monthly':
                     next_charge_date = last_charge_date + timedelta(days=28)
 
-                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) )
-                eachItem['next_charge_date'] = str( next_charge_date.date() )            
+                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) + 1)
+                eachItem['next_charge_date'] = str( next_charge_date.date() ) 
+
+                if eachItem['delivery_zip'] in mondayZips:
+                    eachItem['monday_available'] = True
+                else:
+                    eachItem['monday_available'] = False
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
@@ -863,20 +706,54 @@ class SignUp(Resource):
 
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit account.'
+
+                query = """
+                    SELECT user_email FROM ptyd_accounts
+                    WHERE user_email = \'""" + Email + "\';"
+
+                emailExists = execute(query, 'get', conn)
+
+                if emailExists['code'] == 280 and len(emailExists['result']) > 0:
+                    statusCode = 400
+                    response['result'] = 'Email address taken.'
+                else:
+                    statusCode = 500
+                    response['result'] = 'Internal server error.'
+
+                response['code'] = usnInsert['code']
                 print(response['message'], response['result'], usnInsert['code'])
-                return response, 400
+                return response, statusCode
 
             pwInsert = execute(queries[2], 'post', conn)
 
-            if usnInsert['code'] != 281:
+            if pwInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit password.'
+                response['result'] = 'Internal server error (Password write).'
+                response['code'] = pwInsert['code']
+
+                # Make sure to delete signed up user
+                # New user was added to db from first MySQL cmd
+                query = """
+                    DELETE FROM ptyd_accounts
+                    WHERE user_email = \'""" + Email + "\';"
+
+                deleteUser = execute(query, 'post', conn)
+
+                # Handle error for successful user account signup
+                # but failed password storing to the db
+                if deleteUser['code'] != 281:
+                    response['WARNING'] = "This user was signed up to the database but did not properly store their password. Their account cannot be logged into and must be reset by a system administrator."
+                    response['code'] = 590
+
                 print(response['message'], response['result'], pwInsert['code'])
                 return response, 500
 
             response['message'] = 'Request successful.'
+            response['code'] = usnInsert['code']
+            response['first_name'] = FirstName
+            response['user_uid'] = NewUserID
 
+            print(response)
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -1128,7 +1005,6 @@ class Checkout(Resource):
 class MealSelection(Resource):
     def readQuery(self, items):
         for item in items:
-            print(item)
             item['meals_selected'] = {}
             if item['meal_selection'] == 'SKIP':
                 continue

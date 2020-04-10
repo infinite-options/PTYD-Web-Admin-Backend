@@ -10,7 +10,9 @@ class Mealschedule extends Component {
     this.state = {
       menu: [],
       user_uid: searchCookie4UserID(document.cookie),
-      user: { NextCharge: 0 }
+      purchase: { NextCharge: 0 },
+      subscribed: false,
+      monday_available: false
     };
 
     function searchCookie4UserID(str) {
@@ -27,18 +29,22 @@ class Mealschedule extends Component {
   }
 
   async componentDidMount() {
-    let currUser = {};
+    let currPur = {};
     let purchaseId = 0;
 
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
 
     if (this.state.user_uid !== null) {
-      const users = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
-      const usersApi = await users.json();
-      if (usersApi.result.length != 0) {
-        currUser = usersApi.result[0];
-        purchaseId = usersApi.result[0].purchase_id;
+      const purchases = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
+      const purchasesApi = await purchases.json();
+
+      // Check if user has any active subscriptions
+      if (purchasesApi.result.length != 0) {
+        currPur = purchasesApi.result[0];
+        purchaseId = purchasesApi.result[0].purchase_id;
+        this.setState({ subscribed: true });
+        this.setState({ monday_available: purchasesApi.result[0].monday_available });
       }
     }
 
@@ -60,7 +66,7 @@ class Mealschedule extends Component {
       currentWeek.addons = api.result[key].Addons;
       currentWeek.mealQuantities = api.result[key].MealQuantities;
       currentWeek.addonQuantities = Object.assign({}, currentWeek.mealQuantities);
-      currentWeek.maxmeals = currUser.MaximumMeals;
+      currentWeek.maxmeals = currPur.MaximumMeals;
       currentWeek.deliverDay = 'Sunday';
       currentWeek.surprise = true;
       currentWeek.addonsSelected = false;
@@ -95,7 +101,7 @@ class Mealschedule extends Component {
 
       sixWeekMenu.push(currentWeek);
     }
-    this.setState({ menu: sixWeekMenu, user: currUser });
+    this.setState({ menu: sixWeekMenu, purchase: currPur });
   }
 
   render() {
@@ -140,27 +146,27 @@ class Mealschedule extends Component {
                 </button>
                 <br />
                 <h4>Subscription Details</h4>{" "}
-                <p>My Subscription: {this.state.user.meal_plan_desc}</p>
-                <p>Payment Plan: {this.state.user.payment_frequency}</p>
+                <p>My Subscription: {this.state.purchase.meal_plan_desc}</p>
+                <p>Payment Plan: {this.state.purchase.payment_frequency}</p>
                 <p>
-                  Paid Weeks Remaining: {this.state.user.paid_weeks_remaining}
+                  Paid Weeks Remaining: {this.state.purchase.paid_weeks_remaining}
                 </p>
-                <p>Next Charge: ${this.state.user.amount_due}</p>
-                <p>Next Charge Date: {this.state.user.next_charge_date}</p>
-                <p>Coupons: { this.state.user.coupon_id ? this.state.user.coupon_id : 'None' }</p>
-                { /* <p>Account Status: {this.state.user.purchase_status}</p> */ }
+                <p>Next Charge: ${this.state.purchase.amount_due}</p>
+                <p>Next Charge Date: {this.state.purchase.next_charge_date}</p>
+                <p>Coupons: { this.state.purchase.coupon_id ? this.state.purchase.coupon_id : 'None' }</p>
+                { /* <p>Account Status: {this.state.purchase.purchase_status}</p> */ }
                 <h4>Credit Card Details</h4>{" "}
-                <p>Credit Card: {this.state.user.cc_num}</p>
-                <p>Expiration Date: {this.state.user.cc_exp_date}</p>
-                <p>CVV: {this.state.user.cc_cvv}</p>
+                <p>Credit Card: {this.state.purchase.cc_num}</p>
+                <p>Expiration Date: {this.state.purchase.cc_exp_date}</p>
+                <p>CVV: {this.state.purchase.cc_cvv}</p>
                 <h4>Delivery Details</h4>{" "}
-                <p>Address: {this.state.user.delivery_address}</p>
-                <p>Unit: {this.state.user.delivery_address_unit}</p>
+                <p>Address: {this.state.purchase.delivery_address}</p>
+                <p>Unit: {this.state.purchase.delivery_address_unit}</p>
                 <p>
-                  City, State ZIP: {this.state.user.delivery_city},{" "}
-                  {this.state.user.delivery_state} {this.state.user.delivery_zip}
+                  City, State ZIP: {this.state.purchase.delivery_city},{" "}
+                  {this.state.purchase.delivery_state} {this.state.purchase.delivery_zip}
                 </p>
-                <p>Instructions: {this.state.user.delivery_instructions}</p>
+                <p>Instructions: {this.state.purchase.delivery_instructions}</p>
               </Cell>{" "}
               <Cell col={1}></Cell>
               <Cell col={8}>
@@ -187,10 +193,12 @@ class Mealschedule extends Component {
                       mealQuantities={eachWeek.mealQuantities}
                       addonQuantities={eachWeek.addonQuantities}
                       maxmeals={eachWeek.maxmeals}
-                      purchase_id={this.state.user.purchase_id}
+                      purchase_id={this.state.purchase.purchase_id}
                       deliverDay={eachWeek.deliverDay}
+                      subscribed={this.state.subscribed}
                       surprise={eachWeek.surprise}
                       addonsSelected={eachWeek.addonsSelected}
+                      monday_available={this.state.monday_available}
                       MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
                     />
                   )

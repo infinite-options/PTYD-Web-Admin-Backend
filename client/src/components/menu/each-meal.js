@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Grid, Cell } from "react-mdl";
-import { Alert } from "react-bootstrap";
+import { Alert, Tooltip, OverlayTrigger, Button } from "react-bootstrap";
 
 //  Replace FINDUS1 below with this.props.imgurl
 
@@ -18,6 +18,19 @@ class EachMeal extends Component {
                 <br />
               </div>
             )}
+            <OverlayTrigger
+              key="top"
+              placement="top"
+              delay={{ show: 150, hide: 150 }}
+              overlay={
+                <Tooltip id="button-tooltip">
+                  <p>{this.props.detail}</p>
+                  <p><strong>Ingredients:</strong> {this.props.ingridents}</p>
+                </Tooltip>
+              }
+            >
+              <Button variant="primary"><strong><i>i</i></strong></Button>
+            </OverlayTrigger>
           </h6>
           {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
@@ -68,8 +81,6 @@ class EachMeal extends Component {
               </div>
             </div>
           </Cell>
-          <p>{this.props.ingridents}</p>
-          <p>{this.props.detail}</p>
         </Grid>
       </div>
     );
