@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-
-import Jumbotron from "../Jumbotron/Jumbotron-create-menu";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
@@ -9,8 +7,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
-import MaterialTable from "material-table";
-import { display } from "@material-ui/system";
 
 class CreateMenu extends Component {
   constructor(props) {
@@ -19,6 +15,7 @@ class CreateMenu extends Component {
       datekeys: [],
       details: [],
       selection: 0,
+      selection2: 0,
       showAdd: false
     };
   }
@@ -32,11 +29,18 @@ class CreateMenu extends Component {
     for (var key of Object.keys(createMenu)) {
       tempkeys.push(key);
     }
-    tempkeys = tempkeys.reverse();
+    // tempkeys = tempkeys.reverse();
     this.setState({ datekeys: tempkeys, createMenu, avg });
   }
   handleChange = event => {
-    this.setState({ selection: event.target.value });
+    this.setState({
+      selection: event.target.value
+    });
+  };
+  handleChange2 = event => {
+    this.setState({
+      selection2: event.target.value
+    });
   };
   render() {
     let displayrows = [];
@@ -45,7 +49,7 @@ class CreateMenu extends Component {
       return <div></div>;
     }
     let arr = this.state.createMenu[enterDate];
-    arr = arr.reverse();
+    // arr = arr.reverse();
     if (arr == null) {
       return <div></div>;
     }
@@ -53,7 +57,7 @@ class CreateMenu extends Component {
       let tempelement = (
         <tr>
           <td>{arr[i].Menu_Type}</td>
-          <td>{arr[i].Meal_Name}</td>
+          <td>{this.mealDropdown(arr[i].Meal_Name)}</td>
           <td>{this.avgpost(arr[i].Meal_Name)}</td>
         </tr>
       );
@@ -210,6 +214,30 @@ class CreateMenu extends Component {
       }
     }
     return "N/A";
+  };
+  mealDropdown = mealDefault => {
+    let tempmeal = [];
+    for (let i = 0; i < this.state.avg.length; i++) {
+      tempmeal.push(
+        <MenuItem value={i}>{this.state.avg[i]["Meal_Name"]}</MenuItem>
+      );
+      // if (this.state.avg[i]["Meal_Name"] == mealDefault) {
+      //   return this.state.avg[i]["Avg_Sales_Posting"];
+      // }
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.selection2}
+          onChange={this.handleChange2}
+          // style={{ color: "white" }}
+        >
+          {tempmeal}
+        </Select>
+      </FormControl>
+    );
   };
 }
 export default CreateMenu;
