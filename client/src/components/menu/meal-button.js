@@ -256,6 +256,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
+              disabled={!this.state.subscribed}
               variant="outline-dark"
               style={this.state.buttonSkip ? orange : hide}
               onClick={this.changeButtonSkip}
@@ -285,7 +286,7 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled || !this.state.subscribed}
             variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
