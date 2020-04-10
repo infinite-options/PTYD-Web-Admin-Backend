@@ -2047,6 +2047,7 @@ class MenuCreation(Resource):
     def post(self):
         response = {}
         
+        data = request.get_json(force=True)
 
         Date = data['MenuDate']
         Type = data['MenuType']
