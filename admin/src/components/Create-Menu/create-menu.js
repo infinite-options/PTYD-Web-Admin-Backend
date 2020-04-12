@@ -42,7 +42,6 @@ class CreateMenu extends Component {
       mealMap[avg[x].Meal_Name] = x; //maps meal to number
       mealMap[x] = avg[x].Meal_Name;
     }
-    console.log("tanny says ", mealMap);
     for (var key of Object.keys(createMenu)) {
       tempkeys.push(key);
     }
@@ -64,7 +63,7 @@ class CreateMenu extends Component {
         mealMap
       },
       () => {
-        console.log("selection of drops ", this.state.selectionOfDropMenu);
+        // console.log("selection of drops ", this.state.selectionOfDropMenu);
       }
     );
   }
@@ -166,6 +165,40 @@ class CreateMenu extends Component {
       </div>
     );
   }
+
+  //The row that shows when we click on "Add Meal" Button
+  addRowTemplate = () => {
+    return (
+      <tr>
+        <td>
+          <form noValidate autoComplete="off">
+            <TextField
+              value={this.state.newMealCategory}
+              onChange={e => {
+                this.setState({ newMealCategory: e.target.value });
+              }}
+              id="standard-basic"
+            />
+          </form>
+          {console.log.newMealCategory}
+        </td>
+        <td>{this.addMealDropdown()}</td>
+        <td>{this.avgpost(this.state.mealMap[this.state.newMeal])}</td>
+        <td>
+          <Button
+            variant="primary"
+            onClick={() => {
+              // console.log("clicked on save");
+              this.addNewRow();
+            }}
+          >
+            Save
+          </Button>
+        </td>
+      </tr>
+    );
+  };
+
   //DropDown menu of all items for "addRowTemplate" function
   addMealDropdown = () => {
     let tempmeal = [];
@@ -190,38 +223,6 @@ class CreateMenu extends Component {
           {tempmeal}
         </Select>
       </FormControl>
-    );
-  };
-
-  //The row that shows when we click on "Add Meal" Button
-  addRowTemplate = () => {
-    return (
-      <tr>
-        <td>
-          <form noValidate autoComplete="off">
-            <TextField
-              value={this.state.newMealCategory}
-              onChange={e => {
-                this.setState({ newMealCategory: e.target.value });
-              }}
-              id="standard-basic"
-            />
-          </form>
-        </td>
-        <td>{this.addMealDropdown()}</td>
-        <td>{this.avgpost(this.state.mealMap[this.state.newMeal])}</td>
-        <td>
-          <Button
-            variant="primary"
-            onClick={() => {
-              console.log("clicked on save");
-              this.addNewRow();
-            }}
-          >
-            Save
-          </Button>
-        </td>
-      </tr>
     );
   };
 
@@ -269,10 +270,10 @@ class CreateMenu extends Component {
 
   avgpost = mealName => {
     for (let i = 0; i < this.state.avg.length; i++) {
-      console.log(mealName, " and ", this.state.avg[i]["Meal_Name"]);
+      // console.log(mealName, " and ", this.state.avg[i]["Meal_Name"]);
 
       if (this.state.avg[i]["Meal_Name"] == mealName) {
-        console.log("matched ", this.state.avg[i]["Avg_Sales_Posting"]);
+        // console.log("matched ", this.state.avg[i]["Avg_Sales_Posting"]);
 
         return this.state.avg[i]["Avg_Sales_Posting"];
       }
@@ -296,14 +297,14 @@ class CreateMenu extends Component {
       );
     }
 
-    console.log(
-      " item is ",
-      this.state.mealMap[this.state.avg[index]["Meal_Name"]],
-      " with ",
-      this.state.avg[index]["Meal_Name"],
-      " realValue : ",
-      mealDefault
-    );
+    // console.log(
+    //   " item is ",
+    //   this.state.mealMap[this.state.avg[index]["Meal_Name"]],
+    //   " with ",
+    //   this.state.avg[index]["Meal_Name"],
+    //   " realValue : ",
+    //   mealDefault
+    // );
 
     return (
       <FormControl>
