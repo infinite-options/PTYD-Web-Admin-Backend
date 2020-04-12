@@ -7,6 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
+import Graph from "./mapGraph";
 
 class CreateMenu extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class CreateMenu extends Component {
     const res = await fetch(this.props.API_URL_CREATEMENU);
     const api = await res.json();
     const createMenu = api.menus;
-    const avg = api.result;
+    const avg = api.result.Soup;
 
     let tempkeys = [];
     let mealMap = {};
@@ -64,6 +65,7 @@ class CreateMenu extends Component {
       },
       () => {
         // console.log("selection of drops ", this.state.selectionOfDropMenu);
+        console.log(this.state.avg);
       }
     );
   }
@@ -162,6 +164,7 @@ class CreateMenu extends Component {
           </Col>
           <Col></Col>
         </Row>
+        <Graph />
       </div>
     );
   }
@@ -180,7 +183,6 @@ class CreateMenu extends Component {
               id="standard-basic"
             />
           </form>
-          {console.log.newMealCategory}
         </td>
         <td>{this.addMealDropdown()}</td>
         <td>{this.avgpost(this.state.mealMap[this.state.newMeal])}</td>
@@ -218,7 +220,6 @@ class CreateMenu extends Component {
           onChange={e => {
             this.setState({ newMeal: e.target.value });
           }}
-          // style={{ color: "white" }}
         >
           {tempmeal}
         </Select>
@@ -248,6 +249,7 @@ class CreateMenu extends Component {
       newMealCategory: ""
     });
   };
+
   dateDropdown = () => {
     let tempdate = [];
     for (let i = 0; i < this.state.datekeys.length; i++) {
