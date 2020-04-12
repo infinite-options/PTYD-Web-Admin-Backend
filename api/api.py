@@ -1964,7 +1964,9 @@ class MenuCreation(Resource):
                                 FROM 
                                     ptyd_menu
                                 GROUP BY menu_meal_id) AS A
-                            JOIN 
+                            
+
+                            LEFT JOIN 
 
                             (SELECT
                                 meal_selected,
