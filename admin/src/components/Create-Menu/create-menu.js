@@ -16,7 +16,7 @@ class CreateMenu extends Component {
       details: [],
       selection: 0,
       showAdd: false,
-      selectionOfDropMenu: [] //remembering Meal selection dropdown
+      selectionOfDropMenu: [], //remembering Meal selection dropdown
 
       /**
        * selectionOfDropMenu[0] = 8
@@ -25,6 +25,9 @@ class CreateMenu extends Component {
        * selectionOfDropMenu[3] = 0
        *
        */
+
+      newMealCategory: "",
+      newMeal: 0
     };
   }
   async componentWillMount() {
@@ -160,91 +163,90 @@ class CreateMenu extends Component {
           </Col>
           <Col></Col>
         </Row>
-
-        {/* {this.state.createMenu.map(eachMeal => (
-          <tr>
-            <td>{eachMeal.Menu_Type}</td>
-            <td>{eachMeal.Meal_Name}</td>
-          </tr>
-
-
-
-          <MaterialTable
-            style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
-            title="Customer Profile"
-            columns={this.state.columns}
-            data={eachItem.createMenu}
-            editable={{
-              onRowAdd: newData =>
-                new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve();
-                    this.setState(prevState => {
-                      const data = [...prevState.data];
-                      data.push(newData);
-                      return { ...prevState, data };
-                    });
-                  }, 600);
-                }),
-              onRowUpdate: (newData, oldData) =>
-                new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve();
-                    if (oldData) {
-                      this.setState(prevState => {
-                        const data = [...prevState.data];
-                        data[data.indexOf(oldData)] = newData;
-                        return { ...prevState, data };
-                      });
-                    }
-                  }, 600);
-                }),
-              onRowDelete: oldData =>
-                new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve();
-                    this.setState(prevState => {
-                      const data = [...prevState.data];
-                      data.splice(data.indexOf(oldData), 1);
-                      return { ...prevState, data };
-                    });
-                  }, 600);
-                })
-            }}
-          />
-        ))} */}
       </div>
     );
   }
+  //DropDown menu of all items for "addRowTemplate" function
+  addMealDropdown = () => {
+    let tempmeal = [];
+    for (let i = 0; i < this.state.avg.length; i++) {
+      tempmeal.push(
+        <MenuItem value={this.state.mealMap[this.state.avg[i]["Meal_Name"]]}>
+          {this.state.avg[i]["Meal_Name"]}
+        </MenuItem>
+      );
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.newMeal}
+          onChange={e => {
+            this.setState({ newMeal: e.target.value });
+          }}
+          // style={{ color: "white" }}
+        >
+          {tempmeal}
+        </Select>
+      </FormControl>
+    );
+  };
+
+  //The row that shows when we click on "Add Meal" Button
   addRowTemplate = () => {
     return (
       <tr>
         <td>
           <form noValidate autoComplete="off">
-            <TextField id="standard-basic" />
+            <TextField
+              value={this.state.newMealCategory}
+              onChange={e => {
+                this.setState({ newMealCategory: e.target.value });
+              }}
+              id="standard-basic"
+            />
           </form>
         </td>
+        <td>{this.addMealDropdown()}</td>
+        <td>{this.avgpost(this.state.mealMap[this.state.newMeal])}</td>
         <td>
-          <form noValidate autoComplete="off">
-            <TextField id="standard-basic" />
-          </form>
-        </td>
-        <td>
-          <form noValidate autoComplete="off">
-            <TextField id="standard-basic" />
-          </form>
+          <Button
+            variant="primary"
+            onClick={() => {
+              console.log("clicked on save");
+              this.addNewRow();
+            }}
+          >
+            Save
+          </Button>
         </td>
       </tr>
     );
   };
-  // this.setState({
-  //   temp: this.state.temp
-  // });
-  // getdate = () =>{
-  //   let dates=[];
-  //   for (let i = 0; i < createMenu.menu_dates.length; i += 1) {
-  //     dates.push()
-  // }
+
+  //Adds new row to the database array: createMenu
+  addNewRow = () => {
+    let arr = this.state.selectionOfDropMenu;
+    arr.push(this.state.newMeal);
+
+    let day = this.state.datekeys[this.state.selection]; //get the current date
+    let newCreateMenu = this.state.createMenu;
+    let mealArray = newCreateMenu[day];
+
+    let element = {
+      Menu_Type: this.state.newMealCategory,
+      Meal_Name: this.state.mealMap[this.state.newMeal]
+    };
+    mealArray.push(element);
+
+    this.setState({
+      selectionOfDropMenu: arr,
+      CreateMenu: newCreateMenu,
+      newMeal: 0,
+      newMealCategory: ""
+    });
+  };
   dateDropdown = () => {
     let tempdate = [];
     for (let i = 0; i < this.state.datekeys.length; i++) {
@@ -281,12 +283,12 @@ class CreateMenu extends Component {
   mealDropdown = (mealDefault, index) => {
     let tempmeal = [];
     for (let i = 0; i < this.state.avg.length; i++) {
-      console.log(
-        "key: ",
-        this.state.mealMap[this.state.avg[i]["Meal_Name"]],
-        " meal : ",
-        this.state.avg[i]["Meal_Name"]
-      );
+      // console.log(
+      //   "key: ",
+      //   this.state.mealMap[this.state.avg[i]["Meal_Name"]],
+      //   " meal : ",
+      //   this.state.avg[i]["Meal_Name"]
+      // );
       tempmeal.push(
         <MenuItem value={this.state.mealMap[this.state.avg[i]["Meal_Name"]]}>
           {this.state.avg[i]["Meal_Name"]}
