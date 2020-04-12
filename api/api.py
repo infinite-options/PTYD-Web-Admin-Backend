@@ -1956,7 +1956,7 @@ class MenuCreation(Resource):
 
             
             items = execute(
-                        """ SELECT C.meal_id, C.meal_name, IFNULL(B.total_sold,0) AS total_sold, IFNULL(A.times_posted,0) AS times_posted, IFNULL(total_sold/times_posted,0) AS "Avg Sales/Posting"
+                        """ SELECT C.meal_id, C.meal_category, C.meal_name, IFNULL(B.total_sold,0) AS total_sold, IFNULL(A.times_posted,0) AS times_posted, IFNULL(total_sold/times_posted,0) AS "Avg Sales/Posting"
                             FROM 
                                 (SELECT 
                                     menu_meal_id,
@@ -1994,11 +1994,14 @@ class MenuCreation(Resource):
             
             #creating list of meal categories to isolate unique values
             
+            mealCat = []
             mealAvg = []
             mealNames = []
             mealPostings = []
             mealTotalSold = []
             for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['meal_category']
+                mealCat.append(placeHolder)
                 placeHolder = items['result'][index]['meal_name']
                 mealNames.append(placeHolder)
                 placeHolder = items['result'][index]['Avg Sales/Posting']
@@ -2007,6 +2010,7 @@ class MenuCreation(Resource):
                 mealTotalSold.append(placeHolder)
                 placeHolder = items['result'][index]['times_posted']
                 mealPostings.append(placeHolder)
+
 
             
             
@@ -2022,6 +2026,8 @@ class MenuCreation(Resource):
                 key2 = "Avg Sales/Posting"
                 key3 = "Total Posts"
                 key4 = "Total Sold"
+                key5 = "Meal Category"
+                tempDict[key5] = mealCat[index]
                 tempDict[key1] = mealNames[index]
                 tempDict[key2] = str(mealAvg[index])
                 tempDict[key3] = str(mealPostings[index])
@@ -2032,14 +2038,50 @@ class MenuCreation(Resource):
             
            #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
 
+            d2 = {}
 
-          
+            for index in range(len(mealCat)):
+                key = mealCat[index]
+                d2[key] = "value"
+            
+            print("TEST -------------------")
+            print(d2)
+            for index in range(len(mealCat)):
+                tempList = []
+                
+                for index2 in range(len(items['result'])):
+                    
+                    if (items['result'][index2]['meal_category'] == mealCat[index]):
+                        tempDict = {}
+                        mealName = items['result'][index2]['meal_name']
+                        mealAvg = str(items['result'][index2]['Avg Sales/Posting'])
+                        mealTotalSold = str(items['result'][index2]['total_sold'])
+                        mealNumPostings = str(items['result'][index2]['times_posted'])
+                        key1 = "Meal Name"
+                        key2 = "Avg Sales/Posting"
+                        key3 = "Total Sold"
+                        key4 = "Times Posted"
+                        tempDict[key1] = mealName
+                        tempDict[key2] = mealAvg
+                        tempDict[key3] = mealTotalSold
+                        tempDict[key4] = mealNumPostings
+                        tempList.append(tempDict)
+                        print("tempDict --------------")
+                        print(tempDict)
+                print("TEMPLIST ____________________")
+                print(tempList)
+                d2[mealCat[index]] = tempList
+
+                        
+
+            print("TEST -------------")
+            print(d2)
 
             response['message'] = 'successful'
             
             response['menu_dates'] = menuDates
             response['menus'] = d
-            response['result'] = mealList
+            response['result'] = d2
             
 
             return response, 200
