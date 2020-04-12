@@ -1910,7 +1910,8 @@ class MenuCreation(Resource):
                         meal_name
                         FROM 
                         ptyd_menu
-                        JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
+                        JOIN ptyd_meals ON menu_meal_id=meal_id
+                        ORDER BY menu_date DESC ;""", 'get', conn)
 
             # generated all of the menu dates available                
             menuDates = []
@@ -1955,7 +1956,7 @@ class MenuCreation(Resource):
 
             
             items = execute(
-                        """ SELECT A.menu_meal_id, B.meal_name, B.total_sold, A.times_posted, total_sold/times_posted AS "Avg Sales/Posting"
+                        """ SELECT C.meal_id, C.meal_name, IFNULL(B.total_sold,0) AS total_sold, IFNULL(A.times_posted,0) AS times_posted, IFNULL(total_sold/times_posted,0) AS "Avg Sales/Posting"
                             FROM 
                                 (SELECT 
                                     menu_meal_id,
@@ -1963,6 +1964,8 @@ class MenuCreation(Resource):
                                 FROM 
                                     ptyd_menu
                                 GROUP BY menu_meal_id) AS A
+
+
                             JOIN 
 
                             (SELECT
@@ -1979,12 +1982,14 @@ class MenuCreation(Resource):
                                 >= n - 1) sub1
                             JOIN 
                                 ptyd_meals
-
                             ON sub1.meal_selected=meal_id
                             GROUP BY sub1.meal_selected ) AS B
 
                             ON
-                                B.meal_selected = A.menu_meal_id ;
+                                B.meal_selected = A.menu_meal_id
+                            RIGHT JOIN 
+                                ptyd_meals C 
+                            ON A.menu_meal_id = C. meal_id;
                         """, 'get', conn)
             
             #creating list of meal categories to isolate unique values
@@ -2027,9 +2032,7 @@ class MenuCreation(Resource):
             
            #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
 
-            
-            
-        
+
           
 
             response['message'] = 'successful'
@@ -2048,6 +2051,7 @@ class MenuCreation(Resource):
     def post(self):
         response = {}
         
+        data = request.get_json(force=True)
 
         Date = data['MenuDate']
         Type = data['MenuType']
