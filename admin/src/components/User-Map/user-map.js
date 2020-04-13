@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import Jumbotron from "../Jumbotron/Jumbotron-user";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";

@@ -6,6 +6,9 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import ItemToPurchase from "./ItemToPurchase";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 class UpcomingMeals extends Component {
   constructor(props) {
@@ -13,7 +16,8 @@ class UpcomingMeals extends Component {
     this.state = {
       upcomingMeals: [],
       ingredients: [],
-      datekeys: []
+      datekeys: [],
+      selection: 0
     };
   }
 
@@ -27,44 +31,61 @@ class UpcomingMeals extends Component {
     const api4 = await res4.json();
     const ingredients = api4.result;
 
-    this.setState({ upcomingMeals, ingredients });
+    let tempkeys = [];
+
+    for (var key of Object.keys(upcomingMeals)) {
+      tempkeys.push(key);
+    }
+
+    this.setState({ upcomingMeals, ingredients, datekeys: tempkeys });
   }
+
+  handleChange = event => {
+    //get new dropdown value
+    let x = this.state.datekeys[event.target.value];
+    this.setState({
+      selection: event.target.value
+    });
+  };
   handleClick(event) {
     event.preventDefault();
   }
 
-  makeTable = () => {
-    // if (this.state.upcomingMeals == null) {
-    //   return <div></div>;
-    // }
-    let a = [];
+  //   makeTable = () => {
 
-    for (var key in this.state.upcomingMeals) {
-      // console.log(this.state.upcomingMeals[key]);
-      // console.log(key);
+  //     let a = [];
 
-      a.push(
-        <div className="scrollItem">
-          {this.upcomingMeals_and_weeklyPurchase(
-            this.state.upcomingMeals[key],
-            // this.state.ingredients[key],
-            key
-          )}
-        </div>
-      );
-    }
-    return a;
-  };
+  //     for (var key in this.state.upcomingMeals) {
+
+  //       a.push(
+  //         <div className="scrollItem">
+  //           {this.upcomingMeals_and_weeklyPurchase(
+  //             this.state.upcomingMeals[key],
+  //             key
+  //           )}
+  //         </div>
+  //       );
+  //     }
+  //     return a;
+  //   };
   render() {
-    return <div className="scrollMenu">{this.makeTable()}</div>;
+    return (
+      <div className="scrollMenu">
+        {this.upcomingMeals_and_weeklyPurchase()}
+      </div>
+    );
   }
-  upcomingMeals_and_weeklyPurchase = (
-    weekArgument,
-    // ingredientArgument,
-    date
-  ) => {
+  upcomingMeals_and_weeklyPurchase = () => {
     let arr = [];
     let arr2 = [];
+
+    let displayrows = [];
+    let enterdate = this.state.datekeys[this.state.selection];
+    if (enterdate == null) {
+      return <div></div>;
+    }
+    let weekArgument = this.state.upcomingMeals[enterdate];
+
     for (let i = 0; i < weekArgument.length; i += 3) {
       let first = weekArgument[i];
       let second = weekArgument[i + 1];
@@ -75,7 +96,6 @@ class UpcomingMeals extends Component {
       let c = third.split(":")[1];
 
       arr.push(this.single_item(a, b, c));
-      console.log("datessssssssssssssss", date);
     }
 
     // for (let i = 0; i < ingredientArgument.length; i += 2) {
@@ -99,7 +119,7 @@ class UpcomingMeals extends Component {
             >
               <Card.Body>
                 <Card.Title>
-                  The week of: {date}
+                  The week of:
                   {this.dateDropdown()}
                 </Card.Title>
                 {/* <Card.Subtitle className="mb-2 text-muted">
@@ -157,7 +177,7 @@ class UpcomingMeals extends Component {
               }}
             >
               <Card.Body>
-                <Card.Title>The week of: {date}</Card.Title>
+                <Card.Title>The week of: {this.dateDropdown()}</Card.Title>
                 {/* <Card.Subtitle className="mb-2 text-muted">
                   The week of:
                 </Card.Subtitle> */}
