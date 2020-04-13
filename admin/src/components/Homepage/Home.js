@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Table, Card, Container, Row, Col } from "react-bootstrap";
 // import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 // import { MenuCreation } from "./MenuCreation";
-import Jumbotron from "../Jumbotron/Jumbotron-home";
+import UpcomingMeal from "./upcomingMeal";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
@@ -12,23 +12,12 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      upcomingMeals: [],
-      ingredients: [],
       mealInfo: [],
       custInfo: []
     };
   }
 
   async componentDidMount() {
-    // upcoming meals
-    const res = await fetch(this.props.API_URL_MEALSELECT);
-    const api = await res.json();
-    const upcomingMeals = api.result;
-    // upcoming meals
-    const res4 = await fetch(this.props.API_URL_INGREDIENTS);
-    const api4 = await res4.json();
-    const ingredients = api4.result;
-    console.log(ingredients);
     // customer info
     // const res2 = await fetch(this.props.API_URL_CUSTINFO);
     // const api2 = await res2.json();
@@ -37,44 +26,12 @@ class Home extends Component {
     const res3 = await fetch(this.props.API_URL_MEALINFO);
     const api3 = await res3.json();
     const mealInfo = api3.result.meal_info.result;
-    this.setState({ upcomingMeals, ingredients, mealInfo });
+    this.setState({ mealInfo });
   }
-  handleClick(event) {
-    event.preventDefault();
-    console.info("You clicked a breadcrumb.");
-  }
-
-  makeTable = () => {
-    // if (this.state.upcomingMeals == null) {
-    //   return <div></div>;
-    // }
-    let a = [];
-
-    for (var key in this.state.upcomingMeals) {
-      // console.log(this.state.upcomingMeals[key]);
-      // console.log(key);
-
-      a.push(
-        <div className="scrollItem">
-          {this.upcomingMeals_and_weeklyPurchase(
-            this.state.upcomingMeals[key],
-            // this.state.ingredients[key],
-            key
-          )}
-        </div>
-      );
-    }
-    return a;
-  };
   render() {
     return (
       // <div className="container" style={{ marginTop: "10%" }}>
       <div style={{ margin: "1%" }}>
-        {/* <div className="scrollItem">Card</div> */}
-
-        {/* title for the site ----------------------------------------- */}
-        {/* <Jumbotron /> */}
-
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
@@ -87,7 +44,10 @@ class Home extends Component {
         </Breadcrumbs>
         <br />
 
-        <div className="scrollMenu">{this.makeTable()}</div>
+        <UpcomingMeal
+          API_URL_MEALSELECT={this.props.API_URL_MEALSELECT}
+          API_URL_INGREDIENTS={this.props.API_URL_INGREDIENTS}
+        />
         {/* Meal info ----------------------------------------- */}
 
         <br />
@@ -177,153 +137,7 @@ class Home extends Component {
       </div>
     );
   }
-  upcomingMeals_and_weeklyPurchase = (
-    weekArgument,
-    // ingredientArgument,
-    date
-  ) => {
-    let arr = [];
-    let arr2 = [];
-    for (let i = 0; i < weekArgument.length; i += 3) {
-      let first = weekArgument[i];
-      let second = weekArgument[i + 1];
-      let third = weekArgument[i + 2];
 
-      let a = first.split(":")[1];
-      let b = second.split(":")[1];
-      let c = third.split(":")[1];
-
-      arr.push(this.single_item(a, b, c));
-    }
-    // for (let i = 0; i < ingredientArgument.length; i += 2) {
-    //   let one = ingredientArgument[i];
-    //   let two = ingredientArgument[i + 1];
-
-    //   let c = one.split(":")[1];
-    //   let d = two.split(":")[1];
-
-    //   arr2.push(this.single_item_ingredients(c, d));
-    // }
-    return (
-      <Container>
-        <Row>
-          <Col>
-            <Card
-              style={{
-                // width: "100%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <Card.Title>The week of: {date}</Card.Title>
-                {/* <Card.Subtitle className="mb-2 text-muted">
-                  The week of:
-                </Card.Subtitle> */}
-                <Card.Text>
-                  <div className="vertical-menu">
-                    <Table
-                      responsive
-                      striped
-                      bordered
-                      style={{ textAlign: "center" }}
-                    >
-                      <thead style={{ overflow: "scroll" }}>
-                        <tr>
-                          <th>Menu</th>
-                          <th>Meal</th>
-                          <th>Quantity Ordered</th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        style={{
-                          height: "300px",
-                          overflowY: "scroll"
-                        }}
-                      >
-                        {arr}
-                      </tbody>
-                    </Table>
-                  </div>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          {/* ))} */}
-        </Row>
-
-        <br />
-        <br />
-
-        {/* weekly purchase ----------------------------------------- */}
-        {/* <Breadcrumbs aria-label="breadcrumb">
-                  <Link color="inherit" onClick={this.handleClick}>
-                    Admin Site
-                  </Link>
-                  <Typography color="textPrimary">Weekly Purchases</Typography>
-                </Breadcrumbs>
-                <br /> */}
-        <Row>
-          <Col>
-            <Card
-              style={{
-                // width: "100%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <Card.Title>The week of: {date}</Card.Title>
-                {/* <Card.Subtitle className="mb-2 text-muted">
-                  The week of:
-                </Card.Subtitle> */}
-                <Card.Text>
-                  <div className="vertical-menu">
-                    <Table
-                      responsive
-                      striped
-                      bordered
-                      style={{ textAlign: "center" }}
-                    >
-                      <thead style={{ overflow: "scroll" }}>
-                        <tr>
-                          <th>Menu</th>
-                          <th>Meal</th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        style={{
-                          height: "300px",
-                          overflowY: "scroll"
-                        }}
-                      >
-                        {arr2}
-                      </tbody>
-                    </Table>
-                  </div>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    );
-  };
-  single_item = (category, description, quantity) => {
-    return (
-      <tr>
-        <td>{category}</td>
-        <td>{description}</td>
-        <td>{quantity}</td>
-      </tr>
-    );
-  };
-  single_item_ingredients = (ingredient, amount) => {
-    return (
-      <tr>
-        <td>{ingredient}</td>
-        <td>{amount}</td>
-      </tr>
-    );
-  };
   mealInfo_function = () => {
     return (
       <Row>

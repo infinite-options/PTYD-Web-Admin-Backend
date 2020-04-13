@@ -11,7 +11,7 @@ class MapGraph extends Component {
 
   initViz() {
     const vizUrl =
-      "https://us-west-2b.online.tableau.com/t/swati2805/authoring/address_data_map/Sheet1/Dashboard%201#3";
+      "https://public.tableau.com/shared/J59P4NNHF?:display_count=y&:origin=viz_share_link";
     const vizContainer = this.vizContainer;
     let viz = new window.tableau.Viz(vizContainer, vizUrl);
   }

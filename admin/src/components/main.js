@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch } from "react-router-dom";
 import Home from "./Homepage/Home";
+import UpcomingMeal from "./Homepage/upcomingMeal";
 import CustomerProfile from "./Customer-Profile/customer-profile";
 import UserMap from "./User-Map/user-map";
 import AppliedRoute from "./AppliedRoute";
