@@ -760,12 +760,14 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
+# NEED CODE FOR NON-RECURRING ONE TIME PLANS
 class Checkout(Resource):
     def getPaymentQuery(self, data, paymentId, purchaseId):
         query = """ INSERT INTO ptyd_payments
                     (
                         payment_id,
                         buyer_id,
+                        recurring,
                         gift,
                         coupon_id,
                         amount_due,
@@ -781,6 +783,7 @@ class Checkout(Resource):
                     VALUES (
                         \'""" + paymentId + """\',
                         \'""" + data['user_uid'] + """\',
+                        \'TRUE\',
                         \'""" + data['is_gift'] + """\',
                         NULL,
                         """ + data['item_price'] + """,
@@ -819,6 +822,34 @@ class Checkout(Resource):
 #                       \'""" + data['cc_cvv_secret'] + "\');"
         return query
 
+    def getDates(self, frequency):
+        dates = {}
+        dayOfWeek = date.today().weekday()
+
+        # Get the following Thursday from today
+        thurs = date.today() + timedelta(days=(2-dayOfWeek)%7+1)
+
+        # Set start date to Saturday after thurs
+#       dates['startDate'] = thurs + timedelta(days=2)
+        dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
+
+        # Set end date to 1st/2nd/4th Monday after thurs
+        # Set next billing date to Friday after the end date
+        if frequency == 'Weekly':
+            dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
+            dates['weeksRemaining'] = '1'
+        elif frequency == 'Bi-Weekly':
+            dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
+            dates['weeksRemaining'] = '2'
+        elif frequency == 'Monthly':
+            dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
+            dates['weeksRemaining'] = '4'
+
+        return dates
+
     def post(self):
         response = {}
         reply = {}
@@ -835,12 +866,31 @@ class Checkout(Resource):
                     DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
             else:
                 DeliveryUnit = 'NULL'
-            print(DeliveryUnit)
 
             purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
             paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
+            snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
+
+            print(snapshotIDresponse)
+            print(purchaseIDresponse)
+            print(paymentIDresponse)
+
+            snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
             paymentId = paymentIDresponse['result'][0]['new_id']
+
+            if snapshotId == None:
+                snapshotId = '160-000001'
+
+            if purchaseId == None:
+                purchaseId = '300-000001'
+
+            if paymentId == None:
+                paymentId = '200-000001'
+
+            print(snapshotId)
+            print(purchaseId)
+            print(paymentId)
 
             mealPlan = data['item'].split(' Subscription')[0]
 
@@ -855,6 +905,7 @@ class Checkout(Resource):
                     password_hash = \'""" + data['salt'] + "\'", """
                 SELECT
                     meal_plan_id
+                    , payment_frequency
                 FROM
                     ptyd_meal_plans
                 WHERE
@@ -886,6 +937,7 @@ class Checkout(Resource):
             if mealPlanQuery['code'] == 280:
                 print("Getting meal plan ID...")
                 mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
+                dates = self.getDates(mealPlanQuery['result'][0]['payment_frequency'])
                 print("Meal Plan ID:", mealPlanId)
             else:
                 response['message'] = 'Could not retrieve meal ID of requested plan.'
@@ -898,6 +950,8 @@ class Checkout(Resource):
 #           print(ccNumQuery)
 
             queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
+
+            print(queries)
 
 #           if ccNumQuery['code'] == 280 and len(ccNumQuery['result']) > 0:
 #               print("Checking for existing credit cards...")
@@ -954,6 +1008,7 @@ class Checkout(Resource):
                 """ INSERT INTO ptyd_purchases
                     (
                         purchase_id,
+                        purchase_status,
                         meal_plan_id,
                         start_date,
                         delivery_first_name,
@@ -971,6 +1026,7 @@ class Checkout(Resource):
                     VALUES
                     (
                         \'""" + purchaseId + """\',
+                        \'TRUE\',
                         \'""" + mealPlanId + """\',
                         \'""" + getToday() + """\',
                         \'""" + data['delivery_first_name'] + """\',
@@ -986,15 +1042,54 @@ class Checkout(Resource):
                         \'""" + data['delivery_instructions'] + """\'
                     );""")
 
+#           print("pur")
+#           print(dates)
+#           print(snapshotId)
+#           print(paymentId)
+#           print(purchaseId)
+#           print(getNow())
+
+            # Initial snapshot
+            queries.append(
+                """ INSERT INTO ptyd_snapshots
+                    (
+                        snapshot_id
+                        , snapshot_timestamp
+                        , purchase_id
+                        , payment_id
+                        , delivery_start_date
+                        , subscription_weeks
+                        , delivery_end_date
+                        , next_billing_date
+                        , weeks_remaining
+                        , week_affected
+                    )
+                    VALUES
+                    (
+                        \'""" + snapshotId + """\'
+                        , \'""" + getNow() + """\'
+                        , \'""" + purchaseId + """\'
+                        , \'""" + paymentId + """\'
+                        , \'""" + dates['startDate'] + """\'
+                        , """ + dates['weeksRemaining'] + """
+                        , \'""" + dates['endDate'] + """\'
+                        , \'""" + dates['billingDate'] + """\'
+                        , """ + dates['weeksRemaining'] + """
+                        , \'""" + dates['startDate'] + "\');")
+
+#           print("snap")
+
+#           print(queries)
             reply['payment'] = execute(queries[3], 'post', conn)
             # Add credit card verification code here
 
             reply['purchase'] = execute(queries[4], 'post', conn)
+            reply['snapshot'] = execute(queries[5], 'post', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = reply
 
-            print(response)
+#           print(response)
 
             return response, 200
         except:
@@ -1011,7 +1106,19 @@ class UpdatePurchases(Resource):
             conn = connect()
 
             # Get following Saturday (same day if Saturday) as a string
-            thisSat = datetime.strftime(date.today() + timedelta(days=(5-date.today().weekday()%7)), "%Y-%m-%d")
+            thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday()-5)%7)), "%Y-%m-%d")
+            nextSat = datetime.strftime(date.today() + timedelta(days=(5-date.today().weekday()%7)), "%Y-%m-%d")
+
+            thisSat = '2020-04-18'
+            nextSat = '2020-04-25'
+#           thisSat = '2020-04-25'
+#           nextSat = '2020-05-02'
+#           thisSat = '2020-05-02'
+#           nextSat = '2020-05-09'
+#           thisSat = '2020-05-09'
+#           nextSat = '2020-05-16'
+#           thisSat = '2020-05-16'
+#           nextSat = '2020-05-23'
 
             # Returns this Saturday's meal selections with nonzero weeks remaining
             query = """
@@ -1089,6 +1196,7 @@ class UpdatePurchases(Resource):
                     return response, 500
 
                 newSnapshotId = newSnapshotQuery['result'][0]['new_id']
+
                 del newSnapshotQuery
 
                 # Push billing and end delivery dates by a week
@@ -1105,6 +1213,7 @@ class UpdatePurchases(Resource):
                             , delivery_end_date
                             , next_billing_date
                             , weeks_remaining
+                            , week_affected
                         )
                         SELECT
                             \'""" + newSnapshotId + """\' AS snapshot_id
@@ -1122,6 +1231,7 @@ class UpdatePurchases(Resource):
                                 , INTERVAL 7 DAY
                                 ) AS next_billing_date
                             , weeks_remaining
+                            , \'""" + nextSat + """\'
                         FROM
                             ptyd_snapshots s1
                         INNER JOIN (
@@ -1153,6 +1263,7 @@ class UpdatePurchases(Resource):
                             , delivery_end_date
                             , next_billing_date
                             , weeks_remaining
+                            , week_affected
                         )
                         SELECT
                             \'""" + newSnapshotId + """\' AS snapshot_id
@@ -1164,6 +1275,7 @@ class UpdatePurchases(Resource):
                             , delivery_end_date
                             , next_billing_date
                             , weeks_remaining - 1
+                            , \'""" + nextSat + """\'
                         FROM
                             ptyd_snapshots s1
                         INNER JOIN (
@@ -1202,6 +1314,11 @@ class ChargeSubscribers(Resource):
 
         # Get today's date (or the coming Thursday)
         thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
+        thurs = '2020-04-23'
+#       thurs = '2020-04-30'
+#       thurs = '2020-05-07'
+#       thurs = '2020-05-14'
+#       thurs = '2020-05-21'
 
         # Set start date to Saturday after thurs
         dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
@@ -1322,7 +1439,7 @@ class ChargeSubscribers(Resource):
                             WHERE
                                 payment_id = \'""" + eachPayment['payment_id'] + """\'
                             ;"""
-#               print(execute(query, 'post', conn))
+                print(execute(query, 'post', conn))
 
                 # New snapshot
                 dates = self.getDates(eachPayment['subscription_weeks'])
@@ -1338,6 +1455,7 @@ class ChargeSubscribers(Resource):
                         , delivery_end_date
                         , next_billing_date
                         , weeks_remaining
+                        , week_affected
                     )
                     SELECT
                         \'""" + newSnapshotId + """\' AS snapshot_id
@@ -1349,11 +1467,12 @@ class ChargeSubscribers(Resource):
                         , \'""" + dates['endDate'] + """\'
                         , \'""" + dates['billingDate'] + """\'
                         , subscription_weeks
+                        , \'""" + dates['startDate'] + """\'
                     FROM
                         ptyd_snapshots s1
                     WHERE
                         s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
-#               print(execute(query, 'post', conn))
+                print(execute(query, 'post', conn))
 
             response['message'] = 'POST request successful.'
 
