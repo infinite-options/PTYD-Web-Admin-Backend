@@ -35,15 +35,29 @@ class CreateMenu extends Component {
     const res = await fetch(this.props.API_URL_CREATEMENU);
     const api = await res.json();
     const createMenu = api.menus;
-    const avg = api.result.Soup;
+    const avg = api.result;
 
     let tempkeys = [];
     let mealMap = {};
-    for (let x = 0; x < avg.length; x++) {
-      mealMap[avg[x].Meal_Name] = x; //maps meal to number
-      mealMap[x] = avg[x].Meal_Name;
+    let categorykey = [];
+
+    for (let key of Object.keys(avg)) {
+      categorykey.push(key);
     }
-    for (var key of Object.keys(createMenu)) {
+    let meal_type_map = {};
+    let mealCount = 0;
+    for (let x = 0; x < categorykey.length; x++) {
+      let kms = avg[categorykey[x]];
+      let category_name = categorykey[x];
+      for (let j = 0; j < kms.length; j++) {
+        mealMap[kms[j].Meal_Name] = mealCount; //maps meal to number
+        mealMap[mealCount] = kms[j].Meal_Name;
+        mealCount++;
+
+        meal_type_map[kms[j].Meal_Name] = category_name;
+      }
+    }
+    for (let key of Object.keys(createMenu)) {
       tempkeys.push(key);
     }
     // tempkeys = tempkeys.reverse();
@@ -53,6 +67,7 @@ class CreateMenu extends Component {
     let initArr = createMenu[x];
     for (let i = 0; i < len; i++) {
       tempSelectionOfDropMenu[i] = mealMap[initArr[i]["Meal_Name"]];
+      // console.log(mealMap[initArr[i]["Meal_Name"]]);
     }
 
     this.setState(
@@ -61,11 +76,12 @@ class CreateMenu extends Component {
         datekeys: tempkeys,
         createMenu,
         avg,
-        mealMap
+        mealMap,
+        meal_type_map
       },
       () => {
         // console.log("selection of drops ", this.state.selectionOfDropMenu);
-        console.log(this.state.avg);
+        console.log("mememememememememem", this.state.selectionOfDropMenu);
       }
     );
   }
@@ -271,13 +287,14 @@ class CreateMenu extends Component {
   };
 
   avgpost = mealName => {
-    for (let i = 0; i < this.state.avg.length; i++) {
+    let category = this.state.meal_type_map[mealName];
+    for (let i = 0; i < this.state.avg[category].length; i++) {
       // console.log(mealName, " and ", this.state.avg[i]["Meal_Name"]);
 
-      if (this.state.avg[i]["Meal_Name"] == mealName) {
-        // console.log("matched ", this.state.avg[i]["Avg_Sales_Posting"]);
+      if (this.state.avg[category][i]["Meal_Name"] == mealName) {
+        console.log("matched ", this.state.avg[category]);
 
-        return this.state.avg[i]["Avg_Sales_Posting"];
+        return this.state.avg[category][i]["Avg_Sales_Posting"];
       }
     }
     return "N/A";
@@ -285,29 +302,16 @@ class CreateMenu extends Component {
 
   mealDropdown = (mealDefault, index) => {
     let tempmeal = [];
-    for (let i = 0; i < this.state.avg.length; i++) {
-      // console.log(
-      //   "key: ",
-      //   this.state.mealMap[this.state.avg[i]["Meal_Name"]],
-      //   " meal : ",
-      //   this.state.avg[i]["Meal_Name"]
-      // );
+    let category = this.state.meal_type_map[mealDefault];
+    for (let i = 0; i < this.state.avg[category].length; i++) {
       tempmeal.push(
-        <MenuItem value={this.state.mealMap[this.state.avg[i]["Meal_Name"]]}>
-          {this.state.avg[i]["Meal_Name"]}
+        <MenuItem
+          value={this.state.mealMap[this.state.avg[category][i]["Meal_Name"]]}
+        >
+          {this.state.avg[category][i]["Meal_Name"]}
         </MenuItem>
       );
     }
-
-    // console.log(
-    //   " item is ",
-    //   this.state.mealMap[this.state.avg[index]["Meal_Name"]],
-    //   " with ",
-    //   this.state.avg[index]["Meal_Name"],
-    //   " realValue : ",
-    //   mealDefault
-    // );
-
     return (
       <FormControl>
         <Select

@@ -20,7 +20,8 @@ RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
 RDS_PORT = 3306
 #RDS_USER = 'root'
 RDS_USER = 'admin'
-RDS_DB = 'pricing'
+# RDS_DB = 'pricing'
+RDS_DB = 'ptyd'
 
 app = Flask(__name__)
 
@@ -2023,11 +2024,11 @@ class MenuCreation(Resource):
             for index in range(len(mealNames)):
                 tempDict = {}
 
-                key1 = "Meal Name"
-                key2 = "Avg Sales/Posting"
-                key3 = "Total Posts"
-                key4 = "Total Sold"
-                key5 = "Meal Category"
+                key1 = "Meal_Name"
+                key2 = "Avg_Sales/Posting"
+                key3 = "Total_Posts"
+                key4 = "Total_Sold"
+                key5 = "Meal_Category"
                 tempDict[key5] = mealCat[index]
                 tempDict[key1] = mealNames[index]
                 tempDict[key2] = str(mealAvg[index])
@@ -2058,10 +2059,10 @@ class MenuCreation(Resource):
                         mealAvg = str(items['result'][index2]['Avg Sales/Posting'])
                         mealTotalSold = str(items['result'][index2]['total_sold'])
                         mealNumPostings = str(items['result'][index2]['times_posted'])
-                        key1 = "Meal Name"
-                        key2 = "Avg Sales/Posting"
-                        key3 = "Total Sold"
-                        key4 = "Times Posted"
+                        key1 = "Meal_Name"
+                        key2 = "Avg_Sales_Posting"
+                        key3 = "Total_Sold"
+                        key4 = "Times_Posted"
                         tempDict[key1] = mealName
                         tempDict[key2] = mealAvg
                         tempDict[key3] = mealTotalSold
