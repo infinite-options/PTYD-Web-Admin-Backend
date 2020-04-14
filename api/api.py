@@ -295,6 +295,7 @@ class Meals(Resource):
 
             dates = execute("SELECT DISTINCT menu_date FROM ptyd_menu;", 'get', conn)
 
+            print('before loop')
             i = 1
             for date in dates['result']:
                 # only grab 6 weeks worth of menus
@@ -401,11 +402,12 @@ class Meals(Resource):
                         WHERE menu_category LIKE 'ADD_ON_%'
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
+                    print('after')
                     week = {
                         'SaturdayDate': str(stamp.date()),
                         'SundayDate': str((stamp + timedelta(days=1)).date()),
-                        'Sunday': (stamp + timedelta(days=1)).strftime('%b %-d'),
-                        'Monday': (stamp + timedelta(days=2)).strftime('%b %-d'),
+                        'Sunday': str( (stamp + timedelta(days=1)).date() ), # .strftime('%b %-d'),
+                        'Monday': str( (stamp + timedelta(days=2)).date() ), # .strftime('%b %-d'),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -788,32 +790,8 @@ class Checkout(Resource):
                         \'""" + data['cc_num'][-4:] + """\',
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
-                        \'""" + data['billing_zip'] + "\');"
-#       query = """ INSERT INTO ptyd_payments
-#                   (
-#                       payment_id,
-#                       purchase_id,
-#                       buyer_id,
-#                       amount_paid,
-#                       coupon_id,
-#                       payment_time_stamp,
-#                       payment_type,
-#                       cc_num,
-#                       cc_exp_date,
-#                       cc_cvv
-#                   )
-#                   VALUES
-#                   (
-#                       \'""" + paymentId + """\',
-#                       \'""" + purchaseId + """\',
-#                       \'""" + data['user_uid'] + """\',
-#                       """ + data['item_price'] + """,
-#                       NULL,
-#                       \'""" + getNow() + """\',
-#                       \'unknown\',
-#                       \'""" + data['cc_num_secret'] + """\',
-#                       \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
-#                       \'""" + data['cc_cvv_secret'] + "\');"
+                        \'""" + data['billing_zip'] + "\');"""
+
         return query
 
     def post(self):
@@ -901,97 +879,54 @@ class Checkout(Resource):
                 print("Error JSON:", response['error'])
                 return response, 501
 
-#           ccNumQuery = execute(queries[2], 'get', conn)
-#           print(ccNumQuery)
-
             queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
 
-#           if ccNumQuery['code'] == 280 and len(ccNumQuery['result']) > 0:
-#               print("Checking for existing credit cards...")
-#               ccNumLastFour = ccNumQuery['result'][0]['cc_num']
-#               print(data['cc_num'][-4:])
-#               if data['cc_num'][-4:] == ccNumLastFour:
-#                   queries.append("""
-#                       INSERT INTO ptyd_payments
-#                       (
-#                           payment_id,
-#                           buyer_id,
-#                           gift,
-#                           coupon_id,
-#                           amount_due,
-#                           amount_paid,
-#                           purchase_id,
-#                           payment_time_stamp,
-#                           payment_type,
-#                           cc_num,
-#                           cc_exp_date,
-#                           cc_cvv,
-#                           billing_zip
-#                       )
-#                       SELECT
-#                           \'""" + paymentId + """\',
-#                           \'""" + data['user_uid'] + """\',
-#                           \'""" + data['is_gift'] + """\',
-#                           NULL,
-#                           """ + data['item_price'] + """,
-#                           """ + data['item_price'] + """,
-#                           \'""" + purchaseId + """\',
-#                           \'""" + getNow() + """\',
-#                           payment_type,
-#                           cc_num,
-#                           cc_exp_date,
-#                           cc_cvv,
-#                           \'""" + data['billing_zip'] + """\'
-#                       FROM
-#                           ptyd_payments
-#                       WHERE
-#                           RIGHT(cc_num, 4) = \'""" + ccNumLastFour + """\'
-#                       ORDER BY
-#                           payment_time_stamp
-#                       LIMIT 1;""")
-#                   print("Credit card exists, using previous card.")
-#               else:
-#                   print('No matching credit cards found. Using user input.')
-#                   queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
-#           else:
-#               print('No matching credit cards found. Using user input.')
-#               queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
-
+            test_deilvery_long = '-97.9107'
+            test_deilvery_lat = '-97.9107'
             queries.append(
                 """ INSERT INTO ptyd_purchases
                     (
                         purchase_id,
+                        purchase_status,
                         meal_plan_id,
                         start_date,
                         delivery_first_name,
                         delivery_last_name,
                         delivery_email,
                         delivery_phone,
+                        delivery_instructions,
                         delivery_address,
                         delivery_address_unit,
                         delivery_city,
                         delivery_state,
                         delivery_zip,
                         delivery_region,
-                        delivery_instructions
+                        delivery_long,
+                        delivery_lat
                     )
                     VALUES
                     (
                         \'""" + purchaseId + """\',
+                        \'""" + 'TRUE' + """\',
                         \'""" + mealPlanId + """\',
                         \'""" + getToday() + """\',
                         \'""" + data['delivery_first_name'] + """\',
                         \'""" + data['delivery_last_name'] + """\',
                         \'""" + data['delivery_email'] + """\',
                         \'""" + data['delivery_phone'] + """\',
+                        \'""" + data['delivery_instructions'] + """\',
                         \'""" + data['delivery_address'] + """\',
                         """ + DeliveryUnit + """,
                         \'""" + data['delivery_city'] + """\',
                         \'""" + data['delivery_state'] + """\',
                         \'""" + data['delivery_zip'] + """\',
                         \'""" + data['delivery_region'] + """\',
-                        \'""" + data['delivery_instructions'] + """\'
-                    );""")
+                        """ + test_deilvery_long + """,
+                        """ + test_deilvery_lat + """
+                    );"""
+            )
+
+            print('perforem laste 2 queries')
 
             reply['payment'] = execute(queries[3], 'post', conn)
             # Add credit card verification code here
@@ -1001,7 +936,7 @@ class Checkout(Resource):
             response['message'] = 'Request successful.'
             response['result'] = reply
 
-            print(response)
+            print(json.dumps(response, indent=1))
 
             return response, 200
         except:
