@@ -1181,7 +1181,7 @@ class UpdatePurchases(Resource):
                             snapshot_timestamp = latest_snapshot
                         WHERE
                             s1.purchase_id = \'""" + eachPurchase['purchase_id'] + "\';"
-                items.append(execute(query, 'get', conn))
+                items.append(execute(query, 'post', conn))
 
             response['message'] = 'POST request successful.'
 
@@ -1204,19 +1204,19 @@ class ChargeSubscribers(Resource):
         thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
 
         # Set start date to Saturday after thurs
-        dates['startDate'] = thurs + timedelta(days=2)
+        dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
 
         # Set end date to 1st/2nd/4th Monday after thurs
         # Set next billing date to Friday after the end date
         if frequency == 1:
-            dates['endDate'] = thurs + timedelta(days=4)
-            dates['billingDate'] = thurs + timedelta(days=7)
+            dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
         elif frequency == 2:
-            dates['endDate'] = thurs + timedelta(days=11)
-            dates['billingDate'] = thurs + timedelta(days=14)
+            dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
         elif frequency == 4:
-            dates['endDate'] = thurs + timedelta(days=25)
-            dates['billingDate'] = thurs + timedelta(days=28)
+            dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
 
         return dates
 
@@ -1224,7 +1224,6 @@ class ChargeSubscribers(Resource):
         response = {}
         try:
             conn = connect()
-            data = request.get_json(force=True)
 
             # Get all purchases with 0 weeks remaining
             query = """
@@ -1306,7 +1305,7 @@ class ChargeSubscribers(Resource):
                             )
                             SELECT
                                 \'""" + newPaymentId + """\' AS payment_id,
-                                user_uid,
+                                buyer_id,
                                 gift,
                                 coupon_id,
                                 amount_due,
@@ -1323,6 +1322,7 @@ class ChargeSubscribers(Resource):
                             WHERE
                                 payment_id = \'""" + eachPayment['payment_id'] + """\'
                             ;"""
+#               print(execute(query, 'post', conn))
 
                 # New snapshot
                 dates = self.getDates(eachPayment['subscription_weeks'])
@@ -1352,7 +1352,8 @@ class ChargeSubscribers(Resource):
                     FROM
                         ptyd_snapshots s1
                     WHERE
-                        s1.snapshot_id = \'""" + eachPurchase['snapshot_id'] + "\';"
+                        s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
+#               print(execute(query, 'post', conn))
 
             response['message'] = 'POST request successful.'
 
