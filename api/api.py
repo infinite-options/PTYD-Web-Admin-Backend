@@ -1109,6 +1109,7 @@ class UpdatePurchases(Resource):
             thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday()-5)%7)), "%Y-%m-%d")
             nextSat = datetime.strftime(date.today() + timedelta(days=(5-date.today().weekday()%7)), "%Y-%m-%d")
 
+            # UPDATE PURCHASE TEST CASES
             thisSat = '2020-04-18'
             nextSat = '2020-04-25'
 #           thisSat = '2020-04-25'
@@ -1182,13 +1183,63 @@ class UpdatePurchases(Resource):
                     weeks_remaining != 0
                 ;"""
 
+            # Get purchases with no selections at all
+            dflts = """
+                SELECT active.*
+                    , orders.delivery_day
+                    , orders.meal_selection
+                FROM (
+                    SELECT * FROM ptyd.ptyd_snapshots snap
+                    WHERE weeks_remaining > 0 AND week_affected = \'""" + thisSat + """\')
+                    AS active
+                    LEFT JOIN (
+                        SELECT ms1.*
+                            , ms2.latest_selection
+                        FROM ptyd_meals_selected AS ms1
+                        INNER JOIN (
+                            SELECT *, MAX(selection_time) AS latest_selection
+                            FROM ptyd_meals_selected
+                            GROUP BY purchase_id
+                                , week_affected)
+                        AS ms2 	
+                    ON ms1.purchase_id = ms2.purchase_id 
+                        AND ms1.week_affected = ms2.week_affected 
+                        AND ms1.selection_time = ms2.latest_selection
+                    WHERE ms1.week_affected = \'""" + thisSat + """\')
+                AS orders
+                ON active.purchase_id = orders.purchase_id
+                WHERE orders.meal_selection IS NULL
+                ;"""
+
             mealSelections = execute(query, 'get', conn)
+            defaultSelections = execute(dflts, 'get', conn)
+
+#           print("\n\n\n\n\n")
+#           print(mealSelections['result'])
+#           print("\n\n\n\n\n")
+#           print(defaultSelections['result'])
 
             if mealSelections['code'] != 280:
                 response['message'] = 'Could not retrieve meal selections.'
                 return response, 500
+            if defaultSelections['code'] != 280:
+                response['message'] = 'Could not retrieve default selections.'
+                return response, 500
 
-            for eachPurchase in mealSelections['result']:
+            allPurchases = []
+            for selections in [mealSelections['result'], defaultSelections['result']]:
+                allPurchases.extend(selections)
+
+#           print("\n\n\n\n\n")
+#           print(allPurchases)
+#           print(len(allPurchases))
+
+#           # FIXED: RETURNING 6 INSTEAD OF 3
+
+#           raise Exception
+
+            for eachPurchase in allPurchases:
+#               print(eachPurchase)
                 newSnapshotQuery = execute("CALL get_snapshots_id", 'get', conn)
 
                 if newSnapshotQuery['code'] != 280:
@@ -1298,7 +1349,8 @@ class UpdatePurchases(Resource):
             response['message'] = 'POST request successful.'
 
             # For debugging
-#           response['items'] = items
+            response['items'] = items
+            print(items)
 
             return response, 200
         except:
@@ -1314,11 +1366,13 @@ class ChargeSubscribers(Resource):
 
         # Get today's date (or the coming Thursday)
         thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
-        thurs = '2020-04-23'
-#       thurs = '2020-04-30'
-#       thurs = '2020-05-07'
-#       thurs = '2020-05-14'
-#       thurs = '2020-05-21'
+
+        # CHARGE SUBSCRIBER TEST CASES
+        thurs = date(2020, 4, 23)
+#       thurs = date(2020, 4, 30)
+#       thurs = date(2020, 5, 7)
+#       thurs = date(2020, 5, 14)
+#       thurs = date(2020, 5, 21)
 
         # Set start date to Saturday after thurs
         dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
@@ -1339,6 +1393,7 @@ class ChargeSubscribers(Resource):
 
     def post(self):
         response = {}
+        items = []
         try:
             conn = connect()
 
@@ -1346,8 +1401,8 @@ class ChargeSubscribers(Resource):
             query = """
                 SELECT
                     p1.purchase_id
-                    , purchase_status
-                    , payment_id
+                    , recurring
+                    , p1.payment_id
                     , snapshot_id
                     , latest_snapshot
                     , delivery_start_date
@@ -1371,11 +1426,11 @@ class ChargeSubscribers(Resource):
                 AND
                     snapshot_timestamp = latest_snapshot
                 INNER JOIN
-                    ptyd_purchases p3
+                    ptyd_payments p3
                 ON
-                    p1.purchase_id = p3.purchase_id
+                    p1.payment_id = p3.payment_id
                 WHERE
-                    purchase_status = 'TRUE'
+                    recurring = \'TRUE\'
                 AND
                     weeks_remaining = 0
                 ORDER BY
@@ -1408,6 +1463,7 @@ class ChargeSubscribers(Resource):
                             (
                                 payment_id,
                                 buyer_id,
+                                recurring,
                                 gift,
                                 coupon_id,
                                 amount_due,
@@ -1423,6 +1479,7 @@ class ChargeSubscribers(Resource):
                             SELECT
                                 \'""" + newPaymentId + """\' AS payment_id,
                                 buyer_id,
+                                \'TRUE\',
                                 gift,
                                 coupon_id,
                                 amount_due,
@@ -1439,7 +1496,7 @@ class ChargeSubscribers(Resource):
                             WHERE
                                 payment_id = \'""" + eachPayment['payment_id'] + """\'
                             ;"""
-                print(execute(query, 'post', conn))
+                items.append(execute(query, 'post', conn))
 
                 # New snapshot
                 dates = self.getDates(eachPayment['subscription_weeks'])
@@ -1472,9 +1529,14 @@ class ChargeSubscribers(Resource):
                         ptyd_snapshots s1
                     WHERE
                         s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
-                print(execute(query, 'post', conn))
+
+                items.append(execute(query, 'post', conn))
 
             response['message'] = 'POST request successful.'
+
+            # For debugging
+            response['items'] = items
+            print(items)
 
             return response, 200
         except:

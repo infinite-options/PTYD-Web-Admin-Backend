@@ -28,12 +28,12 @@ def test2():
     while 1:
         now = datetime.now()
 
-        r = requests.post(url = API['CHARGE'])
-        print("Calling for billing renewing purchases...")
-        a = input()
-
         r = requests.post(url = API['UPDATE'])
         print("Calling for update subscription snapshots...")
+        a = input()
+
+        r = requests.post(url = API['CHARGE'])
+        print("Calling for billing renewing purchases...")
         a = input()
 
 def main():
