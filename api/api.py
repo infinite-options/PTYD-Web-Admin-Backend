@@ -881,6 +881,7 @@ class Checkout(Resource):
 
             queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
 
+            # replace with real longitute and latitude
             test_deilvery_long = '-97.9107'
             test_deilvery_lat = '-97.9107'
             queries.append(

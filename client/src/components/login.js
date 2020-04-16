@@ -201,6 +201,7 @@ export default function Login (props) {
               </h4>
 
               <Row>
+                {/*
                 <Col>
                   <div 
                     Style={{
@@ -208,7 +209,7 @@ export default function Login (props) {
                     }}
                   > 
                     <FacebookLogin
-                      appId="1088597931155576"
+                      appId="508721976476931"
                       //autoLoad={true}
                       fields="name,email,picture"
                       onClick={console.log('test')}
@@ -218,6 +219,7 @@ export default function Login (props) {
                     />
                   </div>
                 </Col>
+                */}
                 
                 <Col>
                   <GoogleLogin
