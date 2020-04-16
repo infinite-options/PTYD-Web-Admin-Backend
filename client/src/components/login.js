@@ -124,6 +124,42 @@ export default function Login (props) {
                   </Form>
                 </Col>
               </Row>
+
+              <h4>
+                Or Login With Social Media!
+              </h4>
+
+              <Row>
+                {/*
+                <Col>
+                  <div 
+                    Style={{
+                      width: '200px'
+                    }}
+                  > 
+                    <FacebookLogin
+                      appId="508721976476931"
+                      //autoLoad={true}
+                      fields="name,email,picture"
+                      onClick={console.log('test')}
+                      callback={responseFacebook} 
+                      size="small"
+                      textButton="FB Login"
+                    />
+                  </div>
+                </Col>
+                */}
+                
+                <Col>
+                  <GoogleLogin
+                    clientId="333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com"
+                    buttonText="Login"
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                  />
+                </Col>
+              </Row>
             </Container>
             <Col>
             </Col>
