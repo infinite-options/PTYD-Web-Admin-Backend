@@ -15,7 +15,6 @@ class CreateMenu extends Component {
       datekeys: [],
       details: [],
       selection: 0,
-      selection1: 0,
       showAdd: false,
       selectionOfDropMenu: [], //remembering Meal selection dropdown
 
@@ -29,7 +28,9 @@ class CreateMenu extends Component {
 
       newMealCategory: "",
       newMeal: 0,
-      add_keys: []
+      newMeal2: 0,
+      newMealName: ""
+      //add selection and
     };
   }
   async componentWillMount() {
@@ -38,11 +39,10 @@ class CreateMenu extends Component {
     const createMenu = api.menus;
     const avg = api.result;
 
-    let tempkeys = [];
-    let mealMap = {};
-    let categorykey = [];
-    let add_mealMap = {};
-
+    let tempkeys = []; //dates
+    let mealMap = {}; //meal to int
+    let categorykey = []; //["Entree", "Breakfast", "Salad",...]
+    let mealToAvgPostMap = {};
     for (let key of Object.keys(avg)) {
       categorykey.push(key);
     }
@@ -50,16 +50,18 @@ class CreateMenu extends Component {
     let mealCount = 0;
     for (let x = 0; x < categorykey.length; x++) {
       let kms = avg[categorykey[x]];
-      var category_name = categorykey[x];
+      let category_name = categorykey[x];
       for (let j = 0; j < kms.length; j++) {
         mealMap[kms[j].Meal_Name] = mealCount; //maps meal to number
+        mealToAvgPostMap[kms[j].Meal_Name] = kms[j].Avg_Sales_Posting;
         mealMap[mealCount] = kms[j].Meal_Name;
         mealCount++;
-
         meal_type_map[kms[j].Meal_Name] = category_name;
       }
     }
+    // console.log("tanny ", categorykey);
     for (let key of Object.keys(createMenu)) {
+      //
       tempkeys.push(key);
     }
     // tempkeys = tempkeys.reverse();
@@ -71,26 +73,22 @@ class CreateMenu extends Component {
       tempSelectionOfDropMenu[i] = mealMap[initArr[i]["Meal_Name"]];
       // console.log(mealMap[initArr[i]["Meal_Name"]]);
     }
-    //add meal map
-    let add_tempkeys = [];
-    for (let key of Object.keys(avg)) {
-      add_tempkeys.push(key);
-      // tempmeal.push(<MenuItem value={tempkeys[0]}>{tempkeys}</MenuItem>);
-    }
+
     this.setState(
       {
-        selectionOfDropMenu: tempSelectionOfDropMenu,
-        datekeys: tempkeys,
-        createMenu,
-        avg,
-        mealMap,
-        add_mealMap,
-        meal_type_map,
-        add_keys: add_tempkeys
+        selectionOfDropMenu: tempSelectionOfDropMenu, //[1, 2 , 3, 21, 1, 2, ...]
+        datekeys: tempkeys, //list of dates ["2020-01-05",...]
+        createMenu, //contains list of all maels by date
+        avg, //db of all meals and what their stats
+        mealMap, // maps meal -> int and int -> meal {"The Energizer": 0, 0: "The Energizer", ...}
+        meal_type_map, // {"The Energizer": "Local Treat", "Detox Smoothie": "Local Treat", ...}
+        categorykey, //[Soup, Breakfast, Entree, ...]
+        addingSelection: 0,
+        mealToAvgPostMap
       },
       () => {
         // console.log("selection of drops ", this.state.selectionOfDropMenu);
-        console.log("mememememememememem", this.state.meal_type_map);
+        // console.log("mememememememememem", this.state.selectionOfDropMenu);
       }
     );
   }
@@ -107,8 +105,7 @@ class CreateMenu extends Component {
 
     this.setState({
       selection: event.target.value,
-      selectionOfDropMenu: tempSelectionOfDropMenu,
-      selection1: event.target.value
+      selectionOfDropMenu: tempSelectionOfDropMenu
     });
   };
 
@@ -135,11 +132,9 @@ class CreateMenu extends Component {
     }
 
     let arr = this.state.createMenu[enterDate];
-    // arr = arr.reverse();
     if (arr == null) {
       return <div></div>;
     }
-
     for (let i = 0; i < arr.length; i++) {
       let tempelement = (
         <tr>
@@ -196,26 +191,10 @@ class CreateMenu extends Component {
 
   //The row that shows when we click on "Add Meal" Button
   addRowTemplate = () => {
-    let displayrows = [];
-    let enter_category = this.state.add_keys[this.state.selection];
-    if (enter_category == null) {
-      return <div></div>;
-    }
-
-    let arr = this.state.avg[enter_category];
-    // arr = arr.reverse();
-    if (arr == null) {
-      return <div></div>;
-    }
-
-    for (let i = 0; i < arr.length; i++) {
-      let tempelement = <td>{this.mealDropdown(arr[i].Meal_Name, i)}</td>;
-      displayrows.push(tempelement);
-    }
     return (
       <tr>
         <td>
-          {/* <form noValidate autoComplete="off">
+          <form noValidate autoComplete="off">
             <TextField
               value={this.state.newMealCategory}
               onChange={e => {
@@ -223,12 +202,14 @@ class CreateMenu extends Component {
               }}
               id="standard-basic"
             />
-          </form> */}
-          {this.add_meal_category_dropdown()}
+          </form>
         </td>
-        {/* <td>{this.addMealDropdown()}</td> */}
-        <td>{displayrows}</td>
-        <td>{this.avgpost(this.state.mealMap[this.state.newMeal])}</td>
+        <td>
+          {this.addMealDropdown()}
+          {this.addMealDropdown2()}
+        </td>
+
+        <td>{this.avgpost(this.state.newMealName)}</td>
         <td>
           <Button
             variant="primary"
@@ -245,16 +226,15 @@ class CreateMenu extends Component {
   };
 
   //DropDown menu of all items for "addRowTemplate" function
-  add_meal_category_dropdown = () => {
+  addMealDropdown = () => {
     let tempmeal = [];
-    for (let i = 0; i < this.state.add_keys.length; i++) {
-      tempmeal.push(
-        <MenuItem value={this.state.add_mealMap[this.state.add_keys[i]]}>
-          {this.state.add_keys[i]}
-        </MenuItem>
-      );
+    let keyArr = this.state.categorykey; //[Soup, Entree, BreakFast]
+    if (keyArr.length === 0) return <div></div>;
+    let defaultNewMeal = keyArr[0];
+    for (let i = 0; i < keyArr.length; i++) {
+      tempmeal.push(<MenuItem value={i}>{keyArr[i]}</MenuItem>);
     }
-
+    //newMeal is just a integer starting at 0
     return (
       <FormControl>
         <Select
@@ -262,7 +242,7 @@ class CreateMenu extends Component {
           id="demo-simple-select"
           value={this.state.newMeal}
           onChange={e => {
-            this.setState({ newMeal: e.target.value });
+            this.setState({ newMeal: e.target.value, newMeal2: 0 });
           }}
         >
           {tempmeal}
@@ -272,23 +252,29 @@ class CreateMenu extends Component {
   };
 
   //DropDown menu of all items for "addRowTemplate" function
-  addMealDropdown = () => {
-    let tempmeal = [];
-    for (let i = 0; i < this.state.avg.length; i++) {
+  addMealDropdown2 = () => {
+    let tempmeal = []; //Temporary holds the views to be printed to screen
+
+    let specificCategory = this.state.categorykey[this.state.newMeal];
+    let specificMealArr = this.state.avg[specificCategory];
+
+    for (let i = 0; i < specificMealArr.length; i++) {
       tempmeal.push(
-        <MenuItem value={this.state.mealMap[this.state.avg[i]["Meal_Name"]]}>
-          {this.state.avg[i]["Meal_Name"]}
-        </MenuItem>
+        <MenuItem value={i}>{specificMealArr[i].Meal_Name}</MenuItem>
       );
     }
+    //newMeal is just a integer starting at 0
     return (
       <FormControl>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={this.state.newMeal}
+          value={this.state.newMeal2}
           onChange={e => {
-            this.setState({ newMeal: e.target.value });
+            this.setState({
+              newMeal2: e.target.value,
+              newMealName: specificMealArr[e.target.value].Meal_Name
+            });
           }}
         >
           {tempmeal}
@@ -341,20 +327,8 @@ class CreateMenu extends Component {
   };
 
   avgpost = mealName => {
-    let category = this.state.meal_type_map[mealName];
-    for (let i = 0; i < this.state.avg[category].length; i++) {
-      // console.log(mealName, " and ", this.state.avg[i]["Meal_Name"]);
-
-      if (this.state.avg[category][i]["Meal_Name"] == mealName) {
-        console.log(
-          "matched ",
-          this.state.avg[category][i]["Avg_Sales_Posting"]
-        );
-
-        return this.state.avg[category][i]["Avg_Sales_Posting"];
-      }
-    }
-    return "N/A";
+    let x = this.state.mealToAvgPostMap[mealName];
+    return this.state.mealToAvgPostMap[mealName];
   };
 
   mealDropdown = (mealDefault, index) => {
