@@ -408,8 +408,8 @@ class Meals(Resource):
                     week = {
                         'SaturdayDate': str(stamp.date()),
                         'SundayDate': str((stamp + timedelta(days=1)).date()),
-                        'Sunday': str( (stamp + timedelta(days=1)).date() ), # .strftime('%b %-d'),
-                        'Monday': str( (stamp + timedelta(days=2)).date() ), # .strftime('%b %-d'),
+                        'Sunday': str( (stamp + timedelta(days=1)).date().strftime('%b %-d') ),
+                        'Monday': str( (stamp + timedelta(days=2)).date().strftime('%b %-d') ),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",

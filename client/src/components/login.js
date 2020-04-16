@@ -9,6 +9,8 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 
 import crypto from "crypto";
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 export default function Login (props) {
 
@@ -39,6 +41,74 @@ export default function Login (props) {
 //  const api = await res.json();
 //  setSalt(api.result[0].password_salt);
 //}
+
+  // Social Media 
+
+  // API GET Request for Social Media User Data
+  async function checkForSocial(user) {
+    const res = await fetch(props.SOCIAL_API_URL + '/' + user );
+    const api = await res.json();
+    const social = api.result.result[0];
+    return social;
+  }
+
+  async function grabSocialUserInfor(uid) {
+    const res = await fetch(props.SOCIAL_API_URL + 'acc/' + uid );
+    const api = await res.json();
+    const login = api.result.result[0];
+    return login;
+  }
+
+  const responseGoogle = (response) => {
+    console.log("Google Response: ", response);
+    const e = response.profileObj.email
+    const at = response.accessToken
+    const rt = response.googleId
+
+    checkForSocial(e)
+    .then(res1 => { 
+      console.log("Social Media User: ", res1)
+      grabSocialUserInfor(res1.user_uid)
+      .then(res2 => socialLogin(res2))
+      .catch(err => console.log(err)) }
+    )
+    .catch(err => {
+      console.log(err)
+      // Redirect to Signup Page for Social Media Users
+      props.history.push({
+        pathname: "/socialsignup",
+        state: {
+          email: e,
+          social: "google",
+          accessToken: at,
+          refreshToken: rt
+        }
+      })
+      window.location.reload(false)
+    })
+  }
+
+  const responseFacebook = (response) => {
+    console.log(response);
+  }
+
+  function socialLogin(user) {
+    console.log("Login Social Media User: " + user)
+    let uid = user.user_uid
+    let name = user.first_name
+      
+    document.cookie = " loginStatus: Hello " + name  + "! , " + " user_uid: " + uid + " , ";
+    console.log(document.cookie)
+
+    // redirect & reload page for buttons and login status
+    props.history.push("/");
+    window.location.reload(false);
+    
+    console.log('Social Media Login Complete!');
+  }
+
+  // Direct Login
+
 
   async function grabLoginInfoForUser(userEmail, userPass) {
     const saltres = await fetch(props.API_URL + '/' + userEmail);
