@@ -1579,35 +1579,80 @@ class MealSelection(Resource):
             conn = connect()
 
             queries = ["""
-                SELECT
-                    ms1.week_affected,
-                    ms1.meal_selection,
-                    ms1.selection_time,
-                    ms1.delivery_day
-                FROM ptyd_meals_selected AS ms1
-                INNER JOIN (
-                    SELECT
-                        week_affected,
-                        MAX(selection_time) AS latest_selection
-                    FROM ptyd_meals_selected
-                    GROUP BY week_affected
-                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                SELECT latest_active.week_affected
+                    , latest_sel.meal_selection
+                    , latest_sel.delivery_day
+                FROM (
+                    # LATEST ACTIVE SUBSCRIPTIONS BY WEEK WITH MEALS PURCHASED
+                    SELECT active.*
+                        ,pur_plans.num_meals
+                    FROM (
+                        SELECT snap1.*
+                            , snap2.latest_snapshot
+                        FROM ptyd_snapshots AS snap1
+                        INNER JOIN (
+                            SELECT *, MAX(snapshot_timestamp) AS latest_snapshot
+                            FROM ptyd_snapshots
+                            GROUP BY purchase_id
+                                , week_affected)
+                            AS snap2 
+                        ON snap1.purchase_id = snap2.purchase_id 
+                            AND snap1.week_affected = snap2.week_affected 
+                            AND snap1.snapshot_timestamp = snap2.latest_snapshot)
+                        AS active
+                    LEFT JOIN (
+                        SELECT pur.*
+                        , plans.num_meals
+                        FROM ptyd.ptyd_purchases pur
+                        LEFT JOIN ptyd_meal_plans plans
+                        ON pur.meal_plan_id = plans.meal_plan_id)
+                        AS pur_plans
+                    ON active.purchase_id = pur_plans.purchase_id)
+                    AS latest_active
+                LEFT JOIN (
+                    SELECT ms1.*
+                        , ms2.latest_selection
+                    FROM ptyd_meals_selected AS ms1
+                    INNER JOIN (
+                        SELECT *, MAX(selection_time) AS latest_selection
+                        FROM ptyd_meals_selected
+                        GROUP BY purchase_id
+                            , week_affected)
+                        AS ms2 
+                    ON ms1.purchase_id = ms2.purchase_id 
+                        AND ms1.week_affected = ms2.week_affected 
+                        AND ms1.selection_time = ms2.latest_selection)
+                    AS latest_sel
+                ON latest_active.purchase_id = latest_sel.purchase_id 
+                    AND latest_active.week_affected = latest_sel.week_affected
                 WHERE
-                purchase_id = \'""" + purchaseId + "\';", """
+                    latest_active.purchase_id = \'""" + purchaseId + """\'
+                ;""", """
                 SELECT
-                    ms1.week_affected,
-                    ms1.meal_selection,
-                    ms1.selection_time
+                    ms1.purchase_id
+                    , ms1.week_affected
+                    , ms1.meal_selection
+                    
                 FROM ptyd_addons_selected AS ms1
                 INNER JOIN (
                     SELECT
-                        week_affected,
-                        MAX(selection_time) AS latest_selection
+                        purchase_id
+                        , week_affected
+                        , meal_selection
+                        , MAX(selection_time) AS latest_selection
                     FROM ptyd_addons_selected
-                    GROUP BY week_affected
-                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                    GROUP BY purchase_id
+                        , week_affected
+                ) as ms2 
+                ON
+                    ms1.purchase_id = ms2.purchase_id
+                AND
+                    ms1.week_affected = ms2.week_affected
+                AND
+                    ms1.selection_time = ms2.latest_selection
                 WHERE
-                purchase_id = \'""" + purchaseId + "\';"]
+                    ms1.purchase_id = \'""" + purchaseId + """\'
+                ;"""]
 
             meals = execute(queries[0], 'get', conn)
             addons = execute(queries[1], 'get', conn)
