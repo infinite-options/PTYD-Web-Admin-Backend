@@ -20,6 +20,7 @@ import MealSchedule from "./menu/mealschedule";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
+import SocialSignUp from "./socialsignup"
 import Login from "./login";
 import Logout from "./logout";
 
@@ -173,7 +174,17 @@ export default function Main({ appProps }) {
         component={SignUp}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v2/signup`
+          API_URL: `${DEV_URL}v2/signup`,
+          CHECK_EMAIL_API_URL: `${DEV_URL}v2/checkemail`
+        }}
+      />
+      <AppliedRoute
+        exact
+        path="/socialsignup"
+        component={SocialSignUp}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}v2/socialSignup`
         }}
       />
       <AppliedRoute
@@ -183,7 +194,8 @@ export default function Main({ appProps }) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/accountsalt`,
-          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          SOCIAL_API_URL: `${DEV_URL}v2/social`
         }}
       />
       <AppliedRoute

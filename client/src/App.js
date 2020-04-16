@@ -198,11 +198,18 @@ const App = props => {
           Style={{ backgroundColor: "#493f3f" }}
           className="header-color-background"
           title={
-            <Link Style={{ fontFamily: "Kalam", color: "white" }} to="/">
-              Prep To Your Door
-            </Link>
+            <a className="navbar-brand" href="/">
+              <img
+                src="https://static.wixstatic.com/media/db4706_fb464984e3094a629a8bfb5297ca38c7~mv2.png/v1/fill/w_110,h_81,al_c,q_90/LOGO%2012_19_18%20.webp"
+                width="88"
+                height="65"
+                alt=""
+              ></img>
+            </a>
+
           }
         >
+          
           <Navigation>
             <a href="/selectmealplan">SUBSCRIBE</a>
             <a href="/menuthisweek">MENU</a>
@@ -280,7 +287,7 @@ const App = props => {
 
         <hr></hr>
 
-        <footer className="container text-center font2">
+        <footer className="container footer text-center font2">
           <div className="row">
             <div className="col">
               <div Style="margin-top:-10px">
