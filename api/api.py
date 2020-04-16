@@ -16,7 +16,9 @@ import json
 import pymysql
 
 RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
+#RDS_HOST = 'localhost'
 RDS_PORT = 3306
+#RDS_USER = 'root'
 RDS_USER = 'admin'
 RDS_DB = 'ptyd'
 
@@ -402,10 +404,10 @@ class Meals(Resource):
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
                     week = {
-                        'SaturdayDate': str(stamp.date()),
-                        'SundayDate': str((stamp + timedelta(days=1)).date()),
-                        'Sunday': (stamp + timedelta(days=1)).strftime('%b %-d'),
-                        'Monday': (stamp + timedelta(days=2)).strftime('%b %-d'),
+                        'SaturdayDate': str((stamp - timedelta(days=1)).date()),
+                        'SundayDate': str(stamp.date()),
+                        'Sunday': str(stamp.date().strftime("%b %-d")),
+                        'Monday': str((stamp + timedelta(days=1)).date().strftime("%b %-d")),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -443,6 +445,7 @@ class Meals(Resource):
 
                     i += 1
 
+            print('Finish Query of Menus')
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -757,14 +760,12 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
-# NEED CODE FOR NON-RECURRING ONE TIME PLANS
 class Checkout(Resource):
     def getPaymentQuery(self, data, paymentId, purchaseId):
         query = """ INSERT INTO ptyd_payments
                     (
                         payment_id,
                         buyer_id,
-                        recurring,
                         gift,
                         coupon_id,
                         amount_due,
@@ -780,7 +781,6 @@ class Checkout(Resource):
                     VALUES (
                         \'""" + paymentId + """\',
                         \'""" + data['user_uid'] + """\',
-                        \'TRUE\',
                         \'""" + data['is_gift'] + """\',
                         NULL,
                         """ + data['item_price'] + """,
@@ -819,34 +819,6 @@ class Checkout(Resource):
 #                       \'""" + data['cc_cvv_secret'] + "\');"
         return query
 
-    def getDates(self, frequency):
-        dates = {}
-        dayOfWeek = date.today().weekday()
-
-        # Get the following Thursday from today
-        thurs = date.today() + timedelta(days=(2-dayOfWeek)%7+1)
-
-        # Set start date to Saturday after thurs
-#       dates['startDate'] = thurs + timedelta(days=2)
-        dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
-
-        # Set end date to 1st/2nd/4th Monday after thurs
-        # Set next billing date to Friday after the end date
-        if frequency == 'Weekly':
-            dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
-            dates['weeksRemaining'] = '1'
-        elif frequency == 'Bi-Weekly':
-            dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
-            dates['weeksRemaining'] = '2'
-        elif frequency == 'Monthly':
-            dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
-            dates['weeksRemaining'] = '4'
-
-        return dates
-
     def post(self):
         response = {}
         reply = {}
@@ -863,31 +835,12 @@ class Checkout(Resource):
                     DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
             else:
                 DeliveryUnit = 'NULL'
+            print(DeliveryUnit)
 
             purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
             paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
-            snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
-
-            print(snapshotIDresponse)
-            print(purchaseIDresponse)
-            print(paymentIDresponse)
-
-            snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
             paymentId = paymentIDresponse['result'][0]['new_id']
-
-            if snapshotId == None:
-                snapshotId = '160-000001'
-
-            if purchaseId == None:
-                purchaseId = '300-000001'
-
-            if paymentId == None:
-                paymentId = '200-000001'
-
-            print(snapshotId)
-            print(purchaseId)
-            print(paymentId)
 
             mealPlan = data['item'].split(' Subscription')[0]
 
@@ -902,7 +855,6 @@ class Checkout(Resource):
                     password_hash = \'""" + data['salt'] + "\'", """
                 SELECT
                     meal_plan_id
-                    , payment_frequency
                 FROM
                     ptyd_meal_plans
                 WHERE
@@ -916,17 +868,7 @@ class Checkout(Resource):
 
             userAuth = execute(queries[0], 'get', conn)
 
-            possSocialAcc = execute("SELECT user_uid FROM ptyd_social_accounts WHERE user_email = '" + data['delivery_email'] + "';", 'get', conn)
-            print(json.dumps(possSocialAcc, indent=1))
-
-            if len(possSocialAcc['result']) != 0:
-                if possSocialAcc['result'][0]['user_uid'] == data['user_uid']:
-                    print('Very Cool Kanye!')
-                    print("Successfully authenticated user.")
-                else:
-                    response['message'] = 'Could not authenticate user.'
-                    return response, 400 
-            elif userAuth['code'] != 280 or len(userAuth['result']) != 1:
+            if userAuth['code'] != 280 or len(userAuth['result']) != 1:
                 response['message'] = 'Could not authenticate user.'
                 response['error'] = userAuth
                 print("Error:", response['message'])
@@ -944,7 +886,6 @@ class Checkout(Resource):
             if mealPlanQuery['code'] == 280:
                 print("Getting meal plan ID...")
                 mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
-                dates = self.getDates(mealPlanQuery['result'][0]['payment_frequency'])
                 print("Meal Plan ID:", mealPlanId)
             else:
                 response['message'] = 'Could not retrieve meal ID of requested plan.'
@@ -957,8 +898,6 @@ class Checkout(Resource):
 #           print(ccNumQuery)
 
             queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
-
-            print(queries)
 
 #           if ccNumQuery['code'] == 280 and len(ccNumQuery['result']) > 0:
 #               print("Checking for existing credit cards...")
@@ -1015,7 +954,6 @@ class Checkout(Resource):
                 """ INSERT INTO ptyd_purchases
                     (
                         purchase_id,
-                        purchase_status,
                         meal_plan_id,
                         start_date,
                         delivery_first_name,
@@ -1033,7 +971,6 @@ class Checkout(Resource):
                     VALUES
                     (
                         \'""" + purchaseId + """\',
-                        \'TRUE\',
                         \'""" + mealPlanId + """\',
                         \'""" + getToday() + """\',
                         \'""" + data['delivery_first_name'] + """\',
@@ -1049,504 +986,15 @@ class Checkout(Resource):
                         \'""" + data['delivery_instructions'] + """\'
                     );""")
 
-#           print("pur")
-#           print(dates)
-#           print(snapshotId)
-#           print(paymentId)
-#           print(purchaseId)
-#           print(getNow())
-
-            # Initial snapshot
-            queries.append(
-                """ INSERT INTO ptyd_snapshots
-                    (
-                        snapshot_id
-                        , snapshot_timestamp
-                        , purchase_id
-                        , payment_id
-                        , delivery_start_date
-                        , subscription_weeks
-                        , delivery_end_date
-                        , next_billing_date
-                        , weeks_remaining
-                        , week_affected
-                    )
-                    VALUES
-                    (
-                        \'""" + snapshotId + """\'
-                        , \'""" + getNow() + """\'
-                        , \'""" + purchaseId + """\'
-                        , \'""" + paymentId + """\'
-                        , \'""" + dates['startDate'] + """\'
-                        , """ + dates['weeksRemaining'] + """
-                        , \'""" + dates['endDate'] + """\'
-                        , \'""" + dates['billingDate'] + """\'
-                        , """ + dates['weeksRemaining'] + """
-                        , \'""" + dates['startDate'] + "\');")
-
-#           print("snap")
-
-#           print(queries)
             reply['payment'] = execute(queries[3], 'post', conn)
             # Add credit card verification code here
 
             reply['purchase'] = execute(queries[4], 'post', conn)
-            reply['snapshot'] = execute(queries[5], 'post', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = reply
 
-#           print(response)
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-# Call this API from another source every Monday at midnight
-class UpdatePurchases(Resource):
-    def post(self):
-        response = {}
-        items = []
-        try:
-            conn = connect()
-
-            # Get following Saturday (same day if Saturday) as a string
-            thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday()-5)%7)), "%Y-%m-%d")
-            nextSat = datetime.strftime(date.today() + timedelta(days=(5-date.today().weekday()%7)), "%Y-%m-%d")
-
-            # UPDATE PURCHASE TEST CASES
-#           thisSat = '2020-04-18'
-#           nextSat = '2020-04-25'
-#           thisSat = '2020-04-25'
-#           nextSat = '2020-05-02'
-#           thisSat = '2020-05-02'
-#           nextSat = '2020-05-09'
-#           thisSat = '2020-05-09'
-#           nextSat = '2020-05-16'
-#           thisSat = '2020-05-16'
-#           nextSat = '2020-05-23'
-#           thisSat = '2020-05-23'
-#           nextSat = '2020-05-30'
-
-            # Returns this Saturday's meal selections with nonzero weeks remaining
-            query = """
-                SELECT
-                    p1.purchase_id
-                    , p1.purchase_status
-                    , ms1.week_affected
-                    , ms1.meal_selection
-                    , ms1.selection_time
-                    , ms1.delivery_day
-                    , s3.snapshot_id
-                    , s3.snapshot_timestamp
-                    , s3.weeks_remaining
-                FROM
-                    ptyd_meals_selected AS ms1
-                INNER JOIN (
-                    SELECT
-                        week_affected
-                        , MAX(selection_time) AS latest_selection
-                    FROM
-                        ptyd_meals_selected
-                    GROUP BY
-                        week_affected
-                        , purchase_id
-                ) ms2
-                ON
-                    ms1.week_affected = ms2.week_affected
-                AND
-                    selection_time = latest_selection
-                LEFT JOIN
-                    ptyd_purchases p1
-                ON
-                    ms1.purchase_id = p1.purchase_id
-                LEFT JOIN (
-                    SELECT
-                        s1.purchase_id
-                        , snapshot_id
-                        , snapshot_timestamp
-                        , weeks_remaining
-                    FROM
-                        ptyd_snapshots s1
-                    INNER JOIN (
-                        SELECT
-                            purchase_id
-                            , MAX(snapshot_timestamp) AS latest_snapshot
-                        FROM
-                            ptyd_snapshots
-                        GROUP BY
-                            purchase_id
-                    ) s2
-                    ON
-                        s1.purchase_id = s2.purchase_id
-                    AND
-                        snapshot_timestamp = latest_snapshot
-                ) s3
-                ON
-                    ms1.purchase_id = s3.purchase_id
-                WHERE
-                    ms1.week_affected = \'""" + thisSat + """\'
-                AND
-                    weeks_remaining != 0
-                ;"""
-
-            # Get purchases with no selections at all
-            dflts = """
-                SELECT active.*
-                    , orders.delivery_day
-                    , orders.meal_selection
-                FROM (
-                    SELECT * FROM ptyd.ptyd_snapshots snap
-                    WHERE weeks_remaining > 0 AND week_affected = \'""" + thisSat + """\')
-                    AS active
-                    LEFT JOIN (
-                        SELECT ms1.*
-                            , ms2.latest_selection
-                        FROM ptyd_meals_selected AS ms1
-                        INNER JOIN (
-                            SELECT *, MAX(selection_time) AS latest_selection
-                            FROM ptyd_meals_selected
-                            GROUP BY purchase_id
-                                , week_affected)
-                        AS ms2 	
-                    ON ms1.purchase_id = ms2.purchase_id 
-                        AND ms1.week_affected = ms2.week_affected 
-                        AND ms1.selection_time = ms2.latest_selection
-                    WHERE ms1.week_affected = \'""" + thisSat + """\')
-                AS orders
-                ON active.purchase_id = orders.purchase_id
-                WHERE orders.meal_selection IS NULL
-                ;"""
-
-            mealSelections = execute(query, 'get', conn)
-            defaultSelections = execute(dflts, 'get', conn)
-
-#           print("\n\n\n\n\n")
-#           print(mealSelections['result'])
-#           print("\n\n\n\n\n")
-#           print(defaultSelections['result'])
-
-            if mealSelections['code'] != 280:
-                response['message'] = 'Could not retrieve meal selections.'
-                return response, 500
-            if defaultSelections['code'] != 280:
-                response['message'] = 'Could not retrieve default selections.'
-                return response, 500
-
-            allPurchases = []
-            for selections in [mealSelections['result'], defaultSelections['result']]:
-                allPurchases.extend(selections)
-
-#           print("\n\n\n\n\n")
-#           print(allPurchases)
-#           print(len(allPurchases))
-
-#           # FIXED: RETURNING 6 INSTEAD OF 3
-
-#           raise Exception
-
-            for eachPurchase in allPurchases:
-#               print(eachPurchase)
-                newSnapshotQuery = execute("CALL get_snapshots_id", 'get', conn)
-
-                if newSnapshotQuery['code'] != 280:
-                    response['message'] = 'Could not generate new snapshot ID.'
-                    return response, 500
-
-                newSnapshotId = newSnapshotQuery['result'][0]['new_id']
-
-                del newSnapshotQuery
-
-                # Push billing and end delivery dates by a week
-                if eachPurchase['meal_selection'] == 'SKIP':
-                    query = """
-                        INSERT INTO ptyd_snapshots
-                        (
-                            snapshot_id
-                            , snapshot_timestamp
-                            , purchase_id
-                            , payment_id
-                            , delivery_start_date
-                            , subscription_weeks
-                            , delivery_end_date
-                            , next_billing_date
-                            , weeks_remaining
-                            , week_affected
-                        )
-                        SELECT
-                            \'""" + newSnapshotId + """\' AS snapshot_id
-                            , \'""" + getNow() + """\' AS snapshot_timestamp
-                            , s1.purchase_id
-                            , payment_id
-                            , delivery_start_date
-                            , subscription_weeks
-                            , DATE_ADD(
-                                delivery_end_date
-                                , INTERVAL 7 DAY
-                                ) AS delivery_end_date
-                            , DATE_ADD(
-                                next_billing_date
-                                , INTERVAL 7 DAY
-                                ) AS next_billing_date
-                            , weeks_remaining
-                            , \'""" + nextSat + """\'
-                        FROM
-                            ptyd_snapshots s1
-                        INNER JOIN (
-                            SELECT
-                                purchase_id
-                                , MAX(snapshot_timestamp) AS latest_snapshot
-                            FROM
-                                ptyd_snapshots
-                            GROUP BY
-                                purchase_id
-                        ) s2
-                        ON
-                            s1.purchase_id = s2.purchase_id
-                        AND
-                            snapshot_timestamp = latest_snapshot
-                        WHERE
-                            s1.purchase_id = \'""" + eachPurchase['purchase_id'] + "\';"
-                # Decrement weeks remaining by 1
-                else:
-                    query = """
-                        INSERT INTO ptyd_snapshots
-                        (
-                            snapshot_id
-                            , snapshot_timestamp
-                            , purchase_id
-                            , payment_id
-                            , delivery_start_date
-                            , subscription_weeks
-                            , delivery_end_date
-                            , next_billing_date
-                            , weeks_remaining
-                            , week_affected
-                        )
-                        SELECT
-                            \'""" + newSnapshotId + """\' AS snapshot_id
-                            , \'""" + getNow() + """\' AS snapshot_timestamp
-                            , s1.purchase_id
-                            , payment_id
-                            , delivery_start_date
-                            , subscription_weeks
-                            , delivery_end_date
-                            , next_billing_date
-                            , weeks_remaining - 1
-                            , \'""" + nextSat + """\'
-                        FROM
-                            ptyd_snapshots s1
-                        INNER JOIN (
-                            SELECT
-                                purchase_id
-                                , MAX(snapshot_timestamp) AS latest_snapshot
-                            FROM
-                                ptyd_snapshots
-                            GROUP BY
-                                purchase_id
-                        ) s2
-                        ON
-                            s1.purchase_id = s2.purchase_id
-                        AND
-                            snapshot_timestamp = latest_snapshot
-                        WHERE
-                            s1.purchase_id = \'""" + eachPurchase['purchase_id'] + "\';"
-                items.append(execute(query, 'post', conn))
-
-            response['message'] = 'POST request successful.'
-
-            # For debugging
-            response['items'] = items
-#           print(items)
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-# Call this API from another source every Thursday at midnight
-class ChargeSubscribers(Resource):
-    def getDates(self, frequency):
-        dates = {}
-        dayOfWeek = date.today().weekday()
-
-        # Get today's date (or the coming Thursday)
-        thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
-
-        # CHARGE SUBSCRIBER TEST CASES
-#       thurs = date(2020, 4, 23)
-#       thurs = date(2020, 4, 30)
-#       thurs = date(2020, 5, 7)
-#       thurs = date(2020, 5, 14)
-#       thurs = date(2020, 5, 21)
-#       thurs = date(2020, 5, 28)
-
-        # Set start date to Saturday after thurs
-        dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
-
-        # Set end date to 1st/2nd/4th Monday after thurs
-        # Set next billing date to Friday after the end date
-        if frequency == 1:
-            dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
-        elif frequency == 2:
-            dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
-        elif frequency == 4:
-            dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
-
-        return dates
-
-    def post(self):
-        response = {}
-        items = []
-        try:
-            conn = connect()
-
-            # Get all purchases with 0 weeks remaining
-            query = """
-                SELECT
-                    p1.purchase_id
-                    , recurring
-                    , p1.payment_id
-                    , snapshot_id
-                    , latest_snapshot
-                    , delivery_start_date
-                    , subscription_weeks
-                    , delivery_end_date
-                    , next_billing_date
-                    , weeks_remaining
-                FROM
-                    ptyd_snapshots p1
-                INNER JOIN (
-                    SELECT
-                        purchase_id
-                        , MAX(snapshot_timestamp) AS latest_snapshot
-                    FROM
-                        ptyd_snapshots
-                    GROUP BY
-                        purchase_id
-                ) p2
-                ON
-                    p1.purchase_id = p2.purchase_id
-                AND
-                    snapshot_timestamp = latest_snapshot
-                INNER JOIN
-                    ptyd_payments p3
-                ON
-                    p1.payment_id = p3.payment_id
-                WHERE
-                    recurring = \'TRUE\'
-                AND
-                    weeks_remaining = 0
-                ORDER BY
-                    p1.purchase_id
-                ASC
-                ;"""
-
-            duePayments = execute(query, 'get', conn)
-
-            if duePayments['code'] != 280:
-                response['message'] = 'Could not retrieve meal selections.'
-                return response, 500
-
-            for eachPayment in duePayments['result']:
-                newSnapshotQuery = execute("CALL get_snapshots_id", 'get', conn)
-                newPaymentQuery = execute("CALL get_new_payment_id", 'get', conn)
-
-                if newSnapshotQuery['code'] != 280:
-                    response['message'] = 'Could not generate new snapshot ID.'
-                    return response, 500
-                if newPaymentQuery['code'] != 280:
-                    response['message'] = 'Could not generate new snapshot ID.'
-                    return response, 500
-
-                newSnapshotId = newSnapshotQuery['result'][0]['new_id']
-                newPaymentId = newPaymentQuery['result'][0]['new_id']
-
-                # New payment
-                query = """ INSERT INTO ptyd_payments
-                            (
-                                payment_id,
-                                buyer_id,
-                                recurring,
-                                gift,
-                                coupon_id,
-                                amount_due,
-                                amount_paid,
-                                purchase_id,
-                                payment_time_stamp,
-                                payment_type,
-                                cc_num,
-                                cc_exp_date,
-                                cc_cvv,
-                                billing_zip
-                            )
-                            SELECT
-                                \'""" + newPaymentId + """\' AS payment_id,
-                                buyer_id,
-                                \'TRUE\',
-                                gift,
-                                coupon_id,
-                                amount_due,
-                                amount_paid,
-                                purchase_id,
-                                \'""" + getNow() + """\',
-                                \'STRIPE\',
-                                cc_num,
-                                cc_exp_date,
-                                cc_cvv,
-                                billing_zip
-                            FROM
-                                ptyd_payments
-                            WHERE
-                                payment_id = \'""" + eachPayment['payment_id'] + """\'
-                            ;"""
-                items.append(execute(query, 'post', conn))
-
-                # New snapshot
-                dates = self.getDates(eachPayment['subscription_weeks'])
-                query = """
-                    INSERT INTO ptyd_snapshots
-                    (
-                        snapshot_id
-                        , snapshot_timestamp
-                        , purchase_id
-                        , payment_id
-                        , delivery_start_date
-                        , subscription_weeks
-                        , delivery_end_date
-                        , next_billing_date
-                        , weeks_remaining
-                        , week_affected
-                    )
-                    SELECT
-                        \'""" + newSnapshotId + """\' AS snapshot_id
-                        , \'""" + getNow() + """\' AS snapshot_timestamp
-                        , s1.purchase_id
-                        , \'""" + newPaymentId + """\' AS payment_id
-                        , \'""" + dates['startDate'] + """\'
-                        , subscription_weeks
-                        , \'""" + dates['endDate'] + """\'
-                        , \'""" + dates['billingDate'] + """\'
-                        , subscription_weeks
-                        , \'""" + dates['startDate'] + """\'
-                    FROM
-                        ptyd_snapshots s1
-                    WHERE
-                        s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
-
-                items.append(execute(query, 'post', conn))
-
-            response['message'] = 'POST request successful.'
-
-            # For debugging
-            response['items'] = items
-#           print(items)
+            print(response)
 
             return response, 200
         except:
@@ -1579,80 +1027,35 @@ class MealSelection(Resource):
             conn = connect()
 
             queries = ["""
-                SELECT latest_active.week_affected
-                    , latest_sel.meal_selection
-                    , latest_sel.delivery_day
-                FROM (
-                    # LATEST ACTIVE SUBSCRIPTIONS BY WEEK WITH MEALS PURCHASED
-                    SELECT active.*
-                        ,pur_plans.num_meals
-                    FROM (
-                        SELECT snap1.*
-                            , snap2.latest_snapshot
-                        FROM ptyd_snapshots AS snap1
-                        INNER JOIN (
-                            SELECT *, MAX(snapshot_timestamp) AS latest_snapshot
-                            FROM ptyd_snapshots
-                            GROUP BY purchase_id
-                                , week_affected)
-                            AS snap2 
-                        ON snap1.purchase_id = snap2.purchase_id 
-                            AND snap1.week_affected = snap2.week_affected 
-                            AND snap1.snapshot_timestamp = snap2.latest_snapshot)
-                        AS active
-                    LEFT JOIN (
-                        SELECT pur.*
-                        , plans.num_meals
-                        FROM ptyd.ptyd_purchases pur
-                        LEFT JOIN ptyd_meal_plans plans
-                        ON pur.meal_plan_id = plans.meal_plan_id)
-                        AS pur_plans
-                    ON active.purchase_id = pur_plans.purchase_id)
-                    AS latest_active
-                LEFT JOIN (
-                    SELECT ms1.*
-                        , ms2.latest_selection
-                    FROM ptyd_meals_selected AS ms1
-                    INNER JOIN (
-                        SELECT *, MAX(selection_time) AS latest_selection
-                        FROM ptyd_meals_selected
-                        GROUP BY purchase_id
-                            , week_affected)
-                        AS ms2 
-                    ON ms1.purchase_id = ms2.purchase_id 
-                        AND ms1.week_affected = ms2.week_affected 
-                        AND ms1.selection_time = ms2.latest_selection)
-                    AS latest_sel
-                ON latest_active.purchase_id = latest_sel.purchase_id 
-                    AND latest_active.week_affected = latest_sel.week_affected
-                WHERE
-                    latest_active.purchase_id = \'""" + purchaseId + """\'
-                ;""", """
                 SELECT
-                    ms1.purchase_id
-                    , ms1.week_affected
-                    , ms1.meal_selection
-                    
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time,
+                    ms1.delivery_day
+                FROM ptyd_meals_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
+                    FROM ptyd_meals_selected
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                WHERE
+                purchase_id = \'""" + purchaseId + "\';", """
+                SELECT
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time
                 FROM ptyd_addons_selected AS ms1
                 INNER JOIN (
                     SELECT
-                        purchase_id
-                        , week_affected
-                        , meal_selection
-                        , MAX(selection_time) AS latest_selection
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
                     FROM ptyd_addons_selected
-                    GROUP BY purchase_id
-                        , week_affected
-                ) as ms2 
-                ON
-                    ms1.purchase_id = ms2.purchase_id
-                AND
-                    ms1.week_affected = ms2.week_affected
-                AND
-                    ms1.selection_time = ms2.latest_selection
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
                 WHERE
-                    ms1.purchase_id = \'""" + purchaseId + """\'
-                ;"""]
+                purchase_id = \'""" + purchaseId + "\';"]
 
             meals = execute(queries[0], 'get', conn)
             addons = execute(queries[1], 'get', conn)
@@ -2287,211 +1690,17 @@ class TemplateApi(Resource):
         finally:
             disconnect(conn)
 
-class SocialSignUp(Resource):
-    # HTTP method POST
-    def post(self):
-        response = {}
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-            Email = data['Email']
-            FirstName = data['FirstName']
-            LastName = data['LastName']
-            PhoneNumber = data['PhoneNumber']
-            WeeklyUpdates = data['WeeklyUpdates']
-            CreateDate = getToday()
-            LastUpdate = CreateDate
-            Referral = data['Referral']
-            SocialMedia = data['SocialMedia']
-            AccessToken = data['AccessToken']
-            RefreshToken = data['RefreshToken']
-
-            print("Received:", data)
-
-            # Query [0]
-            queries = ["CALL get_new_user_id;"]
-
-            NewUserIDresponse = execute(queries[0], 'get', conn)
-            NewUserID = NewUserIDresponse['result'][0]['new_id']
-
-            print("NewUserID:", NewUserID)
-
-            # Query [1]
-            queries.append(
-                """ INSERT INTO ptyd_accounts
-                    (
-                        user_uid,
-                        user_email,
-                        first_name,
-                        last_name,
-                        phone_number,
-                        weekly_updates,
-                        create_date,
-                        last_update,
-                        referral_source
-                    )
-                    VALUES
-                    (""" +
-                        "\'" + NewUserID + "\'," +
-                        "\'" + Email + "\'," +
-                        "\'" + FirstName + "\'," +
-                        "\'" + LastName + "\'," +
-                        "\'" + PhoneNumber + "\'," +
-                        "\'" + WeeklyUpdates + "\'," +
-                        "\'" + CreateDate + "\'," +
-                        "\'" + LastUpdate + "\'," +
-                        "\'" + Referral + "\');")
-
-            # Query [2]
-            queries.append("""
-                INSERT INTO ptyd_social_accounts
-                (
-                    user_uid,
-                    user_email,
-                    user_social_media,
-                    user_access_token,
-                    user_refresh_token
-                )
-                VALUES
-                (
-                    \'""" + NewUserID + """\',
-                    \'""" + Email + """\',
-                    \'""" + SocialMedia + """\',
-                    \'""" + AccessToken + """\',
-                    \'""" + RefreshToken + "\');")
-
-            usnInsert = execute(queries[1], 'post', conn)
-
-            if usnInsert['code'] != 281:
-                response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit account.'
-                print(response['message'], response['result'], usnInsert['code'])
-                return response, 400
-
-            socInsert = execute(queries[2], 'post', conn)
-
-            if socInsert['code'] != 281:
-                response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit password.'
-                print(response['message'], response['result'], socInsert['code'])
-                return response, 500
-
-            response['message'] = 'Request successful.'
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-# Social Media Login API
-class Social(Resource):
-
-    # HTTP method GET
-    def get(self, email):
-        response = {}
-        try:
-            conn = connect()
-
-            queries = [
-            """     SELECT
-                        user_uid,
-                        user_email,
-                        user_social_media,
-                        user_access_token,
-                        user_refresh_token
-                    FROM ptyd_social_accounts WHERE user_email = '""" + email + "';"
-            ]
-
-            items = execute(queries[0], 'get', conn)
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            print( items )
-
-            # restest = SocialAccount().get(email)
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-class SocialAccount(Resource):
-
-    # HTTP method GET
-    def get(self, uid):
-        response = {}
-        try:
-            conn = connect()
-
-            queries = [
-            """     SELECT
-                        user_uid,
-                        first_name,
-                        last_name,
-                        user_email,
-                        phone_number,
-                        create_date,
-                        last_update,
-                        referral_source
-                    FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
-
-            items = execute(queries[0], 'get', conn)
-
-            print(items)
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-class CheckEmail(Resource):
-
-    # HTTP method GET
-    def get(self, email):
-        if email == None:
-            return {'result': False}, 401
-
-        try:
-            conn = connect()
-
-            queries = []
-            queries.append( "SELECT user_email FROM ptyd_accounts WHERE user_email = '" + email + "';" )
-
-            users = execute(queries[0], 'get', conn)
-
-            if users['result'] == ():
-                return {'result': False}, 401
-            elif len(users['result']) > 0:
-                return {'result': True}, 200
-
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
-api.add_resource(CheckEmail, '/api/v2/checkemail/<string:email>')
 api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(AccountSaltById, '/api/v2/accountsaltbyid/<string:userUid>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
-api.add_resource(SocialSignUp, '/api/v2/socialSignup')
-api.add_resource(Social, '/api/v2/social/<string:email>')
-api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 
 # Admin page
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
@@ -2503,10 +1712,6 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
-
-# Automated APIs
-api.add_resource(UpdatePurchases, '/api/v2/updatepurchases')
-api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers')
 
 # Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')

@@ -36,8 +36,7 @@ class Checkout extends Component {
       const res = await fetch(`${this.props.SALT_URL}/${this.state.user_uid}`);
       const api = await res.json();
       console.log(api);
-      // ternary operator in case of social media account
-      this.setState({ password_salt: api.result.length != 0 ? api.result[0].password_salt : 'null' });
+      this.setState({ password_salt: api.result[0].password_salt });
 
       const users = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
       const usersApi = await users.json();

@@ -247,11 +247,3 @@ hr.four {
   font-size: 20px;
   text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
 }
-
-.footer {
-  padding-top: 20%;
-  margin-top: -20%;
-  height: 20%;
-  clear: both;
-}
-
