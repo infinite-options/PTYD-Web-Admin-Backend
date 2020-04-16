@@ -8,34 +8,6 @@ API['UPDATE'] = DEV_URL + "updatepurchases"
 API['CHARGE'] = DEV_URL + "chargesubscribers"
 INTERVAL = 60 * 60
 
-def test():
-    global API
-    while 1:
-        now = datetime.now()
-
-        if now.second < 5:
-            r = requests.post(url = API['UPDATE'])
-            print("Calling for update subscription snapshots...")
-        if now.second > 55:
-            r = requests.post(url = API['CHARGE'])
-            print("Calling for billing renewing purchases...")
-
-        print("Current timestamp:", now)
-        sleep(5)
-
-def test2():
-    global API
-    while 1:
-        now = datetime.now()
-
-        r = requests.post(url = API['UPDATE'])
-        print("Calling for update subscription snapshots...")
-        a = input()
-
-        r = requests.post(url = API['CHARGE'])
-        print("Calling for billing renewing purchases...")
-        a = input()
-
 def main():
     global API
     global INTERVAL
@@ -54,4 +26,4 @@ def main():
         sleep(INTERVAL)
 
 if __name__ == '__main__':
-    test2()
+    main()
