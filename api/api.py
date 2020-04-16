@@ -762,6 +762,288 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
+# NEED CODE FOR NON-RECURRING ONE TIME PLANS
+class Checkout(Resource):
+    def getPaymentQuery(self, data, paymentId, purchaseId):
+        query = """ INSERT INTO ptyd_payments
+                    (
+                        payment_id,
+                        buyer_id,
+                        recurring,
+                        gift,
+                        coupon_id,
+                        amount_due,
+                        amount_paid,
+                        purchase_id,
+                        payment_time_stamp,
+                        payment_type,
+                        cc_num,
+                        cc_exp_date,
+                        cc_cvv,
+                        billing_zip
+                    )
+                    VALUES (
+                        \'""" + paymentId + """\',
+                        \'""" + data['user_uid'] + """\',
+                        \'TRUE\',
+                        \'""" + data['is_gift'] + """\',
+                        NULL,
+                        """ + data['item_price'] + """,
+                        """ + data['item_price'] + """,
+                        \'""" + purchaseId + """\',
+                        \'""" + getNow() + """\',
+                        \'STRIPE\',
+                        \'""" + data['cc_num'][-4:] + """\',
+                        \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
+                        \'""" + data['cc_cvv'] + """\',
+                        \'""" + data['billing_zip'] + "\');"""
+
+        return query
+
+    def getDates(self, frequency):
+        dates = {}
+        dayOfWeek = date.today().weekday()
+
+        # Get the soonest Thursday, same day if today is Thursday
+        thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
+
+        # If today is Thursday after 4PM
+        if thurs == date.today() and datetime.now().hour >= 16:
+            thurs += timedelta(days=7)
+
+        # Set start date to Saturday after thurs
+#       dates['startDate'] = thurs + timedelta(days=2)
+        dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
+
+        # Set end date to 1st/2nd/4th Monday after thurs
+        # Set next billing date to Friday after the end date
+        if frequency == 'Weekly':
+            dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
+            dates['weeksRemaining'] = '1'
+        elif frequency == 'Bi-Weekly':
+            dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
+            dates['weeksRemaining'] = '2'
+        elif frequency == 'Monthly':
+            dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
+            dates['weeksRemaining'] = '4'
+
+        return dates
+
+    def post(self):
+        response = {}
+        reply = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            print("Received:", data)
+
+            if 'delivery_address_unit' in data:
+                if data['delivery_address_unit'] == None:
+                    DeliveryUnit = 'NULL'
+                else:
+                    DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
+            else:
+                DeliveryUnit = 'NULL'
+
+            purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
+            paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
+            snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
+
+            print(snapshotIDresponse)
+            print(purchaseIDresponse)
+            print(paymentIDresponse)
+
+            snapshotId = snapshotIDresponse['result'][0]['new_id']
+            purchaseId = purchaseIDresponse['result'][0]['new_id']
+            paymentId = paymentIDresponse['result'][0]['new_id']
+
+            if snapshotId == None:
+                snapshotId = '160-000001'
+
+            if purchaseId == None:
+                purchaseId = '300-000001'
+
+            if paymentId == None:
+                paymentId = '200-000001'
+
+            print(snapshotId)
+            print(purchaseId)
+            print(paymentId)
+
+            mealPlan = data['item'].split(' Subscription')[0]
+
+            queries = ["""
+                SELECT
+                    password_user_uid
+                FROM
+                    ptyd_passwords
+                WHERE
+                    password_user_uid = \'""" + data['user_uid'] + """\'
+                AND
+                    password_hash = \'""" + data['salt'] + "\'", """
+                SELECT
+                    meal_plan_id
+                    , payment_frequency
+                FROM
+                    ptyd_meal_plans
+                WHERE
+                    meal_plan_desc = \'""" + mealPlan + "\'", """
+                SELECT
+                    cc_num
+                FROM
+                    ptyd_payments
+                WHERE
+                    buyer_id = \'""" + data['user_uid'] + "\';"]
+
+            userAuth = execute(queries[0], 'get', conn)
+
+            possSocialAcc = execute("SELECT user_uid FROM ptyd_social_accounts WHERE user_email = '" + data['delivery_email'] + "';", 'get', conn)
+            print(json.dumps(possSocialAcc, indent=1))
+
+            if len(possSocialAcc['result']) != 0:
+                if possSocialAcc['result'][0]['user_uid'] == data['user_uid']:
+                    print('Very Cool Kanye!')
+                    print("Successfully authenticated user.")
+                else:
+                    response['message'] = 'Could not authenticate user.'
+                    return response, 400 
+            elif userAuth['code'] != 280 or len(userAuth['result']) != 1:
+                response['message'] = 'Could not authenticate user.'
+                response['error'] = userAuth
+                print("Error:", response['message'])
+                print("Error JSON:", response['error'])
+                if userAuth['code'] == 280:
+                    statusCode = 400
+                else:
+                    statusCode = 500
+                return response, statusCode
+            else:
+                print("Successfully authenticated user.")
+
+            mealPlanQuery = execute(queries[1], 'get', conn)
+
+            if mealPlanQuery['code'] == 280:
+                print("Getting meal plan ID...")
+                mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
+                dates = self.getDates(mealPlanQuery['result'][0]['payment_frequency'])
+                print("Meal Plan ID:", mealPlanId)
+            else:
+                response['message'] = 'Could not retrieve meal ID of requested plan.'
+                response['error'] = mealPlanQuery
+                print("Error:", response['message'])
+                print("Error JSON:", response['error'])
+                return response, 501
+
+            queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
+
+            # replace with real longitute and latitude
+            test_deilvery_long = '-97.9107'
+            test_deilvery_lat = '-97.9107'
+            queries.append(
+                """ INSERT INTO ptyd_purchases
+                    (
+                        purchase_id,
+                        purchase_status,
+                        meal_plan_id,
+                        start_date,
+                        delivery_first_name,
+                        delivery_last_name,
+                        delivery_email,
+                        delivery_phone,
+                        delivery_instructions,
+                        delivery_address,
+                        delivery_address_unit,
+                        delivery_city,
+                        delivery_state,
+                        delivery_zip,
+                        delivery_region,
+                        delivery_long,
+                        delivery_lat
+                    )
+                    VALUES
+                    (
+                        \'""" + purchaseId + """\',
+                        \'TRUE\',
+                        \'""" + mealPlanId + """\',
+                        \'""" + getToday() + """\',
+                        \'""" + data['delivery_first_name'] + """\',
+                        \'""" + data['delivery_last_name'] + """\',
+                        \'""" + data['delivery_email'] + """\',
+                        \'""" + data['delivery_phone'] + """\',
+                        \'""" + data['delivery_instructions'] + """\',
+                        \'""" + data['delivery_address'] + """\',
+                        """ + DeliveryUnit + """,
+                        \'""" + data['delivery_city'] + """\',
+                        \'""" + data['delivery_state'] + """\',
+                        \'""" + data['delivery_zip'] + """\',
+                        \'""" + data['delivery_region'] + """\',
+                        """ + test_deilvery_long + """,
+                        """ + test_deilvery_lat + """
+                    );"""
+            )
+
+            print('perforem laste 2 queries')
+
+#           print("pur")
+#           print(dates)
+#           print(snapshotId)
+#           print(paymentId)
+#           print(purchaseId)
+#           print(getNow())
+
+            # Initial snapshot
+            queries.append(
+                """ INSERT INTO ptyd_snapshots
+                    (
+                        snapshot_id
+                        , snapshot_timestamp
+                        , purchase_id
+                        , payment_id
+                        , delivery_start_date
+                        , subscription_weeks
+                        , delivery_end_date
+                        , next_billing_date
+                        , weeks_remaining
+                        , week_affected
+                    )
+                    VALUES
+                    (
+                        \'""" + snapshotId + """\'
+                        , \'""" + getNow() + """\'
+                        , \'""" + purchaseId + """\'
+                        , \'""" + paymentId + """\'
+                        , \'""" + dates['startDate'] + """\'
+                        , """ + dates['weeksRemaining'] + """
+                        , \'""" + dates['endDate'] + """\'
+                        , \'""" + dates['billingDate'] + """\'
+                        , """ + dates['weeksRemaining'] + """
+                        , \'""" + dates['startDate'] + "\');")
+
+#           print("snap")
+
+#           print(queries)
+            reply['payment'] = execute(queries[3], 'post', conn)
+            # Add credit card verification code here
+
+            reply['purchase'] = execute(queries[4], 'post', conn)
+            reply['snapshot'] = execute(queries[5], 'post', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = reply
+
+#           print(response)
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+'''
 class Checkout(Resource):
     def getPaymentQuery(self, data, paymentId, purchaseId):
         query = """ INSERT INTO ptyd_payments
@@ -933,6 +1215,7 @@ class Checkout(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+'''
 
 # Call this API from another source every Monday at midnight
 class UpdatePurchases(Resource):
