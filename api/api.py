@@ -1110,8 +1110,8 @@ class UpdatePurchases(Resource):
             nextSat = datetime.strftime(date.today() + timedelta(days=(5-date.today().weekday()%7)), "%Y-%m-%d")
 
             # UPDATE PURCHASE TEST CASES
-            thisSat = '2020-04-18'
-            nextSat = '2020-04-25'
+#           thisSat = '2020-04-18'
+#           nextSat = '2020-04-25'
 #           thisSat = '2020-04-25'
 #           nextSat = '2020-05-02'
 #           thisSat = '2020-05-02'
@@ -1120,6 +1120,8 @@ class UpdatePurchases(Resource):
 #           nextSat = '2020-05-16'
 #           thisSat = '2020-05-16'
 #           nextSat = '2020-05-23'
+#           thisSat = '2020-05-23'
+#           nextSat = '2020-05-30'
 
             # Returns this Saturday's meal selections with nonzero weeks remaining
             query = """
@@ -1350,7 +1352,7 @@ class UpdatePurchases(Resource):
 
             # For debugging
             response['items'] = items
-            print(items)
+#           print(items)
 
             return response, 200
         except:
@@ -1368,11 +1370,12 @@ class ChargeSubscribers(Resource):
         thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
 
         # CHARGE SUBSCRIBER TEST CASES
-        thurs = date(2020, 4, 23)
+#       thurs = date(2020, 4, 23)
 #       thurs = date(2020, 4, 30)
 #       thurs = date(2020, 5, 7)
 #       thurs = date(2020, 5, 14)
 #       thurs = date(2020, 5, 21)
+#       thurs = date(2020, 5, 28)
 
         # Set start date to Saturday after thurs
         dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
@@ -1536,7 +1539,7 @@ class ChargeSubscribers(Resource):
 
             # For debugging
             response['items'] = items
-            print(items)
+#           print(items)
 
             return response, 200
         except:
