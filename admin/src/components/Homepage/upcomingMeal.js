@@ -70,9 +70,8 @@ class UpcomingMeals extends Component {
   //   };
   render() {
     return (
-      <div className="scrollMenu">
-        {this.upcomingMeals_and_weeklyPurchase()}
-      </div>
+      //   <div className="scrollMenu">
+      <div>{this.upcomingMeals_and_weeklyPurchase()}</div>
     );
   }
   upcomingMeals_and_weeklyPurchase = () => {
@@ -108,57 +107,53 @@ class UpcomingMeals extends Component {
     //   arr2.push(this.single_item_ingredients(c, d));
     // }
     return (
-      <Container>
-        <Row>
-          <Col>
-            <Card
-              style={{
-                // width: "100%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <Card.Title>
-                  The week of:
-                  {this.dateDropdown()}
-                </Card.Title>
-                {/* <Card.Subtitle className="mb-2 text-muted">
+      //   <Container>
+      <Row>
+        <Col>
+          <Card
+            style={{
+              // width: "100%",
+              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+            }}
+          >
+            <Card.Body>
+              <Card.Title>
+                The week of:
+                {this.dateDropdown()}
+              </Card.Title>
+              {/* <Card.Subtitle className="mb-2 text-muted">
                   The week of:
                 </Card.Subtitle> */}
-                <Card.Text>
-                  <div className="vertical-menu">
-                    <Table
-                      responsive
-                      striped
-                      bordered
-                      style={{ textAlign: "center" }}
+              <Card.Text>
+                <div className="vertical-menu">
+                  <Table
+                    responsive
+                    striped
+                    bordered
+                    style={{ textAlign: "center" }}
+                  >
+                    <thead style={{ overflow: "scroll" }}>
+                      <tr>
+                        <th>Menu</th>
+                        <th>Meal</th>
+                        <th>Quantity Ordered</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      style={{
+                        height: "300px",
+                        overflowY: "scroll"
+                      }}
                     >
-                      <thead style={{ overflow: "scroll" }}>
-                        <tr>
-                          <th>Menu</th>
-                          <th>Meal</th>
-                          <th>Quantity Ordered</th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        style={{
-                          height: "300px",
-                          overflowY: "scroll"
-                        }}
-                      >
-                        {arr}
-                      </tbody>
-                    </Table>
-                  </div>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          {/* ))} */}
-        </Row>
-
-        <br />
-        <br />
+                      {arr}
+                    </tbody>
+                  </Table>
+                </div>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        {/* ))} */}
 
         {/* weekly purchase ----------------------------------------- */}
         {/* <Breadcrumbs aria-label="breadcrumb">
@@ -168,49 +163,48 @@ class UpcomingMeals extends Component {
                   <Typography color="textPrimary">Weekly Purchases</Typography>
                 </Breadcrumbs>
                 <br /> */}
-        <Row>
-          <Col>
-            <Card
-              style={{
-                // width: "100%",
-                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Card.Body>
-                <Card.Title>The week of: {this.dateDropdown()}</Card.Title>
-                {/* <Card.Subtitle className="mb-2 text-muted">
+        <Col>
+          <Card
+            style={{
+              // width: "100%",
+              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+            }}
+          >
+            <Card.Body>
+              <Card.Title>The week of: </Card.Title>
+              {/* <Card.Subtitle className="mb-2 text-muted">
                   The week of:
                 </Card.Subtitle> */}
-                <Card.Text>
-                  <div className="vertical-menu">
-                    <Table
-                      responsive
-                      striped
-                      bordered
-                      style={{ textAlign: "center" }}
+              <Card.Text>
+                <div className="vertical-menu">
+                  <Table
+                    responsive
+                    striped
+                    bordered
+                    style={{ textAlign: "center" }}
+                  >
+                    <thead style={{ overflow: "scroll" }}>
+                      <tr>
+                        <th>Menu</th>
+                        <th>Meal</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      style={{
+                        height: "300px",
+                        overflowY: "scroll"
+                      }}
                     >
-                      <thead style={{ overflow: "scroll" }}>
-                        <tr>
-                          <th>Menu</th>
-                          <th>Meal</th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        style={{
-                          height: "300px",
-                          overflowY: "scroll"
-                        }}
-                      >
-                        {arr2}
-                      </tbody>
-                    </Table>
-                  </div>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                      {arr2}
+                    </tbody>
+                  </Table>
+                </div>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      //   </Container>
     );
   };
   dateDropdown = () => {

@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import ItemToPurchase from "./ItemToPurchase";
+import Graph from "./mapGraph";
 
 class Home extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class Home extends Component {
     return (
       // <div className="container" style={{ marginTop: "10%" }}>
       <div style={{ margin: "1%" }}>
+        <Graph />
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
@@ -50,6 +52,7 @@ class Home extends Component {
         />
         {/* Meal info ----------------------------------------- */}
 
+        <br />
         <br />
         <Row>
           <Col>
@@ -192,15 +195,7 @@ class Home extends Component {
           boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
         }}
       >
-        <Card.Body>
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-        </Card.Body>
+        <Card.Body></Card.Body>
       </Card>
     );
   };
