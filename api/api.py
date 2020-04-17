@@ -1693,6 +1693,226 @@ class MealSelection(Resource):
             conn = connect()
 
             queries = ["""
+                SELECT latest_active.week_affected
+                    , latest_sel.meal_selection
+                    , latest_sel.delivery_day
+                FROM (
+                    # LATEST ACTIVE SUBSCRIPTIONS BY WEEK WITH MEALS PURCHASED
+                    SELECT active.*
+                        ,pur_plans.num_meals
+                    FROM (
+                        SELECT snap1.*
+                            , snap2.latest_snapshot
+                        FROM ptyd_snapshots AS snap1
+                        INNER JOIN (
+                            SELECT *, MAX(snapshot_timestamp) AS latest_snapshot
+                            FROM ptyd_snapshots
+                            GROUP BY purchase_id
+                                , week_affected)
+                            AS snap2 
+                        ON snap1.purchase_id = snap2.purchase_id 
+                            AND snap1.week_affected = snap2.week_affected 
+                            AND snap1.snapshot_timestamp = snap2.latest_snapshot)
+                        AS active
+                    LEFT JOIN (
+                        SELECT pur.*
+                        , plans.num_meals
+                        FROM ptyd.ptyd_purchases pur
+                        LEFT JOIN ptyd_meal_plans plans
+                        ON pur.meal_plan_id = plans.meal_plan_id)
+                        AS pur_plans
+                    ON active.purchase_id = pur_plans.purchase_id)
+                    AS latest_active
+                LEFT JOIN (
+                    SELECT ms1.*
+                        , ms2.latest_selection
+                    FROM ptyd_meals_selected AS ms1
+                    INNER JOIN (
+                        SELECT *, MAX(selection_time) AS latest_selection
+                        FROM ptyd_meals_selected
+                        GROUP BY purchase_id
+                            , week_affected)
+                        AS ms2 
+                    ON ms1.purchase_id = ms2.purchase_id 
+                        AND ms1.week_affected = ms2.week_affected 
+                        AND ms1.selection_time = ms2.latest_selection)
+                    AS latest_sel
+                ON latest_active.purchase_id = latest_sel.purchase_id 
+                    AND latest_active.week_affected = latest_sel.week_affected
+                WHERE
+                    latest_active.purchase_id = \'""" + purchaseId + """\'
+                ;""", """
+                SELECT
+                    ms1.purchase_id
+                    , ms1.week_affected
+                    , ms1.meal_selection
+                    
+                FROM ptyd_addons_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        purchase_id
+                        , week_affected
+                        , meal_selection
+                        , MAX(selection_time) AS latest_selection
+                    FROM ptyd_addons_selected
+                    GROUP BY purchase_id
+                        , week_affected
+                ) as ms2 
+                ON
+                    ms1.purchase_id = ms2.purchase_id
+                AND
+                    ms1.week_affected = ms2.week_affected
+                AND
+                    ms1.selection_time = ms2.latest_selection
+                WHERE
+                    ms1.purchase_id = \'""" + purchaseId + """\'
+                ;"""]
+
+            meals = execute(queries[0], 'get', conn)
+            addons = execute(queries[1], 'get', conn)
+
+            items['Meals'] = self.readQuery(meals['result'])
+            items['Addons'] = self.readQuery(addons['result'])
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        # Remove last semicolon
+        return mealSelectionString[:-1]
+
+    def postQuery(self, purchaseId, data):
+        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if data['is_addons'] == True:
+            mealSelection = self.formatMealSelection(data['addon_quantities'])
+            query = """
+                INSERT INTO ptyd_addons_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + "\');"
+        else:
+            # Handle SKIP request
+            if data['delivery_day'] == 'SKIP':
+                mealSelection = 'SKIP'
+            # Handle default meal selection
+            elif data['default_selected'] is True:
+                mealSelection = 'SURPRISE'
+            # Handle custom meal selection
+            else:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+
+            query = """
+                INSERT INTO ptyd_meals_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection,
+                    delivery_day
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + """\',
+                    \'""" + data['delivery_day'] + "\');"
+
+        return query
+
+    # HTTP method POST
+    def post(self, purchaseId):
+        response = {}
+        items = []
+        try:
+            conn = connect()
+
+            data = request.get_json(force=True)
+            print("Received:", data)
+
+            queries = [
+                """ SELECT purchase_id
+                    FROM ptyd_purchases
+                    WHERE purchase_id = \'""" + purchaseId + "\';"]
+
+            # Retrieve purchase ID
+            getPurchaseId = execute(queries[0], 'get', conn)
+
+            # Handle successful purchase ID query
+            if getPurchaseId['code'] == 280:
+                if not len(getPurchaseId['result']) > 0:
+                    response['message'] = 'Recipient has no active purchase_id.'
+                    response['error'] = getPurchaseId
+                    print("Error:", response['message'])
+                    # 400: Client side bad request
+                    return response, 400
+            # Handle unsuccessful purchase ID query
+            else:
+                response['message'] = 'Could not retrieve purchase_id.'
+                response['error'] = getPurchaseId
+                print("Error:", response['message'])
+                # 500: Internal server error
+                return response, 500
+#               print("purchase_id:", purchaseId)
+
+            queries.append(self.postQuery(purchaseId, data))
+
+            execute(queries[1], 'post', conn)
+
+            response['message'] = 'Request successful.'
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+'''
+class MealSelection(Resource):
+    def readQuery(self, items):
+        for item in items:
+            item['meals_selected'] = {}
+            if item['meal_selection'] == 'SKIP':
+                continue
+            if item['meal_selection'] == 'SURPRISE':
+                continue
+            if item['meal_selection'] == None:
+                continue
+            selectedMeals = item['meal_selection'].split(';')
+            for selectedMeal in selectedMeals:
+                if selectedMeal in item['meals_selected']:
+                    item['meals_selected'][selectedMeal] += 1
+                else:
+                    item['meals_selected'][selectedMeal] = 1
+        return items
+
+    def get(self, purchaseId):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            queries = ["""
                 SELECT
                     ms1.week_affected,
                     ms1.meal_selection,
@@ -1841,7 +2061,7 @@ class MealSelection(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
+'''
 class CustomerInfo(Resource):
 
     # def ___inti__(self):
