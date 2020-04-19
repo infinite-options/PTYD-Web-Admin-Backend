@@ -73,6 +73,8 @@ class CreateMenu extends Component {
       tempSelectionOfDropMenu[i] = mealMap[initArr[i]["Meal_Name"]];
       // console.log(mealMap[initArr[i]["Meal_Name"]]);
     }
+    // let temp_newMealName = avg[categorykey[0]];
+    // console.log("rtempkeys", avg[categorykey[0]][0].Avg_Sales_Posting);
 
     this.setState(
       {
@@ -85,6 +87,7 @@ class CreateMenu extends Component {
         categorykey, //[Soup, Breakfast, Entree, ...]
         addingSelection: 0,
         mealToAvgPostMap
+        // newMealName: temp_newMealName
       },
       () => {
         // console.log("selection of drops ", this.state.selectionOfDropMenu);
@@ -193,22 +196,8 @@ class CreateMenu extends Component {
   addRowTemplate = () => {
     return (
       <tr>
-        <td>
-          <form noValidate autoComplete="off">
-            <TextField
-              value={this.state.newMealCategory}
-              onChange={e => {
-                this.setState({ newMealCategory: e.target.value });
-              }}
-              id="standard-basic"
-            />
-          </form>
-        </td>
-        <td>
-          {this.addMealDropdown()}
-          {this.addMealDropdown2()}
-        </td>
-
+        <td>{this.addMealDropdown()}</td>
+        <td>{this.addMealDropdown2()}</td>
         <td>{this.avgpost(this.state.newMealName)}</td>
         <td>
           <Button
@@ -282,6 +271,10 @@ class CreateMenu extends Component {
       </FormControl>
     );
   };
+  avgpost = mealName => {
+    let x = this.state.mealToAvgPostMap[mealName];
+    return this.state.mealToAvgPostMap[mealName];
+  };
 
   //Adds new row to the database array: createMenu
   addNewRow = () => {
@@ -324,11 +317,6 @@ class CreateMenu extends Component {
         </Select>
       </FormControl>
     );
-  };
-
-  avgpost = mealName => {
-    let x = this.state.mealToAvgPostMap[mealName];
-    return this.state.mealToAvgPostMap[mealName];
   };
 
   mealDropdown = (mealDefault, index) => {
