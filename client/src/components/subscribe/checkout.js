@@ -108,11 +108,51 @@ class Checkout extends Component {
       , 'cc_exp_year'
       , 'billing_zip'
     ];
+
+    //  Check if fields are null/empty
     for (var field of fields) {
+      console.log(this.state.purchase[field]);
       if (!this.state.purchase[field]) {
         return true;
       }
     }
+
+    //  Check if fields have correct length
+    //  Disable submit if phone number isn't 10 digits
+    if (this.state.purchase.delivery_phone.length != 10 || !/^\d+$/.test(this.state.purchase.delivery_phone) ) {
+      return true;
+    }
+    //  Disable submit if cc_num isn't 16 characters
+    if (this.state.purchase.cc_num.length != 16) {
+      return true;
+    }
+    //  Disable submit if cc_num isn't 16 characters
+    if (this.state.purchase.cc_cvv.length != 3) {
+      return true;
+    }
+
+    //  Data check zipcodes
+    var zipcode_fields = [
+      'delivery_zip'
+      , 'billing_zip'
+    ];
+
+    for (var zipfield of zipcode_fields) {
+      if (this.state.purchase[zipfield].length != 5 && this.state.purchase[zipfield].length != 10) {
+        return true;
+      }
+
+      //  Disable submit if zipcode is 5 characters but contains nondigits
+      if (this.state.purchase[zipfield].length == 5 && !/^\d+$/.test(this.state.purchase[zipfield]) ) {
+        return true;
+      }
+
+      //  Disable submit if zipcode is 10 characters but contains nondigits in first 5 characters or last 4 characters or if 6th character is not a hyphen
+      if (this.state.purchase[zipfield].length == 10 && ( !/^\d+$/.test(this.state.purchase[zipfield].substring(0,5) ) || !/^\d+$/.test(this.state.purchase[zipfield].substring(6,10)) || this.state.purchase[zipfield][5] != '-' ) ) {
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -229,7 +269,7 @@ class Checkout extends Component {
                 <Form.Group controlId="formGridNotes">
                   <Form.Label>Delivery Notes<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
-                    placeholder="Enter Notes or N/A"
+                    placeholder="Enter Notes or N/A (e.g. Gate Code, Special Instructions)"
                     value={this.state.purchase.delivery_instructions}
                     name="delivery_instructions"
                     onChange={this.handleChange}
@@ -333,7 +373,7 @@ class Checkout extends Component {
                 <Form.Group controlId="formGridPhoneNumber">
                   <Form.Label>Phone Number<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
-                    placeholder="Phone Number"
+                    placeholder="1234567890"
                     value={this.state.purchase.delivery_phone}
                     name="delivery_phone"
                     onChange={this.handleChange}
