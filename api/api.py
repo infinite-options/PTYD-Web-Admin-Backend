@@ -501,6 +501,41 @@ class AccountSalt(Resource):
 class Account(Resource):
 
     # HTTP method GET
+    def get(self, accId):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [
+                """ SELECT
+                        user_uid,
+                        first_name,
+                        last_name,
+                        user_email,
+                        phone_number,
+                        create_date,
+                        last_update,
+                        referral_source
+                    FROM ptyd_accounts""" +
+                    "\nWHERE user_uid = " + "\'" + accId + "\';"]
+
+            items = execute(queries[0], 'get', conn)
+            user_uid = items['result'][0]['user_uid']
+
+            queries.append("SELECT * FROM ptyd_passwords WHERE password_user_uid = \'" + user_uid + "\';")
+            password_response = execute(queries[1], 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items['result']
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class Login(Resource):
+
+    # HTTP method GET
     def get(self, accEmail, accPass):
         response = {}
         try:
@@ -2581,7 +2616,8 @@ class TemplateApi(Resource):
 api.add_resource(Meals, '/api/v2/meals')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
-api.add_resource(Account, '/api/v2/account/<string:accEmail>/<string:accPass>')
+api.add_resource(Login, '/api/v2/account/<string:accEmail>/<string:accPass>')
+api.add_resource(Account, '/api/v2/account/<string:accId>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(AccountSaltById, '/api/v2/accountsaltbyid/<string:userUid>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')

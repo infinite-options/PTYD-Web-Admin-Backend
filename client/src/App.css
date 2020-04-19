@@ -67,6 +67,11 @@ br {
   line-height: 22px;
 }
 
+/* required asterisk */
+.required-red {
+  color: red;
+}
+
 /* button */
 
 .btn1 {

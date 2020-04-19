@@ -38,10 +38,24 @@ class Checkout extends Component {
       console.log(api);
       this.setState({ password_salt: api.result[0].password_salt });
 
-      const users = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
-      const usersApi = await users.json();
-      if (usersApi.result.length != 0) {
-        this.setState({ purchase: usersApi.result[0] });
+      const pur = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
+      const purApi = await pur.json();
+      if (purApi.result.length != 0) {
+        this.setState({ purchase: purApi.result[0] });
+      }
+      else {
+        const acc = await fetch(`${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`);
+        const accApi = await acc.json();
+        if (accApi.result.length != 0) {
+          this.setState({
+            purchase: {
+              delivery_first_name: accApi.result[0].first_name,
+              delivery_last_name: accApi.result[0].last_name,
+              delivery_email: accApi.result[0].user_email,
+              delivery_phone: accApi.result[0].phone_number,
+            },
+          });
+        }
       }
     }
   }
@@ -164,7 +178,7 @@ class Checkout extends Component {
               <Form>
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridFirstName">
-                    <Form.Label>First Name</Form.Label>
+                    <Form.Label>First Name<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Enter First Name"
                       value={this.state.purchase.delivery_first_name}
@@ -174,7 +188,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridLastName">
-                    <Form.Label>Last Name</Form.Label>
+                    <Form.Label>Last Name<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Enter Last Name"
                       value={this.state.purchase.delivery_last_name}
@@ -185,7 +199,7 @@ class Checkout extends Component {
                 </Form.Row>
 
                 <Form.Group controlId="formGridNotes">
-                  <Form.Label>Delivery Notes</Form.Label>
+                  <Form.Label>Delivery Notes<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
                     placeholder="Enter Notes or N/A"
                     value={this.state.purchase.delivery_instructions}
@@ -196,7 +210,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridEmail">
-                    <Form.Label>Email</Form.Label>
+                    <Form.Label>Email<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       type="email"
                       placeholder="Enter Email"
@@ -207,7 +221,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Password<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       type="password"
                       placeholder="Enter Password"
@@ -219,7 +233,7 @@ class Checkout extends Component {
                 </Form.Row>
 
                 <Form.Group controlId="formGridAddress">
-                  <Form.Label>Address</Form.Label>
+                  <Form.Label>Address<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
                     placeholder="1234 Main St"
                     value={this.state.purchase.delivery_address}
@@ -235,7 +249,7 @@ class Checkout extends Component {
                   controlId="formGridAptNum"
                 >
                   <Form.Label>
-                    Apartment/Unit <b>(Optional)</b>
+                    Apartment/Unit <b>(optional)</b>
                   </Form.Label>
                   <Form.Control
                     placeholder="Apartment, studio, or floor"
@@ -247,7 +261,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Label>City</Form.Label>
+                    <Form.Label>City<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Prep City"
                       value={this.state.purchase.delivery_city}
@@ -257,7 +271,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridState">
-                    <Form.Label>State</Form.Label>
+                    <Form.Label>State<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select" value={this.state.purchase.delivery_state} name="delivery_state" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>TX</option>
@@ -265,7 +279,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridZip">
-                    <Form.Label>Zip</Form.Label>
+                    <Form.Label>Zip<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="12345"
                       value={this.state.purchase.delivery_zip}
@@ -281,7 +295,7 @@ class Checkout extends Component {
                   Style="margin-left:-15px;"
                   controlId="formGridCountry"
                 >
-                  <Form.Label>Country</Form.Label>
+                  <Form.Label>Country<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control as="select" value={this.state.purchase.delivery_region} name="delivery_region" onChange={this.handleChange}>
                     <option>Choose...</option>
                     <option>US</option>
@@ -289,6 +303,7 @@ class Checkout extends Component {
                 </Form.Group>
 
                 <Form.Group controlId="formGridPhoneNumber">
+                  <Form.Label>Phone Number<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
                     placeholder="Phone Number"
                     value={this.state.purchase.delivery_phone}
@@ -311,7 +326,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} md={6} controlId="formGridCardNumber">
-                    <Form.Label>Credit Card Number</Form.Label>
+                    <Form.Label>Credit Card Number<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Enter Card Number"
                       value={this.state.purchase.cc_num}
@@ -323,7 +338,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} md={3} controlId="formGridCardCvc">
-                    <Form.Label>CVC</Form.Label>
+                    <Form.Label>CVC<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="123"
                       value={this.state.purchase.cc_cvv}
@@ -333,7 +348,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} md={3} controlId="formGridCardMonth">
-                    <Form.Label>Month</Form.Label>
+                    <Form.Label>Month<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select" value={this.state.purchase.cc_exp_month} name="cc_exp_month" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>01</option>
@@ -352,7 +367,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} md={3} controlId="formGridCardYear">
-                    <Form.Label>Year</Form.Label>
+                    <Form.Label>Year<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select" value={this.state.purchase.cc_exp_year} name="cc_exp_year" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>2020</option>
@@ -371,7 +386,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} md={4} controlId="formGridBillingZip">
-                    <Form.Label>Postal Code</Form.Label>
+                    <Form.Label>Postal Code<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="12345"
                       value={this.state.purchase.billing_zip}
@@ -381,7 +396,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridBillingCountry">
-                    <Form.Label>Country</Form.Label>
+                    <Form.Label>Country<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select">
                       <option>Choose...</option>
                       <option>US</option>
