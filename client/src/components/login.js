@@ -27,20 +27,7 @@ export default function Login (props) {
     event.preventDefault();
   }
 
-  useEffect(() => {
-    onLoad();
-    //componentDidMount();
-  }, []);
-
-  async function onLoad() {
-    // fill it up when needed
-  }
-
-//async function componentDidMount() {
-//  const res = await fetch(props.API_URL);
-//  const api = await res.json();
-//  setSalt(api.result[0].password_salt);
-//}
+  useEffect(() => {  }, []);
 
   // Social Media 
 
@@ -87,9 +74,36 @@ export default function Login (props) {
       window.location.reload(false)
     })
   }
+  // Maria Alejcgfbaifeg Changsky	104605834561957	pnkuzirrok_1587274227@tfbnw.net
 
   const responseFacebook = (response) => {
-    console.log(response);
+    console.log("Facebook Response ", response);
+    const e = response.email
+    const at = response.accessToken
+    const rt = response.id
+    console.log(e, at, rt)
+
+    checkForSocial(e)
+    .then(res1 => { 
+      console.log("Social Media User: ", res1)
+      grabSocialUserInfor(res1.user_uid)
+      .then(res2 => socialLogin(res2))
+      .catch(err => console.log(err)) }
+    )
+    .catch(err => {
+      console.log(err)
+      // Redirect to Signup Page for Social Media Users
+      props.history.push({
+        pathname: "/socialsignup",
+        state: {
+          email: e,
+          social: "facebook",
+          accessToken: at,
+          refreshToken: rt
+        }
+      })
+      window.location.reload(false)
+    })
   }
 
   function socialLogin(user) {
@@ -201,7 +215,7 @@ export default function Login (props) {
               </h4>
 
               <Row>
-                {/*
+                {
                 <Col>
                   <div 
                     Style={{
@@ -210,7 +224,7 @@ export default function Login (props) {
                   > 
                     <FacebookLogin
                       appId="508721976476931"
-                      //autoLoad={true}
+                      autoLoad={true}
                       fields="name,email,picture"
                       onClick={console.log('test')}
                       callback={responseFacebook} 
@@ -219,7 +233,7 @@ export default function Login (props) {
                     />
                   </div>
                 </Col>
-                */}
+                }
                 
                 <Col>
                   <GoogleLogin
