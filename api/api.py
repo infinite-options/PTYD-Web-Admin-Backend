@@ -465,8 +465,11 @@ class AccountSaltById(Resource):
             conn = connect()
 
             items = execute(""" SELECT password_salt
+                                , referral_source
                                 FROM ptyd_passwords
-                                WHERE password_user_uid = \'""" + userUid + "\';", 'get', conn)
+                                RIGHT JOIN ptyd_accounts
+                                ON password_user_uid = user_uid
+                                WHERE user_uid = \'""" + userUid + "\';", 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']

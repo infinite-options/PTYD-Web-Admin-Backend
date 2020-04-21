@@ -38,7 +38,12 @@ class Checkout extends Component {
       const res = await fetch(`${this.props.SALT_URL}/${this.state.user_uid}`);
       const api = await res.json();
       console.log(api);
-      this.setState({ password_salt: api.result[0].password_salt });
+
+      //  Social Media accounts will have null salts
+      //  Disable password field if salt is null
+      this.setState({
+        password_salt: api.result[0].password_salt
+      });
 
       const pur = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
       const purApi = await pur.json();
@@ -292,10 +297,11 @@ class Checkout extends Component {
                     <Form.Label>Password<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       type="password"
-                      placeholder="Enter Password"
+                      placeholder={!this.state.password_salt ? "No Password Needed" : "Enter Password"}
                       value={this.state.password}
                       name="password"
                       onChange={this.handlePwChange}
+                      disabled={!this.state.password_salt ? true : false}
                     />
                   </Form.Group>
                 </Form.Row>
