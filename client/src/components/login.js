@@ -177,8 +177,9 @@ export default function Login(props) {
         } else {
           props.history.push("/");
         }
+        window.location.reload(false);
       } else {
-        props.history.push("/"); // should prompt something or asking re-login
+        props.history.push("/"); // should prompt something or asking for re-login
       }
     } else {
       document.cookie = " loginStatus: Sign In , user_uid: null , ";
