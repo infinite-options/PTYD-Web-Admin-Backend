@@ -4,11 +4,10 @@ import IMG2 from "../img/img2.jpg";
 import IMG4 from "../img/img4.jpg";
 import IMG5 from "../img/img5.jpg";
 import IMG6 from "../img/img6.jpg";
-import IMG7 from "../img/img7.jpg";
 import HUMAN1 from "../img/human1.png";
 import HUMAN2 from "../img/human2.png";
 import HUMAN3 from "../img/human3.png";
-import COMPANY from "../img/company.png";
+
 import { Row, Col, Container, Card, CardColumns } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 
@@ -41,7 +40,7 @@ class Landing extends Component {
                   lineHeight: "35px"
                 }}
               >
-                Farm-to-table, prepared meals <br></br>delivered to your
+                Plant-based, ready to eat meals <br></br>delivered to your
                 doorstep.<br></br>
                 <a href="/signup">
                   <button
@@ -64,7 +63,7 @@ class Landing extends Component {
               <div class="langding-part2 font2">
                 <br></br>
                 <center>
-                  <h2 class="font3">SAVE TIME, EAT BETTER.</h2>
+                  <h3 class="font3">THE ONLY ZERO WASTE MEAL DELIVERY SERVICE</h3>
                 </center>
                 <hr class="one-half" />
                 <Container>
@@ -76,9 +75,9 @@ class Landing extends Component {
                       marginLeft: "5%"
                     }}
                   >
-                    <Col>CHOOSE YOUR PLAN</Col>
+                    <Col>CHOOSE YOUR MEALS</Col>
                     <Col>WEEKLY DELIVERY</Col>
-                    <Col>NO COMMITMENT</Col>
+                    <Col>RETURN YOUR JARS</Col>
                   </Row>
                   <Row
                     style={{
@@ -90,21 +89,17 @@ class Landing extends Component {
                   >
                     <Col>
                       <Cell col={11}>
-                        Order 5, 10, or 20 meals each week. Customize your order
-                        from 6 new recipes every week.
+                        Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        We deliver in Austin, Texas to your home or office.
-                        Delivery times are Sunday 6pm to 9pm and Monday 9am to
-                        1pm.{" "}
+                        Seamless non-contact delivery in Austin & Houston.
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        Prep to Your Door is flexible. You can modify, skip, or
-                        cancel your plan at any time with no commitment.
+                        Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.
                       </Cell>
                     </Col>
                   </Row>
@@ -148,8 +143,7 @@ class Landing extends Component {
                       >
                         <Col>
                           <Cell col={10}>
-                            Eat seasonally and locally every week. Our chefs
-                            create each menu based on what is growing in Texas.
+                            Our organic produce comes directly from small Texas farms to the PTYD kitchen. No middle men or long transit times. We provide the most nutrient rich ingredients straight to your door.
                           </Cell>
                         </Col>
                         <Col>
@@ -183,9 +177,7 @@ class Landing extends Component {
                         </Col>
                         <Col>
                           <Cell col={11}>
-                            Not only is organic food better for your health,
-                            it's better for our planet. Healthy soil means
-                            healthy nutrients and healthy bodies.{" "}
+                            Once upon a time, all food was organic. Healthy soil means healthy nutrients and healthy bodies. We source 100% organic ingredients, so there's no pesticides, herbicides or sprays in your food, ever.
                           </Cell>
                         </Col>
                       </Row>
@@ -227,7 +219,7 @@ class Landing extends Component {
                 <div
                   style={{
                     color: "white",
-                    backgroundColor: "black",
+                    backgroundColor: "#467844",
                     width: "700px",
                     height: "700px"
                   }}
@@ -237,12 +229,11 @@ class Landing extends Component {
                   <h3 class="font1">STRAIGHT TO YOUR DOOR</h3>
                   <hr class="three" />
                   <h5 class="font1">&bull; READY-TO-EAT PLANT BASED MEALS</h5>
-                  <h5 class="font1">&bull; ORGANIC INGREDIENTS </h5>
-                  <h5 class="font1">&bull; LOCALLY SOURCED</h5>
-                  <h5 class="font1">&bull; REUSABLE ECO-FRIENDLY MASON JARS</h5>
+                  <h5 class="font1">&bull; 100% GLUTEN, MEAT, AND DAIRY FREE</h5>
+                  <h5 class="font1">&bull; REAL WHOLE FOOD INGREDIENTS</h5>
+                  <h5 class="font1">&bull; NO PRESERVATIVES, EVER</h5>
                   <hr class="three" />
                   <h6>
-                    All meals are 100% gluten, meat, and dairy free.
                     <br />
                     <i>Pause anytime, no commitment.</i>
                   </h6>
@@ -333,91 +324,11 @@ class Landing extends Component {
                 BROWSE OUR MENU
               </button>
             </div>
-            <br></br>
-            <br></br>
-            <div class="container">
-              <Grid>
-                <Cell col={8}>
-                  <h3 class="font2">The Healthiest Fast-Food in Austin</h3>
-
-                  <Container>
-                    <div class="font2">
-                      <Row style={{ fontSize: "20px", color: "#888785" }}>
-                        <Col>Time</Col>
-                        <Col>Delicious</Col>
-                      </Row>
-                      <Row
-                        style={{
-                          fontSize: "13px",
-                          lineHeight: "20px",
-                          color: "#888785"
-                        }}
-                      >
-                        <Col>
-                          Save time and enjoy healthy meals made with real whole
-                          foods. You don't have to sacrifice health for
-                          convenience anymore.
-                        </Col>
-                        <Col>
-                          New season means new ingredients. Eat exciting new
-                          dishes every week based on what is in season and
-                          growing in Texas farms.
-                        </Col>
-                      </Row>
-                      <br></br>
-                      <Row style={{ fontSize: "20px", color: "#888785" }}>
-                        <Col>Healthy</Col>
-                        <Col>Zero Waste</Col>
-                      </Row>
-
-                      <Row
-                        style={{
-                          fontSize: "13px",
-                          lineHeight: "20px",
-                          color: "#888785"
-                        }}
-                      >
-                        <Col>
-                          100% organic, plant-based ingredients. No chemicals,
-                          antibiotics, or preservatives. All meals are
-                          gluten-free.
-                        </Col>
-                        <Col>
-                          Reusable jars and delivery bags means we save
-                          thousands of plastic containers every week. Zero
-                          plastic throw away when you order PTYD.
-                        </Col>
-                      </Row>
-                      <br></br>
-                      <button
-                        type="button"
-                        class="btn1 btn1-primary font4"
-                        style={{
-                          marginTop: "10px",
-                          color: "white",
-                          size: "10px",
-                          fontSize: "17px"
-                        }}
-                      >
-                        EAT HEALTHIER NOW
-                      </button>
-                    </div>
-                  </Container>
-                </Cell>
-                <Cell col={4}>
-                  <img
-                    class="img-fluid"
-                    style={{ width: "80%", height: "100%" }}
-                    src={IMG7}
-                    alt=""
-                  />
-                </Cell>
-              </Grid>
-            </div>
+            
             <br></br>
             <br></br>
             <div class="container font2">
-              <h3 class="font2">What Prepsters love about us...</h3>
+              <h3 class="font2">What Our Community is Saying...</h3>
               <CardColumns>
                 <Card className="p-3">
                   <p>
@@ -526,16 +437,7 @@ class Landing extends Component {
                     </h3>
                     <br />
                   </Cell>{" "}
-                  <img
-                    class="img-fluid"
-                    style={{ width: "50%", height: "22%" }}
-                    src={COMPANY}
-                    alt=""
-                  />
-                  <div style={{ backgroundColor: "black" }}>
-                    <br />
-                    <br />
-                  </div>
+                  
                   <br />
                 </center>
               </Grid>

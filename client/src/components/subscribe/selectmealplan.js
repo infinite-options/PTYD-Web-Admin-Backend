@@ -229,13 +229,6 @@ class Selectmealplan extends Component {
             </div>
             <br />
             <br />
-            <div style={{ backgroundColor: "black" }}>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-            </div>
             <br />
           </center>
         </div>
