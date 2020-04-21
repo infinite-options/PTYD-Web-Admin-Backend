@@ -109,10 +109,14 @@ export default function Login(props) {
 
   // Direct Login
   async function grabLoginInfoForUser(userEmail, userPass) {
-    const saltres = await fetch(props.API_URL + "/" + userEmail);
+    let saltres;
+    if (props.API_URL != undefined) {
+      saltres = await fetch(`${props.API_URL}/${userEmail}`);
+    } else {
+      saltres = await fetch(`${props.SINGLE_ACC_API_URL}salt/${userEmail}`);
+    }
     const saltapi = await saltres.json();
     const salt = saltapi.result[0].password_salt;
-    console.log(salt);
     const res = await fetch(
       props.SINGLE_ACC_API_URL +
         "/" +
@@ -128,7 +132,7 @@ export default function Login(props) {
   }
 
   async function checkLogin() {
-    let t = [];
+    // let t = [];
     await grabLoginInfoForUser(email, password)
       .then(res => login(res))
       .catch(err => console.log(err));
