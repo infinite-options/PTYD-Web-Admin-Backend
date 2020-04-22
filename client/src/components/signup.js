@@ -63,19 +63,18 @@ function SignUp(props) {
         console.log(res);
         //handleSignup(res.json());
         if (res.status === 200) {
-          let response = res.data;
-          console.log(response);
-          if (response !== undefined) {
-            document.cookie = `loginStatus: Hello ${response.first_name}! ,   user_uid:  ${response.user_uid}  , `;
+          if (res.data !== undefined) {
+            document.cookie = `loginStatus: Hello ${res.data.first_name}! ,   user_uid:  ${res.data.user_uid}  , `;
           }
           props.history.push("/selectmealplan");
           window.location.reload(false);
         }
       })
       .catch(err => {
-        console.log(`error happened`);
         if (err.response !== undefined) {
           setErro(err.response.data.result);
+        } else {
+          console.log(`Error without response. Error's code is: ${err.status}`);
         }
       });
   }

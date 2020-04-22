@@ -491,7 +491,6 @@ class AccountSalt(Resource):
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
-
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -724,6 +723,7 @@ class SignUp(Resource):
 
                 response['code'] = usnInsert['code']
                 print(response['message'], response['result'], usnInsert['code'])
+                print ('response will be sent to client')
                 return response, statusCode
 
             pwInsert = execute(queries[2], 'post', conn)
