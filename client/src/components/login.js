@@ -96,8 +96,7 @@ export default function Login(props) {
     let uid = user.user_uid;
     let name = user.first_name;
 
-    document.cookie =
-      " loginStatus: Hello " + name + "! , " + " user_uid: " + uid + " , ";
+    document.cookie = ` loginStatus: Hello ${name} ! , user_uid: ${uid} , `;
     console.log(document.cookie);
 
     // redirect & reload page for buttons and login status

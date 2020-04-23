@@ -64,7 +64,7 @@ function SignUp(props) {
         //handleSignup(res.json());
         if (res.status === 200) {
           if (res.data !== undefined) {
-            document.cookie = `loginStatus: Hello ${res.data.first_name}! ,   user_uid:  ${res.data.user_uid}  , `;
+            document.cookie = ` loginStatus: Hello ${res.data.first_name} ! , user_uid: ${res.data.user_uid} , `;
           }
           props.history.push("/selectmealplan");
           window.location.reload(false);
