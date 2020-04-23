@@ -2696,6 +2696,10 @@ api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
+# Automated APIs
+api.add_resource(UpdatePurchases, '/api/v2/updatepurchases')
+api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers')
+
 # Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')
 
