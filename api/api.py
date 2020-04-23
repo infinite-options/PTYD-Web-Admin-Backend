@@ -2629,6 +2629,46 @@ class TemplateApi(Resource):
         finally:
             disconnect(conn)
 
+class Coordinates:
+
+    #array of addresses such as 
+    #['Dunning Ln, Austin, TX 78746', '12916 Cardinal Flower Drive, Austin, TX 78739', '51 Rainey St., austin, TX 78701']
+    def __init__(self, locations):
+        self.locations = locations
+    
+    def calculateFromLocations(self):
+        params = {
+        'key' : "API_KEY" #put key here
+        }
+        coordinates = []
+
+        for address in self.locations:
+            formattedAddress = self.formatAddress(address)
+            r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
+                '&maxResults=1&key={}'.format(params['key']))
+
+            results = r.json()        
+            point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
+           
+            lat, lng = point[0], point[1]
+            #appends a dictionary of latitude and longitude points for the given address
+            coordinates.append({
+                "latitude": lat,
+                "longitude": lng
+            })
+        #prints lat, long points for each address
+        for i in coordinates:
+            print(i, "\n")
+
+        #return array of dictionaries containing lat, long points
+        return coordinates
+        
+        
+    #returns an address formatted to be used for the Bing API to get locations
+    def formatAddress(self, address):
+        output = address.replace(" ", "%20")
+        return output
+
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals')
@@ -2641,6 +2681,9 @@ api.add_resource(AccountSaltById, '/api/v2/accountsaltbyid/<string:userUid>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
+api.add_resource(SocialSignUp, '/api/v2/socialSignup')
+api.add_resource(Social, '/api/v2/social/<string:email>')
+api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 
 # Admin page
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
