@@ -35,11 +35,11 @@ export default function Login(props) {
     // fill it up when needed
   }
 
-  //async function componentDidMount() {
-  //  const res = await fetch(props.API_URL);
-  //  const api = await res.json();
-  //  setSalt(api.result[0].password_salt);
-  //}
+  async function componentDidMount() {
+    const res = await fetch(props.API_URL);
+    const api = await res.json();
+    setSalt(api.result[0].password_salt);
+  }
 
   // Social Media
 
