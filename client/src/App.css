@@ -61,10 +61,19 @@
   transform: translate(-50%, -50%);
 }
 
+.override-form-control {
+  color: #181818;
+}
+
 br {
   display: block;
   margin: 100px 100px;
   line-height: 22px;
+}
+
+/* required asterisk */
+.required-red {
+  color: red;
 }
 
 /* button */
