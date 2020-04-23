@@ -15,8 +15,8 @@ import GoogleLogin from "react-google-login";
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [loginStatus, setLoginStatus] = useState("");
-  // const [salt, setSalt] = useState("");
+  const [loginStatus, setLoginStatus] = useState("");
+  const [salt, setSalt] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -35,11 +35,11 @@ export default function Login(props) {
     // fill it up when needed
   }
 
-  //async function componentDidMount() {
-  //  const res = await fetch(props.API_URL);
-  //  const api = await res.json();
-  //  setSalt(api.result[0].password_salt);
-  //}
+  async function componentDidMount() {
+    const res = await fetch(props.API_URL);
+    const api = await res.json();
+    setSalt(api.result[0].password_salt);
+  }
 
   // Social Media
 
