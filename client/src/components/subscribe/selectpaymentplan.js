@@ -53,12 +53,14 @@ class SelectPaymentPlan extends Component {
             </a>
             <hr class="three" />
             <br></br>
-            <CardDeck>
+            <div class="justify-content-center">
+            <CardDeck class="d-flex justify-content-center">
               {this.state.paymentPlans.map(paymentPlan => (
                 <Card
                   style={{
                     maxWidth: "20rem",
-                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
+                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
+                    margin: "50px"
                   }}
                 >
                   {" "}
@@ -138,6 +140,7 @@ class SelectPaymentPlan extends Component {
                 </Card>
               ))}
             </CardDeck>
+            </div>
             <br></br>
             <br></br>
             <hr></hr>
