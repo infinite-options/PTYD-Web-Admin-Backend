@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {Switch} from "react-router-dom";
 
 import AppliedRoute from "./AppliedRoute";
@@ -22,7 +22,7 @@ import NotFound from "./NotFound";
 import SignUp from "./signup";
 import Login from "./login";
 import Logout from "./logout";
-import {SIGUNUSED} from "constants";
+// import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
 // const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
@@ -30,7 +30,7 @@ import {SIGUNUSED} from "constants";
 //  Localhost API that can be run from /backend/api directory
 const DEV_URL = "http://localhost:2000/api/";
 export default function Main({appProps}) {
-  const [objectIndex, setObjectIndex] = useState(0);
+  // const [objectIndex, setObjectIndex] = useState(0);
 
   return (
     <Switch>

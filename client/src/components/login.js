@@ -9,14 +9,14 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 
 import crypto from "crypto";
-import FacebookLogin from "react-facebook-login";
+// import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState("");
-  const [salt, setSalt] = useState("");
+  // const [loginStatus, setLoginStatus] = useState("");
+  // const [salt, setSalt] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -87,17 +87,16 @@ export default function Login(props) {
       });
   };
 
-  const responseFacebook = response => {
-    console.log(response);
-  };
+  // const responseFacebook = response => {
+  //   console.log(response);
+  // };
 
   function socialLogin(user) {
     console.log("Login Social Media User: " + user);
     let uid = user.user_uid;
     let name = user.first_name;
 
-    document.cookie =
-      " loginStatus: Hello " + name + "! , " + " user_uid: " + uid + " , ";
+    document.cookie = ` loginStatus: Hello ${name} ! ,  user_uid:  ${uid} , `;
     console.log(document.cookie);
 
     // redirect & reload page for buttons and login status
@@ -110,7 +109,7 @@ export default function Login(props) {
   // Direct Login
   async function grabLoginInfoForUser(userEmail, userPass) {
     let saltres;
-    if (props.API_URL != undefined) {
+    if (props.API_URL !== undefined) {
       saltres = await fetch(`${props.API_URL}/${userEmail}`);
     } else {
       saltres = await fetch(`${props.SINGLE_ACC_API_URL}salt/${userEmail}`);
@@ -143,8 +142,8 @@ export default function Login(props) {
   async function login(response) {
     let userId = response.result.result[0].user_uid;
     console.log(userId);
-    if (response.auth_success == true) {
-      setLoginStatus("Logged In");
+    if (response.auth_success === true) {
+      // setLoginStatus("Logged In");
 
       document.cookie =
         " loginStatus: Hello " +
@@ -171,12 +170,12 @@ export default function Login(props) {
         `${props.SINGLE_ACC_API_URL}purchases/${userId}`
       );
 
-      if (checkPurchases.status == 200) {
+      if (checkPurchases.status === 200) {
         // if success
         let purchases = await checkPurchases.json();
-        if (purchases != undefined && purchases.result.length != 0) {
+        if (purchases !== undefined && purchases.result.length !== 0) {
           props.history.push("/mealschedule");
-        } else if (purchases != undefined && purchases.result.length == 0) {
+        } else if (purchases !== undefined && purchases.result.length === 0) {
           props.history.push("/selectmealplan");
         } else {
           props.history.push("/");

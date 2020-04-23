@@ -1,5 +1,7 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, url_for, redirect
 from flask_restful import Resource, Api
+from flask_mail import Mail, Message # used for email
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature #used for serializer email and error handling
 from flask_cors import CORS
 
 from werkzeug.exceptions import BadRequest, NotFound
@@ -16,9 +18,9 @@ import json
 import pymysql
 
 RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
-#RDS_HOST = 'localhost'
+# RDS_HOST = 'localhost'
 RDS_PORT = 3306
-#RDS_USER = 'root'
+# RDS_USER = 'root'
 RDS_USER = 'admin'
 RDS_DB = 'ptyd'
 
@@ -30,14 +32,30 @@ cors = CORS(app, resources={r'/api/*': {'origins': '*'}})
 # Set this to false when deploying to live application
 app.config['DEBUG'] = True
 
+# Adding for email testing
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'ptydtesting@gmail.com'
+app.config['MAIL_PASSWORD'] = 'infiniteoptions0422'
+app.config['MAIL_DEFAULT_SENDER'] = 'ptydtesting@gmail.com'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+#app.config['MAIL_DEBUG'] = True
+#app.config['MAIL_SUPPRESS_SEND'] = False
+#app.config['TESTING'] = False
+
+mail = Mail(app)
+
 # API
 api = Api(app)
+
 
 # Get RDS password from command line argument
 def RdsPw():
     if len(sys.argv) == 2:
         return str(sys.argv[1])
     return ""
+
 
 # RDS PASSWORD
 # When deploying to Zappa, set RDS_PW equal to the password as a string
@@ -46,6 +64,7 @@ RDS_PW = RdsPw()
 
 getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
 getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+
 
 # Connect to MySQL database (API v2)
 def connect():
@@ -57,17 +76,18 @@ def connect():
 
     print("Trying to connect to RDS (API v2)...")
     try:
-        conn = pymysql.connect( RDS_HOST,
-                                user=RDS_USER,
-                                port=RDS_PORT,
-                                passwd=RDS_PW,
-                                db=RDS_DB,
-                                cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(RDS_HOST,
+                               user=RDS_USER,
+                               port=RDS_PORT,
+                               passwd=RDS_PW,
+                               db=RDS_DB,
+                               cursorclass=pymysql.cursors.DictCursor)
         print("Successfully connected to RDS. (API v2)")
         return conn
     except:
         print("Could not connect to RDS. (API v2)")
         raise Exception("RDS Connection failed. (API v2)")
+
 
 # Disconnect from MySQL database (API v2)
 def disconnect(conn):
@@ -77,6 +97,7 @@ def disconnect(conn):
     except:
         print("Could not properly disconnect from MySQL database. (API v2)")
         raise Exception("Failure disconnecting from MySQL database. (API v2)")
+
 
 # Serialize JSON
 def serializeResponse(response):
@@ -91,11 +112,12 @@ def serializeResponse(response):
     except:
         raise Exception("Bad query JSON")
 
+
 # Execute an SQL command (API v2)
 # Set cmd parameter to 'get' or 'post'
 # Set conn parameter to connection object
 # OPTIONAL: Set skipSerialization to True to skip default JSON response serialization
-def execute(sql, cmd, conn, skipSerialization = False):
+def execute(sql, cmd, conn, skipSerialization=False):
     response = {}
     try:
         with conn.cursor() as cur:
@@ -124,6 +146,7 @@ def execute(sql, cmd, conn, skipSerialization = False):
     finally:
         response['sql'] = sql
         return response
+
 
 # Plans API (v2)
 class Plans(Resource):
@@ -205,6 +228,7 @@ class Plans(Resource):
         finally:
             disconnect(conn)
 
+
 # V2 Meals API
 class Meals(Resource):
     global RDS_PW
@@ -233,7 +257,7 @@ class Meals(Resource):
             # Hardcode quantity to 0
             # Will need to fetch from db eventually
             rowDict['quantity'] = 0
-#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
+            #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
             if 'SEAS_FAVE' in rowDict['menu_category']:
                 json['Seasonal']['Menu'].append(rowDict)
             elif 'WKLY_SPCL' in rowDict['menu_category']:
@@ -244,7 +268,7 @@ class Meals(Resource):
 
     def jsonifyAddons(self, query, mealKeys):
         json = {}
-        for key in [('Addons', 'ADD-ON'),('Weekly', 'ADD MORE MEALS'), ('Smoothies', 'ADD MORE SMOOTHIES')]:
+        for key in [('Addons', 'ADD-ON'), ('Weekly', 'ADD MORE MEALS'), ('Smoothies', 'ADD MORE SMOOTHIES')]:
             json[key[0]] = {'Category': key[1], 'Menu': []}
         decimalKeys = ['extra_meal_price', 'meal_calories', 'meal_protein',
                        'meal_carbs', 'meal_fiber', 'meal_sugar', 'meal_fat', 'meal_sat']
@@ -265,8 +289,8 @@ class Meals(Resource):
             # Hardcode quantity to 0
             # Will need to fetch from db eventually
             rowDict['quantity'] = 0
-#           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
-            
+            #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
+
             if rowDict['menu_category'] in ['ALMOND_BUTTER', 'THE_ENERGIZER', 'SEASONAL_SMOOTHIE', 'THE_ORIGINAL']:
                 json['Smoothies']['Menu'].append(rowDict)
             elif 'SEAS_FAVE' in rowDict['menu_category']:
@@ -307,7 +331,6 @@ class Meals(Resource):
                 stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
                 # Roll calendar at 4PM Monday
                 if now - timedelta(days=1, hours=16) < stamp:
-
                     weekly_special = execute(
                         """ 
                         SELECT
@@ -408,8 +431,8 @@ class Meals(Resource):
                     week = {
                         'SaturdayDate': str(stamp.date()),
                         'SundayDate': str((stamp + timedelta(days=1)).date()),
-                        'Sunday': str( (stamp + timedelta(days=1)).date().strftime('%b %-d') ),
-                        'Monday': str( (stamp + timedelta(days=2)).date().strftime('%b %-d') ),
+                        'Sunday': str((stamp + timedelta(days=1)).date().strftime('%b %-d')),
+                        'Monday': str((stamp + timedelta(days=2)).date().strftime('%b %-d')),
                         'Meals': {
                             'Weekly': {
                                 'Category': "WEEKLY SPECIALS",
@@ -458,6 +481,7 @@ class Meals(Resource):
         finally:
             disconnect(conn)
 
+
 class AccountSaltById(Resource):
     def get(self, userUid):
         response = {}
@@ -476,6 +500,7 @@ class AccountSaltById(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class AccountSalt(Resource):
     def get(self, accEmail):
@@ -497,6 +522,7 @@ class AccountSalt(Resource):
         finally:
             disconnect(conn)
 
+
 class Account(Resource):
 
     # HTTP method GET
@@ -516,7 +542,7 @@ class Account(Resource):
                         last_update,
                         referral_source
                     FROM ptyd_accounts""" +
-                    "\nWHERE user_email = " + "\'" + accEmail + "\';"]
+                "\nWHERE user_email = " + "\'" + accEmail + "\';"]
 
             items = execute(queries[0], 'get', conn)
             user_uid = items['result'][0]['user_uid']
@@ -534,11 +560,12 @@ class Account(Resource):
                 print("Wrong password.")
                 response['message'] = 'Request failed, wrong password.'
                 response['auth_success'] = False
-                return response, 401 
+                return response, 401
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class AccountPurchases(Resource):
 
@@ -548,7 +575,7 @@ class AccountPurchases(Resource):
         try:
             conn = connect()
 
-            queries = [ """
+            queries = ["""
                 SELECT DISTINCT
                     payment_id,
                     buyer_id,
@@ -590,7 +617,7 @@ class AccountPurchases(Resource):
                 ON p2.meal_plan_id = mp.meal_plan_id
                 WHERE buyer_id = \'""" + buyerId + """\'
                 GROUP BY purchase_id;""",
-                "   SELECT * FROM ptyd_monday_zipcodes;"]
+                       "   SELECT * FROM ptyd_monday_zipcodes;"]
 
             items = execute(queries[0], 'get', conn)
             mondayZipsQuery = execute(queries[1], 'get', conn)
@@ -611,8 +638,8 @@ class AccountPurchases(Resource):
                 elif eachItem['payment_frequency'] == 'Monthly':
                     next_charge_date = last_charge_date + timedelta(days=28)
 
-                eachItem['paid_weeks_remaining'] = str( int( (next_charge_date - datetime.now()).days / 7 ) + 1)
-                eachItem['next_charge_date'] = str( next_charge_date.date() ) 
+                eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
+                eachItem['next_charge_date'] = str(next_charge_date.date())
 
                 if eachItem['delivery_zip'] in mondayZips:
                     eachItem['monday_available'] = True
@@ -627,6 +654,12 @@ class AccountPurchases(Resource):
         finally:
             disconnect(conn)
 
+
+'''This part use for testing of sending confirmation email'''
+
+s = URLSafeTimedSerializer('thisisaverysecretkey')  # should put the secret key in this.
+
+'''Confirmation testing is ended here'''
 class SignUp(Resource):
     # HTTP method POST
     def post(self):
@@ -670,15 +703,15 @@ class SignUp(Resource):
                     )
                     VALUES
                     (""" +
-                        "\'" + NewUserID + "\'," +
-                        "\'" + Email + "\'," +
-                        "\'" + FirstName + "\'," +
-                        "\'" + LastName + "\'," +
-                        "\'" + PhoneNumber + "\'," +
-                        "\'" + WeeklyUpdates + "\'," +
-                        "\'" + CreateDate + "\'," +
-                        "\'" + LastUpdate + "\'," +
-                        "\'" + Referral + "\');")
+                "\'" + NewUserID + "\'," +
+                "\'" + Email + "\'," +
+                "\'" + FirstName + "\'," +
+                "\'" + LastName + "\'," +
+                "\'" + PhoneNumber + "\'," +
+                "\'" + WeeklyUpdates + "\'," +
+                "\'" + CreateDate + "\'," +
+                "\'" + LastUpdate + "\'," +
+                "\'" + Referral + "\');")
 
             DatetimeStamp = getNow()
             salt = getNow()
@@ -702,7 +735,7 @@ class SignUp(Resource):
                     \'SHA512\',
                     \'""" + DatetimeStamp + """\',
                     \'""" + DatetimeStamp + "\');")
-
+            '''
             usnInsert = execute(queries[1], 'post', conn)
 
             if usnInsert['code'] != 281:
@@ -723,7 +756,7 @@ class SignUp(Resource):
 
                 response['code'] = usnInsert['code']
                 print(response['message'], response['result'], usnInsert['code'])
-                print ('response will be sent to client')
+                print('response will be sent to client')
                 return response, statusCode
 
             pwInsert = execute(queries[2], 'post', conn)
@@ -744,23 +777,50 @@ class SignUp(Resource):
                 # Handle error for successful user account signup
                 # but failed password storing to the db
                 if deleteUser['code'] != 281:
-                    response['WARNING'] = "This user was signed up to the database but did not properly store their password. Their account cannot be logged into and must be reset by a system administrator."
+                    response[
+                        'WARNING'] = "This user was signed up to the database but did not properly store their password. Their account cannot be logged into and must be reset by a system administrator."
                     response['code'] = 590
 
                 print(response['message'], response['result'], pwInsert['code'])
                 return response, 500
+            '''
 
-            response['message'] = 'Request successful.'
-            response['code'] = usnInsert['code']
+            #this part using for testing email verification
+
+
+            token = s.dumps(Email, salt="I'm secret")
+            msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[Email])
+
+            link = url_for('confirm', token=token, _external=True)
+            msg.body = 'Click on the link <a href={}>---> :) Confirm (: <----</a> to verify your email.'.format(link)
+
+            mail.send(msg)
+            print('I\'m here')
+            #email verification testing is ended here...
+            response['message'] = 'Request successful. An email has been sent and need to verify.'
+            #response['code'] = usnInsert['code']
             response['first_name'] = FirstName
             response['user_uid'] = NewUserID
 
             print(response)
             return response, 200
         except:
+            print("Error happened while Sign Up")
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
+#confirmation page
+@app.route('/api/v2/confirm/<token>', methods=['GET'])
+def confirm(token):
+    try:
+        email = s.loads(token, salt="I'm secret", max_age=5000)
+        #marking email confirmed in database, then...
+        #redirect to login page
+        return redirect('http://127.0.0.1:3000/login')
+    except (SignatureExpired, BadTimeSignature) as err:
+        status=403 #forbidden
+        return str(err), status
 
 # NEED CODE FOR NON-RECURRING ONE TIME PLANS
 class Checkout(Resource):
@@ -805,14 +865,14 @@ class Checkout(Resource):
         dayOfWeek = date.today().weekday()
 
         # Get the soonest Thursday, same day if today is Thursday
-        thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
+        thurs = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
 
         # If today is Thursday after 4PM
         if thurs == date.today() and datetime.now().hour >= 16:
             thurs += timedelta(days=7)
 
         # Set start date to Saturday after thurs
-#       dates['startDate'] = thurs + timedelta(days=2)
+        #       dates['startDate'] = thurs + timedelta(days=2)
         dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
 
         # Set end date to 1st/2nd/4th Monday after thurs
@@ -901,7 +961,9 @@ class Checkout(Resource):
 
             userAuth = execute(queries[0], 'get', conn)
 
-            possSocialAcc = execute("SELECT user_uid FROM ptyd_social_accounts WHERE user_email = '" + data['delivery_email'] + "';", 'get', conn)
+            possSocialAcc = execute(
+                "SELECT user_uid FROM ptyd_social_accounts WHERE user_email = '" + data['delivery_email'] + "';", 'get',
+                conn)
             print(json.dumps(possSocialAcc, indent=1))
 
             if len(possSocialAcc['result']) != 0:
@@ -910,7 +972,7 @@ class Checkout(Resource):
                     print("Successfully authenticated user.")
                 else:
                     response['message'] = 'Could not authenticate user.'
-                    return response, 400 
+                    return response, 400
             elif userAuth['code'] != 280 or len(userAuth['result']) != 1:
                 response['message'] = 'Could not authenticate user.'
                 response['error'] = userAuth
@@ -988,12 +1050,12 @@ class Checkout(Resource):
 
             print('perforem laste 2 queries')
 
-#           print("pur")
-#           print(dates)
-#           print(snapshotId)
-#           print(paymentId)
-#           print(purchaseId)
-#           print(getNow())
+            #           print("pur")
+            #           print(dates)
+            #           print(snapshotId)
+            #           print(paymentId)
+            #           print(purchaseId)
+            #           print(getNow())
 
             # Initial snapshot
             queries.append(
@@ -1023,9 +1085,9 @@ class Checkout(Resource):
                         , """ + dates['weeksRemaining'] + """
                         , \'""" + dates['startDate'] + "\');")
 
-#           print("snap")
+            #           print("snap")
 
-#           print(queries)
+            #           print(queries)
             reply['payment'] = execute(queries[3], 'post', conn)
             # Add credit card verification code here
 
@@ -1035,13 +1097,14 @@ class Checkout(Resource):
             response['message'] = 'Request successful.'
             response['result'] = reply
 
-#           print(response)
+            #           print(response)
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 '''
 class Checkout(Resource):
@@ -1217,6 +1280,7 @@ class Checkout(Resource):
             disconnect(conn)
 '''
 
+
 # Call this API from another source every Monday at midnight
 class UpdatePurchases(Resource):
     def post(self):
@@ -1226,22 +1290,22 @@ class UpdatePurchases(Resource):
             conn = connect()
 
             # Get following Saturday (same day if Saturday) as a string
-            thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday()-5)%7)), "%Y-%m-%d")
-            nextSat = datetime.strftime(date.today() + timedelta(days=(5-date.today().weekday()%7)), "%Y-%m-%d")
+            thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
+            nextSat = datetime.strftime(date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
 
             # UPDATE PURCHASE TEST CASES
-#           thisSat = '2020-04-18'
-#           nextSat = '2020-04-25'
-#           thisSat = '2020-04-25'
-#           nextSat = '2020-05-02'
-#           thisSat = '2020-05-02'
-#           nextSat = '2020-05-09'
-#           thisSat = '2020-05-09'
-#           nextSat = '2020-05-16'
-#           thisSat = '2020-05-16'
-#           nextSat = '2020-05-23'
-#           thisSat = '2020-05-23'
-#           nextSat = '2020-05-30'
+            #           thisSat = '2020-04-18'
+            #           nextSat = '2020-04-25'
+            #           thisSat = '2020-04-25'
+            #           nextSat = '2020-05-02'
+            #           thisSat = '2020-05-02'
+            #           nextSat = '2020-05-09'
+            #           thisSat = '2020-05-09'
+            #           nextSat = '2020-05-16'
+            #           thisSat = '2020-05-16'
+            #           nextSat = '2020-05-23'
+            #           thisSat = '2020-05-23'
+            #           nextSat = '2020-05-30'
 
             # Returns this Saturday's meal selections with nonzero weeks remaining
             query = """
@@ -1336,10 +1400,10 @@ class UpdatePurchases(Resource):
             mealSelections = execute(query, 'get', conn)
             defaultSelections = execute(dflts, 'get', conn)
 
-#           print("\n\n\n\n\n")
-#           print(mealSelections['result'])
-#           print("\n\n\n\n\n")
-#           print(defaultSelections['result'])
+            #           print("\n\n\n\n\n")
+            #           print(mealSelections['result'])
+            #           print("\n\n\n\n\n")
+            #           print(defaultSelections['result'])
 
             if mealSelections['code'] != 280:
                 response['message'] = 'Could not retrieve meal selections.'
@@ -1352,16 +1416,16 @@ class UpdatePurchases(Resource):
             for selections in [mealSelections['result'], defaultSelections['result']]:
                 allPurchases.extend(selections)
 
-#           print("\n\n\n\n\n")
-#           print(allPurchases)
-#           print(len(allPurchases))
+            #           print("\n\n\n\n\n")
+            #           print(allPurchases)
+            #           print(len(allPurchases))
 
-#           # FIXED: RETURNING 6 INSTEAD OF 3
+            #           # FIXED: RETURNING 6 INSTEAD OF 3
 
-#           raise Exception
+            #           raise Exception
 
             for eachPurchase in allPurchases:
-#               print(eachPurchase)
+                #               print(eachPurchase)
                 newSnapshotQuery = execute("CALL get_snapshots_id", 'get', conn)
 
                 if newSnapshotQuery['code'] != 280:
@@ -1472,13 +1536,14 @@ class UpdatePurchases(Resource):
 
             # For debugging
             response['items'] = items
-#           print(items)
+            #           print(items)
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 # Call this API from another source every Thursday at midnight
 class ChargeSubscribers(Resource):
@@ -1487,15 +1552,15 @@ class ChargeSubscribers(Resource):
         dayOfWeek = date.today().weekday()
 
         # Get today's date (or the coming Thursday)
-        thurs = date.today() + timedelta(days=(3-dayOfWeek)%7)
+        thurs = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
 
         # CHARGE SUBSCRIBER TEST CASES
-#       thurs = date(2020, 4, 23)
-#       thurs = date(2020, 4, 30)
-#       thurs = date(2020, 5, 7)
-#       thurs = date(2020, 5, 14)
-#       thurs = date(2020, 5, 21)
-#       thurs = date(2020, 5, 28)
+        #       thurs = date(2020, 4, 23)
+        #       thurs = date(2020, 4, 30)
+        #       thurs = date(2020, 5, 7)
+        #       thurs = date(2020, 5, 14)
+        #       thurs = date(2020, 5, 21)
+        #       thurs = date(2020, 5, 28)
 
         # Set start date to Saturday after thurs
         dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
@@ -1659,14 +1724,15 @@ class ChargeSubscribers(Resource):
 
             # For debugging
             response['items'] = items
-#           print(items)
-#           print(json.dumps(response, indent=1))
+            #           print(items)
+            #           print(json.dumps(response, indent=1))
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class MealSelection(Resource):
     def readQuery(self, items):
@@ -1873,7 +1939,7 @@ class MealSelection(Resource):
                 print("Error:", response['message'])
                 # 500: Internal server error
                 return response, 500
-#               print("purchase_id:", purchaseId)
+            #               print("purchase_id:", purchaseId)
 
             queries.append(self.postQuery(purchaseId, data))
 
@@ -1886,6 +1952,7 @@ class MealSelection(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 '''
 class MealSelection(Resource):
@@ -2062,29 +2129,31 @@ class MealSelection(Resource):
         finally:
             disconnect(conn)
 '''
+
+
 class CustomerInfo(Resource):
 
     # def ___inti__(self):
     #     self.dict1 = {"Full_name":None,"Current_subscription":None,"Start_date":None,"End_date":None}
     @staticmethod
     def jsonify_one(dict1):
-        map_subs = {"Weekly":7,"Bi-Weekly":14}
+        map_subs = {"Weekly": 7, "Bi-Weekly": 14}
         # res = {}
         # res = None
         start_date = datetime.strptime(dict1["start_date"], '%Y-%m-%d')
-        if dict1["frequency"]=="Monthly":
+        if dict1["frequency"] == "Monthly":
             end_date = start_date + relativedelta(months=1)
         else:
             end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
-        
+
         curr_date = datetime.now()
         delta = end_date - curr_date
-        if delta.days<0:
+        if delta.days < 0:
             # res["weeks_left"] = "Expired"
             dict1["Weeks_left"] = "Expired"
-        else:    
+        else:
             # res["weeks_left"] = delta.days//7
-            dict1["Weeks_left"]=delta.days//7
+            dict1["Weeks_left"] = delta.days // 7
 
         del dict1['start_date']
         del dict1['frequency']
@@ -2098,7 +2167,7 @@ class CustomerInfo(Resource):
         #             end_date = start_date + relativedelta(months=1)
         #         else:
         #             end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
-                
+
         #         # res["end_date"] = end_date.strftime('%Y-%m-%d')
         #         curr_date = datetime.now()
         #         # curr_date = datetime.strptime("2020-02-15", '%Y-%m-%d')
@@ -2112,7 +2181,7 @@ class CustomerInfo(Resource):
         #     else:
         #         continue
         return dict1
-            
+
     # HTTP method GET
     def get(self):
         response = {}
@@ -2129,8 +2198,8 @@ class CustomerInfo(Resource):
                         ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
-            list1 = list(map(self.jsonify_one,cus_info['CustomerInfo']['result']))
-            
+            list1 = list(map(self.jsonify_one, cus_info['CustomerInfo']['result']))
+
             cus_info['CustomerInfo']['result'] = list1
             response['message'] = 'Request successful.'
             response['result'] = cus_info
@@ -2140,6 +2209,7 @@ class CustomerInfo(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class CustomerProfile(Resource):
 
@@ -2169,7 +2239,7 @@ class CustomerProfile(Resource):
                             group by pay.buyer_id"""
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
-            list1 = list(map(CustomerInfo.jsonify_one,cus_info['CustomerInfo']['result']))
+            list1 = list(map(CustomerInfo.jsonify_one, cus_info['CustomerInfo']['result']))
             response['message'] = 'Request successful.'
             response['result'] = cus_info
 
@@ -2178,6 +2248,7 @@ class CustomerProfile(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class CustomerInfo2(Resource):
 
@@ -2216,7 +2287,7 @@ class AdminDBv2(Resource):
             conn = connect()
             queries_name = ["Meals_by_week", "Inventory_DB"]
             queries = [
-                        """SELECT 
+                """SELECT 
                             M.menu_date as "Entered Menu Date" ,
                             M.menu_category AS "Menu Category",
                             A.meal_desc as "Meal option" ,
@@ -2227,9 +2298,9 @@ class AdminDBv2(Resource):
                             ptyd_meals A ON M.menu_meal_id = A.meal_id
                         -- WHERE 
                             -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                        -- M.menu_date = "2020-02-01";""", 
+                        -- M.menu_date = "2020-02-01";""",
 
-                        """SELECT 
+                """SELECT 
                         M.menu_meal_id AS "Menu Number",
                         M.menu_date "Entered Menu Date" ,
                         M.menu_category AS "Menu Category",
@@ -2257,11 +2328,11 @@ class AdminDBv2(Resource):
                         -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
                     -- M.menu_date = "2020-02-01";"""
 
-                    ]
-            
-            for ind1,query in enumerate(queries):
+            ]
+
+            for ind1, query in enumerate(queries):
                 results[queries_name[ind1]] = execute(query, 'get', conn)
-            
+
             # print(results["Meals_by_week"])
 
             response['message'] = 'Request successful.'
@@ -2273,6 +2344,7 @@ class AdminDBv2(Resource):
         finally:
             disconnect(conn)
 
+
 class MealCustomerLifeReport(Resource):
 
     # HTTP method GET
@@ -2283,7 +2355,7 @@ class MealCustomerLifeReport(Resource):
             conn = connect()
             queries_name = ["Meals report", "Customer Lifetime"]
             queries = [
-                        """SELECT 
+                """SELECT 
                         p.menu_meal_id,
                         M.meal_desc AS "Meal Name",
                         ROUND(AVG(p.menu_num_sold),2) AS "Average number sold per listing",
@@ -2296,7 +2368,7 @@ class MealCustomerLifeReport(Resource):
                         ORDER BY p.menu_meal_id ASC
                         ;
                         """,
-                        """SELECT 
+                """SELECT 
                         CONCAT(first_name, " " , last_name) AS "Customer Name",
                         create_date AS "Account creation Date",
                         last_update AS "Last account Update",
@@ -2305,9 +2377,9 @@ class MealCustomerLifeReport(Resource):
                         timestampdiff(MONTH, create_date, last_delivery) AS "Customer Lifetime in months"
                         FROM
                             ptyd_accounts;"""
-                    ]
-            
-            for ind1,query in enumerate(queries):
+            ]
+
+            for ind1, query in enumerate(queries):
                 results[queries_name[ind1]] = execute(query, 'get', conn)
 
             response['message'] = 'Request successful.'
@@ -2319,6 +2391,7 @@ class MealCustomerLifeReport(Resource):
         finally:
             disconnect(conn)
 
+
 class MealInfo(Resource):
 
     # HTTP method GET
@@ -2327,7 +2400,6 @@ class MealInfo(Resource):
         meal_info = {}
         conn = connect()
         try:
-            
 
             queries = """select A1.menu_meal_id,A3.meal_desc, A1.total_sold,A2.post_count, (A1.total_sold/A2.post_count) as "Number_sold_per_posting"
                         from
@@ -2356,9 +2428,10 @@ class MealInfo(Resource):
         finally:
             disconnect(conn)
 
+
 class AdminMenu(Resource):
     global RDS_PW
-    
+
     def get(self):
         response = {}
         items = {}
@@ -2366,7 +2439,7 @@ class AdminMenu(Resource):
             conn = connect()
 
             items = execute(
-                    """ SELECT 
+                """ SELECT 
                         menu_date,
                         menu_category,
                         meal_desc,
@@ -2375,8 +2448,7 @@ class AdminMenu(Resource):
                         ptyd_menu
                         JOIN ptyd_meals ON menu_meal_id=meal_id;""", 'get', conn)
 
-                           
-            print('Items --------------------------------------------')         
+            print('Items --------------------------------------------')
             print(items['result'][0]['menu_date'])
 
             print('Test Code ---------------------------------------')
@@ -2384,21 +2456,20 @@ class AdminMenu(Resource):
             for index in range(len(items['result'])):
                 placeHolder = items['result'][index]['menu_date']
                 menuDates.append(placeHolder)
-            menuDates = list( dict.fromkeys(menuDates) )
-            
+            menuDates = list(dict.fromkeys(menuDates))
+
             print(menuDates)
 
-
-            d ={}
+            d = {}
             for index in range(len(menuDates)):
                 key = menuDates[index]
                 d[key] = 'value'
-            
+
             print('new dictionary-------------------------------')
             print(d)
 
             print('test-------------')
-            
+
             index2 = 0
             for index in range(len(menuDates)):
                 dictValues = []
@@ -2407,8 +2478,8 @@ class AdminMenu(Resource):
                     menu_cat = items['result'][index2]['menu_category']
                     menu_cat = "Menu Category: " + menu_cat
                     dictValues.append(menu_cat)
-                    
-                    menu_descript =  items['result'][index2]['meal_desc']
+
+                    menu_descript = items['result'][index2]['meal_desc']
                     menu_descript = "Meal Description: " + menu_descript
                     dictValues.append(menu_descript)
 
@@ -2417,19 +2488,13 @@ class AdminMenu(Resource):
                     menu_num = "Number Sold: " + menu_num
                     dictValues.append(menu_num)
 
-                    menuEntries -=1
-                    index2 +=1
-                
+                    menuEntries -= 1
+                    index2 += 1
+
                 d[menuDates[index]] = dictValues
 
-            
-            
-            
-        
-            print ('Dictionary part 2 --------------')
+            print('Dictionary part 2 --------------')
             print(d)
-
-
 
             response['message'] = 'successful'
             response['result'] = d
@@ -2439,7 +2504,7 @@ class AdminMenu(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-    
+
     # HTTP method POST to update the menu
     def post(self):
         response = {}
@@ -2468,10 +2533,11 @@ class AdminMenu(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-    
+
+
 class displayIngredients(Resource):
     global RDS_PW
-    
+
     def get(self):
         response = {}
         items = {}
@@ -2479,7 +2545,7 @@ class displayIngredients(Resource):
             conn = connect()
 
             items = execute(
-                    """ SELECT 
+                """ SELECT 
                             menu_date,
                             ingredient_desc,
                             IFNULL(CONCAT(TRIM(ROUND(SUM((menu_num_sold*recipe_ingredient_qty)*(SELECT conversion_ratio FROM ptyd_measure_conversion WHERE from_measure_unit_id=recipe_measure_id AND to_measure_unit_id=ingredient_measure_id)  ),6))+0, " ",
@@ -2495,25 +2561,24 @@ class displayIngredients(Resource):
                         GROUP BY ingredient_desc, menu_date
                         ORDER BY menu_date, menu_category ASC;
                         """, 'get', conn)
-                        
-            print('Items --------------------------------------------')         
+
+            print('Items --------------------------------------------')
             print(items['result'][0]['menu_date'])
-            
+
             print('Test Code ---------------------------------------')
             menuDates = []
             for index in range(len(items['result'])):
                 placeHolder = items['result'][index]['menu_date']
                 menuDates.append(placeHolder)
-            menuDates = list( dict.fromkeys(menuDates) )
-            
+            menuDates = list(dict.fromkeys(menuDates))
+
             print(menuDates)
 
-
-            d ={}
+            d = {}
             for index in range(len(menuDates)):
                 key = menuDates[index]
                 d[key] = 'value'
-            
+
             print('new dictionary-------------------------------')
             print(d)
 
@@ -2531,20 +2596,18 @@ class displayIngredients(Resource):
                     dictValues.append(ingredient_description)
                     print(menuEntries)
 
-                    ingredients_needed =  items['result'][index2]['quantity']
+                    ingredients_needed = items['result'][index2]['quantity']
                     ingredients_needed = "Amount needed to use: " + ingredients_needed
                     dictValues.append(ingredients_needed)
 
-                    menuEntries -=1
-                    index2 +=1
+                    menuEntries -= 1
+                    index2 += 1
                     print(menuEntries)
-                
+
                 d[menuDates[index]] = dictValues
-        
-            print ('Dictionary part 2 --------------')
+
+            print('Dictionary part 2 --------------')
             print(d)
-
-
 
             response['message'] = 'successful'
             response['result'] = d
@@ -2554,6 +2617,7 @@ class displayIngredients(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class TemplateApi(Resource):
     def get(self):
@@ -2576,6 +2640,7 @@ class TemplateApi(Resource):
         finally:
             disconnect(conn)
 
+
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals')
@@ -2590,7 +2655,7 @@ api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 
 # Admin page
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
-api.add_resource(CustomerProfile,'/api/v2/customerprofile')
+api.add_resource(CustomerProfile, '/api/v2/customerprofile')
 
 api.add_resource(MealInfo, '/api/v2/meal_info')
 
