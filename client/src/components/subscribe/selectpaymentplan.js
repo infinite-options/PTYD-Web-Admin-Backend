@@ -24,7 +24,7 @@ class SelectPaymentPlan extends Component {
 
   render() {
     return (
-      <section class="content-section">
+      <section class="content-section" style={{ marginTop: "-70px" }}>
         <div class="container font2">
           <center>
             <h2 class="font1">{this.state.meals} MEALS PAYMENT OPTIONS</h2>
@@ -34,7 +34,7 @@ class SelectPaymentPlan extends Component {
                 LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
               </b>
             </h4>
-            <br></br>
+            <br/>
             <hr class="three" />
             <a href="/5-meals-subscription" style={{ color: "black" }}>
               5 MEALS
