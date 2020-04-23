@@ -1887,67 +1887,161 @@ class MealSelection(Resource):
         finally:
             disconnect(conn)
 
-'''
-class MealSelection(Resource):
-    def readQuery(self, items):
-        for item in items:
-            item['meals_selected'] = {}
-            if item['meal_selection'] == 'SKIP':
-                continue
-            if item['meal_selection'] == 'SURPRISE':
-                continue
-            if item['meal_selection'] == None:
-                continue
-            selectedMeals = item['meal_selection'].split(';')
-            for selectedMeal in selectedMeals:
-                if selectedMeal in item['meals_selected']:
-                    item['meals_selected'][selectedMeal] += 1
-                else:
-                    item['meals_selected'][selectedMeal] = 1
-        return items
-
-    def get(self, purchaseId):
+class SocialSignUp(Resource):
+    # HTTP method POST
+    def post(self):
         response = {}
-        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            Email = data['Email']
+            FirstName = data['FirstName']
+            LastName = data['LastName']
+            PhoneNumber = data['PhoneNumber']
+            WeeklyUpdates = data['WeeklyUpdates']
+            CreateDate = getToday()
+            LastUpdate = CreateDate
+            Referral = data['Referral']
+            SocialMedia = data['SocialMedia']
+            AccessToken = data['AccessToken']
+            RefreshToken = data['RefreshToken']
+
+            print("Received:", data)
+
+            # Query [0]
+            queries = ["CALL get_new_user_id;"]
+
+            NewUserIDresponse = execute(queries[0], 'get', conn)
+            NewUserID = NewUserIDresponse['result'][0]['new_id']
+
+            print("NewUserID:", NewUserID)
+
+            # Query [1]
+            queries.append(
+                """ INSERT INTO ptyd_accounts
+                    (
+                        user_uid,
+                        user_email,
+                        first_name,
+                        last_name,
+                        phone_number,
+                        weekly_updates,
+                        create_date,
+                        last_update,
+                        referral_source
+                    )
+                    VALUES
+                    (""" +
+                        "\'" + NewUserID + "\'," +
+                        "\'" + Email + "\'," +
+                        "\'" + FirstName + "\'," +
+                        "\'" + LastName + "\'," +
+                        "\'" + PhoneNumber + "\'," +
+                        "\'" + WeeklyUpdates + "\'," +
+                        "\'" + CreateDate + "\'," +
+                        "\'" + LastUpdate + "\'," +
+                        "\'" + Referral + "\');")
+
+            # Query [2]
+            queries.append("""
+                INSERT INTO ptyd_social_accounts
+                (
+                    user_uid,
+                    user_email,
+                    user_social_media,
+                    user_access_token,
+                    user_refresh_token
+                )
+                VALUES
+                (
+                    \'""" + NewUserID + """\',
+                    \'""" + Email + """\',
+                    \'""" + SocialMedia + """\',
+                    \'""" + AccessToken + """\',
+                    \'""" + RefreshToken + "\');")
+
+            usnInsert = execute(queries[1], 'post', conn)
+
+            if usnInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit account.'
+                print(response['message'], response['result'], usnInsert['code'])
+                return response, 400
+
+            socInsert = execute(queries[2], 'post', conn)
+
+            if socInsert['code'] != 281:
+                response['message'] = 'Request failed.'
+                response['result'] = 'Could not commit password.'
+                print(response['message'], response['result'], socInsert['code'])
+                return response, 500
+
+            response['message'] = 'Request successful.'
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+# Social Media Login API
+class Social(Resource):
+
+    # HTTP method GET
+    def get(self, email):
+        response = {}
         try:
             conn = connect()
 
-            queries = ["""
-                SELECT
-                    ms1.week_affected,
-                    ms1.meal_selection,
-                    ms1.selection_time,
-                    ms1.delivery_day
-                FROM ptyd_meals_selected AS ms1
-                INNER JOIN (
-                    SELECT
-                        week_affected,
-                        MAX(selection_time) AS latest_selection
-                    FROM ptyd_meals_selected
-                    GROUP BY week_affected
-                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
-                WHERE
-                purchase_id = \'""" + purchaseId + "\';", """
-                SELECT
-                    ms1.week_affected,
-                    ms1.meal_selection,
-                    ms1.selection_time
-                FROM ptyd_addons_selected AS ms1
-                INNER JOIN (
-                    SELECT
-                        week_affected,
-                        MAX(selection_time) AS latest_selection
-                    FROM ptyd_addons_selected
-                    GROUP BY week_affected
-                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
-                WHERE
-                purchase_id = \'""" + purchaseId + "\';"]
+            queries = [
+            """     SELECT
+                        user_uid,
+                        user_email,
+                        user_social_media,
+                        user_access_token,
+                        user_refresh_token
+                    FROM ptyd_social_accounts WHERE user_email = '""" + email + "';"
+            ]
 
-            meals = execute(queries[0], 'get', conn)
-            addons = execute(queries[1], 'get', conn)
+            items = execute(queries[0], 'get', conn)
 
-            items['Meals'] = self.readQuery(meals['result'])
-            items['Addons'] = self.readQuery(addons['result'])
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            print( items )
+
+            # restest = SocialAccount().get(email)
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class SocialAccount(Resource):
+
+    # HTTP method GET
+    def get(self, uid):
+        response = {}
+        try:
+            conn = connect()
+
+            queries = [
+            """     SELECT
+                        user_uid,
+                        first_name,
+                        last_name,
+                        user_email,
+                        phone_number,
+                        create_date,
+                        last_update,
+                        referral_source
+                    FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
+
+            items = execute(queries[0], 'get', conn)
+
+            print(items)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -1958,110 +2052,31 @@ class MealSelection(Resource):
         finally:
             disconnect(conn)
 
-    def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
+class CheckEmail(Resource):
 
-    def postQuery(self, purchaseId, data):
-        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # HTTP method GET
+    def get(self, email):
+        if email == None:
+            return {'result': False}, 401
 
-        if data['is_addons'] == True:
-            mealSelection = self.formatMealSelection(data['addon_quantities'])
-            query = """
-                INSERT INTO ptyd_addons_selected
-                (
-                    purchase_id,
-                    selection_time,
-                    week_affected,
-                    meal_selection
-                )
-                VALUES
-                (
-                    \'""" + purchaseId + """\',
-                    \'""" + selectionTime + """\',
-                    \'""" + data['week_affected'] + """\',
-                    \'""" + mealSelection + "\');"
-        else:
-            # Handle SKIP request
-            if data['delivery_day'] == 'SKIP':
-                mealSelection = 'SKIP'
-            # Handle default meal selection
-            elif data['default_selected'] is True:
-                mealSelection = 'SURPRISE'
-            # Handle custom meal selection
-            else:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
-
-            query = """
-                INSERT INTO ptyd_meals_selected
-                (
-                    purchase_id,
-                    selection_time,
-                    week_affected,
-                    meal_selection,
-                    delivery_day
-                )
-                VALUES
-                (
-                    \'""" + purchaseId + """\',
-                    \'""" + selectionTime + """\',
-                    \'""" + data['week_affected'] + """\',
-                    \'""" + mealSelection + """\',
-                    \'""" + data['delivery_day'] + "\');"
-
-        return query
-
-    # HTTP method POST
-    def post(self, purchaseId):
-        response = {}
-        items = []
         try:
             conn = connect()
 
-            data = request.get_json(force=True)
-            print("Received:", data)
+            queries = []
+            queries.append( "SELECT user_email FROM ptyd_accounts WHERE user_email = '" + email + "';" )
 
-            queries = [
-                """ SELECT purchase_id
-                    FROM ptyd_purchases
-                    WHERE purchase_id = \'""" + purchaseId + "\';"]
+            users = execute(queries[0], 'get', conn)
 
-            # Retrieve purchase ID
-            getPurchaseId = execute(queries[0], 'get', conn)
+            if users['result'] == ():
+                return {'result': False}, 401
+            elif len(users['result']) > 0:
+                return {'result': True}, 200
 
-            # Handle successful purchase ID query
-            if getPurchaseId['code'] == 280:
-                if not len(getPurchaseId['result']) > 0:
-                    response['message'] = 'Recipient has no active purchase_id.'
-                    response['error'] = getPurchaseId
-                    print("Error:", response['message'])
-                    # 400: Client side bad request
-                    return response, 400
-            # Handle unsuccessful purchase ID query
-            else:
-                response['message'] = 'Could not retrieve purchase_id.'
-                response['error'] = getPurchaseId
-                print("Error:", response['message'])
-                # 500: Internal server error
-                return response, 500
-#               print("purchase_id:", purchaseId)
-
-            queries.append(self.postQuery(purchaseId, data))
-
-            execute(queries[1], 'post', conn)
-
-            response['message'] = 'Request successful.'
-
-            return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-'''
+
 class CustomerInfo(Resource):
 
     # def ___inti__(self):
