@@ -7,7 +7,15 @@ import IMG6 from "../img/img6.jpg";
 import HUMAN1 from "../img/human1.png";
 import HUMAN2 from "../img/human2.png";
 import HUMAN3 from "../img/human3.png";
-
+// import COMPANY from "../img/company.png";
+import LOGOBOULDIN from "../img/logo-bouldinfoodforest.jpg"
+import LOGOFOX7 from "../img/logo-fox7austin.jpg"
+import LOGOCREDO from "../img/logo-credo.jpg"
+import LOGOCURCUMA from "../img/logo-curcuma.jpg"
+import LOGOFRONKS from "../img/logo-fronks.png"
+import LOGOJBG from "../img/logo-jbg.png"
+import LOGOYELLOWBIRD from "../img/logo-yellowbird.png"
+import LOGOSIETE from "../img/logo-siete.png"
 import { Row, Col, Container, Card, CardColumns } from "react-bootstrap";
 import { Grid, Cell } from "react-mdl";
 
@@ -436,8 +444,41 @@ class Landing extends Component {
                       every week with tasty surprises!"
                     </h3>
                     <br />
-                  </Cell>{" "}
-                  
+                  </Cell>
+
+                  <Grid className="sponsors">
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOJBG} alt="jbg" />
+                    </Cell>
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOFOX7} alt="fox7austin" />
+                    </Cell>
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOCURCUMA} alt="curcuma" />
+                    </Cell>
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOYELLOWBIRD} alt="yellowbird" />
+                    </Cell>
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOFRONKS} alt="fronks" />
+                    </Cell>
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOBOULDIN} alt="bouldin" />
+                    </Cell>
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOCREDO} alt="credo" />
+                    </Cell>
+                    <Cell col={3} align='middle'>
+                      <img src={LOGOSIETE} alt="siete" />
+                    </Cell>
+                  </Grid>
+
+                  {/* <img
+                    class="img-fluid"
+                    style={{ width: "50%", height: "22%" }}
+                    src={COMPANY}
+                    alt=""
+                  /> */}
                   <br />
                 </center>
               </Grid>

@@ -247,3 +247,9 @@ hr.four {
   font-size: 20px;
   text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
 }
+
+/* sponsors */
+.sponsors {
+  display: flex;
+  align-items: center;
+}
