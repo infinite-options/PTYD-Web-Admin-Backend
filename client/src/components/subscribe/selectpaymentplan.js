@@ -225,13 +225,6 @@ class SelectPaymentPlan extends Component {
             </Container>
             <br />
             <br />
-            <div style={{ backgroundColor: "black" }}>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-            </div>
             <br />
           </center>
         </div>
