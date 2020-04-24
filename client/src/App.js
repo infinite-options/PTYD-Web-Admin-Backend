@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {useEffect, useState, Fragment} from "react";
 import {Layout, Header, Navigation, Drawer, Content} from "react-mdl";
 import {Link} from "react-router-dom";
 
@@ -18,6 +18,7 @@ const App = props => {
 
   useEffect(() => {
     onLoad();
+    // eslint-disable-next-line
   }, []);
 
   async function onLoad() {

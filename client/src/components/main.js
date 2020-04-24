@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {Switch} from "react-router-dom";
-
+import {CookiesProvider} from "react-cookie";
 import AppliedRoute from "./AppliedRoute";
 
 import LandingPage from "./landingpage";
@@ -20,9 +20,10 @@ import MealSchedule from "./menu/mealschedule";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
+import SignupWaiting from "./SignupWaiting";
 import Login from "./login";
 import Logout from "./logout";
-import {SIGUNUSED} from "constants";
+// import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
 // const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
@@ -30,15 +31,14 @@ import {SIGUNUSED} from "constants";
 //  Localhost API that can be run from /backend/api directory
 const DEV_URL = "http://localhost:2000/api/";
 export default function Main({appProps}) {
-  const [objectIndex, setObjectIndex] = useState(0);
-
+  // const [objectIndex, setObjectIndex] = useState(0);
   return (
     <Switch>
       <AppliedRoute
         exact
         path='/'
         component={LandingPage}
-        appProps={appProps}
+        appProps={{appProps, cookie: document.cookie}}
       />
       <AppliedRoute
         exact
@@ -178,7 +178,13 @@ export default function Main({appProps}) {
       />
       <AppliedRoute
         exact
-        path='/login'
+        path='/signupwaiting'
+        component={SignupWaiting}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path='/login/:email?/:password?'
         component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
@@ -186,6 +192,7 @@ export default function Main({appProps}) {
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
         }}
       />
+
       <AppliedRoute
         exact
         path='/checkoutsuccess'

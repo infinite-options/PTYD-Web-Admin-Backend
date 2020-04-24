@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 
 import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -15,22 +15,22 @@ function SignUp(props) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
-  const [address, setAddress] = useState("");
-  const [addressUnit, setAddressUnit] = useState("");
-  const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
-  const [userState, setUserState] = useState("");
+  // const [address, setAddress] = useState("");
+  // const [addressUnit, setAddressUnit] = useState("");
+  // const [city, setCity] = useState("");
+  // const [zip, setZip] = useState("");
+  // const [userState, setUserState] = useState("");
   const [referral, setReferral] = useState("Website");
   const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
   const [erro, setErro] = useState(null);
 
   function sendForm(e) {
     e.preventDefault();
-    if (email != confirmEmail) {
+    if (email !== confirmEmail) {
       return {code: 470, result: "Email mismatch."};
     }
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       return {code: 471, result: "Password mismatch."};
     }
     var data = {
@@ -57,22 +57,29 @@ function SignUp(props) {
     //   },
     //   body: JSON.stringify(data)
     // });
+
     axios
       .post(props.API_URL, data)
       .then(res => {
-        console.log(res);
-        //handleSignup(res.json());
         if (res.status === 200) {
-          if (res.data !== undefined) {
-            document.cookie = ` loginStatus: Hello ${res.data.first_name} ! , user_uid: ${res.data.user_uid} , `;
-          }
-          props.history.push("/selectmealplan");
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `loginStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
+
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+          // window.location.reload(false);
+          console.log(`done`);
+          props.history.push("/signupwaiting");
           window.location.reload(false);
         }
       })
       .catch(err => {
         if (err.response !== undefined) {
           setErro(err.response.data.result);
+          //window.location.reload(false);
         } else {
           console.log(`Error without response. Error's code is: ${err.status}`);
         }
@@ -248,7 +255,7 @@ function SignUp(props) {
                       onChange={e => {
                         if (
                           document.getElementById("weeklyUpdateCheck")
-                            .checked == true
+                            .checked === true
                         ) {
                           setWeeklyUpdates("TRUE");
                         } else {
