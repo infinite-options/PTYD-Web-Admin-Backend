@@ -793,8 +793,9 @@ class SignUp(Resource):
 
             mail.send(msg)
             #email verification testing is ended here...
+
             response['message'] = 'Request successful. An email has been sent and need to verify.'
-            #response['code'] = usnInsert['code']
+            response['code'] = usnInsert['code']
             response['first_name'] = FirstName
             response['user_uid'] = NewUserID
 

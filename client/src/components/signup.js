@@ -65,7 +65,7 @@ function SignUp(props) {
           // if success
           // if (res.data !== undefined && res.data !== null) {// if success
           //   // this should not be here. this will allows login without add username and password in database
-          //   document.cookie = `loginStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
           // }
 
           // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
