@@ -61,16 +61,18 @@ function SignUp(props) {
     axios
       .post(props.API_URL, data)
       .then(res => {
-        console.log(res);
-        //handleSignup(res.json());
         if (res.status === 200) {
-          if (res.data !== undefined && res.data !== null) {
-            // this should not be here. this will allows login without add username and password in database
-            document.cookie = `loginStatus: Hello ${res.data.first_name}! ,   user_uid:  ${res.data.user_uid}  , `;
-          }
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `loginStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
 
-          props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
 
+          // window.location.reload(false);
+          console.log(`done`);
+          props.history.push("/signupwaiting");
           window.location.reload(false);
         }
       })

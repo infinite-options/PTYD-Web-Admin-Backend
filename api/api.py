@@ -549,7 +549,6 @@ class Account(Resource):
 
             queries.append("SELECT * FROM ptyd_passwords WHERE password_user_uid = \'" + user_uid + "\';")
             password_response = execute(queries[1], 'get', conn)
-
             if accPass == password_response['result'][0]['password_hash']:
                 print("Successful authentication.")
                 response['message'] = 'Request successful.'
@@ -568,7 +567,6 @@ class Account(Resource):
 
 
 class AccountPurchases(Resource):
-
     # HTTP method GET
     def get(self, buyerId):
         response = {}
@@ -735,7 +733,6 @@ class SignUp(Resource):
                     \'SHA512\',
                     \'""" + DatetimeStamp + """\',
                     \'""" + DatetimeStamp + "\');")
-            '''
             usnInsert = execute(queries[1], 'post', conn)
 
             if usnInsert['code'] != 281:
@@ -783,19 +780,18 @@ class SignUp(Resource):
 
                 print(response['message'], response['result'], pwInsert['code'])
                 return response, 500
-            '''
 
             #this part using for testing email verification
 
 
-            token = s.dumps(Email, salt="I'm secret")
+            token = s.dumps(Email)
             msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[Email])
-
-            link = url_for('confirm', token=token, _external=True)
+            print('password after hashed: {}'.format(hashed))
+            link = url_for('confirm', token=token, hashed=hashed, _external=True)
+            print (link)
             msg.body = 'Click on the link <a href={}>---> :) Confirm (: <----</a> to verify your email.'.format(link)
 
             mail.send(msg)
-            print('I\'m here')
             #email verification testing is ended here...
             response['message'] = 'Request successful. An email has been sent and need to verify.'
             #response['code'] = usnInsert['code']
@@ -811,13 +807,15 @@ class SignUp(Resource):
             disconnect(conn)
 
 #confirmation page
-@app.route('/api/v2/confirm/<token>', methods=['GET'])
-def confirm(token):
+@app.route('/api/v2/confirm/<token>/<hashed>', methods=['GET'])
+def confirm(token, hashed):
     try:
-        email = s.loads(token, salt="I'm secret", max_age=5000)
+        email = s.loads(token, max_age=50000)
+        print(email)
+        print(hashed)
         #marking email confirmed in database, then...
         #redirect to login page
-        return redirect('http://127.0.0.1:3000/login')
+        return redirect('http://127.0.0.1:3000/login/{}/{}'.format(email, hashed))
     except (SignatureExpired, BadTimeSignature) as err:
         status=403 #forbidden
         return str(err), status

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, Fragment} from "react";
 import {Layout, Header, Navigation, Drawer, Content} from "react-mdl";
 import {Link} from "react-router-dom";
 
@@ -99,25 +99,27 @@ const App = props => {
                 SUBSCRIBE
               </Nav.Link>
             </Nav.Item>
-            {isAuthenticated && (
-              <NavDropdown
-                title='MENU'
-                id='nav-dropdown'
-                style={{marginTop: "30px", color: "black"}}
-              >
-                <NavDropdown.Item href='/menuthisweek'>
-                  THIS WEEK
-                </NavDropdown.Item>
-                <NavDropdown.Item href='/menunextweek'>
-                  NEXT WEEK
-                </NavDropdown.Item>
-                {searchCookie4UserID(document.cookie) != "null" && (
-                  <NavDropdown.Item href='/mealschedule'>
-                    MEAL SCHEDULE
+            <NavDropdown
+              title='MENU'
+              id='nav-dropdown'
+              style={{marginTop: "30px", color: "black"}}
+            >
+              {isAuthenticated && (
+                <Fragment>
+                  <NavDropdown.Item href='/menuthisweek'>
+                    THIS WEEK
                   </NavDropdown.Item>
-                )}
-              </NavDropdown>
-            )}
+                  <NavDropdown.Item href='/menunextweek'>
+                    NEXT WEEK
+                  </NavDropdown.Item>
+                  {searchCookie4UserID(document.cookie) != "null" && (
+                    <NavDropdown.Item href='/mealschedule'>
+                      MEAL SCHEDULE
+                    </NavDropdown.Item>
+                  )}
+                </Fragment>
+              )}
+            </NavDropdown>
 
             <Nav.Item style={{marginTop: "30px"}}>
               <Nav.Link style={{color: "black"}} href='/findus'>

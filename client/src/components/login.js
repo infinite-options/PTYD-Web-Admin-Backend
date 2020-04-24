@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import {useHistory} from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -11,7 +12,7 @@ import Form from "react-bootstrap/Form";
 import crypto from "crypto";
 // import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
-
+import axios from "axios";
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,14 +28,38 @@ export default function Login(props) {
   }
 
   useEffect(() => {
-    onLoad();
+    (async function ByPassLogin() {
+      await onLoad();
+    })();
     //componentDidMount();
+    // eslint-disable-next-line
   }, []);
 
-  async function onLoad() {
+  function onLoad() {
     // fill it up when needed
+    let data;
+    let params = props.match.params;
+    let LogIn = (e, p) => {
+      if (props.SINGLE_ACC_API_URL !== undefined) {
+        axios(`${props.SINGLE_ACC_API_URL}/${e}/${p}`)
+          .then(res => {
+            data = res.data.result.result[0];
+            document.cookie = ` loginStatus: Hello ${data.first_name}! ,  user_uid: ${data.uid} , ; path=/ `;
+            props.history.push("/selectmealplan");
+            window.location.reload(false);
+          })
+          .catch(err => {
+            console.log(err);
+            document.cookie = ` loginStatus: Sign In , user_uid: null , ; path=/ `;
+            props.history.push("/login");
+            window.location.reload(false);
+          });
+      }
+    };
+    if (params.email !== undefined && params.password !== undefined) {
+      LogIn(params.email, params.password);
+    }
   }
-
   async function componentDidMount() {
     const res = await fetch(props.API_URL);
     const api = await res.json();
@@ -96,7 +121,8 @@ export default function Login(props) {
     let uid = user.user_uid;
     let name = user.first_name;
 
-    document.cookie = ` loginStatus: Hello ${name} ! ,  user_uid:  ${uid} , `;
+    document.cookie =
+      " loginStatus: Hello " + name + "! , " + " user_uid: " + uid + " , ";
     console.log(document.cookie);
 
     // redirect & reload page for buttons and login status
