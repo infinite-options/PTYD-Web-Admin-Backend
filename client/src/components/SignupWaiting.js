@@ -2,7 +2,7 @@ import React, {Fragment, useState, useEffect} from "react";
 import Layout from "./layout";
 
 const SignupWaiting = () => {
-  const [second, setSecond] = useState(5);
+  const [second, setSecond] = useState(60);
   useEffect(() => {
     second > 0 && setTimeout(() => setSecond(second - 1), 1000);
   }, [second]);

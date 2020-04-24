@@ -3,20 +3,21 @@ import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/img9.webp";
 import {Link} from "react-router-dom";
+import {timingSafeEqual} from "crypto";
 
 class Selectmealplan extends Component {
   constructor(props) {
     super(props);
-    this.state = {mealPlans: []};
+    this.state = {
+      mealPlans: []
+    };
   }
-
   async componentDidMount() {
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const mealPlans = api.result.MealPlans.result;
     this.setState({mealPlans});
   }
-
   render() {
     return (
       <section class='content-section'>

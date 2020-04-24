@@ -733,6 +733,7 @@ class SignUp(Resource):
                     \'SHA512\',
                     \'""" + DatetimeStamp + """\',
                     \'""" + DatetimeStamp + "\');")
+
             usnInsert = execute(queries[1], 'post', conn)
 
             if usnInsert['code'] != 281:
@@ -783,12 +784,9 @@ class SignUp(Resource):
 
             #this part using for testing email verification
 
-
             token = s.dumps(Email)
             msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[Email])
-            print('password after hashed: {}'.format(hashed))
             link = url_for('confirm', token=token, hashed=hashed, _external=True)
-            print (link)
             msg.body = 'Click on the link <a href={}>---> :) Confirm (: <----</a> to verify your email.'.format(link)
 
             mail.send(msg)
@@ -811,9 +809,7 @@ class SignUp(Resource):
 @app.route('/api/v2/confirm/<token>/<hashed>', methods=['GET'])
 def confirm(token, hashed):
     try:
-        email = s.loads(token, max_age=50000)
-        print(email)
-        print(hashed)
+        email = s.loads(token, max_age=60)
         #marking email confirmed in database, then...
         #redirect to login page
         return redirect('http://127.0.0.1:3000/login/{}/{}'.format(email, hashed))

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Fragment} from "react";
 import {useHistory} from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
@@ -18,6 +18,7 @@ export default function Login(props) {
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
   const [salt, setSalt] = useState("");
+  const [error, RaiseError] = useState(null);
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -138,6 +139,9 @@ export default function Login(props) {
       saltres = await fetch(`${props.SINGLE_ACC_API_URL}salt/${userEmail}`);
     }
     const saltapi = await saltres.json();
+    if (saltapi.result.length === 0) {
+      throw "Invalid Email Address.";
+    }
     const salt = saltapi.result[0].password_salt;
     const res = await fetch(
       props.SINGLE_ACC_API_URL +
@@ -150,14 +154,18 @@ export default function Login(props) {
           .digest("hex")
     );
     const api = await res.json();
-    return api;
+    if (api.auth_success === false) {
+      throw "Sorry, Wrong Password.";
+    } else {
+      return api;
+    }
   }
 
   async function checkLogin() {
     // let t = [];
     await grabLoginInfoForUser(email, password)
       .then(res => login(res))
-      .catch(err => console.log(err));
+      .catch(err => RaiseError(err));
 
     // await login(t);
   }
@@ -217,9 +225,18 @@ export default function Login(props) {
     <main Style='margin-top:-80px;'>
       <div class='container text-center' Style='margin-top:-40px;'>
         <h1>Login</h1>
+        {error !== null && (
+          <Fragment>
+            <h6>
+              <span className='icon has-text-danger'>
+                <i className='fa fa-info-circle'></i>
+              </span>
+              <span className='has-text-danger'>{error}</span>
+            </h6>
+          </Fragment>
+        )}
         <div class='row'>
           <Col></Col>
-
           <Container className='justify-content-center bg-success'>
             <Row>
               <Col>
@@ -229,7 +246,10 @@ export default function Login(props) {
                     <FormControl
                       type='email'
                       value={email}
-                      onChange={e => setEmail(e.target.value)}
+                      onChange={e => {
+                        setEmail(e.target.value);
+                        RaiseError(null);
+                      }}
                       id='userForm'
                       placeholder='Enter Email'
                       aria-label='Email'
@@ -241,7 +261,10 @@ export default function Login(props) {
                   <InputGroup className='mb-3'>
                     <FormControl
                       value={password}
-                      onChange={e => setPassword(e.target.value)}
+                      onChange={e => {
+                        setPassword(e.target.value);
+                        RaiseError(null);
+                      }}
                       id='passForm'
                       placeholder='Enter Password'
                       aria-label='Password'
