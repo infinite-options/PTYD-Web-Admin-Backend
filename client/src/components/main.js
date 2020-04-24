@@ -20,7 +20,7 @@ import MealSchedule from "./menu/mealschedule";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
-import SocialSignUp from "./socialsignup"
+import SocialSignUp from "./socialsignup";
 import Login from "./login";
 import Logout from "./logout";
 
@@ -86,7 +86,7 @@ export default function Main({ appProps }) {
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
-          redirect_after_login: '/checkout'
+          redirect_after_login: "/checkout"
         }}
       />
 
@@ -102,7 +102,8 @@ export default function Main({ appProps }) {
           appProps,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
-          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
+          PLANS_URL: `${DEV_URL}v2/plans`
         }}
       />
 

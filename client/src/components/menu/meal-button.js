@@ -36,43 +36,43 @@ export default class MealButton extends Component {
       flag: false,
       mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
-      subscribed: this.props.subscribed,
+      subscribed: this.props.subscribed
     };
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     if (this.props.surprise == false) {
       this.setState({
         buttonSurprise: false,
-        buttonSelectKeepColor: true,
+        buttonSelectKeepColor: true
       });
     }
 
     switch (this.props.deliverDay) {
-      case 'SKIP':
+      case "SKIP":
         this.setState({
           buttonS: false,
           buttonM: false,
           buttonSkip: true,
           buttonSurprise: false,
           buttonDisabled: true,
-          buttonAddOnKeepColor: false,
+          buttonAddOnKeepColor: false
         });
         break;
-      case 'Monday':
+      case "Monday":
         this.setState({
           buttonS: false,
           buttonM: true,
           buttonSkip: false,
-          buttonDisabled: false,
+          buttonDisabled: false
         });
         break;
-      case 'Sunday':
+      case "Sunday":
         this.setState({
           buttonS: true,
           buttonM: false,
           buttonSkip: false,
-          buttonDisabled: false,
+          buttonDisabled: false
         });
     }
   }
@@ -90,7 +90,7 @@ export default class MealButton extends Component {
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
         default_selected: this.state.buttonSurprise,
-        is_addons: false,
+        is_addons: false
       })
     });
   };
@@ -106,7 +106,7 @@ export default class MealButton extends Component {
         purchase_id: this.props.purchase_id,
         week_affected: this.props.saturdayDate,
         addon_quantities: this.state.addonQuantities,
-        is_addons: true,
+        is_addons: true
       })
     });
   };
@@ -154,7 +154,7 @@ export default class MealButton extends Component {
     });
   };
 
-  async changeButtonSkip () {
+  async changeButtonSkip() {
     await this.setState({
       buttonM: false,
       buttonS: false,
@@ -169,7 +169,7 @@ export default class MealButton extends Component {
       dayToDeliver: "SKIP"
     });
     this.sendForm();
-  };
+  }
 
   changeButtonSelect = () => {
     this.setState({
@@ -179,7 +179,7 @@ export default class MealButton extends Component {
       buttonSelectKeepColor: true
     });
   };
-  async changeButtonSurprise () {
+  async changeButtonSurprise() {
     await this.setState({
       buttonSelect: false,
       buttonSurprise: true,
@@ -187,7 +187,7 @@ export default class MealButton extends Component {
       buttonSelectKeepColor: false
     });
     this.sendForm();
-  };
+  }
   changeButtonAddOn = () => {
     this.setState({
       buttonAddOn: true,
@@ -324,44 +324,66 @@ export default class MealButton extends Component {
       <Card style={{ width: "92%" }}>
         <Card.Header>
           <center>
-            <Modal.Title>
-              <p style={{ float: "left" }}>
-                {" "}
-                Please select {this.state.maxmeals} meals:
-              </p>
-              Select Meal Menu{" "}
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  if (
-                    this.state.maxmealsCopy !== this.state.maxmeals &&
-                    this.state.flag === false
-                  ) {
-                    alert(
-                      "Are you sure your want to close without save the changes?"
-                    );
-                    this.setState({
-                      flag: true
-                    });
-                    return;
-                  }
-                  this.closeButtonSelect();
-                }}
-              >
-                Close
-              </Button>
+            <Modal.Title style={{ backgroundColor: "white" }}>
+              <h4 style={{ float: "left", margin: "0" }} class="font2">
+                Please Select {this.state.maxmeals} Meals:
+              </h4>
+              <div style={{ float: "right" }}>
+                <Button
+                  variant="danger"
+                  style={{
+                    backgroundColor: "pink",
+                    color: "black"
+                  }}
+                  onClick={() => {
+                    if (
+                      this.state.maxmealsCopy !== this.state.maxmeals &&
+                      this.state.flag === false
+                    ) {
+                      alert(
+                        "Are you sure your want to close without save the changes?"
+                      );
+                      this.setState({
+                        flag: true
+                      });
+                      return;
+                    }
+                    this.closeButtonSelect();
+                  }}
+                >
+                  Close
+                </Button>
+                &nbsp;&nbsp;
+                {this.state.subscribed ? (
+                  this.state.maxmeals === 0 ? (
+                    <Button
+                      variant="success"
+                      style={{ backgroundColor: "#A3C7AC", color: "black" }}
+                      onClick={this.saveButtonActivateAddons}
+                    >
+                      Save changes
+                    </Button>
+                  ) : (
+                    <br />
+                  )
+                ) : (
+                  <Button
+                    variant="success"
+                    style={{ backgroundColor: "#A3C7AC", color: "black" }}
+                    href="/selectmealplan"
+                  >
+                    Subscribe Now
+                  </Button>
+                )}
+              </div>
             </Modal.Title>
           </center>
         </Card.Header>
-        {Object.keys(this.props.menu).map(key => (
-          <div>
+        <div class="scrollMenu">
+          {Object.keys(this.props.menu).map(key => (
             <Grid>
               <Cell col={12}>
-                <center>
-                  <h4 style={{ margin: "0" }}>
-                    {this.props.menu[key].Category}
-                  </h4>
-                </center>
+                <h4 style={{ margin: "0" }}>{this.props.menu[key].Category}</h4>
               </Cell>
               <br />
               {this.props.menu[key].Menu.map(meal => (
@@ -387,9 +409,7 @@ export default class MealButton extends Component {
                     }
                     imgurl={meal.meal_photo_url}
                     maxmeals={this.state.maxmeals}
-                    mealQuantities={
-                      this.state.mealQuantities[meal.meal_id]
-                    }
+                    mealQuantities={this.state.mealQuantities[meal.meal_id]}
                     incrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
                       stateCopy.mealQuantities[meal.meal_id] -= 1;
@@ -406,8 +426,8 @@ export default class MealButton extends Component {
                 </Cell>
               ))}
             </Grid>
-          </div>
-        ))}
+          ))}
+        </div>
         <Card.Body>
           <center>
             <Button
@@ -417,9 +437,7 @@ export default class MealButton extends Component {
                   this.state.maxmealsCopy !== this.state.maxmeals &&
                   this.state.flag === false
                 ) {
-                  alert(
-                    "Are you sure you want to close without saving?"
-                  );
+                  alert("Are you sure you want to close without saving?");
                   this.setState({
                     flag: true
                   });
@@ -432,15 +450,18 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;&nbsp;
             {this.state.subscribed ? (
-              (this.state.maxmeals === 0 ? (
-                <Button variant="primary" onClick={this.saveButtonActivateAddons}>
+              this.state.maxmeals === 0 ? (
+                <Button
+                  variant="primary"
+                  onClick={this.saveButtonActivateAddons}
+                >
                   Save changes
                 </Button>
               ) : (
                 <br />
-              ))
+              )
             ) : (
-              <Link to="/selectmealplan" className="btn btn-danger" >
+              <Link to="/selectmealplan" className="btn btn-danger">
                 Subscribe Now
               </Link>
             )}
@@ -529,7 +550,7 @@ export default class MealButton extends Component {
                 <Cell col={12}>
                   <center>
                     <h4 style={{ margin: "0" }}>
-                        { this.props.addons["Addons"].Category }
+                      {this.props.addons["Addons"].Category}
                     </h4>
                   </center>
                 </Cell>
@@ -556,9 +577,7 @@ export default class MealButton extends Component {
                         meal.meal_sat
                       }
                       imgurl={meal.meal_photo_url}
-                      addonQuantities={
-                        this.state.addonQuantities[meal.meal_id]
-                      }
+                      addonQuantities={this.state.addonQuantities[meal.meal_id]}
                       incrementAddon={() => {
                         var stateCopy = Object.assign({}, this.state);
                         stateCopy.addonQuantities[meal.menu_meal_id] += 1;
@@ -584,9 +603,11 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;&nbsp;
             {this.state.subscribed ? (
-              <Button variant="primary" onClick={this.saveButtonAddOn}>Save changes</Button>
+              <Button variant="primary" onClick={this.saveButtonAddOn}>
+                Save changes
+              </Button>
             ) : (
-              <Link to="/selectmealplan" className="btn btn-danger" >
+              <Link to="/selectmealplan" className="btn btn-danger">
                 Subscribe Now
               </Link>
             )}

@@ -27,7 +27,7 @@ const App = props => {
       }
       else if (!document.cookie.includes("loginStatus")){
         document.cookie =
-          " loginStatus: Sign In , user_uid: null , ";
+          " loginStatus: null , user_uid: null , ";
         console.log("First time? Resetting document cookie");
       }
     } catch (e) {
@@ -43,6 +43,9 @@ const App = props => {
   function searchCookie4Login(str) {
     let arr = str.split(" ");
     let i = arr.indexOf("loginStatus:");
+    if (arr[i+1] === "null") {
+      return " ";
+    }
     return arr[i + 1] + " " + arr[i + 2];
   }
 
@@ -105,7 +108,7 @@ const App = props => {
               </NavDropdown.Item>
               {searchCookie4UserID(document.cookie) != "null" ? (
                 <NavDropdown.Item href="/mealschedule">
-                  MEAL SCHEDULE
+                  MEAL SELECTION
                 </NavDropdown.Item>
               ) : (
                 <></>
@@ -156,7 +159,7 @@ const App = props => {
                       size="sm"
                       onClick={() => {
                         document.cookie =
-                          " loginStatus: Sign In , user_uid: null , ";
+                          " loginStatus: null , user_uid: null , ";
                         window.location.reload(false);
                       }}
                     >
@@ -235,7 +238,7 @@ const App = props => {
                       size="sm"
                       onClick={() => {
                         document.cookie =
-                          " loginStatus: Sign In , user_uid: null , ";
+                          " loginStatus: null , user_uid: null , ";
                         window.location.reload(false);
                       }}
                     >

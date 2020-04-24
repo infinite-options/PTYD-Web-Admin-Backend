@@ -14,6 +14,7 @@ import decimal
 import sys
 import json
 import pymysql
+import requests
 
 RDS_HOST = 'pm-mysqldb.cxjnrciilyjq.us-west-1.rds.amazonaws.com'
 RDS_PORT = 3306
@@ -534,13 +535,80 @@ class Account(Resource):
         finally:
             disconnect(conn)
 
+def ipVersion(ip):
+    if '.' in ip:
+        return 'IPv4'
+    elif ':' in ip:
+        return 'IPv6'
+    else:
+        return 'unknown'
+
+# NO MAC ADDRESS INSERT
+def LogLoginAttempt(data, conn):
+    try:
+        response = {}
+
+        login_id_res = execute("CALL get_login_id;", 'get', conn)
+        login_id = login_id_res['result'][0]['new_id']
+
+        # Generate random session ID
+        if data["auth_success"] is "TRUE":
+            session_id = "\'" + sha512(getNow().encode()).hexdigest() + "\'"
+        else:
+            session_id = "NULL"
+
+        sql = """
+            INSERT INTO ptyd_login (
+                login_attempt
+                , login_password
+                , login_user_uid
+                , ip_address
+                , ip_version
+                , browser_type
+                , attempt_datetime
+                , successBool
+                , session_id
+            )
+            VALUES
+            (
+                \'""" + login_id + """\'
+                , \'""" + data["attempt_hash"] + """\'
+                , \'""" + data["user_uid"] + """\'
+                , \'""" + data["ip_address"] + """\'
+                , \'""" + ipVersion(data["ip_address"]) + """\'
+                , \'""" + data["browser_type"] + """\'
+                , \'""" + getNow() + """\'
+                , \'""" + data["auth_success"] + """\'
+                , """ + session_id + """
+            );
+            """
+        log = execute(sql, 'post', conn)
+
+        if session_id != "NULL":
+            session_id = session_id[1:-1]
+
+        response['session_id'] = session_id
+        response['login_id'] = login_id
+
+        return response
+    except:
+        print("Could not log login attempt.")
+        return None
+
 class Login(Resource):
 
-    # HTTP method GET
-    def get(self, accEmail, accPass):
+    def post(self, accEmail, accPass):
         response = {}
         try:
             conn = connect()
+            data = request.get_json(force=True)
+
+            if data.get('ip_address') == None:
+                response['message'] = 'Request failed, did not receive IP address.'
+                return response, 400
+            if data.get('browser_type') == None:
+                response['message'] = 'Request failed, did not receive browser type.'
+                return response, 400
 
             queries = [
                 """ SELECT
@@ -566,12 +634,28 @@ class Login(Resource):
                 response['message'] = 'Request successful.'
                 response['result'] = items
                 response['auth_success'] = True
-                return response, 200
+                httpCode = 200
             else:
                 print("Wrong password.")
                 response['message'] = 'Request failed, wrong password.'
                 response['auth_success'] = False
-                return response, 401 
+                httpCode = 401
+
+            login_attempt = {
+                'user_uid': user_uid,
+                'attempt_hash': accPass,
+                'ip_address': data['ip_address'],
+                'browser_type': data['browser_type'],
+            }
+
+            if response['auth_success']:
+                login_attempt['auth_success'] = 'TRUE'
+            else:
+                login_attempt['auth_success'] = 'FALSE'
+
+            response['login_attempt_log'] = LogLoginAttempt(login_attempt, conn)
+
+            return response, httpCode
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -798,6 +882,49 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
+class Coordinates:
+    #array of addresses such as 
+    #['Dunning Ln, Austin, TX 78746', '12916 Cardinal Flower Drive, Austin, TX 78739', '51 Rainey St., austin, TX 78701']
+    def __init__(self, locations):
+        self.locations = locations
+    
+    def calculateFromLocations(self):
+        params = {
+        'key' : "AjarHaO5ugwlQDMfMsMEYziHW1Gugafz3e3CRGJy_a4KGHtYidc38JUGR1psA0A9"
+        }
+        coordinates = []
+
+        for address in self.locations:
+            formattedAddress = self.formatAddress(address)
+            r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
+                '&maxResults=1&key={}'.format(params['key']))
+            results = r.json() 
+
+            try:
+                assert(results['resourceSets'][0]['estimatedTotal']) 
+                point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
+                lat, lng = point[0], point[1]
+            except:
+                lat,lng = None, None
+
+            #appends a dictionary of latitude and longitude points for the given address
+            coordinates.append({
+                "latitude": lat,
+                "longitude": lng
+            })
+        #prints lat, long points for each address
+        for i in coordinates:
+            print(i, "\n")
+            print(type(i["latitude"]))
+
+        #return array of dictionaries containing lat, long points
+        return coordinates
+
+    #returns an address formatted to be used for the Bing API to get locations
+    def formatAddress(self, address):
+        output = address.replace(" ", "%20")
+        return output
+
 # NEED CODE FOR NON-RECURRING ONE TIME PLANS
 class Checkout(Resource):
     def getPaymentQuery(self, data, paymentId, purchaseId):
@@ -977,8 +1104,9 @@ class Checkout(Resource):
             queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
 
             # replace with real longitute and latitude
-            test_deilvery_long = '-97.9107'
-            test_deilvery_lat = '-97.9107'
+            addressObj = Coordinates([data['delivery_address']])
+            delivery_coord = addressObj.calculateFromLocations()[0]
+
             queries.append(
                 """ INSERT INTO ptyd_purchases
                     (
@@ -1017,8 +1145,8 @@ class Checkout(Resource):
                         \'""" + data['delivery_state'] + """\',
                         \'""" + data['delivery_zip'] + """\',
                         \'""" + data['delivery_region'] + """\',
-                        """ + test_deilvery_long + """,
-                        """ + test_deilvery_lat + """
+                        """ + delivery_coord['longitude'] + """,
+                        """ + delivery_coord['latitude'] + """
                     );"""
             )
 
@@ -1078,180 +1206,6 @@ class Checkout(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
-'''
-class Checkout(Resource):
-    def getPaymentQuery(self, data, paymentId, purchaseId):
-        query = """ INSERT INTO ptyd_payments
-                    (
-                        payment_id,
-                        buyer_id,
-                        gift,
-                        coupon_id,
-                        amount_due,
-                        amount_paid,
-                        purchase_id,
-                        payment_time_stamp,
-                        payment_type,
-                        cc_num,
-                        cc_exp_date,
-                        cc_cvv,
-                        billing_zip
-                    )
-                    VALUES (
-                        \'""" + paymentId + """\',
-                        \'""" + data['user_uid'] + """\',
-                        \'""" + data['is_gift'] + """\',
-                        NULL,
-                        """ + data['item_price'] + """,
-                        """ + data['item_price'] + """,
-                        \'""" + purchaseId + """\',
-                        \'""" + getNow() + """\',
-                        \'STRIPE\',
-                        \'""" + data['cc_num'][-4:] + """\',
-                        \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
-                        \'""" + data['cc_cvv'] + """\',
-                        \'""" + data['billing_zip'] + "\');"""
-
-        return query
-
-    def post(self):
-        response = {}
-        reply = {}
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-            print("Received:", data)
-
-            if 'delivery_address_unit' in data:
-                if data['delivery_address_unit'] == None:
-                    DeliveryUnit = 'NULL'
-                else:
-                    DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
-            else:
-                DeliveryUnit = 'NULL'
-            print(DeliveryUnit)
-
-            purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
-            paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
-            purchaseId = purchaseIDresponse['result'][0]['new_id']
-            paymentId = paymentIDresponse['result'][0]['new_id']
-
-            mealPlan = data['item'].split(' Subscription')[0]
-
-            queries = ["""
-                SELECT
-                    password_user_uid
-                FROM
-                    ptyd_passwords
-                WHERE
-                    password_user_uid = \'""" + data['user_uid'] + """\'
-                AND
-                    password_hash = \'""" + data['salt'] + "\'", """
-                SELECT
-                    meal_plan_id
-                FROM
-                    ptyd_meal_plans
-                WHERE
-                    meal_plan_desc = \'""" + mealPlan + "\'", """
-                SELECT
-                    cc_num
-                FROM
-                    ptyd_payments
-                WHERE
-                    buyer_id = \'""" + data['user_uid'] + "\';"]
-
-            userAuth = execute(queries[0], 'get', conn)
-
-            if userAuth['code'] != 280 or len(userAuth['result']) != 1:
-                response['message'] = 'Could not authenticate user.'
-                response['error'] = userAuth
-                print("Error:", response['message'])
-                print("Error JSON:", response['error'])
-                if userAuth['code'] == 280:
-                    statusCode = 400
-                else:
-                    statusCode = 500
-                return response, statusCode
-            else:
-                print("Successfully authenticated user.")
-
-            mealPlanQuery = execute(queries[1], 'get', conn)
-
-            if mealPlanQuery['code'] == 280:
-                print("Getting meal plan ID...")
-                mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
-                print("Meal Plan ID:", mealPlanId)
-            else:
-                response['message'] = 'Could not retrieve meal ID of requested plan.'
-                response['error'] = mealPlanQuery
-                print("Error:", response['message'])
-                print("Error JSON:", response['error'])
-                return response, 501
-
-            queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
-
-            # replace with real longitute and latitude
-            test_deilvery_long = '-97.9107'
-            test_deilvery_lat = '-97.9107'
-            queries.append(
-                """ INSERT INTO ptyd_purchases
-                    (
-                        purchase_id,
-                        meal_plan_id,
-                        start_date,
-                        delivery_first_name,
-                        delivery_last_name,
-                        delivery_email,
-                        delivery_phone,
-                        delivery_instructions,
-                        delivery_address,
-                        delivery_address_unit,
-                        delivery_city,
-                        delivery_state,
-                        delivery_zip,
-                        delivery_region,
-                        delivery_long,
-                        delivery_lat
-                    )
-                    VALUES
-                    (
-                        \'""" + purchaseId + """\',
-                        \'""" + mealPlanId + """\',
-                        \'""" + getToday() + """\',
-                        \'""" + data['delivery_first_name'] + """\',
-                        \'""" + data['delivery_last_name'] + """\',
-                        \'""" + data['delivery_email'] + """\',
-                        \'""" + data['delivery_phone'] + """\',
-                        \'""" + data['delivery_instructions'] + """\',
-                        \'""" + data['delivery_address'] + """\',
-                        """ + DeliveryUnit + """,
-                        \'""" + data['delivery_city'] + """\',
-                        \'""" + data['delivery_state'] + """\',
-                        \'""" + data['delivery_zip'] + """\',
-                        \'""" + data['delivery_region'] + """\',
-                        """ + test_deilvery_long + """,
-                        """ + test_deilvery_lat + """
-                    );"""
-            )
-
-            print('perforem laste 2 queries')
-
-            reply['payment'] = execute(queries[3], 'post', conn)
-            # Add credit card verification code here
-
-            reply['purchase'] = execute(queries[4], 'post', conn)
-
-            response['message'] = 'Request successful.'
-            response['result'] = reply
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-'''
 
 # Call this API from another source every Monday at midnight
 class UpdatePurchases(Resource):
@@ -2626,46 +2580,6 @@ class TemplateApi(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
-class Coordinates:
-
-    #array of addresses such as 
-    #['Dunning Ln, Austin, TX 78746', '12916 Cardinal Flower Drive, Austin, TX 78739', '51 Rainey St., austin, TX 78701']
-    def __init__(self, locations):
-        self.locations = locations
-    
-    def calculateFromLocations(self):
-        params = {
-        'key' : "API_KEY" #put key here
-        }
-        coordinates = []
-
-        for address in self.locations:
-            formattedAddress = self.formatAddress(address)
-            r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
-                '&maxResults=1&key={}'.format(params['key']))
-
-            results = r.json()        
-            point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
-           
-            lat, lng = point[0], point[1]
-            #appends a dictionary of latitude and longitude points for the given address
-            coordinates.append({
-                "latitude": lat,
-                "longitude": lng
-            })
-        #prints lat, long points for each address
-        for i in coordinates:
-            print(i, "\n")
-
-        #return array of dictionaries containing lat, long points
-        return coordinates
-        
-        
-    #returns an address formatted to be used for the Bing API to get locations
-    def formatAddress(self, address):
-        output = address.replace(" ", "%20")
-        return output
 
 # Define API routes
 # Customer page

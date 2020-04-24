@@ -12,8 +12,21 @@ import crypto from "crypto";
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 
-export default function Login (props) {
+import {
+  getIp 
+, getBrowser
+}
+from '../functions/getClientInfo';
 
+export default function Login (props) {
+  /*
+  g();
+
+  async function g() {
+    console.log(await getIp());
+    console.log(getBrowser());
+  }
+  */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
@@ -128,9 +141,24 @@ export default function Login (props) {
     const saltres = await fetch(props.API_URL + '/' + userEmail);
     const saltapi = await saltres.json();
     const salt = saltapi.result[0].password_salt;
-    console.log(salt);
-    const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userEmail + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
+
+    const ip_res = await getIp();
+    const browser_type = getBrowser();
+
+    const res = await fetch(
+      props.SINGLE_ACC_API_URL + '/' + userEmail + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'), {
+      method: 'POST'
+      , headers: {
+        'Accept': 'application/json'
+        , 'Content-Type': 'application/json'
+      }
+      , body: JSON.stringify({
+        'ip_address': ip_res.ip
+      , 'browser_type': browser_type.browser_type
+      })
+    });
     const api = await res.json();
+    console.log(api);
     return api;
   }
 
@@ -146,7 +174,7 @@ export default function Login (props) {
     if (response.auth_success == true) {
       setLoginStatus("Logged In");
 
-      document.cookie = " loginStatus: Hello " + response.result.result[0].first_name  + "! , " + " user_uid: " + response.result.result[0].user_uid + " , ";
+      document.cookie = " loginStatus: Hello " + response.result.result[0].first_name  + "! , " + " user_uid: " + response.result.result[0].user_uid + " , login_id: " + response.login_attempt_log.login_id + " , session_id: " + response.login_attempt_log.session_id + " , ";
 
       // redirect & reload page for buttons and login status
       if (props.redirect_after_login !== null) {
@@ -160,7 +188,7 @@ export default function Login (props) {
 
     } 
     else {
-      document.cookie = " loginStatus: Sign In , user_uid: null , ";
+      document.cookie = " loginStatus: null , user_uid: null , ";
       // need code for failed authentication here
     }
   }

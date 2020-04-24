@@ -53,6 +53,14 @@
   right: 16px;
 }
 
+.bottom-right-meal-selection {
+  position: absolute;
+  bottom: 30px;
+  right: 0.1px;
+  left: 0.1px;
+  float: right;
+}
+
 /* Centered text */
 .centered {
   position: absolute;
@@ -161,18 +169,29 @@ hr.four {
 }
 
 .black {
-  outline: 100px solid rgba(0, 0, 0, 0.5) !important;
+  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
   outline-offset: -100px;
   overflow: hidden;
   position: relative;
-  height: 187px;
+  /*height: 187px;
+  width: 276px; */
+  object-fit: cover;
+  opacity: 50%;
   width: 276px;
+  height:187px;
 }
+
+.overlay {
+  background: black;
+}
+
 .blackM {
-  outline: 100px solid rgba(0, 0, 0, 0.5) !important;
+  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
   outline-offset: -100px;
   overflow: hidden;
-  position: relative;
+  position: relative; */
+  object-fit: cover;
+  opacity: 50%;
   height: 187px;
   width: 252px;
 }
@@ -216,6 +235,16 @@ hr.four {
 .h6 {
   font-size: 10em;
 }
+.container-select-meal {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.scrollMenu {
+  overflow: auto;
+  height: 550px;
+}
 
 /* font */
 
@@ -237,6 +266,11 @@ hr.four {
 
 .font5 {
   font-family: "Montserrat", sans-serif;
+}
+
+.scrollMenu-profile {
+  overflow: auto;
+  height: 450px;
 }
 
 /* subscription page */

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Grid, Cell } from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
+import MakeChanges from "./make-account-changes";
+import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
 
 class Mealschedule extends Component {
   constructor(props) {
@@ -12,7 +14,8 @@ class Mealschedule extends Component {
       user_uid: searchCookie4UserID(document.cookie),
       purchase: { NextCharge: 0 },
       subscribed: false,
-      monday_available: false
+      monday_available: false,
+      paymentPlans: []
     };
 
     function searchCookie4UserID(str) {
@@ -36,7 +39,9 @@ class Mealschedule extends Component {
     const api = await res.json();
 
     if (this.state.user_uid !== null) {
-      const purchases = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
+      const purchases = await fetch(
+        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+      );
       const purchasesApi = await purchases.json();
 
       // Check if user has any active subscriptions
@@ -44,11 +49,15 @@ class Mealschedule extends Component {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
         this.setState({ subscribed: true });
-        this.setState({ monday_available: purchasesApi.result[0].monday_available });
+        this.setState({
+          monday_available: purchasesApi.result[0].monday_available
+        });
       }
     }
 
-    const mselect_res = await fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseId}`);
+    const mselect_res = await fetch(
+      `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
+    );
     const mselect_api = await mselect_res.json();
 
     let key;
@@ -56,7 +65,7 @@ class Mealschedule extends Component {
     let weekNum;
     for (weekNum = 1; weekNum < 7; weekNum++) {
       key = "MenuForWeek" + weekNum;
-      if(!(key in api.result)) break
+      if (!(key in api.result)) break;
 
       let currentWeek = {};
       currentWeek.sat = api.result[key].SaturdayDate;
@@ -65,25 +74,32 @@ class Mealschedule extends Component {
       currentWeek.menu = api.result[key].Meals;
       currentWeek.addons = api.result[key].Addons;
       currentWeek.mealQuantities = api.result[key].MealQuantities;
-      currentWeek.addonQuantities = Object.assign({}, currentWeek.mealQuantities);
+      currentWeek.addonQuantities = Object.assign(
+        {},
+        currentWeek.mealQuantities
+      );
       currentWeek.maxmeals = currPur.MaximumMeals;
-      currentWeek.deliverDay = 'Sunday';
+      currentWeek.deliverDay = "Sunday";
       currentWeek.surprise = true;
       currentWeek.addonsSelected = false;
 
       for (let week in mselect_api.result.Meals) {
         if (mselect_api.result.Meals[week].week_affected == currentWeek.sat) {
-          if (mselect_api.result.Meals[week].meal_selection == 'SKIP') {
-            currentWeek.deliverDay = 'SKIP';
-          }
-          else if (mselect_api.result.Meals[week].meal_selection == 'SURPRISE') {
-            currentWeek.deliverDay = mselect_api.result.Meals[week].delivery_day;
-          }
-          else {
+          if (mselect_api.result.Meals[week].meal_selection == "SKIP") {
+            currentWeek.deliverDay = "SKIP";
+          } else if (
+            mselect_api.result.Meals[week].meal_selection == "SURPRISE"
+          ) {
+            currentWeek.deliverDay =
+              mselect_api.result.Meals[week].delivery_day;
+          } else {
             for (let mealId in mselect_api.result.Meals[week].meals_selected) {
-              currentWeek.mealQuantities[mealId] = mselect_api.result.Meals[week].meals_selected[mealId];
-              currentWeek.maxmeals -= mselect_api.result.Meals[week].meals_selected[mealId];
-              currentWeek.deliverDay = mselect_api.result.Meals[week].delivery_day;
+              currentWeek.mealQuantities[mealId] =
+                mselect_api.result.Meals[week].meals_selected[mealId];
+              currentWeek.maxmeals -=
+                mselect_api.result.Meals[week].meals_selected[mealId];
+              currentWeek.deliverDay =
+                mselect_api.result.Meals[week].delivery_day;
               currentWeek.surprise = false;
             }
           }
@@ -93,7 +109,8 @@ class Mealschedule extends Component {
       for (let week in mselect_api.result.Addons) {
         if (mselect_api.result.Addons[week].week_affected == currentWeek.sat) {
           for (let mealId in mselect_api.result.Addons[week].meals_selected) {
-            currentWeek.addonQuantities[mealId] = mselect_api.result.Addons[week].meals_selected[mealId];
+            currentWeek.addonQuantities[mealId] =
+              mselect_api.result.Addons[week].meals_selected[mealId];
             currentWeek.addonsSelected = true;
           }
         }
@@ -101,10 +118,36 @@ class Mealschedule extends Component {
 
       sixWeekMenu.push(currentWeek);
     }
-    this.setState({ menu: sixWeekMenu, purchase: currPur });
+
+    const plans_res = await fetch(this.props.PLANS_URL);
+    const plans_api = await plans_res.json();
+
+    const plans = plans_api.result;
+    var keys = Object.keys(plans);
+    let new_plans = [];
+
+    for (let i in keys) {
+      let x = plans[keys[i]].result;
+      for (let j = 1; j < x.length; j++) {
+        new_plans.push(x[j]);
+      }
+    }
+
+    this.setState(
+      {
+        menu: sixWeekMenu,
+        purchase: currPur,
+        paymentPlans: new_plans
+      },
+      () => {
+        console.log("ccccccc", this.state.paymentPlans);
+      }
+    );
   }
 
   render() {
+    console.log("num_meals", this.state.purchase.num_meals);
+    console.log("dhsjakdhkajsdhas", this.state.purchase.plan_footer);
     return (
       <div>
         <section class="content-section">
@@ -126,35 +169,47 @@ class Mealschedule extends Component {
                     ></img>
                   </Cell>
                   <Cell col={8}>
-                    <h4>Hi, {this.searchCookie4Name(document.cookie)}</h4>
+                    <h4>
+                      Hi, {this.searchCookie4Name(document.cookie)}
+                      {this.state.purchase.num_meals}
+                    </h4>
                   </Cell>
                 </Grid>
-                <button
-                  type="button"
-                  class="btn2 btn2-primary font4"
-                  style={{
-                    marginTop: "10px",
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
-                    paddingTop: "5px",
-                    paddingBottom: "5px",
-                    color: "white",
-                    fontSize: "12px"
-                  }}
-                >
-                  Make Account Changes
-                </button>
+                <MakeChanges
+                  subscription={this.state.purchase.meal_plan_desc}
+                  paymentplan={this.state.paymentPlans}
+                  payment_plan={this.state.purchase.payment_frequency}
+                  cc_num={this.state.purchase.cc_num}
+                  cc_exp_date={this.state.purchase.cc_exp_date}
+                  cc_cvv={this.state.purchase.cc_cvv}
+                  delivery_address={this.state.purchase.delivery_address}
+                  delivery_address_unit={
+                    this.state.purchase.delivery_address_unit
+                  }
+                  delivery_city={this.state.purchase.delivery_city}
+                  delivery_state={this.state.purchase.delivery_state}
+                  delivery_zip={this.state.purchase.delivery_zip}
+                  delivery_instructions={
+                    this.state.purchase.delivery_instructions
+                  }
+                />
                 <br />
                 <h4>Subscription Details</h4>{" "}
                 <p>My Subscription: {this.state.purchase.meal_plan_desc}</p>
                 <p>Payment Plan: {this.state.purchase.payment_frequency}</p>
                 <p>
-                  Paid Weeks Remaining: {this.state.purchase.paid_weeks_remaining}
+                  Paid Weeks Remaining:{" "}
+                  {this.state.purchase.paid_weeks_remaining}
                 </p>
                 <p>Next Charge: ${this.state.purchase.amount_due}</p>
                 <p>Next Charge Date: {this.state.purchase.next_charge_date}</p>
-                <p>Coupons: { this.state.purchase.coupon_id ? this.state.purchase.coupon_id : 'None' }</p>
-                { /* <p>Account Status: {this.state.purchase.purchase_status}</p> */ }
+                <p>
+                  Coupons:{" "}
+                  {this.state.purchase.coupon_id
+                    ? this.state.purchase.coupon_id
+                    : "None"}
+                </p>
+                {/* <p>Account Status: {this.state.purchase.purchase_status}</p> */}
                 <h4>Credit Card Details</h4>{" "}
                 <p>Credit Card: {this.state.purchase.cc_num}</p>
                 <p>Expiration Date: {this.state.purchase.cc_exp_date}</p>
@@ -164,7 +219,8 @@ class Mealschedule extends Component {
                 <p>Unit: {this.state.purchase.delivery_address_unit}</p>
                 <p>
                   City, State ZIP: {this.state.purchase.delivery_city},{" "}
-                  {this.state.purchase.delivery_state} {this.state.purchase.delivery_zip}
+                  {this.state.purchase.delivery_state}{" "}
+                  {this.state.purchase.delivery_zip}
                 </p>
                 <p>Instructions: {this.state.purchase.delivery_instructions}</p>
               </Cell>{" "}
@@ -176,12 +232,9 @@ class Mealschedule extends Component {
                   <b>Select Meals Around Your Schedule</b>
                 </h3>
                 <br />
-                <div>
-                  { console.log(this.state.menu) }
-                </div>
+                <div>{console.log(this.state.menu)}</div>
                 <div class="meals-button">
-                  {
-                  this.state.menu.map(eachWeek => 
+                  {this.state.menu.map(eachWeek => (
                     <MealButton
                       day1="Sunday"
                       day2="Monday"
@@ -201,8 +254,7 @@ class Mealschedule extends Component {
                       monday_available={this.state.monday_available}
                       MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
                     />
-                  )
-                  }
+                  ))}
                 </div>
               </Cell>
             </Grid>

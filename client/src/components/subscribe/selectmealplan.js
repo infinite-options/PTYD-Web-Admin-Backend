@@ -60,12 +60,14 @@ class Selectmealplan extends Component {
                           : { height: "110%" }
                       }
                     >
+                      <div class="overlay">
                       <Card.Img
                         class="blackM"
                         variant="top"
                         src={mealPlan.photo_URL}
                         style={{ width: "100%" }}
                       />
+                      </div>
                       <div
                         class="selectmeal-center"
                         style={{
