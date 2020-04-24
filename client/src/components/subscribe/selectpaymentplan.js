@@ -24,7 +24,7 @@ class SelectPaymentPlan extends Component {
 
   render() {
     return (
-      <section class="content-section">
+      <section class="content-section" style={{ marginTop: "-70px" }}>
         <div class="container font2">
           <center>
             <h2 class="font1">{this.state.meals} MEALS PAYMENT OPTIONS</h2>
@@ -34,7 +34,7 @@ class SelectPaymentPlan extends Component {
                 LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
               </b>
             </h4>
-            <br></br>
+            <br/>
             <hr class="three" />
             <a href="/5-meals-subscription" style={{ color: "black" }}>
               5 MEALS
@@ -53,12 +53,14 @@ class SelectPaymentPlan extends Component {
             </a>
             <hr class="three" />
             <br></br>
-            <CardDeck>
+            <div class="justify-content-center">
+            <CardDeck class="d-flex justify-content-center">
               {this.state.paymentPlans.map(paymentPlan => (
                 <Card
                   style={{
                     maxWidth: "20rem",
-                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
+                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
+                    margin: "30px"
                   }}
                 >
                   {" "}
@@ -138,6 +140,7 @@ class SelectPaymentPlan extends Component {
                 </Card>
               ))}
             </CardDeck>
+            </div>
             <br></br>
             <br></br>
             <hr></hr>
@@ -225,13 +228,6 @@ class SelectPaymentPlan extends Component {
             </Container>
             <br />
             <br />
-            <div style={{ backgroundColor: "black" }}>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-            </div>
             <br />
           </center>
         </div>

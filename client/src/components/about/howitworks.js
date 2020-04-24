@@ -338,13 +338,7 @@ class Howitworks extends Component {
                   </h3>
                   <br />
                 </Cell>{" "}
-                <div style={{ backgroundColor: "black" }}>
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                </div>
+                
                 <br />
               </center>
             </Grid>
