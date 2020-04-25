@@ -65,11 +65,12 @@ class SelectPaymentPlan extends Component {
                 >
                   {" "}
                   <span class="border border-dark" style={{}}>
+                    <div class="overlay">
                     <Card.Img
                       class="black"
                       variant="top"
                       src={paymentPlan.photo_URL}
-                    />
+                    /></div>
                     <div
                       class="mealoption-center"
                       style={{
