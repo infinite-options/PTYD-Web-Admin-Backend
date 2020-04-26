@@ -172,12 +172,6 @@ hr.four {
 }
 
 .black {
-  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
-  outline-offset: -100px;
-  overflow: hidden;
-  position: relative;
-  /*height: 187px;
-  width: 276px; */
   object-fit: cover;
   opacity: 50%;
   height:187px;
@@ -189,14 +183,9 @@ hr.four {
 }
 
 .blackM {
-  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
-  outline-offset: -100px;
-  overflow: hidden;
-  position: relative; */
   object-fit: cover;
   opacity: 50%;
   height: 187px;
-  /* width: 252px; */
   width: 100%;
 }
 .checked {
@@ -279,11 +268,3 @@ hr.four {
   font-size: 20px;
   text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
 }
-
-/* #meal-sub-parent {
-  display: table;
-}
-#meal-sub-child {
-  display: table-cell;
-  vertical-align: middle;
-} */
