@@ -71,7 +71,6 @@ function SignUp(props) {
           // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
 
           // window.location.reload(false);
-          console.log(`done`);
           props.history.push("/signupwaiting");
           window.location.reload(false);
         }
@@ -119,44 +118,50 @@ function SignUp(props) {
 
   return (
     <main Style='margin-top:-80px;'>
-      <div class='container text-center' Style='margin-top:-40px;'>
-        <h1>Sign Up</h1>
-        {erro != null && (
-          <h6>
-            <span class='icon has-text-danger'>
-              <i className='fa fa-info-circle'></i>
-            </span>
-            <span class='has-text-info'>{erro}</span>
-          </h6>
-        )}
-        <div class='row'>
-          <Col></Col>
+      <Row>
+        <Col></Col>
+        <Col sm={8}>
+          <Row className='justify-content-md-center'>
+            <h3>Sign Up</h3>
+          </Row>
+          {erro != null && (
+            <Row className='justify-content-md-center'>
+              <Col></Col>
+              <Col sm={8}>
+                <h6>
+                  <span class='icon has-text-danger'>
+                    <i className='fa fa-info-circle'></i>
+                  </span>
+                  <span class='has-text-info'>{erro}</span>
+                </h6>
+              </Col>
+              <Col></Col>
+            </Row>
+          )}
+          <Row className='justify-content-md-center'>
+            <Container className='container fluid justify-content-center bg-success'>
+              <Form>
+                <Form.Row>
+                  <Form.Group as={Col} controlId='formGridFirstName'>
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control
+                      value={firstname}
+                      onChange={e => setFirstName(e.target.value)}
+                      placeholder='First'
+                    />
+                  </Form.Group>
 
-          <Container className='justify-content-center bg-success'>
-            <Row>
-              <Col size={6}>
-                <Form>
-                  <Form.Row>
-                    <Form.Group as={Col} controlId='formGridFirstName'>
-                      <Form.Label>First Name</Form.Label>
-                      <Form.Control
-                        value={firstname}
-                        onChange={e => setFirstName(e.target.value)}
-                        placeholder='First'
-                      />
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId='formGridLastName'>
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        value={lastname}
-                        onChange={e => setLastName(e.target.value)}
-                        placeholder='Last'
-                      />
-                    </Form.Group>
-                  </Form.Row>
-
-                  <Form.Group controlId='formGridEmail'>
+                  <Form.Group as={Col} controlId='formGridLastName'>
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control
+                      value={lastname}
+                      onChange={e => setLastName(e.target.value)}
+                      placeholder='Last'
+                    />
+                  </Form.Group>
+                </Form.Row>
+                <Form.Row>
+                  <Form.Group as={Col} controlId='formGridEmail'>
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                       type='email'
@@ -169,7 +174,7 @@ function SignUp(props) {
                     />
                   </Form.Group>
 
-                  <Form.Group controlId='formGridEmailConfirm'>
+                  <Form.Group as={Col} controlId='formGridEmailConfirm'>
                     <Form.Label>Confirm Email</Form.Label>
                     <Form.Control
                       type='email'
@@ -178,17 +183,9 @@ function SignUp(props) {
                       placeholder='Confirm Email'
                     />
                   </Form.Group>
-
-                  <Form.Group controlId='formGridPhoneNumber'>
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control
-                      value={phoneNumber}
-                      onChange={e => setPhoneNumber(e.target.value)}
-                      placeholder='Enter Phone Number'
-                    />
-                  </Form.Group>
-
-                  <Form.Group controlId='formGridPassword'>
+                </Form.Row>
+                <Form.Row>
+                  <Form.Group as={Col} controlId='formGridPassword'>
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                       type='password'
@@ -197,8 +194,7 @@ function SignUp(props) {
                       placeholder='Enter Password'
                     />
                   </Form.Group>
-
-                  <Form.Group controlId='formGridPasswordConfirm'>
+                  <Form.Group as={Col} controlId='formGridPasswordConfirm'>
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
                       type='password'
@@ -207,6 +203,18 @@ function SignUp(props) {
                       placeholder='Confirm Password'
                     />
                   </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
+                  <Form.Group as={Col} controlId='formGridPhoneNumber'>
+                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Control
+                      value={phoneNumber}
+                      onChange={e => setPhoneNumber(e.target.value)}
+                      placeholder='Enter Phone Number'
+                    />
+                  </Form.Group>
+
                   <Form.Group as={Col} controlId='formGridReferral'>
                     <Form.Label>Referral</Form.Label>
                     <Form.Control
@@ -220,70 +228,72 @@ function SignUp(props) {
                       <option>Event</option>
                     </Form.Control>
                   </Form.Group>
+                </Form.Row>
+                <Form.Group>
+                  <Form.Label>Terms of Service</Form.Label>
+                  <Form.Control as='textarea' size='sm' rows='4' disabled>
+                    Add Terms of Service to signup.js - Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Curabitur ultrices ligula
+                    in venenatis iaculis. Nunc et rutrum nisl. Aliquam libero
+                    ligula, tempus sit amet libero vel, tincidunt iaculis odio.
+                    Aliquam sed ipsum nulla. Nulla accumsan, est a sodales
+                    cursus, lacus elit fermentum dui, ac ullamcorper tortor nisi
+                    eget massa. Suspendisse eu massa varius, feugiat augue
+                    vitae, venenatis libero. Aliquam varius ligula turpis, non
+                    elementum mauris mattis id. Vestibulum ultrices quam iaculis
+                    justo porttitor tempor. Pellentesque fringilla tempus nisi
+                    sit amet facilisis. Donec sed interdum tellus, non interdum
+                    massa. Donec lectus ex, varius vitae tincidunt in, pulvinar
+                    nec ipsum. Pellentesque habitant morbi tristique senectus et
+                    netus et malesuada fames ac turpis egestas. Nam scelerisque
+                    massa gravida sollicitudin rutrum.
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group id='formGridServiceTerms'>
+                  <Form.Check
+                    type='checkbox'
+                    label='Agree To Prep To Your Door Terms Of Service.'
+                  />
+                </Form.Group>
+                <Form.Group id='formGridCheckbox'>
+                  <Form.Check
+                    id='weeklyUpdateCheck'
+                    value={weeklyUpdates}
+                    onChange={e => {
+                      if (
+                        document.getElementById("weeklyUpdateCheck").checked ===
+                        true
+                      ) {
+                        setWeeklyUpdates("TRUE");
+                      } else {
+                        setWeeklyUpdates("FALSE");
+                      }
+                    }}
+                    type='checkbox'
+                    label='Sign Me Up For Weekly Prep To Your Door Updates!'
+                  />
+                  {/*
+                                      <Form.Control
+                                          value={weeklyUpdates}
+                                          onChange={e => setWeeklyUpdates(e.target.value)}
+                                      />
+                                      */}
+                </Form.Group>
 
-                  <Form.Group>
-                    <Form.Label>Terms of Service</Form.Label>
-                    <Form.Control as='textarea' size='sm' rows='4' disabled>
-                      Add Terms of Service to signup.js - Lorem ipsum dolor sit
-                      amet, consectetur adipiscing elit. Curabitur ultrices
-                      ligula in venenatis iaculis. Nunc et rutrum nisl. Aliquam
-                      libero ligula, tempus sit amet libero vel, tincidunt
-                      iaculis odio. Aliquam sed ipsum nulla. Nulla accumsan, est
-                      a sodales cursus, lacus elit fermentum dui, ac ullamcorper
-                      tortor nisi eget massa. Suspendisse eu massa varius,
-                      feugiat augue vitae, venenatis libero. Aliquam varius
-                      ligula turpis, non elementum mauris mattis id. Vestibulum
-                      ultrices quam iaculis justo porttitor tempor. Pellentesque
-                      fringilla tempus nisi sit amet facilisis. Donec sed
-                      interdum tellus, non interdum massa. Donec lectus ex,
-                      varius vitae tincidunt in, pulvinar nec ipsum.
-                      Pellentesque habitant morbi tristique senectus et netus et
-                      malesuada fames ac turpis egestas. Nam scelerisque massa
-                      gravida sollicitudin rutrum.
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group id='formGridServiceTerms'>
-                    <Form.Check
-                      type='checkbox'
-                      label='Agree To Prep To Your Door Terms Of Service.'
-                    />
-                  </Form.Group>
-                  <Form.Group id='formGridCheckbox'>
-                    <Form.Check
-                      id='weeklyUpdateCheck'
-                      value={weeklyUpdates}
-                      onChange={e => {
-                        if (
-                          document.getElementById("weeklyUpdateCheck")
-                            .checked === true
-                        ) {
-                          setWeeklyUpdates("TRUE");
-                        } else {
-                          setWeeklyUpdates("FALSE");
-                        }
-                      }}
-                      type='checkbox'
-                      label='Sign Me Up For Weekly Prep To Your Door Updates!'
-                    />
-                    {/*
-                                    <Form.Control
-                                        value={weeklyUpdates}
-                                        onChange={e => setWeeklyUpdates(e.target.value)}
-                                    />
-                                    */}
-                  </Form.Group>
-
-                  <Button onClick={sendForm} variant='dark' type='submit'>
-                    Submit
-                  </Button>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
-
-          <Col></Col>
-        </div>
-      </div>
+                <Button
+                  onClick={sendForm}
+                  variant='dark'
+                  type='submit'
+                  size='lg'
+                >
+                  Submit
+                </Button>
+              </Form>
+            </Container>
+          </Row>
+        </Col>
+        <Col></Col>
+      </Row>
     </main>
   );
 }

@@ -42,7 +42,7 @@ export default function Main({appProps}) {
       />
       <AppliedRoute
         exact
-        path='/selectmealplan/:first_name?/:uid?'
+        path='/selectmealplan'
         component={SelectMealPlan}
         appProps={{
           appProps,
