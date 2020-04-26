@@ -65,6 +65,7 @@ class SelectPaymentPlan extends Component {
                 >
                   {" "}
                   <span class="border border-dark" style={{}}>
+                    <div class="borderr">
                     <div class="overlay">
                     <Card.Img
                       class="black"
@@ -82,6 +83,19 @@ class SelectPaymentPlan extends Component {
                       }}
                     >
                       {paymentPlan.num_meals}
+
+                      {/* <div class="meal-plan-container">
+                        <div class="overlay">
+                          <Card.Img
+                            class="blackM"
+                            variant="top"
+                            src={mealPlan.photo_URL}
+                          />
+                        </div>
+                        <div class="selectmeal-center">
+                          {mealPlan.num_meals} MEALS
+                        </div>
+                      </div> */}
                     </div>
                     <Card.Body>
                       <Card.Title>
@@ -137,6 +151,7 @@ class SelectPaymentPlan extends Component {
                         }}
                       />
                     </Card.Body>
+                    </div>
                   </span>
                 </Card>
               ))}
