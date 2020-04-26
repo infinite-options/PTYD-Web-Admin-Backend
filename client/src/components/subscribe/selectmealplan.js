@@ -1,32 +1,33 @@
-import React, { Component } from "react";
-import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
-import { Grid, Cell } from "react-mdl";
+import React, {Component} from "react";
+import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
+import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/img9.webp";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import {timingSafeEqual} from "crypto";
 
 class Selectmealplan extends Component {
   constructor(props) {
     super(props);
-    this.state = { mealPlans: [] };
+    this.state = {
+      mealPlans: []
+    };
   }
-
   async componentDidMount() {
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const mealPlans = api.result.MealPlans.result;
-    this.setState({ mealPlans });
+    this.setState({mealPlans});
   }
-
   render() {
     return (
-      <section class="content-section">
-        <div class="container font2" style={{ width: "80%" }}>
+      <section class='content-section'>
+        <div class='container font2' style={{width: "80%"}}>
           <center>
-            <h2 class="font1" style={{ color: "#4D4D4D" }}>
+            <h2 class='font1' style={{color: "#4D4D4D"}}>
               SELECT A MEAL PLAN
             </h2>
-            <hr class="two" />
-            <h4 class="font1">
+            <hr class='two' />
+            <h4 class='font1'>
               <b>
                 LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
               </b>
@@ -42,9 +43,9 @@ class Selectmealplan extends Component {
                   }}
                 >
                   {mealPlan.num_meals === 10 ? (
-                    <p class="rcorners font3">MOST POPULAR</p>
+                    <p class='rcorners font3'>MOST POPULAR</p>
                   ) : (
-                    <p style={{ height: "32px" }} />
+                    <p style={{height: "32px"}} />
                   )}
                   <Card
                     style={{
@@ -53,23 +54,23 @@ class Selectmealplan extends Component {
                     }}
                   >
                     <div
-                      class="borderr"
+                      class='borderr'
                       style={
                         mealPlan.num_meals === 10
-                          ? { height: "110%", color: "green" }
-                          : { height: "110%" }
+                          ? {height: "110%", color: "green"}
+                          : {height: "110%"}
                       }
                     >
                       <div class="overlay">
                       <Card.Img
-                        class="blackM"
-                        variant="top"
+                        class='blackM'
+                        variant='top'
                         src={mealPlan.photo_URL}
-                        style={{ width: "100%" }}
+                        style={{width: "100%"}}
                       />
                       </div>
                       <div
-                        class="selectmeal-center"
+                        class='selectmeal-center'
                         style={{
                           marginBottom: "10%",
                           fontSize: "30px",
@@ -84,31 +85,27 @@ class Selectmealplan extends Component {
                         <Card.Title>
                           <b>{mealPlan.num_meals} MEALS WEEKLY</b>
                         </Card.Title>
-                        <Card.Text
-                          style={{ fontSize: "15px", color: "#888785" }}
-                        >
+                        <Card.Text style={{fontSize: "15px", color: "#888785"}}>
                           from ${mealPlan.meal_plan_price_per_meal.toFixed(2)}{" "}
                           per meal
                         </Card.Text>
-                        <Card.Text style={{ fontSize: "13px" }}>
+                        <Card.Text style={{fontSize: "13px"}}>
                           {mealPlan.plan_headline}
                         </Card.Text>
                         <Card.Text>
                           STARTING AT ${mealPlan.meal_plan_price.toFixed(2)}{" "}
                           /week
                         </Card.Text>
-                        <Card.Text
-                          style={{ fontSize: "13px", color: "#888785" }}
-                        >
+                        <Card.Text style={{fontSize: "13px", color: "#888785"}}>
                           Sales tax of 8.25% will be added
                         </Card.Text>
                         <Link
-                          style={{ fontFamily: "Kalam", color: "white" }}
+                          style={{fontFamily: "Kalam", color: "white"}}
                           to={mealPlan.RouteOnclick}
                         >
                           <button
-                            type="button"
-                            class="btn2 btn2-primary font4"
+                            type='button'
+                            class='btn2 btn2-primary font4'
                             style={{
                               marginTop: "10px",
                               paddingLeft: "10px",
@@ -123,16 +120,16 @@ class Selectmealplan extends Component {
                           </button>
                         </Link>
                         <img
-                          class="img-fluid"
+                          class='img-fluid'
                           src={IMG9}
-                          alt=""
+                          alt=''
                           style={{
                             width: "90%"
                           }}
                         />
                       </Card.Body>
-                      <Card.Footer Style="bottom:0px; ">
-                        <large className="text-muted">
+                      <Card.Footer Style='bottom:0px; '>
+                        <large className='text-muted'>
                           {mealPlan.plan_footer}
                         </large>
                       </Card.Footer>
@@ -147,49 +144,49 @@ class Selectmealplan extends Component {
             <hr></hr>
             <br></br>
             <br></br>
-            <h3 class="font1" style={{ color: "#196F3D" }}>
+            <h3 class='font1' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
-            <div class="font2">
+            <div class='font2'>
               <Container>
-                <Row style={{ fontSize: "20px" }}>
+                <Row style={{fontSize: "20px"}}>
                   <Col>
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
                   </Col>
                   <Col>
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
                   </Col>
                   <Col>
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
-                    <span class="fa fa-star checked" />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
+                    <span class='fa fa-star checked' />
                   </Col>
                 </Row>
-                <Row style={{ fontSize: "15px" }}>
+                <Row style={{fontSize: "15px"}}>
                   <Col>Convenience and goodness</Col>
                   <Col>PTYD feels like family!</Col>
                   <Col>They make life SO easy!</Col>
                 </Row>
                 <br></br>
-                <Row style={{ fontSize: "15px", color: "#196F3D" }}>
+                <Row style={{fontSize: "15px", color: "#196F3D"}}>
                   <Col>
-                    <hr class="one" />
+                    <hr class='one' />
                   </Col>
                   <Col>
-                    <hr class="one" />
+                    <hr class='one' />
                   </Col>
                   <Col>
-                    <hr class="one" />
+                    <hr class='one' />
                   </Col>
                 </Row>
                 <Row

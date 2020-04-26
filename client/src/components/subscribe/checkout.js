@@ -33,11 +33,20 @@ class Checkout extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.state.user_uid)
+    const login_session = {
+      'login_id': this.searchCookie4LoginID(document.cookie)
+    , 'session_id': this.searchCookie4SessionID(document.cookie)
+    };
+
     if (this.state.user_uid) {
-      const res = await fetch(`${this.props.SALT_URL}/${this.state.user_uid}`);
+      const res = await fetch(`${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.login_id}/${login_session.session_id}`);
       const api = await res.json();
-      console.log(api);
+
+      if (api.result.length == 0) {
+        //could not verify login session
+        console.log("r u hacker");
+        return;
+      }
 
       //  Social Media accounts will have null salts
       //  Disable password field if salt is null
@@ -64,6 +73,28 @@ class Checkout extends Component {
           });
         }
       }
+    }
+  }
+
+  searchCookie4LoginID(str) {
+    try {
+      let arr = str.split(" ");
+      let i = arr.indexOf("login_id:");
+      return arr[i + 1];
+    }
+    catch {
+      return null;
+    }
+  }
+
+  searchCookie4SessionID(str) {
+    try {
+      let arr = str.split(" ");
+      let i = arr.indexOf("session_id:");
+      return arr[i + 1];
+    }
+    catch {
+      return null;
     }
   }
 
@@ -116,7 +147,6 @@ class Checkout extends Component {
 
     //  Check if fields are null/empty
     for (var field of fields) {
-      console.log(this.state.purchase[field]);
       if (!this.state.purchase[field]) {
         return true;
       }
