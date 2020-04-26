@@ -55,7 +55,7 @@
   font-size: 30px;
   width: 100%;
   font-size: 30px;
-  text-shadow: 2px 2px 4px #FFEFB0;
+  text-shadow: 2px 2px 4px #ffefb0;
   line-height: 35px;
   color: white;
 }
@@ -175,7 +175,7 @@ hr.four {
   object-fit: cover;
   opacity: 50%;
   width: 276px;
-  height:187px;
+  height: 187px;
 }
 
 .overlay {
@@ -264,10 +264,11 @@ hr.four {
 
 .rcorners {
   border-radius: 100px 100px 0 0;
-  background: #427c42;
-  padding: 15px;
+  /* background: #427c42; */
+  /* padding: 15px;
   margin: 2px;
-  width: 88%;
+  width: 88%; */
+  margin-bottom: 0px;
   height: 7%;
   color: white;
   font-size: 20px;
