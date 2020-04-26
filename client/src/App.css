@@ -41,11 +41,25 @@
   top: 15%;
   left: 35%;
 }
+
+.meal-plan-container {
+  position: relative;
+  text-align: center;
+}
+
 .selectmeal-center {
   position: absolute;
-  top: 15%;
-  left: 20%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  width: 100%;
+  font-size: 30px;
+  text-shadow: 2px 2px 4px #FFEFB0;
+  line-height: 35px;
+  color: white;
 }
+
 /* Bottom right text */
 .bottom-right {
   position: absolute;
@@ -176,7 +190,8 @@ hr.four {
   object-fit: cover;
   opacity: 50%;
   height: 187px;
-  width: 252px;
+  /* width: 252px; */
+  width: 100%;
 }
 .checked {
   color: rgb(255, 196, 0);
@@ -258,3 +273,11 @@ hr.four {
   font-size: 20px;
   text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
 }
+
+/* #meal-sub-parent {
+  display: table;
+}
+#meal-sub-child {
+  display: table-cell;
+  vertical-align: middle;
+} */

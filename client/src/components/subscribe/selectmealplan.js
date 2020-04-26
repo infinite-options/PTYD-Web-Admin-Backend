@@ -60,25 +60,17 @@ class Selectmealplan extends Component {
                           : { height: "110%" }
                       }
                     >
-                      <div class="overlay">
-                      <Card.Img
-                        class="blackM"
-                        variant="top"
-                        src={mealPlan.photo_URL}
-                        style={{ width: "100%" }}
-                      />
-                      </div>
-                      <div
-                        class="selectmeal-center"
-                        style={{
-                          marginBottom: "10%",
-                          fontSize: "30px",
-                          textShadow: "2px 2px 4px #FFEFB0",
-                          lineHeight: "35px",
-                          color: "white"
-                        }}
-                      >
-                        {mealPlan.num_meals} MEALS
+                      <div class="meal-plan-container">
+                        <div class="overlay">
+                          <Card.Img
+                            class="blackM"
+                            variant="top"
+                            src={mealPlan.photo_URL}
+                          />
+                        </div>
+                        <div class="selectmeal-center">
+                          {mealPlan.num_meals} MEALS
+                        </div>
                       </div>
                       <Card.Body>
                         <Card.Title>
