@@ -36,10 +36,16 @@
   top: 5%;
   left: 30%;
 }
+
 .mealoption-center {
   position: absolute;
-  top: 15%;
-  left: 35%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 100px;
+  text-shadow: 2px 2px 4px #FFEFB0;
+  line-height: 35px;
+  color: white;
 }
 
 .meal-plan-container {
@@ -174,8 +180,8 @@ hr.four {
   width: 276px; */
   object-fit: cover;
   opacity: 50%;
-  width: 276px;
   height:187px;
+  width: 100%;
 }
 
 .overlay {
