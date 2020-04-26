@@ -20,20 +20,21 @@ function SignUp (props)  {
     const [city, setCity] = useState("");
     const [zip, setZip] = useState("");
     const [userState, setUserState] = useState("");
-    const [referral, setReferral] = useState("Social Media");
+    const [referral, setReferral] = useState("Website");
     const [weeklyUpdates, setWeeklyUpdates] = useState("FALSE");
 
     async function sendForm() {
         if (email != confirmEmail) {
-            return "email mismatch";
+            return {'code': 470, 'result': "Email mismatch."};
         }
 
         if (password != confirmPassword) {
-            return "password mismatch";
+            return {'code': 471, 'result': "Password mismatch."};
         }
 
-        fetch(props.API_URL, {
+        const res = await fetch(props.API_URL, {
           method: 'POST',
+          mode: 'no-cors',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -52,12 +53,37 @@ function SignUp (props)  {
             Referral: referral,
             WeeklyUpdates: weeklyUpdates,
           })
-        })
+        });
 
-        return "success";
+        const response = await res.json();
+        console.log("response.code");
+        console.log(response.code);
+
+        return response;
     }
 
-    const sending = () => sendForm().then(mes => console.log(mes)).catch(err => console.log(err))
+    function handleSubmit(event) {
+      event.preventDefault();
+    }
+
+    function handleSignup (response) {
+      console.log(response);
+      if (response.code == 281) {
+        document.cookie = " loginStatus: Hello " + response.first_name + "! , " + " user_uid: " + response.user_uid + " , ";
+
+        // NOT WORKING
+        // redirect & reload page for buttons and login status
+        props.history.push('/');
+        window.location.reload(false);
+      }
+      else {
+        // DISPLAY ERROR MSG
+//      props.history.push('/signup');
+        window.location.reload(false);
+      }
+    }
+
+    const sending = () => sendForm().then(mes => handleSignup(mes)).catch(err => console.log(err))
 
     return (
         <main Style="margin-top:-80px;">
@@ -69,7 +95,7 @@ function SignUp (props)  {
                 <Container className="justify-content-center bg-success">
                     <Row>
                         <Col size={6} >               
-                            <Form >
+                            <Form onSubmit={handleSubmit}>
                                 <Form.Row>
                                     <Form.Group as={Col} controlId="formGridFirstName">
                                     <Form.Label>First Name</Form.Label>
@@ -127,62 +153,30 @@ function SignUp (props)  {
                                     onChange={e => setConfirmPassword(e.target.value)}
                                     placeholder="Confirm Password" />
                                 </Form.Group>
-
-                                <Form.Row>
-                                    <Form.Group as={Col} sm={9} controlId="formGridAddress">
-                                        <Form.Label>Address</Form.Label>
-                                        <Form.Control
-                                            value={address}
-                                            onChange={e => setAddress(e.target.value)}
-                                            placeholder="1234 Main St" />
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridAddressUnit">
-                                        <Form.Label>Unit</Form.Label>
-                                        <Form.Control
-                                            value={addressUnit}
-                                            onChange={e => setAddressUnit(e.target.value)}
-                                            placeholder="" />
-                                    </Form.Group>
-                                </Form.Row>
-                                
-
-                                <Form.Row>
-                                    <Form.Group as={Col} controlId="formGridCity">
-                                    <Form.Label>City</Form.Label>
-                                    <Form.Control 
-                                        value={city}
-                                        onChange={e => setCity(e.target.value)}
-                                        />
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>State</Form.Label>
-                                    <Form.Control as="select" value={userState} onChange={e => setUserState(e.target.value)}>
-                                        <option>Choose...</option>
-                                        <option>TX</option>
-                                    </Form.Control>
-                                    </Form.Group>
-
-                                    <Form.Group as={Col} controlId="formGridZip">
-                                    <Form.Label>Zip</Form.Label>
-                                    <Form.Control
-                                        value={zip}
-                                        onChange={e => setZip(e.target.value)}
-                                    />
-                                    </Form.Group>
-                                </Form.Row>
-
                                 <Form.Group as={Col} controlId="formGridReferral">
                                     <Form.Label>Referral</Form.Label>
                                     <Form.Control as="select" value={referral} onChange={e => setReferral(e.target.value)}>
-                                        <option>Social Media</option>
                                         <option>Website</option>
+                                        <option>Social Media</option>
                                         <option>Friend</option>
                                         <option>Event</option>
                                     </Form.Control>
                                 </Form.Group>
 
+                                <Form.Group>
+                                  <Form.Label>Terms of Service</Form.Label>
+                                  <Form.Control
+                                    as="textarea"
+                                    size="sm"
+                                    rows="4"
+                                    disabled
+                                  >
+                                    Add Terms of Service to signup.js - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ultrices ligula in venenatis iaculis. Nunc et rutrum nisl. Aliquam libero ligula, tempus sit amet libero vel, tincidunt iaculis odio. Aliquam sed ipsum nulla. Nulla accumsan, est a sodales cursus, lacus elit fermentum dui, ac ullamcorper tortor nisi eget massa. Suspendisse eu massa varius, feugiat augue vitae, venenatis libero. Aliquam varius ligula turpis, non elementum mauris mattis id. Vestibulum ultrices quam iaculis justo porttitor tempor. Pellentesque fringilla tempus nisi sit amet facilisis. Donec sed interdum tellus, non interdum massa. Donec lectus ex, varius vitae tincidunt in, pulvinar nec ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam scelerisque massa gravida sollicitudin rutrum.
+                                  </Form.Control>
+                                </Form.Group>
+                                <Form.Group id="formGridServiceTerms">
+                                    <Form.Check type="checkbox" label="Agree To Prep To Your Door Terms Of Service." />
+                                </Form.Group>
                                 <Form.Group id="formGridCheckbox">
                                     <Form.Check 
                                         id="weeklyUpdateCheck"
@@ -204,10 +198,6 @@ function SignUp (props)  {
                                         onChange={e => setWeeklyUpdates(e.target.value)}
                                     />
                                     */}
-                                </Form.Group>
-
-                                <Form.Group id="formGridServiceTerms">
-                                    <Form.Check type="checkbox" label="Agree To Prep To Your Door Terms Of Service." />
                                 </Form.Group>
 
                                 <Button onClick={ sending } variant="dark" type="submit">

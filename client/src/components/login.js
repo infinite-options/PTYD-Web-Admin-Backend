@@ -9,13 +9,15 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 
 import crypto from "crypto";
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 export default function Login (props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
-  const [users, setUsers] = useState([]);
+  const [salt, setSalt] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -32,22 +34,87 @@ export default function Login (props) {
 
   async function onLoad() {
     // fill it up when needed
-    const res = await fetch(props.API_URL);
-    const api = await res.json();
-    const logins = api.result.Accounts;
-    setUsers(logins);
   }
 
-  async function componentDidMount() {
-    const res = await fetch(props.API_URL);
+//async function componentDidMount() {
+//  const res = await fetch(props.API_URL);
+//  const api = await res.json();
+//  setSalt(api.result[0].password_salt);
+//}
+
+  // Social Media 
+
+  // API GET Request for Social Media User Data
+  async function checkForSocial(user) {
+    const res = await fetch(props.SOCIAL_API_URL + '/' + user );
     const api = await res.json();
-    console.log(api);
-    const logins = api.result.Accounts;
-    setUsers(logins);
+    const social = api.result.result[0];
+    return social;
   }
+
+  async function grabSocialUserInfor(uid) {
+    const res = await fetch(props.SOCIAL_API_URL + 'acc/' + uid );
+    const api = await res.json();
+    const login = api.result.result[0];
+    return login;
+  }
+
+  const responseGoogle = (response) => {
+    console.log("Google Response: ", response);
+    const e = response.profileObj.email
+    const at = response.accessToken
+    const rt = response.googleId
+
+    checkForSocial(e)
+    .then(res1 => { 
+      console.log("Social Media User: ", res1)
+      grabSocialUserInfor(res1.user_uid)
+      .then(res2 => socialLogin(res2))
+      .catch(err => console.log(err)) }
+    )
+    .catch(err => {
+      console.log(err)
+      // Redirect to Signup Page for Social Media Users
+      props.history.push({
+        pathname: "/socialsignup",
+        state: {
+          email: e,
+          social: "google",
+          accessToken: at,
+          refreshToken: rt
+        }
+      })
+      window.location.reload(false)
+    })
+  }
+
+  const responseFacebook = (response) => {
+    console.log(response);
+  }
+
+  function socialLogin(user) {
+    console.log("Login Social Media User: " + user)
+    let uid = user.user_uid
+    let name = user.first_name
+      
+    document.cookie = " loginStatus: Hello " + name  + "! , " + " user_uid: " + uid + " , ";
+    console.log(document.cookie)
+
+    // redirect & reload page for buttons and login status
+    props.history.push("/");
+    window.location.reload(false);
+    
+    console.log('Social Media Login Complete!');
+  }
+
+  // Direct Login
+
 
   async function grabLoginInfoForUser(userEmail, userPass) {
-    const salt = users.find(user => user.user_email === userEmail).password_salt;
+    const saltres = await fetch(props.API_URL + '/' + userEmail);
+    const saltapi = await saltres.json();
+    const salt = saltapi.result[0].password_salt;
+    console.log(salt);
     const res = await fetch(props.SINGLE_ACC_API_URL + '/' + userEmail + '/' + crypto.createHash('sha512').update(userPass + salt).digest('hex'));
     const api = await res.json();
     return api;
@@ -125,6 +192,42 @@ export default function Login (props) {
                     <Button variant="dark" onClick={ checkLogin } disabled={!validateForm()} type="submit" >Sign In</Button>
 
                   </Form>
+                </Col>
+              </Row>
+
+              <h4>
+                Or Login With Social Media!
+              </h4>
+
+              <Row>
+                {/*
+                <Col>
+                  <div 
+                    Style={{
+                      width: '200px'
+                    }}
+                  > 
+                    <FacebookLogin
+                      appId="508721976476931"
+                      //autoLoad={true}
+                      fields="name,email,picture"
+                      onClick={console.log('test')}
+                      callback={responseFacebook} 
+                      size="small"
+                      textButton="FB Login"
+                    />
+                  </div>
+                </Col>
+                */}
+                
+                <Col>
+                  <GoogleLogin
+                    clientId="333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com"
+                    buttonText="Login"
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                  />
                 </Col>
               </Row>
             </Container>

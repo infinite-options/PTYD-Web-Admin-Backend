@@ -4,10 +4,15 @@ import EachMeal from "./each-meal";
 import EachAddon from "./each-addon";
 
 import { ButtonToolbar, Button, Modal, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
+
+    console.log("Props");
+    console.log(this.props);
+
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
     this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
 
@@ -22,13 +27,16 @@ export default class MealButton extends Component {
       requestModal: false,
       // buttonDisabled: true,
       buttonSelectKeepColor: false,
-      buttonAddOnKeepColor: false,
+      buttonAddOnKeepColor: this.props.addonsSelected,
       mealQuantities: this.props.mealQuantities,
+      addonQuantities: this.props.addonQuantities,
       maxmeals: this.props.maxmeals,
       maxmealsCopy: this.props.maxmeals,
       addonActivated: false,
       flag: false,
+      mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
+      subscribed: this.props.subscribed,
     };
   }
 
@@ -48,6 +56,7 @@ export default class MealButton extends Component {
           buttonSkip: true,
           buttonSurprise: false,
           buttonDisabled: true,
+          buttonAddOnKeepColor: false,
         });
         break;
       case 'Monday':
@@ -69,19 +78,35 @@ export default class MealButton extends Component {
   }
 
   sendForm = () => {
-    fetch(this.props.API_URL, {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        recipient_id: this.props.recipient_id,
+        purchase_id: this.props.purchase_id,
         week_affected: this.props.saturdayDate,
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
         default_selected: this.state.buttonSurprise,
-        num_meals: this.props.maxmeals,
+        is_addons: false,
+      })
+    });
+  };
+
+  sendAddonForm = () => {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        purchase_id: this.props.purchase_id,
+        week_affected: this.props.saturdayDate,
+        addon_quantities: this.state.addonQuantities,
+        is_addons: true,
       })
     });
   };
@@ -97,15 +122,17 @@ export default class MealButton extends Component {
   closeButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
-      buttonAddOnKeepColor: true
+      buttonAddOnKeepColor: false,
+      addonQuantities: this.props.addonQuantities
     });
   };
-  // keepButtonAddOn = () => {
-  //   this.setState({
-  //     buttonAddOn: false,
-  //     buttonAddOnKeepColor: true
-  //   });
-  // };
+  saveButtonAddOn = () => {
+    this.setState({
+      buttonAddOn: false,
+      buttonAddOnKeepColor: true
+    });
+    this.sendAddonForm();
+  };
 
   changeButtonS = () => {
     this.setState({
@@ -219,6 +246,7 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
+              disabled={!this.state.mondayAvailable}
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
@@ -228,6 +256,7 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;
             <Button
+              disabled={!this.state.subscribed}
               variant="outline-dark"
               style={this.state.buttonSkip ? orange : hide}
               onClick={this.changeButtonSkip}
@@ -257,7 +286,7 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled || !this.state.subscribed}
             variant="outline-dark"
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
@@ -268,6 +297,7 @@ export default class MealButton extends Component {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {/* <SpecialRequestAnimation /> */}
           <Button
+            disabled={this.state.buttonDisabled}
             variant="outline-dark"
             style={
               (this.state.buttonAddOn ? orange : hide,
@@ -337,8 +367,8 @@ export default class MealButton extends Component {
               {this.props.menu[key].Menu.map(meal => (
                 <Cell col={4}>
                   <EachMeal
-                    mealTitle={meal.meal_desc}
-                    ingridents="Ingredients: Not Yet in Database"
+                    mealTitle={meal.meal_name}
+                    ingridents={"Ingredients: " + meal.meal_desc}
                     detail={
                       "Cal " +
                       meal.meal_calories +
@@ -358,17 +388,17 @@ export default class MealButton extends Component {
                     imgurl={meal.meal_photo_url}
                     maxmeals={this.state.maxmeals}
                     mealQuantities={
-                      this.state.mealQuantities[meal.menu_meal_id]
+                      this.state.mealQuantities[meal.meal_id]
                     }
                     incrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
-                      stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                      stateCopy.mealQuantities[meal.meal_id] -= 1;
                       this.setState(stateCopy);
                       this.setState({ maxmeals: this.state.maxmeals + 1 });
                     }}
                     decrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
-                      stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                      stateCopy.mealQuantities[meal.meal_id] += 1;
                       this.setState(stateCopy);
                       this.setState({ maxmeals: this.state.maxmeals - 1 });
                     }}
@@ -388,7 +418,7 @@ export default class MealButton extends Component {
                   this.state.flag === false
                 ) {
                   alert(
-                    "Are you sure your want to close without save the changes?"
+                    "Are you sure you want to close without saving?"
                   );
                   this.setState({
                     flag: true
@@ -401,12 +431,18 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            {this.state.maxmeals === 0 ? (
-              <Button variant="primary" onClick={this.saveButtonActivateAddons}>
-                Save changes
-              </Button>
+            {this.state.subscribed ? (
+              (this.state.maxmeals === 0 ? (
+                <Button variant="primary" onClick={this.saveButtonActivateAddons}>
+                  Save changes
+                </Button>
+              ) : (
+                <br />
+              ))
             ) : (
-              <br />
+              <Link to="/selectmealplan" className="btn btn-danger" >
+                Subscribe Now
+              </Link>
             )}
           </center>
         </Card.Body>
@@ -446,8 +482,8 @@ export default class MealButton extends Component {
                   {this.props.addons[key].Menu.map(meal => (
                     <Cell col={4}>
                       <EachAddon
-                        mealTitle={meal.meal_desc}
-                        ingridents="Ingredients: Not Yet in Database"
+                        mealTitle={meal.meal_name}
+                        ingridents={"Ingredients: " + meal.meal_desc}
                         detail={
                           "Cal " +
                           meal.meal_calories +
@@ -465,14 +501,17 @@ export default class MealButton extends Component {
                           meal.meal_sat
                         }
                         imgurl={meal.meal_photo_url}
+                        addonQuantities={
+                          this.state.addonQuantities[meal.meal_id]
+                        }
                         incrementAddon={() => {
                           var stateCopy = Object.assign({}, this.state);
-                          stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                          stateCopy.addonQuantities[meal.menu_meal_id] += 1;
                           this.setState(stateCopy);
                         }}
                         decrementAddon={() => {
                           var stateCopy = Object.assign({}, this.state);
-                          stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                          stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
                           this.setState(stateCopy);
                         }}
                       />
@@ -490,7 +529,7 @@ export default class MealButton extends Component {
                 <Cell col={12}>
                   <center>
                     <h4 style={{ margin: "0" }}>
-                      {this.props.addons["Addons"].Category}
+                        { this.props.addons["Addons"].Category }
                     </h4>
                   </center>
                 </Cell>
@@ -498,8 +537,8 @@ export default class MealButton extends Component {
                 {this.props.addons["Addons"].Menu.map(meal => (
                   <Cell col={4}>
                     <EachAddon
-                      mealTitle={meal.meal_desc}
-                      ingridents="Ingredients: Not Yet in Database"
+                      mealTitle={meal.meal_name}
+                      ingridents={"Ingredients: " + meal.meal_desc}
                       detail={
                         "Cal " +
                         meal.meal_calories +
@@ -517,14 +556,17 @@ export default class MealButton extends Component {
                         meal.meal_sat
                       }
                       imgurl={meal.meal_photo_url}
+                      addonQuantities={
+                        this.state.addonQuantities[meal.meal_id]
+                      }
                       incrementAddon={() => {
                         var stateCopy = Object.assign({}, this.state);
-                        stateCopy.mealQuantities[meal.menu_meal_id] += 1;
+                        stateCopy.addonQuantities[meal.menu_meal_id] += 1;
                         this.setState(stateCopy);
                       }}
                       decrementAddon={() => {
                         var stateCopy = Object.assign({}, this.state);
-                        stateCopy.mealQuantities[meal.menu_meal_id] -= 1;
+                        stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
                         this.setState(stateCopy);
                       }}
                     />
@@ -541,7 +583,13 @@ export default class MealButton extends Component {
               Close
             </Button>
             &nbsp;&nbsp;
-            <Button variant="primary">Save changes</Button>
+            {this.state.subscribed ? (
+              <Button variant="primary" onClick={this.saveButtonAddOn}>Save changes</Button>
+            ) : (
+              <Link to="/selectmealplan" className="btn btn-danger" >
+                Subscribe Now
+              </Link>
+            )}
           </center>
         </Card.Body>
       </Card>

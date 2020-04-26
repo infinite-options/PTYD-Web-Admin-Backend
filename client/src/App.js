@@ -25,6 +25,11 @@ const App = props => {
       if (searchCookie4UserID(document.cookie).includes('100-')){
         userHasAuthenticated(true);
       }
+      else if (!document.cookie.includes("loginStatus")){
+        document.cookie =
+          " loginStatus: Sign In , user_uid: null , ";
+        console.log("First time? Resetting document cookie");
+      }
     } catch (e) {
       console.log("No user?");
       if (e !== "No current user") {
@@ -203,8 +208,68 @@ const App = props => {
             <a href="/menuthisweek">MENU</a>
             <a href="/findus">FIND US</a>
             <a href="/giftcards">GIFT CARDS</a>
-            <a href="/">ABOUT</a>
-            <a href="/">GET $100</a>
+            <NavDropdown
+              title="ABOUT"
+              id="nav-dropdown"
+              Style="margin-left:-10px; color:black;"
+            >
+              <NavDropdown.Item href="/howitworks">HOW IT WORKS</NavDropdown.Item>
+              <NavDropdown.Item href="/ourstory">OUR STORY</NavDropdown.Item>
+              <NavDropdown.Item href="/faq">FAQ</NavDropdown.Item>
+              <NavDropdown.Item
+                href="https://www.messenger.com/t/preptoyourdoor"
+                target="_blank"
+              >
+                CONTACT
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
+            </NavDropdown>
+            <a href="/get100">GET $100</a>
+            <div className="sideNavLogin">
+              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
+                <div>
+                  <a href="/logout">
+                    <Button
+                      id="logoutButton"
+                      variant="success"
+                      size="sm"
+                      onClick={() => {
+                        document.cookie =
+                          " loginStatus: Sign In , user_uid: null , ";
+                        window.location.reload(false);
+                      }}
+                    >
+                      Log Out
+                    </Button>
+                  </a>
+                  <p
+                    id="loginStatus"
+                    Style="font-size:20px; text-align:right; color:black;"
+                  >
+                    {searchCookie4Login(document.cookie)}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <a href="/login">
+                    <Button
+                      id="loginButton"
+                      variant="success"
+                      size="sm"
+                      onClick={() => window.location.reload(false)}
+                    >
+                      Login
+                    </Button>
+                  </a>
+                  <p
+                    id="loginStatus"
+                    Style="font-size:12px; text-align:right; color:black;"
+                  >
+                    {searchCookie4Login(document.cookie)}
+                  </p>
+                </>
+              )}
+            </div>
           </Navigation>
         </Drawer>
 

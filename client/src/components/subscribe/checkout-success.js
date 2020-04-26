@@ -8,9 +8,16 @@ class CheckoutSuccess extends Component {
     return (
       <div class="container text-center">
         <h1>Checkout Successful!</h1>
-        <a href="/">
-          <img src={TruckIcon} alt="Truck Icon" />
-        </a>
+        <div>
+          <a href="/mealschedule">
+            <img src={TruckIcon} alt="Truck Icon" />
+          </a>
+        </div>
+        <div>
+          <a href="/mealschedule">
+            Go to Meal Schedule
+          </a>
+        </div>
       </div>
     );
   }
