@@ -11,15 +11,10 @@ import Form from "react-bootstrap/Form";
 
 import axios from "axios";
 import crypto from "crypto";
-import FacebookLogin from 'react-facebook-login';
-import GoogleLogin from 'react-google-login';
+import FacebookLogin from "react-facebook-login";
+import GoogleLogin from "react-google-login";
 
-import {
-  getIp 
-, getBrowser
-}
-from '../functions/getClientInfo';
-
+import {getIp, getBrowser} from "../functions/getClientInfo";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
@@ -44,13 +39,19 @@ export default function Login(props) {
     // eslint-disable-next-line
   }, []);
 
-  function onLoad() {
+  async function onLoad() {
     // fill it up when needed
     let data;
     let params = props.match.params;
+    let ip_res = await getIp();
+    let browser_type = getBrowser().browser_type;
     let LogIn = (e, p) => {
       if (props.SINGLE_ACC_API_URL !== undefined) {
-        axios(`${props.SINGLE_ACC_API_URL}/${e}/${p}`)
+        axios
+          .post(`${props.SINGLE_ACC_API_URL}/${e}/${p}`, {
+            ip_address: ip_res.ip,
+            browser_type: browser_type
+          })
           .then(res => {
             data = res.data.result.result[0];
             document.cookie = ` loginStatus: Hello ${data.first_name}! ,  user_uid: ${data.uid} , ; path=/ `;
@@ -90,7 +91,7 @@ export default function Login(props) {
     return login;
   }
 
-  const responseGoogle = (response) => {
+  const responseGoogle = response => {
     console.log("Google Response: ", response);
     const e = response.profileObj.email;
     const at = response.accessToken;
@@ -103,52 +104,52 @@ export default function Login(props) {
           .then(res2 => socialLogin(res2))
           .catch(err => console.log(err));
       })
-    .catch(err => {
-      console.log(err)
-      // Redirect to Signup Page for Social Media Users
-      props.history.push({
-        pathname: "/socialsignup",
-        state: {
-          email: e,
-          social: "google",
-          accessToken: at,
-          refreshToken: rt
-        }
-      })
-      window.location.reload(false)
-    })
-  }
+      .catch(err => {
+        console.log(err);
+        // Redirect to Signup Page for Social Media Users
+        props.history.push({
+          pathname: "/socialsignup",
+          state: {
+            email: e,
+            social: "google",
+            accessToken: at,
+            refreshToken: rt
+          }
+        });
+        window.location.reload(false);
+      });
+  };
   // Maria Alejcgfbaifeg Changsky	104605834561957	pnkuzirrok_1587274227@tfbnw.net
 
-  const responseFacebook = (response) => {
+  const responseFacebook = response => {
     console.log("Facebook Response ", response);
-    const e = response.email
-    const at = response.accessToken
-    const rt = response.id
-    console.log(e, at, rt)
+    const e = response.email;
+    const at = response.accessToken;
+    const rt = response.id;
+    console.log(e, at, rt);
 
     checkForSocial(e)
-    .then(res1 => { 
-      console.log("Social Media User: ", res1)
-      grabSocialUserInfor(res1.user_uid)
-      .then(res2 => socialLogin(res2))
-      .catch(err => console.log(err)) }
-    )
-    .catch(err => {
-      console.log(err)
-      // Redirect to Signup Page for Social Media Users
-      props.history.push({
-        pathname: "/socialsignup",
-        state: {
-          email: e,
-          social: "facebook",
-          accessToken: at,
-          refreshToken: rt
-        }
+      .then(res1 => {
+        console.log("Social Media User: ", res1);
+        grabSocialUserInfor(res1.user_uid)
+          .then(res2 => socialLogin(res2))
+          .catch(err => console.log(err));
       })
-      window.location.reload(false)
-    })
-  }
+      .catch(err => {
+        console.log(err);
+        // Redirect to Signup Page for Social Media Users
+        props.history.push({
+          pathname: "/socialsignup",
+          state: {
+            email: e,
+            social: "facebook",
+            accessToken: at,
+            refreshToken: rt
+          }
+        });
+        window.location.reload(false);
+      });
+  };
 
   function socialLogin(user) {
     console.log("Login Social Media User: " + user);
@@ -180,23 +181,29 @@ export default function Login(props) {
     const salt = saltapi.result[0].password_salt;
 
     const ip_res = await getIp();
-    const browser_type = getBrowser();
-
-    const res = await fetch(
-      props.SINGLE_ACC_API_URL +
-        "/" +
-        userEmail +
-        "/" +
-        crypto
-          .createHash("sha512")
-          .update(userPass + salt)
-          .digest("hex")
-    );
-    const api = await res.json();
-    if (api.auth_success === false) {
-      throw "Sorry, Wrong Password.";
-    } else {
-      return api;
+    const browser_type = getBrowser().browser_type;
+    const pass = crypto
+      .createHash("sha512")
+      .update(userPass + salt)
+      .digest("hex");
+    try {
+      const res = await axios.post(
+        props.SINGLE_ACC_API_URL + "/" + userEmail + "/" + pass,
+        {
+          ip_address: ip_res.ip,
+          browser_type: browser_type
+        }
+      );
+      if (res.status === 200) {
+        //success
+        console.log(res);
+        return res.data;
+      } else {
+        RaiseError("Wrong password");
+      }
+    } catch (err) {
+      console.log(`error happended: ${err}`);
+      RaiseError(err);
     }
   }
 
@@ -208,7 +215,6 @@ export default function Login(props) {
 
     // await login(t);
   }
-
   async function login(response) {
     let userId = response.result.result[0].user_uid;
     console.log(userId);
@@ -257,8 +263,7 @@ export default function Login(props) {
       } else {
         props.history.push("/"); // should prompt something or asking for re-login
       }
-    } 
-    else {
+    } else {
       document.cookie = " loginStatus: null , user_uid: null , ";
     }
   }
@@ -330,23 +335,23 @@ export default function Login(props) {
             <h4>Or Login With Social Media!</h4>
 
             <Row>
-                <Col>
-                  <div 
-                    Style={{
-                      width: '200px'
-                    }}
-                  > 
-                    <FacebookLogin
-                      appId="508721976476931"
-                      autoLoad={true}
-                      fields="name,email,picture"
-                      onClick={console.log('test')}
-                      callback={responseFacebook} 
-                      size="small"
-                      textButton="FB Login"
-                    />
-                  </div>
-                </Col>
+              <Col>
+                <div
+                  Style={{
+                    width: "200px"
+                  }}
+                >
+                  <FacebookLogin
+                    appId='508721976476931'
+                    autoLoad={true}
+                    fields='name,email,picture'
+                    onClick={console.log("test")}
+                    callback={responseFacebook}
+                    size='small'
+                    textButton='FB Login'
+                  />
+                </div>
+              </Col>
 
               <Col>
                 <GoogleLogin

@@ -593,13 +593,12 @@ def LogLoginAttempt(data, conn):
 
         login_id_res = execute("CALL get_login_id;", 'get', conn)
         login_id = login_id_res['result'][0]['new_id']
-
         # Generate random session ID
+
         if data["auth_success"] is "TRUE":
             session_id = "\'" + sha512(getNow().encode()).hexdigest() + "\'"
         else:
             session_id = "NULL"
-
         sql = """
             INSERT INTO ptyd_login (
                 login_attempt
@@ -622,13 +621,14 @@ def LogLoginAttempt(data, conn):
                 , \'""" + data["browser_type"] + """\'
                 , \'""" + getNow() + """\'
                 , \'""" + data["auth_success"] + """\'
-                , """ + session_id + """
+                , \'""" + session_id + """\'
             );
             """
         log = execute(sql, 'post', conn)
 
         if session_id != "NULL":
             session_id = session_id[1:-1]
+            print(session_id)
 
         response['session_id'] = session_id
         response['login_id'] = login_id
@@ -645,7 +645,7 @@ class Login(Resource):
         try:
             conn = connect()
             data = request.get_json(force=True)
-
+            print (data)
             if data.get('ip_address') == None:
                 response['message'] = 'Request failed, did not receive IP address.'
                 return response, 400
