@@ -39,14 +39,17 @@ class Checkout extends Component {
     };
 
     if (this.state.user_uid) {
+
       const res = await fetch(`${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.login_id}/${login_session.session_id}`);
       const api = await res.json();
 
+      /*
       if (api.result.length == 0) {
         //could not verify login session
         console.log("r u hacker");
         return;
       }
+      */
 
       //  Social Media accounts will have null salts
       //  Disable password field if salt is null

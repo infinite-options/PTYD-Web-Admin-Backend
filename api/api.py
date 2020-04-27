@@ -486,24 +486,26 @@ class SessionVerification(Resource):
         try:
             conn = connect()
 
-            verifySession = execute("""
-                CALL get_session(\'"""
-                + userUid
-                + "\');", 'get', conn)
+#           verifySession = execute("""
+#               CALL get_session(\'"""
+#               + userUid
+#               + """\', """
+#               + data['browser_type']
+#               + "\');", 'get', conn)
 
-            if verifySession['code'] == 280 and len(verifySession['result']) != 1:
-                response['message'] = 'Could not verify login session.'
-                response['result'] = []
-                return response, 401
-            else:
-                if verifySession['result'][0]['login_attempt'] != loginId:
-                    response['message'] = 'Invalid login ID.'
-                    response['result'] = []
-                    return response, 401
-                if verifySession['result'][0]['session_id'] != sessionId:
-                    response['message'] = 'Invalid session ID.'
-                    response['result'] = []
-                    return response, 401
+#           if verifySession['code'] == 280 and len(verifySession['result']) != 1:
+#               response['message'] = 'Could not verify login session.'
+#               response['result'] = []
+#               return response, 401
+#           else:
+#               if verifySession['result'][0]['login_attempt'] != loginId:
+#                   response['message'] = 'Invalid login ID.'
+#                   response['result'] = []
+#                   return response, 401
+#               if verifySession['result'][0]['session_id'] != sessionId:
+#                   response['message'] = 'Invalid session ID.'
+#                   response['result'] = []
+#                   return response, 401
 
             items = execute(""" SELECT password_salt
                                 , referral_source
@@ -1138,13 +1140,12 @@ class Checkout(Resource):
             userAuth = execute(queries[0], 'get', conn)
 
             possSocialAcc = execute(
-                "SELECT user_uid FROM ptyd_social_accounts WHERE user_email = '" + data['delivery_email'] + "';", 'get',
+                "SELECT user_uid FROM ptyd_social_accounts WHERE user_uid = '" + data['user_uid'] + "';", 'get',
                 conn)
             print(json.dumps(possSocialAcc, indent=1))
 
             if len(possSocialAcc['result']) != 0:
                 if possSocialAcc['result'][0]['user_uid'] == data['user_uid']:
-                    print('Very Cool Kanye!')
                     print("Successfully authenticated user.")
                 else:
                     response['message'] = 'Could not authenticate user.'
@@ -1220,8 +1221,8 @@ class Checkout(Resource):
                         \'""" + data['delivery_state'] + """\',
                         \'""" + data['delivery_zip'] + """\',
                         \'""" + data['delivery_region'] + """\',
-                        """ + delivery_coord['longitude'] + """,
-                        """ + delivery_coord['latitude'] + """
+                        """ + str(delivery_coord['longitude']) + """,
+                        """ + str(delivery_coord['latitude']) + """
                     );"""
             )
 
