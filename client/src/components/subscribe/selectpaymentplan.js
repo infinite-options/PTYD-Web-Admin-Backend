@@ -65,24 +65,19 @@ class SelectPaymentPlan extends Component {
                 >
                   {" "}
                   <span class="border border-dark" style={{}}>
-                    <div class="overlay">
-                    <Card.Img
-                      class="black"
-                      variant="top"
-                      src={paymentPlan.photo_URL}
-                    /></div>
-                    <div
-                      class="mealoption-center"
-                      style={{
-                        marginBottom: "10%",
-                        fontSize: "100px",
-                        textShadow: "2px 2px 4px #FFEFB0",
-                        lineHeight: "35px",
-                        color: "white"
-                      }}
-                    >
-                      {paymentPlan.num_meals}
-                    </div>
+                    <div class="borderr">
+                      <div class="meal-plan-container">
+                        <div class="overlay">
+                          <Card.Img
+                            class="black"
+                            variant="top"
+                            src={paymentPlan.photo_URL}
+                          />
+                        </div>
+                        <div class="mealoption-center">
+                          {paymentPlan.num_meals}
+                        </div>
+                        </div>
                     <Card.Body>
                       <Card.Title>
                         <b>{paymentPlan.payment_frequency.toUpperCase()}</b>
@@ -137,6 +132,7 @@ class SelectPaymentPlan extends Component {
                         }}
                       />
                     </Card.Body>
+                    </div>
                   </span>
                 </Card>
               ))}
