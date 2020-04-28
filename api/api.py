@@ -12,6 +12,9 @@ from datetime import datetime, date, timedelta
 from hashlib import sha512
 from math import ceil
 
+# BING API KEY
+from api_keys import BING_API_KEY
+
 import decimal
 import sys
 import json
@@ -953,7 +956,7 @@ class Coordinates:
     
     def calculateFromLocations(self):
         params = {
-        'key' : "AjarHaO5ugwlQDMfMsMEYziHW1Gugafz3e3CRGJy_a4KGHtYidc38JUGR1psA0A9"
+        'key' : BING_API_KEY
         }
         coordinates = []
 
