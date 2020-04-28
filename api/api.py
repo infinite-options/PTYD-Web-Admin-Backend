@@ -13,7 +13,11 @@ from hashlib import sha512
 from math import ceil
 
 # BING API KEY
-from api_keys import BING_API_KEY
+# Import Bing API key into bing_api_key.py
+from bing_api_key import BING_API_KEY
+
+# When deploying to Zappa, replace above statement with below:
+#BING_API_KEY = "insert_key_kere"
 
 import decimal
 import sys
@@ -955,6 +959,8 @@ class Coordinates:
         self.locations = locations
     
     def calculateFromLocations(self):
+        global BING_API_KEY
+
         params = {
         'key' : BING_API_KEY
         }

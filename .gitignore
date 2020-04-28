@@ -1,5 +1,4 @@
-*api_keys.py
-
+*api_key.py
 node_modules
 *__pycache__*
 *.log

@@ -1,5 +1,7 @@
 flask
 flask-restful
 flask_cors
+flask_mail
+itsdangerous
 pymysql
 zappa
