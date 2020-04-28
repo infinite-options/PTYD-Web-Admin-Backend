@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'brandongrotw01-lightregular';
+  src: url('font/brandon_grot_w01_light-webfont.woff2') format('woff2'),
+       url('font/brandon_grot_w01_light-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* landing page */
 .container {
   position: relative;
@@ -233,7 +241,7 @@ hr.four {
 
 /* big header */
 .font1 {
-  font-family: "Raleway", sans-serif;
+  font-family: brandongrotw01-lightregular,sans-serif;
 }
 /* text font */
 .font2 {
