@@ -630,7 +630,7 @@ def LogLoginAttempt(data, conn):
                 , \'""" + data["browser_type"] + """\'
                 , \'""" + getNow() + """\'
                 , \'""" + data["auth_success"] + """\'
-                , \'""" + session_id + """\'
+                , """ + session_id + """
             );
             """
         log = execute(sql, 'post', conn)
@@ -641,6 +641,7 @@ def LogLoginAttempt(data, conn):
 
         response['session_id'] = session_id
         response['login_id'] = login_id
+        print(log)
 
         return response
     except:
@@ -1769,80 +1770,106 @@ class MealSelection(Resource):
         try:
             conn = connect()
 
+#           queries = ["""
+#               SELECT latest_active.week_affected
+#                   , latest_sel.meal_selection
+#                   , latest_sel.delivery_day
+#               FROM (
+#                   # LATEST ACTIVE SUBSCRIPTIONS BY WEEK WITH MEALS PURCHASED
+#                   SELECT active.*
+#                       ,pur_plans.num_meals
+#                   FROM (
+#                       SELECT snap1.*
+#                           , snap2.latest_snapshot
+#                       FROM ptyd_snapshots AS snap1
+#                       INNER JOIN (
+#                           SELECT *, MAX(snapshot_timestamp) AS latest_snapshot
+#                           FROM ptyd_snapshots
+#                           GROUP BY purchase_id
+#                               , week_affected)
+#                           AS snap2 
+#                       ON snap1.purchase_id = snap2.purchase_id 
+#                           AND snap1.week_affected = snap2.week_affected 
+#                           AND snap1.snapshot_timestamp = snap2.latest_snapshot)
+#                       AS active
+#                   LEFT JOIN (
+#                       SELECT pur.*
+#                       , plans.num_meals
+#                       FROM ptyd.ptyd_purchases pur
+#                       LEFT JOIN ptyd_meal_plans plans
+#                       ON pur.meal_plan_id = plans.meal_plan_id)
+#                       AS pur_plans
+#                   ON active.purchase_id = pur_plans.purchase_id)
+#                   AS latest_active
+#               LEFT JOIN (
+#                   SELECT ms1.*
+#                       , ms2.latest_selection
+#                   FROM ptyd_meals_selected AS ms1
+#                   INNER JOIN (
+#                       SELECT *, MAX(selection_time) AS latest_selection
+#                       FROM ptyd_meals_selected
+#                       GROUP BY purchase_id
+#                           , week_affected)
+#                       AS ms2 
+#                   ON ms1.purchase_id = ms2.purchase_id 
+#                       AND ms1.week_affected = ms2.week_affected 
+#                       AND ms1.selection_time = ms2.latest_selection)
+#                   AS latest_sel
+#               ON latest_active.purchase_id = latest_sel.purchase_id 
+#                   AND latest_active.week_affected = latest_sel.week_affected
+#               WHERE
+#                   latest_active.purchase_id = \'""" + purchaseId + """\'
+#               ;""", """
+#               SELECT
+#                   ms1.purchase_id
+#                   , ms1.week_affected
+#                   , ms1.meal_selection
+#                   
+#               FROM ptyd_addons_selected AS ms1
+#               INNER JOIN (
+#                   SELECT
+#                       purchase_id
+#                       , week_affected
+#                       , meal_selection
+#                       , MAX(selection_time) AS latest_selection
+#                   FROM ptyd_addons_selected
+#                   GROUP BY purchase_id
+#                       , week_affected
+#               ) as ms2 
+#               ON
+#                   ms1.purchase_id = ms2.purchase_id
+#               AND
+#                   ms1.week_affected = ms2.week_affected
+#               AND
+#                   ms1.selection_time = ms2.latest_selection
+#               WHERE
+#                   ms1.purchase_id = \'""" + purchaseId + """\'
+#               ;"""]
+
             queries = ["""
-                SELECT latest_active.week_affected
-                    , latest_sel.meal_selection
-                    , latest_sel.delivery_day
-                FROM (
-                    # LATEST ACTIVE SUBSCRIPTIONS BY WEEK WITH MEALS PURCHASED
-                    SELECT active.*
-                        ,pur_plans.num_meals
-                    FROM (
-                        SELECT snap1.*
-                            , snap2.latest_snapshot
-                        FROM ptyd_snapshots AS snap1
-                        INNER JOIN (
-                            SELECT *, MAX(snapshot_timestamp) AS latest_snapshot
-                            FROM ptyd_snapshots
-                            GROUP BY purchase_id
-                                , week_affected)
-                            AS snap2 
-                        ON snap1.purchase_id = snap2.purchase_id 
-                            AND snap1.week_affected = snap2.week_affected 
-                            AND snap1.snapshot_timestamp = snap2.latest_snapshot)
-                        AS active
-                    LEFT JOIN (
-                        SELECT pur.*
-                        , plans.num_meals
-                        FROM ptyd.ptyd_purchases pur
-                        LEFT JOIN ptyd_meal_plans plans
-                        ON pur.meal_plan_id = plans.meal_plan_id)
-                        AS pur_plans
-                    ON active.purchase_id = pur_plans.purchase_id)
-                    AS latest_active
-                LEFT JOIN (
-                    SELECT ms1.*
-                        , ms2.latest_selection
-                    FROM ptyd_meals_selected AS ms1
-                    INNER JOIN (
-                        SELECT *, MAX(selection_time) AS latest_selection
-                        FROM ptyd_meals_selected
-                        GROUP BY purchase_id
-                            , week_affected)
-                        AS ms2 
-                    ON ms1.purchase_id = ms2.purchase_id 
-                        AND ms1.week_affected = ms2.week_affected 
-                        AND ms1.selection_time = ms2.latest_selection)
-                    AS latest_sel
-                ON latest_active.purchase_id = latest_sel.purchase_id 
-                    AND latest_active.week_affected = latest_sel.week_affected
-                WHERE
-                    latest_active.purchase_id = \'""" + purchaseId + """\'
+
                 ;""", """
+                # WORKING AND VERIFIED  
+                # SAME
+                # (KEY QUERY - use this to count meals from a string)
+                # Latest Meal Selection (from ptyd_addons_selected table)  
                 SELECT
-                    ms1.purchase_id
+                ms1.purchase_id
                     , ms1.week_affected
-                    , ms1.meal_selection
-                    
+                , ms1.meal_selection
+                   
                 FROM ptyd_addons_selected AS ms1
                 INNER JOIN (
-                    SELECT
-                        purchase_id
+                SELECT
+                purchase_id
                         , week_affected
                         , meal_selection
                         , MAX(selection_time) AS latest_selection
-                    FROM ptyd_addons_selected
-                    GROUP BY purchase_id
-                        , week_affected
-                ) as ms2 
-                ON
-                    ms1.purchase_id = ms2.purchase_id
-                AND
-                    ms1.week_affected = ms2.week_affected
-                AND
-                    ms1.selection_time = ms2.latest_selection
-                WHERE
-                    ms1.purchase_id = \'""" + purchaseId + """\'
+                FROM ptyd_addons_selected
+                GROUP BY purchase_id
+                , week_affected
+                ) as ms2
+                ON ms1.purchase_id = ms2.purchase_id AND ms1.week_affected = ms2.week_affected AND ms1.selection_time = ms2.latest_selection
                 ;"""]
 
             meals = execute(queries[0], 'get', conn)
