@@ -20,14 +20,14 @@ class Selectmealplan extends Component {
   }
   render() {
     return (
-      <section class='content-section'>
-        <div class='container font2' style={{width: "80%"}}>
+      <section className='content-section'>
+        <div className='container font2' style={{width: "80%"}}>
           <center>
-            <h2 class='font1' style={{color: "#4D4D4D"}}>
+            <h2 className='font1' style={{color: "#4D4D4D"}}>
               SELECT A MEAL PLAN
             </h2>
-            <hr class='two' />
-            <h4 class='font1'>
+            <hr className='two' />
+            <h4 className='font1'>
               <b>
                 LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
               </b>
@@ -35,60 +35,34 @@ class Selectmealplan extends Component {
             <br></br>
             <CardDeck>
               {this.state.mealPlans.map(mealPlan => (
-                <Card
-                  style={{
-                    padding: "0px",
-                    border: "none",
-                    width: "auto"
-                  }}
-                >
+                <Card className='p-0 border-0 w-auto'>
                   {mealPlan.num_meals === 10 ? (
-                    <p
-                      className='rcorners font3'
-                      style={{
-                        backgroundColor: "#427c42",
-                        padding: "10px"
-                      }}
-                    >
-                      MOST POPULAR
-                    </p>
+                    <div className='rcorners font3 d-flex rcorner_color'>
+                      <h6 className='align-self-center mx-auto'>
+                        MOST POPULAR
+                      </h6>
+                    </div>
                   ) : (
-                    <p className='rcorners'></p>
+                    <h3 className='rcorners'></h3>
                   )}
 
-                  <Card.Body
-                    style={{
-                      padding: "0px",
-                      border: "1px solid #b4b4b4",
-                      boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
-                    }}
-                  >
-                    {/* <div
-                      class='borderr'
-                      style={
-                        mealPlan.num_meals === 10
-                          ? {height: "110%", color: "green"}
-                          : {height: "110%"}
-                      }
-                    > */}
-                    <Card.Img
-                      class='blackM'
-                      variant='top'
-                      src={mealPlan.photo_URL}
-                      style={{width: "100%"}}
-                    />
-                    <div
-                      class='selectmeal-center'
-                      style={{
-                        marginBottom: "10%",
-                        fontSize: "30px",
-                        textShadow: "2px 2px 4px #FFEFB0",
-                        lineHeight: "35px",
-                        color: "white"
-                      }}
-                    >
-                      {mealPlan.num_meals} MEALS
-                    </div>
+                  <Card.Body className='border_card_subcribe'>
+                    <Card.Header className='p-0 position-relative'>
+                      <Card.Img
+                        variant='top'
+                        src={mealPlan.photo_URL}
+                        style={{
+                          "border-top-left-radius": "0px",
+                          "border-top-right-radius": "0px"
+                        }}
+                      />
+
+                      <Card.ImgOverlay className='d-flex'>
+                        <span className='px-0 align-self-center mx-auto selectmeal-center'>
+                          {mealPlan.num_meals} MEALS
+                        </span>
+                      </Card.ImgOverlay>
+                    </Card.Header>
                     <Card.Body>
                       <Card.Title>
                         <b>{mealPlan.num_meals} MEALS WEEKLY</b>
