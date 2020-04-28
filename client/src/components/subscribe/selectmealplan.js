@@ -43,10 +43,17 @@ class Selectmealplan extends Component {
                       </h6>
                     </div>
                   ) : (
-                    <h3 className='rcorners'></h3>
+                    <div className='rcorners font3 d-flex'>
+                      <h6 className='lign-self-center mx-auto'></h6>
+                    </div>
                   )}
 
-                  <Card.Body className='border_card_subcribe'>
+                  <Card.Body
+                    className={
+                      "borderr border_card_subcribe" +
+                      (mealPlan.num_meals === 10 ? " card_color" : "")
+                    }
+                  >
                     <Card.Header className='p-0 position-relative'>
                       <Card.Img
                         variant='top'
@@ -56,7 +63,6 @@ class Selectmealplan extends Component {
                           "border-top-right-radius": "0px"
                         }}
                       />
-
                       <Card.ImgOverlay className='d-flex'>
                         <span className='px-0 align-self-center mx-auto selectmeal-center'>
                           {mealPlan.num_meals} MEALS
