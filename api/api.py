@@ -1207,7 +1207,7 @@ class Checkout(Resource):
                     VALUES
                     (
                         \'""" + purchaseId + """\',
-                        \'TRUE\',
+                        \'ACTIVE\',
                         \'""" + mealPlanId + """\',
                         \'""" + getToday() + """\',
                         \'""" + data['delivery_first_name'] + """\',
