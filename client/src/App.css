@@ -54,16 +54,11 @@
 }
 
 .selectmeal-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   font-size: 30px;
-  width: 100%;
-  font-size: 30px;
-  text-shadow: 2px 2px 4px #FFEFB0;
-  line-height: 35px;
+  text-shadow: 2px 2px 4px #ffefb0;
+  line-height: 30px;
   color: white;
+  vertical-align: middle;
 }
 
 /* Bottom right text */
@@ -302,16 +297,20 @@ hr.four {
 
 .rcorners {
   border-radius: 100px 100px 0 0;
-  background: #427c42;
-  padding: 15px;
+  /* background: #427c42; */
+  /* padding: 15px;
   margin: 2px;
-  width: 88%;
+  width: 88%; */
+  margin-bottom: 3px;
   height: 7%;
   color: white;
   font-size: 20px;
   text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
 }
 
+.rcorner_color {
+  background-color: #427c42;
+}
 /* #meal-sub-parent {
   display: table;
 }
@@ -319,3 +318,13 @@ hr.four {
   display: table-cell;
   vertical-align: middle;
 } */
+
+.border_card_subcribe {
+  padding: 0px !important;
+  /* border: 1px solid #b4b4b4; */
+  box-shadow: 10px 0px 32px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card_color {
+  color: green;
+}
