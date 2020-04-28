@@ -9,6 +9,14 @@ import ANNA from "../../img/Anna.png";
 import THOMAS from "../../img/Thomas.png";
 import JUSTIN from "../../img/Justin.png";
 import COMPANY from "../../img/company.png";
+import LOGOBOULDIN from "../../img/logo-bouldinfoodforest.jpg"
+import LOGOFOX7 from "../../img/logo-fox7austin.jpg"
+import LOGOCREDO from "../../img/logo-credo.jpg"
+import LOGOCURCUMA from "../../img/logo-curcuma.jpg"
+import LOGOFRONKS from "../../img/logo-fronks.png"
+import LOGOJBG from "../../img/logo-jbg.png"
+import LOGOYELLOWBIRD from "../../img/logo-yellowbird.png"
+import LOGOSIETE from "../../img/logo-siete.png"
 
 class Ourstory extends Component {
   render() {
@@ -277,12 +285,40 @@ class Ourstory extends Component {
             <br />
             <h5 class="font1">A special thanks to these “team members” too!</h5>
             <br />
-            <img
+
+            <Grid className="sponsors">
+              <Cell col={3} align='middle'>
+                <img src={LOGOJBG} alt="jbg" />
+              </Cell>
+              <Cell col={3} align='middle'>
+                <img src={LOGOFOX7} alt="fox7austin" />
+              </Cell>
+              <Cell col={3} align='middle'>
+                <img src={LOGOCURCUMA} alt="curcuma" />
+              </Cell>
+              <Cell col={3} align='middle'>
+                <img src={LOGOYELLOWBIRD} alt="yellowbird" />
+              </Cell>
+              <Cell col={3} align='middle'>
+                <img src={LOGOFRONKS} alt="fronks" />
+              </Cell>
+              <Cell col={3} align='middle'>
+                <img src={LOGOBOULDIN} alt="bouldin" />
+              </Cell>
+              <Cell col={3} align='middle'>
+                <img src={LOGOCREDO} alt="credo" />
+              </Cell>
+              <Cell col={3} align='middle'>
+                <img src={LOGOSIETE} alt="siete" />
+              </Cell>
+            </Grid>
+            
+            {/* <img
               class="img-fluid"
               style={{ width: "60%", height: "30%" }}
               src={COMPANY}
               alt=""
-            />
+            /> */}
           </center>
         </div>
       </div>

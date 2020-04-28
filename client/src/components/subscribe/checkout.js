@@ -12,6 +12,7 @@ class Checkout extends Component {
       user_uid: searchCookie4UserID(document.cookie),
       password_salt: null,
       purchase: {},
+      disabled: true,
       gift: "FALSE",
       password: null,
       salt: null
@@ -28,21 +29,75 @@ class Checkout extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleGiftChange = this.handleGiftChange.bind(this);
     this.handlePwChange = this.handlePwChange.bind(this);
+    this.validateForm = this.validateForm.bind(this);
   }
 
   async componentDidMount() {
-    console.log(this.state.user_uid)
-    if (this.state.user_uid) {
-      const res = await fetch(`${this.props.SALT_URL}/${this.state.user_uid}`);
-      const api = await res.json();
-      console.log(api);
-      this.setState({ password_salt: api.result[0].password_salt });
+    const login_session = {
+      'login_id': this.searchCookie4LoginID(document.cookie)
+    , 'session_id': this.searchCookie4SessionID(document.cookie)
+    };
 
-      const users = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
-      const usersApi = await users.json();
-      if (usersApi.result.length != 0) {
-        this.setState({ purchase: usersApi.result[0] });
+    if (this.state.user_uid) {
+
+      const res = await fetch(`${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.login_id}/${login_session.session_id}`);
+      const api = await res.json();
+
+      /*
+      if (api.result.length == 0) {
+        //could not verify login session
+        console.log("r u hacker");
+        return;
       }
+      */
+
+      //  Social Media accounts will have null salts
+      //  Disable password field if salt is null
+      this.setState({
+        password_salt: api.result[0].password_salt
+      });
+
+      const pur = await fetch(`${this.props.PURCHASE_API_URL}/${this.state.user_uid}`);
+      const purApi = await pur.json();
+      if (purApi.result.length != 0) {
+        this.setState({ purchase: purApi.result[0] });
+      }
+      else {
+        const acc = await fetch(`${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`);
+        const accApi = await acc.json();
+        if (accApi.result.length != 0) {
+          this.setState({
+            purchase: {
+              delivery_first_name: accApi.result[0].first_name,
+              delivery_last_name: accApi.result[0].last_name,
+              delivery_email: accApi.result[0].user_email,
+              delivery_phone: accApi.result[0].phone_number,
+            },
+          });
+        }
+      }
+    }
+  }
+
+  searchCookie4LoginID(str) {
+    try {
+      let arr = str.split(" ");
+      let i = arr.indexOf("login_id:");
+      return arr[i + 1];
+    }
+    catch {
+      return null;
+    }
+  }
+
+  searchCookie4SessionID(str) {
+    try {
+      let arr = str.split(" ");
+      let i = arr.indexOf("session_id:");
+      return arr[i + 1];
+    }
+    catch {
+      return null;
     }
   }
 
@@ -72,6 +127,71 @@ class Checkout extends Component {
     this.sendForm()
     .then(res => this.handleApi(res))
     .catch(err => console.log(err));
+  }
+
+  validateForm() {
+    var fields = [
+      'delivery_first_name'
+      , 'delivery_last_name'
+      , 'delivery_instructions'
+      , 'delivery_email'
+      , 'delivery_address'
+      , 'delivery_city'
+      , 'delivery_state'
+      , 'delivery_zip'
+      , 'delivery_region'
+      , 'delivery_phone'
+      , 'cc_num'
+      , 'cc_cvv'
+      , 'cc_exp_month'
+      , 'cc_exp_year'
+      , 'billing_zip'
+    ];
+
+    //  Check if fields are null/empty
+    for (var field of fields) {
+      if (!this.state.purchase[field]) {
+        return true;
+      }
+    }
+
+    //  Check if fields have correct length
+    //  Disable submit if phone number isn't 10 digits
+    if (this.state.purchase.delivery_phone.length != 10 || !/^\d+$/.test(this.state.purchase.delivery_phone) ) {
+      return true;
+    }
+    //  Disable submit if cc_num isn't 16 characters
+    if (this.state.purchase.cc_num.length != 16) {
+      return true;
+    }
+    //  Disable submit if cc_num isn't 16 characters
+    if (this.state.purchase.cc_cvv.length != 3) {
+      return true;
+    }
+
+    //  Data check zipcodes
+    var zipcode_fields = [
+      'delivery_zip'
+      , 'billing_zip'
+    ];
+
+    for (var zipfield of zipcode_fields) {
+      if (this.state.purchase[zipfield].length != 5 && this.state.purchase[zipfield].length != 10) {
+        return true;
+      }
+
+      //  Disable submit if zipcode is 5 characters but contains nondigits
+      if (this.state.purchase[zipfield].length == 5 && !/^\d+$/.test(this.state.purchase[zipfield]) ) {
+        return true;
+      }
+
+      //  Disable submit if zipcode is 10 characters but contains nondigits in first 5 characters or last 4 characters or if 6th character is not a hyphen
+      if (this.state.purchase[zipfield].length == 10 && ( !/^\d+$/.test(this.state.purchase[zipfield].substring(0,5) ) || !/^\d+$/.test(this.state.purchase[zipfield].substring(6,10)) || this.state.purchase[zipfield][5] != '-' ) ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   handleApi(response) {
@@ -164,7 +284,7 @@ class Checkout extends Component {
               <Form>
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridFirstName">
-                    <Form.Label>First Name</Form.Label>
+                    <Form.Label>First Name<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Enter First Name"
                       value={this.state.purchase.delivery_first_name}
@@ -174,7 +294,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridLastName">
-                    <Form.Label>Last Name</Form.Label>
+                    <Form.Label>Last Name<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Enter Last Name"
                       value={this.state.purchase.delivery_last_name}
@@ -185,9 +305,9 @@ class Checkout extends Component {
                 </Form.Row>
 
                 <Form.Group controlId="formGridNotes">
-                  <Form.Label>Delivery Notes</Form.Label>
+                  <Form.Label>Delivery Notes<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
-                    placeholder="Enter Notes or N/A"
+                    placeholder="Enter Notes or N/A (e.g. Gate Code, Special Instructions)"
                     value={this.state.purchase.delivery_instructions}
                     name="delivery_instructions"
                     onChange={this.handleChange}
@@ -196,7 +316,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridEmail">
-                    <Form.Label>Email</Form.Label>
+                    <Form.Label>Email<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       type="email"
                       placeholder="Enter Email"
@@ -207,19 +327,20 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Password<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       type="password"
-                      placeholder="Enter Password"
+                      placeholder={!this.state.password_salt ? "Social Media Account" : "Enter Password"}
                       value={this.state.password}
                       name="password"
                       onChange={this.handlePwChange}
+                      disabled={!this.state.password_salt ? true : false}
                     />
                   </Form.Group>
                 </Form.Row>
 
                 <Form.Group controlId="formGridAddress">
-                  <Form.Label>Address</Form.Label>
+                  <Form.Label>Address<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
                     placeholder="1234 Main St"
                     value={this.state.purchase.delivery_address}
@@ -235,7 +356,7 @@ class Checkout extends Component {
                   controlId="formGridAptNum"
                 >
                   <Form.Label>
-                    Apartment/Unit <b>(Optional)</b>
+                    Apartment/Unit <b>(optional)</b>
                   </Form.Label>
                   <Form.Control
                     placeholder="Apartment, studio, or floor"
@@ -247,7 +368,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Label>City</Form.Label>
+                    <Form.Label>City<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Prep City"
                       value={this.state.purchase.delivery_city}
@@ -257,7 +378,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridState">
-                    <Form.Label>State</Form.Label>
+                    <Form.Label>State<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select" value={this.state.purchase.delivery_state} name="delivery_state" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>TX</option>
@@ -265,7 +386,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridZip">
-                    <Form.Label>Zip</Form.Label>
+                    <Form.Label>Zip<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="12345"
                       value={this.state.purchase.delivery_zip}
@@ -281,7 +402,7 @@ class Checkout extends Component {
                   Style="margin-left:-15px;"
                   controlId="formGridCountry"
                 >
-                  <Form.Label>Country</Form.Label>
+                  <Form.Label>Country<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control as="select" value={this.state.purchase.delivery_region} name="delivery_region" onChange={this.handleChange}>
                     <option>Choose...</option>
                     <option>US</option>
@@ -289,8 +410,9 @@ class Checkout extends Component {
                 </Form.Group>
 
                 <Form.Group controlId="formGridPhoneNumber">
+                  <Form.Label>Phone Number<span className="required-red"> (required)</span></Form.Label>
                   <Form.Control
-                    placeholder="Phone Number"
+                    placeholder="1234567890"
                     value={this.state.purchase.delivery_phone}
                     name="delivery_phone"
                     onChange={this.handleChange}
@@ -311,7 +433,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} md={6} controlId="formGridCardNumber">
-                    <Form.Label>Credit Card Number</Form.Label>
+                    <Form.Label>Credit Card Number<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="Enter Card Number"
                       value={this.state.purchase.cc_num}
@@ -323,7 +445,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} md={3} controlId="formGridCardCvc">
-                    <Form.Label>CVC</Form.Label>
+                    <Form.Label>CVC<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="123"
                       value={this.state.purchase.cc_cvv}
@@ -333,7 +455,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} md={3} controlId="formGridCardMonth">
-                    <Form.Label>Month</Form.Label>
+                    <Form.Label>Month<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select" value={this.state.purchase.cc_exp_month} name="cc_exp_month" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>01</option>
@@ -352,7 +474,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} md={3} controlId="formGridCardYear">
-                    <Form.Label>Year</Form.Label>
+                    <Form.Label>Year<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select" value={this.state.purchase.cc_exp_year} name="cc_exp_year" onChange={this.handleChange}>
                       <option>Choose...</option>
                       <option>2020</option>
@@ -371,7 +493,7 @@ class Checkout extends Component {
 
                 <Form.Row>
                   <Form.Group as={Col} md={4} controlId="formGridBillingZip">
-                    <Form.Label>Postal Code</Form.Label>
+                    <Form.Label>Postal Code<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       placeholder="12345"
                       value={this.state.purchase.billing_zip}
@@ -381,7 +503,7 @@ class Checkout extends Component {
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridBillingCountry">
-                    <Form.Label>Country</Form.Label>
+                    <Form.Label>Country<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control as="select">
                       <option>Choose...</option>
                       <option>US</option>
@@ -389,7 +511,7 @@ class Checkout extends Component {
                   </Form.Group>
                 </Form.Row>
 
-                <Button onClick={ this.checkout } variant="success" type="submit">
+                <Button onClick={ this.checkout } variant="success" type="submit" disabled={this.validateForm()}>
                   Checkout
                 </Button>
               </Form>

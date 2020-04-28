@@ -24,7 +24,7 @@ class SelectPaymentPlan extends Component {
 
   render() {
     return (
-      <section class="content-section">
+      <section class="content-section" style={{ marginTop: "-70px" }}>
         <div class="container font2">
           <center>
             <h2 class="font1">{this.state.meals} MEALS PAYMENT OPTIONS</h2>
@@ -34,7 +34,7 @@ class SelectPaymentPlan extends Component {
                 LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
               </b>
             </h4>
-            <br></br>
+            <br/>
             <hr class="three" />
             <a href="/5-meals-subscription" style={{ color: "black" }}>
               5 MEALS
@@ -53,33 +53,31 @@ class SelectPaymentPlan extends Component {
             </a>
             <hr class="three" />
             <br></br>
-            <CardDeck>
+            <div class="justify-content-center">
+            <CardDeck class="d-flex justify-content-center">
               {this.state.paymentPlans.map(paymentPlan => (
                 <Card
                   style={{
                     maxWidth: "20rem",
-                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
+                    boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
+                    margin: "30px"
                   }}
                 >
                   {" "}
                   <span class="border border-dark" style={{}}>
-                    <Card.Img
-                      class="black"
-                      variant="top"
-                      src={paymentPlan.photo_URL}
-                    />
-                    <div
-                      class="mealoption-center"
-                      style={{
-                        marginBottom: "10%",
-                        fontSize: "100px",
-                        textShadow: "2px 2px 4px #FFEFB0",
-                        lineHeight: "35px",
-                        color: "white"
-                      }}
-                    >
-                      {paymentPlan.num_meals}
-                    </div>
+                    <div class="borderr">
+                      <div class="meal-plan-container">
+                        <div class="overlay">
+                          <Card.Img
+                            class="black"
+                            variant="top"
+                            src={paymentPlan.photo_URL}
+                          />
+                        </div>
+                        <div class="mealoption-center">
+                          {paymentPlan.num_meals}
+                        </div>
+                        </div>
                     <Card.Body>
                       <Card.Title>
                         <b>{paymentPlan.payment_frequency.toUpperCase()}</b>
@@ -134,10 +132,12 @@ class SelectPaymentPlan extends Component {
                         }}
                       />
                     </Card.Body>
+                    </div>
                   </span>
                 </Card>
               ))}
             </CardDeck>
+            </div>
             <br></br>
             <br></br>
             <hr></hr>
@@ -225,13 +225,6 @@ class SelectPaymentPlan extends Component {
             </Container>
             <br />
             <br />
-            <div style={{ backgroundColor: "black" }}>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-            </div>
             <br />
           </center>
         </div>

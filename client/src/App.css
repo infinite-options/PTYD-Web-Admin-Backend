@@ -36,21 +36,49 @@
   top: 5%;
   left: 30%;
 }
+
 .mealoption-center {
   position: absolute;
-  top: 15%;
-  left: 35%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 100px;
+  text-shadow: 2px 2px 4px #FFEFB0;
+  line-height: 35px;
+  color: white;
 }
+
+.meal-plan-container {
+  position: relative;
+  text-align: center;
+}
+
 .selectmeal-center {
   position: absolute;
-  top: 15%;
-  left: 20%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  width: 100%;
+  font-size: 30px;
+  text-shadow: 2px 2px 4px #FFEFB0;
+  line-height: 35px;
+  color: white;
 }
+
 /* Bottom right text */
 .bottom-right {
   position: absolute;
   bottom: 8px;
   right: 16px;
+}
+
+.bottom-right-meal-selection {
+  position: absolute;
+  bottom: 30px;
+  right: 0.1px;
+  left: 0.1px;
+  float: right;
 }
 
 /* Centered text */
@@ -61,10 +89,19 @@
   transform: translate(-50%, -50%);
 }
 
+.override-form-control {
+  color: #181818;
+}
+
 br {
   display: block;
   margin: 100px 100px;
   line-height: 22px;
+}
+
+/* required asterisk */
+.required-red {
+  color: red;
 }
 
 /* button */
@@ -152,20 +189,32 @@ hr.four {
 }
 
 .black {
-  outline: 100px solid rgba(0, 0, 0, 0.5) !important;
+  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
   outline-offset: -100px;
   overflow: hidden;
   position: relative;
-  height: 187px;
-  width: 276px;
+  /*height: 187px;
+  width: 276px; */
+  object-fit: cover;
+  opacity: 50%;
+  height:187px;
+  width: 100%;
 }
+
+.overlay {
+  background: black;
+}
+
 .blackM {
-  outline: 100px solid rgba(0, 0, 0, 0.5) !important;
+  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
   outline-offset: -100px;
   overflow: hidden;
-  position: relative;
+  position: relative; */
+  object-fit: cover;
+  opacity: 50%;
   height: 187px;
-  width: 252px;
+  /* width: 252px; */
+  width: 100%;
 }
 .checked {
   color: rgb(255, 196, 0);
@@ -207,6 +256,16 @@ hr.four {
 .h6 {
   font-size: 10em;
 }
+.container-select-meal {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.scrollMenu {
+  overflow: auto;
+  height: 550px;
+}
 
 /* font */
 
@@ -230,6 +289,11 @@ hr.four {
   font-family: "Montserrat", sans-serif;
 }
 
+.scrollMenu-profile {
+  overflow: auto;
+  height: 450px;
+}
+
 /* subscription page */
 .borderr {
   border-style: solid;
@@ -247,3 +311,11 @@ hr.four {
   font-size: 20px;
   text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
 }
+
+/* #meal-sub-parent {
+  display: table;
+}
+#meal-sub-child {
+  display: table-cell;
+  vertical-align: middle;
+} */
