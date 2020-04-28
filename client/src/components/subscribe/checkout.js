@@ -330,7 +330,7 @@ class Checkout extends Component {
                     <Form.Label>Password<span className="required-red"> (required)</span></Form.Label>
                     <Form.Control
                       type="password"
-                      placeholder={!this.state.password_salt ? "No Password Needed" : "Enter Password"}
+                      placeholder={!this.state.password_salt ? "Social Media Account" : "Enter Password"}
                       value={this.state.password}
                       name="password"
                       onChange={this.handlePwChange}
