@@ -343,7 +343,7 @@ export default function Login(props) {
                 >
                   <FacebookLogin
                     appId='508721976476931'
-                    autoLoad={true}
+                    autoLoad={false}
                     fields='name,email,picture'
                     onClick={console.log("test")}
                     callback={responseFacebook}
