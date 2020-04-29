@@ -71,7 +71,6 @@ RDS_PW = RdsPw()
 getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
 getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
-
 # Connect to MySQL database (API v2)
 def connect():
     global RDS_PW
@@ -153,7 +152,6 @@ def execute(sql, cmd, conn, skipSerialization=False):
         response['sql'] = sql
         return response
 
-
 # Plans API (v2)
 class Plans(Resource):
 
@@ -233,7 +231,6 @@ class Plans(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
 
 # V2 Meals API
 class Meals(Resource):
@@ -529,7 +526,6 @@ class SessionVerification(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
 
 class AccountSalt(Resource):
     def get(self, accEmail):
@@ -2095,9 +2091,23 @@ class SocialSignUp(Resource):
 
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
-                response['result'] = 'Could not commit account.'
+
+                query = """
+                    SELECT user_email FROM ptyd_accounts
+                    WHERE user_email = \'""" + Email + "\';"
+
+                emailExists = execute(query, 'get', conn)
+
+                if emailExists['code'] == 280 and len(emailExists['result']) > 0:
+                    statusCode = 400
+                    response['result'] = 'Email address taken.'
+                else:
+                    statusCode = 500
+                    response['result'] = 'Internal server error.'
+
+                response['code'] = usnInsert['code']
                 print(response['message'], response['result'], usnInsert['code'])
-                return response, 400
+                return response, statusCode
 
             socInsert = execute(queries[2], 'post', conn)
 
@@ -2108,7 +2118,11 @@ class SocialSignUp(Resource):
                 return response, 500
 
             response['message'] = 'Request successful.'
+            response['code'] = usnInsert['code']
+            response['first_name'] = FirstName
+            response['user_uid'] = NewUserID
 
+            print(response)
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -2207,6 +2221,265 @@ class CheckEmail(Resource):
         finally:
             disconnect(conn)
 
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        # Remove last semicolon
+        return mealSelectionString[:-1]
+
+    def postQuery(self, purchaseId, data):
+        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if data['is_addons'] == True:
+            mealSelection = self.formatMealSelection(data['addon_quantities'])
+            query = """
+                INSERT INTO ptyd_addons_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + "\');"
+        else:
+            # Handle SKIP request
+            if data['delivery_day'] == 'SKIP':
+                mealSelection = 'SKIP'
+            # Handle default meal selection
+            elif data['default_selected'] is True:
+                mealSelection = 'SURPRISE'
+            # Handle custom meal selection
+            else:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+
+            query = """
+                INSERT INTO ptyd_meals_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection,
+                    delivery_day
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + """\',
+                    \'""" + data['delivery_day'] + "\');"
+
+        return query
+
+    # HTTP method POST
+    def post(self, purchaseId):
+        response = {}
+        items = []
+        try:
+            conn = connect()
+
+            data = request.get_json(force=True)
+            print("Received:", data)
+
+            queries = [
+                """ SELECT purchase_id
+                    FROM ptyd_purchases
+                    WHERE purchase_id = \'""" + purchaseId + "\';"]
+
+            # Retrieve purchase ID
+            getPurchaseId = execute(queries[0], 'get', conn)
+
+            # Handle successful purchase ID query
+            if getPurchaseId['code'] == 280:
+                if not len(getPurchaseId['result']) > 0:
+                    response['message'] = 'Recipient has no active purchase_id.'
+                    response['error'] = getPurchaseId
+                    print("Error:", response['message'])
+                    # 400: Client side bad request
+                    return response, 400
+            # Handle unsuccessful purchase ID query
+            else:
+                response['message'] = 'Could not retrieve purchase_id.'
+                response['error'] = getPurchaseId
+                print("Error:", response['message'])
+                # 500: Internal server error
+                return response, 500
+#               print("purchase_id:", purchaseId)
+
+            queries.append(self.postQuery(purchaseId, data))
+
+            execute(queries[1], 'post', conn)
+
+            response['message'] = 'Request successful.'
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+'''
+class MealSelection(Resource):
+    def readQuery(self, items):
+        for item in items:
+            item['meals_selected'] = {}
+            if item['meal_selection'] == 'SKIP':
+                continue
+            if item['meal_selection'] == 'SURPRISE':
+                continue
+            if item['meal_selection'] == None:
+                continue
+            selectedMeals = item['meal_selection'].split(';')
+            for selectedMeal in selectedMeals:
+                if selectedMeal in item['meals_selected']:
+                    item['meals_selected'][selectedMeal] += 1
+                else:
+                    item['meals_selected'][selectedMeal] = 1
+        return items
+    def get(self, purchaseId):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            queries = ["""
+                SELECT
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time,
+                    ms1.delivery_day
+                FROM ptyd_meals_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
+                    FROM ptyd_meals_selected
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                WHERE
+                purchase_id = \'""" + purchaseId + "\';", """
+                SELECT
+                    ms1.week_affected,
+                    ms1.meal_selection,
+                    ms1.selection_time
+                FROM ptyd_addons_selected AS ms1
+                INNER JOIN (
+                    SELECT
+                        week_affected,
+                        MAX(selection_time) AS latest_selection
+                    FROM ptyd_addons_selected
+                    GROUP BY week_affected
+                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
+                WHERE
+                purchase_id = \'""" + purchaseId + "\';"]
+            meals = execute(queries[0], 'get', conn)
+            addons = execute(queries[1], 'get', conn)
+            items['Meals'] = self.readQuery(meals['result'])
+            items['Addons'] = self.readQuery(addons['result'])
+            response['message'] = 'Request successful.'
+            response['result'] = items
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    def formatMealSelection(self, mealSelection):
+        mealSelectionString = ""
+        for mealId in mealSelection:
+            for mealCount in range(mealSelection[mealId]):
+                mealSelectionString += mealId + ";"
+        # Remove last semicolon
+        return mealSelectionString[:-1]
+    def postQuery(self, purchaseId, data):
+        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if data['is_addons'] == True:
+            mealSelection = self.formatMealSelection(data['addon_quantities'])
+            query = """
+                INSERT INTO ptyd_addons_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + "\');"
+        else:
+            # Handle SKIP request
+            if data['delivery_day'] == 'SKIP':
+                mealSelection = 'SKIP'
+            # Handle default meal selection
+            elif data['default_selected'] is True:
+                mealSelection = 'SURPRISE'
+            # Handle custom meal selection
+            else:
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+            query = """
+                INSERT INTO ptyd_meals_selected
+                (
+                    purchase_id,
+                    selection_time,
+                    week_affected,
+                    meal_selection,
+                    delivery_day
+                )
+                VALUES
+                (
+                    \'""" + purchaseId + """\',
+                    \'""" + selectionTime + """\',
+                    \'""" + data['week_affected'] + """\',
+                    \'""" + mealSelection + """\',
+                    \'""" + data['delivery_day'] + "\');"
+        return query
+    # HTTP method POST
+    def post(self, purchaseId):
+        response = {}
+        items = []
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            print("Received:", data)
+            queries = [
+                """ SELECT purchase_id
+                    FROM ptyd_purchases
+                    WHERE purchase_id = \'""" + purchaseId + "\';"]
+            # Retrieve purchase ID
+            getPurchaseId = execute(queries[0], 'get', conn)
+            # Handle successful purchase ID query
+            if getPurchaseId['code'] == 280:
+                if not len(getPurchaseId['result']) > 0:
+                    response['message'] = 'Recipient has no active purchase_id.'
+                    response['error'] = getPurchaseId
+                    print("Error:", response['message'])
+                    # 400: Client side bad request
+                    return response, 400
+            # Handle unsuccessful purchase ID query
+            else:
+                response['message'] = 'Could not retrieve purchase_id.'
+                response['error'] = getPurchaseId
+                print("Error:", response['message'])
+                # 500: Internal server error
+                return response, 500
+#               print("purchase_id:", purchaseId)
+            queries.append(self.postQuery(purchaseId, data))
+            execute(queries[1], 'post', conn)
+            response['message'] = 'Request successful.'
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+'''
 class CustomerInfo(Resource):
 
     # def ___inti__(self):
@@ -2402,7 +2675,8 @@ class AdminDBv2(Resource):
                         ptyd_inventory AS inv ON R.recipe_ingredient_id = inv.inventory_ingredient_id
                     -- WHERE 
                         -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                    -- M.menu_date = "2020-02-01";"""
+                    -- M.menu_date = "2020-02-01";
+                    """
 
             ]
 
@@ -2695,6 +2969,92 @@ class displayIngredients(Resource):
             disconnect(conn)
 
 
+#curl -X PATCH -H "Content-Type: application/json" http://localhost:2000/api/v2/cancel-subscription-now --data '{"item_name": "Apple", "quantity": 2}'
+
+class CancelSubscriptionNow(Resource):
+    global RDS_PW
+
+    def patch(self):
+        response = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            print(data)
+            
+            print("--------------------------")
+
+
+            newSnapshotQuery = execute("""CALL get_snapshots_id();""", 'get', conn)
+            print("------------------------------")
+            print(newSnapshotQuery)
+             
+
+            
+            purchase_id = data['purchase_id']
+
+            snapshotId = newSnapshotQuery['result'][0]['new_id']
+
+            
+
+            execute(""" CALL `ptyd`.`user_cancel_now_update_snapshot`( \'""" + snapshotId + """\' , \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_payments` SET `recurring` = 'FALSE' WHERE (`payment_id` = (SELECT payment_id FROM ptyd_snapshots WHERE purchase_id = \'""" + purchase_id + """\' ORDER BY snapshot_timestamp DESC LIMIT 1) );""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" + purchase_id + """\');""",'post',conn)
+            
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class DoNotRenewSubscription(Resource):
+    def patch(self):
+        response = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+
+            newSnapshotQuery = execute("CALL get_snapshots_id;", 'get', conn)
+
+            purchase_id = data['purchase_id']
+
+            snapshotId = newSnapshotQuery['result'][0]['new_id']
+
+            print(snapshotId)
+
+            execute(""" CALL `ptyd`.`user_cancel_later_update_snapshot`(\'""" + snapshotId + """\', \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_payments` SET `recurring` = 'FALSE' WHERE (`payment_id` = (SELECT payment_id FROM ptyd_snapshots WHERE purchase_id = \'""" + purchase_id + """\' ORDER BY snapshot_timestamp DESC LIMIT 1) );""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" + purchase_id + """\');""",'post',conn)
+            
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+
+class ZipCodes(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT * FROM ptyd_monday_zipcodes; """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -2734,6 +3094,7 @@ api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 
 # Admin page
+# ---------- Admin page -----------------------------
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile, '/api/v2/customerprofile')
 
@@ -2747,6 +3108,11 @@ api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases')
 api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers')
+#in progress
+api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
+api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
+
+api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')

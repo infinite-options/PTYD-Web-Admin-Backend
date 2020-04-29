@@ -3,6 +3,7 @@ import { Grid, Cell } from "react-mdl";
 import { Alert, Tooltip, OverlayTrigger, Button } from "react-bootstrap";
 import defaultMeal from "../../img/default-meal.png";
 
+
 //  Replace FINDUS1 below with this.props.imgurl
 
 class EachMeal extends Component {
@@ -19,6 +20,7 @@ class EachMeal extends Component {
                 <br />
               </div>
             )} */}
+
           </h6>
           {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
@@ -132,6 +134,7 @@ class EachMeal extends Component {
         >
           <b>+</b>
         </Button>
+
       </div>
     );
   }

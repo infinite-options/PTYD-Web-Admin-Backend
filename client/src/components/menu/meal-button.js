@@ -37,6 +37,7 @@ export default class MealButton extends Component {
       mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
       subscribed: this.props.subscribed
+
     };
   }
 
@@ -57,6 +58,7 @@ export default class MealButton extends Component {
           buttonSurprise: false,
           buttonDisabled: true,
           buttonAddOnKeepColor: false
+
         });
         break;
       case "Monday":
@@ -91,6 +93,7 @@ export default class MealButton extends Component {
         delivery_day: this.state.dayToDeliver,
         default_selected: this.state.buttonSurprise,
         is_addons: false
+
       })
     });
   };
@@ -107,6 +110,7 @@ export default class MealButton extends Component {
         week_affected: this.props.saturdayDate,
         addon_quantities: this.state.addonQuantities,
         is_addons: true
+
       })
     });
   };
@@ -410,6 +414,7 @@ export default class MealButton extends Component {
                     imgurl={meal.meal_photo_url}
                     maxmeals={this.state.maxmeals}
                     mealQuantities={this.state.mealQuantities[meal.meal_id]}
+
                     incrementMaxMeal={() => {
                       var stateCopy = Object.assign({}, this.state);
                       stateCopy.mealQuantities[meal.meal_id] -= 1;
@@ -438,6 +443,7 @@ export default class MealButton extends Component {
                   this.state.flag === false
                 ) {
                   alert("Are you sure you want to close without saving?");
+
                   this.setState({
                     flag: true
                   });
@@ -455,6 +461,7 @@ export default class MealButton extends Component {
                   variant="primary"
                   onClick={this.saveButtonActivateAddons}
                 >
+
                   Save changes
                 </Button>
               ) : (
@@ -550,7 +557,7 @@ export default class MealButton extends Component {
                 <Cell col={12}>
                   <center>
                     <h4 style={{ margin: "0" }}>
-                      {this.props.addons["Addons"].Category}
+                        { this.props.addons["Addons"].Category }
                     </h4>
                   </center>
                 </Cell>

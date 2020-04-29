@@ -254,7 +254,8 @@ class Mealschedule extends Component {
                 <br />
                 <div>{console.log(this.state.menu)}</div>
                 <div class="meals-button">
-                  {this.state.menu.map(eachWeek => (
+                  {
+                  this.state.menu.map(eachWeek => 
                     <MealButton
                       day1="Sunday"
                       day2="Monday"
@@ -274,7 +275,8 @@ class Mealschedule extends Component {
                       monday_available={this.state.monday_available}
                       MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
                     />
-                  ))}
+                  )
+                  }
                 </div>
               </Cell>
             </Grid>

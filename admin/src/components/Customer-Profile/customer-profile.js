@@ -31,15 +31,15 @@ class CustomerProfile extends Component {
   }
   render() {
     return (
-      <div className="container" style={{ marginTop: "10%" }}>
+      <div style={{ margin: "1%" }}>
         {/* <div className="scrollItem">Card</div> */}
 
         {/* title for the site ----------------------------------------- */}
-        <Jumbotron />
+        {/* <Jumbotron /> */}
 
         <MaterialTable
           style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
-          title="Meal Creation"
+          title="Customer Profile"
           columns={this.state.columns}
           data={this.state.custInfo}
           editable={{
