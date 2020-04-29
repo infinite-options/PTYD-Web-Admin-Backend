@@ -27,24 +27,24 @@ class Selectmealplan extends Component {
               SELECT A MEAL PLAN
             </h2>
             <hr className='two' />
-            <h4 className='font1'>
-              <b>
-                LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
-              </b>
-            </h4>
-            <br></br>
+            <article className='font1 bottom_header'>
+              <h4 className='font-weight-normal'>
+                LOCAL. ORGANIC. RESPONSIBLE.
+              </h4>
+              <h4 className='font-weight-normal'>STRAIGHT TO YOUR DOOR</h4>
+            </article>
             <CardDeck>
               {this.state.mealPlans.map(mealPlan => (
-                <Card className='p-0 border-0 w-auto'>
+                <Card className='p-0 border-0 shadow-none w-auto'>
                   {mealPlan.num_meals === 10 ? (
                     <div className='rcorners font3 d-flex rcorner_color'>
-                      <h6 className='align-self-center mx-auto'>
+                      <h6 className='align-self-center border-0 mx-auto'>
                         MOST POPULAR
                       </h6>
                     </div>
                   ) : (
                     <div className='rcorners font3 d-flex'>
-                      <h6 className='lign-self-center mx-auto'></h6>
+                      <h6 className='align-self-center mx-auto'></h6>
                     </div>
                   )}
 
@@ -56,6 +56,7 @@ class Selectmealplan extends Component {
                   >
                     <Card.Header className='p-0 position-relative'>
                       <Card.Img
+                        className='blackM'
                         variant='top'
                         src={mealPlan.photo_URL}
                         style={{
@@ -123,13 +124,7 @@ class Selectmealplan extends Component {
                 </Card>
               ))}
             </CardDeck>
-
-            <br></br>
-            <br></br>
-            <hr></hr>
-            <br></br>
-            <br></br>
-            <h3 class='font1' style={{color: "#196F3D"}}>
+            <h3 class='font1 feedback_marginTop' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
             <div class='font2'>
@@ -162,7 +157,6 @@ class Selectmealplan extends Component {
                   <Col>PTYD feels like family!</Col>
                   <Col>They make life SO easy!</Col>
                 </Row>
-                <br></br>
                 <Row style={{fontSize: "15px", color: "#196F3D"}}>
                   <Col>
                     <hr class='one' />
@@ -184,43 +178,39 @@ class Selectmealplan extends Component {
                   <Grid>
                     <Col>
                       <Cell col={10}>
-                        Besides the convenience and goodness going inside our
-                        bods, PTYD is also the friendliest most generous team
-                        that is always quick to respond.
-                        <br />- Austin
+                        <p>
+                          Besides the convenience and goodness going inside our
+                          bods, PTYD is also the friendliest most generous team
+                          that is always quick to respond.
+                        </p>
+                        <p>- Austin</p>
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        Whether I split a soup between our two kids, feed my
-                        husband after his workout, or snack on a salad while the
-                        kids nap, it's an outstanding addition to our fridge!
-                        <br />- Christy
+                        <p>
+                          Whether I split a soup between our two kids, feed my
+                          husband after his workout, or snack on a salad while
+                          the kids nap, it's an outstanding addition to our
+                          fridge!
+                        </p>
+                        <p>- Christy</p>
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        I love how the food is as locally sourced as possible
-                        and containers are not going to waste. I don't think
-                        I've ever had a meal I didn't like!
-                        <br />- Courtney
+                        <p>
+                          I love how the food is as locally sourced as possible
+                          and containers are not going to waste. I don't think
+                          I've ever had a meal I didn't like!
+                        </p>
+                        <p>- Courtney</p>
                       </Cell>
                     </Col>
                   </Grid>
                 </Row>
-                <br></br>
               </Container>
             </div>
-            <br />
-            <br />
-            <div style={{backgroundColor: "black"}}>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-            </div>
-            <br />
           </center>
         </div>
       </section>

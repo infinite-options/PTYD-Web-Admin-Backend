@@ -46,12 +46,16 @@
 }
 
 .mealoption-center {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
   font-size: 100px;
-  text-shadow: 2px 2px 4px #FFEFB0;
+  text-shadow: 2px 2px 4px #ffefb0;
+  line-height: 35px;
+  color: white;
+  font-size: 100px;
+  text-shadow: 2px 2px 4px #ffefb0;
   line-height: 35px;
   color: white;
 }
@@ -146,14 +150,14 @@ hr.one {
   margin-top: 0;
   border-bottom: 0 solid #1f1209;
   box-shadow: 0 20px 20px -20px #333;
-  margin: -50px auto 10px;
+  /* margin: -50px auto 10px; */
 }
 hr.one-half {
   border: none;
   width: 90%;
   height: 50px;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 20px;
   border-top: 0 solid #1f1209;
   box-shadow: 0 -20px 20px -20px #333;
   margin-left: 50px;
@@ -194,7 +198,7 @@ hr.four {
 .black {
   object-fit: cover;
   opacity: 50%;
-  height:187px;
+  height: 187px;
   width: 100%;
 }
 
@@ -204,7 +208,7 @@ hr.four {
 
 .blackM {
   object-fit: cover;
-  opacity: 50%;
+  opacity: 70%;
   height: 187px;
   width: 100%;
 }
@@ -324,4 +328,32 @@ hr.four {
 
 .card_color {
   color: green;
+}
+
+.bottom_header {
+  margin-bottom: 50px;
+}
+.feedback_marginTop {
+  margin-top: 150px;
+}
+.home_title {
+  font-size: 40px;
+  line-height: 55px;
+  text-shadow: 2px 2px 10px white;
+  font-weight: normal;
+}
+.home_subtitle {
+  margin-bottom: 200px;
+}
+.home_subtitle p {
+  font-size: 21px;
+  text-shadow: 2px 2px 10px white;
+  line-height: 35px;
+}
+.start_button {
+  margin-top: 10px;
+  color: white;
+}
+.container_space {
+  margin-top: 150px;
 }
