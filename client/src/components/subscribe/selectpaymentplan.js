@@ -52,7 +52,6 @@ class SelectPaymentPlan extends Component {
               20 MEALS{" "}
             </a>
             <hr class='three' />
-            <br></br>
             <div class='justify-content-center'>
               <CardDeck className='d-flex justify-content-center'>
                 {this.state.paymentPlans.map(paymentPlan => (
@@ -134,12 +133,8 @@ class SelectPaymentPlan extends Component {
                 ))}
               </CardDeck>
             </div>
-            <br></br>
-            <br></br>
-            <hr></hr>
-            <br></br>
-            <br></br>
-            <h3 class='font1' style={{color: "#196F3D"}}>
+            <hr className='mt-5' />
+            <h3 class='font1 feedback_marginTop' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
             <Container>
@@ -171,7 +166,6 @@ class SelectPaymentPlan extends Component {
                 <Col>PTYD feels like family!</Col>
                 <Col>They make life SO easy!</Col>
               </Row>
-              <br></br>
               <Row style={{fontSize: "15px", color: "#196F3D"}}>
                 <Col>
                   <hr class='one' />
@@ -193,35 +187,37 @@ class SelectPaymentPlan extends Component {
                 <Grid>
                   <Col>
                     <Cell col={10}>
-                      Besides the convenience and goodness going inside our
-                      bods, PTYD is also the friendliest most generous team that
-                      is always quick to respond.
-                      <br />- Austin
+                      <p>
+                        Besides the convenience and goodness going inside our
+                        bods, PTYD is also the friendliest most generous team
+                        that is always quick to respond.
+                      </p>
+                      <p>- Austin</p>
                     </Cell>
                   </Col>
                   <Col>
                     <Cell col={10}>
-                      Whether I split a soup between our two kids, feed my
-                      husband after his workout, or snack on a salad while the
-                      kids nap, it's an outstanding addition to our fridge!
-                      <br />- Christy
+                      <p>
+                        Whether I split a soup between our two kids, feed my
+                        husband after his workout, or snack on a salad while the
+                        kids nap, it's an outstanding addition to our fridge!
+                      </p>
+                      <p>- Christy</p>
                     </Cell>
                   </Col>
                   <Col>
                     <Cell col={10}>
-                      I love how the food is as locally sourced as possible and
-                      containers are not going to waste. I don't think I've ever
-                      had a meal I didn't like!
-                      <br />- Courtney
+                      <p>
+                        I love how the food is as locally sourced as possible
+                        and containers are not going to waste. I don't think
+                        I've ever had a meal I didn't like!
+                      </p>
+                      <p>- Courtney</p>
                     </Cell>
                   </Col>
                 </Grid>
               </Row>
-              <br></br>
             </Container>
-            <br />
-            <br />
-            <br />
           </center>
         </div>
       </section>
