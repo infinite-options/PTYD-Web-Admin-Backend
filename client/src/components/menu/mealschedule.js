@@ -4,6 +4,9 @@ import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
 import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 class Mealschedule extends Component {
   constructor(props) {
@@ -15,7 +18,9 @@ class Mealschedule extends Component {
       purchase: { NextCharge: 0 },
       subscribed: false,
       monday_available: false,
-      paymentPlans: []
+      paymentPlans: [],
+      purchase_all: [], //hold all subscriptions
+      selection: 0
     };
 
     function searchCookie4UserID(str) {
@@ -48,9 +53,10 @@ class Mealschedule extends Component {
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
-        this.setState({ subscribed: true });
         this.setState({
-          monday_available: purchasesApi.result[0].monday_available
+          subscribed: true,
+          monday_available: purchasesApi.result[0].monday_available,
+          purchase_all: purchasesApi.result
         });
       }
     }
@@ -144,6 +150,12 @@ class Mealschedule extends Component {
       }
     );
   }
+  //dropdown for different subscription
+  handleChange = event => {
+    this.setState({
+      selection: event.target.value
+    });
+  };
 
   render() {
     console.log("num_meals", this.state.purchase.num_meals);
@@ -171,7 +183,7 @@ class Mealschedule extends Component {
                   <Cell col={8}>
                     <h4>
                       Hi, {this.searchCookie4Name(document.cookie)}
-                      {this.state.purchase.num_meals}
+                      <th colSpan="2">{this.subscription_dropdown()}</th>
                     </h4>
                   </Cell>
                 </Grid>
@@ -196,6 +208,7 @@ class Mealschedule extends Component {
                 <br />
                 <h4>Subscription Details</h4>{" "}
                 <p>My Subscription: {this.state.purchase.meal_plan_desc}</p>
+                <p>{this.state.purchase.payment_id}</p>
                 <p>Payment Plan: {this.state.purchase.payment_frequency}</p>
                 <p>
                   Paid Weeks Remaining:{" "}
@@ -263,6 +276,33 @@ class Mealschedule extends Component {
       </div>
     );
   }
+
+  subscription_dropdown = () => {
+    if (this.state.purchase_all == null) {
+      return <div />;
+    }
+    let temp = [];
+    for (let i = 0; i < this.state.purchase_all.length; i++) {
+      temp.push(
+        <MenuItem value={i}>
+          {this.state.purchase_all[i].meal_plan_desc}
+        </MenuItem>
+      );
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.selection}
+          onChange={this.handleChange}
+          // style={{ color: "white" }}
+        >
+          {temp}
+        </Select>
+      </FormControl>
+    );
+  };
 }
 
 export default Mealschedule;
