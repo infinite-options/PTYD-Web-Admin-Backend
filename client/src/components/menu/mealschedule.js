@@ -158,8 +158,45 @@ class Mealschedule extends Component {
   };
 
   render() {
-    console.log("num_meals", this.state.purchase.num_meals);
-    console.log("dhsjakdhkajsdhas", this.state.purchase.plan_footer);
+    let displayrows = [];
+    let subscription_selection = this.state.purchase_all[this.state.selection];
+    if (subscription_selection == null) {
+      return <div></div>;
+    }
+    // for (let i = 0; i < subscription_selection.length; i++) {
+    let tempelement = (
+      <div>
+        <h4>Subscription Details</h4>
+        <p>My Subscription: {subscription_selection.meal_plan_desc}</p>
+        <p>Payment Plan: {subscription_selection.payment_frequency}</p>
+        <p>
+          Paid Weeks Remaining: {subscription_selection.paid_weeks_remaining}
+        </p>
+        <p>Next Charge: ${subscription_selection.amount_due}</p>
+        <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
+        <p>
+          Coupons:{" "}
+          {subscription_selection.coupon_id
+            ? subscription_selection.coupon_id
+            : "None"}
+        </p>
+        <h4>Credit Card Details</h4>{" "}
+        <p>Credit Card: {subscription_selection.cc_num}</p>
+        <p>Expiration Date: {subscription_selection.cc_exp_date}</p>
+        <p>CVV: {subscription_selection.cc_cvv}</p>
+        <h4>Delivery Details</h4>{" "}
+        <p>Address: {subscription_selection.delivery_address}</p>
+        <p>Unit: {subscription_selection.delivery_address_unit}</p>
+        <p>
+          City, State ZIP: {subscription_selection.delivery_city},{" "}
+          {subscription_selection.delivery_state}{" "}
+          {subscription_selection.delivery_zip}
+        </p>
+        <p>Instructions: {subscription_selection.delivery_instructions}</p>
+      </div>
+    );
+    displayrows.push(tempelement);
+    // }
     return (
       <div>
         <section class="content-section">
@@ -188,54 +225,24 @@ class Mealschedule extends Component {
                   </Cell>
                 </Grid>
                 <MakeChanges
-                  subscription={this.state.purchase.meal_plan_desc}
+                  subscription={this.state.purchase_all.meal_plan_desc}
                   paymentplan={this.state.paymentPlans}
-                  payment_plan={this.state.purchase.payment_frequency}
-                  cc_num={this.state.purchase.cc_num}
-                  cc_exp_date={this.state.purchase.cc_exp_date}
-                  cc_cvv={this.state.purchase.cc_cvv}
-                  delivery_address={this.state.purchase.delivery_address}
+                  payment_plan={this.state.purchase_all.payment_frequency}
+                  cc_num={this.state.purchase_all.cc_num}
+                  cc_exp_date={this.state.purchase_all.cc_exp_date}
+                  cc_cvv={this.state.purchase_all.cc_cvv}
+                  delivery_address={this.state.purchase_all.delivery_address}
                   delivery_address_unit={
-                    this.state.purchase.delivery_address_unit
+                    this.state.purchase_all.delivery_address_unit
                   }
-                  delivery_city={this.state.purchase.delivery_city}
-                  delivery_state={this.state.purchase.delivery_state}
-                  delivery_zip={this.state.purchase.delivery_zip}
+                  delivery_city={this.state.purchase_all.delivery_city}
+                  delivery_state={this.state.purchase_all.delivery_state}
+                  delivery_zip={this.state.purchase_all.delivery_zip}
                   delivery_instructions={
-                    this.state.purchase.delivery_instructions
+                    this.state.purchase_all.delivery_instructions
                   }
                 />
-                <br />
-                <h4>Subscription Details</h4>{" "}
-                <p>My Subscription: {this.state.purchase.meal_plan_desc}</p>
-                <p>{this.state.purchase.payment_id}</p>
-                <p>Payment Plan: {this.state.purchase.payment_frequency}</p>
-                <p>
-                  Paid Weeks Remaining:{" "}
-                  {this.state.purchase.paid_weeks_remaining}
-                </p>
-                <p>Next Charge: ${this.state.purchase.amount_due}</p>
-                <p>Next Charge Date: {this.state.purchase.next_charge_date}</p>
-                <p>
-                  Coupons:{" "}
-                  {this.state.purchase.coupon_id
-                    ? this.state.purchase.coupon_id
-                    : "None"}
-                </p>
-                {/* <p>Account Status: {this.state.purchase.purchase_status}</p> */}
-                <h4>Credit Card Details</h4>{" "}
-                <p>Credit Card: {this.state.purchase.cc_num}</p>
-                <p>Expiration Date: {this.state.purchase.cc_exp_date}</p>
-                <p>CVV: {this.state.purchase.cc_cvv}</p>
-                <h4>Delivery Details</h4>{" "}
-                <p>Address: {this.state.purchase.delivery_address}</p>
-                <p>Unit: {this.state.purchase.delivery_address_unit}</p>
-                <p>
-                  City, State ZIP: {this.state.purchase.delivery_city},{" "}
-                  {this.state.purchase.delivery_state}{" "}
-                  {this.state.purchase.delivery_zip}
-                </p>
-                <p>Instructions: {this.state.purchase.delivery_instructions}</p>
+                {displayrows}
               </Cell>{" "}
               <Cell col={1}></Cell>
               <Cell col={8}>
@@ -259,7 +266,7 @@ class Mealschedule extends Component {
                       mealQuantities={eachWeek.mealQuantities}
                       addonQuantities={eachWeek.addonQuantities}
                       maxmeals={eachWeek.maxmeals}
-                      purchase_id={this.state.purchase.purchase_id}
+                      purchase_id={this.state.purchase_all.purchase_id}
                       deliverDay={eachWeek.deliverDay}
                       subscribed={this.state.subscribed}
                       surprise={eachWeek.surprise}
