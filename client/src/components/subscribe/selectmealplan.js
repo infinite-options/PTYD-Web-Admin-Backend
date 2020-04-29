@@ -13,8 +13,6 @@ class Selectmealplan extends Component {
     };
   }
   async componentDidMount() {
-    alert("mounting selecmealplan");
-    console.log(this.props.API_URL);
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const mealPlans = api.result.MealPlans.result;

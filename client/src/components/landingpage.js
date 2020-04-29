@@ -61,7 +61,7 @@ class Landing extends Component {
           </div>
         </div>
         <div className='container'>
-          <div className='langding-part2 font2 feedback_marginTop'>
+          <div className='container font2 feedback_marginTop'>
             <center>
               <h3 className='font3'>
                 THE ONLY ZERO WASTE MEAL DELIVERY SERVICE
@@ -108,7 +108,7 @@ class Landing extends Component {
                 </Col>
               </Row>
             </Container>
-            <hr class='one-half mt-5' />
+            <hr class='one-half' />
             <center>
               <button
                 type='button'
@@ -126,8 +126,8 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div class='container'>
-          <div class='langding-part2 font2'>
+        <div class='container container_space d-flex justify-content-center'>
+          <div class='font2'>
             <Grid className='mt-5'>
               <Cell col={8}>
                 <Container>

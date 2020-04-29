@@ -54,7 +54,7 @@ class SelectPaymentPlan extends Component {
             <hr class='three' />
             <br></br>
             <div class='justify-content-center'>
-              <CardDeck>
+              <CardDeck className='d-flex justify-content-center'>
                 {this.state.paymentPlans.map(paymentPlan => (
                   <Card
                     className='borderr'
