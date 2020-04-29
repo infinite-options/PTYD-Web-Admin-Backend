@@ -2483,20 +2483,30 @@ class displayIngredients(Resource):
 #curl -X PATCH -H "Content-Type: application/json" http://localhost:2000/api/v2/cancel-subscription-now --data '{"item_name": "Apple", "quantity": 2}'
 
 class CancelSubscriptionNow(Resource):
+    global RDS_PW
+
     def patch(self):
         response = {}
         
         try:
-            data = request.get_json(force=True)
             conn = connect()
+            data = request.get_json(force=True)
+            print(data)
+            
+            print("--------------------------")
 
-            newSnapshotQuery = execute("CALL get_snapshots_id;", 'get', conn)
 
+            newSnapshotQuery = execute("""CALL get_snapshots_id();""", 'get', conn)
+            print("------------------------------")
+            print(newSnapshotQuery)
+             
+
+            
             purchase_id = data['purchase_id']
 
             snapshotId = newSnapshotQuery['result'][0]['new_id']
 
-            print(snapshotId)
+            
 
             execute(""" CALL `ptyd`.`user_cancel_now_update_snapshot`( \'""" + snapshotId + """\' , \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
             execute("""UPDATE `ptyd`.`ptyd_payments` SET `recurring` = 'FALSE' WHERE (`payment_id` = (SELECT payment_id FROM ptyd_snapshots WHERE purchase_id = \'""" + purchase_id + """\' ORDER BY snapshot_timestamp DESC LIMIT 1) );""", 'post', conn)
@@ -2513,8 +2523,9 @@ class DoNotRenewSubscription(Resource):
         response = {}
         
         try:
-            data = request.get_json(force=True)
             conn = connect()
+            data = request.get_json(force=True)
+            
 
             newSnapshotQuery = execute("CALL get_snapshots_id;", 'get', conn)
 
@@ -2601,6 +2612,8 @@ api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
 #in progress
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
+api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
+
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Template
