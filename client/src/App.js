@@ -25,8 +25,10 @@ const App = props => {
     try {
       if (searchCookie4UserID(document.cookie).includes("100-")) {
         userHasAuthenticated(true);
-      } else if (!document.cookie.includes("loginStatus")) {
-        document.cookie = " loginStatus: null , user_uid: null , ";
+      }
+      else if (!document.cookie.includes("loginStatus")){
+        document.cookie =
+          " loginStatus: null , user_uid: null , ";
         console.log("First time? Resetting document cookie");
       }
     } catch (e) {
@@ -42,7 +44,7 @@ const App = props => {
   function searchCookie4Login(str) {
     let arr = str.split(" ");
     let i = arr.indexOf("loginStatus:");
-    if (arr[i + 1] === "null") {
+    if (arr[i+1] === "null") {
       return " ";
     }
     return arr[i + 1] + " " + arr[i + 2];
