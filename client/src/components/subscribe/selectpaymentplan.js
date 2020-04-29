@@ -83,7 +83,6 @@ class SelectPaymentPlan extends Component {
                         ${paymentPlan.meal_plan_price_per_meal.toFixed(2)} per
                         meal
                       </Card.Text>
-                      <br></br>
                       <Card.Title>
                         ${paymentPlan.meal_plan_price.toFixed(2)} /week
                       </Card.Title>
