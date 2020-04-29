@@ -26,7 +26,7 @@ const App = props => {
       if (searchCookie4UserID(document.cookie).includes("100-")) {
         userHasAuthenticated(true);
       } else if (!document.cookie.includes("loginStatus")) {
-        document.cookie = " loginStatus: null , user_uid: null , ";
+        document.cookie = `loginStatus=; path=/`;
         console.log("First time? Resetting document cookie");
       }
     } catch (e) {
@@ -40,8 +40,8 @@ const App = props => {
   }
 
   function searchCookie4Login(str) {
-    let arr = str.split(" ");
-    let i = arr.indexOf("loginStatus:");
+    let arr = str.split(";");
+    let i = arr.indexOf("loginStatus");
     if (arr[i + 1] === "null") {
       return " ";
     }
@@ -49,8 +49,20 @@ const App = props => {
   }
 
   function searchCookie4UserID(str) {
-    let arr = str.split(" ");
-    let i = arr.indexOf("user_uid:");
+    let arr = str.split(";");
+    let i = arr.indexOf("loginStatus");
+    let cookie = arr[i + 1].split("=");
+    if (cookie.length >= 2) {
+      i = cookie.indexOf("loginStatus");
+      let cookie_value = cookie[i + 1].split(",");
+      // i = cookie_value
+      console.log(`cookie_value is: ${cookie_value}`);
+      let cookie_uid = cookie[i + 1];
+      console.log(cookie_uid);
+    }
+    console.log(arr);
+    console.log(cookie);
+
     return arr[i + 1];
   }
 
@@ -88,7 +100,6 @@ const App = props => {
                   lineHeight: "0.8em",
                   textAlign: "center",
                   letterSpacing: "0.25em",
-                  fontSize: "11px",
                   color: "#E38B19",
                   fontWeight: "bold"
                 }}

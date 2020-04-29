@@ -22,6 +22,7 @@ export default function Login(props) {
   const [loginStatus, setLoginStatus] = useState("");
   const [salt, setSalt] = useState("");
   const [error, RaiseError] = useState(null);
+  const [cookies, setCookie] = useState("first_name:null,user_uid:null");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -54,13 +55,17 @@ export default function Login(props) {
           })
           .then(res => {
             data = res.data.result.result[0];
-            document.cookie = ` loginStatus: Hello ${data.first_name}! ,  user_uid: ${data.uid} , ; path=/ `;
+            let first = data.first_name;
+            let uid = data.user_uid;
+            let login_id = data.login_id;
+            let session_id = data.session_id;
+            document.cookie = `loginStatus=first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
             props.history.push("/selectmealplan");
             window.location.reload(false);
           })
           .catch(err => {
             console.log(err);
-            document.cookie = ` loginStatus: null , user_uid: null , ; path=/ `;
+            document.cookie = `loginStatus=first_name:null,user_uid: null; path=/ `;
             props.history.push("/login");
             window.location.reload(false);
           });
@@ -156,7 +161,7 @@ export default function Login(props) {
     let uid = user.user_uid;
     let name = user.first_name;
 
-    document.cookie = ` loginStatus: Hello ${name} ! , user_uid: ${uid} , `;
+    document.cookie = `loginStatus=first_name:${name},user_uid:${uid}`;
     console.log(document.cookie);
 
     // redirect & reload page for buttons and login status
@@ -196,13 +201,11 @@ export default function Login(props) {
       );
       if (res.status === 200) {
         //success
-        console.log(res);
         return res.data;
       } else {
         RaiseError("Wrong password");
       }
     } catch (err) {
-      console.log(`error happended: ${err}`);
       RaiseError(err);
     }
   }
@@ -224,18 +227,18 @@ export default function Login(props) {
       let uid = response.result.result[0].user_uid;
       let login_id = response.login_attempt_log.login_id;
       let session_id = response.login_attempt_log.session_id;
-      // document.cookie = `logged In: loginStatus: ${first}! user_uid: ${uid} , login_id= ${login_id} ; session_id= ${session_id} ; path=/`;
-      console.log(document.cookie);
-      document.cookie =
-        " loginStatus: Hello " +
-        response.result.result[0].first_name +
-        "! , user_uid: " +
-        response.result.result[0].user_uid +
-        " , login_id: " +
-        response.login_attempt_log.login_id +
-        " , session_id: " +
-        response.login_attempt_log.session_id +
-        " , ";
+      document.cookie = `loginStatus=first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+      // console.log(document.cookie);
+      // document.cookie =
+      //   " loginStatus: Hello " +
+      //   response.result.result[0].first_name +
+      //   "! , user_uid: " +
+      //   response.result.result[0].user_uid +
+      //   " , login_id: " +
+      //   response.login_attempt_log.login_id +
+      //   " , session_id: " +
+      //   response.login_attempt_log.session_id +
+      //   " , ";
 
       // redirect & reload page for buttons and login status
 
