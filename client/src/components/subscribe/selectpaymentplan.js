@@ -29,12 +29,12 @@ class SelectPaymentPlan extends Component {
           <center>
             <h2 class='font1'>{this.state.meals} MEALS PAYMENT OPTIONS</h2>
             <hr class='two' />
-            <article className='font1 bottom_header'>
-              <h4 className='font-weight-normal'>
-                LOCAL. ORGANIC. RESPONSIBLE.
-              </h4>
-              <h4 className='font-weight-normal'>STRAIGHT TO YOUR DOOR</h4>
-            </article>
+            <h4 class='font1'>
+              <b>
+                LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
+              </b>
+            </h4>
+            <br />
             <hr class='three' />
             <a href='/5-meals-subscription' style={{color: "black"}}>
               5 MEALS
@@ -52,88 +52,126 @@ class SelectPaymentPlan extends Component {
               20 MEALS{" "}
             </a>
             <hr class='three' />
+            <br></br>
             <div class='justify-content-center'>
-              <CardDeck className='d-flex justify-content-center'>
+              <CardDeck class='d-flex justify-content-center'>
                 {this.state.paymentPlans.map(paymentPlan => (
                   <Card
-                    className='borderr'
                     style={{
                       maxWidth: "20rem",
                       boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
                       margin: "30px"
                     }}
                   >
-                    <Card.Header className='p-0 position-relative'>
-                      <Card.Img
-                        className='blackM'
-                        variant='top'
-                        src={paymentPlan.photo_URL}
-                      />
-                      <div class='d-flex card-img-overlay'>
-                        <span className='px-0 align-self-center mx-auto mealoption-center '>
+                    {" "}
+                    <span class='border border-dark' style={{}}>
+                      <div class='borderr'>
+                        <div class='overlay'>
+                          <Card.Img
+                            class='blackM'
+                            variant='top'
+                            src={paymentPlan.photo_URL}
+                          />
+                          <div class=' mx-auto d-flex align-item-center'>
+                            <h6
+                              className='mealoption-center'
+                              style={{
+                                // marginBottom: "10%",
+                                fontSize: "100px",
+                                textShadow: "2px 2px 4px #FFEFB0",
+                                lineHeight: "35px",
+                                color: "white"
+                              }}
+                            >
+                              {paymentPlan.num_meals}
+                            </h6>
+
+                            {/* <div class="meal-plan-container">
+                        <div class="overlay">
+                          <Card.Img
+                            class="black"
+                            variant="top"
+                            src={paymentPlan.photo_URL}
+                          />
+                        </div>
+                        <div class="mealoption-center">
                           {paymentPlan.num_meals}
-                        </span>
+                        </div>
+                        </div>
+                      </div> */}
+                          </div>
+                        </div>
+
+                        <Card.Body>
+                          <Card.Title>
+                            <b>{paymentPlan.payment_frequency.toUpperCase()}</b>
+                          </Card.Title>
+                          <Card.Text
+                            style={{fontSize: "15px", color: "#888785"}}
+                          >
+                            ${paymentPlan.meal_plan_price_per_meal.toFixed(2)}{" "}
+                            per meal
+                          </Card.Text>
+                          <br></br>
+                          <Card.Title>
+                            ${paymentPlan.meal_plan_price.toFixed(2)} /week
+                          </Card.Title>
+                          <Card.Text
+                            style={{fontSize: "13px", color: "#888785"}}
+                          >
+                            Sales tax of 8.25% will be added
+                          </Card.Text>
+                          <Link
+                            style={{fontFamily: "Kalam", color: "white"}}
+                            to={{
+                              pathname: "/checkout",
+                              item: {
+                                name: `${
+                                  paymentPlan.meal_plan_desc
+                                } Subscription - $${paymentPlan.meal_plan_price.toFixed(
+                                  2
+                                )} /week`,
+                                total: paymentPlan.meal_plan_price.toFixed(2)
+                              }
+                            }}
+                          >
+                            <button
+                              type='button'
+                              class='btn2 btn2-primary font4'
+                              style={{
+                                marginTop: "10px",
+                                paddingLeft: "30px",
+                                paddingRight: "30px",
+                                paddingTop: "5px",
+                                paddingBottom: "5px",
+                                color: "white",
+                                fontSize: "15px"
+                              }}
+                            >
+                              CHECKOUT
+                            </button>
+                          </Link>
+                          <img
+                            class='img-fluid'
+                            src={IMG9}
+                            alt=''
+                            style={{
+                              width: "90%"
+                            }}
+                          />
+                        </Card.Body>
                       </div>
-                    </Card.Header>
-                    <Card.Body>
-                      <Card.Title>
-                        <b>{paymentPlan.payment_frequency.toUpperCase()}</b>
-                      </Card.Title>
-                      <Card.Text style={{fontSize: "15px", color: "#888785"}}>
-                        ${paymentPlan.meal_plan_price_per_meal.toFixed(2)} per
-                        meal
-                      </Card.Text>
-                      <Card.Title>
-                        ${paymentPlan.meal_plan_price.toFixed(2)} /week
-                      </Card.Title>
-                      <Card.Text style={{fontSize: "13px", color: "#888785"}}>
-                        Sales tax of 8.25% will be added
-                      </Card.Text>
-                      <Link
-                        style={{fontFamily: "Kalam", color: "white"}}
-                        to={{
-                          pathname: "/checkout",
-                          item: {
-                            name: `${
-                              paymentPlan.meal_plan_desc
-                            } Subscription - $${paymentPlan.meal_plan_price.toFixed(
-                              2
-                            )} /week`,
-                            total: paymentPlan.meal_plan_price.toFixed(2)
-                          }
-                        }}
-                      >
-                        <button
-                          type='button'
-                          class='btn2 btn2-primary font4'
-                          style={{
-                            marginTop: "10px",
-                            paddingLeft: "30px",
-                            paddingRight: "30px",
-                            paddingTop: "5px",
-                            paddingBottom: "5px",
-                            color: "white",
-                            fontSize: "15px"
-                          }}
-                        >
-                          CHECKOUT
-                        </button>
-                      </Link>
-                      <img
-                        class='img-fluid'
-                        src={IMG9}
-                        alt=''
-                        style={{
-                          width: "90%"
-                        }}
-                      />
-                    </Card.Body>
+                    </span>
                   </Card>
                 ))}
               </CardDeck>
             </div>
-            <hr className='mt-5' />
-            <h3 class='font1 feedback_marginTop' style={{color: "#196F3D"}}>
+            <br></br>
+            <br></br>
+            <hr></hr>
+            <br></br>
+            <br></br>
+            <h3 class='font1' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
             <Container>
@@ -165,6 +203,7 @@ class SelectPaymentPlan extends Component {
                 <Col>PTYD feels like family!</Col>
                 <Col>They make life SO easy!</Col>
               </Row>
+              <br></br>
               <Row style={{fontSize: "15px", color: "#196F3D"}}>
                 <Col>
                   <hr class='one' />
@@ -186,37 +225,35 @@ class SelectPaymentPlan extends Component {
                 <Grid>
                   <Col>
                     <Cell col={10}>
-                      <p>
-                        Besides the convenience and goodness going inside our
-                        bods, PTYD is also the friendliest most generous team
-                        that is always quick to respond.
-                      </p>
-                      <p>- Austin</p>
+                      Besides the convenience and goodness going inside our
+                      bods, PTYD is also the friendliest most generous team that
+                      is always quick to respond.
+                      <br />- Austin
                     </Cell>
                   </Col>
                   <Col>
                     <Cell col={10}>
-                      <p>
-                        Whether I split a soup between our two kids, feed my
-                        husband after his workout, or snack on a salad while the
-                        kids nap, it's an outstanding addition to our fridge!
-                      </p>
-                      <p>- Christy</p>
+                      Whether I split a soup between our two kids, feed my
+                      husband after his workout, or snack on a salad while the
+                      kids nap, it's an outstanding addition to our fridge!
+                      <br />- Christy
                     </Cell>
                   </Col>
                   <Col>
                     <Cell col={10}>
-                      <p>
-                        I love how the food is as locally sourced as possible
-                        and containers are not going to waste. I don't think
-                        I've ever had a meal I didn't like!
-                      </p>
-                      <p>- Courtney</p>
+                      I love how the food is as locally sourced as possible and
+                      containers are not going to waste. I don't think I've ever
+                      had a meal I didn't like!
+                      <br />- Courtney
                     </Cell>
                   </Col>
                 </Grid>
               </Row>
+              <br></br>
             </Container>
+            <br />
+            <br />
+            <br />
           </center>
         </div>
       </section>
