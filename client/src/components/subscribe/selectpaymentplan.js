@@ -55,19 +55,16 @@ class SelectPaymentPlan extends Component {
             <div class='justify-content-center'>
               <CardDeck className='d-flex justify-content-center'>
                 {this.state.paymentPlans.map(paymentPlan => (
-                  <Card
-                    className='borderr'
-                    style={{
-                      maxWidth: "20rem",
-                      boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
-                      margin: "30px"
-                    }}
-                  >
+                  <Card.Body className='borderr border_card_subcribe paymentCard '>
                     <Card.Header className='p-0 position-relative'>
                       <Card.Img
                         className='blackM'
                         variant='top'
                         src={paymentPlan.photo_URL}
+                        style={{
+                          "border-top-left-radius": "0px",
+                          "border-top-right-radius": "0px"
+                        }}
                       />
                       <div class='d-flex card-img-overlay'>
                         <span className='px-0 align-self-center mx-auto mealoption-center '>
@@ -128,7 +125,7 @@ class SelectPaymentPlan extends Component {
                         }}
                       />
                     </Card.Body>
-                  </Card>
+                  </Card.Body>
                 ))}
               </CardDeck>
             </div>

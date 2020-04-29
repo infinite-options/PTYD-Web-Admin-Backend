@@ -295,8 +295,8 @@ hr.four {
 
 /* subscription page */
 .borderr {
-  border-style: solid;
-  border-width: thick;
+  border-style: solid !important;
+  border-width: thick !important;
 }
 
 .rcorners {
@@ -359,4 +359,10 @@ hr.four {
 }
 .container_space {
   margin-top: 150px;
+}
+.paymentCard {
+  max-width: 20rem;
+  margin: 20px;
+  border: 1px solid rgb(68, 68, 68);
+  border-radius: 0px;
 }
