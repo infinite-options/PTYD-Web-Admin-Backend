@@ -38,12 +38,16 @@
 }
 
 .mealoption-center {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
   font-size: 100px;
-  text-shadow: 2px 2px 4px #FFEFB0;
+  text-shadow: 2px 2px 4px #ffefb0;
+  line-height: 35px;
+  color: white;
+  font-size: 100px;
+  text-shadow: 2px 2px 4px #ffefb0;
   line-height: 35px;
   color: white;
 }
@@ -192,7 +196,7 @@ hr.four {
   width: 276px; */
   object-fit: cover;
   opacity: 50%;
-  height:187px;
+  height: 187px;
   width: 100%;
 }
 
@@ -206,7 +210,7 @@ hr.four {
   overflow: hidden;
   position: relative; */
   object-fit: cover;
-  opacity: 50%;
+  opacity: 70%;
   height: 187px;
   /* width: 252px; */
   width: 100%;

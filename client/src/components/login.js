@@ -217,10 +217,15 @@ export default function Login(props) {
   }
   async function login(response) {
     let userId = response.result.result[0].user_uid;
-    console.log(userId);
+
     if (response.auth_success === true) {
       // setLoginStatus("Logged In");
-
+      let first = response.result.result[0].first_name;
+      let uid = response.result.result[0].user_uid;
+      let login_id = response.login_attempt_log.login_id;
+      let session_id = response.login_attempt_log.session_id;
+      // document.cookie = `logged In: loginStatus: ${first}! user_uid: ${uid} , login_id= ${login_id} ; session_id= ${session_id} ; path=/`;
+      console.log(document.cookie);
       document.cookie =
         " loginStatus: Hello " +
         response.result.result[0].first_name +
@@ -272,7 +277,7 @@ export default function Login(props) {
     <main Style='margin-top:-80px;'>
       <div class='container text-center' Style='margin-top:-40px;'>
         <h1>Login</h1>
-        {error !== null && (
+        {error !== null && error != undefined && (
           <Fragment>
             <h6>
               <span className='icon has-text-danger'>

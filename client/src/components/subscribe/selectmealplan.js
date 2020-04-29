@@ -13,6 +13,8 @@ class Selectmealplan extends Component {
     };
   }
   async componentDidMount() {
+    alert("mounting selecmealplan");
+    console.log(this.props.API_URL);
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const mealPlans = api.result.MealPlans.result;
@@ -35,16 +37,16 @@ class Selectmealplan extends Component {
             <br></br>
             <CardDeck>
               {this.state.mealPlans.map(mealPlan => (
-                <Card className='p-0 border-0 w-auto'>
+                <Card className='p-0 border-0 shadow-none w-auto'>
                   {mealPlan.num_meals === 10 ? (
                     <div className='rcorners font3 d-flex rcorner_color'>
-                      <h6 className='align-self-center mx-auto'>
+                      <h6 className='align-self-center border-0 mx-auto'>
                         MOST POPULAR
                       </h6>
                     </div>
                   ) : (
                     <div className='rcorners font3 d-flex'>
-                      <h6 className='lign-self-center mx-auto'></h6>
+                      <h6 className='align-self-center mx-auto'></h6>
                     </div>
                   )}
 
