@@ -488,38 +488,21 @@ class Meals(Resource):
 
 # Return salt if current login session
 class SessionVerification(Resource):
-    def get(self, userUid, loginId, sessionId):
+    def get(self, userUid, sessionId):
         response = {}
         try:
             conn = connect()
 
-#           verifySession = execute("""
-#               CALL get_session(\'"""
-#               + userUid
-#               + """\', """
-#               + data['browser_type']
-#               + "\');", 'get', conn)
-
-#           if verifySession['code'] == 280 and len(verifySession['result']) != 1:
-#               response['message'] = 'Could not verify login session.'
-#               response['result'] = []
-#               return response, 401
-#           else:
-#               if verifySession['result'][0]['login_attempt'] != loginId:
-#                   response['message'] = 'Invalid login ID.'
-#                   response['result'] = []
-#                   return response, 401
-#               if verifySession['result'][0]['session_id'] != sessionId:
-#                   response['message'] = 'Invalid session ID.'
-#                   response['result'] = []
-#                   return response, 401
-
             items = execute(""" SELECT password_salt
-                                , referral_source
-                                FROM ptyd_passwords
-                                RIGHT JOIN ptyd_accounts
-                                ON password_user_uid = user_uid
-                                WHERE user_uid = \'""" + userUid + "\';", 'get', conn)
+                , referral_source
+                FROM ptyd_passwords
+                RIGHT JOIN ptyd_accounts
+                ON password_user_uid = user_uid
+                INNER JOIN ptyd_login
+                ON password_user_uid = login_user_uid
+                WHERE user_uid = \'""" + userUid + """\'
+                AND session_id = \'""" + sessionId + """\'
+                ;""", 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
@@ -2725,7 +2708,7 @@ api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Login, '/api/v2/account/<string:accEmail>/<string:accPass>')
 api.add_resource(Account, '/api/v2/account/<string:accId>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
-api.add_resource(SessionVerification, '/api/v2/sessionverification/<string:userUid>/<string:loginId>/<string:sessionId>')
+api.add_resource(SessionVerification, '/api/v2/sessionverification/<string:userUid>/<string:sessionId>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
 api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
