@@ -288,8 +288,8 @@ hr.four {
 
 /* subscription page */
 .borderr {
-  border-style: solid;
-  border-width: thick;
+  border-style: solid !important;
+  border-width: thick !important;
 }
 
 .rcorners {
@@ -324,4 +324,38 @@ hr.four {
 
 .card_color {
   color: green;
+}
+
+.bottom_header {
+  margin-bottom: 50px;
+}
+.feedback_marginTop {
+  margin-top: 150px;
+}
+.home_title {
+  font-size: 40px;
+  line-height: 55px;
+  text-shadow: 2px 2px 10px white;
+  font-weight: normal;
+}
+.home_subtitle {
+  margin-bottom: 200px;
+}
+.home_subtitle p {
+  font-size: 21px;
+  text-shadow: 2px 2px 10px white;
+  line-height: 35px;
+}
+.start_button {
+  margin-top: 10px;
+  color: white;
+}
+.container_space {
+  margin-top: 150px;
+}
+.paymentCard {
+  max-width: 20rem;
+  margin: 20px;
+  border: 1px solid rgb(68, 68, 68);
+  border-radius: 0px;
 }
