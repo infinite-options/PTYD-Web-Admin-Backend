@@ -59,13 +59,13 @@ export default function Login(props) {
             let uid = data.user_uid;
             let login_id = data.login_id;
             let session_id = data.session_id;
-            document.cookie = `loginStatus=first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+            document.cookie = `first_name=${first};user_id=${uid},login_id=${login_id},session_id=${session_id}; path=/`;
             props.history.push("/selectmealplan");
             window.location.reload(false);
           })
           .catch(err => {
             console.log(err);
-            document.cookie = `loginStatus=first_name:null,user_uid: null; path=/ `;
+            document.cookie = `first_name=;user_id=,login_id=,session_id=; path=/`;
             props.history.push("/login");
             window.location.reload(false);
           });
@@ -227,7 +227,7 @@ export default function Login(props) {
       let uid = response.result.result[0].user_uid;
       let login_id = response.login_attempt_log.login_id;
       let session_id = response.login_attempt_log.session_id;
-      document.cookie = `loginStatus=first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+      document.cookie = `first_name=${first};user_id=${uid},login_id=${login_id},session_id=${session_id}; path=/`;
       // console.log(document.cookie);
       // document.cookie =
       //   " loginStatus: Hello " +
@@ -272,7 +272,7 @@ export default function Login(props) {
         props.history.push("/"); // should prompt something or asking for re-login
       }
     } else {
-      document.cookie = " loginStatus: null , user_uid: null , ";
+      document.cookie = `first_name=;user_id=,login_id=,session_id=; path=/`;
     }
   }
 
@@ -280,7 +280,7 @@ export default function Login(props) {
     <main Style='margin-top:-80px;'>
       <div class='container text-center' Style='margin-top:-40px;'>
         <h1>Login</h1>
-        {error !== null && error != undefined && (
+        {error !== null && error !== undefined && (
           <Fragment>
             <h6>
               <span className='icon has-text-danger'>

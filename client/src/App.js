@@ -23,47 +23,69 @@ const App = props => {
 
   async function onLoad() {
     try {
-      if (searchCookie4UserID(document.cookie).includes("100-")) {
+      alert(searchCookie4UserID("loginStatus"));
+      if (
+        isAuthenticated === false &&
+        searchCookie4UserID("loginStatus") !== null
+      ) {
         userHasAuthenticated(true);
-      } else if (!document.cookie.includes("loginStatus")) {
-        document.cookie = `loginStatus=; path=/`;
+      } else if (
+        isAuthenticated === false &&
+        searchCookie4UserID("loginStatus") === null
+      ) {
+        document.cookie = `loginStatus=;`;
         console.log("First time? Resetting document cookie");
       }
-    } catch (e) {
-      console.log("No user?");
-      if (e !== "No current user") {
-        alert(e);
-      }
+    } catch (err) {
+      console.log(err);
+      // if (err !== "No current user") {
+      //   alert(e);
+      // }
     }
 
     setIsAuthenticating(false);
   }
 
-  function searchCookie4Login(str) {
-    let arr = str.split(";");
-    let i = arr.indexOf("loginStatus");
-    if (arr[i + 1] === "null") {
-      return " ";
+  let getCookie = cname => {
+    //split cookie to find cookie name matching
+    let cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      let [name, values] = cookies[i].split("=");
+      if (name === cname) {
+        console.log(values.split(","));
+        if (values === "") {
+          return null;
+        }
+        return values;
+      }
     }
-    return arr[i + 1] + " " + arr[i + 2];
+    return null;
+  };
+
+  let cookiesForLoginHelper = (cname, type) => {
+    // this function is used for splitting first name and user id out of cookies.
+    //type === first_name or user_id or ...rest
+    let values = getCookie(cname);
+    if (values !== null) {
+      values = values.split(",");
+      for (let value of values) {
+        console.log(value);
+        if (value.includes(type)) {
+          return value.split(":")[1]; // dangerous
+        }
+      }
+    }
+    return null;
+  };
+  function searchCookie4Login(cname) {
+    // pass cookie name to look for user's first name
+    console.log(cookiesForLoginHelper("first_name"));
+    return cookiesForLoginHelper("first_name");
   }
 
-  function searchCookie4UserID(str) {
-    let arr = str.split(";");
-    let i = arr.indexOf("loginStatus");
-    let cookie = arr[i + 1].split("=");
-    if (cookie.length >= 2) {
-      i = cookie.indexOf("loginStatus");
-      let cookie_value = cookie[i + 1].split(",");
-      // i = cookie_value
-      console.log(`cookie_value is: ${cookie_value}`);
-      let cookie_uid = cookie[i + 1];
-      console.log(cookie_uid);
-    }
-    console.log(arr);
-    console.log(cookie);
-
-    return arr[i + 1];
+  function searchCookie4UserID(cname) {
+    //// pass cookie name to look for user's id
+    return cookiesForLoginHelper("user_id");
   }
 
   let stuff = !isAuthenticating && (
@@ -170,7 +192,7 @@ const App = props => {
             </Nav.Item>
 
             <div className='' style={{paddingTop: "66px"}}>
-              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
+              {searchCookie4Login("loginStatus") !== null ? (
                 <div>
                   <a href='/logout'>
                     <Button
@@ -194,7 +216,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login(document.cookie)}
+                    {searchCookie4Login("loginStatus")}
                   </p>
                 </div>
               ) : (
@@ -217,7 +239,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login(document.cookie)}
+                    {searchCookie4Login("loginStatus")}
                   </p>
                 </>
               )}
@@ -259,7 +281,7 @@ const App = props => {
             </NavDropdown>
             <a href='/get100'>GET $100</a>
             <div className='sideNavLogin'>
-              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
+              {searchCookie4Login("loginStatus") !== null ? (
                 <div>
                   <a href='/logout'>
                     <Button
@@ -283,7 +305,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login(document.cookie)}
+                    {searchCookie4Login("loginStatus")}
                   </p>
                 </div>
               ) : (
@@ -302,7 +324,7 @@ const App = props => {
                     id='loginStatus'
                     Style='font-size:12px; text-align:right; color:black;'
                   >
-                    {searchCookie4Login(document.cookie)}
+                    {searchCookie4Login("loginStatus")}
                   </p>
                 </>
               )}
