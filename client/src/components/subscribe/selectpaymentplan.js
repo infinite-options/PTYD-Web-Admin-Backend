@@ -29,12 +29,12 @@ class SelectPaymentPlan extends Component {
           <center>
             <h2 class='font1'>{this.state.meals} MEALS PAYMENT OPTIONS</h2>
             <hr class='two' />
-            <h4 class='font1'>
-              <b>
-                LOCAL. ORGANIC. RESPONSIBLE.<br></br>STRAIGHT TO YOUR DOOR
-              </b>
-            </h4>
-            <br />
+            <article className='font1 bottom_header'>
+              <h4 className='font-weight-normal'>
+                LOCAL. ORGANIC. RESPONSIBLE.
+              </h4>
+              <h4 className='font-weight-normal'>STRAIGHT TO YOUR DOOR</h4>
+            </article>
             <hr class='three' />
             <a href='/5-meals-subscription' style={{color: "black"}}>
               5 MEALS
