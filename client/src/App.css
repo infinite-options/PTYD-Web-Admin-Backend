@@ -142,7 +142,7 @@ hr.one {
   margin-top: 0;
   border-bottom: 0 solid #1f1209;
   box-shadow: 0 20px 20px -20px #333;
-  margin: -50px auto 10px;
+  /* margin: -50px auto 10px; */
 }
 hr.one-half {
   border: none;
@@ -331,4 +331,11 @@ hr.four {
 
 .card_color {
   color: green;
+}
+
+.bottom_header {
+  margin-bottom: 50px;
+}
+.feedback_marginTop {
+  margin-top: 150px;
 }

@@ -66,7 +66,7 @@ class SelectPaymentPlan extends Component {
                   >
                     <Card.Header className='p-0 position-relative'>
                       <Card.Img
-                        class='blackM'
+                        className='blackM'
                         variant='top'
                         src={paymentPlan.photo_URL}
                       />
