@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'brandongrotw01-lightregular';
+  src: url('font/brandon_grot_w01_light-webfont.woff2') format('woff2'),
+       url('font/brandon_grot_w01_light-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* landing page */
 .container {
   position: relative;
@@ -184,12 +192,6 @@ hr.four {
 }
 
 .black {
-  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
-  outline-offset: -100px;
-  overflow: hidden;
-  position: relative;
-  /*height: 187px;
-  width: 276px; */
   object-fit: cover;
   opacity: 50%;
   height:187px;
@@ -201,14 +203,9 @@ hr.four {
 }
 
 .blackM {
-  /* outline: 100px solid rgba(0, 0, 0, 0.5) !important;
-  outline-offset: -100px;
-  overflow: hidden;
-  position: relative; */
   object-fit: cover;
   opacity: 50%;
   height: 187px;
-  /* width: 252px; */
   width: 100%;
 }
 .checked {
@@ -266,7 +263,7 @@ hr.four {
 
 /* big header */
 .font1 {
-  font-family: "Raleway", sans-serif;
+  font-family: brandongrotw01-lightregular,sans-serif;
 }
 /* text font */
 .font2 {
@@ -291,8 +288,8 @@ hr.four {
 
 /* subscription page */
 .borderr {
-  border-style: solid;
-  border-width: thick;
+  border-style: solid !important;
+  border-width: thick !important;
 }
 
 .rcorners {
@@ -327,4 +324,38 @@ hr.four {
 
 .card_color {
   color: green;
+}
+
+.bottom_header {
+  margin-bottom: 50px;
+}
+.feedback_marginTop {
+  margin-top: 150px;
+}
+.home_title {
+  font-size: 40px;
+  line-height: 55px;
+  text-shadow: 2px 2px 10px white;
+  font-weight: normal;
+}
+.home_subtitle {
+  margin-bottom: 200px;
+}
+.home_subtitle p {
+  font-size: 21px;
+  text-shadow: 2px 2px 10px white;
+  line-height: 35px;
+}
+.start_button {
+  margin-top: 10px;
+  color: white;
+}
+.container_space {
+  margin-top: 150px;
+}
+.paymentCard {
+  max-width: 20rem;
+  margin: 20px;
+  border: 1px solid rgb(68, 68, 68);
+  border-radius: 0px;
 }
