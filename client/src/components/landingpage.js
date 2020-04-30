@@ -216,9 +216,9 @@ class Landing extends Component {
             backgroundSize: "100% 100%"
           }}
         >
-          <center>
+          <center className='d-flex justify-content-center'>
             <div
-              className='mb-5'
+              className='p-5'
               style={{
                 color: "white",
                 backgroundColor: "#467844",
