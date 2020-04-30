@@ -17,25 +17,75 @@ class MakeChanges extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalShow: false
+      modalShow: false,
+      changes: {}
     };
   }
-  handleChange = event => {
-    this.setState({ event });
-  };
-  handleChange = event => {
-    //get new dropdown value
-    let x = this.state.datekeys[event.target.value];
-    let len = this.state.createMenu[x].length;
-    let tempSelectionOfDropMenu = new Array(len).fill(0);
-    let initArr = this.state.createMenu[x];
-    for (let i = 0; i < len; i++) {
-      tempSelectionOfDropMenu[i] = this.state.mealMap[initArr[i]["Meal_Name"]];
-    }
-
+  handleChange(event) {
+    const target = event.target;
+    const name = target.name;
+    this.setState(prevState => ({
+      changes: {
+        ...prevState.changes,
+        [name]: target.value
+      }
+    }));
+  }
+  componentDidMount() {
     this.setState({
-      selection: event.target.value,
-      selectionOfDropMenu: tempSelectionOfDropMenu
+      changes: this.props
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps !== this.props) {
+      // nextProps.myProp has a different value than our current prop
+      console.log("new update" + nextProps + " old: " + this.props);
+      this.setState({
+        changes: this.props
+      });
+    }
+  }
+  // post_subscription = () => {
+  //   fetch(`${this.props.PURCHASE_API_URL}/${this.props.purchase_id}`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       subscription:this.props.subscription,
+  //                 paymentplan:this.props.paymentplan,
+  //                 payment_plan:this.props.payment_plan,
+  //                 cc_num:this.props.cc_num,
+  //                 cc_exp_date:this.props.cc_exp_date,
+  //                 cc_cvv:this.props.cc_cvv,
+  //                 delivery_address:this.props.delivery_address,
+  //                 delivery_address_unit:
+  //                   this.props.delivery_address_unit,
+
+  //                 delivery_city:this.props.delivery_city,
+  //                 delivery_state:this.props.delivery_state,
+  //                 delivery_zip:this.props.delivery_zip,
+  //                 delivery_instructions:
+  //                   this.props.delivery_instructions,
+
+  //                 purchase_id:this.props.purchase_id
+
+  //     })
+  //   });
+  // };
+
+  delete_subscription = () => {
+    fetch(`${this.props.DELETE_URL}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        purchase_id: this.props.purchase_id,
+        cancel_account: "true"
+      })
     });
   };
   MakeChangesAnimation = () => {
@@ -94,10 +144,10 @@ class MakeChanges extends Component {
 
                   <Form.Control
                     as="select"
-                    name="cc_exp_month"
+                    name="subscription"
                     value={this.props.subscription}
+                    onChange={this.handleChange}
                   >
-                    {console.log("tyler is here", this.props.paymentplan)}
                     {this.props.paymentplan.map(paymentPlan => (
                       <option>
                         {paymentPlan.meal_plan_desc
@@ -128,14 +178,15 @@ class MakeChanges extends Component {
                   <Form.Control
                     placeholder="Enter Card Number"
                     name="cc_num"
-                    value={this.props.cc_num}
+                    value={this.state.changes.cc_num}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} md={4} controlId="formGridCardCvc">
-                  <Form.Label>CVC</Form.Label>
+                  <Form.Label>CVV</Form.Label>
                   <Form.Control
                     placeholder="123"
                     name="cc_cvv"
@@ -253,8 +304,7 @@ class MakeChanges extends Component {
                   type="submit"
                   style={{ float: "left" }}
                   onClick={() => {
-                    alert("You have successfully deleted your subscription");
-                    return;
+                    this.delete_subscription();
                   }}
                 >
                   Delete My Subscription
@@ -288,6 +338,7 @@ class MakeChanges extends Component {
     // if (this.props.subscription == null) {
     //   return <div />;
     // }
+    console.log("cccccnum", this.state.changes, this.state.changes.cc_num);
     return this.MakeChangesAnimation();
   }
 }

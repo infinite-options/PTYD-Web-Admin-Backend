@@ -225,22 +225,23 @@ class Mealschedule extends Component {
                   </Cell>
                 </Grid>
                 <MakeChanges
-                  subscription={this.state.purchase_all.meal_plan_desc}
+                  subscription={this.state.purchase.meal_plan_desc}
                   paymentplan={this.state.paymentPlans}
-                  payment_plan={this.state.purchase_all.payment_frequency}
-                  cc_num={this.state.purchase_all.cc_num}
-                  cc_exp_date={this.state.purchase_all.cc_exp_date}
-                  cc_cvv={this.state.purchase_all.cc_cvv}
-                  delivery_address={this.state.purchase_all.delivery_address}
+                  payment_plan={this.state.purchase.payment_frequency}
+                  cc_num={this.state.purchase.cc_num}
+                  cc_exp_date={this.state.purchase.cc_exp_date}
+                  cc_cvv={this.state.purchase.cc_cvv}
+                  delivery_address={this.state.purchase.delivery_address}
                   delivery_address_unit={
-                    this.state.purchase_all.delivery_address_unit
+                    this.state.purchase.delivery_address_unit
                   }
-                  delivery_city={this.state.purchase_all.delivery_city}
-                  delivery_state={this.state.purchase_all.delivery_state}
-                  delivery_zip={this.state.purchase_all.delivery_zip}
+                  delivery_city={this.state.purchase.delivery_city}
+                  delivery_state={this.state.purchase.delivery_state}
+                  delivery_zip={this.state.purchase.delivery_zip}
                   delivery_instructions={
-                    this.state.purchase_all.delivery_instructions
+                    this.state.purchase.delivery_instructions
                   }
+                  purchase_id={this.state.purchase.purchase_id}
                 />
                 {displayrows}
               </Cell>{" "}
@@ -254,8 +255,7 @@ class Mealschedule extends Component {
                 <br />
                 <div>{console.log(this.state.menu)}</div>
                 <div class="meals-button">
-                  {
-                  this.state.menu.map(eachWeek => 
+                  {this.state.menu.map(eachWeek => (
                     <MealButton
                       day1="Sunday"
                       day2="Monday"
@@ -275,8 +275,7 @@ class Mealschedule extends Component {
                       monday_available={this.state.monday_available}
                       MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
                     />
-                  )
-                  }
+                  ))}
                 </div>
               </Cell>
             </Grid>
