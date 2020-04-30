@@ -318,16 +318,25 @@ class Meals(Resource):
         return mealQuantities
 
     # HTTP method GET
-    def get(self):
+    # Optional parameter: startDate (YYYYMMDD)
+    def get(self, startDate = None):
         response = {}
         items = {}
+
+        try:
+            if startDate:
+                now = datetime.strptime(startDate, "%Y%m%d")
+            else:
+                now = datetime.now()
+
+        except:
+            raise BadRequest('Request failed, bad startDate parameter.')
+
         try:
             conn = connect()
-            now = datetime.now()
 
             dates = execute("SELECT DISTINCT menu_date FROM ptyd_menu;", 'get', conn)
 
-            print('before loop')
             i = 1
             for date in dates['result']:
                 # only grab 6 weeks worth of menus
@@ -433,7 +442,6 @@ class Meals(Resource):
                         WHERE menu_category LIKE 'ADD_ON_%'
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
-                    print('after')
                     week = {
                         'SaturdayDate': str(stamp.date()),
                         'SundayDate': str((stamp + timedelta(days=1)).date()),
@@ -2702,7 +2710,7 @@ class TemplateApi(Resource):
 
 # Define API routes
 # Customer page
-api.add_resource(Meals, '/api/v2/meals')
+api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Login, '/api/v2/account/<string:accEmail>/<string:accPass>')
@@ -2728,8 +2736,8 @@ api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
 # Automated APIs
-api.add_resource(UpdatePurchases, '/api/v2/updatepurchases')
-api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers')
+api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
+api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers', '/api/v2/chargesubscribers/<string:affectedDate>')
 
 # Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')
