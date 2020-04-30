@@ -267,7 +267,7 @@ class Mealschedule extends Component {
                       mealQuantities={eachWeek.mealQuantities}
                       addonQuantities={eachWeek.addonQuantities}
                       maxmeals={eachWeek.maxmeals}
-                      purchase_id={this.state.purchase_all.purchase_id}
+                      purchase_id={this.state.purchase.purchase_id}
                       deliverDay={eachWeek.deliverDay}
                       subscribed={this.state.subscribed}
                       surprise={eachWeek.surprise}
