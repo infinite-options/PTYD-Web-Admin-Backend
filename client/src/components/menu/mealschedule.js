@@ -35,7 +35,14 @@ class Mealschedule extends Component {
     let currPur = {};
     let purchaseId = 0;
 
-    const res = await fetch(this.props.API_URL);
+    //  Handle startdate parameter on URL with ternary operator
+    //  Use this to turn back / forward time
+    //  Make sure to disable this when putting into production
+    const res = await fetch(
+      this.props.match.params.startdate ?
+      this.props.API_URL + '/' + this.props.match.params.startdate :
+      this.props.API_URL
+    );
     const api = await res.json();
 
     if (this.state.user_uid !== null) {
