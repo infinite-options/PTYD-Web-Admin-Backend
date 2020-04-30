@@ -15,6 +15,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [first_name, setFirstname] = useState("");
+  const [user_id, setUser_id] = useState("");
 
   useEffect(() => {
     onLoad();
@@ -23,14 +25,12 @@ const App = props => {
 
   async function onLoad() {
     try {
-      alert(searchCookie4UserID("loginStatus"));
-      if (
-        isAuthenticated === false &&
-        searchCookie4UserID("loginStatus") !== null
-      ) {
+      if (!isAuthenticated && searchCookie4UserID("loginStatus") !== null) {
         userHasAuthenticated(true);
+        setFirstname(searchCookie4Login("loginStatus"));
+        setUser_id(searchCookie4UserID("loginStatus"));
       } else if (
-        isAuthenticated === false &&
+        !isAuthenticated &&
         searchCookie4UserID("loginStatus") === null
       ) {
         document.cookie = `loginStatus=;`;
@@ -52,7 +52,6 @@ const App = props => {
     for (let i = 0; i < cookies.length; i++) {
       let [name, values] = cookies[i].split("=");
       if (name === cname) {
-        console.log(values.split(","));
         if (values === "") {
           return null;
         }
@@ -65,11 +64,10 @@ const App = props => {
   let cookiesForLoginHelper = (cname, type) => {
     // this function is used for splitting first name and user id out of cookies.
     //type === first_name or user_id or ...rest
-    let values = getCookie(cname);
+    let values = getCookie("loginStatus");
     if (values !== null) {
       values = values.split(",");
       for (let value of values) {
-        console.log(value);
         if (value.includes(type)) {
           return value.split(":")[1]; // dangerous
         }
@@ -79,13 +77,12 @@ const App = props => {
   };
   function searchCookie4Login(cname) {
     // pass cookie name to look for user's first name
-    console.log(cookiesForLoginHelper("first_name"));
-    return cookiesForLoginHelper("first_name");
+    return cookiesForLoginHelper(cname, "first_name");
   }
 
   function searchCookie4UserID(cname) {
     //// pass cookie name to look for user's id
-    return cookiesForLoginHelper("user_id");
+    return cookiesForLoginHelper(cname, "user_id");
   }
 
   let stuff = !isAuthenticating && (
@@ -200,8 +197,7 @@ const App = props => {
                       variant='success'
                       size='sm'
                       onClick={() => {
-                        document.cookie =
-                          " loginStatus: null , user_uid: null , ";
+                        document.cookie = "loginStatus=; path=/";
                         window.location.reload(false);
                       }}
                     >
@@ -289,8 +285,7 @@ const App = props => {
                       variant='success'
                       size='sm'
                       onClick={() => {
-                        document.cookie =
-                          " loginStatus: null , user_uid: null , ";
+                        document.cookie = "loginStatus=; path=/";
                         window.location.reload(false);
                       }}
                     >
@@ -334,7 +329,14 @@ const App = props => {
 
         <Content Style='padding-top:140px'>
           <div className='page-content' />
-          <Main appProps={{isAuthenticated, userHasAuthenticated}} />
+          <Main
+            appProps={{
+              isAuthenticated,
+              userHasAuthenticated,
+              first_name,
+              user_id
+            }}
+          />
         </Content>
 
         <hr></hr>
