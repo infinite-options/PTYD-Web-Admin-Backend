@@ -209,8 +209,15 @@ class MakeChanges extends Component {
 
                 <Form.Group as={Col} md={4} controlId="formGridCardMonth">
                   <Form.Label>Month</Form.Label>
-                  {this.state.changes.cc_exp_date}
-                  <Form.Control as="select" name="cc_exp_month">
+
+                  <Form.Control
+                    as="select"
+                    name="cc_exp_month"
+                    onChange={this.handleChange}
+                    value={String(
+                      this.state.changes.cc_exp_date.split("-")
+                    ).substring(5, 7)}
+                  >
                     <option>Choose...</option>
                     <option>01</option>
                     <option>02</option>
@@ -229,7 +236,12 @@ class MakeChanges extends Component {
 
                 <Form.Group as={Col} md={4} controlId="formGridCardYear">
                   <Form.Label>Year</Form.Label>
-                  <Form.Control as="select" name="cc_exp_year">
+                  <Form.Control
+                    as="select"
+                    name="cc_exp_year"
+                    onChange={this.handleChange}
+                    value={this.state.changes.cc_exp_date.substr(0, 4)}
+                  >
                     <option>Choose...</option>
                     <option>2020</option>
                     <option>2021</option>
