@@ -37,16 +37,16 @@ class Selectmealplan extends Component {
             </article>
             <CardDeck>
               {this.state.mealPlans.map(mealPlan => (
-                <Card className='p-0 border-0 shadow-none w-auto'>
+                <Card className='p-0 border-0 w-auto'>
                   {mealPlan.num_meals === 10 ? (
                     <div className='rcorners font3 d-flex rcorner_color'>
-                      <h6 className='align-self-center border-0 mx-auto'>
+                      <h6 className='align-self-center mx-auto'>
                         MOST POPULAR
                       </h6>
                     </div>
                   ) : (
                     <div className='rcorners font3 d-flex'>
-                      <h6 className='align-self-center mx-auto'></h6>
+                      <h6 className='lign-self-center mx-auto'></h6>
                     </div>
                   )}
 
@@ -58,7 +58,6 @@ class Selectmealplan extends Component {
                   >
                     <Card.Header className='p-0 position-relative background_black'>
                       <Card.Img
-                        className='blackM'
                         variant='top'
                         src={mealPlan.photo_URL}
                         style={{
@@ -182,39 +181,43 @@ class Selectmealplan extends Component {
                   <Grid>
                     <Col>
                       <Cell col={10}>
-                        <p>
-                          Besides the convenience and goodness going inside our
-                          bods, PTYD is also the friendliest most generous team
-                          that is always quick to respond.
-                        </p>
-                        <p>- Austin</p>
+                        Besides the convenience and goodness going inside our
+                        bods, PTYD is also the friendliest most generous team
+                        that is always quick to respond.
+                        <br />- Austin
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        <p>
-                          Whether I split a soup between our two kids, feed my
-                          husband after his workout, or snack on a salad while
-                          the kids nap, it's an outstanding addition to our
-                          fridge!
-                        </p>
-                        <p>- Christy</p>
+                        Whether I split a soup between our two kids, feed my
+                        husband after his workout, or snack on a salad while the
+                        kids nap, it's an outstanding addition to our fridge!
+                        <br />- Christy
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        <p>
-                          I love how the food is as locally sourced as possible
-                          and containers are not going to waste. I don't think
-                          I've ever had a meal I didn't like!
-                        </p>
-                        <p>- Courtney</p>
+                        I love how the food is as locally sourced as possible
+                        and containers are not going to waste. I don't think
+                        I've ever had a meal I didn't like!
+                        <br />- Courtney
                       </Cell>
                     </Col>
                   </Grid>
                 </Row>
+                <br></br>
               </Container>
             </div>
+            <br />
+            <br />
+            <div style={{backgroundColor: "black"}}>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+            </div>
+            <br />
           </center>
         </div>
       </section>

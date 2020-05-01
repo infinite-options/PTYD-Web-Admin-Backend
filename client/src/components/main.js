@@ -11,6 +11,7 @@ import SelectPaymentPlan from "./subscribe/selectpaymentplan";
 import WeeklyMenu from "./menu/weeklymenu";
 import Checkout from "./subscribe/checkout";
 import CheckoutSuccess from "./subscribe/checkout-success";
+import UnknownSession from "./subscribe/unknown-session";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./about/howitworks";
@@ -209,6 +210,12 @@ export default function Main({appProps}) {
         }}
       />
 
+      <AppliedRoute
+        exact
+        path='/invalidsession'
+        component={UnknownSession}
+        appProps={appProps}
+      />
       <AppliedRoute
         exact
         path='/checkoutsuccess'

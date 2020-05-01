@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
 import IMG4 from "../img/img4.jpg";
@@ -461,5 +461,4 @@ class Landing extends Component {
     );
   }
 }
-
 export default Landing;
