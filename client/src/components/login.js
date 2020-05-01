@@ -81,15 +81,25 @@ export default function Login(props) {
   }
 
   // API GET Request for Social Media User Data
-  async function checkForSocial(user) {
-    const res = await fetch(props.SOCIAL_API_URL + "/" + user);
-    const api = await res.json();
-    const social = api.result.result[0];
-    return social;
+  function checkForSocial(user) {
+    axios(props.SOCIAL_API_URL + "/" + user)
+      .then(res => {
+        if (res.status == 200) {
+          const social = res.data.result.result[0];
+
+          return social;
+        } else {
+          console.log(`Server returned code: ${res.status}`);
+        }
+      })
+      .catch(err => {
+        console.log(`Error happened when cheking for Social`);
+      });
   }
 
   async function grabSocialUserInfor(uid) {
     const res = await fetch(props.SOCIAL_API_URL + "acc/" + uid);
+    alert(`URL: ${res.json()}`);
     const api = await res.json();
     const login = api.result.result[0];
     return login;
@@ -125,34 +135,41 @@ export default function Login(props) {
   };
   // Maria Alejcgfbaifeg Changsky	104605834561957	pnkuzirrok_1587274227@tfbnw.net
 
-  const responseFacebook = response => {
-    console.log("Facebook Response ", response);
-    const e = response.email;
-    const at = response.accessToken;
-    const rt = response.id;
-    console.log(e, at, rt);
-
-    checkForSocial(e)
-      .then(res1 => {
-        console.log("Social Media User: ", res1);
-        grabSocialUserInfor(res1.user_uid)
-          .then(res2 => socialLogin(res2))
-          .catch(err => console.log(err));
-      })
-      .catch(err => {
-        console.log(err);
-        // Redirect to Signup Page for Social Media Users
-        props.history.push({
-          pathname: "/socialsignup",
-          state: {
-            email: e,
-            social: "facebook",
-            accessToken: at,
-            refreshToken: rt
-          }
+  const responseFacebook = async response => {
+    if (response !== null && response !== undefined) {
+      console.log("Facebook Response ", response);
+      const e = response.email;
+      const at = response.accessToken;
+      const rt = response.id;
+      const name = response.name.split(" ");
+      const last_name = name[name.length - 1];
+      let first_name = "";
+      for (let n = 0; n < name.length - 1; n++) {
+        first_name += name[n] + " ";
+      }
+      checkForSocial(e)
+        .then(res => {
+          console.log("Social Media User: ", res);
+          grabSocialUserInfor(res.user_uid).then(res => {
+            socialLogin(res);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          // Redirect to Signup Page for Social Media Users
+          props.history.push({
+            pathname: "/socialsignup",
+            state: {
+              email: e,
+              social: "facebook",
+              accessToken: at,
+              refreshToken: rt
+            }
+          });
         });
-        window.location.reload(false);
-      });
+    } else {
+      console.log(`Facebook does not have any info about this user.`);
+    }
   };
 
   function socialLogin(user) {
@@ -349,10 +366,9 @@ export default function Login(props) {
                   }}
                 >
                   <FacebookLogin
-                    appId='508721976476931'
+                    appId='2733716733422240'
                     autoLoad={false}
                     fields='name,email,picture'
-                    onClick={console.log("test")}
                     callback={responseFacebook}
                     size='small'
                     textButton='FB Login'
