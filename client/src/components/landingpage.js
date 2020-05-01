@@ -18,7 +18,6 @@ import LOGOYELLOWBIRD from "../img/logo-yellowbird.png";
 import LOGOSIETE from "../img/logo-siete.png";
 import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
-import {CardText} from "react-bootstrap/Card";
 
 class Landing extends Component {
   constructor(props) {
