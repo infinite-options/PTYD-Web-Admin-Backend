@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
 import IMG4 from "../img/img4.jpg";
@@ -8,17 +8,16 @@ import HUMAN1 from "../img/human1.png";
 import HUMAN2 from "../img/human2.png";
 import HUMAN3 from "../img/human3.png";
 // import COMPANY from "../img/company.png";
-import LOGOBOULDIN from "../img/logo-bouldinfoodforest.jpg";
-import LOGOFOX7 from "../img/logo-fox7austin.jpg";
-import LOGOCREDO from "../img/logo-credo.jpg";
-import LOGOCURCUMA from "../img/logo-curcuma.jpg";
-import LOGOFRONKS from "../img/logo-fronks.png";
-import LOGOJBG from "../img/logo-jbg.png";
-import LOGOYELLOWBIRD from "../img/logo-yellowbird.png";
-import LOGOSIETE from "../img/logo-siete.png";
-import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
-import {Grid, Cell} from "react-mdl";
-import {CardText} from "react-bootstrap/Card";
+import LOGOBOULDIN from "../img/logo-bouldinfoodforest.jpg"
+import LOGOFOX7 from "../img/logo-fox7austin.jpg"
+import LOGOCREDO from "../img/logo-credo.jpg"
+import LOGOCURCUMA from "../img/logo-curcuma.jpg"
+import LOGOFRONKS from "../img/logo-fronks.png"
+import LOGOJBG from "../img/logo-jbg.png"
+import LOGOYELLOWBIRD from "../img/logo-yellowbird.png"
+import LOGOSIETE from "../img/logo-siete.png"
+import { Row, Col, Container, Card, CardColumns } from "react-bootstrap";
+import { Grid, Cell } from "react-mdl";
 
 class Landing extends Component {
   constructor(props) {
@@ -462,5 +461,4 @@ class Landing extends Component {
     );
   }
 }
-
 export default Landing;
