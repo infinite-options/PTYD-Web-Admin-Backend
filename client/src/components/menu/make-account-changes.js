@@ -20,6 +20,7 @@ class MakeChanges extends Component {
       modalShow: false,
       changes: {}
     };
+    console.log("printing url", this.props.DELETE_URL);
   }
   handleChange(event) {
     const target = event.target;
@@ -75,19 +76,20 @@ class MakeChanges extends Component {
   //   });
   // };
 
-  delete_subscription = () => {
-    fetch(`${this.props.DELETE_URL}`, {
-      method: "POST",
+  async delete_subscription() {
+    console.log("its deleting");
+    const test = await fetch(this.props.DELETE_URL, {
+      method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id,
-        cancel_account: "true"
+        purchase_id: this.props.purchase_id
       })
     });
-  };
+    console.log(test);
+  }
   MakeChangesAnimation = () => {
     console.log("test1");
     return (
@@ -305,6 +307,7 @@ class MakeChanges extends Component {
                   style={{ float: "left" }}
                   onClick={() => {
                     this.delete_subscription();
+                    console.log("calling delete");
                   }}
                 >
                   Delete My Subscription

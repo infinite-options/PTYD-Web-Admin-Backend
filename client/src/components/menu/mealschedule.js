@@ -225,6 +225,7 @@ class Mealschedule extends Component {
                   </Cell>
                 </Grid>
                 <MakeChanges
+                  DELETE_URL={this.props.DELETE_URL}
                   subscription={this.state.purchase.meal_plan_desc}
                   paymentplan={this.state.paymentPlans}
                   payment_plan={this.state.purchase.payment_frequency}
