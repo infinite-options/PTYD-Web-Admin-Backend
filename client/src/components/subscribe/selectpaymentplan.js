@@ -60,7 +60,7 @@ class SelectPaymentPlan extends Component {
                   <Card.Body className='borderr border_card_subcribe paymentCard '>
                     <Card.Header className='p-0 position-relative background_black'>
                       <Card.Img
-                        className='blackM'
+                        className='blackM background_black'
                         variant='top'
                         src={paymentPlan.photo_URL}
                         style={{

@@ -37,7 +37,7 @@ class Selectmealplan extends Component {
             </article>
             <CardDeck>
               {this.state.mealPlans.map(mealPlan => (
-                <Card className='p-0 border-0 w-auto'>
+                <Card className='p-0 border-0 w-auto shadow-none'>
                   {mealPlan.num_meals === 10 ? (
                     <div className='rcorners font3 d-flex rcorner_color'>
                       <h6 className='align-self-center mx-auto'>
@@ -58,6 +58,7 @@ class Selectmealplan extends Component {
                   >
                     <Card.Header className='p-0 position-relative background_black'>
                       <Card.Img
+                        className='blackM background_black '
                         variant='top'
                         src={mealPlan.photo_URL}
                         style={{
