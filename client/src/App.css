@@ -366,3 +366,6 @@ hr.four {
   border: 1px solid rgb(68, 68, 68);
   border-radius: 0px;
 }
+.background_black {
+  background-color: #181818 !important;
+}
