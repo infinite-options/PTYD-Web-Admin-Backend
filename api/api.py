@@ -1286,15 +1286,26 @@ class Checkout(Resource):
 
 # Call this API from another source every Monday at midnight
 class UpdatePurchases(Resource):
-    def post(self):
+    def post(self, affectedDate = None):
         response = {}
         items = []
-        try:
-            conn = connect()
 
-            # Get following Saturday (same day if Saturday) as a string
-            thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
-            nextSat = datetime.strftime(date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
+        try:
+            if affectedDate:
+                param = datetime.strptime(startDate, "%Y%m%d")
+                thisSat = datetime.strftime(param, "%Y-%m-%d")
+                nextSat = datetime.strftime(param + timedelta(days=7), "%Y-%m-%d")
+            else:
+                # Get following Saturday (same day if Saturday) as a string
+                thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
+                nextSat = datetime.strftime(date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
+        except:
+            raise BadRequest('Request failed, bad affectedDate parameter.')
+
+        try:
+            print(thisSat)
+            raise Exception
+            conn = connect()
 
             # UPDATE PURCHASE TEST CASES
             #           thisSat = '2020-04-18'
@@ -1550,12 +1561,8 @@ class UpdatePurchases(Resource):
 
 # Call this API from another source every Thursday at midnight
 class ChargeSubscribers(Resource):
-    def getDates(self, frequency):
+    def getDates(self, frequency, thurs):
         dates = {}
-        dayOfWeek = date.today().weekday()
-
-        # Get today's date (or the coming Thursday)
-        thurs = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
 
         # CHARGE SUBSCRIBER TEST CASES
         #       thurs = date(2020, 4, 23)
@@ -1582,9 +1589,21 @@ class ChargeSubscribers(Resource):
 
         return dates
 
-    def post(self):
+    def post(self, affectedDate = None):
         response = {}
         items = []
+
+        try:
+            if affectedDate:
+                paramDate = date.strptime(startDate, "%Y%m%d")
+            else:
+                # Get today's date (or the coming Thursday)
+                dayOfWeek = date.today().weekday()
+                paramDate = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
+
+        except:
+            raise BadRequest('Request failed, bad affectedDate parameter.')
+
         try:
             conn = connect()
 
@@ -1690,7 +1709,7 @@ class ChargeSubscribers(Resource):
                 items.append(execute(query, 'post', conn))
 
                 # New snapshot
-                dates = self.getDates(eachPayment['subscription_weeks'])
+                dates = self.getDates(eachPayment['subscription_weeks'], paramDate)
                 query = """
                     INSERT INTO ptyd_snapshots
                     (
