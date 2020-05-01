@@ -22,16 +22,23 @@ class MakeChanges extends Component {
     };
     console.log("printing url", this.props.DELETE_URL);
   }
-  handleChange(event) {
+  handleChange = event => {
     const target = event.target;
     const name = target.name;
-    this.setState(prevState => ({
-      changes: {
-        ...prevState.changes,
-        [name]: target.value
+    console.log("handle change", target.value);
+    console.log("name", name);
+    this.setState(
+      prevState => ({
+        changes: {
+          ...prevState.changes,
+          [name]: target.value
+        }
+      }),
+      () => {
+        console.log("after set state", this.state.changes);
       }
-    }));
-  }
+    );
+  };
   componentDidMount() {
     this.setState({
       changes: this.props
@@ -41,8 +48,13 @@ class MakeChanges extends Component {
     if (nextProps !== this.props) {
       // nextProps.myProp has a different value than our current prop
       console.log("new update" + nextProps + " old: " + this.props);
+      // let temp = JSON.parse(JSON.stringify(nextProps));
+      // temp.subscription = nextProps.subscription
+      //   .concat(":  $")
+      //   .concat(nextProps.meal_plan_price);
+
       this.setState({
-        changes: this.props
+        changes: nextProps
       });
     }
   }
@@ -143,19 +155,17 @@ class MakeChanges extends Component {
                   controlId="formGridCardSubscription"
                 >
                   <Form.Label>My Subscription</Form.Label>
-
+                  {this.state.changes.subscription
+                    .concat(":  $")
+                    .concat(this.state.changes.meal_plan_price)}
                   <Form.Control
                     as="select"
                     name="subscription"
-                    value={this.props.subscription}
+                    value={this.state.changes.subscription}
                     onChange={this.handleChange}
                   >
-                    {this.props.paymentplan.map(paymentPlan => (
-                      <option>
-                        {paymentPlan.meal_plan_desc
-                          .concat(":  $")
-                          .concat(paymentPlan.meal_plan_price)}
-                      </option>
+                    {this.state.changes.paymentplan.map(paymentPlan => (
+                      <option>{paymentPlan.meal_plan_desc}</option>
                     ))}
                   </Form.Control>
                 </Form.Group>
@@ -192,12 +202,14 @@ class MakeChanges extends Component {
                   <Form.Control
                     placeholder="123"
                     name="cc_cvv"
-                    value={this.props.cc_cvv}
+                    value={this.state.changes.cc_cvv}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="formGridCardMonth">
                   <Form.Label>Month</Form.Label>
+                  {this.state.changes.cc_exp_date}
                   <Form.Control as="select" name="cc_exp_month">
                     <option>Choose...</option>
                     <option>01</option>
@@ -238,7 +250,8 @@ class MakeChanges extends Component {
                 <Form.Control
                   placeholder="1234 Main St"
                   name="delivery_address"
-                  value={this.props.delivery_address}
+                  value={this.state.changes.delivery_address}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
 
@@ -247,7 +260,8 @@ class MakeChanges extends Component {
                 md={4}
                 Style="margin-left:-15px;"
                 controlId="formGridAptNum"
-                value={this.props.delivery_address_unit}
+                value={this.state.changes.delivery_address_unit}
+                onChange={this.handleChange}
               >
                 <Form.Label>
                   Apartment/Unit <b>(Optional)</b>
@@ -255,6 +269,8 @@ class MakeChanges extends Component {
                 <Form.Control
                   placeholder="Apartment, studio, or floor"
                   name="delivery_address_unit"
+                  value={this.state.changes.delivery_address_unit}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
 
@@ -264,7 +280,8 @@ class MakeChanges extends Component {
                   <Form.Control
                     placeholder="Prep City"
                     name="delivery_city"
-                    value={this.props.delivery_city}
+                    value={this.state.changes.delivery_city}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -273,7 +290,8 @@ class MakeChanges extends Component {
                   <Form.Control
                     as="select"
                     name="delivery_state"
-                    value={this.props.delivery_state}
+                    value={this.state.changes.delivery_state}
+                    onChange={this.handleChange}
                   >
                     <option>Choose...</option>
                     <option>TX</option>
@@ -285,7 +303,8 @@ class MakeChanges extends Component {
                   <Form.Control
                     placeholder="12345"
                     name="delivery_zip"
-                    value={this.props.delivery_zip}
+                    value={this.state.changes.delivery_zip}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
               </Form.Row>
@@ -294,7 +313,8 @@ class MakeChanges extends Component {
                 <Form.Control
                   as="textarea"
                   rows="1"
-                  value={this.props.delivery_instructions}
+                  value={this.state.changes.delivery_instructions}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Tooltip
@@ -307,7 +327,6 @@ class MakeChanges extends Component {
                   style={{ float: "left" }}
                   onClick={() => {
                     this.delete_subscription();
-                    console.log("calling delete");
                   }}
                 >
                   Delete My Subscription
@@ -341,7 +360,7 @@ class MakeChanges extends Component {
     // if (this.props.subscription == null) {
     //   return <div />;
     // }
-    console.log("cccccnum", this.state.changes, this.state.changes.cc_num);
+    console.log("state changes", this.state.changes);
     return this.MakeChangesAnimation();
   }
 }

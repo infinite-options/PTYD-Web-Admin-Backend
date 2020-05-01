@@ -20,8 +20,10 @@ class Mealschedule extends Component {
       monday_available: false,
       paymentPlans: [],
       purchase_all: [], //hold all subscriptions
-      selection: 0
+      selection: 0,
+      api: null //initial result api call
     };
+    this.changeMenuButtons = this.changeMenuButtons.bind(this);
 
     function searchCookie4UserID(str) {
       let arr = str.split(" ");
@@ -35,32 +37,14 @@ class Mealschedule extends Component {
     let i = arr.indexOf("loginStatus:");
     return arr[i + 2];
   }
-
-  async componentDidMount() {
-    let currPur = {};
-    let purchaseId = 0;
-
-    const res = await fetch(this.props.API_URL);
-    const api = await res.json();
-
-    if (this.state.user_uid !== null) {
-      const purchases = await fetch(
-        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
-      );
-      const purchasesApi = await purchases.json();
-
-      // Check if user has any active subscriptions
-      if (purchasesApi.result.length != 0) {
-        currPur = purchasesApi.result[0];
-        purchaseId = purchasesApi.result[0].purchase_id;
-        this.setState({
-          subscribed: true,
-          monday_available: purchasesApi.result[0].monday_available,
-          purchase_all: purchasesApi.result
-        });
-      }
-    }
-
+  async changeMenuButtons() {
+    console.log("tyler is here");
+    let currPur = this.state.purchase_all[this.state.selection]; //t - change
+    let purchaseId = currPur.purchase_id; //
+    console.log("purchase id chec", purchaseId);
+    let monday_available = currPur.monday_available;
+    let api = this.state.api;
+    if (api === null) return;
     const mselect_res = await fetch(
       `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
     );
@@ -69,6 +53,10 @@ class Mealschedule extends Component {
     let key;
     let sixWeekMenu = [];
     let weekNum;
+    if (api.result === null) {
+      return;
+    }
+    console.log("resule", api.result);
     for (weekNum = 1; weekNum < 7; weekNum++) {
       key = "MenuForWeek" + weekNum;
       if (!(key in api.result)) break;
@@ -143,6 +131,126 @@ class Mealschedule extends Component {
       {
         menu: sixWeekMenu,
         purchase: currPur,
+        paymentPlans: new_plans,
+        monday_available: monday_available
+      },
+      () => {
+        console.log("ccccccc", this.state.paymentPlans);
+      }
+    );
+  }
+  async componentDidMount() {
+    let currPur = {};
+    let purchaseId = 0;
+
+    const res = await fetch(this.props.API_URL);
+    const api = await res.json();
+
+    if (this.state.user_uid !== null) {
+      const purchases = await fetch(
+        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+      );
+      const purchasesApi = await purchases.json();
+
+      // Check if user has any active subscriptions
+      if (purchasesApi.result.length != 0) {
+        currPur = purchasesApi.result[0];
+        purchaseId = purchasesApi.result[0].purchase_id;
+        this.setState({
+          subscribed: true,
+          monday_available: purchasesApi.result[0].monday_available,
+          purchase_all: purchasesApi.result,
+          api: api
+        });
+      }
+    }
+
+    const mselect_res = await fetch(
+      `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
+    );
+    const mselect_api = await mselect_res.json();
+
+    let key;
+    let sixWeekMenu = [];
+    let weekNum;
+    for (weekNum = 1; weekNum < 7; weekNum++) {
+      key = "MenuForWeek" + weekNum;
+      if (!(key in api.result)) break;
+
+      let currentWeek = {};
+      currentWeek.sat = api.result[key].SaturdayDate;
+      currentWeek.sun = api.result[key].Sunday;
+      currentWeek.mon = api.result[key].Monday;
+      currentWeek.menu = api.result[key].Meals;
+      currentWeek.addons = api.result[key].Addons;
+      currentWeek.mealQuantities = api.result[key].MealQuantities;
+      currentWeek.addonQuantities = Object.assign(
+        {},
+        currentWeek.mealQuantities
+      );
+      currentWeek.maxmeals = currPur.MaximumMeals;
+      currentWeek.deliverDay = "Sunday";
+      currentWeek.surprise = true;
+      currentWeek.addonsSelected = false;
+
+      for (let week in mselect_api.result.Meals) {
+        if (mselect_api.result.Meals[week].week_affected == currentWeek.sat) {
+          if (mselect_api.result.Meals[week].meal_selection == "SKIP") {
+            currentWeek.deliverDay = "SKIP";
+          } else if (
+            mselect_api.result.Meals[week].meal_selection == "SURPRISE"
+          ) {
+            currentWeek.deliverDay =
+              mselect_api.result.Meals[week].delivery_day;
+          } else {
+            for (let mealId in mselect_api.result.Meals[week].meals_selected) {
+              currentWeek.mealQuantities[mealId] =
+                mselect_api.result.Meals[week].meals_selected[mealId];
+              currentWeek.maxmeals -=
+                mselect_api.result.Meals[week].meals_selected[mealId];
+              currentWeek.deliverDay =
+                mselect_api.result.Meals[week].delivery_day;
+              currentWeek.surprise = false;
+            }
+          }
+        }
+      }
+
+      for (let week in mselect_api.result.Addons) {
+        if (mselect_api.result.Addons[week].week_affected == currentWeek.sat) {
+          for (let mealId in mselect_api.result.Addons[week].meals_selected) {
+            currentWeek.addonQuantities[mealId] =
+              mselect_api.result.Addons[week].meals_selected[mealId];
+            currentWeek.addonsSelected = true;
+          }
+        }
+      }
+
+      sixWeekMenu.push(currentWeek);
+    }
+
+    const plans_res = await fetch(this.props.PLANS_URL);
+    const plans_api = await plans_res.json();
+
+    const plans = plans_api.result;
+    var keys = Object.keys(plans);
+    let new_plans = [];
+    let skip = 0;
+    for (let i in keys) {
+      if (skip === 0) {
+        skip++;
+        continue;
+      }
+      let x = plans[keys[i]].result;
+      for (let j = 0; j < x.length; j++) {
+        new_plans.push(x[j]);
+      }
+    }
+
+    this.setState(
+      {
+        menu: sixWeekMenu,
+        purchase: currPur,
         paymentPlans: new_plans
       },
       () => {
@@ -152,9 +260,14 @@ class Mealschedule extends Component {
   }
   //dropdown for different subscription
   handleChange = event => {
-    this.setState({
-      selection: event.target.value
-    });
+    this.setState(
+      {
+        selection: event.target.value
+      },
+      () => {
+        this.changeMenuButtons();
+      }
+    );
   };
 
   render() {
@@ -163,6 +276,7 @@ class Mealschedule extends Component {
     if (subscription_selection == null) {
       return <div></div>;
     }
+    console.log("selection", subscription_selection);
     // for (let i = 0; i < subscription_selection.length; i++) {
     let tempelement = (
       <div>
@@ -227,6 +341,7 @@ class Mealschedule extends Component {
                 <MakeChanges
                   DELETE_URL={this.props.DELETE_URL}
                   subscription={this.state.purchase.meal_plan_desc}
+                  meal_plan_price={this.state.purchase.amount_due}
                   paymentplan={this.state.paymentPlans}
                   payment_plan={this.state.purchase.payment_frequency}
                   cc_num={this.state.purchase.cc_num}
@@ -244,6 +359,7 @@ class Mealschedule extends Component {
                   }
                   purchase_id={this.state.purchase.purchase_id}
                 />
+                {console.log("meal plan price", this.state.paymentPlans)}
                 {displayrows}
               </Cell>{" "}
               <Cell col={1}></Cell>
