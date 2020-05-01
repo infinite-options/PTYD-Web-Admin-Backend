@@ -181,43 +181,39 @@ class Selectmealplan extends Component {
                   <Grid>
                     <Col>
                       <Cell col={10}>
-                        Besides the convenience and goodness going inside our
-                        bods, PTYD is also the friendliest most generous team
-                        that is always quick to respond.
-                        <br />- Austin
+                        <p>
+                          Besides the convenience and goodness going inside our
+                          bods, PTYD is also the friendliest most generous team
+                          that is always quick to respond.
+                        </p>
+                        <p>- Austin</p>
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        Whether I split a soup between our two kids, feed my
-                        husband after his workout, or snack on a salad while the
-                        kids nap, it's an outstanding addition to our fridge!
-                        <br />- Christy
+                        <p>
+                          Whether I split a soup between our two kids, feed my
+                          husband after his workout, or snack on a salad while
+                          the kids nap, it's an outstanding addition to our
+                          fridge!
+                        </p>
+                        <p>- Christy</p>
                       </Cell>
                     </Col>
                     <Col>
                       <Cell col={10}>
-                        I love how the food is as locally sourced as possible
-                        and containers are not going to waste. I don't think
-                        I've ever had a meal I didn't like!
-                        <br />- Courtney
+                        <p>
+                          I love how the food is as locally sourced as possible
+                          and containers are not going to waste. I don't think
+                          I've ever had a meal I didn't like!
+                        </p>
+                        <p>- Courtney</p>
                       </Cell>
                     </Col>
                   </Grid>
                 </Row>
-                <br></br>
               </Container>
             </div>
-            <br />
-            <br />
-            <div style={{backgroundColor: "black"}}>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-            </div>
-            <br />
           </center>
         </div>
       </section>
