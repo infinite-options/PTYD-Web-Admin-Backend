@@ -1292,19 +1292,20 @@ class UpdatePurchases(Resource):
 
         try:
             if affectedDate:
-                param = datetime.strptime(startDate, "%Y%m%d")
-                thisSat = datetime.strftime(param, "%Y-%m-%d")
-                nextSat = datetime.strftime(param + timedelta(days=7), "%Y-%m-%d")
+                affDateObj = datetime.strptime(affectedDate, "%Y%m%d")
+                print(affDateObj)
+                thisSat = datetime.strftime(affDateObj - timedelta(days=((affDateObj.weekday() - 5) % 7)), "%Y-%m-%d")
+                nextSat = datetime.strftime(affDateObj + timedelta(days=(5 - affDateObj.weekday() % 7)), "%Y-%m-%d")
             else:
                 # Get following Saturday (same day if Saturday) as a string
                 thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
                 nextSat = datetime.strftime(date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
         except:
+            print('Error: Bad parameter.')
             raise BadRequest('Request failed, bad affectedDate parameter.')
 
         try:
             print(thisSat)
-            raise Exception
             conn = connect()
 
             # UPDATE PURCHASE TEST CASES
@@ -1595,16 +1596,21 @@ class ChargeSubscribers(Resource):
 
         try:
             if affectedDate:
-                paramDate = date.strptime(startDate, "%Y%m%d")
+                affDateObj = datetime.strptime(affectedDate, "%Y%m%d")
+                print(affDateObj)
+                dayOfWeek = affDateObj.weekday()
+                paramDate = affDateObj + timedelta(days=(3 - dayOfWeek) % 7)
             else:
                 # Get today's date (or the coming Thursday)
                 dayOfWeek = date.today().weekday()
                 paramDate = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
 
         except:
+            print('Error, bad parameter.')
             raise BadRequest('Request failed, bad affectedDate parameter.')
 
         try:
+            print(paramDate)
             conn = connect()
 
             # Get all purchases with 0 weeks remaining
