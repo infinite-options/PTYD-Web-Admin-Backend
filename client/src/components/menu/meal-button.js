@@ -15,6 +15,8 @@ export default class MealButton extends Component {
 
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
     this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
+    this.changeButtonM = this.changeButtonM.bind(this);
+    this.changeButtonS = this.changeButtonS.bind(this);
 
     this.state = {
       count: 0,
@@ -134,24 +136,26 @@ export default class MealButton extends Component {
     this.sendAddonForm();
   };
 
-  changeButtonS = () => {
-    this.setState({
+  async changeButtonS() {
+    await this.setState({
       buttonS: true,
       buttonM: false,
       buttonSkip: false,
       buttonDisabled: false,
       dayToDeliver: "Sunday"
     });
+    this.sendForm();
   };
 
-  changeButtonM = () => {
-    this.setState({
+  async changeButtonM() {
+    await this.setState({
       buttonM: true,
       buttonS: false,
       buttonSkip: false,
       buttonDisabled: false,
       dayToDeliver: "Monday"
     });
+    this.sendForm();
   };
 
   async changeButtonSkip() {
