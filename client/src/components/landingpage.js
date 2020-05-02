@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
 import IMG4 from "../img/img4.jpg";
@@ -18,7 +18,6 @@ import LOGOYELLOWBIRD from "../img/logo-yellowbird.png";
 import LOGOSIETE from "../img/logo-siete.png";
 import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
-import {CardText} from "react-bootstrap/Card";
 
 class Landing extends Component {
   constructor(props) {
@@ -216,9 +215,9 @@ class Landing extends Component {
             backgroundSize: "100% 100%"
           }}
         >
-          <center>
+          <center className='d-flex justify-content-center'>
             <div
-              className='mb-5'
+              className='p-5'
               style={{
                 color: "white",
                 backgroundColor: "#467844",
@@ -462,5 +461,4 @@ class Landing extends Component {
     );
   }
 }
-
 export default Landing;

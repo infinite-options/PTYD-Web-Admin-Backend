@@ -9,6 +9,7 @@ import SelectPaymentPlan from "./subscribe/selectpaymentplan";
 import WeeklyMenu from "./menu/weeklymenu";
 import Checkout from "./subscribe/checkout";
 import CheckoutSuccess from "./subscribe/checkout-success";
+import UnknownSession from "./subscribe/unknown-session";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./about/howitworks";
@@ -100,6 +101,21 @@ export default function Main({appProps}) {
       <AppliedRoute
         exact
         path='/mealschedule'
+        component={appProps.isAuthenticated ? MealSchedule : Login}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}v2/meals`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
+          PLANS_URL: `${DEV_URL}v2/plans`
+        }}
+      />
+
+      {/* startdate parameter for turning back / forward time */}
+      {/* remove this parameter when putting app to production */}
+      <AppliedRoute
+        exact
+        path='/mealschedule/:startdate'
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
@@ -208,6 +224,12 @@ export default function Main({appProps}) {
         }}
       />
 
+      <AppliedRoute
+        exact
+        path='/invalidsession'
+        component={UnknownSession}
+        appProps={appProps}
+      />
       <AppliedRoute
         exact
         path='/checkoutsuccess'

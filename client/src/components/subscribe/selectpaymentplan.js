@@ -29,11 +29,13 @@ class SelectPaymentPlan extends Component {
           <center>
             <h2 class='font1'>{this.state.meals} MEALS PAYMENT OPTIONS</h2>
             <hr class='two' />
-            <article className='font1 bottom_header'>
-              <h4 className='font-weight-normal'>
+            <article className='bottom_header'>
+              <h4 className='font-weight-normal font1'>
                 LOCAL. ORGANIC. RESPONSIBLE.
               </h4>
-              <h4 className='font-weight-normal'>STRAIGHT TO YOUR DOOR</h4>
+              <h4 className='font-weight-normal font1'>
+                STRAIGHT TO YOUR DOOR
+              </h4>
             </article>
             <hr class='three' />
             <a href='/5-meals-subscription' style={{color: "black"}}>
@@ -55,19 +57,16 @@ class SelectPaymentPlan extends Component {
             <div class='justify-content-center'>
               <CardDeck className='d-flex justify-content-center'>
                 {this.state.paymentPlans.map(paymentPlan => (
-                  <Card
-                    className='borderr'
-                    style={{
-                      maxWidth: "20rem",
-                      boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)",
-                      margin: "30px"
-                    }}
-                  >
-                    <Card.Header className='p-0 position-relative'>
+                  <Card.Body className='borderr border_card_subcribe paymentCard '>
+                    <Card.Header className='p-0 position-relative background_black'>
                       <Card.Img
-                        className='blackM'
+                        className='blackM background_black'
                         variant='top'
                         src={paymentPlan.photo_URL}
+                        style={{
+                          "border-top-left-radius": "0px",
+                          "border-top-right-radius": "0px"
+                        }}
                       />
                       <div class='d-flex card-img-overlay'>
                         <span className='px-0 align-self-center mx-auto mealoption-center '>
@@ -128,7 +127,7 @@ class SelectPaymentPlan extends Component {
                         }}
                       />
                     </Card.Body>
-                  </Card>
+                  </Card.Body>
                 ))}
               </CardDeck>
             </div>
@@ -139,41 +138,40 @@ class SelectPaymentPlan extends Component {
             <Container>
               <Row style={{fontSize: "20px"}}>
                 <Col>
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
+                  <div className='shadow w-75'>
+                    <div className='mb-2'>
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                    </div>
+                    <p>Convenience and goodness</p>
+                  </div>
                 </Col>
                 <Col>
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
+                  <div className='shadow w-75'>
+                    <div className='mb-2'>
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                    </div>
+                    <p>PTYD feels like family!</p>
+                  </div>
                 </Col>
                 <Col>
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                  <span class='fa fa-star checked' />
-                </Col>
-              </Row>
-              <Row style={{fontSize: "15px"}}>
-                <Col>Convenience and goodness</Col>
-                <Col>PTYD feels like family!</Col>
-                <Col>They make life SO easy!</Col>
-              </Row>
-              <Row style={{fontSize: "15px", color: "#196F3D"}}>
-                <Col>
-                  <hr class='one' />
-                </Col>
-                <Col>
-                  <hr class='one' />
-                </Col>
-                <Col>
-                  <hr class='one' />
+                  <div className='shadow w-75'>
+                    <div className='mb-2'>
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                      <span class='fa fa-star checked' />
+                    </div>
+                    <p>They make life SO easy!</p>
+                  </div>
                 </Col>
               </Row>
               <Row
