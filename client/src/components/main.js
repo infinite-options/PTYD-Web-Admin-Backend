@@ -30,10 +30,10 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
+//const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
 
 //  Localhost API that can be run from /backend/api directory
-//const DEV_URL = "http://localhost:2000/api/";
+const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({appProps}) {
   const [objectIndex, setObjectIndex] = useState(0);
@@ -102,6 +102,21 @@ export default function Main({appProps}) {
       <AppliedRoute
         exact
         path='/mealschedule'
+        component={appProps.isAuthenticated ? MealSchedule : Login}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}v2/meals`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
+          PLANS_URL: `${DEV_URL}v2/plans`
+        }}
+      />
+
+      {/* startdate parameter for turning back / forward time */}
+      {/* remove this parameter when putting app to production */}
+      <AppliedRoute
+        exact
+        path='/mealschedule/:startdate'
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
