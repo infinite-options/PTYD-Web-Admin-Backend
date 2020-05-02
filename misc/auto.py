@@ -15,9 +15,12 @@ def main():
     while 1:
         now = datetime.now()
 
+        # Run Update Purchases API if it is Monday before 1AM
         if now.weekday() == 0 and now.hour < 1:
             r = requests.post(url = API['UPDATE'])
             print("Calling for update subscription snapshots...")
+
+        # Run Charge Subscribers API if it is Thursday before 1AM
         if now.weekday() == 3 and now.hour < 1:
             r = requests.post(url = API['CHARGE'])
             print("Calling for billing renewing purchases...")
