@@ -14,7 +14,7 @@ from math import ceil
 
 # BING API KEY
 # Import Bing API key into bing_api_key.py
-from bing_api_key import BING_API_KEY
+#from bing_api_key import BING_API_KEY
 
 # When deploying to Zappa, replace above statement with below:
 #BING_API_KEY = "insert_key_kere"
@@ -130,6 +130,7 @@ def execute(sql, cmd, conn, skipSerialization=False):
             cur.execute(sql)
             if cmd is 'get':
                 result = cur.fetchall()
+                #error happened when result is an empty object
                 response['message'] = 'Successfully executed SQL query.'
                 # Return status code of 280 for successful GET request
                 response['code'] = 280
@@ -2133,13 +2134,10 @@ class Social(Resource):
                         user_refresh_token
                     FROM ptyd_social_accounts WHERE user_email = '""" + email + "';"
             ]
-
             items = execute(queries[0], 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
-
-            print( items )
 
             # restest = SocialAccount().get(email)
 

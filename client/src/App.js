@@ -11,6 +11,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cookies from "js-cookie";
 
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
@@ -23,17 +24,19 @@ const App = props => {
     // eslint-disable-next-line
   }, []);
 
-  async function onLoad() {
+  function onLoad() {
     try {
-      if (!isAuthenticated && searchCookie4UserID("loginStatus") !== null) {
+      if (!isAuthenticated && searchCookie4Login("loginStatus") !== null) {
         userHasAuthenticated(true);
         setFirstname(searchCookie4Login("loginStatus"));
-        setUser_id(searchCookie4UserID("loginStatus"));
+        if (searchCookie4Login("loginStatus") !== null) {
+          setUser_id(searchCookie4UserID("loginStatus"));
+        }
       } else if (
         !isAuthenticated &&
-        searchCookie4UserID("loginStatus") === null
+        searchCookie4Login("loginStatus") === null
       ) {
-        document.cookie = `loginStatus=;`;
+        document.cookie = `loginStatus=; path=/`;
         console.log("First time? Resetting document cookie");
       }
     } catch (err) {
@@ -42,47 +45,30 @@ const App = props => {
       //   alert(e);
       // }
     }
-
     setIsAuthenticating(false);
   }
-
-  let getCookie = cname => {
-    //split cookie to find cookie name matching
-    let cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      let [name, values] = cookies[i].split("=");
-      if (name === cname) {
-        if (values === "") {
-          return null;
-        }
-        return values;
-      }
-    }
-    return null;
-  };
-
-  let cookiesForLoginHelper = (cname, type) => {
-    // this function is used for splitting first name and user id out of cookies.
-    //type === first_name or user_id or ...rest
-    let values = getCookie("loginStatus");
-    if (values !== null) {
-      values = values.split(",");
-      for (let value of values) {
-        if (value.includes(type)) {
-          return value.split(":")[1]; // dangerous
+  const getCookieAttrHelper = (cname, type) => {
+    const values = Cookies.get("loginStatus");
+    if (values === "" || values === undefined) {
+      return null;
+    } else {
+      for (let val of values.split(",")) {
+        let [n, v] = val.split(":");
+        if (n === type) {
+          return v;
         }
       }
+      return null;
     }
-    return null;
   };
   function searchCookie4Login(cname) {
     // pass cookie name to look for user's first name
-    return cookiesForLoginHelper(cname, "first_name");
+    return getCookieAttrHelper(cname, "first_name");
   }
 
   function searchCookie4UserID(cname) {
     //// pass cookie name to look for user's id
-    return cookiesForLoginHelper(cname, "user_id");
+    return getCookieAttrHelper(cname, "user_id");
   }
 
   let stuff = !isAuthenticating && (
