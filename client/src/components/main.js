@@ -112,6 +112,21 @@ export default function Main({appProps}) {
         }}
       />
 
+      {/* startdate parameter for turning back / forward time */}
+      {/* remove this parameter when putting app to production */}
+      <AppliedRoute
+        exact
+        path='/mealschedule/:startdate'
+        component={appProps.isAuthenticated ? MealSchedule : Login}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}v2/meals`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
+          PLANS_URL: `${DEV_URL}v2/plans`
+        }}
+      />
+
       <AppliedRoute
         exact
         path='/5-meals-subscription'
