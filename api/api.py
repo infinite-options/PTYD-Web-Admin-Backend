@@ -1184,6 +1184,15 @@ class Checkout(Resource):
             addressObj = Coordinates([data['delivery_address']])
             delivery_coord = addressObj.calculateFromLocations()[0]
 
+            # If a key of the coordinates object is None, set to NULL
+            # Otherwise wrap quotation marks around it
+            # This is because delivery_lat and delivery_long are VARCHAR in db
+            for key in delivery_coord:
+                if delivery_coord[key] == None:
+                    delivery_coord[key] = 'NULL'
+                else:
+                    delivery_coord[key] = '\'' + delivery_coord[key] + '\''
+
             queries.append(
                 """ INSERT INTO ptyd_purchases
                     (
