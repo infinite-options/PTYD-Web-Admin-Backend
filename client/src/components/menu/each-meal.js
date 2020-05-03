@@ -27,7 +27,7 @@ class EachMeal extends Component {
             class="img-fluid"
             src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
             alt="no_meal_img"
-            style={{ width: "200px", height: "200px" }}
+            style={{ width: "200px", height: "200px", objectFit: "cover" }}
           />
 
           {/* <div
@@ -80,7 +80,12 @@ class EachMeal extends Component {
             </center>
           </div>
         </div>
-        <br />
+        <div 
+          style={{ 
+            textAlign: "center", 
+            marginTop: "8px" 
+          }}
+        >
         <Button
           variant="outline-dark"
           style={{
@@ -88,7 +93,8 @@ class EachMeal extends Component {
             height: "35px",
             borderRadius: "50%",
             fontSize: "15px",
-            float: "left"
+            float: "left",
+            marginLeft: "30px"
           }}
           onClick={() => {
             if (this.props.mealQuantities > 0) {
@@ -108,30 +114,31 @@ class EachMeal extends Component {
             width: "40px",
             height: "40px",
             borderRadius: "50%",
-            marginLeft: "22%"
           }}
         />
         <Button
-          variant="outline-success"
-          style={{
-            width: "35px",
-            height: "35px",
-            borderRadius: "50%",
-            fontSize: "15px",
-            float: "right"
-          }}
-          onClick={() => {
-            if (this.props.maxmeals == 0) {
-              alert(
-                "You have selected more meals than your subscription plan allows.  Please select additional meal in the Add-Ons menu or upgrade your Subscription Plan.  Thanks PTYD"
-              );
-              return;
-            }
-            this.props.decrementMaxMeal();
-          }}
-        >
-          <b>+</b>
-        </Button>
+        variant="outline-success"
+        style={{
+          width: "35px",
+          height: "35px",
+          borderRadius: "50%",
+          fontSize: "15px",
+          float: "right",
+          marginRight: "30px"
+        }}
+        onClick={() => {
+          if (this.props.maxmeals == 0) {
+            alert(
+              "You have selected more meals than your subscription plan allows.  Please select additional meal in the Add-Ons menu or upgrade your Subscription Plan.  Thanks PTYD"
+            );
+            return;
+          }
+          this.props.decrementMaxMeal();
+        }}
+      >
+        <b>+</b>
+      </Button>
+      </div>
       </div>
     );
   }
