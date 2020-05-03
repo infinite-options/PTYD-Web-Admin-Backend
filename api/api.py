@@ -14,7 +14,7 @@ from math import ceil
 
 # BING API KEY
 # Import Bing API key into bing_api_key.py
-from bing_api_key import BING_API_KEY
+#from bing_api_key import BING_API_KEY
 
 # When deploying to Zappa, replace above statement with below:
 #BING_API_KEY = "insert_key_kere"
@@ -130,6 +130,7 @@ def execute(sql, cmd, conn, skipSerialization=False):
             cur.execute(sql)
             if cmd is 'get':
                 result = cur.fetchall()
+                #error happened when result is an empty object
                 response['message'] = 'Successfully executed SQL query.'
                 # Return status code of 280 for successful GET request
                 response['code'] = 280
@@ -263,7 +264,7 @@ class Meals(Resource):
             # Hardcode quantity to 0
             # Will need to fetch from db eventually
             rowDict['quantity'] = 0
-            #           rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
+            # rowDict['meal_photo_url'] = 'https://prep-to-your-door-s3.s3.us-west-1.amazonaws.com/dev_imgs/700-000014.png'
             if 'SEAS_FAVE' in rowDict['menu_category']:
                 json['Seasonal']['Menu'].append(rowDict)
             elif 'WKLY_SPCL' in rowDict['menu_category']:
@@ -2158,13 +2159,10 @@ class Social(Resource):
                         user_refresh_token
                     FROM ptyd_social_accounts WHERE user_email = '""" + email + "';"
             ]
-
             items = execute(queries[0], 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
-
-            print( items )
 
             # restest = SocialAccount().get(email)
 
