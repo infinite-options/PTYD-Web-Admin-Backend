@@ -50,7 +50,7 @@ const App = props => {
     setIsAuthenticating(false);
   }
   const getCookieAttrHelper = (cname, type) => {
-    const values = Cookies.get("loginStatus");
+    const values = Cookies.get(cname);
     if (values === "" || values === undefined) {
       return null;
     } else {
