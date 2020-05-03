@@ -80,8 +80,12 @@ class EachMeal extends Component {
             </center>
           </div>
         </div>
-        <br />
-        <div style={{textAlign: "center"}}>
+        <div 
+          style={{ 
+            textAlign: "center", 
+            marginTop: "8px" 
+          }}
+        >
         <Button
           variant="outline-dark"
           style={{
