@@ -11,64 +11,49 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Cookies from "js-cookie";
 
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
-  const [first_name, setFirstname] = useState("");
-  const [user_id, setUser_id] = useState("");
 
   useEffect(() => {
     onLoad();
     // eslint-disable-next-line
   }, []);
 
-  function onLoad() {
+  async function onLoad() {
     try {
-      if (!isAuthenticated && searchCookie4Login("loginStatus") !== null) {
+      if (searchCookie4UserID(document.cookie).includes("100-")) {
         userHasAuthenticated(true);
-        setFirstname(searchCookie4Login("loginStatus"));
-        if (searchCookie4Login("loginStatus") !== null) {
-          setUser_id(searchCookie4UserID("loginStatus"));
-        }
-      } else if (
-        !isAuthenticated &&
-        searchCookie4Login("loginStatus") === null
-      ) {
-        document.cookie = `loginStatus=; path=/`;
+      }
+      else if (!document.cookie.includes("loginStatus")){
+        document.cookie =
+          " loginStatus: null , user_uid: null , ";
         console.log("First time? Resetting document cookie");
       }
-    } catch (err) {
-      console.log(err);
-      // if (err !== "No current user") {
-      //   alert(e);
-      // }
+    } catch (e) {
+      console.log("No user?");
+      if (e !== "No current user") {
+        alert(e);
+      }
     }
+
     setIsAuthenticating(false);
   }
-  const getCookieAttrHelper = (cname, type) => {
-    const values = Cookies.get("loginStatus");
-    if (values === "" || values === undefined) {
-      return null;
-    } else {
-      for (let val of values.split(",")) {
-        let [n, v] = val.split(":");
-        if (n === type) {
-          return v;
-        }
-      }
-      return null;
+
+  function searchCookie4Login(str) {
+    let arr = str.split(" ");
+    let i = arr.indexOf("loginStatus:");
+    if (arr[i+1] === "null") {
+      return " ";
     }
-  };
-  function searchCookie4Login(cname) {
-    // pass cookie name to look for user's first name
-    return getCookieAttrHelper(cname, "first_name");
+    return arr[i + 1] + " " + arr[i + 2];
   }
 
-  function searchCookie4UserID(cname) {
-    //// pass cookie name to look for user's id
-    return getCookieAttrHelper(cname, "user_id");
+  function searchCookie4UserID(str) {
+    let arr = str.split(" ");
+    let i = arr.indexOf("user_uid:");
+    return arr[i + 1];
   }
 
   let stuff = !isAuthenticating && (
@@ -105,6 +90,7 @@ const App = props => {
                   lineHeight: "0.8em",
                   textAlign: "center",
                   letterSpacing: "0.25em",
+                  fontSize: "11px",
                   color: "#E38B19",
                   fontWeight: "bold"
                 }}
@@ -175,7 +161,7 @@ const App = props => {
             </Nav.Item>
 
             <div className='' style={{paddingTop: "66px"}}>
-              {searchCookie4Login("loginStatus") !== null ? (
+              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
                 <div>
                   <a href='/logout'>
                     <Button
@@ -183,7 +169,8 @@ const App = props => {
                       variant='success'
                       size='sm'
                       onClick={() => {
-                        document.cookie = "loginStatus=; path=/";
+                        document.cookie =
+                          " loginStatus: null , user_uid: null , ";
                         window.location.reload(false);
                       }}
                     >
@@ -198,7 +185,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login("loginStatus")}
+                    {searchCookie4Login(document.cookie)}
                   </p>
                 </div>
               ) : (
@@ -221,7 +208,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login("loginStatus")}
+                    {searchCookie4Login(document.cookie)}
                   </p>
                 </>
               )}
@@ -263,7 +250,7 @@ const App = props => {
             </NavDropdown>
             <a href='/get100'>GET $100</a>
             <div className='sideNavLogin'>
-              {searchCookie4Login("loginStatus") !== null ? (
+              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
                 <div>
                   <a href='/logout'>
                     <Button
@@ -271,7 +258,8 @@ const App = props => {
                       variant='success'
                       size='sm'
                       onClick={() => {
-                        document.cookie = "loginStatus=; path=/";
+                        document.cookie =
+                          " loginStatus: null , user_uid: null , ";
                         window.location.reload(false);
                       }}
                     >
@@ -286,7 +274,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login("loginStatus")}
+                    {searchCookie4Login(document.cookie)}
                   </p>
                 </div>
               ) : (
@@ -305,7 +293,7 @@ const App = props => {
                     id='loginStatus'
                     Style='font-size:12px; text-align:right; color:black;'
                   >
-                    {searchCookie4Login("loginStatus")}
+                    {searchCookie4Login(document.cookie)}
                   </p>
                 </>
               )}
@@ -315,14 +303,7 @@ const App = props => {
 
         <Content Style='padding-top:140px'>
           <div className='page-content' />
-          <Main
-            appProps={{
-              isAuthenticated,
-              userHasAuthenticated,
-              first_name,
-              user_id
-            }}
-          />
+          <Main appProps={{isAuthenticated, userHasAuthenticated}} />
         </Content>
 
         <hr></hr>

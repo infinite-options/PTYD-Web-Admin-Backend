@@ -1,4 +1,6 @@
-import React, {useState} from "react";
+import React, {
+  useState
+} from "react";
 import {Switch} from "react-router-dom";
 import {CookiesProvider} from "react-cookie";
 import AppliedRoute from "./AppliedRoute";
@@ -28,11 +30,10 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL =
-  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
+const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
 
 //  Localhost API that can be run from /backend/api directory
-// const DEV_URL = "http://localhost:2000/api/";
+//const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({appProps}) {
   const [objectIndex, setObjectIndex] = useState(0);
@@ -199,7 +200,7 @@ export default function Main({appProps}) {
       />
       <AppliedRoute
         exact
-        path='/socialsignup'
+        path="/socialsignup"
         component={SocialSignUp}
         appProps={{
           appProps,
