@@ -27,7 +27,7 @@ class EachMeal extends Component {
             class="img-fluid"
             src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
             alt="no_meal_img"
-            style={{ width: "200px", height: "200px" }}
+            style={{ width: "200px", height: "200px", objectFit: "cover" }}
           />
 
           {/* <div
