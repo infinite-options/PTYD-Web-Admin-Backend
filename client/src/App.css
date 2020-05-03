@@ -1,7 +1,7 @@
 @font-face {
-  font-family: "brandongrotw01-lightregular";
-  src: url("font/brandon_grot_w01_light-webfont.woff2") format("woff2"),
-    url("font/brandon_grot_w01_light-webfont.woff") format("woff");
+  font-family: 'brandongrotw01-lightregular';
+  src: url('font/brandon_grot_w01_light-webfont.woff2') format('woff2'),
+       url('font/brandon_grot_w01_light-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -51,7 +51,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 100px;
-  text-shadow: 2px 2px 4px #ffefb0;
+  text-shadow: 2px 2px 4px #FFEFB0;
   line-height: 35px;
   color: white;
 }
@@ -194,7 +194,7 @@ hr.four {
 .black {
   object-fit: cover;
   opacity: 50%;
-  height: 187px;
+  height:187px;
   width: 100%;
 }
 
@@ -204,7 +204,7 @@ hr.four {
 
 .blackM {
   object-fit: cover;
-  opacity: 50% !important;
+  opacity: 50%;
   height: 187px;
   width: 100%;
 }
@@ -263,7 +263,7 @@ hr.four {
 
 /* big header */
 .font1 {
-  font-family: brandongrotw01-lightregular, sans-serif;
+  font-family: brandongrotw01-lightregular,sans-serif;
 }
 /* text font */
 .font2 {
