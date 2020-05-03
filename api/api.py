@@ -1191,7 +1191,7 @@ class Checkout(Resource):
                 if delivery_coord[key] == None:
                     delivery_coord[key] = 'NULL'
                 else:
-                    delivery_coord[key] = '\'' + delivery_coord[key] + '\''
+                    delivery_coord[key] = '\'' + str(delivery_coord[key]) + '\''
 
             queries.append(
                 """ INSERT INTO ptyd_purchases
