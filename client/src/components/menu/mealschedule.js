@@ -34,7 +34,6 @@ class Mealschedule extends Component {
   async componentDidMount() {
     let currPur = {};
     let purchaseId = 0;
-    alert(`user_uid: ${this.state.user_uid}`);
     //  Handle startdate parameter on URL with ternary operator
     //  Use this to turn back / forward time
     //  Make sure to disable this when putting into production
