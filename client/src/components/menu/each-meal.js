@@ -28,6 +28,8 @@ class EachMeal extends Component {
             src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
             alt="no_meal_img"
             style={{ width: "200px", height: "200px", objectFit: "cover" }}
+            
+
           />
 
           {/* <div
@@ -51,7 +53,7 @@ class EachMeal extends Component {
             }}
           >
             <center>
-              <OverlayTrigger
+              {/* <OverlayTrigger
                 key="top"
                 placement="top"
                 delay={{ show: 150, hide: 150 }}
@@ -75,7 +77,7 @@ class EachMeal extends Component {
                   <b>i</b>
                 </Button>
               </OverlayTrigger>
-              &nbsp;&nbsp;
+              &nbsp;&nbsp; */}
               {this.props.mealTitle}
             </center>
           </div>
