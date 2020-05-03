@@ -18,7 +18,8 @@ class MakeChanges extends Component {
     super(props);
     this.state = {
       modalShow: false,
-      changes: {}
+      changes: props,
+      init: 0
     };
     console.log("printing url", this.props.DELETE_URL);
   }
@@ -44,17 +45,18 @@ class MakeChanges extends Component {
       changes: this.props
     });
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
       // nextProps.myProp has a different value than our current prop
       console.log("new update" + nextProps + " old: " + this.props);
-      // let temp = JSON.parse(JSON.stringify(nextProps));
-      // temp.subscription = nextProps.subscription
-      //   .concat(":  $")
-      //   .concat(nextProps.meal_plan_price);
+      let temp = JSON.parse(JSON.stringify(nextProps));
+      temp.subscription = nextProps.subscription
+        .concat(":  $")
+        .concat(nextProps.meal_plan_price);
 
       this.setState({
-        changes: nextProps
+        changes: temp
       });
     }
   }
@@ -155,9 +157,7 @@ class MakeChanges extends Component {
                   controlId="formGridCardSubscription"
                 >
                   <Form.Label>My Subscription</Form.Label>
-                  {this.state.changes.subscription
-                    .concat(":  $")
-                    .concat(this.state.changes.meal_plan_price)}
+                  {/* {this.state.changes.subscription} */}
                   <Form.Control
                     as="select"
                     name="subscription"
@@ -165,7 +165,11 @@ class MakeChanges extends Component {
                     onChange={this.handleChange}
                   >
                     {this.state.changes.paymentplan.map(paymentPlan => (
-                      <option>{paymentPlan.meal_plan_desc}</option>
+                      <option>
+                        {paymentPlan.meal_plan_desc
+                          .concat(":  $")
+                          .concat(paymentPlan.meal_plan_price)}
+                      </option>
                     ))}
                   </Form.Control>
                 </Form.Group>
@@ -372,7 +376,21 @@ class MakeChanges extends Component {
     // if (this.props.subscription == null) {
     //   return <div />;
     // }
-    console.log("state changes", this.state.changes);
+    // if (this.state.changes.subscription !== null && this.state.init != 0) {
+    //   let temp = this.state.changes;
+    //   temp.subscription = temp.subscription
+    //     .concat(":  $")
+    //     .concat(this.state.changes.meal_plan_price);
+
+    //   this.setState({
+    //     init: 1,
+    //     changes: temp
+    //   });
+    // }
+    console.log(
+      "state changes",
+      this.state.changes.paymentplan
+    );
     return this.MakeChangesAnimation();
   }
 }

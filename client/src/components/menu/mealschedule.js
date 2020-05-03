@@ -38,7 +38,7 @@ class Mealschedule extends Component {
     return arr[i + 2];
   }
   async changeMenuButtons() {
-    console.log("tyler is here");
+    console.log(" here");
     let currPur = this.state.purchase_all[this.state.selection]; //t - change
     let purchaseId = currPur.purchase_id; //
     console.log("purchase id chec", purchaseId);
@@ -311,6 +311,7 @@ class Mealschedule extends Component {
     );
     displayrows.push(tempelement);
     // }
+    console.log("lololololol menu", this.state.menu);
     return (
       <div>
         <section class="content-section">

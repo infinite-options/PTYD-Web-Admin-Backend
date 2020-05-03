@@ -229,7 +229,7 @@ export default class MealButton extends Component {
       backgroundColor: "#427c42",
       color: "white"
     };
-
+    console.log("lalala testing");
     return (
       <div>
         <ButtonToolbar>
