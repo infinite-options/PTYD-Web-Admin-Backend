@@ -39,7 +39,46 @@ export default class MealButton extends Component {
       subscribed: this.props.subscribed
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps !== this.props) {
+      console.log("we need to be hererererererere", nextProps, this.props);
+      if (this.props.surprise == false) {
+        this.setState({
+          buttonSurprise: false,
+          buttonSelectKeepColor: true
+        });
+      }
 
+      switch (this.props.deliverDay) {
+        case "SKIP":
+          this.setState({
+            buttonS: false,
+            buttonM: false,
+            buttonSkip: true,
+            buttonSurprise: false,
+            buttonDisabled: true,
+            buttonAddOnKeepColor: false
+          });
+          break;
+        case "Monday":
+          this.setState({
+            buttonS: false,
+            buttonM: true,
+            buttonSkip: false,
+            buttonDisabled: false
+          });
+          break;
+        case "Sunday":
+          this.setState({
+            buttonS: true,
+            buttonM: false,
+            buttonSkip: false,
+            buttonDisabled: false
+          });
+      }
+    }
+    this.setState({ maxmeals: nextProps.maxmeals });
+  }
   async componentDidMount() {
     if (this.props.surprise == false) {
       this.setState({
