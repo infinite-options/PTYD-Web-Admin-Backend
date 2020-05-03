@@ -16,8 +16,8 @@ import Cookies from "js-cookie";
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
-  const [first_name, setFirstname] = useState("");
-  const [user_id, setUser_id] = useState("");
+  const [first_name, setFirstname] = useState(null);
+  const [user_uid, setUser_uid] = useState(null);
 
   useEffect(() => {
     onLoad();
@@ -28,9 +28,11 @@ const App = props => {
     try {
       if (!isAuthenticated && searchCookie4Login("loginStatus") !== null) {
         userHasAuthenticated(true);
-        setFirstname(searchCookie4Login("loginStatus"));
-        if (searchCookie4Login("loginStatus") !== null) {
-          setUser_id(searchCookie4UserID("loginStatus"));
+        let first = searchCookie4Login("loginStatus");
+        setFirstname(first);
+        if (searchCookie4UserID("loginStatus") !== null) {
+          let uid = searchCookie4UserID("loginStatus");
+          setUser_uid(uid);
         }
       } else if (
         !isAuthenticated &&
@@ -68,7 +70,7 @@ const App = props => {
 
   function searchCookie4UserID(cname) {
     //// pass cookie name to look for user's id
-    return getCookieAttrHelper(cname, "user_id");
+    return getCookieAttrHelper(cname, "user_uid");
   }
 
   let stuff = !isAuthenticating && (
@@ -320,7 +322,7 @@ const App = props => {
               isAuthenticated,
               userHasAuthenticated,
               first_name,
-              user_id
+              user_uid
             }}
           />
         </Content>

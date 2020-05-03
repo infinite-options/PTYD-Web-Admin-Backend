@@ -249,7 +249,7 @@ export default function Login(props) {
       let uid = response.result.result[0].user_uid;
       let login_id = response.login_attempt_log.login_id;
       let session_id = response.login_attempt_log.session_id;
-      document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_id:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+      document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
       //check for purchases
       checkForPurchased(uid);
     } else {

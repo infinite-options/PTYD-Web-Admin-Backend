@@ -18,6 +18,7 @@ import FaQ from "./about/faq";
 import JobS from "./about/jobs";
 import Get100 from "./get100";
 import MealSchedule from "./menu/mealschedule";
+import Cookies from "js-cookie";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
@@ -36,7 +37,6 @@ const DEV_URL =
 
 export default function Main({appProps}) {
   const [objectIndex, setObjectIndex] = useState(0);
-
   return (
     <Switch>
       <AppliedRoute
@@ -90,7 +90,8 @@ export default function Main({appProps}) {
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
-          redirect_after_login: "/checkout"
+          redirect_after_login: "/checkout",
+          user_uid: appProps.user_uid
         }}
       />
 
