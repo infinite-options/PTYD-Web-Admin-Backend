@@ -145,7 +145,6 @@ export default function Login(props) {
       let data = await grabSocialUserInfo(e);
       console.log(data);
       if (data === null) {
-        alert("data is null");
         //email not found --> render to signup for social
         props.history.push({
           pathname: "/socialsignup",
@@ -167,7 +166,6 @@ export default function Login(props) {
   };
 
   function socialLogin(data) {
-    alert("stop");
     let uid = data.user_uid;
     let name = data.first_name;
     document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid=${uid}; path=/`;
