@@ -200,7 +200,9 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login("loginStatus")}
+                    <span class='font-weight-bold'>Hello </span>
+                    <span>{searchCookie4Login("loginStatus")}</span>
+                    <span class='font-weight-bold'>!</span>
                   </p>
                 </div>
               ) : (
