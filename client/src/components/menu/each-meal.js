@@ -23,14 +23,35 @@ class EachMeal extends Component {
           {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
         <div class="container-select-meal" style={{ color: "white" }}>
-          <img
-            class="img-fluid"
-            src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
-            alt="no_meal_img"
-            style={{ width: "200px", height: "200px", objectFit: "cover" }}
-            
 
-          />
+          <OverlayTrigger
+            placement="bottom"
+            delay={{ show: 100, hide: 100 }}
+            popperConfig={{
+              modifiers: {
+                preventOverflow: {
+                  boundariesElement: 'offsetParent'
+                }
+              }
+            }}
+            overlay={
+              <Tooltip id="button-tooltip">
+                <p>{this.props.detail}</p>
+                <p>
+                  <strong>Ingredients:</strong> {this.props.ingridents}
+                </p>
+              </Tooltip>
+            }
+          >
+
+            <img
+              class="img-fluid"
+              src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
+              alt="no_meal_img"
+              style={{ width: "200px", height: "200px", objectFit: "cover" }}
+            />
+
+          </OverlayTrigger>
 
           {/* <div
             class="bottom-right-meal-selection font2"
@@ -43,6 +64,25 @@ class EachMeal extends Component {
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
           </div> */}
+          <OverlayTrigger
+            placement="bottom"
+            delay={{ show: 100, hide: 100 }}
+            popperConfig={{
+              modifiers: {
+                preventOverflow: {
+                  boundariesElement: 'offsetParent'
+                }
+              }
+            }}
+            overlay={
+              <Tooltip id="button-tooltip">
+                <p>{this.props.detail}</p>
+                <p>
+                  <strong>Ingredients:</strong> {this.props.ingridents}
+                </p>
+              </Tooltip>
+            }
+          >
           <div
             class="bottom-right-meal-selection font2"
             style={{
@@ -52,95 +92,68 @@ class EachMeal extends Component {
               lineHeight: "25px"
             }}
           >
-            <center>
-              {/* <OverlayTrigger
-                key="top"
-                placement="top"
-                delay={{ show: 150, hide: 150 }}
-                overlay={
-                  <Tooltip id="button-tooltip">
-                    <p>{this.props.detail}</p>
-                    <p>
-                      <strong>Ingredients:</strong> {this.props.ingridents}
-                    </p>
-                  </Tooltip>
-                }
-              >
-                <Button
-                  variant="primary"
-                  style={{
-                    width: "20px",
-                    height: "25px",
-                    borderRadius: "50%"
-                  }}
-                >
-                  <b>i</b>
-                </Button>
-              </OverlayTrigger>
-              &nbsp;&nbsp; */}
-              {this.props.mealTitle}
-            </center>
-          </div>
+            <center>{this.props.mealTitle}</center>
+          </div></OverlayTrigger>
         </div>
-        <div 
-          style={{ 
-            textAlign: "center", 
-            marginTop: "8px" 
-          }}
-        >
-        <Button
-          variant="outline-dark"
-          style={{
-            width: "35px",
-            height: "35px",
-            borderRadius: "50%",
-            fontSize: "15px",
-            float: "left",
-            marginLeft: "30px"
-          }}
-          onClick={() => {
-            if (this.props.mealQuantities > 0) {
-              this.props.incrementMaxMeal();
-            }
-          }}
-        >
-          <b>-</b>
-        </Button>
-        <input
-          type="text"
-          size="1"
-          value={this.props.mealQuantities}
-          id="count"
+        <div
           style={{
             textAlign: "center",
-            width: "40px",
-            height: "40px",
-            borderRadius: "50%",
+            marginTop: "8px"
           }}
-        />
-        <Button
-        variant="outline-success"
-        style={{
-          width: "35px",
-          height: "35px",
-          borderRadius: "50%",
-          fontSize: "15px",
-          float: "right",
-          marginRight: "30px"
-        }}
-        onClick={() => {
-          if (this.props.maxmeals == 0) {
-            alert(
-              "You have selected more meals than your subscription plan allows.  Please select additional meal in the Add-Ons menu or upgrade your Subscription Plan.  Thanks PTYD"
-            );
-            return;
-          }
-          this.props.decrementMaxMeal();
-        }}
-      >
-        <b>+</b>
-      </Button>
-      </div>
+        >
+          <Button
+            variant="outline-dark"
+            style={{
+              width: "35px",
+              height: "35px",
+              borderRadius: "50%",
+              fontSize: "15px",
+              float: "left",
+              marginLeft: "30px"
+            }}
+            onClick={() => {
+              if (this.props.mealQuantities > 0) {
+                this.props.incrementMaxMeal();
+              }
+            }}
+          >
+            <b>-</b>
+          </Button>
+          <input
+            type="text"
+            size="1"
+            value={this.props.mealQuantities}
+            id="count"
+            style={{
+              textAlign: "center",
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+            }}
+          />
+          <Button
+            variant="outline-success"
+            style={{
+              width: "35px",
+              height: "35px",
+              borderRadius: "50%",
+              fontSize: "15px",
+              float: "right",
+              marginRight: "30px"
+            }}
+            onClick={() => {
+              if (this.props.maxmeals == 0) {
+                alert(
+                  "You have selected more meals than your subscription plan allows.  Please select additional meal in the Add-Ons menu or upgrade your Subscription Plan.  Thanks PTYD"
+                );
+                return;
+              }
+              this.props.decrementMaxMeal();
+            }}
+          >
+            <b>+</b>
+          </Button>
+        </div>
       </div>
     );
   }
