@@ -313,93 +313,89 @@ class Mealschedule extends Component {
     // }
     console.log("lololololol menu", this.state.menu);
     return (
-      <div>
-        <section class="content-section">
-          <div class="container font2">
+      // <div>
+      //   <section class="content-section">
+      <div class="container font2">
+        <Grid>
+          <Cell col={3}>
+            {" "}
             <Grid>
-              <Cell col={3}>
-                {" "}
-                <Grid>
-                  <Cell col={4}>
-                    <img
-                      style={{
-                        borderRadius: "50%",
-                        width: "70px",
-                        height: "70px",
-                        marginTop: "10px"
-                      }}
-                      src={IMG8}
-                      alt="Avatar"
-                    ></img>
-                  </Cell>
-                  <Cell col={8}>
-                    <h4>
-                      Hi, {this.searchCookie4Name(document.cookie)}
-                      <th colSpan="2">{this.subscription_dropdown()}</th>
-                    </h4>
-                  </Cell>
-                </Grid>
-                <MakeChanges
-                  DELETE_URL={this.props.DELETE_URL}
-                  subscription={this.state.purchase.meal_plan_desc}
-                  meal_plan_price={this.state.purchase.amount_due}
-                  paymentplan={this.state.paymentPlans}
-                  payment_plan={this.state.purchase.payment_frequency}
-                  cc_num={this.state.purchase.cc_num}
-                  cc_exp_date={this.state.purchase.cc_exp_date}
-                  cc_cvv={this.state.purchase.cc_cvv}
-                  delivery_address={this.state.purchase.delivery_address}
-                  delivery_address_unit={
-                    this.state.purchase.delivery_address_unit
-                  }
-                  delivery_city={this.state.purchase.delivery_city}
-                  delivery_state={this.state.purchase.delivery_state}
-                  delivery_zip={this.state.purchase.delivery_zip}
-                  delivery_instructions={
-                    this.state.purchase.delivery_instructions
-                  }
-                  purchase_id={this.state.purchase.purchase_id}
-                />
-                {console.log("meal plan price", this.state.paymentPlans)}
-                {displayrows}
-              </Cell>{" "}
-              <Cell col={1}></Cell>
+              <Cell col={4}>
+                <img
+                  style={{
+                    borderRadius: "50%",
+                    width: "70px",
+                    height: "70px",
+                    marginTop: "10px"
+                  }}
+                  src={IMG8}
+                  alt="Avatar"
+                ></img>
+              </Cell>
               <Cell col={8}>
-                <br />
-                <br />
-                <h3 class="font1">
-                  <b>Select Meals Around Your Schedule</b>
-                </h3>
-                <br />
-                <div>{console.log(this.state.menu)}</div>
-                <div class="meals-button">
-                  {this.state.menu.map(eachWeek => (
-                    <MealButton
-                      day1="Sunday"
-                      day2="Monday"
-                      saturdayDate={eachWeek.sat}
-                      date1={eachWeek.sun}
-                      date2={eachWeek.mon}
-                      menu={eachWeek.menu}
-                      addons={eachWeek.addons}
-                      mealQuantities={eachWeek.mealQuantities}
-                      addonQuantities={eachWeek.addonQuantities}
-                      maxmeals={eachWeek.maxmeals}
-                      purchase_id={this.state.purchase.purchase_id}
-                      deliverDay={eachWeek.deliverDay}
-                      subscribed={this.state.subscribed}
-                      surprise={eachWeek.surprise}
-                      addonsSelected={eachWeek.addonsSelected}
-                      monday_available={this.state.monday_available}
-                      MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
-                    />
-                  ))}
-                </div>
+                <h4>
+                  Hi, {this.searchCookie4Name(document.cookie)}
+                  <th colSpan="2">{this.subscription_dropdown()}</th>
+                </h4>
               </Cell>
             </Grid>
-          </div>
-        </section>
+            <MakeChanges
+              DELETE_URL={this.props.DELETE_URL}
+              subscription={this.state.purchase.meal_plan_desc}
+              meal_plan_price={this.state.purchase.amount_due}
+              paymentplan={this.state.paymentPlans}
+              payment_plan={this.state.purchase.payment_frequency}
+              cc_num={this.state.purchase.cc_num}
+              cc_exp_date={this.state.purchase.cc_exp_date}
+              cc_cvv={this.state.purchase.cc_cvv}
+              delivery_address={this.state.purchase.delivery_address}
+              delivery_address_unit={this.state.purchase.delivery_address_unit}
+              delivery_city={this.state.purchase.delivery_city}
+              delivery_state={this.state.purchase.delivery_state}
+              delivery_zip={this.state.purchase.delivery_zip}
+              delivery_instructions={this.state.purchase.delivery_instructions}
+              purchase_id={this.state.purchase.purchase_id}
+            />
+            {console.log("meal plan price", this.state.paymentPlans)}
+            {displayrows}
+          </Cell>{" "}
+          <Cell col={1}></Cell>
+          <Cell col={8}>
+            <br />
+            <br />
+            <h3 class="font1">
+              <b>Select Meals Around Your Schedule</b>
+            </h3>
+            <br />
+            <div>{console.log(this.state.menu)}</div>
+            <div class="meals-button">
+              {this.state.menu.map(eachWeek => (
+                <MealButton
+                  day1="Sunday"
+                  day2="Monday"
+                  saturdayDate={eachWeek.sat}
+                  date1={eachWeek.sun}
+                  date2={eachWeek.mon}
+                  menu={eachWeek.menu}
+                  addons={eachWeek.addons}
+                  mealQuantities={eachWeek.mealQuantities}
+                  addonQuantities={eachWeek.addonQuantities}
+                  maxmeals={eachWeek.maxmeals}
+                  purchase_id={this.state.purchase.purchase_id}
+                  deliverDay={eachWeek.deliverDay}
+                  subscribed={this.state.subscribed}
+                  surprise={eachWeek.surprise}
+                  addonsSelected={eachWeek.addonsSelected}
+                  monday_available={this.state.monday_available}
+                  MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
+                />
+              ))}
+            </div>
+          </Cell>
+        </Grid>
       </div>
+      //   </section>
+      // </div>
     );
   }
 

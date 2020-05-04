@@ -36,20 +36,24 @@ export default class MealButton extends Component {
       flag: false,
       mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
-      subscribed: this.props.subscribed
+      subscribed: this.props.subscribed,
+      //next props
+      purchase_id: this.props.purchase_id,
+      week_affected: this.props.saturdayDate,
+      menu: this.props.menu
     };
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
       console.log("we need to be hererererererere", nextProps, this.props);
-      if (this.props.surprise == false) {
+      if (nextProps.surprise == false) {
         this.setState({
           buttonSurprise: false,
           buttonSelectKeepColor: true
         });
       }
 
-      switch (this.props.deliverDay) {
+      switch (nextProps.deliverDay) {
         case "SKIP":
           this.setState({
             buttonS: false,
@@ -77,7 +81,13 @@ export default class MealButton extends Component {
           });
       }
     }
-    this.setState({ maxmeals: nextProps.maxmeals });
+    this.setState({
+      maxmeals: nextProps.maxmeals,
+      maxmealsCopy: nextProps.maxmeals,
+      purchase_id: nextProps.purchase_id,
+      week_affected: nextProps.week_affected,
+      menu: nextProps.menu
+    });
   }
   async componentDidMount() {
     if (this.props.surprise == false) {
@@ -117,15 +127,15 @@ export default class MealButton extends Component {
   }
 
   sendForm = () => {
-    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id,
-        week_affected: this.props.saturdayDate,
+        purchase_id: this.state.purchase_id,
+        week_affected: this.state.week_affected,
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
         default_selected: this.state.buttonSurprise,
@@ -135,15 +145,15 @@ export default class MealButton extends Component {
   };
 
   sendAddonForm = () => {
-    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id,
-        week_affected: this.props.saturdayDate,
+        purchase_id: this.state.purchase_id,
+        week_affected: this.state.week_affected,
         addon_quantities: this.state.addonQuantities,
         is_addons: true
       })
@@ -419,13 +429,13 @@ export default class MealButton extends Component {
           </center>
         </Card.Header>
         <div class="scrollMenu">
-          {Object.keys(this.props.menu).map(key => (
+          {Object.keys(this.state.menu).map(key => (
             <Grid>
               <Cell col={12}>
-                <h4 style={{ margin: "0" }}>{this.props.menu[key].Category}</h4>
+                <h4 style={{ margin: "0" }}>{this.state.menu[key].Category}</h4>
               </Cell>
               <br />
-              {this.props.menu[key].Menu.map(meal => (
+              {this.state.menu[key].Menu.map(meal => (
                 <Cell col={4}>
                   <EachMeal
                     mealTitle={meal.meal_name}
