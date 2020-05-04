@@ -127,7 +127,8 @@ export default function Login(props) {
             email: e,
             // social: "facebook",
             accessToken: at,
-            refreshToken: rt
+            refreshToken: rt,
+            SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
           }
         });
       } else {
@@ -141,7 +142,6 @@ export default function Login(props) {
 
   const responseFacebook = async response => {
     if (response.email !== null && response.email !== undefined) {
-      console.log("Facebook Response ", response);
       const e = response.email;
       const at = response.accessToken;
       const rt = response.id;
@@ -162,7 +162,8 @@ export default function Login(props) {
             email: e,
             // social: "facebook",
             accessToken: at,
-            refreshToken: rt
+            refreshToken: rt,
+            SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
           }
         });
       } else {

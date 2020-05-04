@@ -5,6 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import {getIp, getBrowser} from "../functions/getClientInfo";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import axios from "axios";
@@ -20,6 +21,7 @@ export default function SocialSignUp(props) {
   const [socialMedia, setSocialMedia] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
+  const [SOCIAL_API_URL, setSOCIAL_API_URL] = useState("");
 
   useEffect(() => {
     //     console.log(props.location.state)
@@ -41,9 +43,10 @@ export default function SocialSignUp(props) {
     setFirstName(state.firstname);
     setAccessToken(state.accessToken);
     setRefreshToken(state.refreshToken);
+    setSOCIAL_API_URL(state.SOCIAL_API_URL);
   }
 
-  function sendForm(e) {
+  async function sendForm(e) {
     e.preventDefault();
     // if (email != confirmEmail) {
     //   return "email mismatch";
@@ -70,8 +73,8 @@ export default function SocialSignUp(props) {
     //   },
     //   body: b
     // })
-    axios
-      .post(props.API_URL, {
+    try {
+      const res = await axios.post(props.API_URL, {
         FirstName: firstname,
         LastName: lastname,
         Email: email,
@@ -81,17 +84,38 @@ export default function SocialSignUp(props) {
         SocialMedia: socialMedia,
         AccessToken: accessToken,
         RefreshToken: refreshToken
-      })
-      .then(res => {
-        document.cookie = `loginStatus=loggedInBy:social,first_name:${firstname}; path=/`;
+      });
+
+      console.log(res.data.result.user_uid);
+      if (res.data !== undefined) {
+        loginSocial(res.data.result.user_uid);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const loginSocial = async uid => {
+    try {
+      const ip_res = await getIp();
+      const browser_type = getBrowser().browser_type;
+      const res1 = await axios.post(`${SOCIAL_API_URL}/${uid}`, {
+        ip_address: ip_res.ip,
+        browser_type: browser_type
+      });
+      if (res1.data !== undefined && res1.data.result.result.length === 0) {
+        throw "No record found.";
+      } else if (res1.data !== undefined) {
+        const log_attemp = res1.data.login_attempt_log;
+        let session_id = log_attemp.session_id;
+        let login_id = log_attemp.login_id;
+        document.cookie = `loginStatus=loggedInBy:social,first_name:${firstname},user_uid=${uid},login_id:${login_id},session_id:${session_id}; path=/`;
         props.history.push("/selectmealplan");
         window.location.reload(false);
-      })
-      .catch(err => {
-        console.log(err.response);
-        throw "Email address has taken";
-      });
-  }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <main Style='margin-top:-80px;'>
       <div class='container text-center' Style='margin-top:-40px;'>

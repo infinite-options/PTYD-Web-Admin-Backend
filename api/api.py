@@ -2134,6 +2134,7 @@ class SocialSignUp(Resource):
                 return response, 500
 
             response['message'] = 'Request successful.'
+            response['result'] = {'user_uid':NewUserID}
 
             return response, 200
         except:
