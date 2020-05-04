@@ -74,11 +74,11 @@ export default function Login(props) {
       LogIn(params.email, params.password);
     }
   }
-  async function componentDidMount() {
-    const res = await fetch(props.API_URL);
-    const api = await res.json();
-    setSalt(api.result[0].password_salt);
-  }
+  // async function componentDidMount() {
+  //   const res = await fetch(props.API_URL);
+  //   const api = await res.json();
+  //   setSalt(api.result[0].password_salt);
+  // }
 
   // API GET Request for Social Media User Data
   async function grabSocialUserInfo(email) {
@@ -90,10 +90,19 @@ export default function Login(props) {
         return null;
       }
       let uid = res.data.result.result[0].user_uid;
-      console.log(uid);
-      let res1 = await axios.get(`${props.SOCIAL_API_URL}acc/${uid}`);
-      console.log(res1.data.result.result[0]);
-      return res1.data.result.result[0];
+      const ip_res = await getIp();
+      const browser_type = getBrowser().browser_type;
+      const res1 = await axios.post(`${props.SOCIAL_API_URL}acc/${uid}`, {
+        ip_address: ip_res.ip,
+        browser_type: browser_type
+      });
+      //success
+      if (res1.data !== undefined && res1.data.result.result.length === 0) {
+        // throw "No record found.";
+        return null;
+      } else {
+        return res1.data;
+      }
     } catch (err) {
       console.log(err);
     }
@@ -143,7 +152,6 @@ export default function Login(props) {
         first_name += name[n] + " ";
       }
       let data = await grabSocialUserInfo(e);
-      console.log(data);
       if (data === null) {
         //email not found --> render to signup for social
         props.history.push({
@@ -166,9 +174,14 @@ export default function Login(props) {
   };
 
   function socialLogin(data) {
-    let uid = data.user_uid;
-    let name = data.first_name;
-    document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid=${uid}; path=/`;
+    console.log(data);
+    const log_attemp = data.login_attempt_log;
+    const result = data.result.result[0];
+    let uid = result.user_uid;
+    let name = result.first_name;
+    let session_id = log_attemp.session_id;
+    let login_id = log_attemp.login_id;
+    document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid=${uid},login_id:${login_id},session_id:${session_id}; path=/`;
     checkForPurchased(uid);
   }
 
