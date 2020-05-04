@@ -23,7 +23,6 @@ class EachMeal extends Component {
           {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
         <div class="container-select-meal" style={{ color: "white" }}>
-
           <OverlayTrigger
             placement="bottom"
             delay={{ show: 100, hide: 100 }}
@@ -43,16 +42,13 @@ class EachMeal extends Component {
               </Tooltip>
             }
           >
-
             <img
               class="img-fluid"
               src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
               alt="no_meal_img"
               style={{ width: "200px", height: "200px", objectFit: "cover" }}
             />
-
           </OverlayTrigger>
-
           {/* <div
             class="bottom-right-meal-selection font2"
             style={{
@@ -83,17 +79,18 @@ class EachMeal extends Component {
               </Tooltip>
             }
           >
-          <div
-            class="bottom-right-meal-selection font2"
-            style={{
-              fontSize: "15px",
-              float: "right",
-              backgroundColor: "black",
-              lineHeight: "25px"
-            }}
-          >
-            <center>{this.props.mealTitle}</center>
-          </div></OverlayTrigger>
+            <div
+              class="bottom-right-meal-selection font2"
+              style={{
+                fontSize: "15px",
+                float: "right",
+                backgroundColor: "black",
+                lineHeight: "25px"
+              }}
+            >
+              <center>{this.props.mealTitle}</center>
+            </div>
+          </OverlayTrigger>
         </div>
         <div
           style={{
