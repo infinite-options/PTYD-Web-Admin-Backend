@@ -176,7 +176,7 @@ class Mealschedule extends Component {
                   </Cell>
                   <Cell col={8}>
                     <h4>
-                      Hi, {this.searchCookie4Name(document.cookie)}
+                      Hi, Name
                       {this.state.purchase.num_meals}
                     </h4>
                   </Cell>
