@@ -11,37 +11,36 @@ class Mealschedule extends Component {
 
     this.state = {
       menu: [],
-      user_uid: searchCookie4UserID(document.cookie),
-      purchase: { NextCharge: 0 },
+      user_uid: this.props.appProps.user_uid,
+      purchase: {NextCharge: 0},
       subscribed: false,
       monday_available: false,
       paymentPlans: []
     };
 
-    function searchCookie4UserID(str) {
-      let arr = str.split(" ");
-      let i = arr.indexOf("user_uid:");
-      return arr[i + 1];
-    }
+    // function searchCookie4UserID(str) {
+    //   let arr = str.split(" ");
+    //   let i = arr.indexOf("user_uid:");
+    //   return arr[i + 1];
+    // }
   }
 
-  searchCookie4Name(str) {
-    let arr = str.split(" ");
-    let i = arr.indexOf("loginStatus:");
-    return arr[i + 2];
-  }
+  // searchCookie4Name(str) {
+  //   let arr = str.split(" ");
+  //   let i = arr.indexOf("loginStatus:");
+  //   return arr[i + 2];
+  // }
 
   async componentDidMount() {
     let currPur = {};
     let purchaseId = 0;
-
     //  Handle startdate parameter on URL with ternary operator
     //  Use this to turn back / forward time
     //  Make sure to disable this when putting into production
     const res = await fetch(
-      this.props.match.params.startdate ?
-      this.props.API_URL + '/' + this.props.match.params.startdate :
-      this.props.API_URL
+      this.props.match.params.startdate
+        ? this.props.API_URL + "/" + this.props.match.params.startdate
+        : this.props.API_URL
     );
     const api = await res.json();
 
@@ -171,13 +170,13 @@ class Mealschedule extends Component {
                         height: "70px",
                         marginTop: "10px"
                       }}
-                      src={IMG8}
-                      alt="Avatar"
+                      // src={IMG8}
+                      // alt="Avatar"
                     ></img>
                   </Cell>
                   <Cell col={8}>
                     <h4>
-                      Hi, {this.searchCookie4Name(document.cookie)}
+                      Hi, Name
                       {this.state.purchase.num_meals}
                     </h4>
                   </Cell>

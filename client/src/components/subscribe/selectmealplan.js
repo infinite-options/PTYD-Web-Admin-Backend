@@ -46,7 +46,7 @@ class Selectmealplan extends Component {
                     </div>
                   ) : (
                     <div className='rcorners font3 d-flex'>
-                      <h6 className='lign-self-center mx-auto'></h6>
+                      <h6 className='align-self-center mx-auto'></h6>
                     </div>
                   )}
 
@@ -61,10 +61,10 @@ class Selectmealplan extends Component {
                         className='blackM background_black '
                         variant='top'
                         src={mealPlan.photo_URL}
-                        style={{
-                          "border-top-left-radius": "0px",
-                          "border-top-right-radius": "0px"
-                        }}
+                        // style={{
+                        //   "border-top-left-radius": "0px",
+                        //   "border-top-right-radius": "0px",
+                        // }}
                       />
                       <Card.ImgOverlay className='d-flex'>
                         <span className='px-0 align-self-center mx-auto selectmeal-center'>

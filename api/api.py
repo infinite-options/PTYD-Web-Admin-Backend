@@ -2133,6 +2133,7 @@ class SocialSignUp(Resource):
                 return response, 500
 
             response['message'] = 'Request successful.'
+            response['result'] = {'user_uid':NewUserID}
 
             return response, 200
         except:
@@ -2160,12 +2161,8 @@ class Social(Resource):
             ]
 
             items = execute(queries[0], 'get', conn)
-
             response['message'] = 'Request successful.'
             response['result'] = items
-
-            print( items )
-
             # restest = SocialAccount().get(email)
 
             return response, 200
@@ -2176,12 +2173,12 @@ class Social(Resource):
 
 class SocialAccount(Resource):
 
-    # HTTP method GET
-    def get(self, uid):
+    # HTTP method POST
+    def post(self, uid):
         response = {}
         try:
             conn = connect()
-
+            data = request.get_json(force=True)
             queries = [
             """     SELECT
                         user_uid,
@@ -2194,9 +2191,20 @@ class SocialAccount(Resource):
                         referral_source
                     FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
 
-            items = execute(queries[0], 'get', conn)
 
-            print(items)
+            print('I\'m here')
+            print("data is {}".format(data));
+            items = execute(queries[0], 'get', conn)
+            #create a login attempt
+            login_attempt = {
+                'auth_success': 'TRUE',
+                'user_uid': uid,
+                'attempt_hash': "NULL",
+                'ip_address': data['ip_address'],
+                'browser_type': data['browser_type'],
+            }
+
+            response['login_attempt_log'] = LogLoginAttempt(login_attempt, conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
