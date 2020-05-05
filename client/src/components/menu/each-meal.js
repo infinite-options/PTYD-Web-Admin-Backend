@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Cell } from "react-mdl";
+//import { Grid, Cell } from "react-mdl";
 import { Alert, Tooltip, OverlayTrigger, Button } from "react-bootstrap";
 import defaultMeal from "../../img/default-meal.png";
 
@@ -23,44 +23,45 @@ class EachMeal extends Component {
           {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
         <div class="container-select-meal" style={{ color: "white" }}>
-          <OverlayTrigger
-            placement="bottom"
-            delay={{ show: 100, hide: 100 }}
-            popperConfig={{
-              modifiers: {
-                preventOverflow: {
-                  boundariesElement: 'offsetParent'
+          <div class="meal-img-wrapper" style={{ overflow:"hidden", width: "100%", minWidth:"100%", height:"200px", maxHeight:"200px"}}>
+            <OverlayTrigger
+              placement="bottom"
+              delay={{ show: 100, hide: 100 }}
+              popperConfig={{
+                modifiers: {
+                  preventOverflow: {
+                    boundariesElement: 'offsetParent'
+                  }
                 }
+              }}
+              overlay={
+                <Tooltip id="button-tooltip">
+                  <p>{this.props.detail}</p>
+                  <p>
+                    <strong>Ingredients:</strong> {this.props.ingridents}
+                  </p>
+                </Tooltip>
               }
-            }}
-            overlay={
-              <Tooltip id="button-tooltip">
-                <p>{this.props.detail}</p>
-                <p>
-                  <strong>Ingredients:</strong> {this.props.ingridents}
-                </p>
-              </Tooltip>
-            }
-          >
-            <img
-              class="img-fluid"
-              src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
-              alt="no_meal_img"
-              style={{ width: "200px", height: "200px", objectFit: "cover" }}
-            />
-          </OverlayTrigger>
-          {/* <div
-            class="bottom-right-meal-selection font2"
-            style={{
-              fontSize: "20px",
-              backgroundColor: "black",
-              height: "30px"
-            }}
-          >
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-          </div> */}
-          <OverlayTrigger
+            >
+              <img
+                class="img-fluid"
+                src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
+                alt="no_meal_img"
+                resizeMode
+              />
+            </OverlayTrigger>
+            {/* <div
+              class="bottom-right-meal-selection font2"
+              style={{
+                fontSize: "20px",
+                backgroundColor: "black",
+                height: "30px"
+              }}
+            >
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            </div> */}
+            <OverlayTrigger
             placement="bottom"
             delay={{ show: 100, hide: 100 }}
             popperConfig={{
@@ -91,6 +92,7 @@ class EachMeal extends Component {
               <center>{this.props.mealTitle}</center>
             </div>
           </OverlayTrigger>
+          </div>
         </div>
         <div
           style={{
