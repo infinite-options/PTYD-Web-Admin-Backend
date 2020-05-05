@@ -1,9 +1,9 @@
-import React, {Component} from "react";
-import {Grid, Cell} from "react-mdl";
+import React, { Component } from "react";
+import { Grid, Cell } from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
-import {ButtonToolbar, Button, Modal, Card, Form} from "react-bootstrap";
+import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
 
 class Mealschedule extends Component {
   constructor(props) {
@@ -54,7 +54,7 @@ class Mealschedule extends Component {
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
-        this.setState({subscribed: true});
+        this.setState({ subscribed: true });
         this.setState({
           monday_available: purchasesApi.result[0].monday_available
         });
@@ -156,8 +156,8 @@ class Mealschedule extends Component {
     console.log("dhsjakdhkajsdhas", this.state.purchase.plan_footer);
     return (
       <div>
-        <section class='content-section'>
-          <div class='container font2'>
+        <section class="content-section">
+          <div class="container font2">
             <Grid>
               <Cell col={3}>
                 {" "}
@@ -170,13 +170,13 @@ class Mealschedule extends Component {
                         height: "70px",
                         marginTop: "10px"
                       }}
-                      src={IMG8}
-                      alt='Avatar'
+                      // src={IMG8}
+                      // alt="Avatar"
                     ></img>
                   </Cell>
                   <Cell col={8}>
                     <h4>
-                      Hi, {this.props.appProps.first_name}
+                      Hi, {this.searchCookie4Name(document.cookie)}
                       {this.state.purchase.num_meals}
                     </h4>
                   </Cell>
@@ -234,16 +234,16 @@ class Mealschedule extends Component {
               <Cell col={8}>
                 <br />
                 <br />
-                <h3 class='font1'>
+                <h3 class="font1">
                   <b>Select Meals Around Your Schedule</b>
                 </h3>
                 <br />
                 <div>{console.log(this.state.menu)}</div>
-                <div class='meals-button'>
+                <div class="meals-button">
                   {this.state.menu.map(eachWeek => (
                     <MealButton
-                      day1='Sunday'
-                      day2='Monday'
+                      day1="Sunday"
+                      day2="Monday"
                       saturdayDate={eachWeek.sat}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}

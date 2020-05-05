@@ -63,10 +63,10 @@ class SelectPaymentPlan extends Component {
                         className='blackM background_black'
                         variant='top'
                         src={paymentPlan.photo_URL}
-                        style={{
-                          "border-top-left-radius": "0px",
-                          "border-top-right-radius": "0px"
-                        }}
+                        // style={{
+                        //   "border-top-left-radius": "0px",
+                        //   "border-top-right-radius": "0px"
+                        // }}
                       />
                       <div class='d-flex card-img-overlay'>
                         <span className='px-0 align-self-center mx-auto mealoption-center '>
