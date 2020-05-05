@@ -52,6 +52,12 @@ export default class MealButton extends Component {
           buttonSelectKeepColor: true
         });
       }
+      else {
+        this.setState({
+          buttonSurprise: true,
+          buttonSelectKeepColor: false
+        });
+      }
 
       switch (nextProps.deliverDay) {
         case "SKIP":
@@ -85,7 +91,7 @@ export default class MealButton extends Component {
       maxmeals: nextProps.maxmeals,
       maxmealsCopy: nextProps.maxmeals,
       purchase_id: nextProps.purchase_id,
-      week_affected: nextProps.week_affected,
+      week_affected: nextProps.saturdayDate,
       menu: nextProps.menu
     });
   }
@@ -127,6 +133,18 @@ export default class MealButton extends Component {
   }
 
   sendForm = () => {
+
+    /*
+    console.log({
+      purchase_id: this.state.purchase_id,
+      week_affected: this.state.week_affected,
+      meal_quantities: this.state.mealQuantities,
+      delivery_day: this.state.dayToDeliver,
+      default_selected: this.state.buttonSurprise,
+      is_addons: false
+    });
+    */
+
     fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {

@@ -24,6 +24,7 @@ class Mealschedule extends Component {
       api: null //initial result api call
     };
     this.changeMenuButtons = this.changeMenuButtons.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
     function searchCookie4UserID(str) {
       let arr = str.split(" ");
@@ -259,11 +260,13 @@ class Mealschedule extends Component {
     );
   }
   //dropdown for different subscription
-  handleChange = event => {
-    this.setState(
+  async handleChange(event) {
+    await this.setState(
       {
         selection: event.target.value
-      },
+      }
+    );
+    this.setState(
       () => {
         this.changeMenuButtons();
       }
