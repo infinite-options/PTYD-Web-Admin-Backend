@@ -24,6 +24,10 @@ RDS_DB = 'ptyd'
 
 app = Flask(__name__)
 
+#--------------- Stripe Variables ------------------
+pubKey = 'pk_test_3HElAH8HDKNUmf5qCPxIyxDn00I2qUjmiM'
+secKey = 'sk_test_rcUdq1pyNtsDMCWE4ool6qK100z3zdq0Hr'
+
 # Allow cross-origin resource sharing
 cors = CORS(app, resources={r'/api/*': {'origins': '*'}})
 
@@ -2491,16 +2495,8 @@ class CancelSubscriptionNow(Resource):
         try:
             conn = connect()
             data = request.get_json(force=True)
-            print(data)
             
-            print("--------------------------")
-
-
             newSnapshotQuery = execute("""CALL get_snapshots_id();""", 'get', conn)
-            print("------------------------------")
-            print(newSnapshotQuery)
-             
-
             
             purchase_id = data['purchase_id']
 
@@ -2566,6 +2562,66 @@ class ZipCodes(Resource):
             disconnect(conn)
 
 
+class GetTestKey(Resource):
+    def get(self):
+        keys = {"Public Key" : pubKey, "Secret Key": secKey }
+        return keys
+
+class StripeTestPayment(Resource):
+    stripe.api_key = pubKey
+
+
+    def post(self):
+        response = {}
+        items = {}
+
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+            cartAmount = data['cart_amount']
+
+
+            intent = stripe.PaymentIntent.create(
+                amount=1099,
+                currency='usd',
+                # Verify your integration in this guide by including this parameter
+                metadata={'integration_check': 'accept_a_payment'},
+            )
+ 
+class UpdateSubscription(Resource):
+    def patch(self):
+        response = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+            meal_plan_id = data['meal_plan_id']
+            purchase_id = data['purchase_id']
+            delivery_address = data['delivery_address']
+            deliver_address_unit = data['delivery_address_unit']
+            delivery_city = data['delivery_city']
+            delivery_state = data['delivery_state']
+            delivery_zip = data['delivery_zip']
+            delivery_instructions = data['delivery_instructions']
+
+            execute(""" CALL 
+                    `ptyd`.`update_purchase`
+                    (\'""" + meal_plan_id + """\', \'""" + purchase_id + """\', 
+                    \'""" + deliver_address + """\', \'""" + delivery_address_unit + """\', 
+                    \'""" + delivery_city + """\', \'""" + delivery_state + """\', \'""" + delivery_zip + """\', 
+                    \'""" + delivery_instructions + """\');
+                    """, 'get', conn)
+
+            
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -2610,9 +2666,16 @@ api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
-#in progress
+
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
+
+#-----------Stripe Resrouces--------------------
+api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
+
+#in progress
+api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
+
 
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
