@@ -361,4 +361,5 @@ hr.four {
 }
 .background_black {
   background-color: #181818 !important;
+  border-radius: 0!important;
 }
