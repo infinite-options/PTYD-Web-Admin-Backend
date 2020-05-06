@@ -20,7 +20,7 @@ class Mealschedule extends Component {
     };
 
     function searchCookie4UserID(cname) {
-      this.getCookieAttrHelper(cname, "first_name");
+      this.getCookieAttrHelper(cname, "user_uid");
     }
   }
 
