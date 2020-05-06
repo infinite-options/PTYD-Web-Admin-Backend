@@ -2588,7 +2588,7 @@ class StripeTestPayment(Resource):
                 # Verify your integration in this guide by including this parameter
                 metadata={'integration_check': 'accept_a_payment'},
             )
-
+'''
 
 
 class UpdateSubscription(Resource):
@@ -2622,7 +2622,7 @@ class UpdateSubscription(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-'''
+
 
 class TemplateApi(Resource):
     def get(self):
