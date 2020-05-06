@@ -2561,7 +2561,7 @@ class ZipCodes(Resource):
         finally:
             disconnect(conn)
 
-
+'''
 class GetTestKey(Resource):
     def get(self):
         keys = {"Public Key" : pubKey, "Secret Key": secKey }
@@ -2588,7 +2588,9 @@ class StripeTestPayment(Resource):
                 # Verify your integration in this guide by including this parameter
                 metadata={'integration_check': 'accept_a_payment'},
             )
- 
+
+
+
 class UpdateSubscription(Resource):
     def patch(self):
         response = {}
@@ -2620,7 +2622,7 @@ class UpdateSubscription(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
+'''
 
 class TemplateApi(Resource):
     def get(self):
@@ -2670,12 +2672,13 @@ api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
+'''
 #-----------Stripe Resrouces--------------------
 api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
 
 #in progress
 api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
-
+'''
 
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
