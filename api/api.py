@@ -2675,10 +2675,10 @@ api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 '''
 #-----------Stripe Resrouces--------------------
 api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
-
+'''
 #in progress
 api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
-'''
+
 
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
