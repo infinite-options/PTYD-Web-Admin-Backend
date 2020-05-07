@@ -109,7 +109,7 @@ export default function Main({ appProps }) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_URL: `${DEV_URL}v2/updatepurchases`
+          UPDATE_URL: `${DEV_URL}v2/update-subscription`
         }}
       />
 

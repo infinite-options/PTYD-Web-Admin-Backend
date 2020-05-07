@@ -19,7 +19,9 @@ class MakeChanges extends Component {
     this.state = {
       modalShow: false,
       changes: props,
-      init: 0
+      init: 0,
+      month: 1
+      // new_changed_subscription: changes.subscription
     };
     console.log("printing url", this.props.DELETE_URL);
   }
@@ -41,9 +43,17 @@ class MakeChanges extends Component {
     );
   };
   componentDidMount() {
-    this.setState({
-      changes: this.props
-    });
+    this.setState(
+      {
+        changes: this.props
+        // month: parseInt(
+        //   String(this.props.cc_exp_date.split("-")).substring(5, 7)
+        // )
+      },
+      () => {
+        console.log("month", this.state.changes);
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -55,9 +65,17 @@ class MakeChanges extends Component {
         .concat(":  $")
         .concat(nextProps.meal_plan_price);
 
-      this.setState({
-        changes: temp
-      });
+      this.setState(
+        {
+          changes: temp,
+          month: parseInt(
+            String(nextProps.cc_exp_date.split("-")).substring(5, 7)
+          )
+        },
+        () => {
+          console.log("nextprops", this.state.month);
+        }
+      );
     }
   }
   // post_subscription = () => {
@@ -92,14 +110,24 @@ class MakeChanges extends Component {
 
   async update_subscription() {
     console.log("its updating");
-    const test = await fetch(this.props.DELETE_URL, {
-      method: "POST",
+    const test = await fetch(this.props.UPDATE_URL, {
+      method: "PATCH",
       headers: {
-        Accept: "application/json",
+        // Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id
+        meal_plan_id: this.state.changes.subscription,
+        purchase_id: this.props.purchase_id,
+        // cc_num: this.state.changes.cc_num,
+        // cc_cvv: this.state.changes.cc_cvv,
+        // cc_exp_date: this.state.changes.cc_exp_date,
+        delivery_address: this.state.changes.delivery_address,
+        deliver_address_unit: this.state.changes.delivery_address_unit,
+        delivery_city: this.state.changes.delivery_city,
+        delivery_state: this.state.changes.delivery_state,
+        delivery_zip: this.state.changes.delivery_zip,
+        delivery_instructions: this.state.changes.delivery_instructions
       })
     });
     console.log("DONE UPDATE");
@@ -225,24 +253,23 @@ class MakeChanges extends Component {
                   <Form.Control
                     as="select"
                     name="cc_exp_month"
-                    onChange={this.handleChange}
-                    value={String(
-                      this.state.changes.cc_exp_date.split("-")
-                    ).substring(5, 7)}
+                    onChange={event => {
+                      this.setState({ month: event.target.value });
+                    }}
+                    value={this.state.month}
                   >
-                    <option>Choose...</option>
-                    <option>01</option>
-                    <option>02</option>
-                    <option>03</option>
-                    <option>04</option>
-                    <option>05</option>
-                    <option>06</option>
-                    <option>07</option>
-                    <option>08</option>
-                    <option>09</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
+                    <option>{1}</option>
+                    <option>{2}</option>
+                    <option>{3}</option>
+                    <option>{4}</option>
+                    <option>{5}</option>
+                    <option>{6}</option>
+                    <option>{7}</option>
+                    <option>{8}</option>
+                    <option>{9}</option>
+                    <option>{10}</option>
+                    <option>{11}</option>
+                    <option>{12}</option>
                   </Form.Control>
                 </Form.Group>
 
@@ -252,7 +279,7 @@ class MakeChanges extends Component {
                     as="select"
                     name="cc_exp_year"
                     onChange={this.handleChange}
-                    value={this.state.changes.cc_exp_date.substr(0, 4)}
+                    // value={this.state.changes.cc_exp_date.substr(0, 4)}
                   >
                     <option>Choose...</option>
                     <option>2020</option>
@@ -366,13 +393,19 @@ class MakeChanges extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" type="submit">
+          <Button
+            variant="success"
+            type="submit"
+            onClick={() => {
+              this.update_subscription();
+            }}
+          >
             Save Changes
           </Button>
           <Button
             variant="light"
             onClick={() => {
-              this.setState({ modalShow: false });
+              this.setState({ modalShow: false, changes: this.props });
             }}
           >
             Close
