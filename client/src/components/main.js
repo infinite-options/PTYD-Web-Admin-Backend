@@ -106,6 +106,7 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
@@ -121,6 +122,7 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,

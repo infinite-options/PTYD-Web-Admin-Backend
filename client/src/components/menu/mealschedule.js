@@ -44,6 +44,15 @@ class Mealschedule extends Component {
   }
 
   async componentDidMount() {
+    /*  PLEASE REPLACE THIS CODE WITH COOKIE
+        DO NOT MAKE API CALL TO GET USER'S FIRST NAME
+    */
+    const accountres = await fetch(this.props.ACC_URL + '/' + this.state.user_uid);
+    const accountapi = await accountres.json();
+    this.setState({
+      first_name: accountapi.result[0].first_name
+    });
+
     let currPur = {};
     let purchaseId = 0;
     //  Handle startdate parameter on URL with ternary operator
@@ -188,8 +197,7 @@ class Mealschedule extends Component {
                   </Cell>
                   <Cell col={8}>
                     <h4>
-                      Hi, Name
-                      {this.state.purchase.num_meals}
+                      Hi, {this.state.first_name}
                     </h4>
                   </Cell>
                 </Grid>
