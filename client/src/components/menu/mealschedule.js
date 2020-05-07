@@ -261,17 +261,13 @@ class Mealschedule extends Component {
   }
   //dropdown for different subscription
   async handleChange(event) {
-    await this.setState(
-      {
-        selection: event.target.value
-      }
-    );
-    this.setState(
-      () => {
-        this.changeMenuButtons();
-      }
-    );
-  };
+    await this.setState({
+      selection: event.target.value
+    });
+    this.setState(() => {
+      this.changeMenuButtons();
+    });
+  }
 
   render() {
     let displayrows = [];
@@ -344,6 +340,7 @@ class Mealschedule extends Component {
             </Grid>
             <MakeChanges
               DELETE_URL={this.props.DELETE_URL}
+              UPDATE_URL={this.props.UPDATE_URL}
               subscription={this.state.purchase.meal_plan_desc}
               meal_plan_price={this.state.purchase.amount_due}
               paymentplan={this.state.paymentPlans}

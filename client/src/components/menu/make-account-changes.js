@@ -90,6 +90,21 @@ class MakeChanges extends Component {
   //   });
   // };
 
+  async update_subscription() {
+    console.log("its updating");
+    const test = await fetch(this.props.DELETE_URL, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        purchase_id: this.props.purchase_id
+      })
+    });
+    console.log("DONE UPDATE");
+  }
+
   async delete_subscription() {
     console.log("its deleting");
     const test = await fetch(this.props.DELETE_URL, {
@@ -102,7 +117,6 @@ class MakeChanges extends Component {
         purchase_id: this.props.purchase_id
       })
     });
-    console.log(test);
   }
   MakeChangesAnimation = () => {
     console.log("test1");
@@ -156,8 +170,15 @@ class MakeChanges extends Component {
                   md={6}
                   controlId="formGridCardSubscription"
                 >
-                  <Form.Label>My Subscription</Form.Label>
-                  {/* {this.state.changes.subscription} */}
+                  <Form.Label>Current Subscription</Form.Label>
+
+                  <Form.Control
+                    type="text"
+                    value={this.state.changes.subscription}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md={6} controlId="formGridCardPayment">
+                  <Form.Label>Change Subscription</Form.Label>
                   <Form.Control
                     as="select"
                     name="subscription"
@@ -173,19 +194,6 @@ class MakeChanges extends Component {
                     ))}
                   </Form.Control>
                 </Form.Group>
-                {/* <Form.Group as={Col} md={6} controlId="formGridCardPayment">
-                  <Form.Label>Payment Plan</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="cc_exp_month"
-                    value={this.props.payment_plan}
-                  >
-                    <option>Choose...</option>
-                    <option>Weekly</option>
-                    <option>Bi-Weekly</option>
-                    <option>Monthly</option>
-                  </Form.Control>
-                </Form.Group> */}
               </Form.Row>
               <h5>Credit Card Details</h5>
               <Form.Row>
@@ -342,6 +350,7 @@ class MakeChanges extends Component {
                   type="submit"
                   style={{ float: "left" }}
                   onClick={() => {
+                    alert("Are you sure you want to delete your subscription?");
                     this.delete_subscription();
                   }}
                 >
@@ -387,10 +396,7 @@ class MakeChanges extends Component {
     //     changes: temp
     //   });
     // }
-    console.log(
-      "state changes",
-      this.state.changes.paymentplan
-    );
+    console.log("state changes", this.state.changes.paymentplan);
     return this.MakeChangesAnimation();
   }
 }
