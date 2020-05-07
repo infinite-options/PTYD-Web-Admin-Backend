@@ -163,7 +163,7 @@ class Mealschedule extends Component {
               <Cell col={3}>
                 {" "}
                 <Grid>
-                  <Cell col={4}>
+                  {/* <Cell col={4}>
                     <img
                       style={{
                         borderRadius: "50%",
@@ -171,12 +171,12 @@ class Mealschedule extends Component {
                         height: "70px",
                         marginTop: "10px"
                       }}
-                      // src={IMG8}
-                      // alt="Avatar"
+                      src={IMG8}
+                      alt="Avatar"
                     ></img>
-                  </Cell>
-                  <Cell col={8}>
-                    <h4>
+                  </Cell> */}
+                  <Cell col={10}>
+                    <h4 style={{textAlign: "center", overflowWrap: "break-word"}}>
                       Hi, {this.searchCookie4Name(document.cookie)}
                       {this.state.purchase.num_meals}
                     </h4>
