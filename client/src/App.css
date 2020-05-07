@@ -193,7 +193,7 @@ hr.four {
 
 .black {
   object-fit: cover;
-  opacity: 50%;
+  opacity: 50% !important;
   height:187px;
   width: 100%;
 }
@@ -204,7 +204,7 @@ hr.four {
 
 .blackM {
   object-fit: cover;
-  opacity: 50%;
+  opacity: 50% !important;
   height: 187px;
   width: 100%;
 }
