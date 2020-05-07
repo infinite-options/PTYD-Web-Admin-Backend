@@ -345,7 +345,7 @@ export default class MealButton extends Component {
                       this.state.flag === false
                     ) {
                       alert(
-                        "Are you sure your want to close without save the changes?"
+                        "Are you sure your want to close without saving your changes?"
                       );
                       this.setState({
                         flag: true
