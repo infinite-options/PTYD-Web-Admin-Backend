@@ -182,8 +182,8 @@ class Mealschedule extends Component {
                         height: "70px",
                         marginTop: "10px"
                       }}
-                      // src={IMG8}
-                      // alt="Avatar"
+                      //src={IMG8}
+                      //alt="Avatar"
                     ></img>
                   </Cell>
                   <Cell col={8}>
