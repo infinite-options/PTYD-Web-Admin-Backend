@@ -3146,14 +3146,10 @@ api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
-<<<<<<< HEAD
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases')
 api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers')
 #in progress
-=======
-
->>>>>>> feature/stripe
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
