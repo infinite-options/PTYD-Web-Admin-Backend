@@ -38,15 +38,28 @@ export default class MealButton extends Component {
       flag: false,
       mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
-      subscribed: this.props.subscribed
+      subscribed: this.props.subscribed,
+      disableSunMon: (this.props.maxmeals > 0) ? true : false
     };
   }
 
   async componentDidMount() {
+//  var stateCopy = await Object.assign({}, this.state);
+//  this.setState({
+//    maxmealsOriginal: stateCopy.maxmeals,
+//    mealQuantitiesOriginal: stateCopy.mealQuantities,
+//    addonQuantitiesOriginal: stateCopy.addonQuantities,
+//  });
+
     if (this.props.surprise == false) {
       this.setState({
         buttonSurprise: false,
         buttonSelectKeepColor: true
+      });
+    }
+    else {
+      this.setState({
+        disableSunMon: false
       });
     }
 
@@ -58,7 +71,8 @@ export default class MealButton extends Component {
           buttonSkip: true,
           buttonSurprise: false,
           buttonDisabled: true,
-          buttonAddOnKeepColor: false
+          buttonAddOnKeepColor: false,
+          disableSunMon: false,
         });
         break;
       case "Monday":
@@ -118,14 +132,15 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSelectKeepColor: true,
       flag: false,
-      mealQuantities: this.props.mealQuantities
+//    mealQuantities: this.state.mealQuantitiesOriginal,
+//    maxmeals: this.state.maxmealsOriginal,
     });
   };
   closeButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
       buttonAddOnKeepColor: false,
-      addonQuantities: this.props.addonQuantities
+//    addonQuantities: this.state.addonQuantitiesOriginal,
     });
   };
   saveButtonAddOn = () => {
@@ -138,6 +153,9 @@ export default class MealButton extends Component {
 
   async changeButtonS() {
     await this.setState({
+      buttonSurprise: (this.state.buttonSkip ? true : this.state.buttonSurprise),
+    });
+    await this.setState({
       buttonS: true,
       buttonM: false,
       buttonSkip: false,
@@ -148,6 +166,9 @@ export default class MealButton extends Component {
   };
 
   async changeButtonM() {
+    await this.setState({
+      buttonSurprise: (this.state.buttonSkip ? true : this.state.buttonSurprise),
+    });
     await this.setState({
       buttonM: true,
       buttonS: false,
@@ -170,7 +191,8 @@ export default class MealButton extends Component {
       buttonDisabled: true,
       buttonSelectKeepColor: false,
       buttonAddOnKeepColor: false,
-      dayToDeliver: "SKIP"
+      dayToDeliver: "SKIP",
+      disableSunMon: false,
     });
     this.sendForm();
   }
@@ -180,7 +202,8 @@ export default class MealButton extends Component {
       buttonSelect: true,
       buttonSurprise: false,
       buttonAddOn: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      disableSunMon: true,
     });
   };
   async changeButtonSurprise() {
@@ -188,7 +211,8 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSurprise: true,
       buttonAddOn: false,
-      buttonSelectKeepColor: false
+      buttonSelectKeepColor: false,
+      disableSunMon: false,
     });
     this.sendForm();
   }
@@ -196,7 +220,7 @@ export default class MealButton extends Component {
     this.setState({
       buttonAddOn: true,
       buttonAddOnKeepColor: true,
-      buttonSelect: false
+      buttonSelect: false,
     });
   };
   specialRequest = () => {
@@ -208,7 +232,8 @@ export default class MealButton extends Component {
     this.setState({
       addonActivated: true,
       buttonSelect: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      disableSunMon: false,
     });
     this.sendForm();
   };
@@ -233,6 +258,12 @@ export default class MealButton extends Component {
       backgroundColor: "#427c42",
       color: "white"
     };
+    const red = {
+      width: "95px",
+      height: "95px",
+      backgroundColor: "#d9534f",
+      color: "white"
+    };
 
     return (
       <div>
@@ -240,6 +271,7 @@ export default class MealButton extends Component {
           <div className="radio">
             <Button
               variant="outline-dark"
+              disabled={this.state.disableSunMon}
               onClick={this.changeButtonS}
               style={this.state.buttonS ? green : hide}
             >
@@ -250,7 +282,7 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
-              disabled={!this.state.mondayAvailable}
+              disabled={!this.state.mondayAvailable || this.state.disableSunMon}
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
@@ -280,7 +312,9 @@ export default class MealButton extends Component {
             ref={button => (this.button = button)}
             style={
               (this.state.buttonSelect ? green : hide,
-                this.state.buttonSelectKeepColor ? green : hide)
+              this.state.buttonSelectKeepColor ? (
+                this.state.disableSunMon ? red : green
+              ) : hide)
             }
             onClick={this.changeButtonSelect}
           >

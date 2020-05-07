@@ -1,9 +1,10 @@
-import React, { Component } from "react";
-import { Grid, Cell } from "react-mdl";
+import React, {Component} from "react";
+import {Grid, Cell} from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
-import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
+import {ButtonToolbar, Button, Modal, Card, Form} from "react-bootstrap";
+import Cookies from "js-cookie";
 
 class Mealschedule extends Component {
   constructor(props) {
@@ -11,37 +12,47 @@ class Mealschedule extends Component {
 
     this.state = {
       menu: [],
-      user_uid: searchCookie4UserID(document.cookie),
-      purchase: { NextCharge: 0 },
+      user_uid: this.props.appProps.user_uid,
+      purchase: {NextCharge: 0},
       subscribed: false,
       monday_available: false,
       paymentPlans: []
     };
 
-    function searchCookie4UserID(str) {
-      let arr = str.split(" ");
-      let i = arr.indexOf("user_uid:");
-      return arr[i + 1];
+    function searchCookie4UserID(cname) {
+      this.getCookieAttrHelper(cname, "user_uid");
     }
   }
 
-  searchCookie4Name(str) {
-    let arr = str.split(" ");
-    let i = arr.indexOf("loginStatus:");
-    return arr[i + 2];
+  getCookieAttrHelper(cname, type) {
+    const values = Cookies.get(cname);
+    if (values === "" || values === undefined) {
+      return null;
+    } else {
+      for (let val of values.split(",")) {
+        let [n, v] = val.split(":");
+        if (n === type) {
+          return v;
+        }
+      }
+      return null;
+    }
+  }
+
+  searchCookie4Name(cname) {
+    return this.getCookieAttrHelper(cname, "first_name");
   }
 
   async componentDidMount() {
     let currPur = {};
     let purchaseId = 0;
-
     //  Handle startdate parameter on URL with ternary operator
     //  Use this to turn back / forward time
     //  Make sure to disable this when putting into production
     const res = await fetch(
-      this.props.match.params.startdate ?
-      this.props.API_URL + '/' + this.props.match.params.startdate :
-      this.props.API_URL
+      this.props.match.params.startdate
+        ? this.props.API_URL + "/" + this.props.match.params.startdate
+        : this.props.API_URL
     );
     const api = await res.json();
 
@@ -55,7 +66,7 @@ class Mealschedule extends Component {
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
-        this.setState({ subscribed: true });
+        this.setState({subscribed: true});
         this.setState({
           monday_available: purchasesApi.result[0].monday_available
         });
@@ -157,13 +168,13 @@ class Mealschedule extends Component {
     console.log("dhsjakdhkajsdhas", this.state.purchase.plan_footer);
     return (
       <div>
-        <section class="content-section">
-          <div class="container font2">
+        <section class='content-section'>
+          <div class='container font2'>
             <Grid>
               <Cell col={3}>
                 {" "}
                 <Grid>
-                  {/* <Cell col={4}>
+                  <Cell col={4}>
                     <img
                       style={{
                         borderRadius: "50%",
@@ -171,13 +182,13 @@ class Mealschedule extends Component {
                         height: "70px",
                         marginTop: "10px"
                       }}
-                      src={IMG8}
-                      alt="Avatar"
+                      //src={IMG8}
+                      //alt="Avatar"
                     ></img>
-                  </Cell> */}
-                  <Cell col={10}>
-                    <h4 style={{textAlign: "center", overflowWrap: "break-word"}}>
-                      Hi, {this.searchCookie4Name(document.cookie)}
+                  </Cell>
+                  <Cell col={8}>
+                    <h4>
+                      Hi, Name
                       {this.state.purchase.num_meals}
                     </h4>
                   </Cell>
@@ -235,16 +246,16 @@ class Mealschedule extends Component {
               <Cell col={8}>
                 <br />
                 <br />
-                <h3 class="font1">
+                <h3 class='font1'>
                   <b>Select Meals Around Your Schedule</b>
                 </h3>
                 <br />
                 <div>{console.log(this.state.menu)}</div>
-                <div class="meals-button">
+                <div class='meals-button'>
                   {this.state.menu.map(eachWeek => (
                     <MealButton
-                      day1="Sunday"
-                      day2="Monday"
+                      day1='Sunday'
+                      day2='Monday'
                       saturdayDate={eachWeek.sat}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}

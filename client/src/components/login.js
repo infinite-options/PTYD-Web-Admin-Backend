@@ -54,13 +54,17 @@ export default function Login(props) {
           })
           .then(res => {
             data = res.data.result.result[0];
-            document.cookie = ` loginStatus: Hello ${data.first_name}! ,  user_uid: ${data.uid} , ; path=/ `;
+            let first = data.first_name;
+            let uid = data.user_uid;
+            let login_id = data.login_id;
+            let session_id = data.session_id;
+            document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_id:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
             props.history.push("/selectmealplan");
             window.location.reload(false);
           })
           .catch(err => {
             console.log(err);
-            document.cookie = ` loginStatus: null , user_uid: null , ; path=/ `;
+            document.cookie = `loginStatus=; path=/`;
             props.history.push("/login");
             window.location.reload(false);
           });
@@ -70,103 +74,142 @@ export default function Login(props) {
       LogIn(params.email, params.password);
     }
   }
-  async function componentDidMount() {
-    const res = await fetch(props.API_URL);
-    const api = await res.json();
-    setSalt(api.result[0].password_salt);
-  }
+  // async function componentDidMount() {
+  //   const res = await fetch(props.API_URL);
+  //   const api = await res.json();
+  //   setSalt(api.result[0].password_salt);
+  // }
 
   // API GET Request for Social Media User Data
-  async function checkForSocial(user) {
-    const res = await fetch(props.SOCIAL_API_URL + "/" + user);
-    const api = await res.json();
-    const social = api.result.result[0];
-    return social;
+  async function grabSocialUserInfo(email) {
+    try {
+      let res = await axios.get(`${props.SOCIAL_API_URL}/${email}`);
+      console.log(res.data);
+      if (res.data !== undefined && res.data.result.result.length === 0) {
+        // throw "No record found.";
+        return null;
+      }
+      let uid = res.data.result.result[0].user_uid;
+      const ip_res = await getIp();
+      const browser_type = getBrowser().browser_type;
+      const res1 = await axios.post(`${props.SOCIAL_API_URL}acc/${uid}`, {
+        ip_address: ip_res.ip,
+        browser_type: browser_type
+      });
+      //success
+      if (res1.data !== undefined && res1.data.result.result.length === 0) {
+        // throw "No record found.";
+        return null;
+      } else {
+        return res1.data;
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  async function grabSocialUserInfor(uid) {
-    const res = await fetch(props.SOCIAL_API_URL + "acc/" + uid);
-    const api = await res.json();
-    const login = api.result.result[0];
-    return login;
-  }
+  const responseGoogle = async response => {
+    if (response.profileObj !== null || response.profileObj !== undefined) {
+      const e = response.profileObj.email;
+      const at = response.accessToken;
+      const rt = response.googleId;
+      const first_name = response.profileObj.givenName;
+      const last_name = response.profileObj.familyName;
+      let data = await grabSocialUserInfo(e);
 
-  const responseGoogle = response => {
-    console.log("Google Response: ", response);
-    const e = response.profileObj.email;
-    const at = response.accessToken;
-    const rt = response.googleId;
-
-    checkForSocial(e)
-      .then(res1 => {
-        console.log("Social Media User: ", res1);
-        grabSocialUserInfor(res1.user_uid)
-          .then(res2 => socialLogin(res2))
-          .catch(err => console.log(err));
-      })
-      .catch(err => {
-        console.log(err);
-        // Redirect to Signup Page for Social Media Users
+      if (data === null) {
+        //email not found --> render to signup for social
         props.history.push({
           pathname: "/socialsignup",
           state: {
+            lastname: last_name,
+            firstname: first_name,
             email: e,
-            social: "google",
+            // social: "facebook",
             accessToken: at,
-            refreshToken: rt
+            refreshToken: rt,
+            SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
           }
         });
-        window.location.reload(false);
-      });
+      } else {
+        socialLogin(data);
+      }
+    } else {
+      console.log("Google does not have file on this user. lol");
+    }
   };
   // Maria Alejcgfbaifeg Changsky	104605834561957	pnkuzirrok_1587274227@tfbnw.net
 
-  const responseFacebook = response => {
-    console.log("Facebook Response ", response);
-    const e = response.email;
-    const at = response.accessToken;
-    const rt = response.id;
-    console.log(e, at, rt);
-
-    checkForSocial(e)
-      .then(res1 => {
-        console.log("Social Media User: ", res1);
-        grabSocialUserInfor(res1.user_uid)
-          .then(res2 => socialLogin(res2))
-          .catch(err => console.log(err));
-      })
-      .catch(err => {
-        console.log(err);
-        // Redirect to Signup Page for Social Media Users
+  const responseFacebook = async response => {
+    if (response.email !== null && response.email !== undefined) {
+      const e = response.email;
+      const at = response.accessToken;
+      const rt = response.id;
+      const name = response.name.split(" ");
+      const last_name = name[name.length - 1];
+      let first_name = "";
+      for (let n = 0; n < name.length - 1; n++) {
+        first_name += name[n] + " ";
+      }
+      let data = await grabSocialUserInfo(e);
+      if (data === null) {
+        //email not found --> render to signup for social
         props.history.push({
           pathname: "/socialsignup",
           state: {
+            lastname: last_name,
+            firstname: first_name,
             email: e,
-            social: "facebook",
+            // social: "facebook",
             accessToken: at,
-            refreshToken: rt
+            refreshToken: rt,
+            SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
           }
         });
-        window.location.reload(false);
-      });
+      } else {
+        socialLogin(data);
+      }
+    } else {
+      console.log(`Facebook does not have any info about this user.`);
+    }
   };
 
-  function socialLogin(user) {
-    console.log("Login Social Media User: " + user);
-    let uid = user.user_uid;
-    let name = user.first_name;
-
-    document.cookie = ` loginStatus: Hello ${name} ! , user_uid: ${uid} , `;
-    console.log(document.cookie);
-
-    // redirect & reload page for buttons and login status
-    props.history.push("/");
-    window.location.reload(false);
-
-    console.log("Social Media Login Complete!");
+  function socialLogin(data) {
+    console.log(data);
+    const log_attemp = data.login_attempt_log;
+    const result = data.result.result[0];
+    let uid = result.user_uid;
+    let name = result.first_name;
+    let session_id = log_attemp.session_id;
+    let login_id = log_attemp.login_id;
+    document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid=${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+    checkForPurchased(uid);
   }
 
   // Direct Login
+  async function checkForPurchased(userId) {
+    try {
+      const checkPurchases = await fetch(
+        `${props.SINGLE_ACC_API_URL}purchases/${userId}`
+      );
+      if (checkPurchases.status === 200) {
+        // if success
+        let purchases = await checkPurchases.json();
+        if (purchases !== undefined && purchases.result.length !== 0) {
+          props.history.push("/mealschedule");
+        } else if (purchases !== undefined && purchases.result.length === 0) {
+          props.history.push("/selectmealplan");
+        } else {
+          props.history.push("/");
+        }
+        window.location.reload(false);
+      } else {
+        props.history.push("/"); // should prompt something or asking for re-login
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
   async function grabLoginInfoForUser(userEmail, userPass) {
     let saltres;
     if (props.API_URL !== undefined) {
@@ -196,13 +239,11 @@ export default function Login(props) {
       );
       if (res.status === 200) {
         //success
-        console.log(res);
         return res.data;
       } else {
         RaiseError("Wrong password");
       }
     } catch (err) {
-      console.log(`error happended: ${err}`);
       RaiseError(err);
     }
   }
@@ -216,55 +257,17 @@ export default function Login(props) {
     // await login(t);
   }
   async function login(response) {
-    let userId = response.result.result[0].user_uid;
-    console.log(userId);
     if (response.auth_success === true) {
       // setLoginStatus("Logged In");
-
-      document.cookie =
-        " loginStatus: Hello " +
-        response.result.result[0].first_name +
-        "! , user_uid: " +
-        response.result.result[0].user_uid +
-        " , login_id: " +
-        response.login_attempt_log.login_id +
-        " , session_id: " +
-        response.login_attempt_log.session_id +
-        " , ";
-
-      // redirect & reload page for buttons and login status
-
-      // if (props.redirect_after_login !== null) {
-      //   console.log(props.redirect_after_login); this redirect_after_login still !== null. It is undefined
-      //   alert("prepare to redirect");
-      //   props.history.push(props.redirect_after_login);
-      //   window.location.reload(false);
-      // } else {
-      //   props.history.push("/");
-      //   window.location.reload(false);
-      // }
-
+      let first = response.result.result[0].first_name;
+      let uid = response.result.result[0].user_uid;
+      let login_id = response.login_attempt_log.login_id;
+      let session_id = response.login_attempt_log.session_id;
+      document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
       //check for purchases
-      const checkPurchases = await fetch(
-        `${props.SINGLE_ACC_API_URL}purchases/${userId}`
-      );
-
-      if (checkPurchases.status === 200) {
-        // if success
-        let purchases = await checkPurchases.json();
-        if (purchases !== undefined && purchases.result.length !== 0) {
-          props.history.push("/mealschedule");
-        } else if (purchases !== undefined && purchases.result.length === 0) {
-          props.history.push("/selectmealplan");
-        } else {
-          props.history.push("/");
-        }
-        window.location.reload(false);
-      } else {
-        props.history.push("/"); // should prompt something or asking for re-login
-      }
+      checkForPurchased(uid);
     } else {
-      document.cookie = " loginStatus: null , user_uid: null , ";
+      document.cookie = `loginStatus=; path=/`;
     }
   }
 
@@ -272,7 +275,7 @@ export default function Login(props) {
     <main Style='margin-top:-80px;'>
       <div class='container text-center' Style='margin-top:-40px;'>
         <h1>Login</h1>
-        {error !== null && (
+        {error !== null && error !== undefined && (
           <Fragment>
             <h6>
               <span className='icon has-text-danger'>
@@ -342,10 +345,10 @@ export default function Login(props) {
                   }}
                 >
                   <FacebookLogin
-                    appId='508721976476931'
+                    appId='228246798404476'
                     autoLoad={false}
                     fields='name,email,picture'
-                    onClick={console.log("test")}
+                    onClick='return false'
                     callback={responseFacebook}
                     size='small'
                     textButton='FB Login'
