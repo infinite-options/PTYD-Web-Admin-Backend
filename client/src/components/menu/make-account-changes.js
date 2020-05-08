@@ -12,6 +12,7 @@ import {
   Col
 } from "react-bootstrap";
 import Tooltip from "@material-ui/core/Tooltip";
+import moment from "moment";
 
 class MakeChanges extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class MakeChanges extends Component {
       modalShow: false,
       changes: props,
       init: 0,
-      month: 1
+      date: moment(this.props.cc_exp_date)
       // new_changed_subscription: changes.subscription
     };
     console.log("printing url", this.props.DELETE_URL);
@@ -68,9 +69,10 @@ class MakeChanges extends Component {
       this.setState(
         {
           changes: temp,
-          month: parseInt(
-            String(nextProps.cc_exp_date.split("-")).substring(5, 7)
-          )
+          // month: parseInt(
+          //   String(nextProps.cc_exp_date.split("-")).substring(5, 7)
+          // )
+          date: moment(nextProps.cc_exp_date)
         },
         () => {
           console.log("nextprops", this.state.month);
@@ -78,35 +80,6 @@ class MakeChanges extends Component {
       );
     }
   }
-  // post_subscription = () => {
-  //   fetch(`${this.props.PURCHASE_API_URL}/${this.props.purchase_id}`, {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       subscription:this.props.subscription,
-  //                 paymentplan:this.props.paymentplan,
-  //                 payment_plan:this.props.payment_plan,
-  //                 cc_num:this.props.cc_num,
-  //                 cc_exp_date:this.props.cc_exp_date,
-  //                 cc_cvv:this.props.cc_cvv,
-  //                 delivery_address:this.props.delivery_address,
-  //                 delivery_address_unit:
-  //                   this.props.delivery_address_unit,
-
-  //                 delivery_city:this.props.delivery_city,
-  //                 delivery_state:this.props.delivery_state,
-  //                 delivery_zip:this.props.delivery_zip,
-  //                 delivery_instructions:
-  //                   this.props.delivery_instructions,
-
-  //                 purchase_id:this.props.purchase_id
-
-  //     })
-  //   });
-  // };
 
   async update_subscription() {
     console.log(
@@ -261,15 +234,18 @@ class MakeChanges extends Component {
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="formGridCardMonth">
-                  <Form.Label>Month</Form.Label>
+                  <Form.Label>Month{this.state.date.month()}</Form.Label>
 
                   <Form.Control
                     as="select"
                     name="cc_exp_month"
                     onChange={event => {
-                      this.setState({ month: event.target.value });
+                      // this.setState({ month: event.target.value });
+                      this.setState({
+                        date: this.state.date.month(event.target.value - 1)
+                      });
                     }}
-                    value={this.state.month}
+                    value={this.state.date.month() + 1}
                   >
                     <option>{1}</option>
                     <option>{2}</option>
@@ -291,10 +267,14 @@ class MakeChanges extends Component {
                   <Form.Control
                     as="select"
                     name="cc_exp_year"
-                    onChange={this.handleChange}
+                    onChange={event => {
+                      this.setState({
+                        date: this.state.date.year(event.target.value)
+                      });
+                    }}
                     // value={this.state.changes.cc_exp_date.substr(0, 4)}
+                    value={this.state.date.year()}
                   >
-                    <option>Choose...</option>
                     <option>2020</option>
                     <option>2021</option>
                     <option>2022</option>
