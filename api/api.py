@@ -3074,16 +3074,15 @@ class UpdateSubscription(Resource):
             meal_plan_id = data['meal_plan_id']
             purchase_id = data['purchase_id']
             delivery_address = data['delivery_address']
-            deliver_address_unit = data['delivery_address_unit']
+            delivery_address_unit = data['delivery_address_unit']
             delivery_city = data['delivery_city']
             delivery_state = data['delivery_state']
             delivery_zip = data['delivery_zip']
             delivery_instructions = data['delivery_instructions']
 
             execute(""" CALL 
-                    `ptyd`.`update_purchase`
-                    (\'""" + meal_plan_id + """\', \'""" + purchase_id + """\', 
-                    \'""" + deliver_address + """\', \'""" + delivery_address_unit + """\', 
+                    `ptyd`.`update_purchase`(\'""" + meal_plan_id + """\', \'""" + purchase_id + """\', 
+                    \'""" + delivery_address + """\', \'""" + delivery_address_unit + """\', 
                     \'""" + delivery_city + """\', \'""" + delivery_state + """\', \'""" + delivery_zip + """\', 
                     \'""" + delivery_instructions + """\');
                     """, 'get', conn)
@@ -3149,6 +3148,7 @@ api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases')
 api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers')
+
 #in progress
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')

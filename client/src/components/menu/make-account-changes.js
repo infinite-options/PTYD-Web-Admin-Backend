@@ -109,15 +109,27 @@ class MakeChanges extends Component {
   // };
 
   async update_subscription() {
-    console.log("its updating");
+    console.log(
+      "its updating",
+      this.state.changes.meal_plan_id,
+      this.props.purchase_id,
+      this.state.changes.delivery_address,
+      this.state.changes.delivery_address_unit,
+      this.state.changes.delivery_city,
+      this.state.changes.delivery_state,
+      this.state.changes.delivery_zip,
+      this.state.changes.delivery_instructions
+    );
+    // its updating 15 Meal Plan - Bi-Weekly:  $148.50 300-000005 1234 Main Sttttt null San Jose TX 95129 GFGDG
+    // '{"meal_plan_id":"700-000006","purchase_id":"300-000013","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip":"95130","delivery_instructions":"N/A"}'
     const test = await fetch(this.props.UPDATE_URL, {
       method: "PATCH",
       headers: {
-        // Accept: "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        meal_plan_id: this.state.changes.subscription,
+        meal_plan_id: this.state.changes.meal_plan_id,
         purchase_id: this.props.purchase_id,
         // cc_num: this.state.changes.cc_num,
         // cc_cvv: this.state.changes.cc_cvv,
@@ -210,9 +222,10 @@ class MakeChanges extends Component {
                   <Form.Control
                     as="select"
                     name="subscription"
-                    value={this.state.changes.subscription}
+                    // value={this.state.changes.subscription}
                     onChange={this.handleChange}
                   >
+                    <option>Choose...</option>
                     {this.state.changes.paymentplan.map(paymentPlan => (
                       <option>
                         {paymentPlan.meal_plan_desc

@@ -341,6 +341,7 @@ class Mealschedule extends Component {
             <MakeChanges
               DELETE_URL={this.props.DELETE_URL}
               UPDATE_URL={this.props.UPDATE_URL}
+              meal_plan_id={this.state.purchase.meal_plan_id}
               subscription={this.state.purchase.meal_plan_desc}
               meal_plan_price={this.state.purchase.amount_due}
               paymentplan={this.state.paymentPlans}
@@ -356,7 +357,6 @@ class Mealschedule extends Component {
               delivery_instructions={this.state.purchase.delivery_instructions}
               purchase_id={this.state.purchase.purchase_id}
             />
-            {console.log("meal plan price", this.state.paymentPlans)}
             {displayrows}
           </Cell>{" "}
           <Cell col={1}></Cell>
