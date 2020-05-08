@@ -14,10 +14,11 @@ from math import ceil
 
 # BING API KEY
 # Import Bing API key into bing_api_key.py
-from bing_api_key import BING_API_KEY
+from env_keys import BING_API_KEY, RDS_PW
 
 # When deploying to Zappa, replace above statement with below:
 #BING_API_KEY = "insert_key_kere"
+#RDS_PW = "insert_password_here"
 
 import decimal
 import sys
@@ -54,19 +55,6 @@ mail = Mail(app)
 
 # API
 api = Api(app)
-
-
-# Get RDS password from command line argument
-def RdsPw():
-    if len(sys.argv) == 2:
-        return str(sys.argv[1])
-    return ""
-
-
-# RDS PASSWORD
-# When deploying to Zappa, set RDS_PW equal to the password as a string
-# When pushing to GitHub, set RDS_PW equal to RdsPw()
-RDS_PW = RdsPw()
 
 getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
 getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
