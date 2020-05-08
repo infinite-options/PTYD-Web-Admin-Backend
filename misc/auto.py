@@ -18,14 +18,20 @@ def main():
         # Run Update Purchases API if it is Monday before 1AM
         if now.weekday() == 0 and now.hour < 1:
             r = requests.post(url = API['UPDATE'])
+            print("============================================")
             print("Calling for update subscription snapshots...")
+            print("Response:\n", r)
+            print("============================================")
 
         # Run Charge Subscribers API if it is Thursday before 1AM
         if now.weekday() == 3 and now.hour < 1:
             r = requests.post(url = API['CHARGE'])
+            print("============================================")
             print("Calling for billing renewing purchases...")
+            print("Response:\n", r)
+            print("============================================")
 
-        print("Current timestamp:", now)
+        print("Last checked for snapshot updates on:", now)
         sleep(INTERVAL)
 
 if __name__ == '__main__':
