@@ -20,7 +20,7 @@ def main():
             r = requests.post(url = API['UPDATE'])
             print("============================================")
             print("Calling for update subscription snapshots...")
-            print("Response:\n", r)
+            print("Response:\n", r.json())
             print("============================================")
 
         # Run Charge Subscribers API if it is Thursday before 1AM
@@ -28,7 +28,7 @@ def main():
             r = requests.post(url = API['CHARGE'])
             print("============================================")
             print("Calling for billing renewing purchases...")
-            print("Response:\n", r)
+            print("Response:\n", r.json())
             print("============================================")
 
         print("Last checked for snapshot updates on:", now)
