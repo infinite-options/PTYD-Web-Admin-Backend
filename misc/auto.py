@@ -2,7 +2,7 @@ from datetime import datetime
 from time import sleep
 import requests
 
-DEV_URL = "http://127.0.0.1:2000/api/v2/"
+DEV_URL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/"
 API = {}
 API['UPDATE'] = DEV_URL + "updatepurchases"
 API['CHARGE'] = DEV_URL + "chargesubscribers"
