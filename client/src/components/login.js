@@ -182,7 +182,7 @@ export default function Login(props) {
     let name = result.first_name;
     let session_id = log_attemp.session_id;
     let login_id = log_attemp.login_id;
-    document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid=${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+    document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
     checkForPurchased(uid);
   }
 
