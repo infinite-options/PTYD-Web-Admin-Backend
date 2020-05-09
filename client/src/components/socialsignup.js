@@ -74,17 +74,26 @@ export default function SocialSignUp(props) {
     //   body: b
     // })
     try {
-      const res = await axios.post(props.API_URL, {
-        FirstName: firstname,
-        LastName: lastname,
-        Email: email,
-        PhoneNumber: phoneNumber,
-        Referral: referral,
-        WeeklyUpdates: weeklyUpdates,
-        SocialMedia: socialMedia,
-        AccessToken: accessToken,
-        RefreshToken: refreshToken
-      });
+      const res = await axios.post(
+        props.API_URL,
+        {
+          FirstName: firstname,
+          LastName: lastname,
+          Email: email,
+          PhoneNumber: phoneNumber,
+          Referral: referral,
+          WeeklyUpdates: weeklyUpdates,
+          SocialMedia: socialMedia,
+          AccessToken: accessToken,
+          RefreshToken: refreshToken
+        },
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin": "*" // use this to prevent 405 error on Chrome
+          }
+        }
+      );
 
       if (res.data !== undefined && res.data.result !== undefined) {
         loginSocial(res.data.result.user_uid);
