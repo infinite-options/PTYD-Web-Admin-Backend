@@ -2606,7 +2606,8 @@ class UpdateSubscription(Resource):
             delivery_address = data['delivery_address']
 
             print("1")
-            delivery_address_unit = data['delivery_address_unit']
+            #delivery_address_unit = data['delivery_address_unit']
+            delivery_address_unit = None
             print("2")
 
             delivery_city = data['delivery_city']
@@ -2614,8 +2615,8 @@ class UpdateSubscription(Resource):
             delivery_zip = data['delivery_zip']
             delivery_instructions = data['delivery_instructions']
 
-            if delivery_address_unit = None:
-                dilivery_adress_unit = ""
+            if delivery_address_unit == None:
+                delivery_address_unit = ""
 
 
             print("data",data)
@@ -2626,7 +2627,7 @@ class UpdateSubscription(Resource):
             print("test",test)
 
             
-
+            #curl -X PATCH -H "Content-Type: application/json" http://127.0.0.1:2000/api/v2/update-subscription --data '{"purchase_id":"300-00004","meal_plan_id":"800-000007","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip”:"95130","delivery_instructions":"N/A"}'
             
             return response, 200
         except:
