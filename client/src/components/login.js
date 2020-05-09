@@ -92,10 +92,19 @@ export default function Login(props) {
       let uid = res.data.result.result[0].user_uid;
       const ip_res = await getIp();
       const browser_type = getBrowser().browser_type;
-      const res1 = await axios.post(`${props.SOCIAL_API_URL}acc/${uid}`, {
-        ip_address: ip_res.ip,
-        browser_type: browser_type
-      });
+      const res1 = await axios.post(
+        `${props.SOCIAL_API_URL}acc/${uid}`,
+        {
+          ip_address: ip_res.ip,
+          browser_type: browser_type
+        },
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin": "*" // use this to prevent 405 error on Chrome
+          }
+        }
+      );
       //success
       if (res1.data !== undefined && res1.data.result.result.length === 0) {
         // throw "No record found.";
