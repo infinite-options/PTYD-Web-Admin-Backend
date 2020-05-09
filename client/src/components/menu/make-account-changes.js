@@ -19,6 +19,7 @@ class MakeChanges extends Component {
     super(props);
     this.state = {
       modalShow: false,
+      modalShow2: false,
       changes: props,
       init: 0,
       date: moment(this.props.cc_exp_date)
@@ -106,9 +107,9 @@ class MakeChanges extends Component {
         purchase_id: this.props.purchase_id,
         // cc_num: this.state.changes.cc_num,
         // cc_cvv: this.state.changes.cc_cvv,
-        // cc_exp_date: this.state.changes.cc_exp_date,
+        // cc_exp_date: this.state.date.format("YYYY-MM-DD")
         delivery_address: this.state.changes.delivery_address,
-        deliver_address_unit: this.state.changes.delivery_address_unit,
+        // deliver_address_unit: this.state.changes.delivery_address_unit,
         delivery_city: this.state.changes.delivery_city,
         delivery_state: this.state.changes.delivery_state,
         delivery_zip: this.state.changes.delivery_zip,
@@ -361,22 +362,6 @@ class MakeChanges extends Component {
                   onChange={this.handleChange}
                 />
               </Form.Group>
-              <Tooltip
-                title="This will permanently delete your subscription"
-                placement="right"
-              >
-                <Button
-                  variant="danger"
-                  type="submit"
-                  style={{ float: "left" }}
-                  onClick={() => {
-                    alert("Are you sure you want to delete your subscription?");
-                    this.delete_subscription();
-                  }}
-                >
-                  Delete My Subscription
-                </Button>
-              </Tooltip>
 
               <br />
               <br />
@@ -386,6 +371,22 @@ class MakeChanges extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
+          <Tooltip
+            title="This will permanently delete your subscription"
+            placement="left"
+          >
+            <Button
+              variant="danger"
+              type="submit"
+              style={{ float: "left" }}
+              onClick={() => {
+                this.delete_animation();
+                // this.delete_subscription();
+              }}
+            >
+              Delete My Subscription
+            </Button>
+          </Tooltip>
           <Button
             variant="success"
             type="submit"
@@ -399,6 +400,71 @@ class MakeChanges extends Component {
             variant="light"
             onClick={() => {
               this.setState({ modalShow: false, changes: this.props });
+            }}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  delete_animation = () => {
+    console.log("delete animation", this.delete_modal());
+    return (
+      <ButtonToolbar>
+        <button
+          type="button"
+          class="btn2 btn2-primary font4"
+          style={{
+            marginTop: "10px",
+            paddingLeft: "10px",
+            paddingRight: "10px",
+            paddingTop: "5px",
+            paddingBottom: "5px",
+            color: "white",
+            fontSize: "12px"
+          }}
+          onClick={() => {
+            this.setState({ modalShow2: true });
+          }}
+        >
+          Make Account Changes
+        </button>
+
+        {this.state.modalShow2 ? this.delete_modal() : <div />}
+      </ButtonToolbar>
+    );
+  };
+  delete_modal = () => {
+    console.log("test2");
+    return (
+      <Modal
+        show={this.state.modalShow2}
+        onHide={() => this.setState({ modalShow2: false })}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Edit Profile
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body></Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="success"
+            type="submit"
+            onClick={() => {
+              this.update_subscription();
+            }}
+          >
+            Save Changes
+          </Button>
+          <Button
+            variant="light"
+            onClick={() => {
+              this.setState({ modalShow2: false, changes: this.props });
             }}
           >
             Close
