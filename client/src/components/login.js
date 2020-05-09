@@ -371,6 +371,7 @@ export default function Login(props) {
                   buttonText='Login'
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
+                  autoLoad={false}
                   cookiePolicy={"single_host_origin"}
                 />
               </Col>
