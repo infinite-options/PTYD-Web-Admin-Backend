@@ -47,7 +47,9 @@ class Mealschedule extends Component {
     /*  PLEASE REPLACE THIS CODE WITH COOKIE
         DO NOT MAKE API CALL TO GET USER'S FIRST NAME
     */
-    const accountres = await fetch(this.props.ACC_URL + '/' + this.state.user_uid);
+    const accountres = await fetch(
+      this.props.ACC_URL + "/" + this.state.user_uid
+    );
     const accountapi = await accountres.json();
     this.setState({
       first_name: accountapi.result[0].first_name
@@ -183,8 +185,8 @@ class Mealschedule extends Component {
               <Cell col={3}>
                 {" "}
                 <Grid>
-                  <Cell col={4}>
-                    <img
+                  {/* <Cell col={4}>
+                    {/* <img
                       style={{
                         borderRadius: "50%",
                         width: "70px",
@@ -193,12 +195,10 @@ class Mealschedule extends Component {
                       }}
                       //src={IMG8}
                       //alt="Avatar"
-                    ></img>
-                  </Cell>
-                  <Cell col={8}>
-                    <h4>
-                      Hi, {this.state.first_name}
-                    </h4>
+                    ></img> */}
+                  {/* </Cell> */}
+                  <Cell col={12}>
+                    <h4>Hi, {this.state.first_name}</h4>
                   </Cell>
                 </Grid>
                 <MakeChanges

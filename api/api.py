@@ -514,7 +514,7 @@ class SessionVerification(Resource):
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
-
+            print("response['result']: {} ".format(response['result']))
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -1112,7 +1112,7 @@ class Checkout(Resource):
             print(snapshotId)
             print(purchaseId)
             print(paymentId)
-
+            print("data['salt]: {}".format(data['salt']))
             mealPlan = data['item'].split(' Subscription')[0]
 
             queries = ["""
@@ -1139,7 +1139,7 @@ class Checkout(Resource):
                     buyer_id = \'""" + data['user_uid'] + "\';"]
 
             userAuth = execute(queries[0], 'get', conn)
-
+            print("user_id: {}".format(data['user_uid']))
             possSocialAcc = execute(
                 "SELECT user_uid FROM ptyd_social_accounts WHERE user_uid = '" + data['user_uid'] + "';", 'get',
                 conn)

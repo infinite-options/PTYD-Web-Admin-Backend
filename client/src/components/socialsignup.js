@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 
 import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -86,9 +86,10 @@ export default function SocialSignUp(props) {
         RefreshToken: refreshToken
       });
 
-      console.log(res.data.result.user_uid);
-      if (res.data !== undefined) {
+      if (res.data !== undefined && res.data.result !== undefined) {
         loginSocial(res.data.result.user_uid);
+      } else {
+        console.log(`server's response doesn't have userid in it.`);
       }
     } catch (err) {
       console.log(err);
@@ -98,17 +99,26 @@ export default function SocialSignUp(props) {
     try {
       const ip_res = await getIp();
       const browser_type = getBrowser().browser_type;
-      const res1 = await axios.post(`${SOCIAL_API_URL}/${uid}`, {
-        ip_address: ip_res.ip,
-        browser_type: browser_type
-      });
+      const res1 = await axios.post(
+        `${SOCIAL_API_URL}/${uid}`,
+        {
+          ip_address: ip_res.ip,
+          browser_type: browser_type
+        },
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin": "*" // use this to prevent 405 error on Chrome
+          }
+        }
+      );
       if (res1.data !== undefined && res1.data.result.result.length === 0) {
         throw "No record found.";
       } else if (res1.data !== undefined) {
         const log_attemp = res1.data.login_attempt_log;
         let session_id = log_attemp.session_id;
         let login_id = log_attemp.login_id;
-        document.cookie = `loginStatus=loggedInBy:social,first_name:${firstname},user_uid=${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+        document.cookie = `loginStatus=loggedInBy:social,first_name:${firstname},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
         props.history.push("/selectmealplan");
         window.location.reload(false);
       }

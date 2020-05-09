@@ -10,7 +10,7 @@ class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_uid: this.props.appProps.user_uid, //searchCookie4UserID(document.cookie),
+      user_uid: this.searchCookie4UserID("loginStatus"),
       password_salt: null,
       purchase: {},
       disabled: true,
@@ -52,10 +52,14 @@ class Checkout extends Component {
     return this.getCookieAttrHelper(cname, "first_name");
   }
 
-  // function searchCookie4UserID(cname) {
-  //   //// pass cookie name to look for user's id
-  //   return getCookieAttrHelper(cname, "user_uid");
-  // }
+  searchCookie4UserID(cname) {
+    //// pass cookie name to look for user's id
+    return this.getCookieAttrHelper(cname, "user_uid");
+  }
+  searchCookie4loginMethod(cname) {
+    //// pass cookie name to look for user's id
+    return this.getCookieAttrHelper(cname, "loggedInBy");
+  }
 
   // searchCookie4LoginID(str) {
   //   try {
@@ -82,26 +86,33 @@ class Checkout extends Component {
       login_id: this.searchCookie4Login("loginStatus"),
       session_id: this.searchCookie4SessionID("loginStatus")
     };
-    console.log(`login_session: ${login_session}`);
+    console.log(`login_session.login_id: ${login_session.login_id}`);
+    console.log(`login_session.session_id: ${login_session.session_id}`);
 
     if (this.state.user_uid) {
-      const res = await fetch(
-        `${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.session_id}`
-      );
-      const api = await res.json();
-      console.log(`api will be: ${api}`);
-      if (api.result.length == 0) {
-        //could not verify login session
-        this.props.history.push("/invalidsession");
-        return;
+      console.log(`session_url: ${this.props.SESSION_URL}`);
+      if (this.searchCookie4loginMethod("loginStatus") !== "social") {
+        const res = await fetch(
+          `${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.session_id}`
+        );
+        const api = await res.json();
+        console.log(`api.result:${api.result}`);
+        if (api.result.length === 0) {
+          //could not verify login session
+          this.props.history.push("/invalidsession");
+          return;
+        }
+
+        //  Social Media accounts will have null salts
+        //  Disable password field if salt is null
+        this.setState({
+          password_salt: api.result[0].password_salt
+        });
+        console.log(`password_salt: ${this.state.password_salt}`);
       }
-
-      //  Social Media accounts will have null salts
-      //  Disable password field if salt is null
-      this.setState({
-        password_salt: api.result[0].password_salt
-      });
-
+      console.log(
+        `this.props.PURCHASE_API_URL: ${this.props.PURCHASE_API_URL}`
+      );
       const pur = await fetch(
         `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
       );
