@@ -2606,7 +2606,7 @@ class UpdateSubscription(Resource):
             delivery_address = data['delivery_address']
 
             print("1")
-            # delivery_address_unit = data['delivery_address_unit']
+            delivery_address_unit = data['delivery_address_unit']
             print("2")
 
             delivery_city = data['delivery_city']
@@ -2614,14 +2614,18 @@ class UpdateSubscription(Resource):
             delivery_zip = data['delivery_zip']
             delivery_instructions = data['delivery_instructions']
 
+            if delivery_address_unit = None:
+                dilivery_adress_unit = ""
+
+
             print("data",data)
             test=execute(""" CALL `ptyd`.`update_purchase`( \'""" + str(purchase_id) + """\', \'""" + str(meal_plan_id) + """\', \'""" + str(delivery_address) + """\',  
-                    \'""" + str(delivery_city) + """\', \'""" + str(delivery_state) + """\', \'""" + str(delivery_zip) + """\', 
+                    \'""" + str(delivery_city) + """\', \'""" + str(delivery_address_unit) + """\',\'""" + str(delivery_state) + """\', \'""" + str(delivery_zip) + """\', 
                     \'""" + str(delivery_instructions) + """\');
                     """, 'get', conn)
             print("test",test)
 
-            # \'""" + str(delivery_address_unit) + """\',
+            
 
             
             return response, 200
