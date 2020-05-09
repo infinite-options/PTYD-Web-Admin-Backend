@@ -11,13 +11,13 @@ def main():
     global API
 
     while 1:
-        print("--- Charge subscribers API ---")
-        param = input("Enter date parameter (YYYYMMDD):\n")
-        r = requests.post(url = API['CHARGE'] + '/' + str(param))
-
-        print("--- Update snapshots API ---")
+        print("--- Monday API ---")
         param = input("Enter date parameter (YYYYMMDD):\n")
         r = requests.post(url = API['UPDATE'] + '/' + str(param))
+
+        print("--- Thursday API ---")
+        param = input("Enter date parameter (YYYYMMDD):\n")
+        r = requests.post(url = API['CHARGE'] + '/' + str(param))
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,5 @@
-*api_key.py
+*.pem
+*env_keys.py
 node_modules
 *__pycache__*
 *.log
