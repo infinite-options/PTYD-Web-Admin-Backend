@@ -2599,21 +2599,29 @@ class UpdateSubscription(Resource):
             conn = connect()
             data = request.get_json(force=True)
             
-            print(data)
+            print("pre",data)
 
             meal_plan_id = data['meal_plan_id']
             purchase_id = data['purchase_id']
             delivery_address = data['delivery_address']
-            delivery_address_unit = data['delivery_address_unit']
+
+            print("1")
+            # delivery_address_unit = data['delivery_address_unit']
+            print("2")
+
             delivery_city = data['delivery_city']
             delivery_state = data['delivery_state']
             delivery_zip = data['delivery_zip']
             delivery_instructions = data['delivery_instructions']
 
-            execute(""" CALL `ptyd`.`update_purchase`(\'""" + meal_plan_id + """\', \'""" + purchase_id + """\', \'""" + delivery_address + """\', \'""" + delivery_address_unit + """\', 
-                    \'""" + delivery_city + """\', \'""" + delivery_state + """\', \'""" + delivery_zip + """\', 
-                    \'""" + delivery_instructions + """\');
+            print("data",data)
+            test=execute(""" CALL `ptyd`.`update_purchase`( \'""" + str(purchase_id) + """\', \'""" + str(meal_plan_id) + """\', \'""" + str(delivery_address) + """\',  
+                    \'""" + str(delivery_city) + """\', \'""" + str(delivery_state) + """\', \'""" + str(delivery_zip) + """\', 
+                    \'""" + str(delivery_instructions) + """\');
                     """, 'get', conn)
+            print("test",test)
+
+            # \'""" + str(delivery_address_unit) + """\',
 
             
             return response, 200
