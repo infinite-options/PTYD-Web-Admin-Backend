@@ -1,5 +1,9 @@
 # Prep-To-Your-Door/api
-`api.py` is the API which queries from the database.
+This directory contains all files related to the middleware that allows the web UIs to communicate with the database.
+
+- `api.py`: These are the APIs that facilitate communication between the frontend and database
+- `requirements.txt`: This is a list of Python modules that need to be installed
+- `zappa_settings.json`: Configuration file for deploying our API to AWS
 
 ### Requirements
 You will need the following:
