@@ -21,7 +21,8 @@ class MakeChanges extends Component {
       modalShow: false,
       changes: props,
       init: 0,
-      date: moment(this.props.cc_exp_date)
+      date: moment(this.props.cc_exp_date),
+      dict: {}
       // new_changed_subscription: changes.subscription
     };
     console.log("printing url", this.props.DELETE_URL);
@@ -47,12 +48,18 @@ class MakeChanges extends Component {
     this.setState(
       {
         changes: this.props
-        // month: parseInt(
-        //   String(this.props.cc_exp_date.split("-")).substring(5, 7)
-        // )
       },
       () => {
-        console.log("month", this.state.changes);
+        var dict = {};
+        this.state.changes.paymentplan.map(paymentPlan => {
+          let key = paymentPlan.meal_plan_desc
+            .concat(":  $")
+            .concat(paymentPlan.meal_plan_price);
+
+          dict[key] = paymentPlan.meal_plan_id;
+        });
+        console.log("test100", dict);
+        this.setState({ dict: dict });
       }
     );
   }
@@ -66,13 +73,24 @@ class MakeChanges extends Component {
         .concat(":  $")
         .concat(nextProps.meal_plan_price);
 
+      var dict = {};
+      temp.paymentplan.map(paymentPlan => {
+        let key = paymentPlan.meal_plan_desc
+          .concat(":  $")
+          .concat(paymentPlan.meal_plan_price);
+
+        dict[key] = paymentPlan.meal_plan_id;
+      });
+      console.log("test99", dict);
+
       this.setState(
         {
           changes: temp,
           // month: parseInt(
           //   String(nextProps.cc_exp_date.split("-")).substring(5, 7)
           // )
-          date: moment(nextProps.cc_exp_date)
+          date: moment(nextProps.cc_exp_date),
+          dict: dict
         },
         () => {
           console.log("nextprops", this.state.month);
@@ -84,7 +102,8 @@ class MakeChanges extends Component {
   async update_subscription() {
     console.log(
       "its updating",
-      this.state.changes.meal_plan_id,
+      this.state.dict,
+      this.state.changes.subscription,
       this.props.purchase_id,
       this.state.changes.delivery_address,
       this.state.changes.delivery_address_unit,
@@ -102,7 +121,7 @@ class MakeChanges extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        meal_plan_id: this.state.changes.meal_plan_id,
+        meal_plan_id: this.state.dict[this.state.changes.subscription],
         purchase_id: this.props.purchase_id,
         // cc_num: this.state.changes.cc_num,
         // cc_cvv: this.state.changes.cc_cvv,
@@ -159,7 +178,6 @@ class MakeChanges extends Component {
     );
   };
   MakeChangesModal = () => {
-    console.log("test2");
     return (
       <Modal
         show={this.state.modalShow}
@@ -201,6 +219,7 @@ class MakeChanges extends Component {
                     <option>Choose...</option>
                     {this.state.changes.paymentplan.map(paymentPlan => (
                       <option>
+                        {console.log("may 9th", paymentPlan)}
                         {paymentPlan.meal_plan_desc
                           .concat(":  $")
                           .concat(paymentPlan.meal_plan_price)}

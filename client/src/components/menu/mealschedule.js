@@ -1,12 +1,12 @@
-import React, {Component} from "react";
-import {Grid, Cell} from "react-mdl";
+import React, { Component } from "react";
+import { Grid, Cell } from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import {ButtonToolbar, Button, Modal, Card, Form} from "react-bootstrap";
+import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
 import Cookies from "js-cookie";
 
 class Mealschedule extends Component {
@@ -16,7 +16,7 @@ class Mealschedule extends Component {
     this.state = {
       menu: [],
       user_uid: this.props.appProps.user_uid,
-      purchase: {NextCharge: 0},
+      purchase: { NextCharge: 0 },
       subscribed: false,
       monday_available: false,
       paymentPlans: [],
@@ -186,7 +186,7 @@ class Mealschedule extends Component {
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
-        this.setState({subscribed: true});
+        this.setState({ subscribed: true });
         this.setState({
           subscribed: true,
           monday_available: purchasesApi.result[0].monday_available,
@@ -277,7 +277,7 @@ class Mealschedule extends Component {
         new_plans.push(x[j]);
       }
     }
-
+    console.log("test98", new_plans);
     this.setState(
       {
         menu: sixWeekMenu,
