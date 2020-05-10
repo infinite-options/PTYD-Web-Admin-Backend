@@ -118,7 +118,7 @@ export default function Login(props) {
   }
 
   const responseGoogle = async response => {
-    if (response.profileObj !== null && response.profileObj !== undefined) {
+    if (response.profileObj !== null || response.profileObj !== undefined) {
       const e = response.profileObj.email;
       const at = response.accessToken;
       const rt = response.googleId;
