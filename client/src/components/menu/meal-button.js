@@ -39,10 +39,65 @@ export default class MealButton extends Component {
       mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
       subscribed: this.props.subscribed,
+      //next props
+      purchase_id: this.props.purchase_id,
+      week_affected: this.props.saturdayDate,
+      menu: this.props.menu,
       disableSunMon: (this.props.maxmeals > 0) ? true : false
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps !== this.props) {
+      console.log("we need to be hererererererere", nextProps, this.props);
+      if (nextProps.surprise == false) {
+        this.setState({
+          buttonSurprise: false,
+          buttonSelectKeepColor: true
+        });
+      }
+      else {
+        this.setState({
+          buttonSurprise: true,
+          buttonSelectKeepColor: false
+        });
+      }
 
+      switch (nextProps.deliverDay) {
+        case "SKIP":
+          this.setState({
+            buttonS: false,
+            buttonM: false,
+            buttonSkip: true,
+            buttonSurprise: false,
+            buttonDisabled: true,
+            buttonAddOnKeepColor: false
+          });
+          break;
+        case "Monday":
+          this.setState({
+            buttonS: false,
+            buttonM: true,
+            buttonSkip: false,
+            buttonDisabled: false
+          });
+          break;
+        case "Sunday":
+          this.setState({
+            buttonS: true,
+            buttonM: false,
+            buttonSkip: false,
+            buttonDisabled: false
+          });
+      }
+    }
+    this.setState({
+      maxmeals: nextProps.maxmeals,
+      maxmealsCopy: nextProps.maxmeals,
+      purchase_id: nextProps.purchase_id,
+      week_affected: nextProps.saturdayDate,
+      menu: nextProps.menu
+    });
+  }
   async componentDidMount() {
 //  var stateCopy = await Object.assign({}, this.state);
 //  this.setState({
@@ -94,15 +149,27 @@ export default class MealButton extends Component {
   }
 
   sendForm = () => {
-    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+
+    /*
+    console.log({
+      purchase_id: this.state.purchase_id,
+      week_affected: this.state.week_affected,
+      meal_quantities: this.state.mealQuantities,
+      delivery_day: this.state.dayToDeliver,
+      default_selected: this.state.buttonSurprise,
+      is_addons: false
+    });
+    */
+
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id,
-        week_affected: this.props.saturdayDate,
+        purchase_id: this.state.purchase_id,
+        week_affected: this.state.week_affected,
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
         default_selected: this.state.buttonSurprise,
@@ -112,15 +179,15 @@ export default class MealButton extends Component {
   };
 
   sendAddonForm = () => {
-    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id,
-        week_affected: this.props.saturdayDate,
+        purchase_id: this.state.purchase_id,
+        week_affected: this.state.week_affected,
         addon_quantities: this.state.addonQuantities,
         is_addons: true
       })
@@ -422,13 +489,13 @@ export default class MealButton extends Component {
           </center>
         </Card.Header>
         <div class="scrollMenu">
-          {Object.keys(this.props.menu).map(key => (
+          {Object.keys(this.state.menu).map(key => (
             <Grid>
               <Cell col={12}>
-                <h4 style={{ margin: "0" }}>{this.props.menu[key].Category}</h4>
+                <h4 style={{ margin: "0" }}>{this.state.menu[key].Category}</h4>
               </Cell>
               <br />
-              {this.props.menu[key].Menu.map(meal => (
+              {this.state.menu[key].Menu.map(meal => (
                 <Cell col={4}>
                   <EachMeal
                     mealTitle={meal.meal_name}
@@ -485,6 +552,7 @@ export default class MealButton extends Component {
                   this.state.flag === false
                 ) {
                   alert("Are you sure you want to close without saving?");
+
                   this.setState({
                     flag: true
                   });

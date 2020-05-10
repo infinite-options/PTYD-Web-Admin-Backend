@@ -3,9 +3,11 @@ import "./App.css";
 import Main from "./components/main";
 import { Nav } from "react-bootstrap";
 // import styled from "styled-components";
-import { Container } from "react-bootstrap";
+import { Container, Navbar, NavDropdown } from "react-bootstrap";
 import { Header } from "react-mdl";
 import Button from "muicss/lib/react/button";
+import Badge from "@material-ui/core/Badge";
+import MailIcon from "@material-ui/icons/Mail";
 
 // const Styles = styled.div`
 //   navbar {
@@ -43,7 +45,8 @@ function App() {
           <Main />
         </Styles>
       </Container> */}
-      <Container>
+
+      {/* <Container>
         <Header>
           <Nav
             className="navbar fixed-top justify-content-center"
@@ -101,9 +104,62 @@ function App() {
               </a>
             </div>
           </Nav>
-        </Header>
-        <Main />
-      </Container>
+        </Header> */}
+      <Navbar collapseOnSelect expand="xl" bg="dark" variant="dark">
+        <Navbar.Brand href="/">Prep To Your Door</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto" style={{ marginLeft: "3%" }}>
+            <Nav.Link href="/customerProfile">Customers</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
+            <Nav.Link>
+              <Badge
+                badgeContent={84}
+                color="secondary"
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+              ></Badge>
+            </Nav.Link>
+            &nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/">Active Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link>
+              <Badge
+                badgeContent={42}
+                color="secondary"
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+              ></Badge>
+            </Nav.Link>
+            &nbsp;&nbsp;&nbsp;
+            <NavDropdown title="Statistics" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="/editCreateMeal">
+                Edit/Create Meals
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/createMenu">
+                Create Menus
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">
+                Separated link
+              </NavDropdown.Item>
+            </NavDropdown>
+            &nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/">Settings</Nav.Link>
+          </Nav>
+          <Nav>
+            <Nav.Link href="/">Profile</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link eventKey={2} href="/">
+              Log Out
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      <Main />
+      {/* </Container> */}
     </div>
   );
 }

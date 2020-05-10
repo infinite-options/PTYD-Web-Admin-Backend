@@ -23,14 +23,23 @@ class EachMeal extends Component {
           {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
         <div class="container-select-meal" style={{ color: "white" }}>
-          <div class="meal-img-wrapper" style={{ overflow:"hidden", width: "100%", minWidth:"100%", height:"200px", maxHeight:"200px"}}>
+          <div
+            class="meal-img-wrapper"
+            style={{
+              overflow: "hidden",
+              width: "100%",
+              minWidth: "100%",
+              height: "200px",
+              maxHeight: "200px"
+            }}
+          >
             <OverlayTrigger
               placement="bottom"
               delay={{ show: 100, hide: 100 }}
               popperConfig={{
                 modifiers: {
                   preventOverflow: {
-                    boundariesElement: 'offsetParent'
+                    boundariesElement: "offsetParent"
                   }
                 }
               }}
@@ -45,7 +54,9 @@ class EachMeal extends Component {
             >
               <img
                 class="img-fluid"
-                src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
+                src={
+                  this.props.imgurl == null ? defaultMeal : this.props.imgurl
+                }
                 alt="no_meal_img"
                 resizeMode
               />
@@ -62,36 +73,36 @@ class EachMeal extends Component {
               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             </div> */}
             <OverlayTrigger
-            placement="bottom"
-            delay={{ show: 100, hide: 100 }}
-            popperConfig={{
-              modifiers: {
-                preventOverflow: {
-                  boundariesElement: 'offsetParent'
+              placement="bottom"
+              delay={{ show: 100, hide: 100 }}
+              popperConfig={{
+                modifiers: {
+                  preventOverflow: {
+                    boundariesElement: "offsetParent"
+                  }
                 }
-              }
-            }}
-            overlay={
-              <Tooltip id="button-tooltip">
-                <p>{this.props.detail}</p>
-                <p>
-                  <strong>Ingredients:</strong> {this.props.ingridents}
-                </p>
-              </Tooltip>
-            }
-          >
-            <div
-              class="bottom-right-meal-selection font2"
-              style={{
-                fontSize: "15px",
-                float: "right",
-                backgroundColor: "black",
-                lineHeight: "25px"
               }}
+              overlay={
+                <Tooltip id="button-tooltip">
+                  <p>{this.props.detail}</p>
+                  <p>
+                    <strong>Ingredients:</strong> {this.props.ingridents}
+                  </p>
+                </Tooltip>
+              }
             >
-              <center>{this.props.mealTitle}</center>
-            </div>
-          </OverlayTrigger>
+              <div
+                class="bottom-right-meal-selection font2"
+                style={{
+                  fontSize: "15px",
+                  float: "right",
+                  backgroundColor: "black",
+                  lineHeight: "25px"
+                }}
+              >
+                <center>{this.props.mealTitle}</center>
+              </div>
+            </OverlayTrigger>
           </div>
         </div>
         <div
@@ -127,7 +138,7 @@ class EachMeal extends Component {
               textAlign: "center",
               width: "40px",
               height: "40px",
-              borderRadius: "50%",
+              borderRadius: "50%"
             }}
           />
           <Button
