@@ -11,49 +11,66 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cookies from "js-cookie";
 
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [first_name, setFirstname] = useState(null);
+  const [user_uid, setUser_uid] = useState(null);
 
   useEffect(() => {
     onLoad();
     // eslint-disable-next-line
   }, []);
 
-  async function onLoad() {
+  function onLoad() {
     try {
-      if (searchCookie4UserID(document.cookie).includes("100-")) {
+      if (!isAuthenticated && searchCookie4Login("loginStatus") !== null) {
         userHasAuthenticated(true);
-      }
-      else if (!document.cookie.includes("loginStatus")){
-        document.cookie =
-          " loginStatus: null , user_uid: null , ";
+        let first = searchCookie4Login("loginStatus");
+        setFirstname(first);
+        if (searchCookie4UserID("loginStatus") !== null) {
+          let uid = searchCookie4UserID("loginStatus");
+          setUser_uid(uid);
+        }
+      } else if (
+        !isAuthenticated &&
+        searchCookie4Login("loginStatus") === null
+      ) {
+        document.cookie = `loginStatus=; path=/`;
         console.log("First time? Resetting document cookie");
       }
-    } catch (e) {
-      console.log("No user?");
-      if (e !== "No current user") {
-        alert(e);
-      }
+    } catch (err) {
+      console.log(err);
+      // if (err !== "No current user") {
+      //   alert(e);
+      // }
     }
-
     setIsAuthenticating(false);
   }
-
-  function searchCookie4Login(str) {
-    let arr = str.split(" ");
-    let i = arr.indexOf("loginStatus:");
-    if (arr[i+1] === "null") {
-      return " ";
+  const getCookieAttrHelper = (cname, type) => {
+    const values = Cookies.get(cname);
+    if (values === "" || values === undefined) {
+      return null;
+    } else {
+      for (let val of values.split(",")) {
+        let [n, v] = val.split(":");
+        if (n === type) {
+          return v;
+        }
+      }
+      return null;
     }
-    return arr[i + 1] + " " + arr[i + 2];
+  };
+  function searchCookie4Login(cname) {
+    // pass cookie name to look for user's first name
+    return getCookieAttrHelper(cname, "first_name");
   }
 
-  function searchCookie4UserID(str) {
-    let arr = str.split(" ");
-    let i = arr.indexOf("user_uid:");
-    return arr[i + 1];
+  function searchCookie4UserID(cname) {
+    //// pass cookie name to look for user's id
+    return getCookieAttrHelper(cname, "user_uid");
   }
 
   let stuff = !isAuthenticating && (
@@ -90,7 +107,6 @@ const App = props => {
                   lineHeight: "0.8em",
                   textAlign: "center",
                   letterSpacing: "0.25em",
-                  fontSize: "11px",
                   color: "#E38B19",
                   fontWeight: "bold"
                 }}
@@ -161,7 +177,7 @@ const App = props => {
             </Nav.Item>
 
             <div className='' style={{paddingTop: "66px"}}>
-              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
+              {searchCookie4Login("loginStatus") !== null ? (
                 <div>
                   <a href='/logout'>
                     <Button
@@ -169,8 +185,7 @@ const App = props => {
                       variant='success'
                       size='sm'
                       onClick={() => {
-                        document.cookie =
-                          " loginStatus: null , user_uid: null , ";
+                        document.cookie = "loginStatus=; path=/";
                         window.location.reload(false);
                       }}
                     >
@@ -185,7 +200,9 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login(document.cookie)}
+                    <span class='font-weight-bold'>Hello </span>
+                    <span>{searchCookie4Login("loginStatus")}</span>
+                    <span class='font-weight-bold'>!</span>
                   </p>
                 </div>
               ) : (
@@ -208,7 +225,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login(document.cookie)}
+                    {searchCookie4Login("loginStatus")}
                   </p>
                 </>
               )}
@@ -250,7 +267,7 @@ const App = props => {
             </NavDropdown>
             <a href='/get100'>GET $100</a>
             <div className='sideNavLogin'>
-              {searchCookie4Login(document.cookie).split(" ")[0] === "Hello" ? (
+              {searchCookie4Login("loginStatus") !== null ? (
                 <div>
                   <a href='/logout'>
                     <Button
@@ -258,8 +275,7 @@ const App = props => {
                       variant='success'
                       size='sm'
                       onClick={() => {
-                        document.cookie =
-                          " loginStatus: null , user_uid: null , ";
+                        document.cookie = "loginStatus=; path=/";
                         window.location.reload(false);
                       }}
                     >
@@ -274,7 +290,7 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    {searchCookie4Login(document.cookie)}
+                    {searchCookie4Login("loginStatus")}
                   </p>
                 </div>
               ) : (
@@ -293,7 +309,7 @@ const App = props => {
                     id='loginStatus'
                     Style='font-size:12px; text-align:right; color:black;'
                   >
-                    {searchCookie4Login(document.cookie)}
+                    {searchCookie4Login("loginStatus")}
                   </p>
                 </>
               )}
@@ -303,7 +319,14 @@ const App = props => {
 
         <Content Style='padding-top:140px'>
           <div className='page-content' />
-          <Main appProps={{isAuthenticated, userHasAuthenticated}} />
+          <Main
+            appProps={{
+              isAuthenticated,
+              userHasAuthenticated,
+              first_name,
+              user_uid
+            }}
+          />
         </Content>
 
         <hr></hr>

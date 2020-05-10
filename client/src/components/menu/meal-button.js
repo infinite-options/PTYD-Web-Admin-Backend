@@ -15,6 +15,8 @@ export default class MealButton extends Component {
 
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
     this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
+    this.changeButtonM = this.changeButtonM.bind(this);
+    this.changeButtonS = this.changeButtonS.bind(this);
 
     this.state = {
       count: 0,
@@ -40,7 +42,8 @@ export default class MealButton extends Component {
       //next props
       purchase_id: this.props.purchase_id,
       week_affected: this.props.saturdayDate,
-      menu: this.props.menu
+      menu: this.props.menu,
+      disableSunMon: (this.props.maxmeals > 0) ? true : false
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -96,10 +99,22 @@ export default class MealButton extends Component {
     });
   }
   async componentDidMount() {
+//  var stateCopy = await Object.assign({}, this.state);
+//  this.setState({
+//    maxmealsOriginal: stateCopy.maxmeals,
+//    mealQuantitiesOriginal: stateCopy.mealQuantities,
+//    addonQuantitiesOriginal: stateCopy.addonQuantities,
+//  });
+
     if (this.props.surprise == false) {
       this.setState({
         buttonSurprise: false,
         buttonSelectKeepColor: true
+      });
+    }
+    else {
+      this.setState({
+        disableSunMon: false
       });
     }
 
@@ -111,7 +126,8 @@ export default class MealButton extends Component {
           buttonSkip: true,
           buttonSurprise: false,
           buttonDisabled: true,
-          buttonAddOnKeepColor: false
+          buttonAddOnKeepColor: false,
+          disableSunMon: false,
         });
         break;
       case "Monday":
@@ -183,14 +199,15 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSelectKeepColor: true,
       flag: false,
-      mealQuantities: this.props.mealQuantities
+//    mealQuantities: this.state.mealQuantitiesOriginal,
+//    maxmeals: this.state.maxmealsOriginal,
     });
   };
   closeButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
       buttonAddOnKeepColor: false,
-      addonQuantities: this.props.addonQuantities
+//    addonQuantities: this.state.addonQuantitiesOriginal,
     });
   };
   saveButtonAddOn = () => {
@@ -201,24 +218,32 @@ export default class MealButton extends Component {
     this.sendAddonForm();
   };
 
-  changeButtonS = () => {
-    this.setState({
+  async changeButtonS() {
+    await this.setState({
+      buttonSurprise: (this.state.buttonSkip ? true : this.state.buttonSurprise),
+    });
+    await this.setState({
       buttonS: true,
       buttonM: false,
       buttonSkip: false,
       buttonDisabled: false,
       dayToDeliver: "Sunday"
     });
+    this.sendForm();
   };
 
-  changeButtonM = () => {
-    this.setState({
+  async changeButtonM() {
+    await this.setState({
+      buttonSurprise: (this.state.buttonSkip ? true : this.state.buttonSurprise),
+    });
+    await this.setState({
       buttonM: true,
       buttonS: false,
       buttonSkip: false,
       buttonDisabled: false,
       dayToDeliver: "Monday"
     });
+    this.sendForm();
   };
 
   async changeButtonSkip() {
@@ -233,7 +258,8 @@ export default class MealButton extends Component {
       buttonDisabled: true,
       buttonSelectKeepColor: false,
       buttonAddOnKeepColor: false,
-      dayToDeliver: "SKIP"
+      dayToDeliver: "SKIP",
+      disableSunMon: false,
     });
     this.sendForm();
   }
@@ -243,7 +269,8 @@ export default class MealButton extends Component {
       buttonSelect: true,
       buttonSurprise: false,
       buttonAddOn: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      disableSunMon: true,
     });
   };
   async changeButtonSurprise() {
@@ -251,7 +278,8 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSurprise: true,
       buttonAddOn: false,
-      buttonSelectKeepColor: false
+      buttonSelectKeepColor: false,
+      disableSunMon: false,
     });
     this.sendForm();
   }
@@ -259,7 +287,7 @@ export default class MealButton extends Component {
     this.setState({
       buttonAddOn: true,
       buttonAddOnKeepColor: true,
-      buttonSelect: false
+      buttonSelect: false,
     });
   };
   specialRequest = () => {
@@ -271,7 +299,8 @@ export default class MealButton extends Component {
     this.setState({
       addonActivated: true,
       buttonSelect: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      disableSunMon: false,
     });
     this.sendForm();
   };
@@ -296,13 +325,20 @@ export default class MealButton extends Component {
       backgroundColor: "#427c42",
       color: "white"
     };
-    console.log("lalala testing");
+    const red = {
+      width: "95px",
+      height: "95px",
+      backgroundColor: "#d9534f",
+      color: "white"
+    };
+
     return (
       <div>
         <ButtonToolbar>
           <div className="radio">
             <Button
               variant="outline-dark"
+              disabled={this.state.disableSunMon}
               onClick={this.changeButtonS}
               style={this.state.buttonS ? green : hide}
             >
@@ -313,7 +349,7 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
-              disabled={!this.state.mondayAvailable}
+              disabled={!this.state.mondayAvailable || this.state.disableSunMon}
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
@@ -343,7 +379,9 @@ export default class MealButton extends Component {
             ref={button => (this.button = button)}
             style={
               (this.state.buttonSelect ? green : hide,
-              this.state.buttonSelectKeepColor ? green : hide)
+              this.state.buttonSelectKeepColor ? (
+                this.state.disableSunMon ? red : green
+              ) : hide)
             }
             onClick={this.changeButtonSelect}
           >
@@ -368,7 +406,7 @@ export default class MealButton extends Component {
             variant="outline-dark"
             style={
               (this.state.buttonAddOn ? orange : hide,
-              this.state.buttonAddOnKeepColor ? orange : hide)
+                this.state.buttonAddOnKeepColor ? orange : hide)
             }
             onClick={this.changeButtonAddOn}
           >
@@ -391,24 +429,26 @@ export default class MealButton extends Component {
       <Card style={{ width: "92%" }}>
         <Card.Header>
           <center>
-            <Modal.Title style={{ backgroundColor: "white" }}>
+            <Modal.Title style={{ backgroundColor: "white", width: "100%" }}>
               <h4 style={{ float: "left", margin: "0" }} class="font2">
                 Please Select {this.state.maxmeals} Meals:
-              </h4>
+                </h4>
               <div style={{ float: "right" }}>
+                &nbsp;&nbsp;
                 <Button
                   variant="danger"
-                  style={{
-                    backgroundColor: "pink",
-                    color: "black"
-                  }}
+                  // style={{
+                  //   backgroundColor: "pink",
+                  //   color: "black",
+                  //   float: "right"
+                  // }}
                   onClick={() => {
                     if (
                       this.state.maxmealsCopy !== this.state.maxmeals &&
                       this.state.flag === false
                     ) {
                       alert(
-                        "Are you sure your want to close without save the changes?"
+                        "Are you sure you want to close without saving your changes?"
                       );
                       this.setState({
                         flag: true
@@ -425,23 +465,25 @@ export default class MealButton extends Component {
                   this.state.maxmeals === 0 ? (
                     <Button
                       variant="success"
-                      style={{ backgroundColor: "#A3C7AC", color: "black" }}
+                      // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                       onClick={this.saveButtonActivateAddons}
                     >
                       Save changes
                     </Button>
                   ) : (
-                    <br />
-                  )
+                      <br />
+                    )
                 ) : (
-                  <Button
-                    variant="success"
-                    style={{ backgroundColor: "#A3C7AC", color: "black" }}
-                    href="/selectmealplan"
-                  >
-                    Subscribe Now
-                  </Button>
-                )}
+                    <Button
+                      variant="success"
+                      // style={{ backgroundColor: "#A3C7AC", color: "black" }}
+                      href="/selectmealplan"
+                    >
+                      Subscribe Now
+                    </Button>
+                  )}
+                &nbsp;&nbsp;
+                
               </div>
             </Modal.Title>
           </center>
@@ -497,8 +539,13 @@ export default class MealButton extends Component {
         </div>
         <Card.Body>
           <center>
+          &nbsp;&nbsp;
             <Button
-              variant="secondary"
+              variant="danger"
+              // style={{
+              //   backgroundColor: "pink",
+              //   color: "black"
+              // }}
               onClick={() => {
                 if (
                   this.state.maxmealsCopy !== this.state.maxmeals &&
@@ -520,19 +567,24 @@ export default class MealButton extends Component {
             {this.state.subscribed ? (
               this.state.maxmeals === 0 ? (
                 <Button
-                  variant="primary"
+                  variant="success"
+                  // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                   onClick={this.saveButtonActivateAddons}
                 >
                   Save changes
                 </Button>
               ) : (
-                <br />
-              )
-            ) : (
-              <Link to="/selectmealplan" className="btn btn-danger">
-                Subscribe Now
-              </Link>
-            )}
+                  <br />
+                )
+              ) : (
+                <Button
+                  variant="success"
+                  // style={{ backgroundColor: "#A3C7AC", color: "black" }}
+                  href="/selectmealplan"
+                >
+                  Subscribe Now
+                </Button>
+              )}
           </center>
         </Card.Body>
       </Card>
@@ -545,13 +597,23 @@ export default class MealButton extends Component {
           <center>
             <Modal.Title>
               Add Local Treats{" "}
+              &nbsp;&nbsp;
               <Button
-                variant="secondary"
+                variant="danger"
                 onClick={this.closeButtonAddOn}
-                style={{ float: "right" }}
               >
                 Close
               </Button>
+              &nbsp;&nbsp;
+              {this.state.subscribed ? (
+                <Button variant="success" onClick={this.saveButtonAddOn}>
+                  Save changes
+                </Button>
+              ) : (
+                  <Link to="/selectmealplan" className="btn btn-success">
+                    Subscribe Now
+                  </Link>
+                )}
             </Modal.Title>
           </center>
         </Card.Header>
@@ -611,74 +673,74 @@ export default class MealButton extends Component {
             ))}
           </div>
         ) : (
-          <div>
-            {/* {Object.keys(this.props.addons["Addons"]).map(key => ( */}
             <div>
-              <Grid>
-                <Cell col={12}>
-                  <center>
-                    <h4 style={{ margin: "0" }}>
-                      {this.props.addons["Addons"].Category}
-                    </h4>
-                  </center>
-                </Cell>
-
-                {this.props.addons["Addons"].Menu.map(meal => (
-                  <Cell col={4}>
-                    <EachAddon
-                      mealTitle={meal.meal_name}
-                      ingridents={"Ingredients: " + meal.meal_desc}
-                      detail={
-                        "Cal " +
-                        meal.meal_calories +
-                        ", Prot " +
-                        meal.meal_protein +
-                        ", Carb " +
-                        meal.meal_carbs +
-                        ", Sug " +
-                        meal.meal_sugar +
-                        ", Fib " +
-                        meal.meal_fiber +
-                        ", Fat " +
-                        meal.meal_fat +
-                        ", Sat " +
-                        meal.meal_sat
-                      }
-                      imgurl={meal.meal_photo_url}
-                      addonQuantities={this.state.addonQuantities[meal.meal_id]}
-                      incrementAddon={() => {
-                        var stateCopy = Object.assign({}, this.state);
-                        stateCopy.addonQuantities[meal.menu_meal_id] += 1;
-                        this.setState(stateCopy);
-                      }}
-                      decrementAddon={() => {
-                        var stateCopy = Object.assign({}, this.state);
-                        stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
-                        this.setState(stateCopy);
-                      }}
-                    />
+              {/* {Object.keys(this.props.addons["Addons"]).map(key => ( */}
+              <div>
+                <Grid>
+                  <Cell col={12}>
+                    <center>
+                      <h4 style={{ margin: "0" }}>
+                        {this.props.addons["Addons"].Category}
+                      </h4>
+                    </center>
                   </Cell>
-                ))}
-              </Grid>
+
+                  {this.props.addons["Addons"].Menu.map(meal => (
+                    <Cell col={4}>
+                      <EachAddon
+                        mealTitle={meal.meal_name}
+                        ingridents={"Ingredients: " + meal.meal_desc}
+                        detail={
+                          "Cal " +
+                          meal.meal_calories +
+                          ", Prot " +
+                          meal.meal_protein +
+                          ", Carb " +
+                          meal.meal_carbs +
+                          ", Sug " +
+                          meal.meal_sugar +
+                          ", Fib " +
+                          meal.meal_fiber +
+                          ", Fat " +
+                          meal.meal_fat +
+                          ", Sat " +
+                          meal.meal_sat
+                        }
+                        imgurl={meal.meal_photo_url}
+                        addonQuantities={this.state.addonQuantities[meal.meal_id]}
+                        incrementAddon={() => {
+                          var stateCopy = Object.assign({}, this.state);
+                          stateCopy.addonQuantities[meal.menu_meal_id] += 1;
+                          this.setState(stateCopy);
+                        }}
+                        decrementAddon={() => {
+                          var stateCopy = Object.assign({}, this.state);
+                          stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
+                          this.setState(stateCopy);
+                        }}
+                      />
+                    </Cell>
+                  ))}
+                </Grid>
+              </div>
+              {/* ))} */}
             </div>
-            {/* ))} */}
-          </div>
-        )}
+          )}
         <Card.Body>
           <center>
-            <Button variant="secondary" onClick={this.closeButtonAddOn}>
+            <Button variant="danger" onClick={this.closeButtonAddOn}>
               Close
             </Button>
             &nbsp;&nbsp;
             {this.state.subscribed ? (
-              <Button variant="primary" onClick={this.saveButtonAddOn}>
+              <Button variant="success" onClick={this.saveButtonAddOn}>
                 Save changes
               </Button>
             ) : (
-              <Link to="/selectmealplan" className="btn btn-danger">
-                Subscribe Now
-              </Link>
-            )}
+                <Link to="/selectmealplan" className="btn btn-success">
+                  Subscribe Now
+                </Link>
+              )}
           </center>
         </Card.Body>
       </Card>

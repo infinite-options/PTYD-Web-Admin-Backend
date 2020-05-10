@@ -1,12 +1,13 @@
-import React, { Component } from "react";
-import { Grid, Cell } from "react-mdl";
+import React, {Component} from "react";
+import {Grid, Cell} from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
-import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import {ButtonToolbar, Button, Modal, Card, Form} from "react-bootstrap";
+import Cookies from "js-cookie";
 
 class Mealschedule extends Component {
   constructor(props) {
@@ -14,8 +15,8 @@ class Mealschedule extends Component {
 
     this.state = {
       menu: [],
-      user_uid: searchCookie4UserID(document.cookie),
-      purchase: { NextCharge: 0 },
+      user_uid: this.props.appProps.user_uid,
+      purchase: {NextCharge: 0},
       subscribed: false,
       monday_available: false,
       paymentPlans: [],
@@ -26,17 +27,28 @@ class Mealschedule extends Component {
     this.changeMenuButtons = this.changeMenuButtons.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
-    function searchCookie4UserID(str) {
-      let arr = str.split(" ");
-      let i = arr.indexOf("user_uid:");
-      return arr[i + 1];
+    function searchCookie4UserID(cname) {
+      this.getCookieAttrHelper(cname, "user_uid");
     }
   }
 
-  searchCookie4Name(str) {
-    let arr = str.split(" ");
-    let i = arr.indexOf("loginStatus:");
-    return arr[i + 2];
+  getCookieAttrHelper(cname, type) {
+    const values = Cookies.get(cname);
+    if (values === "" || values === undefined) {
+      return null;
+    } else {
+      for (let val of values.split(",")) {
+        let [n, v] = val.split(":");
+        if (n === type) {
+          return v;
+        }
+      }
+      return null;
+    }
+  }
+
+  searchCookie4Name(cname) {
+    return this.getCookieAttrHelper(cname, "first_name");
   }
   async changeMenuButtons() {
     console.log(" here");
@@ -141,10 +153,27 @@ class Mealschedule extends Component {
     );
   }
   async componentDidMount() {
+    /*  PLEASE REPLACE THIS CODE WITH COOKIE
+        DO NOT MAKE API CALL TO GET USER'S FIRST NAME
+    */
+    const accountres = await fetch(
+      this.props.ACC_URL + "/" + this.state.user_uid
+    );
+    const accountapi = await accountres.json();
+    this.setState({
+      first_name: accountapi.result[0].first_name
+    });
+
     let currPur = {};
     let purchaseId = 0;
-
-    const res = await fetch(this.props.API_URL);
+    //  Handle startdate parameter on URL with ternary operator
+    //  Use this to turn back / forward time
+    //  Make sure to disable this when putting into production
+    const res = await fetch(
+      this.props.match.params.startdate
+        ? this.props.API_URL + "/" + this.props.match.params.startdate
+        : this.props.API_URL
+    );
     const api = await res.json();
 
     if (this.state.user_uid !== null) {
@@ -157,6 +186,7 @@ class Mealschedule extends Component {
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
+        this.setState({subscribed: true});
         this.setState({
           subscribed: true,
           monday_available: purchasesApi.result[0].monday_available,

@@ -5,3 +5,4 @@ flask_mail
 itsdangerous
 pymysql
 zappa
+awscli

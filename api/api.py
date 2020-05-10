@@ -14,10 +14,10 @@ from math import ceil
 
 # BING API KEY
 # Import Bing API key into bing_api_key.py
-from bing_api_key import BING_API_KEY
 
 # When deploying to Zappa, replace above statement with below:
 #BING_API_KEY = "insert_key_kere"
+#RDS_PW = "insert_password_here"
 
 import decimal
 import sys
@@ -58,19 +58,6 @@ mail = Mail(app)
 
 # API
 api = Api(app)
-
-
-# Get RDS password from command line argument
-def RdsPw():
-    if len(sys.argv) == 2:
-        return str(sys.argv[1])
-    return ""
-
-
-# RDS PASSWORD
-# When deploying to Zappa, set RDS_PW equal to the password as a string
-# When pushing to GitHub, set RDS_PW equal to RdsPw()
-RDS_PW = RdsPw()
 
 getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
 getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
@@ -319,16 +306,25 @@ class Meals(Resource):
         return mealQuantities
 
     # HTTP method GET
-    def get(self):
+    # Optional parameter: startDate (YYYYMMDD)
+    def get(self, startDate = None):
         response = {}
         items = {}
+
+        try:
+            if startDate:
+                now = datetime.strptime(startDate, "%Y%m%d")
+            else:
+                now = datetime.now()
+
+        except:
+            raise BadRequest('Request failed, bad startDate parameter.')
+
         try:
             conn = connect()
-            now = datetime.now()
 
             dates = execute("SELECT DISTINCT menu_date FROM ptyd_menu;", 'get', conn)
 
-            print('before loop')
             i = 1
             for date in dates['result']:
                 # only grab 6 weeks worth of menus
@@ -434,7 +430,6 @@ class Meals(Resource):
                         WHERE menu_category LIKE 'ADD_ON_%'
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
 
-                    print('after')
                     week = {
                         'SaturdayDate': str(stamp.date()),
                         'SundayDate': str((stamp + timedelta(days=1)).date()),
@@ -507,7 +502,7 @@ class SessionVerification(Resource):
 
             response['message'] = 'Request successful.'
             response['result'] = items['result']
-
+            print("response['result']: {} ".format(response['result']))
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -1104,7 +1099,7 @@ class Checkout(Resource):
             print(snapshotId)
             print(purchaseId)
             print(paymentId)
-
+            print("data['salt]: {}".format(data['salt']))
             mealPlan = data['item'].split(' Subscription')[0]
 
             queries = ["""
@@ -1131,7 +1126,7 @@ class Checkout(Resource):
                     buyer_id = \'""" + data['user_uid'] + "\';"]
 
             userAuth = execute(queries[0], 'get', conn)
-
+            print("user_id: {}".format(data['user_uid']))
             possSocialAcc = execute(
                 "SELECT user_uid FROM ptyd_social_accounts WHERE user_uid = '" + data['user_uid'] + "';", 'get',
                 conn)
@@ -1175,6 +1170,15 @@ class Checkout(Resource):
             # replace with real longitute and latitude
             addressObj = Coordinates([data['delivery_address']])
             delivery_coord = addressObj.calculateFromLocations()[0]
+
+            # If a key of the coordinates object is None, set to NULL
+            # Otherwise wrap quotation marks around it
+            # This is because delivery_lat and delivery_long are VARCHAR in db
+            for key in delivery_coord:
+                if delivery_coord[key] == None:
+                    delivery_coord[key] = 'NULL'
+                else:
+                    delivery_coord[key] = '\'' + str(delivery_coord[key]) + '\''
 
             queries.append(
                 """ INSERT INTO ptyd_purchases
@@ -1278,15 +1282,27 @@ class Checkout(Resource):
 
 # Call this API from another source every Monday at midnight
 class UpdatePurchases(Resource):
-    def post(self):
+    def post(self, affectedDate = None):
         response = {}
         items = []
-        try:
-            conn = connect()
 
-            # Get following Saturday (same day if Saturday) as a string
-            thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
-            nextSat = datetime.strftime(date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
+        try:
+            if affectedDate:
+                affDateObj = datetime.strptime(affectedDate, "%Y%m%d")
+                print(affDateObj)
+                thisSat = datetime.strftime(affDateObj - timedelta(days=((affDateObj.weekday() - 5) % 7)), "%Y-%m-%d")
+                nextSat = datetime.strftime(affDateObj + timedelta(days=(5 - affDateObj.weekday() % 7)), "%Y-%m-%d")
+            else:
+                # Get following Saturday (same day if Saturday) as a string
+                thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
+                nextSat = datetime.strftime(date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
+        except:
+            print('Error: Bad parameter.')
+            raise BadRequest('Request failed, bad affectedDate parameter.')
+
+        try:
+            print(thisSat)
+            conn = connect()
 
             # UPDATE PURCHASE TEST CASES
             #           thisSat = '2020-04-18'
@@ -1542,12 +1558,8 @@ class UpdatePurchases(Resource):
 
 # Call this API from another source every Thursday at midnight
 class ChargeSubscribers(Resource):
-    def getDates(self, frequency):
+    def getDates(self, frequency, thurs):
         dates = {}
-        dayOfWeek = date.today().weekday()
-
-        # Get today's date (or the coming Thursday)
-        thurs = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
 
         # CHARGE SUBSCRIBER TEST CASES
         #       thurs = date(2020, 4, 23)
@@ -1574,10 +1586,27 @@ class ChargeSubscribers(Resource):
 
         return dates
 
-    def post(self):
+    def post(self, affectedDate = None):
         response = {}
         items = []
+
         try:
+            if affectedDate:
+                affDateObj = datetime.strptime(affectedDate, "%Y%m%d")
+                print(affDateObj)
+                dayOfWeek = affDateObj.weekday()
+                paramDate = affDateObj + timedelta(days=(3 - dayOfWeek) % 7)
+            else:
+                # Get today's date (or the coming Thursday)
+                dayOfWeek = date.today().weekday()
+                paramDate = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
+
+        except:
+            print('Error, bad parameter.')
+            raise BadRequest('Request failed, bad affectedDate parameter.')
+
+        try:
+            print(paramDate)
             conn = connect()
 
             # Get all purchases with 0 weeks remaining
@@ -1682,7 +1711,7 @@ class ChargeSubscribers(Resource):
                 items.append(execute(query, 'post', conn))
 
                 # New snapshot
-                dates = self.getDates(eachPayment['subscription_weeks'])
+                dates = self.getDates(eachPayment['subscription_weeks'], paramDate)
                 query = """
                     INSERT INTO ptyd_snapshots
                     (
@@ -2105,9 +2134,7 @@ class SocialSignUp(Resource):
                 return response, 500
 
             response['message'] = 'Request successful.'
-            response['code'] = usnInsert['code']
-            response['first_name'] = FirstName
-            response['user_uid'] = NewUserID
+            response['result'] = {'user_uid':NewUserID}
 
             print(response)
             return response, 200
@@ -2136,12 +2163,8 @@ class Social(Resource):
             ]
 
             items = execute(queries[0], 'get', conn)
-
             response['message'] = 'Request successful.'
             response['result'] = items
-
-            print( items )
-
             # restest = SocialAccount().get(email)
 
             return response, 200
@@ -2152,12 +2175,12 @@ class Social(Resource):
 
 class SocialAccount(Resource):
 
-    # HTTP method GET
-    def get(self, uid):
+    # HTTP method POST
+    def post(self, uid):
         response = {}
         try:
             conn = connect()
-
+            data = request.get_json(force=True)
             queries = [
             """     SELECT
                         user_uid,
@@ -2170,9 +2193,20 @@ class SocialAccount(Resource):
                         referral_source
                     FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
 
-            items = execute(queries[0], 'get', conn)
 
-            print(items)
+            print('I\'m here')
+            print("data is {}".format(data));
+            items = execute(queries[0], 'get', conn)
+            #create a login attempt
+            login_attempt = {
+                'auth_success': 'TRUE',
+                'user_uid': uid,
+                'attempt_hash': "NULL",
+                'ip_address': data['ip_address'],
+                'browser_type': data['browser_type'],
+            }
+
+            response['login_attempt_log'] = LogLoginAttempt(login_attempt, conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -3134,7 +3168,7 @@ class TemplateApi(Resource):
 
 # Define API routes
 # Customer page
-api.add_resource(Meals, '/api/v2/meals')
+api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Login, '/api/v2/account/<string:accEmail>/<string:accPass>')
@@ -3161,8 +3195,8 @@ api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 
 # Automated APIs
-api.add_resource(UpdatePurchases, '/api/v2/updatepurchases')
-api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers')
+api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
+api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers', '/api/v2/chargesubscribers/<string:affectedDate>')
 
 #in progress
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
