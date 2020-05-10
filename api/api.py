@@ -14,6 +14,7 @@ from math import ceil
 
 # BING API KEY
 # Import Bing API key into bing_api_key.py
+from env_keys import BING_API_KEY, RDS_PW
 
 # When deploying to Zappa, replace above statement with below:
 #BING_API_KEY = "insert_key_kere"
