@@ -366,7 +366,7 @@ export default function Login(props) {
               </Col>
 
               <Col>
-                <GoogleLogin
+                {/* <GoogleLogin
                   clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
                   buttonText='Login'
                   onSuccess={responseGoogle}
@@ -374,7 +374,8 @@ export default function Login(props) {
                   isSignedIn={false}
                   disable={false}
                   cookiePolicy={"single_host_origin"}
-                />
+                /> */}
+                <div class='g-signin2' data-onsuccess='onSignIn'></div>
               </Col>
             </Row>
           </Container>
