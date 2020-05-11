@@ -4,9 +4,11 @@ This directory contains files related to calling APIs that update snapshots of P
 
 ### `connect-to-ec2.sh`
 
-This script will let you `ssh` into the EC2 instance (a Linux virtual machine) on AWS. The automated script will run here.
+On your local machine, run `./connect-to-ec2.sh` will let you `ssh` into the EC2 instance (a Linux virtual machine) on AWS. The automated script will run here.
 
-You will need a key pair titled `aws-ec2-ptyd-admin.pem` in this directory. Please retrieve this from an administrator on the team.
+You will need a key pair titled `ptyd-0510.pem` in this directory. Please retrieve this from an administrator on the team.
+
+**NOTE**: Your `.pem` file permissions need to be set to read-only for the owner, and no permissions for anyone else. You can add these permissions with `chmod 400 <file>`.
 
 ### `auto.py`
 
