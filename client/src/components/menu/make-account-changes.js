@@ -53,9 +53,8 @@ class MakeChanges extends Component {
         var dict = {};
         this.state.changes.paymentplan.map(paymentPlan => {
           let key = paymentPlan.meal_plan_desc
-            .concat(":  $")
+            .concat(": $")
             .concat(paymentPlan.meal_plan_price);
-
           dict[key] = paymentPlan.meal_plan_id;
         });
         console.log("test100", dict);
@@ -70,15 +69,14 @@ class MakeChanges extends Component {
       console.log("new update" + nextProps + " old: " + this.props);
       let temp = JSON.parse(JSON.stringify(nextProps));
       temp.subscription = nextProps.subscription
-        .concat(":  $")
+        .concat(": $")
         .concat(nextProps.meal_plan_price);
 
       var dict = {};
       temp.paymentplan.map(paymentPlan => {
         let key = paymentPlan.meal_plan_desc
-          .concat(":  $")
+          .concat(": $")
           .concat(paymentPlan.meal_plan_price);
-
         dict[key] = paymentPlan.meal_plan_id;
       });
       console.log("test99", dict);
@@ -100,10 +98,30 @@ class MakeChanges extends Component {
   }
 
   async update_subscription() {
+    let x = this.state.changes.subscription;
+    for (var key in this.state.dict) {
+      if (key == this.state.changes.subscription) {
+        console.log("key found");
+      }
+      if (key == "10 Meal Plan - Monthly: $390") {
+        console.log("aaaaa2 true");
+      } else {
+        console.log("aaaaa2 false", key, "10 Meal Plan - Monthly: $390");
+      }
+    }
+    console.log("x2", typeof key);
+    console.log("x3", typeof this.state.changes.subscription);
+
+    if (this.state.changes.subscription == "10 Meal Plan - Monthly: $390") {
+      console.log("aaaaa1 true");
+    } else {
+      console.log("aaaaa1 false");
+    }
+
+    console.log("");
     console.log(
       "its updating",
-      this.state.dict,
-      this.state.changes.subscription,
+      this.state.dict[this.state.changes.subscription],
       this.props.purchase_id,
       this.state.changes.delivery_address,
       this.state.changes.delivery_address_unit,
