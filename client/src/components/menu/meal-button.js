@@ -501,23 +501,25 @@ export default class MealButton extends Component {
               <h4 style={{ float: "left", margin: "0"}} class="font2">
                 Add Local Treats
               </h4>
-              &nbsp;&nbsp;
-              <Button
-                variant="danger"
-                onClick={this.closeButtonAddOn}
-              >
-                Close
-              </Button>
-              &nbsp;&nbsp;
-              {this.state.subscribed ? (
-                <Button variant="success" onClick={this.saveButtonAddOn}>
-                  Save changes
+              <div style={{ float: "right" }}>
+                &nbsp;&nbsp;
+                <Button
+                  variant="danger"
+                  onClick={this.closeButtonAddOn}
+                >
+                  Close
                 </Button>
-              ) : (
-                  <Link to="/selectmealplan" className="btn btn-success">
-                    Subscribe Now
-                  </Link>
-                )}
+                &nbsp;&nbsp;
+                {this.state.subscribed ? (
+                  <Button variant="success" onClick={this.saveButtonAddOn}>
+                    Save changes
+                  </Button>
+                ) : (
+                    <Link to="/selectmealplan" className="btn btn-success">
+                      Subscribe Now
+                    </Link>
+                  )}
+                </div>
             </Modal.Title>
           {/* </center> */}
         </Card.Header>
@@ -527,11 +529,11 @@ export default class MealButton extends Component {
               <div>
                 <Grid>
                   <Cell col={12}>
-                    <center>
+                    {/* <center> */}
                       <h4 style={{ margin: "0" }}>
                         {this.props.addons[key].Category}
                       </h4>
-                    </center>
+                    {/* </center> */}
                   </Cell>
 
                   {this.props.addons[key].Menu.map(meal => (
@@ -582,11 +584,11 @@ export default class MealButton extends Component {
               <div>
                 <Grid>
                   <Cell col={12}>
-                    <center>
+                    {/* <center> */}
                       <h4 style={{ margin: "0" }}>
                         {this.props.addons["Addons"].Category}
                       </h4>
-                    </center>
+                    {/* </center> */}
                   </Cell>
 
                   {this.props.addons["Addons"].Menu.map(meal => (
