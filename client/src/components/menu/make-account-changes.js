@@ -109,6 +109,17 @@ class MakeChanges extends Component {
         delivery_zip: this.state.changes.delivery_zip,
         delivery_instructions: this.state.changes.delivery_instructions
       })
+    }).then(response => {
+      if (!response.ok) {
+        const error = response.statusText;
+        alert(error);
+        return Promise.reject(error);
+      } else {
+        alert("You have successfully updated your account information!");
+        window.location.reload();
+      }
+
+      response.json();
     });
   }
 
@@ -122,6 +133,17 @@ class MakeChanges extends Component {
       body: JSON.stringify({
         purchase_id: this.props.purchase_id
       })
+    }).then(response => {
+      if (!response.ok) {
+        const error = response.statusText;
+        alert(error);
+        return Promise.reject(error);
+      } else {
+        alert("You have successfully updated your account information!");
+        window.location.reload();
+      }
+
+      response.json();
     });
   }
   MakeChangesAnimation = () => {
