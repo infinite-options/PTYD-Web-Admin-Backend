@@ -98,27 +98,7 @@ class MakeChanges extends Component {
   }
 
   async update_subscription() {
-    let x = this.state.changes.subscription;
-    for (var key in this.state.dict) {
-      if (key == this.state.changes.subscription) {
-        console.log("key found");
-      }
-      if (key == "10 Meal Plan - Monthly: $390") {
-        console.log("aaaaa2 true");
-      } else {
-        console.log("aaaaa2 false", key, "10 Meal Plan - Monthly: $390");
-      }
-    }
-    console.log("x2", typeof key);
-    console.log("x3", typeof this.state.changes.subscription);
-
-    if (this.state.changes.subscription == "10 Meal Plan - Monthly: $390") {
-      console.log("aaaaa1 true");
-    } else {
-      console.log("aaaaa1 false");
-    }
-
-    console.log("");
+    console.log("url", this.props.UPDATE_URL);
     console.log(
       "its updating",
       this.state.dict[this.state.changes.subscription],
