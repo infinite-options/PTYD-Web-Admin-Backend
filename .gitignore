@@ -1,6 +1,10 @@
+*.pem
+*env_keys.py
+*bing_api_key.py
 node_modules
 *__pycache__*
 *.log
 yarn.lock
 env
 .vscode
+sample.py

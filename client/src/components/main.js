@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Switch } from "react-router-dom";
-
+import { CookiesProvider } from "react-cookie";
 import AppliedRoute from "./AppliedRoute";
 
 import LandingPage from "./landingpage";
@@ -9,6 +9,7 @@ import SelectPaymentPlan from "./subscribe/selectpaymentplan";
 import WeeklyMenu from "./menu/weeklymenu";
 import Checkout from "./subscribe/checkout";
 import CheckoutSuccess from "./subscribe/checkout-success";
+import UnknownSession from "./subscribe/unknown-session";
 import FindUs from "./findus";
 import GiftCards from "./giftcards";
 import HowItWorks from "./about/howitworks";
@@ -17,28 +18,32 @@ import FaQ from "./about/faq";
 import JobS from "./about/jobs";
 import Get100 from "./get100";
 import MealSchedule from "./menu/mealschedule";
+import Cookies from "js-cookie";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
+import SocialSignUp from "./socialsignup";
+import SignupWaiting from "./SignupWaiting";
 import Login from "./login";
 import Logout from "./logout";
+// import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
+const DEV_URL =
+  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
-//const DEV_URL = "http://localhost:2000/api/";
+// const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({ appProps }) {
   const [objectIndex, setObjectIndex] = useState(0);
-
   return (
     <Switch>
       <AppliedRoute
         exact
         path="/"
         component={LandingPage}
-        appProps={appProps}
+        appProps={{ appProps, cookie: document.cookie }}
       />
       <AppliedRoute
         exact
@@ -81,11 +86,12 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? Checkout : Login}
         appProps={{
           appProps,
-          SALT_URL: `${DEV_URL}v2/accountsaltbyid`,
+          SESSION_URL: `${DEV_URL}v2/sessionverification`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
-          redirect_after_login: '/checkout'
+          redirect_after_login: "/checkout",
+          user_uid: appProps.user_uid
         }}
       />
 
@@ -99,9 +105,29 @@ export default function Main({ appProps }) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
-          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
+          PLANS_URL: `${DEV_URL}v2/plans`
+        }}
+      />
+
+      {/* startdate parameter for turning back / forward time */}
+      {/* remove this parameter when putting app to production */}
+      <AppliedRoute
+        exact
+        path="/mealschedule/:startdate"
+        component={appProps.isAuthenticated ? MealSchedule : Login}
+        appProps={{
+          appProps,
+          ACC_URL: `${DEV_URL}v2/account`,
+          API_URL: `${DEV_URL}v2/meals`,
+          PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
+          MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
+          PLANS_URL: `${DEV_URL}v2/plans`,
+          DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
+          UPDATE_URL: `${DEV_URL}v2/update-subscription`
         }}
       />
 
@@ -178,13 +204,36 @@ export default function Main({ appProps }) {
       />
       <AppliedRoute
         exact
-        path="/login"
+        path="/socialsignup"
+        component={SocialSignUp}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}v2/socialSignup`
+        }}
+      />
+      <AppliedRoute
+        exact
+        path="/signupwaiting"
+        component={SignupWaiting}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/login/:email?/:password?"
         component={appProps.isAuthenticated ? LandingPage : Login}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/accountsalt`,
-          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          SOCIAL_API_URL: `${DEV_URL}v2/social`
         }}
+      />
+
+      <AppliedRoute
+        exact
+        path="/invalidsession"
+        component={UnknownSession}
+        appProps={appProps}
       />
       <AppliedRoute
         exact
