@@ -40,9 +40,10 @@ from env_keys import BING_API_KEY, RDS_PW
 Comment the `env_keys import` line, uncomment the `BING_API_KEY` and `RDS_PW` lines and add the keys there.
 
 3. Activate your virtual environment with `source ~/.virtualenv/ptyd-env/bin/activate`. If you havent created it, see below section.
-4. Configure AWS with `aws configure` (may need to install `awscli`)
+4. Configure AWS with `aws configure` (may need to install `awscli`). Retrieve AWS access keys from an administrator. This procedure only needs to be done once.
 5. Run `zappa update dev` to update the API in production on AWS.
 
 #### Troubleshooting
 - Run `zappa tail` to check Zappa logs
-- Create a Python3 virtual environment by navigating to `~/.virtualenv/` (make the directory if you need to) and run `virtualenv ptyd-env`. Then navigate back to this directory and install the Python modules with `pip3 install -r requirements.txt`
+- Create a Python3 virtual environment by navigating to `~/.virtualenv/` (make the directory if you need to) and run `python3 venv -m ptyd-env`. Then navigate back to this directory and install the Python modules with `pip3 install -r requirements.txt`
+- Check Python version with `python3 --version`. Make sure it matches the Python version in `zappa_settings.json`

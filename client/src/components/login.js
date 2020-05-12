@@ -118,7 +118,7 @@ export default function Login(props) {
   }
 
   const responseGoogle = async response => {
-    if (response.profileObj !== null || response.profileObj !== undefined) {
+    if (response.profileObj !== null && response.profileObj !== undefined) {
       const e = response.profileObj.email;
       const at = response.accessToken;
       const rt = response.googleId;
@@ -371,9 +371,11 @@ export default function Login(props) {
                   buttonText='Login'
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
-                  autoLoad={false}
+                  isSignedIn={false}
+                  disable={false}
                   cookiePolicy={"single_host_origin"}
                 />
+                {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
               </Col>
             </Row>
           </Container>
