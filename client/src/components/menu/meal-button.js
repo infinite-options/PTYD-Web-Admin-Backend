@@ -327,9 +327,14 @@ export default class MealButton extends Component {
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
-          <center>
-            <Modal.Title style={{ backgroundColor: "white", width: "100%" }}>
-              <h4 style={{ float: "left", margin: "0" }} class="font2">
+          {/* <center> */}
+            <Modal.Title 
+              style={{ 
+                // backgroundColor: "white", 
+                width: "100%" 
+              }}
+            >
+              <h4 style={{ float: "left", margin: "0"}} class="font2">
                 Please Select {this.state.maxmeals} Meals:
                 </h4>
               <div style={{ float: "right" }}>
@@ -381,11 +386,10 @@ export default class MealButton extends Component {
                       Subscribe Now
                     </Button>
                   )}
-                &nbsp;&nbsp;
-                
+                {/* &nbsp;&nbsp; */}
               </div>
             </Modal.Title>
-          </center>
+          {/* </center> */}
         </Card.Header>
         <div class="scrollMenu">
           {Object.keys(this.props.menu).map(key => (
