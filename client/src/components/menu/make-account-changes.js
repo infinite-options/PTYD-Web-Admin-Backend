@@ -25,13 +25,10 @@ class MakeChanges extends Component {
       dict: {}
       // new_changed_subscription: changes.subscription
     };
-    console.log("printing url", this.props.DELETE_URL);
   }
   handleChange = event => {
     const target = event.target;
     const name = target.name;
-    console.log("handle change", target.value);
-    console.log("name", name);
     this.setState(
       prevState => ({
         changes: {
@@ -39,9 +36,7 @@ class MakeChanges extends Component {
           [name]: target.value
         }
       }),
-      () => {
-        console.log("after set state", this.state.changes);
-      }
+      () => {}
     );
   };
   componentDidMount() {
@@ -57,7 +52,6 @@ class MakeChanges extends Component {
             .concat(paymentPlan.meal_plan_price);
           dict[key] = paymentPlan.meal_plan_id;
         });
-        console.log("test100", dict);
         this.setState({ dict: dict });
       }
     );
@@ -66,7 +60,6 @@ class MakeChanges extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
       // nextProps.myProp has a different value than our current prop
-      console.log("new update" + nextProps + " old: " + this.props);
       let temp = JSON.parse(JSON.stringify(nextProps));
       temp.subscription = nextProps.subscription
         .concat(": $")
@@ -79,7 +72,6 @@ class MakeChanges extends Component {
           .concat(paymentPlan.meal_plan_price);
         dict[key] = paymentPlan.meal_plan_id;
       });
-      console.log("test99", dict);
 
       this.setState(
         {
@@ -90,26 +82,12 @@ class MakeChanges extends Component {
           date: moment(nextProps.cc_exp_date),
           dict: dict
         },
-        () => {
-          console.log("nextprops", this.state.month);
-        }
+        () => {}
       );
     }
   }
 
   async update_subscription() {
-    console.log("url", this.props.UPDATE_URL);
-    console.log(
-      "its updating",
-      this.state.dict[this.state.changes.subscription],
-      this.props.purchase_id,
-      this.state.changes.delivery_address,
-      this.state.changes.delivery_address_unit,
-      this.state.changes.delivery_city,
-      this.state.changes.delivery_state,
-      this.state.changes.delivery_zip,
-      this.state.changes.delivery_instructions
-    );
     // its updating 800-000007 300-000005 1234 Main St null San Jose TX 95129 GFGDG
     // '{"meal_plan_id":"700-000006","purchase_id":"300-000013","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip":"95130","delivery_instructions":"N/A"}'
     fetch(this.props.UPDATE_URL, {
@@ -132,11 +110,9 @@ class MakeChanges extends Component {
         delivery_instructions: this.state.changes.delivery_instructions
       })
     });
-    console.log("DONE UPDATE");
   }
 
   async delete_subscription() {
-    console.log("its deleting");
     const test = await fetch(this.props.DELETE_URL, {
       method: "PATCH",
       headers: {
@@ -149,7 +125,6 @@ class MakeChanges extends Component {
     });
   }
   MakeChangesAnimation = () => {
-    console.log("test1");
     return (
       <ButtonToolbar>
         <button
@@ -217,7 +192,6 @@ class MakeChanges extends Component {
                     <option>Choose...</option>
                     {this.state.changes.paymentplan.map(paymentPlan => (
                       <option>
-                        {console.log("may 9th", paymentPlan)}
                         {paymentPlan.meal_plan_desc
                           .concat(":  $")
                           .concat(paymentPlan.meal_plan_price)}
@@ -439,7 +413,6 @@ class MakeChanges extends Component {
     //     changes: temp
     //   });
     // }
-    console.log("state changes", this.state.changes.paymentplan);
     return this.MakeChangesAnimation();
   }
 }
