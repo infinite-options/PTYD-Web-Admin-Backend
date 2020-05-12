@@ -496,9 +496,11 @@ export default class MealButton extends Component {
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
-          <center>
+          {/* <center> */}
             <Modal.Title>
-              Add Local Treats{" "}
+              <h4 style={{ float: "left", margin: "0"}} class="font2">
+                Add Local Treats
+              </h4>
               &nbsp;&nbsp;
               <Button
                 variant="danger"
@@ -517,7 +519,7 @@ export default class MealButton extends Component {
                   </Link>
                 )}
             </Modal.Title>
-          </center>
+          {/* </center> */}
         </Card.Header>
         {this.state.addonActivated ? (
           <div>
