@@ -21,16 +21,14 @@ class MakeChanges extends Component {
       modalShow: false,
       changes: props,
       init: 0,
-      date: moment(this.props.cc_exp_date)
+      date: moment(this.props.cc_exp_date),
+      dict: {}
       // new_changed_subscription: changes.subscription
     };
-    console.log("printing url", this.props.DELETE_URL);
   }
   handleChange = event => {
     const target = event.target;
     const name = target.name;
-    console.log("handle change", target.value);
-    console.log("name", name);
     this.setState(
       prevState => ({
         changes: {
@@ -38,21 +36,23 @@ class MakeChanges extends Component {
           [name]: target.value
         }
       }),
-      () => {
-        console.log("after set state", this.state.changes);
-      }
+      () => {}
     );
   };
   componentDidMount() {
     this.setState(
       {
         changes: this.props
-        // month: parseInt(
-        //   String(this.props.cc_exp_date.split("-")).substring(5, 7)
-        // )
       },
       () => {
-        console.log("month", this.state.changes);
+        var dict = {};
+        this.state.changes.paymentplan.map(paymentPlan => {
+          let key = paymentPlan.meal_plan_desc
+            .concat(": $")
+            .concat(paymentPlan.meal_plan_price);
+          dict[key] = paymentPlan.meal_plan_id;
+        });
+        this.setState({ dict: dict });
       }
     );
   }
@@ -60,11 +60,18 @@ class MakeChanges extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
       // nextProps.myProp has a different value than our current prop
-      console.log("new update" + nextProps + " old: " + this.props);
       let temp = JSON.parse(JSON.stringify(nextProps));
       temp.subscription = nextProps.subscription
-        .concat(":  $")
+        .concat(": $")
         .concat(nextProps.meal_plan_price);
+
+      var dict = {};
+      temp.paymentplan.map(paymentPlan => {
+        let key = paymentPlan.meal_plan_desc
+          .concat(": $")
+          .concat(paymentPlan.meal_plan_price);
+        dict[key] = paymentPlan.meal_plan_id;
+      });
 
       this.setState(
         {
@@ -72,27 +79,15 @@ class MakeChanges extends Component {
           // month: parseInt(
           //   String(nextProps.cc_exp_date.split("-")).substring(5, 7)
           // )
-          date: moment(nextProps.cc_exp_date)
+          date: moment(nextProps.cc_exp_date),
+          dict: dict
         },
-        () => {
-          console.log("nextprops", this.state.month);
-        }
+        () => {}
       );
     }
   }
 
   async update_subscription() {
-    console.log(
-      "its updating",
-      this.state.changes.meal_plan_id,
-      this.props.purchase_id,
-      this.state.changes.delivery_address,
-      this.state.changes.delivery_address_unit,
-      this.state.changes.delivery_city,
-      this.state.changes.delivery_state,
-      this.state.changes.delivery_zip,
-      this.state.changes.delivery_instructions
-    );
     // its updating 800-000007 300-000005 1234 Main St null San Jose TX 95129 GFGDG
     // '{"meal_plan_id":"700-000006","purchase_id":"300-000013","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip":"95130","delivery_instructions":"N/A"}'
     fetch(this.props.UPDATE_URL, {
@@ -102,7 +97,7 @@ class MakeChanges extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        meal_plan_id: this.state.changes.meal_plan_id,
+        meal_plan_id: this.state.dict[this.state.changes.subscription],
         purchase_id: this.props.purchase_id,
         // cc_num: this.state.changes.cc_num,
         // cc_cvv: this.state.changes.cc_cvv,
@@ -114,12 +109,21 @@ class MakeChanges extends Component {
         delivery_zip: this.state.changes.delivery_zip,
         delivery_instructions: this.state.changes.delivery_instructions
       })
+    }).then(response => {
+      if (!response.ok) {
+        const error = response.statusText;
+        alert(error);
+        return Promise.reject(error);
+      } else {
+        alert("You have successfully updated your account information!");
+        window.location.reload();
+      }
+
+      response.json();
     });
-    console.log("DONE UPDATE");
   }
 
   async delete_subscription() {
-    console.log("its deleting");
     const test = await fetch(this.props.DELETE_URL, {
       method: "PATCH",
       headers: {
@@ -129,10 +133,20 @@ class MakeChanges extends Component {
       body: JSON.stringify({
         purchase_id: this.props.purchase_id
       })
+    }).then(response => {
+      if (!response.ok) {
+        const error = response.statusText;
+        alert(error);
+        return Promise.reject(error);
+      } else {
+        alert("You have successfully updated your account information!");
+        window.location.reload();
+      }
+
+      response.json();
     });
   }
   MakeChangesAnimation = () => {
-    console.log("test1");
     return (
       <ButtonToolbar>
         <button
@@ -159,7 +173,6 @@ class MakeChanges extends Component {
     );
   };
   MakeChangesModal = () => {
-    console.log("test2");
     return (
       <Modal
         show={this.state.modalShow}
@@ -422,7 +435,6 @@ class MakeChanges extends Component {
     //     changes: temp
     //   });
     // }
-    console.log("state changes", this.state.changes.paymentplan);
     return this.MakeChangesAnimation();
   }
 }
