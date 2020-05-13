@@ -24,32 +24,12 @@ class EachMeal extends Component {
         </center>
         <div class="container-select-meal" style={{ color: "white" }}>
           <div class="meal-img-wrapper" style={{ overflow:"hidden", width: "100%", minWidth:"100%", height:"200px", maxHeight:"200px"}}>
-            <OverlayTrigger
-              placement="bottom"
-              delay={{ show: 100, hide: 100 }}
-              popperConfig={{
-                modifiers: {
-                  preventOverflow: {
-                    boundariesElement: 'offsetParent'
-                  }
-                }
-              }}
-              overlay={
-                <Tooltip id="button-tooltip">
-                  <p>{this.props.detail}</p>
-                  <p>
-                    <strong>Ingredients:</strong> {this.props.ingridents}
-                  </p>
-                </Tooltip>
-              }
-            >
               <img
                 class="img-fluid"
                 src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
                 alt="no_meal_img"
                 resizeMode
               />
-            </OverlayTrigger>
             {/* <div
               class="bottom-right-meal-selection font2"
               style={{
