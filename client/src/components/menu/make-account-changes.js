@@ -19,6 +19,7 @@ class MakeChanges extends Component {
     super(props);
     this.state = {
       modalShow: false,
+      modalShowDelete: false,
       changes: props,
       init: 0,
       date: moment(this.props.cc_exp_date),
@@ -90,6 +91,10 @@ class MakeChanges extends Component {
   async update_subscription() {
     // its updating 800-000007 300-000005 1234 Main St null San Jose TX 95129 GFGDG
     // '{"meal_plan_id":"700-000006","purchase_id":"300-000013","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip":"95130","delivery_instructions":"N/A"}'
+    var temp = this.state.dict[this.state.changes.subscription];
+    if (temp == null) {
+      temp = this.props.meal_plan_id;
+    }
     fetch(this.props.UPDATE_URL, {
       method: "PATCH",
       headers: {
@@ -97,7 +102,7 @@ class MakeChanges extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        meal_plan_id: this.state.dict[this.state.changes.subscription],
+        meal_plan_id: temp,
         purchase_id: this.props.purchase_id,
         // cc_num: this.state.changes.cc_num,
         // cc_cvv: this.state.changes.cc_cvv,
@@ -112,7 +117,7 @@ class MakeChanges extends Component {
     }).then(response => {
       if (!response.ok) {
         const error = response.statusText;
-        alert(error);
+        alert("Error updating");
         return Promise.reject(error);
       } else {
         alert("You have successfully updated your account information!");
@@ -122,8 +127,15 @@ class MakeChanges extends Component {
       response.json();
     });
   }
-
+  delete = () => {
+    return <div>{this.delete_subscription()}</div>;
+  };
   async delete_subscription() {
+    console.log(this.props.purchase_id);
+    if (this.props.purchase_id == null) {
+      console.log("Purchase id is null");
+      return;
+    }
     const test = await fetch(this.props.DELETE_URL, {
       method: "PATCH",
       headers: {
@@ -136,11 +148,10 @@ class MakeChanges extends Component {
     }).then(response => {
       if (!response.ok) {
         const error = response.statusText;
-        alert(error);
+        alert("Error deleting");
         return Promise.reject(error);
       } else {
-        alert("You have successfully updated your account information!");
-        window.location.reload();
+        alert("You have successfully deleted your account!");
       }
 
       response.json();
@@ -247,7 +258,7 @@ class MakeChanges extends Component {
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="formGridCardMonth">
-                  <Form.Label>Month{this.state.date.month()}</Form.Label>
+                  <Form.Label>Month</Form.Label>
 
                   <Form.Control
                     as="select"
@@ -368,28 +379,12 @@ class MakeChanges extends Component {
               <Form.Group controlId="exampleForm.ControlTextarea1">
                 <Form.Label>Instructions</Form.Label>
                 <Form.Control
-                  as="textarea"
-                  rows="1"
+                  placeholder="Instruction notes"
+                  name="delivery_instructions"
                   value={this.state.changes.delivery_instructions}
                   onChange={this.handleChange}
                 />
               </Form.Group>
-              <Tooltip
-                title="This will permanently delete your subscription"
-                placement="right"
-              >
-                <Button
-                  variant="danger"
-                  type="submit"
-                  style={{ float: "left" }}
-                  onClick={() => {
-                    alert("Are you sure you want to delete your subscription?");
-                    this.delete_subscription();
-                  }}
-                >
-                  Delete My Subscription
-                </Button>
-              </Tooltip>
 
               <br />
               <br />
@@ -399,6 +394,23 @@ class MakeChanges extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
+          <Tooltip
+            title="This will permanently delete your subscription"
+            placement="left"
+          >
+            <Button
+              variant="danger"
+              type="submit"
+              style={{ float: "left" }}
+              onClick={e => {
+                e.stopPropagation();
+                this.setState({ modalShowDelete: true });
+              }}
+            >
+              Delete My Subscription
+            </Button>
+          </Tooltip>
+          {this.state.modalShowDelete ? this.DeleteModal() : <div />}
           <Button
             variant="success"
             type="submit"
@@ -415,6 +427,34 @@ class MakeChanges extends Component {
             }}
           >
             Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  DeleteModal = () => {
+    console.log("must be here");
+    return (
+      <Modal
+        show={this.state.modalShowDelete}
+        onHide={() => this.setState({ modalShowDelete: false })}
+        animation={false}
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          Sure you want to delete your subscription permantly?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              this.setState({ modalShowDelete: false });
+            }}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={this.delete()}>
+            Delete My Subscription
           </Button>
         </Modal.Footer>
       </Modal>
