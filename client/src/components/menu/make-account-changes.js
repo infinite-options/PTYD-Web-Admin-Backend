@@ -19,6 +19,7 @@ class MakeChanges extends Component {
     super(props);
     this.state = {
       modalShow: false,
+      modalShowDelete: false,
       changes: props,
       init: 0,
       date: moment(this.props.cc_exp_date),
@@ -116,7 +117,7 @@ class MakeChanges extends Component {
     }).then(response => {
       if (!response.ok) {
         const error = response.statusText;
-        alert(error);
+        alert("Error updating");
         return Promise.reject(error);
       } else {
         alert("You have successfully updated your account information!");
@@ -126,8 +127,15 @@ class MakeChanges extends Component {
       response.json();
     });
   }
-
+  delete = () => {
+    return <div>{this.delete_subscription()}</div>;
+  };
   async delete_subscription() {
+    console.log(this.props.purchase_id);
+    if (this.props.purchase_id == null) {
+      console.log("Purchase id is null");
+      return;
+    }
     const test = await fetch(this.props.DELETE_URL, {
       method: "PATCH",
       headers: {
@@ -140,11 +148,10 @@ class MakeChanges extends Component {
     }).then(response => {
       if (!response.ok) {
         const error = response.statusText;
-        alert(error);
+        alert("Error deleting");
         return Promise.reject(error);
       } else {
         alert("You have successfully deleted your account!");
-        window.location.reload();
       }
 
       response.json();
@@ -378,22 +385,6 @@ class MakeChanges extends Component {
                   onChange={this.handleChange}
                 />
               </Form.Group>
-              <Tooltip
-                title="This will permanently delete your subscription"
-                placement="right"
-              >
-                <Button
-                  variant="danger"
-                  type="submit"
-                  style={{ float: "left" }}
-                  onClick={() => {
-                    alert("Are you sure you want to delete your subscription?");
-                    this.delete_subscription();
-                  }}
-                >
-                  Delete My Subscription
-                </Button>
-              </Tooltip>
 
               <br />
               <br />
@@ -403,6 +394,23 @@ class MakeChanges extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
+          <Tooltip
+            title="This will permanently delete your subscription"
+            placement="left"
+          >
+            <Button
+              variant="danger"
+              type="submit"
+              style={{ float: "left" }}
+              onClick={e => {
+                e.stopPropagation();
+                this.setState({ modalShowDelete: true });
+              }}
+            >
+              Delete My Subscription
+            </Button>
+          </Tooltip>
+          {this.state.modalShowDelete ? this.DeleteModal() : <div />}
           <Button
             variant="success"
             type="submit"
@@ -419,6 +427,34 @@ class MakeChanges extends Component {
             }}
           >
             Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  DeleteModal = () => {
+    console.log("must be here");
+    return (
+      <Modal
+        show={this.state.modalShowDelete}
+        onHide={() => this.setState({ modalShowDelete: false })}
+        animation={false}
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          Sure you want to delete your subscription permantly?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              this.setState({ modalShowDelete: false });
+            }}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={this.delete()}>
+            Delete My Subscription
           </Button>
         </Modal.Footer>
       </Modal>
