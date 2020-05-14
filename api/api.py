@@ -17,7 +17,7 @@ from math import ceil
 from env_keys import BING_API_KEY, RDS_PW
 
 # When deploying to Zappa, replace above statement with below:
-BING_API_KEY = "insert_key_kere"
+#BING_API_KEY = "insert_key_kere"
 #RDS_PW = "insert_password_here"
 
 import decimal
