@@ -54,13 +54,17 @@ export default function Login(props) {
           })
           .then(res => {
             data = res.data.result.result[0];
-            let first = data.first_name;
-            let uid = data.user_uid;
-            let login_id = data.login_id;
-            let session_id = data.session_id;
-            document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_id:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
-            props.history.push("/selectmealplan");
-            window.location.reload(false);
+            if (data.email_verify === 0) {
+              throw "Your email need to be verified before you can log in.";
+            } else {
+              let first = data.first_name;
+              let uid = data.user_uid;
+              let login_id = data.login_id;
+              let session_id = data.session_id;
+              document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_id:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+              props.history.push("/selectmealplan");
+              window.location.reload(false);
+            }
           })
           .catch(err => {
             console.log(err);
@@ -113,7 +117,7 @@ export default function Login(props) {
         return res1.data;
       }
     } catch (err) {
-      console.log(err);
+      RaiseError(err);
     }
   }
 
@@ -248,7 +252,11 @@ export default function Login(props) {
       );
       if (res.status === 200) {
         //success
-        return res.data;
+        if (res.data.result.result[0].email_verify === 0) {
+          throw "Your email need to be verified before log in.";
+        } else {
+          return res.data;
+        }
       } else {
         RaiseError("Wrong password");
       }
@@ -266,17 +274,19 @@ export default function Login(props) {
     // await login(t);
   }
   async function login(response) {
-    if (response.auth_success === true) {
-      // setLoginStatus("Logged In");
-      let first = response.result.result[0].first_name;
-      let uid = response.result.result[0].user_uid;
-      let login_id = response.login_attempt_log.login_id;
-      let session_id = response.login_attempt_log.session_id;
-      document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
-      //check for purchases
-      checkForPurchased(uid);
-    } else {
-      document.cookie = `loginStatus=; path=/`;
+    if (response !== undefined) {
+      if (response.auth_success === true) {
+        // setLoginStatus("Logged In");
+        let first = response.result.result[0].first_name;
+        let uid = response.result.result[0].user_uid;
+        let login_id = response.login_attempt_log.login_id;
+        let session_id = response.login_attempt_log.session_id;
+        document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+        //check for purchases
+        checkForPurchased(uid);
+      } else {
+        document.cookie = `loginStatus=; path=/`;
+      }
     }
   }
 
