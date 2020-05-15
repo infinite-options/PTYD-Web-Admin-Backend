@@ -992,7 +992,7 @@ def confirm(token, hashed):
         print(update)
         if update.get('code') == 281:
             #redirect to login page
-            return redirect('http://127.0.0.1:3000/login/{}/{}'.format(email, hashed))
+            return redirect('http://preptoyourdoor.netlify.app/login/{}/{}'.format(email, hashed))
         else:
             print("Error happened while confirming an email address.")
             error = "Confirm error."
