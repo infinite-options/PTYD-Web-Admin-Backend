@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Fragment} from "react";
 
 import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -22,6 +22,7 @@ export default function SocialSignUp(props) {
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
   const [SOCIAL_API_URL, setSOCIAL_API_URL] = useState("");
+  const [error, RaiseError] = useState(null);
 
   useEffect(() => {
     //     console.log(props.location.state)
@@ -98,10 +99,10 @@ export default function SocialSignUp(props) {
       if (res.data !== undefined && res.data.result !== undefined) {
         loginSocial(res.data.result.user_uid);
       } else {
-        console.log(`server's response doesn't have userid in it.`);
+        RaiseError(`server's response doesn't have userid in it.`);
       }
     } catch (err) {
-      console.log(err);
+      RaiseError(err);
     }
   }
   const loginSocial = async uid => {
@@ -132,7 +133,7 @@ export default function SocialSignUp(props) {
         window.location.reload(false);
       }
     } catch (err) {
-      console.log(err);
+      RaiseError(err);
     }
   };
   return (
@@ -144,6 +145,16 @@ export default function SocialSignUp(props) {
 
           <Container className='justify-content-center bg-success'>
             <Row>
+              {error !== null && error !== undefined && (
+                <Fragment>
+                  <h6>
+                    <span className='icon has-text-danger'>
+                      <i className='fa fa-info-circle'></i>
+                    </span>
+                    <span className='has-text-danger'>{error}</span>
+                  </h6>
+                </Fragment>
+              )}
               <Col size={6}>
                 <Form>
                   <Form.Row>

@@ -188,7 +188,6 @@ export default function Login(props) {
   };
 
   function socialLogin(data) {
-    console.log(data);
     const log_attemp = data.login_attempt_log;
     const result = data.result.result[0];
     let uid = result.user_uid;

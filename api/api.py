@@ -2087,7 +2087,8 @@ class SocialSignUp(Resource):
                         weekly_updates,
                         create_date,
                         last_update,
-                        referral_source
+                        referral_source,
+                        email_verify
                     )
                     VALUES
                     (""" +
@@ -2099,7 +2100,7 @@ class SocialSignUp(Resource):
                         "\'" + WeeklyUpdates + "\'," +
                         "\'" + CreateDate + "\'," +
                         "\'" + LastUpdate + "\'," +
-                        "\'" + Referral + "\');")
+                        "\'" + Referral + "\', \'1\');")
 
             # Query [2]
             queries.append("""
