@@ -215,6 +215,7 @@ export default function Login(props) {
         } else {
           props.history.push("/");
         }
+        setLoading(false);
         window.location.reload(false);
       } else {
         props.history.push("/"); // should prompt something or asking for re-login
@@ -265,22 +266,21 @@ export default function Login(props) {
     }
   }
 
-  async function checkLogin() {
+  function checkLogin() {
     // let t = [];
     setLoading(true);
-    await grabLoginInfoForUser(email, password)
+    grabLoginInfoForUser(email, password)
       .then(res => {
         login(res);
-        setLoading(false);
       })
       .catch(err => {
-        RaiseError(err);
         setLoading(false);
+        RaiseError(err);
       });
 
     // await login(t);
   }
-  async function login(response) {
+  function login(response) {
     if (response !== undefined) {
       if (response.auth_success === true) {
         // setLoginStatus("Logged In");
