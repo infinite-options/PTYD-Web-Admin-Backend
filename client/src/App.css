@@ -363,3 +363,15 @@ hr.four {
   background-color: #181818 !important;
   border-radius: 0 !important;
 }
+.loading {
+  width: 100px;
+  height: 100px;
+  opacity: 1;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  padding: 35px;
+  z-index: 3;
+  position: absolute;
+  bottom: 300px;
+}
