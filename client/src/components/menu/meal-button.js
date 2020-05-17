@@ -96,7 +96,8 @@ export default class MealButton extends Component {
       purchase_id: nextProps.purchase_id,
       week_affected: nextProps.saturdayDate,
       menu: nextProps.menu,
-      addons: nextProps.addons
+      addons: nextProps.addons,
+      addonQuantities: nextProps.addonQuantities
     });
   }
   async componentDidMount() {
@@ -207,6 +208,7 @@ export default class MealButton extends Component {
     this.setState({
       buttonAddOn: false,
       buttonAddOnKeepColor: false
+
       //    addonQuantities: this.state.addonQuantitiesOriginal,
     });
   };
@@ -616,9 +618,9 @@ export default class MealButton extends Component {
               <div>
                 <Grid>
                   <Cell col={12}>
-                      <h4 style={{ margin: "0" }}>
-                        {this.state.addons[key].Category}
-                      </h4>
+                    <h4 style={{ margin: "0" }}>
+                      {this.state.addons[key].Category}
+                    </h4>
                   </Cell>
 
                   {this.state.addons[key].Menu.map(meal => (
