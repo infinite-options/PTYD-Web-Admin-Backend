@@ -14,11 +14,11 @@ from math import ceil
 
 # BING API KEY
 # Import Bing API key into bing_api_key.py
-from env_keys import BING_API_KEY, RDS_PW
+#from env_keys import BING_API_KEY, RDS_PW
 
 # When deploying to Zappa, replace above statement with below:
-#BING_API_KEY = "insert_key_kere"
-#RDS_PW = "insert_password_here"
+BING_API_KEY = "AjarHaO5ugwlQDMfMsMEYziHW1Gugafz3e3CRGJy_a4KGHtYidc38JUGR1psA0A9"
+RDS_PW = "prashant"
 
 import decimal
 import sys
@@ -3144,6 +3144,42 @@ class UpdateSubscription(Resource):
         finally:
             disconnect(conn)
 
+class addRecipe(Resource):
+    global RDS_PW
+
+    def post(self):
+        response = {}
+        
+        try:
+            conn = connect()
+            print("test6")
+            data = request.get_json(force=True)
+            print("test1")
+            newingredientquery = execute("""CALL `ptyd`.`get_new_ingredient_id`();""", 'get', conn)
+            print("test2") 
+            ingredient_desc = data['ingredient_desc'] 
+            package_size = 1000
+            ingredient_measure = 1000
+            ingredient_measure_id = 1000
+            ingredient_cost = 1000
+
+            recipe_meal_id = data['recipe_meal_id']
+            recipe_ingredient_id = data['recipe_ingredient_id'] 
+            recipe_ingredient_qty = data['recipe_ingredient_qty']
+            recipe_measure_id = data['recipe_measure_id']
+            new_ingredient_id = newingredientquery['result'][0]['new_id']
+            print("test3")
+            if recipe_ingredient_id == "NewIngrId":
+                execute("""CALL `ptyd`.`insert_ingredient`( \'""" + new_ingredient_id + """\', \'""" + ingredient_desc + """\',\'""" + package_size + """\',\'""" + ingredient_measure + """\',\'""" + ingredient_measure_id + """\',\'""" + ingredient_cost + """\');""", 'post', conn)
+                execute("""CALL `ptyd`.`insert_recipe`(\'""" + recipe_meal_id + """\',\'""" + new_ingredient_id + """\',\'""" + recipe_ingredient_qty + """\',\'""" + recipe_measure_id + """\',\'""" + new_ingredient_id + """\');""", 'post', conn)
+            else:
+                execute("""CALL `ptyd`.`insert_recipe`(\'""" + recipe_meal_id + """\',\'""" + recipe_ingredient_id + """\',\'""" + recipe_ingredient_qty + """\',\'""" + recipe_measure_id + """\',\'""" + new_ingredient_id + """\');""", 'post', conn)
+            print("test4")
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class TemplateApi(Resource):
     def get(self):
@@ -3194,6 +3230,7 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
+api.add_resource(addRecipe, '/api/v2/addRecipe')
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
