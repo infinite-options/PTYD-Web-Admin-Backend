@@ -702,47 +702,48 @@ class AccountPurchases(Resource):
             conn = connect()
 
             queries = ["""
-                SELECT DISTINCT
-                    payment_id,
-                    buyer_id,
-                    coupon_id,
-                    gift,
-                    amount_due,
-                    amount_paid,
-                    p1.purchase_id,
-                    MAX(payment_time_stamp) AS last_payment_time_stamp,
-                    payment_type,
-                    CONCAT(\'XXXXXXXXXXXX\', cc_num) AS cc_num,
-                    cc_exp_date,
-                    cc_cvv,
-                    billing_zip,
-                    p2.meal_plan_id,
-                    num_meals AS MaximumMeals,
-                    meal_plan_desc,
-                    payment_frequency,
-                    start_date,
-                    delivery_first_name,
-                    delivery_last_name,
-                    delivery_email,
-                    delivery_phone,
-                    delivery_address,
-                    delivery_address_unit,
-                    delivery_city,
-                    delivery_state,
-                    delivery_zip,
-                    delivery_region,
-                    delivery_instructions
-                FROM
-                    ptyd_payments p1
-                INNER JOIN
-                    ptyd_purchases p2
-                ON
-                    p1.purchase_id = p2.purchase_id
-                INNER JOIN
-                    ptyd_meal_plans mp
-                ON p2.meal_plan_id = mp.meal_plan_id
-                WHERE buyer_id = \'""" + buyerId + """\'
-                GROUP BY purchase_id;""",
+               SELECT DISTINCT
+                   payment_id,
+                   purchase_status,
+                   buyer_id,
+                   coupon_id,
+                   gift,
+                   amount_due,
+                   amount_paid,
+                   p1.purchase_id,
+                   MAX(payment_time_stamp) AS last_payment_time_stamp,
+                   payment_type,
+                   CONCAT(\'XXXXXXXXXXXX\', cc_num) AS cc_num,
+                   cc_exp_date,
+                   cc_cvv,
+                   billing_zip,
+                   p2.meal_plan_id,
+                   num_meals AS MaximumMeals,
+                   meal_plan_desc,
+                   payment_frequency,
+                   start_date,
+                   delivery_first_name,
+                   delivery_last_name,
+                   delivery_email,
+                   delivery_phone,
+                   delivery_address,
+                   delivery_address_unit,
+                   delivery_city,
+                   delivery_state,
+                   delivery_zip,
+                   delivery_region,
+                   delivery_instructions
+               FROM
+                   ptyd_payments p1
+               INNER JOIN
+                   ptyd_purchases p2
+               ON
+                   p1.purchase_id = p2.purchase_id
+               INNER JOIN
+                   ptyd_meal_plans mp
+               ON p2.meal_plan_id = mp.meal_plan_id
+               WHERE buyer_id = \'""" + buyerId + """\'AND purchase_status = "ACTIVE"
+               GROUP BY purchase_id""",
                        "   SELECT * FROM ptyd_monday_zipcodes;"]
 
             items = execute(queries[0], 'get', conn)
