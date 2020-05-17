@@ -544,10 +544,6 @@ export default class MealButton extends Component {
             &nbsp;&nbsp;
             <Button
               variant="danger"
-              // style={{
-              //   backgroundColor: "pink",
-              //   color: "black"
-              // }}
               onClick={() => {
                 if (
                   this.state.maxmealsCopy !== this.state.maxmeals &&
@@ -570,7 +566,6 @@ export default class MealButton extends Component {
               this.state.maxmeals === 0 ? (
                 <Button
                   variant="success"
-                  // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                   onClick={this.saveButtonActivateAddons}
                 >
                   Save changes
@@ -621,11 +616,9 @@ export default class MealButton extends Component {
               <div>
                 <Grid>
                   <Cell col={12}>
-                    <center>
                       <h4 style={{ margin: "0" }}>
                         {this.state.addons[key].Category}
                       </h4>
-                    </center>
                   </Cell>
 
                   {this.state.addons[key].Menu.map(meal => (

@@ -651,7 +651,8 @@ class Login(Resource):
                         phone_number,
                         create_date,
                         last_update,
-                        referral_source
+                        referral_source,
+                        email_verify
                     FROM ptyd_accounts""" +
                 "\nWHERE user_email = " + "\'" + accEmail + "\';"]
 
@@ -862,7 +863,7 @@ class SignUp(Resource):
                     \'""" + DatetimeStamp + "\');")
 
             usnInsert = execute(queries[1], 'post', conn)
-
+            print ("User insert: {}".format(usnInsert.get('code')))
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
 
@@ -914,7 +915,7 @@ class SignUp(Resource):
             token = s.dumps(Email)
             msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[Email])
             link = url_for('confirm', token=token, hashed=hashed, _external=True)
-            msg.body = 'Click on the link <a href={}>---> :) Confirm (: <----</a> to verify your email.'.format(link)
+            msg.body = "Click on the link <a href={}> Please confirm to verify your email address. </a> ".format(link)
 
             mail.send(msg)
             #email verification testing is ended here...
@@ -981,13 +982,27 @@ class Coordinates:
 @app.route('/api/v2/confirm/<token>/<hashed>', methods=['GET'])
 def confirm(token, hashed):
     try:
-        email = s.loads(token, max_age=60)
+        email = s.loads(token)#max_age = 86400 = 1 day
         #marking email confirmed in database, then...
-        #redirect to login page
-        return redirect('http://127.0.0.1:3000/login/{}/{}'.format(email, hashed))
+        print (email);
+        conn = connect()
+        query = """UPDATE ptyd_accounts SET email_verify = 1 WHERE user_email = \'""" + email + """\';""";
+        print(query)
+        update = execute(query, 'post', conn)
+        print(update)
+        if update.get('code') == 281:
+            #redirect to login page
+            return redirect('http://preptoyourdoor.netlify.app/login/{}/{}'.format(email, hashed))
+        else:
+            print("Error happened while confirming an email address.")
+            error = "Confirm error."
+            err_code = 401 # Verification code is incorrect
+            return error, err_code
     except (SignatureExpired, BadTimeSignature) as err:
         status=403 #forbidden
         return str(err), status
+    finally:
+        disconnect(conn)
 
 # NEED CODE FOR NON-RECURRING ONE TIME PLANS
 class Checkout(Resource):
@@ -2072,7 +2087,8 @@ class SocialSignUp(Resource):
                         weekly_updates,
                         create_date,
                         last_update,
-                        referral_source
+                        referral_source,
+                        email_verify
                     )
                     VALUES
                     (""" +
@@ -2084,7 +2100,7 @@ class SocialSignUp(Resource):
                         "\'" + WeeklyUpdates + "\'," +
                         "\'" + CreateDate + "\'," +
                         "\'" + LastUpdate + "\'," +
-                        "\'" + Referral + "\');")
+                        "\'" + Referral + "\', \'1\');")
 
             # Query [2]
             queries.append("""

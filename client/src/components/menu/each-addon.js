@@ -99,7 +99,8 @@ class EachAddon extends Component {
                   fontSize: "15px",
                   float: "right",
                   backgroundColor: "black",
-                  lineHeight: "25px"
+                  lineHeight: "25px",
+                  cursor: "default"
                 }}
               >
                 <center>{this.props.mealTitle}</center>

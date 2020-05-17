@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Fragment} from "react";
 
 import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -22,6 +22,8 @@ export default function SocialSignUp(props) {
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
   const [SOCIAL_API_URL, setSOCIAL_API_URL] = useState("");
+  const [error, RaiseError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     //     console.log(props.location.state)
@@ -74,6 +76,7 @@ export default function SocialSignUp(props) {
     //   body: b
     // })
     try {
+      setLoading(true);
       const res = await axios.post(
         props.API_URL,
         {
@@ -98,10 +101,10 @@ export default function SocialSignUp(props) {
       if (res.data !== undefined && res.data.result !== undefined) {
         loginSocial(res.data.result.user_uid);
       } else {
-        console.log(`server's response doesn't have userid in it.`);
+        RaiseError(`server's response doesn't have userid in it.`);
       }
     } catch (err) {
-      console.log(err);
+      RaiseError(err);
     }
   }
   const loginSocial = async uid => {
@@ -129,54 +132,75 @@ export default function SocialSignUp(props) {
         let login_id = log_attemp.login_id;
         document.cookie = `loginStatus=loggedInBy:social,first_name:${firstname},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
         props.history.push("/selectmealplan");
+        setLoading(false);
         window.location.reload(false);
       }
     } catch (err) {
-      console.log(err);
+      RaiseError(err);
     }
   };
   return (
-    <main Style='margin-top:-80px;'>
-      <div class='container text-center' Style='margin-top:-40px;'>
-        <h1>Social Media Sign Up</h1>
-        <div class='row'>
-          <Col></Col>
+    <Fragment>
+      {loading && (
+        <div className='d-flex justify-content-center'>
+          <div className='loading'>
+            <div className='spinner-border' role='status'>
+              <span className='sr-only'>Loading...</span>
+            </div>
+          </div>
+        </div>
+      )}
+      <main Style={"margin-top:-80px;" + (loading ? "opacity: 0.5" : "")}>
+        <div class='container text-center' Style='margin-top:-40px;'>
+          <h1>Social Media Sign Up</h1>
+          <div class='row'>
+            <Col></Col>
 
-          <Container className='justify-content-center bg-success'>
-            <Row>
-              <Col size={6}>
-                <Form>
-                  <Form.Row>
-                    <Form.Group as={Col} controlId='formGridFirstName'>
-                      <Form.Label>First Name</Form.Label>
+            <Container className='justify-content-center bg-success'>
+              <Row>
+                {error !== null && error !== undefined && (
+                  <Fragment>
+                    <h6>
+                      <span className='icon has-text-danger'>
+                        <i className='fa fa-info-circle'></i>
+                      </span>
+                      <span className='has-text-danger'>{error}</span>
+                    </h6>
+                  </Fragment>
+                )}
+                <Col size={6}>
+                  <Form>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId='formGridFirstName'>
+                        <Form.Label>First Name</Form.Label>
+                        <Form.Control
+                          value={firstname}
+                          // onChange={e => setFirstName(e.target.value)}
+                          placeholder='First'
+                        />
+                      </Form.Group>
+
+                      <Form.Group as={Col} controlId='formGridLastName'>
+                        <Form.Label>Last Name</Form.Label>
+                        <Form.Control
+                          value={lastname}
+                          // onChange={e => setLastName(e.target.value)}
+                          placeholder='Last'
+                        />
+                      </Form.Group>
+                    </Form.Row>
+
+                    <Form.Group controlId='formGridEmail'>
+                      <Form.Label>Email</Form.Label>
                       <Form.Control
-                        value={firstname}
-                        // onChange={e => setFirstName(e.target.value)}
-                        placeholder='First'
+                        type='email'
+                        value={email}
+                        //   onChange={e => setEmail(e.target.value)}
+                        placeholder='Enter Email'
                       />
                     </Form.Group>
 
-                    <Form.Group as={Col} controlId='formGridLastName'>
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        value={lastname}
-                        // onChange={e => setLastName(e.target.value)}
-                        placeholder='Last'
-                      />
-                    </Form.Group>
-                  </Form.Row>
-
-                  <Form.Group controlId='formGridEmail'>
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type='email'
-                      value={email}
-                      //   onChange={e => setEmail(e.target.value)}
-                      placeholder='Enter Email'
-                    />
-                  </Form.Group>
-
-                  {/* <OverlayTrigger
+                    {/* <OverlayTrigger
                     placement='right'
                     delay={{show: 250, hide: 400}}
                     overlay={
@@ -200,69 +224,71 @@ export default function SocialSignUp(props) {
                     </Form.Group>
                   </OverlayTrigger> */}
 
-                  <Form.Group controlId='formGridPhoneNumber'>
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control
-                      value={phoneNumber}
-                      onChange={e => setPhoneNumber(e.target.value)}
-                      placeholder='Enter Phone Number'
-                    />
-                  </Form.Group>
+                    <Form.Group controlId='formGridPhoneNumber'>
+                      <Form.Label>Phone Number</Form.Label>
+                      <Form.Control
+                        value={phoneNumber}
+                        onChange={e => setPhoneNumber(e.target.value)}
+                        placeholder='Enter Phone Number'
+                      />
+                    </Form.Group>
 
-                  <Form.Group as={Col} controlId='formGridReferral'>
-                    <Form.Label>Referral</Form.Label>
-                    <Form.Control
-                      as='select'
-                      value={referral}
-                      onChange={e => setReferral(e.target.value)}
-                    >
-                      <option>Social Media</option>
-                      <option>Website</option>
-                      <option>Friend</option>
-                      <option>Event</option>
-                    </Form.Control>
-                  </Form.Group>
+                    <Form.Group as={Col} controlId='formGridReferral'>
+                      <Form.Label>Referral</Form.Label>
+                      <Form.Control
+                        as='select'
+                        value={referral}
+                        onChange={e => setReferral(e.target.value)}
+                      >
+                        <option>Social Media</option>
+                        <option>Website</option>
+                        <option>Friend</option>
+                        <option>Event</option>
+                      </Form.Control>
+                    </Form.Group>
 
-                  <Form.Group id='formGridCheckbox'>
-                    <Form.Check
-                      id='weeklyUpdateCheck'
-                      value={weeklyUpdates}
-                      onChange={e => {
-                        if (
-                          document.getElementById("weeklyUpdateCheck")
-                            .checked == true
-                        ) {
-                          console.log(
-                            document.getElementById("weeklyUpdateCheck").checked
-                          );
-                          setWeeklyUpdates("TRUE");
-                        } else {
-                          setWeeklyUpdates("FALSE");
-                        }
-                      }}
-                      type='checkbox'
-                      label='Sign Me Up For Weekly Prep To Your Door Updates!'
-                    />
-                  </Form.Group>
+                    <Form.Group id='formGridCheckbox'>
+                      <Form.Check
+                        id='weeklyUpdateCheck'
+                        value={weeklyUpdates}
+                        onChange={e => {
+                          if (
+                            document.getElementById("weeklyUpdateCheck")
+                              .checked == true
+                          ) {
+                            console.log(
+                              document.getElementById("weeklyUpdateCheck")
+                                .checked
+                            );
+                            setWeeklyUpdates("TRUE");
+                          } else {
+                            setWeeklyUpdates("FALSE");
+                          }
+                        }}
+                        type='checkbox'
+                        label='Sign Me Up For Weekly Prep To Your Door Updates!'
+                      />
+                    </Form.Group>
 
-                  <Form.Group id='formGridServiceTerms'>
-                    <Form.Check
-                      type='checkbox'
-                      label='Agree To Prep To Your Door Terms Of Service.'
-                    />
-                  </Form.Group>
+                    <Form.Group id='formGridServiceTerms'>
+                      <Form.Check
+                        type='checkbox'
+                        label='Agree To Prep To Your Door Terms Of Service.'
+                      />
+                    </Form.Group>
 
-                  <Button onClick={sendForm} variant='dark' type='submit'>
-                    Submit
-                  </Button>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
+                    <Button onClick={sendForm} variant='dark' type='submit'>
+                      Submit
+                    </Button>
+                  </Form>
+                </Col>
+              </Row>
+            </Container>
 
-          <Col></Col>
+            <Col></Col>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </Fragment>
   );
 }

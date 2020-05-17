@@ -2,10 +2,11 @@ import React, {Fragment, useState, useEffect} from "react";
 import Layout from "./layout";
 
 const SignupWaiting = () => {
-  const [second, setSecond] = useState(60);
+  // const [second, setSecond] = useState(60);
   useEffect(() => {
-    second > 0 && setTimeout(() => setSecond(second - 1), 1000);
-  }, [second]);
+    // second > 0 && setTimeout(() => setSecond(second - 1), 1000);
+    // }, [second]);
+  }, []);
   return (
     <Fragment>
       <Layout />
@@ -16,9 +17,7 @@ const SignupWaiting = () => {
             <article className='tile box is-child notification is-info'>
               <h6 className='has-text-white'>
                 A confirmed email has been sent to your email account with
-                instruction to help you complete you registration. That
-                comfirmed email will be expired in {second} seconds. Please
-                doing it ASAP.
+                instruction to help you complete you registration. Thank you.
               </h6>
             </article>
           </div>
