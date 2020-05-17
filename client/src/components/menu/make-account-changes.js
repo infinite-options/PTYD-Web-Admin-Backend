@@ -164,6 +164,7 @@ class MakeChanges extends Component {
         return Promise.reject(error);
       } else {
         alert("You have successfully deleted your subscription!");
+        window.location.reload();
       }
 
       response.json();
