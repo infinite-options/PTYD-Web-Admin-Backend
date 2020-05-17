@@ -354,7 +354,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridFirstName'>
                       <Form.Label>
                         First Name
-                        <span className='required-red'> (required)</span>
+                        <span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Enter First Name'
@@ -367,7 +367,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridLastName'>
                       <Form.Label>
                         Last Name
-                        <span className='required-red'> (required)</span>
+                        <span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Enter Last Name'
@@ -381,7 +381,7 @@ class Checkout extends Component {
                   <Form.Group controlId='formGridNotes'>
                     <Form.Label>
                       Delivery Notes
-                      <span className='required-red'> (required)</span>
+                      <span className='required-red'> <b>*</b></span>
                     </Form.Label>
                     <Form.Control
                       placeholder='Enter Notes or N/A (e.g. Gate Code, Special Instructions)'
@@ -394,7 +394,7 @@ class Checkout extends Component {
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridEmail'>
                       <Form.Label>
-                        Email<span className='required-red'> (required)</span>
+                        Email<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         type='email'
@@ -408,7 +408,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridPassword'>
                       <Form.Label>
                         Password
-                        <span className='required-red'> (required)</span>
+                        <span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         type='password'
@@ -427,7 +427,7 @@ class Checkout extends Component {
 
                   <Form.Group controlId='formGridAddress'>
                     <Form.Label>
-                      Address<span className='required-red'> (required)</span>
+                      Address<span className='required-red'> <b>*</b></span>
                     </Form.Label>
                     <Form.Control
                       placeholder='1234 Main St'
@@ -457,7 +457,7 @@ class Checkout extends Component {
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridCity'>
                       <Form.Label>
-                        City<span className='required-red'> (required)</span>
+                        City<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Prep City'
@@ -469,7 +469,7 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} controlId='formGridState'>
                       <Form.Label>
-                        State<span className='required-red'> (required)</span>
+                        State<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         as='select'
@@ -484,7 +484,7 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} controlId='formGridZip'>
                       <Form.Label>
-                        Zip<span className='required-red'> (required)</span>
+                        Zip<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         placeholder='12345'
@@ -502,7 +502,7 @@ class Checkout extends Component {
                     controlId='formGridCountry'
                   >
                     <Form.Label>
-                      Country<span className='required-red'> (required)</span>
+                      Country<span className='required-red'> <b>*</b></span>
                     </Form.Label>
                     <Form.Control
                       as='select'
@@ -518,7 +518,7 @@ class Checkout extends Component {
                   <Form.Group controlId='formGridPhoneNumber'>
                     <Form.Label>
                       Phone Number
-                      <span className='required-red'> (required)</span>
+                      <span className='required-red'> <b>*</b></span>
                     </Form.Label>
                     <Form.Control
                       placeholder='1234567890'
@@ -544,7 +544,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={6} controlId='formGridCardNumber'>
                       <Form.Label>
                         Credit Card Number
-                        <span className='required-red'> (required)</span>
+                        <span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Enter Card Number'
@@ -558,7 +558,7 @@ class Checkout extends Component {
                   <Form.Row>
                     <Form.Group as={Col} md={3} controlId='formGridCardCvc'>
                       <Form.Label>
-                        CVC<span className='required-red'> (required)</span>
+                        CVC<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         placeholder='123'
@@ -570,7 +570,7 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} md={3} controlId='formGridCardMonth'>
                       <Form.Label>
-                        Month<span className='required-red'> (required)</span>
+                        Month<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         as='select'
@@ -596,7 +596,7 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} md={3} controlId='formGridCardYear'>
                       <Form.Label>
-                        Year<span className='required-red'> (required)</span>
+                        Year<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         as='select'
@@ -623,7 +623,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={4} controlId='formGridBillingZip'>
                       <Form.Label>
                         Postal Code
-                        <span className='required-red'> (required)</span>
+                        <span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control
                         placeholder='12345'
@@ -635,7 +635,7 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} controlId='formGridBillingCountry'>
                       <Form.Label>
-                        Country<span className='required-red'> (required)</span>
+                        Country<span className='required-red'> <b>*</b></span>
                       </Form.Label>
                       <Form.Control as='select'>
                         <option>Choose...</option>
