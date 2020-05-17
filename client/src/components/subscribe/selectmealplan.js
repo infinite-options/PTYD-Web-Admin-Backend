@@ -119,7 +119,7 @@ class Selectmealplan extends Component {
                       />
                     </Card.Body>
                     <Card.Footer>
-                      <large className='text-muted'>
+                      <large className='text-muted align-self-center mx-auto'>
                         {mealPlan.plan_footer}
                       </large>
                     </Card.Footer>
