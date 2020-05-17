@@ -163,7 +163,7 @@ class MakeChanges extends Component {
         alert("Error deleting");
         return Promise.reject(error);
       } else {
-        alert("You have successfully deleted your account!");
+        alert("You have successfully deleted your subscription!");
       }
 
       response.json();
@@ -459,7 +459,7 @@ class MakeChanges extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              Cancel
+              No,Keep
             </Button>
             <Button onClick={this.delete} variant="danger" autoFocus>
               Yes,Delete
