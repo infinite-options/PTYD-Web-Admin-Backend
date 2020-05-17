@@ -30,6 +30,9 @@ class Landing extends Component {
     console.log(this.state.isLoggedIn);
     return (
       <section class='content-section'>
+
+        
+
         <div class='container' style={{color: "white"}}>
           <img
             class='img-fluid'
@@ -121,6 +124,9 @@ class Landing extends Component {
               >
                 Get Started
               </button>
+
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+              
             </center>
           </div>
         </div>
@@ -206,6 +212,11 @@ class Landing extends Component {
               >
                 EAT BETTER NOW
               </button>
+
+
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+              
+
             </Grid>
           </div>
         </div>

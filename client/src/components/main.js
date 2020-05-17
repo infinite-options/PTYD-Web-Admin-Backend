@@ -1,6 +1,4 @@
-import React, {
-  useState
-} from "react";
+import React, {useState} from "react";
 import {Switch} from "react-router-dom";
 import {CookiesProvider} from "react-cookie";
 import AppliedRoute from "./AppliedRoute";
@@ -20,6 +18,7 @@ import FaQ from "./about/faq";
 import JobS from "./about/jobs";
 import Get100 from "./get100";
 import MealSchedule from "./menu/mealschedule";
+import Cookies from "js-cookie";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
@@ -30,14 +29,14 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL = 'https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/';
+const DEV_URL =
+  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
-//const DEV_URL = "http://localhost:2000/api/";
+// const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({appProps}) {
   const [objectIndex, setObjectIndex] = useState(0);
-
   return (
     <Switch>
       <AppliedRoute
@@ -91,7 +90,8 @@ export default function Main({appProps}) {
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
-          redirect_after_login: "/checkout"
+          redirect_after_login: "/checkout",
+          user_uid: appProps.user_uid
         }}
       />
 
@@ -105,10 +105,13 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
-          PLANS_URL: `${DEV_URL}v2/plans`
+          PLANS_URL: `${DEV_URL}v2/plans`,
+          DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
+          UPDATE_URL: `${DEV_URL}v2/update-subscription`
         }}
       />
 
@@ -120,10 +123,13 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
-          PLANS_URL: `${DEV_URL}v2/plans`
+          PLANS_URL: `${DEV_URL}v2/plans`,
+          DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
+          UPDATE_URL: `${DEV_URL}v2/update-subscription`
         }}
       />
 
@@ -200,7 +206,7 @@ export default function Main({appProps}) {
       />
       <AppliedRoute
         exact
-        path="/socialsignup"
+        path='/socialsignup'
         component={SocialSignUp}
         appProps={{
           appProps,

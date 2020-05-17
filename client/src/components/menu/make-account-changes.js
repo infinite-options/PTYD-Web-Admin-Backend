@@ -12,34 +12,152 @@ import {
   Col
 } from "react-bootstrap";
 import Tooltip from "@material-ui/core/Tooltip";
+import moment from "moment";
 
 class MakeChanges extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalShow: false
+      modalShow: false,
+      modalShowDelete: false,
+      changes: props,
+      init: 0,
+      date: moment(this.props.cc_exp_date),
+      dict: {}
+      // new_changed_subscription: changes.subscription
     };
   }
   handleChange = event => {
-    this.setState({ event });
+    const target = event.target;
+    const name = target.name;
+    this.setState(
+      prevState => ({
+        changes: {
+          ...prevState.changes,
+          [name]: target.value
+        }
+      }),
+      () => {}
+    );
   };
-  handleChange = event => {
-    //get new dropdown value
-    let x = this.state.datekeys[event.target.value];
-    let len = this.state.createMenu[x].length;
-    let tempSelectionOfDropMenu = new Array(len).fill(0);
-    let initArr = this.state.createMenu[x];
-    for (let i = 0; i < len; i++) {
-      tempSelectionOfDropMenu[i] = this.state.mealMap[initArr[i]["Meal_Name"]];
-    }
+  componentDidMount() {
+    this.setState(
+      {
+        changes: this.props
+      },
+      () => {
+        var dict = {};
+        this.state.changes.paymentplan.map(paymentPlan => {
+          let key = paymentPlan.meal_plan_desc
+            .concat(": $")
+            .concat(paymentPlan.meal_plan_price);
+          dict[key] = paymentPlan.meal_plan_id;
+        });
+        this.setState({ dict: dict });
+      }
+    );
+  }
 
-    this.setState({
-      selection: event.target.value,
-      selectionOfDropMenu: tempSelectionOfDropMenu
+  componentWillReceiveProps(nextProps) {
+    if (nextProps !== this.props) {
+      // nextProps.myProp has a different value than our current prop
+      let temp = JSON.parse(JSON.stringify(nextProps));
+      temp.subscription = nextProps.subscription
+        .concat(": $")
+        .concat(nextProps.meal_plan_price);
+
+      var dict = {};
+      temp.paymentplan.map(paymentPlan => {
+        let key = paymentPlan.meal_plan_desc
+          .concat(": $")
+          .concat(paymentPlan.meal_plan_price);
+        dict[key] = paymentPlan.meal_plan_id;
+      });
+
+      this.setState(
+        {
+          changes: temp,
+          // month: parseInt(
+          //   String(nextProps.cc_exp_date.split("-")).substring(5, 7)
+          // )
+          date: moment(nextProps.cc_exp_date),
+          dict: dict
+        },
+        () => {}
+      );
+    }
+  }
+
+  async update_subscription() {
+    // its updating 800-000007 300-000005 1234 Main St null San Jose TX 95129 GFGDG
+    // '{"meal_plan_id":"700-000006","purchase_id":"300-000013","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip":"95130","delivery_instructions":"N/A"}'
+    var temp = this.state.dict[this.state.changes.subscription];
+    if (temp == null) {
+      temp = this.props.meal_plan_id;
+    }
+    fetch(this.props.UPDATE_URL, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        meal_plan_id: temp,
+        purchase_id: this.props.purchase_id,
+        // cc_num: this.state.changes.cc_num,
+        // cc_cvv: this.state.changes.cc_cvv,
+        // cc_exp_date: this.state.date,this.state.date.format("YYYY-MM-DD")
+        delivery_address: this.state.changes.delivery_address,
+        delivery_address_unit: this.state.changes.delivery_address_unit,
+        delivery_city: this.state.changes.delivery_city,
+        delivery_state: this.state.changes.delivery_state,
+        delivery_zip: this.state.changes.delivery_zip,
+        delivery_instructions: this.state.changes.delivery_instructions
+      })
+    }).then(response => {
+      if (!response.ok) {
+        const error = response.statusText;
+        alert("Error updating");
+        return Promise.reject(error);
+      } else {
+        alert("You have successfully updated your account information!");
+        window.location.reload();
+      }
+
+      response.json();
     });
+  }
+  delete = () => {
+    return <div>{this.delete_subscription()}</div>;
   };
+  async delete_subscription() {
+    console.log(this.props.purchase_id);
+    if (this.props.purchase_id == null) {
+      console.log("Purchase id is null");
+      return;
+    }
+    const test = await fetch(this.props.DELETE_URL, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        purchase_id: this.props.purchase_id
+      })
+    }).then(response => {
+      if (!response.ok) {
+        const error = response.statusText;
+        alert("Error deleting");
+        return Promise.reject(error);
+      } else {
+        alert("You have successfully deleted your account!");
+      }
+
+      response.json();
+    });
+  }
   MakeChangesAnimation = () => {
-    console.log("test1");
     return (
       <ButtonToolbar>
         <button
@@ -66,7 +184,6 @@ class MakeChanges extends Component {
     );
   };
   MakeChangesModal = () => {
-    console.log("test2");
     return (
       <Modal
         show={this.state.modalShow}
@@ -90,15 +207,23 @@ class MakeChanges extends Component {
                   md={6}
                   controlId="formGridCardSubscription"
                 >
-                  <Form.Label>My Subscription</Form.Label>
+                  <Form.Label>Current Subscription</Form.Label>
 
                   <Form.Control
+                    type="text"
+                    value={this.state.changes.subscription}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md={6} controlId="formGridCardPayment">
+                  <Form.Label>Change Subscription</Form.Label>
+                  <Form.Control
                     as="select"
-                    name="cc_exp_month"
-                    value={this.props.subscription}
+                    name="subscription"
+                    // value={this.state.changes.subscription}
+                    onChange={this.handleChange}
                   >
-                    {console.log("tyler is here", this.props.paymentplan)}
-                    {this.props.paymentplan.map(paymentPlan => (
+                    <option>Choose...</option>
+                    {this.state.changes.paymentplan.map(paymentPlan => (
                       <option>
                         {paymentPlan.meal_plan_desc
                           .concat(":  $")
@@ -107,19 +232,6 @@ class MakeChanges extends Component {
                     ))}
                   </Form.Control>
                 </Form.Group>
-                {/* <Form.Group as={Col} md={6} controlId="formGridCardPayment">
-                  <Form.Label>Payment Plan</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="cc_exp_month"
-                    value={this.props.payment_plan}
-                  >
-                    <option>Choose...</option>
-                    <option>Weekly</option>
-                    <option>Bi-Weekly</option>
-                    <option>Monthly</option>
-                  </Form.Control>
-                </Form.Group> */}
               </Form.Row>
               <h5>Credit Card Details</h5>
               <Form.Row>
@@ -128,44 +240,65 @@ class MakeChanges extends Component {
                   <Form.Control
                     placeholder="Enter Card Number"
                     name="cc_num"
-                    value={this.props.cc_num}
+                    value={this.state.changes.cc_num}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} md={4} controlId="formGridCardCvc">
-                  <Form.Label>CVC</Form.Label>
+                  <Form.Label>CVV</Form.Label>
                   <Form.Control
                     placeholder="123"
                     name="cc_cvv"
-                    value={this.props.cc_cvv}
+                    value={this.state.changes.cc_cvv}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="formGridCardMonth">
                   <Form.Label>Month</Form.Label>
-                  <Form.Control as="select" name="cc_exp_month">
-                    <option>Choose...</option>
-                    <option>01</option>
-                    <option>02</option>
-                    <option>03</option>
-                    <option>04</option>
-                    <option>05</option>
-                    <option>06</option>
-                    <option>07</option>
-                    <option>08</option>
-                    <option>09</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
+
+                  <Form.Control
+                    as="select"
+                    name="cc_exp_month"
+                    onChange={event => {
+                      // this.setState({ month: event.target.value });
+                      this.setState({
+                        date: this.state.date.month(event.target.value - 1)
+                      });
+                    }}
+                    value={this.state.date.month() + 1}
+                  >
+                    <option>{1}</option>
+                    <option>{2}</option>
+                    <option>{3}</option>
+                    <option>{4}</option>
+                    <option>{5}</option>
+                    <option>{6}</option>
+                    <option>{7}</option>
+                    <option>{8}</option>
+                    <option>{9}</option>
+                    <option>{10}</option>
+                    <option>{11}</option>
+                    <option>{12}</option>
                   </Form.Control>
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="formGridCardYear">
                   <Form.Label>Year</Form.Label>
-                  <Form.Control as="select" name="cc_exp_year">
-                    <option>Choose...</option>
+                  <Form.Control
+                    as="select"
+                    name="cc_exp_year"
+                    onChange={event => {
+                      this.setState({
+                        date: this.state.date.year(event.target.value)
+                      });
+                    }}
+                    // value={this.state.changes.cc_exp_date.substr(0, 4)}
+                    value={this.state.date.year()}
+                  >
                     <option>2020</option>
                     <option>2021</option>
                     <option>2022</option>
@@ -185,7 +318,8 @@ class MakeChanges extends Component {
                 <Form.Control
                   placeholder="1234 Main St"
                   name="delivery_address"
-                  value={this.props.delivery_address}
+                  value={this.state.changes.delivery_address}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
 
@@ -194,7 +328,8 @@ class MakeChanges extends Component {
                 md={4}
                 Style="margin-left:-15px;"
                 controlId="formGridAptNum"
-                value={this.props.delivery_address_unit}
+                value={this.state.changes.delivery_address_unit}
+                onChange={this.handleChange}
               >
                 <Form.Label>
                   Apartment/Unit <b>(Optional)</b>
@@ -202,6 +337,8 @@ class MakeChanges extends Component {
                 <Form.Control
                   placeholder="Apartment, studio, or floor"
                   name="delivery_address_unit"
+                  value={this.state.changes.delivery_address_unit}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
 
@@ -211,7 +348,8 @@ class MakeChanges extends Component {
                   <Form.Control
                     placeholder="Prep City"
                     name="delivery_city"
-                    value={this.props.delivery_city}
+                    value={this.state.changes.delivery_city}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -220,7 +358,8 @@ class MakeChanges extends Component {
                   <Form.Control
                     as="select"
                     name="delivery_state"
-                    value={this.props.delivery_state}
+                    value={this.state.changes.delivery_state}
+                    onChange={this.handleChange}
                   >
                     <option>Choose...</option>
                     <option>TX</option>
@@ -232,34 +371,20 @@ class MakeChanges extends Component {
                   <Form.Control
                     placeholder="12345"
                     name="delivery_zip"
-                    value={this.props.delivery_zip}
+                    value={this.state.changes.delivery_zip}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
               </Form.Row>
               <Form.Group controlId="exampleForm.ControlTextarea1">
                 <Form.Label>Instructions</Form.Label>
                 <Form.Control
-                  as="textarea"
-                  rows="1"
-                  value={this.props.delivery_instructions}
+                  placeholder="Instruction notes"
+                  name="delivery_instructions"
+                  value={this.state.changes.delivery_instructions}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
-              <Tooltip
-                title="This will permanently delete your subscription"
-                placement="right"
-              >
-                <Button
-                  variant="danger"
-                  type="submit"
-                  style={{ float: "left" }}
-                  onClick={() => {
-                    alert("You have successfully deleted your subscription");
-                    return;
-                  }}
-                >
-                  Delete My Subscription
-                </Button>
-              </Tooltip>
 
               <br />
               <br />
@@ -269,13 +394,36 @@ class MakeChanges extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" type="submit">
+          <Tooltip
+            title="This will permanently delete your subscription"
+            placement="left"
+          >
+            <Button
+              variant="danger"
+              type="submit"
+              style={{ float: "left" }}
+              onClick={e => {
+                e.stopPropagation();
+                this.setState({ modalShowDelete: true });
+              }}
+            >
+              Delete My Subscription
+            </Button>
+          </Tooltip>
+          {this.state.modalShowDelete ? this.DeleteModal() : <div />}
+          <Button
+            variant="success"
+            type="submit"
+            onClick={() => {
+              this.update_subscription();
+            }}
+          >
             Save Changes
           </Button>
           <Button
             variant="light"
             onClick={() => {
-              this.setState({ modalShow: false });
+              this.setState({ modalShow: false, changes: this.props });
             }}
           >
             Close
@@ -284,9 +432,48 @@ class MakeChanges extends Component {
       </Modal>
     );
   };
+  DeleteModal = () => {
+    console.log("must be here");
+    return (
+      <Modal
+        show={this.state.modalShowDelete}
+        onHide={() => this.setState({ modalShowDelete: false })}
+        animation={false}
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          Sure you want to delete your subscription permantly?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              this.setState({ modalShowDelete: false });
+            }}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={this.delete()}>
+            Delete My Subscription
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
   render() {
     // if (this.props.subscription == null) {
     //   return <div />;
+    // }
+    // if (this.state.changes.subscription !== null && this.state.init != 0) {
+    //   let temp = this.state.changes;
+    //   temp.subscription = temp.subscription
+    //     .concat(":  $")
+    //     .concat(this.state.changes.meal_plan_price);
+
+    //   this.setState({
+    //     init: 1,
+    //     changes: temp
+    //   });
     // }
     return this.MakeChangesAnimation();
   }

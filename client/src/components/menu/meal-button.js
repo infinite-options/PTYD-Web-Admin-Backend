@@ -38,15 +38,83 @@ export default class MealButton extends Component {
       flag: false,
       mondayAvailable: this.props.monday_available,
       dayToDeliver: this.props.deliverDay,
-      subscribed: this.props.subscribed
+      subscribed: this.props.subscribed,
+      //next props
+      purchase_id: this.props.purchase_id,
+      week_affected: this.props.saturdayDate,
+      menu: this.props.menu,
+      disableSunMon: (this.props.maxmeals > 0) ? true : false
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps !== this.props) {
+      console.log("we need to be hererererererere", nextProps, this.props);
+      if (nextProps.surprise == false) {
+        this.setState({
+          buttonSurprise: false,
+          buttonSelectKeepColor: true
+        });
+      }
+      else {
+        this.setState({
+          buttonSurprise: true,
+          buttonSelectKeepColor: false
+        });
+      }
 
+      switch (nextProps.deliverDay) {
+        case "SKIP":
+          this.setState({
+            buttonS: false,
+            buttonM: false,
+            buttonSkip: true,
+            buttonSurprise: false,
+            buttonDisabled: true,
+            buttonAddOnKeepColor: false
+          });
+          break;
+        case "Monday":
+          this.setState({
+            buttonS: false,
+            buttonM: true,
+            buttonSkip: false,
+            buttonDisabled: false
+          });
+          break;
+        case "Sunday":
+          this.setState({
+            buttonS: true,
+            buttonM: false,
+            buttonSkip: false,
+            buttonDisabled: false
+          });
+      }
+    }
+    this.setState({
+      maxmeals: nextProps.maxmeals,
+      maxmealsCopy: nextProps.maxmeals,
+      purchase_id: nextProps.purchase_id,
+      week_affected: nextProps.saturdayDate,
+      menu: nextProps.menu
+    });
+  }
   async componentDidMount() {
+//  var stateCopy = await Object.assign({}, this.state);
+//  this.setState({
+//    maxmealsOriginal: stateCopy.maxmeals,
+//    mealQuantitiesOriginal: stateCopy.mealQuantities,
+//    addonQuantitiesOriginal: stateCopy.addonQuantities,
+//  });
+
     if (this.props.surprise == false) {
       this.setState({
         buttonSurprise: false,
         buttonSelectKeepColor: true
+      });
+    }
+    else {
+      this.setState({
+        disableSunMon: false
       });
     }
 
@@ -58,7 +126,8 @@ export default class MealButton extends Component {
           buttonSkip: true,
           buttonSurprise: false,
           buttonDisabled: true,
-          buttonAddOnKeepColor: false
+          buttonAddOnKeepColor: false,
+          disableSunMon: false,
         });
         break;
       case "Monday":
@@ -80,15 +149,27 @@ export default class MealButton extends Component {
   }
 
   sendForm = () => {
-    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+
+    /*
+    console.log({
+      purchase_id: this.state.purchase_id,
+      week_affected: this.state.week_affected,
+      meal_quantities: this.state.mealQuantities,
+      delivery_day: this.state.dayToDeliver,
+      default_selected: this.state.buttonSurprise,
+      is_addons: false
+    });
+    */
+
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id,
-        week_affected: this.props.saturdayDate,
+        purchase_id: this.state.purchase_id,
+        week_affected: this.state.week_affected,
         meal_quantities: this.state.mealQuantities,
         delivery_day: this.state.dayToDeliver,
         default_selected: this.state.buttonSurprise,
@@ -98,15 +179,15 @@ export default class MealButton extends Component {
   };
 
   sendAddonForm = () => {
-    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.props.purchase_id}`, {
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: this.props.purchase_id,
-        week_affected: this.props.saturdayDate,
+        purchase_id: this.state.purchase_id,
+        week_affected: this.state.week_affected,
         addon_quantities: this.state.addonQuantities,
         is_addons: true
       })
@@ -118,14 +199,15 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSelectKeepColor: true,
       flag: false,
-      mealQuantities: this.props.mealQuantities
+//    mealQuantities: this.state.mealQuantitiesOriginal,
+//    maxmeals: this.state.maxmealsOriginal,
     });
   };
   closeButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
       buttonAddOnKeepColor: false,
-      addonQuantities: this.props.addonQuantities
+//    addonQuantities: this.state.addonQuantitiesOriginal,
     });
   };
   saveButtonAddOn = () => {
@@ -138,6 +220,9 @@ export default class MealButton extends Component {
 
   async changeButtonS() {
     await this.setState({
+      buttonSurprise: (this.state.buttonSkip ? true : this.state.buttonSurprise),
+    });
+    await this.setState({
       buttonS: true,
       buttonM: false,
       buttonSkip: false,
@@ -148,6 +233,9 @@ export default class MealButton extends Component {
   };
 
   async changeButtonM() {
+    await this.setState({
+      buttonSurprise: (this.state.buttonSkip ? true : this.state.buttonSurprise),
+    });
     await this.setState({
       buttonM: true,
       buttonS: false,
@@ -170,7 +258,8 @@ export default class MealButton extends Component {
       buttonDisabled: true,
       buttonSelectKeepColor: false,
       buttonAddOnKeepColor: false,
-      dayToDeliver: "SKIP"
+      dayToDeliver: "SKIP",
+      disableSunMon: false,
     });
     this.sendForm();
   }
@@ -180,7 +269,8 @@ export default class MealButton extends Component {
       buttonSelect: true,
       buttonSurprise: false,
       buttonAddOn: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      disableSunMon: true,
     });
   };
   async changeButtonSurprise() {
@@ -188,7 +278,8 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSurprise: true,
       buttonAddOn: false,
-      buttonSelectKeepColor: false
+      buttonSelectKeepColor: false,
+      disableSunMon: false,
     });
     this.sendForm();
   }
@@ -196,7 +287,7 @@ export default class MealButton extends Component {
     this.setState({
       buttonAddOn: true,
       buttonAddOnKeepColor: true,
-      buttonSelect: false
+      buttonSelect: false,
     });
   };
   specialRequest = () => {
@@ -208,7 +299,8 @@ export default class MealButton extends Component {
     this.setState({
       addonActivated: true,
       buttonSelect: false,
-      buttonSelectKeepColor: true
+      buttonSelectKeepColor: true,
+      disableSunMon: false,
     });
     this.sendForm();
   };
@@ -233,6 +325,12 @@ export default class MealButton extends Component {
       backgroundColor: "#427c42",
       color: "white"
     };
+    const red = {
+      width: "95px",
+      height: "95px",
+      backgroundColor: "#d9534f",
+      color: "white"
+    };
 
     return (
       <div>
@@ -240,6 +338,7 @@ export default class MealButton extends Component {
           <div className="radio">
             <Button
               variant="outline-dark"
+              disabled={this.state.disableSunMon}
               onClick={this.changeButtonS}
               style={this.state.buttonS ? green : hide}
             >
@@ -250,7 +349,7 @@ export default class MealButton extends Component {
             &nbsp;
             <Button
               variant="outline-dark"
-              disabled={!this.state.mondayAvailable}
+              disabled={!this.state.mondayAvailable || this.state.disableSunMon}
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
@@ -280,7 +379,9 @@ export default class MealButton extends Component {
             ref={button => (this.button = button)}
             style={
               (this.state.buttonSelect ? green : hide,
-                this.state.buttonSelectKeepColor ? green : hide)
+              this.state.buttonSelectKeepColor ? (
+                this.state.disableSunMon ? red : green
+              ) : hide)
             }
             onClick={this.changeButtonSelect}
           >
@@ -376,13 +477,13 @@ export default class MealButton extends Component {
           </Modal.Title>
         </Card.Header>
         <div class="scrollMenu">
-          {Object.keys(this.props.menu).map(key => (
+          {Object.keys(this.state.menu).map(key => (
             <Grid>
               <Cell col={12}>
-                <h4 style={{ margin: "0" }}>{this.props.menu[key].Category}</h4>
+                <h4 style={{ margin: "0" }}>{this.state.menu[key].Category}</h4>
               </Cell>
               <br />
-              {this.props.menu[key].Menu.map(meal => (
+              {this.state.menu[key].Menu.map(meal => (
                 <Cell col={4}>
                   <EachMeal
                     mealTitle={meal.meal_name}
@@ -435,6 +536,7 @@ export default class MealButton extends Component {
                   this.state.flag === false
                 ) {
                   alert("Are you sure you want to close without saving?");
+
                   this.setState({
                     flag: true
                   });
