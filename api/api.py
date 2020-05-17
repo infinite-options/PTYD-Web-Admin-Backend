@@ -3126,6 +3126,9 @@ class UpdateSubscription(Resource):
 
             meal_plan_id = data['meal_plan_id']
             purchase_id = data['purchase_id']
+            cc_num = data['cc_num']
+            cc_cvv = data['cc_cvv']
+            cc_exp_date = data['cc_exp_date']
             delivery_address = data['delivery_address']
 
             print("1")
@@ -3146,6 +3149,9 @@ class UpdateSubscription(Resource):
             # print("test",test)
             execute(""" CALL `ptyd`.`update_purchase`(\'""" + str(purchase_id) + """\',
                                                            \'""" + str(meal_plan_id) + """\',
+                                                           \'""" + str(cc_num) + """\',
+                                                           \'""" + str(cc_cvv) + """\',
+                                                           \'""" + str(cc_exp_date) + """\',
                                                            \'""" + str(delivery_address) + """\',
                                                            \'""" + str(delivery_address_unit) + """\', 
                                                            \'""" + str(delivery_city) + """\', 

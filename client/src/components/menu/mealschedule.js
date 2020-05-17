@@ -399,27 +399,33 @@ class Mealschedule extends Component {
             <br />
             <div>{console.log(this.state.menu)}</div>
             <div class="meals-button">
-              {this.state.menu.map(eachWeek => (
-                <MealButton
-                  day1="Sunday"
-                  day2="Monday"
-                  saturdayDate={eachWeek.sat}
-                  date1={eachWeek.sun}
-                  date2={eachWeek.mon}
-                  menu={eachWeek.menu}
-                  addons={eachWeek.addons}
-                  mealQuantities={eachWeek.mealQuantities}
-                  addonQuantities={eachWeek.addonQuantities}
-                  maxmeals={eachWeek.maxmeals}
-                  purchase_id={this.state.purchase.purchase_id}
-                  deliverDay={eachWeek.deliverDay}
-                  subscribed={this.state.subscribed}
-                  surprise={eachWeek.surprise}
-                  addonsSelected={eachWeek.addonsSelected}
-                  monday_available={this.state.monday_available}
-                  MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
-                />
-              ))}
+              {this.state.menu.map(
+                eachWeek => (
+                  console.log("meal printing", eachWeek.mealQuantities),
+                  console.log("addon printing", eachWeek.addonQuantities),
+                  (
+                    <MealButton
+                      day1="Sunday"
+                      day2="Monday"
+                      saturdayDate={eachWeek.sat}
+                      date1={eachWeek.sun}
+                      date2={eachWeek.mon}
+                      menu={eachWeek.menu}
+                      addons={eachWeek.addons}
+                      mealQuantities={eachWeek.mealQuantities}
+                      addonQuantities={eachWeek.addonQuantities}
+                      maxmeals={eachWeek.maxmeals}
+                      purchase_id={this.state.purchase.purchase_id}
+                      deliverDay={eachWeek.deliverDay}
+                      subscribed={this.state.subscribed}
+                      surprise={eachWeek.surprise}
+                      addonsSelected={eachWeek.addonsSelected}
+                      monday_available={this.state.monday_available}
+                      MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
+                    />
+                  )
+                )
+              )}
             </div>
           </Cell>
         </Grid>

@@ -13,6 +13,11 @@ import {
 } from "react-bootstrap";
 import Tooltip from "@material-ui/core/Tooltip";
 import moment from "moment";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 class MakeChanges extends Component {
   constructor(props) {
@@ -23,10 +28,17 @@ class MakeChanges extends Component {
       changes: props,
       init: 0,
       date: moment(this.props.cc_exp_date),
-      dict: {}
+      dict: {},
+      open: false
       // new_changed_subscription: changes.subscription
     };
   }
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+  handleClose = () => {
+    this.setState({ open: false });
+  };
   handleChange = event => {
     const target = event.target;
     const name = target.name;
@@ -104,9 +116,9 @@ class MakeChanges extends Component {
       body: JSON.stringify({
         meal_plan_id: temp,
         purchase_id: this.props.purchase_id,
-        // cc_num: this.state.changes.cc_num,
-        // cc_cvv: this.state.changes.cc_cvv,
-        // cc_exp_date: this.state.date,this.state.date.format("YYYY-MM-DD")
+        cc_num: this.state.changes.cc_num,
+        cc_cvv: this.state.changes.cc_cvv,
+        cc_exp_date: this.state.date.format("YYYY-MM-DD"),
         delivery_address: this.state.changes.delivery_address,
         delivery_address_unit: this.state.changes.delivery_address_unit,
         delivery_city: this.state.changes.delivery_city,
@@ -151,7 +163,7 @@ class MakeChanges extends Component {
         alert("Error deleting");
         return Promise.reject(error);
       } else {
-        alert("You have successfully deleted your account!");
+        alert("You have successfully deleted your subscription!");
       }
 
       response.json();
@@ -389,7 +401,7 @@ class MakeChanges extends Component {
               <br />
               <br />
             </Form>
-
+            {this.DeleteModal()}
             {/* {this.props.subscription} */}
           </div>
         </Modal.Body>
@@ -402,15 +414,12 @@ class MakeChanges extends Component {
               variant="danger"
               type="submit"
               style={{ float: "left" }}
-              onClick={e => {
-                e.stopPropagation();
-                this.setState({ modalShowDelete: true });
-              }}
+              onClick={this.handleClickOpen}
             >
               Delete My Subscription
             </Button>
           </Tooltip>
-          {this.state.modalShowDelete ? this.DeleteModal() : <div />}
+          {/* {this.state.modalShowDelete ? this.DeleteModal() : <div />} */}
           <Button
             variant="success"
             type="submit"
@@ -435,29 +444,29 @@ class MakeChanges extends Component {
   DeleteModal = () => {
     console.log("must be here");
     return (
-      <Modal
-        show={this.state.modalShowDelete}
-        onHide={() => this.setState({ modalShowDelete: false })}
-        animation={false}
-      >
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          Sure you want to delete your subscription permantly?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              this.setState({ modalShowDelete: false });
-            }}
-          >
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={this.delete()}>
-            Delete My Subscription
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <div>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Warning"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete your subscription?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              No,Keep
+            </Button>
+            <Button onClick={this.delete} variant="danger" autoFocus>
+              Yes,Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     );
   };
   render() {
