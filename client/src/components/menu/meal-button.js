@@ -428,65 +428,53 @@ export default class MealButton extends Component {
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
-          <center>
-            <Modal.Title style={{ backgroundColor: "white", width: "100%" }}>
-              <h4 style={{ float: "left", margin: "0" }} class="font2">
-                Please Select {this.state.maxmeals} Meals:
-                </h4>
-              <div style={{ float: "right" }}>
-                &nbsp;&nbsp;
-                <Button
-                  variant="danger"
-                  // style={{
-                  //   backgroundColor: "pink",
-                  //   color: "black",
-                  //   float: "right"
-                  // }}
-                  onClick={() => {
-                    if (
-                      this.state.maxmealsCopy !== this.state.maxmeals &&
-                      this.state.flag === false
-                    ) {
-                      alert(
-                        "Are you sure you want to close without saving your changes?"
-                      );
-                      this.setState({
-                        flag: true
-                      });
-                      return;
-                    }
-                    this.closeButtonSelect();
-                  }}
-                >
-                  Close
-                </Button>
-                &nbsp;&nbsp;
-                {this.state.subscribed ? (
-                  this.state.maxmeals === 0 ? (
-                    <Button
-                      variant="success"
-                      // style={{ backgroundColor: "#A3C7AC", color: "black" }}
-                      onClick={this.saveButtonActivateAddons}
-                    >
-                      Save changes
-                    </Button>
-                  ) : (
-                      <br />
-                    )
+          <Modal.Title style={{ width: "100%" }}>
+            <h4 style={{ float: "left", margin: "0"}} class="font2">
+              Please Select {this.state.maxmeals} Meals:
+            </h4>
+            <div style={{ float: "right" }}>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  if (
+                    this.state.maxmealsCopy !== this.state.maxmeals &&
+                    this.state.flag === false
+                  ) {
+                    alert(
+                      "Are you sure you want to close without saving your changes?"
+                    );
+                    this.setState({
+                      flag: true
+                    });
+                    return;
+                  }
+                  this.closeButtonSelect();
+                }}
+              >
+                Close
+              </Button>
+              &nbsp;&nbsp;
+              {this.state.subscribed ? (
+                this.state.maxmeals === 0 ? (
+                  <Button
+                    variant="success"
+                    onClick={this.saveButtonActivateAddons}
+                  >
+                    Save changes
+                  </Button>
                 ) : (
-                    <Button
-                      variant="success"
-                      // style={{ backgroundColor: "#A3C7AC", color: "black" }}
-                      href="/selectmealplan"
-                    >
-                      Subscribe Now
-                    </Button>
-                  )}
-                &nbsp;&nbsp;
-                
-              </div>
-            </Modal.Title>
-          </center>
+                    <br />
+                  )
+              ) : (
+                  <Button
+                    variant="success"
+                    href="/selectmealplan"
+                  >
+                    Subscribe Now
+                  </Button>
+                )}
+            </div>
+          </Modal.Title>
         </Card.Header>
         <div class="scrollMenu">
           {Object.keys(this.state.menu).map(key => (
@@ -542,10 +530,6 @@ export default class MealButton extends Component {
           &nbsp;&nbsp;
             <Button
               variant="danger"
-              // style={{
-              //   backgroundColor: "pink",
-              //   color: "black"
-              // }}
               onClick={() => {
                 if (
                   this.state.maxmealsCopy !== this.state.maxmeals &&
@@ -568,7 +552,6 @@ export default class MealButton extends Component {
               this.state.maxmeals === 0 ? (
                 <Button
                   variant="success"
-                  // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                   onClick={this.saveButtonActivateAddons}
                 >
                   Save changes
@@ -579,7 +562,6 @@ export default class MealButton extends Component {
               ) : (
                 <Button
                   variant="success"
-                  // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                   href="/selectmealplan"
                 >
                   Subscribe Now
@@ -594,10 +576,11 @@ export default class MealButton extends Component {
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
-          <center>
-            <Modal.Title>
-              Add Local Treats{" "}
-              &nbsp;&nbsp;
+          <Modal.Title style={{ width:"100%" }}>
+            <h4 style={{ float: "left", margin: "0"}} class="font2">
+              Add Local Treats
+            </h4>
+            <div style={{ float: "right" }}>
               <Button
                 variant="danger"
                 onClick={this.closeButtonAddOn}
@@ -614,8 +597,8 @@ export default class MealButton extends Component {
                     Subscribe Now
                   </Link>
                 )}
-            </Modal.Title>
-          </center>
+              </div>
+          </Modal.Title>
         </Card.Header>
         {this.state.addonActivated ? (
           <div>
@@ -623,11 +606,9 @@ export default class MealButton extends Component {
               <div>
                 <Grid>
                   <Cell col={12}>
-                    <center>
                       <h4 style={{ margin: "0" }}>
                         {this.props.addons[key].Category}
                       </h4>
-                    </center>
                   </Cell>
 
                   {this.props.addons[key].Menu.map(meal => (
@@ -678,11 +659,11 @@ export default class MealButton extends Component {
               <div>
                 <Grid>
                   <Cell col={12}>
-                    <center>
+                    {/* <center> */}
                       <h4 style={{ margin: "0" }}>
                         {this.props.addons["Addons"].Category}
                       </h4>
-                    </center>
+                    {/* </center> */}
                   </Cell>
 
                   {this.props.addons["Addons"].Menu.map(meal => (

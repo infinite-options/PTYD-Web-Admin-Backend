@@ -25,7 +25,7 @@ class EachAddon extends Component {
         <div class="container-select-meal" style={{ color: "white" }}>
           {/* <div class='meal-img-wrapper2' style={{objectFit: "cover", width:"100%", height: "100%"}}> */}
             <div class="meal-img-wrapper" style={{ overflow:"hidden", width: "100%", minWidth:"100%", height:"200px", maxHeight:"200px"}}>
-              <OverlayTrigger
+              {/* <OverlayTrigger
                 placement="bottom"
                 delay={{ show: 100, hide: 100 }}
                 popperConfig={{
@@ -43,14 +43,14 @@ class EachAddon extends Component {
                     </p>
                   </Tooltip>
                 }
-              >
+              > */}
                 <img
                   class="img-fluid"
                   src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
                   alt="no_meal_img"
                   resizeMode
                 />
-              </OverlayTrigger>
+              {/* </OverlayTrigger> */}
               {/* <div
                 class="bottom-right-meal-selection font2"
                 style={{
@@ -87,7 +87,8 @@ class EachAddon extends Component {
                   fontSize: "15px",
                   float: "right",
                   backgroundColor: "black",
-                  lineHeight: "25px"
+                  lineHeight: "25px",
+                  cursor: "default"
                 }}
               >
                 <center>{this.props.mealTitle}</center>
