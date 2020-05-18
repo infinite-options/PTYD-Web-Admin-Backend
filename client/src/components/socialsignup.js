@@ -101,9 +101,11 @@ export default function SocialSignUp(props) {
       if (res.data !== undefined && res.data.result !== undefined) {
         loginSocial(res.data.result.user_uid);
       } else {
+        setLoading(false);
         RaiseError(`server's response doesn't have userid in it.`);
       }
     } catch (err) {
+      setLoading(false);
       RaiseError(err);
     }
   }
