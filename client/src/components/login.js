@@ -222,9 +222,14 @@ export default function Login(props) {
       } else {
         props.history.push("/"); // should prompt something or asking for re-login
       }
-    } catch (e) {
-      console.log(e);
-      RaiseError(e);
+    } catch (err) {
+      if (err.response !== undefined) {
+        let msg = err.response.data.message;
+        RaiseError(msg);
+      }
+      if (typeof err === "string") {
+        RaiseError(err);
+      }
       setLoading(false);
     }
   }
@@ -262,12 +267,15 @@ export default function Login(props) {
         } else {
           return res.data;
         }
-      } else {
-        setLoading(false);
-        RaiseError("Wrong password");
       }
     } catch (err) {
-      RaiseError(err);
+      if (err.response !== undefined) {
+        let msg = err.response.data.message;
+        RaiseError(msg);
+      }
+      if (typeof err === "string") {
+        RaiseError(err);
+      }
       setLoading(false);
     }
   }
@@ -280,8 +288,14 @@ export default function Login(props) {
         login(res);
       })
       .catch(err => {
+        if (err.response !== undefined) {
+          let msg = err.response.data.message;
+          RaiseError(msg);
+        }
+        if (typeof err === "string") {
+          RaiseError(err);
+        }
         setLoading(false);
-        RaiseError(err);
       });
 
     // await login(t);
