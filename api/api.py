@@ -3112,6 +3112,10 @@ class UpdateSubscription(Resource):
             purchase_id = data['purchase_id']
             delivery_address = data['delivery_address']
 
+            cc_num = data['cc_num']
+            cc_exp_date = data['cc_exp_date']
+            cc_cvv = data['cc_cvv']
+
             print("1")
             delivery_address_unit = data['delivery_address_unit']
             # delivery_address_unit = None
@@ -3137,6 +3141,11 @@ class UpdateSubscription(Resource):
                                                            \'""" + str(delivery_zip) + """\', 
                                                            \'""" + str(delivery_instructions) + """\');
                                                             """, 'post', conn)
+
+            execute(""" CALL `ptyd`.`update_payments`(\'""" + str(cc_num) + """\', 
+                                                        \'""" + str(cc_exp_date) + """\',
+                                                        \'""" + str(cc_cvv) + """\');
+                                                        """, 'post', conn)
             
             return response, 200
         except:
