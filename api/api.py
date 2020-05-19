@@ -767,7 +767,7 @@ class AccountPurchases(Resource):
                 elif eachItem['payment_frequency'] == 'Monthly':
                     next_charge_date = last_charge_date + timedelta(days=28)
                 
-                tempdate = datetime(2020, 6, 1, 21, 59, 59, 342380)
+                tempdate = datetime(2020, 5, 25, 21, 59, 59, 342380)
                 print("datetime now",datetime.now())
                 print("datetime noww", tempdate)
                 # eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
@@ -3136,9 +3136,6 @@ class UpdateSubscription(Resource):
 
             meal_plan_id = data['meal_plan_id']
             purchase_id = data['purchase_id']
-            cc_num = data['cc_num']
-            cc_cvv = data['cc_cvv']
-            cc_exp_date = data['cc_exp_date']
             delivery_address = data['delivery_address']
 
             print("1")
@@ -3159,9 +3156,6 @@ class UpdateSubscription(Resource):
             # print("test",test)
             execute(""" CALL `ptyd`.`update_purchase`(\'""" + str(purchase_id) + """\',
                                                            \'""" + str(meal_plan_id) + """\',
-                                                           \'""" + str(cc_num) + """\',
-                                                           \'""" + str(cc_cvv) + """\',
-                                                           \'""" + str(cc_exp_date) + """\',
                                                            \'""" + str(delivery_address) + """\',
                                                            \'""" + str(delivery_address_unit) + """\', 
                                                            \'""" + str(delivery_city) + """\', 

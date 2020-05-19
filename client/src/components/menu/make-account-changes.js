@@ -116,9 +116,9 @@ class MakeChanges extends Component {
       body: JSON.stringify({
         meal_plan_id: temp,
         purchase_id: this.props.purchase_id,
-        cc_num: this.state.changes.cc_num,
-        cc_cvv: this.state.changes.cc_cvv,
-        cc_exp_date: this.state.date.format("YYYY-MM-DD"),
+        // cc_num: this.state.changes.cc_num,
+        // cc_cvv: this.state.changes.cc_cvv,
+        // cc_exp_date: this.state.date.format("YYYY-MM-DD"),
         delivery_address: this.state.changes.delivery_address,
         delivery_address_unit: this.state.changes.delivery_address_unit,
         delivery_city: this.state.changes.delivery_city,
