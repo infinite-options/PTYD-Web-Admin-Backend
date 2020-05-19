@@ -3138,10 +3138,6 @@ class UpdateSubscription(Resource):
             purchase_id = data['purchase_id']
             delivery_address = data['delivery_address']
 
-            cc_num = data['cc_num']
-            cc_exp_date = data['cc_exp_date']
-            cc_cvv = data['cc_cvv']
-
             print("1")
             delivery_address_unit = data['delivery_address_unit']
             # delivery_address_unit = None
@@ -3167,7 +3163,28 @@ class UpdateSubscription(Resource):
                                                            \'""" + str(delivery_zip) + """\', 
                                                            \'""" + str(delivery_instructions) + """\');
                                                             """, 'post', conn)
+            
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
+class UpdatePayments(Resource):
+    def patch(self):
+        response = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+            print("pre",data)
+
+            cc_num = data['cc_num']
+            cc_exp_date = data['cc_exp_date']
+            cc_cvv = data['cc_cvv']
+
+            print("data",data)
             execute(""" CALL `ptyd`.`update_payments`(\'""" + str(cc_num) + """\', 
                                                         \'""" + str(cc_exp_date) + """\',
                                                         \'""" + str(cc_cvv) + """\');
@@ -3265,7 +3282,7 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
-api.add_resource(addRecipe, '/api/v2/addRecipe')
+api.add_resource(addRecipe, '/api/v2/add-recipe')
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
@@ -3281,6 +3298,8 @@ api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
 '''
 # in progress
 api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
+api.add_resource(UpdatePayments, '/api/v2/update-payments')
+
 
 
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
