@@ -287,6 +287,11 @@ class Checkout extends Component {
                     alt='Delivery Truck Icon'
                   />
                 </div>
+                <h3>Account Holder Information</h3>
+                <p>First Name: {this.state.purchase.delivery_first_name}</p>
+                <p>Last Name: {this.state.purchase.delivery_last_name}</p>
+                <p>Email: {this.state.purchase.delivery_email}</p>
+                <hr />
                 <h3>Order Summary</h3>
                 <div id='cart'>
                   <p>{this.props.location.item.name}</p>
@@ -315,7 +320,7 @@ class Checkout extends Component {
                       Style='height:30px; margin-top:30px;'
                       type='submit'
                     >
-                      Checkout
+                      Apply
                     </Button>
                   </Form.Row>
                 </Form>
@@ -391,61 +396,55 @@ class Checkout extends Component {
                       />
                     </Form.Group>
 
-                    <Form.Group as={Col} controlId='formGridPassword'>
+                    <Form.Group as={Col} controlId='formGridPhoneNumber'>
                       <Form.Label>
-                        Password
-                        <span className='required-red'>
+                        Phone Number
+                      <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
                       </Form.Label>
                       <Form.Control
-                        type='password'
-                        placeholder={
-                          !this.state.password_salt
-                            ? "Social Media Account"
-                            : "Enter Password"
-                        }
-                        value={this.state.password}
-                        name='password'
-                        onChange={this.handlePwChange}
-                        disabled={!this.state.password_salt ? true : false}
+                        placeholder='1234567890'
+                        value={this.state.purchase.delivery_phone}
+                        name='delivery_phone'
+                        onChange={this.handleChange}
                       />
                     </Form.Group>
                   </Form.Row>
 
-                  <Form.Group controlId='formGridAddress'>
-                    <Form.Label>
-                      Address
+                  <Form.Row>
+                    <Form.Group as={Col} controlId='formGridAddress'>
+                      <Form.Label>
+                        Address
                       <span className='required-red'>
-                        {" "}
-                        <b>*</b>
-                      </span>
-                    </Form.Label>
-                    <Form.Control
-                      placeholder='1234 Main St'
-                      value={this.state.purchase.delivery_address}
-                      name='delivery_address'
-                      onChange={this.handleChange}
-                    />
-                  </Form.Group>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='1234 Main St'
+                        value={this.state.purchase.delivery_address}
+                        name='delivery_address'
+                        onChange={this.handleChange}
+                      />
+                    </Form.Group>
 
-                  <Form.Group
-                    as={Col}
-                    md={4}
-                    Style='margin-left:-15px;'
-                    controlId='formGridAptNum'
-                  >
-                    <Form.Label>
-                      Apartment/Unit <b>(optional)</b>
-                    </Form.Label>
-                    <Form.Control
-                      placeholder='Apartment, studio, or floor'
-                      value={this.state.purchase.delivery_address_unit}
-                      name='delivery_address_unit'
-                      onChange={this.handleChange}
-                    />
-                  </Form.Group>
+                    <Form.Group
+                      as={Col}
+                      controlId='formGridAptNum'
+                    >
+                      <Form.Label>
+                        Apartment/Unit <b>(optional)</b>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='Apartment, studio, or floor'
+                        value={this.state.purchase.delivery_address_unit}
+                        name='delivery_address_unit'
+                        onChange={this.handleChange}
+                      />
+                    </Form.Group>
+                  </Form.Row>
 
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridCity'>
@@ -522,22 +521,6 @@ class Checkout extends Component {
                       <option>Choose...</option>
                       <option>US</option>
                     </Form.Control>
-                  </Form.Group>
-
-                  <Form.Group controlId='formGridPhoneNumber'>
-                    <Form.Label>
-                      Phone Number
-                      <span className='required-red'>
-                        {" "}
-                        <b>*</b>
-                      </span>
-                    </Form.Label>
-                    <Form.Control
-                      placeholder='1234567890'
-                      value={this.state.purchase.delivery_phone}
-                      name='delivery_phone'
-                      onChange={this.handleChange}
-                    />
                   </Form.Group>
 
                   <Form.Group id='formGridCheckbox'>
@@ -677,6 +660,31 @@ class Checkout extends Component {
                       </Form.Control>
                     </Form.Group>
                   </Form.Row>
+
+                  <Form.Row>
+                    <Form.Group as={Col} md={3} controlId='formGridPassword'>
+                      <Form.Label>
+                        Password
+                          <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        type='password'
+                        placeholder={
+                          !this.state.password_salt
+                            ? "Social Media Account"
+                            : "Enter Password"
+                        }
+                        value={this.state.password}
+                        name='password'
+                        onChange={this.handlePwChange}
+                        disabled={!this.state.password_salt ? true : false}
+                      />
+                    </Form.Group>
+                  </Form.Row>
+
 
                   <Button
                     onClick={this.checkout}

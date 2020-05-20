@@ -217,11 +217,11 @@ export default function Login(props) {
         } else {
           props.history.push("/");
         }
-        setLoading(false);
-        window.location.reload(false);
       } else {
         props.history.push("/"); // should prompt something or asking for re-login
       }
+      setLoading(false);
+      window.location.reload(false);
     } catch (err) {
       if (err.response !== undefined) {
         let msg = err.response.data.message;
@@ -267,6 +267,9 @@ export default function Login(props) {
         } else {
           return res.data;
         }
+      } else {
+        setLoading(false);
+        RaiseError("Wrong password");
       }
     } catch (err) {
       if (err.response !== undefined) {
