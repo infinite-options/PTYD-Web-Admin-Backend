@@ -433,20 +433,13 @@ export default class MealButton extends Component {
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
-          <center>
-            <Modal.Title style={{ backgroundColor: "white", width: "100%" }}>
+            <Modal.Title style={{ width: "100%" }}>
               <h4 style={{ float: "left", margin: "0" }} class="font2">
                 Please Select {this.state.maxmeals} Meals:
               </h4>
               <div style={{ float: "right" }}>
-                &nbsp;&nbsp;
                 <Button
                   variant="danger"
-                  // style={{
-                  //   backgroundColor: "pink",
-                  //   color: "black",
-                  //   float: "right"
-                  // }}
                   onClick={() => {
                     if (
                       this.state.maxmealsCopy !== this.state.maxmeals &&
@@ -470,7 +463,6 @@ export default class MealButton extends Component {
                   this.state.maxmeals === 0 ? (
                     <Button
                       variant="success"
-                      // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                       onClick={this.saveButtonActivateAddons}
                     >
                       Save changes
@@ -481,16 +473,13 @@ export default class MealButton extends Component {
                 ) : (
                   <Button
                     variant="success"
-                    // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                     href="/selectmealplan"
                   >
                     Subscribe Now
                   </Button>
                 )}
-                &nbsp;&nbsp;
               </div>
             </Modal.Title>
-          </center>
         </Card.Header>
         <div class="scrollMenu">
           {Object.keys(this.state.menu).map(key => (
@@ -578,7 +567,6 @@ export default class MealButton extends Component {
             ) : (
               <Button
                 variant="success"
-                // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                 href="/selectmealplan"
               >
                 Subscribe Now
@@ -593,24 +581,26 @@ export default class MealButton extends Component {
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
-          <center>
-            <Modal.Title>
-              Add Local Treats &nbsp;&nbsp;
-              <Button variant="danger" onClick={this.closeButtonAddOn}>
-                Close
-              </Button>
-              &nbsp;&nbsp;
-              {this.state.subscribed ? (
-                <Button variant="success" onClick={this.saveButtonAddOn}>
-                  Save changes
+            <Modal.Title style={{ width: "100%" }}>
+              <h4 style={{ float: "left", margin: "0" }} class="font2">
+                Add Local Treats:
+              </h4>
+              <div style={{ float: "right" }}>
+                <Button variant="danger" onClick={this.closeButtonAddOn}>
+                  Close
                 </Button>
-              ) : (
-                <Link to="/selectmealplan" className="btn btn-success">
-                  Subscribe Now
-                </Link>
-              )}
+                &nbsp;&nbsp;
+                {this.state.subscribed ? (
+                  <Button variant="success" onClick={this.saveButtonAddOn}>
+                    Save changes
+                  </Button>
+                ) : (
+                  <Link to="/selectmealplan" className="btn btn-success">
+                    Subscribe Now
+                  </Link>
+                )}
+              </div>
             </Modal.Title>
-          </center>
         </Card.Header>
         {this.state.addonActivated ? (
           <div>
@@ -671,11 +661,10 @@ export default class MealButton extends Component {
             <div>
               <Grid>
                 <Cell col={12}>
-                  <center>
-                    <h4 style={{ margin: "0" }}>
-                      {this.state.addons["Addons"].Category}
-                    </h4>
-                  </center>
+                  <h4 style={{ margin: "0" }}>
+                    {this.state.addons["Addons"].Category}
+                  </h4>
+                  <br />
                 </Cell>
 
                 {this.state.addons["Addons"].Menu.map(meal => (
