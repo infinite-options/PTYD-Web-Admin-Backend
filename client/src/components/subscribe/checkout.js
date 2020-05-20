@@ -62,24 +62,7 @@ class Checkout extends Component {
     return this.getCookieAttrHelper(cname, "loggedInBy");
   }
 
-  // searchCookie4LoginID(str) {
-  //   try {
-  //     let arr = str.split(" ");
-  //     let i = arr.indexOf("login_id:");
-  //     return arr[i + 1];
-  //   } catch {
-  //     return null;
-  //   }
-  // }
-
   searchCookie4SessionID(cname) {
-    // try {
-    //   let arr = str.split(" ");
-    //   let i = arr.indexOf("session_id:");
-    //   return arr[i + 1];
-    // } catch {
-    //   return null;
-    // }
     return this.getCookieAttrHelper(cname, "session_id");
   }
   async componentDidMount() {
@@ -87,33 +70,23 @@ class Checkout extends Component {
       login_id: this.searchCookie4Login("loginStatus"),
       session_id: this.searchCookie4SessionID("loginStatus")
     };
-    console.log(`login_session.login_id: ${login_session.login_id}`);
-    console.log(`login_session.session_id: ${login_session.session_id}`);
-
     if (this.state.user_uid) {
-      console.log(`session_url: ${this.props.SESSION_URL}`);
       if (this.searchCookie4loginMethod("loginStatus") !== "social") {
         const res = await fetch(
           `${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.session_id}`
         );
         const api = await res.json();
-        console.log(`api.result:${api.result}`);
         if (api.result.length === 0) {
           //could not verify login session
           this.props.history.push("/invalidsession");
           return;
         }
-
         //  Social Media accounts will have null salts
         //  Disable password field if salt is null
         this.setState({
           password_salt: api.result[0].password_salt
         });
-        console.log(`password_salt: ${this.state.password_salt}`);
       }
-      console.log(
-        `this.props.PURCHASE_API_URL: ${this.props.PURCHASE_API_URL}`
-      );
       const pur = await fetch(
         `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
       );
@@ -314,6 +287,11 @@ class Checkout extends Component {
                     alt='Delivery Truck Icon'
                   />
                 </div>
+                <h3>Account Holder Information</h3>
+                <p>First Name: {this.state.purchase.delivery_first_name}</p>
+                <p>Last Name: {this.state.purchase.delivery_last_name}</p>
+                <p>Email: {this.state.purchase.delivery_email}</p>
+                <hr />
                 <h3>Order Summary</h3>
                 <div id='cart'>
                   <p>{this.props.location.item.name}</p>
@@ -342,7 +320,7 @@ class Checkout extends Component {
                       Style='height:30px; margin-top:30px;'
                       type='submit'
                     >
-                      Checkout
+                      Apply
                     </Button>
                   </Form.Row>
                 </Form>
@@ -354,7 +332,10 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridFirstName'>
                       <Form.Label>
                         First Name
-                        <span className='required-red'> <b>*</b></span>
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Enter First Name'
@@ -367,7 +348,10 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridLastName'>
                       <Form.Label>
                         Last Name
-                        <span className='required-red'> <b>*</b></span>
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Enter Last Name'
@@ -381,7 +365,10 @@ class Checkout extends Component {
                   <Form.Group controlId='formGridNotes'>
                     <Form.Label>
                       Delivery Notes
-                      <span className='required-red'> <b>*</b></span>
+                      <span className='required-red'>
+                        {" "}
+                        <b>*</b>
+                      </span>
                     </Form.Label>
                     <Form.Control
                       placeholder='Enter Notes or N/A (e.g. Gate Code, Special Instructions)'
@@ -394,7 +381,11 @@ class Checkout extends Component {
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridEmail'>
                       <Form.Label>
-                        Email<span className='required-red'> <b>*</b></span>
+                        Email
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         type='email'
@@ -405,59 +396,64 @@ class Checkout extends Component {
                       />
                     </Form.Group>
 
-                    <Form.Group as={Col} controlId='formGridPassword'>
+                    <Form.Group as={Col} controlId='formGridPhoneNumber'>
                       <Form.Label>
-                        Password
-                        <span className='required-red'> <b>*</b></span>
+                        Phone Number
+                      <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
-                        type='password'
-                        placeholder={
-                          !this.state.password_salt
-                            ? "Social Media Account"
-                            : "Enter Password"
-                        }
-                        value={this.state.password}
-                        name='password'
-                        onChange={this.handlePwChange}
-                        disabled={!this.state.password_salt ? true : false}
+                        placeholder='1234567890'
+                        value={this.state.purchase.delivery_phone}
+                        name='delivery_phone'
+                        onChange={this.handleChange}
                       />
                     </Form.Group>
                   </Form.Row>
 
-                  <Form.Group controlId='formGridAddress'>
-                    <Form.Label>
-                      Address<span className='required-red'> <b>*</b></span>
-                    </Form.Label>
-                    <Form.Control
-                      placeholder='1234 Main St'
-                      value={this.state.purchase.delivery_address}
-                      name='delivery_address'
-                      onChange={this.handleChange}
-                    />
-                  </Form.Group>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId='formGridAddress'>
+                      <Form.Label>
+                        Address
+                      <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='1234 Main St'
+                        value={this.state.purchase.delivery_address}
+                        name='delivery_address'
+                        onChange={this.handleChange}
+                      />
+                    </Form.Group>
 
-                  <Form.Group
-                    as={Col}
-                    md={4}
-                    Style='margin-left:-15px;'
-                    controlId='formGridAptNum'
-                  >
-                    <Form.Label>
-                      Apartment/Unit <b>(optional)</b>
-                    </Form.Label>
-                    <Form.Control
-                      placeholder='Apartment, studio, or floor'
-                      value={this.state.purchase.delivery_address_unit}
-                      name='delivery_address_unit'
-                      onChange={this.handleChange}
-                    />
-                  </Form.Group>
+                    <Form.Group
+                      as={Col}
+                      controlId='formGridAptNum'
+                    >
+                      <Form.Label>
+                        Apartment/Unit <b>(optional)</b>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='Apartment, studio, or floor'
+                        value={this.state.purchase.delivery_address_unit}
+                        name='delivery_address_unit'
+                        onChange={this.handleChange}
+                      />
+                    </Form.Group>
+                  </Form.Row>
 
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridCity'>
                       <Form.Label>
-                        City<span className='required-red'> <b>*</b></span>
+                        City
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Prep City'
@@ -469,7 +465,11 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} controlId='formGridState'>
                       <Form.Label>
-                        State<span className='required-red'> <b>*</b></span>
+                        State
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         as='select'
@@ -484,7 +484,11 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} controlId='formGridZip'>
                       <Form.Label>
-                        Zip<span className='required-red'> <b>*</b></span>
+                        Zip
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         placeholder='12345'
@@ -502,7 +506,11 @@ class Checkout extends Component {
                     controlId='formGridCountry'
                   >
                     <Form.Label>
-                      Country<span className='required-red'> <b>*</b></span>
+                      Country
+                      <span className='required-red'>
+                        {" "}
+                        <b>*</b>
+                      </span>
                     </Form.Label>
                     <Form.Control
                       as='select'
@@ -513,19 +521,6 @@ class Checkout extends Component {
                       <option>Choose...</option>
                       <option>US</option>
                     </Form.Control>
-                  </Form.Group>
-
-                  <Form.Group controlId='formGridPhoneNumber'>
-                    <Form.Label>
-                      Phone Number
-                      <span className='required-red'> <b>*</b></span>
-                    </Form.Label>
-                    <Form.Control
-                      placeholder='1234567890'
-                      value={this.state.purchase.delivery_phone}
-                      name='delivery_phone'
-                      onChange={this.handleChange}
-                    />
                   </Form.Group>
 
                   <Form.Group id='formGridCheckbox'>
@@ -544,7 +539,10 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={6} controlId='formGridCardNumber'>
                       <Form.Label>
                         Credit Card Number
-                        <span className='required-red'> <b>*</b></span>
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         placeholder='Enter Card Number'
@@ -558,7 +556,11 @@ class Checkout extends Component {
                   <Form.Row>
                     <Form.Group as={Col} md={3} controlId='formGridCardCvc'>
                       <Form.Label>
-                        CVC<span className='required-red'> <b>*</b></span>
+                        CVC
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         placeholder='123'
@@ -570,7 +572,11 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} md={3} controlId='formGridCardMonth'>
                       <Form.Label>
-                        Month<span className='required-red'> <b>*</b></span>
+                        Month
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         as='select'
@@ -596,7 +602,11 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} md={3} controlId='formGridCardYear'>
                       <Form.Label>
-                        Year<span className='required-red'> <b>*</b></span>
+                        Year
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         as='select'
@@ -623,7 +633,10 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={4} controlId='formGridBillingZip'>
                       <Form.Label>
                         Postal Code
-                        <span className='required-red'> <b>*</b></span>
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control
                         placeholder='12345'
@@ -635,7 +648,11 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} controlId='formGridBillingCountry'>
                       <Form.Label>
-                        Country<span className='required-red'> <b>*</b></span>
+                        Country
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
                       </Form.Label>
                       <Form.Control as='select'>
                         <option>Choose...</option>
@@ -643,6 +660,31 @@ class Checkout extends Component {
                       </Form.Control>
                     </Form.Group>
                   </Form.Row>
+
+                  <Form.Row>
+                    <Form.Group as={Col} md={3} controlId='formGridPassword'>
+                      <Form.Label>
+                        Password
+                          <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        type='password'
+                        placeholder={
+                          !this.state.password_salt
+                            ? "Social Media Account"
+                            : "Enter Password"
+                        }
+                        value={this.state.password}
+                        name='password'
+                        onChange={this.handlePwChange}
+                        disabled={!this.state.password_salt ? true : false}
+                      />
+                    </Form.Group>
+                  </Form.Row>
+
 
                   <Button
                     onClick={this.checkout}

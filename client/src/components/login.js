@@ -42,7 +42,7 @@ export default function Login(props) {
 
   async function onLoad() {
     // fill it up when needed
-    let data;
+    let data, loginSession;
     let params = props.match.params;
     let ip_res = await getIp();
     let browser_type = getBrowser().browser_type;
@@ -55,14 +55,15 @@ export default function Login(props) {
           })
           .then(res => {
             data = res.data.result.result[0];
+            loginSession = res.data.login_attempt_log;
             if (data.email_verify === 0) {
               throw "Your email need to be verified before you can log in.";
             } else {
               let first = data.first_name;
               let uid = data.user_uid;
-              let login_id = data.login_id;
-              let session_id = data.session_id;
-              document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_id:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+              let login_id = loginSession.login_id;
+              let session_id = loginSession.session_id;
+              document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
               props.history.push("/selectmealplan");
               window.location.reload(false);
             }
@@ -166,6 +167,7 @@ export default function Login(props) {
         first_name += name[n] + " ";
       }
       let data = await grabSocialUserInfo(e);
+      console.log(data);
       if (data === null) {
         //email not found --> render to signup for social
         props.history.push({
@@ -215,13 +217,15 @@ export default function Login(props) {
         } else {
           props.history.push("/");
         }
-        setLoading(false);
-        window.location.reload(false);
       } else {
         props.history.push("/"); // should prompt something or asking for re-login
       }
+      setLoading(false);
+      window.location.reload(false);
     } catch (e) {
       console.log(e);
+      RaiseError(e);
+      setLoading(false);
     }
   }
   async function grabLoginInfoForUser(userEmail, userPass) {
@@ -259,10 +263,12 @@ export default function Login(props) {
           return res.data;
         }
       } else {
+        setLoading(false);
         RaiseError("Wrong password");
       }
     } catch (err) {
       RaiseError(err);
+      setLoading(false);
     }
   }
 
@@ -293,6 +299,7 @@ export default function Login(props) {
         checkForPurchased(uid);
       } else {
         document.cookie = `loginStatus=; path=/`;
+        setLoading(false);
       }
     }
   }
