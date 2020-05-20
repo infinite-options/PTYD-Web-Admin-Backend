@@ -756,8 +756,6 @@ class AccountPurchases(Resource):
 
             for eachItem in items['result']:
                 last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
-                print("strptime", eachItem['last_payment_time_stamp'])
-                print("last_charge_date", last_charge_date)
                 next_charge_date = None
 
                 if eachItem['payment_frequency'] == 'Weekly':
@@ -766,16 +764,9 @@ class AccountPurchases(Resource):
                     next_charge_date = last_charge_date + timedelta(days=14)
                 elif eachItem['payment_frequency'] == 'Monthly':
                     next_charge_date = last_charge_date + timedelta(days=28)
-                
-                tempdate = datetime(2020, 5, 25, 21, 59, 59, 342380)
-                print("datetime now",datetime.now())
-                print("datetime noww", tempdate)
-                # eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
-                eachItem['paid_weeks_remaining'] = str(int((next_charge_date - tempdate).days / 7) + 1)
-                print("paid_week_remaining", eachItem['paid_weeks_remaining'])
 
+                eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
                 eachItem['next_charge_date'] = str(next_charge_date.date())
-                print("next_charge_date", eachItem['next_charge_date'])
 
                 if eachItem['delivery_zip'] in mondayZips:
                     eachItem['monday_available'] = True
@@ -3180,12 +3171,14 @@ class UpdatePayments(Resource):
             
             print("pre",data)
 
-            cc_num = data['cc_num']
+            purchase_id = data['purchase_id']
+            cc_num = data['cc_num'][-4:] 
             cc_exp_date = data['cc_exp_date']
             cc_cvv = data['cc_cvv']
 
             print("data",data)
-            execute(""" CALL `ptyd`.`update_payments`(\'""" + str(cc_num) + """\', 
+            execute(""" CALL `ptyd`.`update_payments`(\'""" + str(purchase_id) + """\',
+                                                        \'""" + str(cc_num) + """\', 
                                                         \'""" + str(cc_exp_date) + """\',
                                                         \'""" + str(cc_cvv) + """\');
                                                         """, 'post', conn)

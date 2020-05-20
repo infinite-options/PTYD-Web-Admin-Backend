@@ -371,6 +371,7 @@ class Mealschedule extends Component {
             <MakeChanges
               DELETE_URL={this.props.DELETE_URL}
               UPDATE_URL={this.props.UPDATE_URL}
+              UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}
               meal_plan_id={this.state.purchase.meal_plan_id}
               subscription={this.state.purchase.meal_plan_desc}
               meal_plan_price={this.state.purchase.amount_due}

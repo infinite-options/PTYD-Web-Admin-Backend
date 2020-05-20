@@ -29,11 +29,11 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL =
-  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
+// const DEV_URL =
+//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
-// const DEV_URL = "http://localhost:2000/api/";
+const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({ appProps }) {
   const [objectIndex, setObjectIndex] = useState(0);
@@ -111,7 +111,8 @@ export default function Main({ appProps }) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_URL: `${DEV_URL}v2/update-subscription`
+          UPDATE_URL: `${DEV_URL}v2/update-subscription`,
+          UPDATE_URL_PAYMENT: `${DEV_URL}v2/update-payments`
         }}
       />
 
@@ -129,7 +130,8 @@ export default function Main({ appProps }) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_URL: `${DEV_URL}v2/update-subscription`
+          UPDATE_URL: `${DEV_URL}v2/update-subscription`,
+          UPDATE_URL_PAYMENT: `${DEV_URL}v2/update-payments`
         }}
       />
 
