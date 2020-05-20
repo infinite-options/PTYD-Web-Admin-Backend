@@ -337,7 +337,7 @@ export default class MealButton extends Component {
 
     return (
       <div>
-        <ButtonToolbar>
+        <ButtonToolbar className='mb-5'>
           <div className='radio'>
             <Button
               variant='outline-dark'
@@ -345,9 +345,9 @@ export default class MealButton extends Component {
               onClick={this.changeButtonS}
               style={this.state.buttonS ? green : hide}
             >
-              {this.props.day1}
-              {/* <br /> */}
-              {this.props.date1}
+              <p>
+                {this.props.day1} {this.props.date1}
+              </p>
             </Button>
             &nbsp;
             <Button
@@ -356,9 +356,9 @@ export default class MealButton extends Component {
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
-              {this.props.day2}
-              {/* <br /> */}
-              {this.props.date2}
+              <p>
+                {this.props.day2} {this.props.date2}
+              </p>
             </Button>
             &nbsp;
             <Button
@@ -367,7 +367,7 @@ export default class MealButton extends Component {
               style={this.state.buttonSkip ? orange : hide}
               onClick={this.changeButtonSkip}
             >
-              Skip This Week
+              <p>Skip This Week</p>
             </Button>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -390,8 +390,7 @@ export default class MealButton extends Component {
             }
             onClick={this.changeButtonSelect}
           >
-            Select <br />
-            Meal
+            <p>Select Meal</p>
           </Button>
           {/* </Link> */}
           &nbsp;
@@ -424,7 +423,7 @@ export default class MealButton extends Component {
             {this.SelectMealEachMealAddOn()}
           </div>
         </ButtonToolbar>
-        <br />
+        {/* <br /> */}
       </div>
     );
   }
@@ -460,15 +459,13 @@ export default class MealButton extends Component {
               </Button>
               &nbsp;&nbsp;
               {this.state.subscribed ? (
-                this.state.maxmeals === 0 ? (
+                this.state.maxmeals === 0 && (
                   <Button
                     variant='success'
                     onClick={this.saveButtonActivateAddons}
                   >
                     Save changes
                   </Button>
-                ) : (
-                  <br />
                 )
               ) : (
                 <Button variant='success' href='/selectmealplan'>
@@ -484,7 +481,7 @@ export default class MealButton extends Component {
               <Cell col={12}>
                 <h4 style={{margin: "0"}}>{this.state.menu[key].Category}</h4>
               </Cell>
-              <br />
+
               {this.state.menu[key].Menu.map(meal => (
                 <Cell col={4}>
                   <EachMeal
@@ -551,15 +548,13 @@ export default class MealButton extends Component {
             </Button>
             &nbsp;&nbsp;
             {this.state.subscribed ? (
-              this.state.maxmeals === 0 ? (
+              this.state.maxmeals === 0 && (
                 <Button
                   variant='success'
                   onClick={this.saveButtonActivateAddons}
                 >
                   Save changes
                 </Button>
-              ) : (
-                <br />
               )
             ) : (
               <Button variant='success' href='/selectmealplan'>
@@ -576,7 +571,7 @@ export default class MealButton extends Component {
       <Card style={{width: "92%"}}>
         <Card.Header>
           <Modal.Title style={{width: "100%"}}>
-            <h4 style={{float: "left", margin: "0"}} class='font2'>
+            <h4 className='font2' style={{float: "left", margin: "0"}}>
               Add Local Treats:
             </h4>
             <div style={{float: "right"}}>

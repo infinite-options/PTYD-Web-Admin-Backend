@@ -339,8 +339,6 @@ class Mealschedule extends Component {
       </div>
     );
     displayrows.push(tempelement);
-    // }
-    console.log("lololololol menu", this.state.menu);
     return (
       // <div>
       //   <section class="content-section">
@@ -394,12 +392,12 @@ class Mealschedule extends Component {
           <Cell col={8}>
             {/* <br />
             <br /> */}
-            <h3 class='font1'>
+            <h3 className='font1'>
               <b>Select Meals Around Your Schedule</b>
             </h3>
             {/* <br /> */}
             <div>{console.log(this.state.menu)}</div>
-            <div class='meals-button'>
+            <div className='meals-button'>
               {this.state.menu.map(
                 eachWeek => (
                   console.log("meal printing", eachWeek.mealQuantities),
