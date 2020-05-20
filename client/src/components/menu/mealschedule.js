@@ -392,12 +392,12 @@ class Mealschedule extends Component {
           </Cell>{" "}
           <Cell col={1}></Cell>
           <Cell col={8}>
-            <br />
-            <br />
+            {/* <br />
+            <br /> */}
             <h3 class='font1'>
               <b>Select Meals Around Your Schedule</b>
             </h3>
-            <br />
+            {/* <br /> */}
             <div>{console.log(this.state.menu)}</div>
             <div class='meals-button'>
               {this.state.menu.map(
