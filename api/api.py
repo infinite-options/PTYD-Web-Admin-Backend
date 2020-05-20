@@ -730,6 +730,7 @@ class AccountPurchases(Resource):
                     ,purch.meal_plan_id
                     ,plans.MaximumMeals
                     ,plans.meal_plan_desc
+                    ,plans.meal_plan_price
                     ,plans.payment_frequency
                     ,snap.delivery_start_date AS start_date
                     ,purch.delivery_first_name
@@ -831,6 +832,7 @@ class AccountPurchases(Resource):
                     ,B.num_meals AS MaximumMeals
                     ,B.meal_plan_desc
                     ,B.payment_frequency
+                    ,B.meal_plan_price
                 FROM 
                     ptyd_meal_plans B
                 ) plans
@@ -2802,7 +2804,8 @@ class AdminDBv2(Resource):
                             ptyd_meals A ON M.menu_meal_id = A.meal_id
                         -- WHERE 
                             -- ENTER THE WEEK IN QUESTION IN “2020-02-01”
-                        -- M.menu_date = "2020-02-01";""",
+                        -- M.menu_date = "2020-02-01";
+                        """,
 
                 """SELECT 
                         M.menu_meal_id AS "Menu Number",
@@ -3279,6 +3282,41 @@ class UpdateSubscription(Resource):
         finally:
             disconnect(conn)
 
+class UpdateRecipe(Resource):
+    def patch(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            recipe_meal_id = data['recipe_meal_id']
+            old_ingredient_id = data['old_ingredient_id']
+            new_ingredient_id = data['new_ingredient_id']
+            new_ingredient_qty = data['new_ingredient_qty']
+            new_measure_id = data['new_measure_id']
+
+            print(data)
+
+            #CALL `ptyd`.`update_recipe`(<{IN recipe_meal_id1 varchar(60)}>, <{IN old_ingredient_id varchar(299)}>, <{IN new_ingredient_id varchar(299)}>, <{IN new_ingredient_qty varchar(299)}>, <{IN new_measure_id varchar(299)}>);
+
+
+            execute(""" CALL `ptyd`.`update_recipe`(
+                \'""" + str(recipe_meal_id) + """\', \'""" + str(old_ingredient_id) + """\', \'""" + str(new_ingredient_id) + """\'
+                , \'""" + float(new_ingredient_qty) + """\', \'""" + str(new_measure_id) + """\')
+                ;""", 'post', conn)
+
+            print("items") 
+            print(items)
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+
 
 class TemplateApi(Resource):
     def get(self):
@@ -3334,7 +3372,7 @@ api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
 api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers', '/api/v2/chargesubscribers/<string:affectedDate>')
 
-#in progress
+
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
@@ -3345,6 +3383,7 @@ api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
 # in progress
 api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
 
+api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
 
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
