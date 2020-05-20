@@ -280,6 +280,7 @@ export default function Login(props) {
         RaiseError(err);
       }
       setLoading(false);
+    }
   }
 
   function checkLogin() {
