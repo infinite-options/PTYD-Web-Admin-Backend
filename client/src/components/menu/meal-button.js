@@ -582,24 +582,26 @@ export default class MealButton extends Component {
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
-          <center>
-            <Modal.Title>
-              Add Local Treats &nbsp;&nbsp;
-              <Button variant="danger" onClick={this.closeButtonAddOn}>
-                Close
-              </Button>
-              &nbsp;&nbsp;
-              {this.state.subscribed ? (
-                <Button variant="success" onClick={this.saveButtonAddOn}>
-                  Save changes
+            <Modal.Title style={{ width: "100%" }}>
+              <h4 style={{ float: "left", margin: "0" }} class="font2">
+                Add Local Treats:
+              </h4>
+              <div style={{ float: "right" }}>
+                <Button variant="danger" onClick={this.closeButtonAddOn}>
+                  Close
                 </Button>
-              ) : (
-                <Link to="/selectmealplan" className="btn btn-success">
-                  Subscribe Now
-                </Link>
-              )}
+                &nbsp;&nbsp;
+                {this.state.subscribed ? (
+                  <Button variant="success" onClick={this.saveButtonAddOn}>
+                    Save changes
+                  </Button>
+                ) : (
+                  <Link to="/selectmealplan" className="btn btn-success">
+                    Subscribe Now
+                  </Link>
+                )}
+              </div>
             </Modal.Title>
-          </center>
         </Card.Header>
         {this.state.addonActivated ? (
           <div>
