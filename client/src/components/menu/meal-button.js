@@ -653,7 +653,6 @@ export default class MealButton extends Component {
                   <h4 style={{margin: "0"}}>
                     {this.state.addons["Addons"].Category}
                   </h4>
-                  <br />
                 </Cell>
 
                 {this.state.addons["Addons"].Menu.map(meal => (
