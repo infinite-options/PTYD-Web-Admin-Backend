@@ -168,7 +168,7 @@ class Plans(Resource):
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
                         CONCAT('/', num_meals, '-meals-subscription') AS RouteOnclick
                     FROM ptyd_meal_plans
-                    WHERE payment_frequency = \'Monthly\';""",
+                    WHERE payment_frequency = \'4 Week Pre-Pay\';""",
                 """SELECT
                         meal_plan_id,
                         meal_plan_desc,
@@ -719,50 +719,6 @@ class AccountPurchases(Resource):
             
 
             queries = ["""
-<<<<<<< HEAD
-               SELECT DISTINCT
-                   payment_id,
-                   purchase_status,
-                   buyer_id,
-                   coupon_id,
-                   gift,
-                   amount_due,
-                   amount_paid,
-                   p1.purchase_id,
-                   MAX(payment_time_stamp) AS last_payment_time_stamp,
-                   payment_type,
-                   CONCAT(\'XXXXXXXXXXXX\', cc_num) AS cc_num,
-                   cc_exp_date,
-                   cc_cvv,
-                   billing_zip,
-                   p2.meal_plan_id,
-                   num_meals AS MaximumMeals,
-                   meal_plan_desc,
-                   payment_frequency,
-                   start_date,
-                   delivery_first_name,
-                   delivery_last_name,
-                   delivery_email,
-                   delivery_phone,
-                   delivery_address,
-                   delivery_address_unit,
-                   delivery_city,
-                   delivery_state,
-                   delivery_zip,
-                   delivery_region,
-                   delivery_instructions
-               FROM
-                   ptyd_payments p1
-               INNER JOIN
-                   ptyd_purchases p2
-               ON
-                   p1.purchase_id = p2.purchase_id
-               INNER JOIN
-                   ptyd_meal_plans mp
-               ON p2.meal_plan_id = mp.meal_plan_id
-               WHERE buyer_id = \'""" + buyerId + """\'AND purchase_status = "ACTIVE"
-               GROUP BY purchase_id""",
-=======
                 SELECT 
                     snap.payment_id
                     ,pay.buyer_id
@@ -925,7 +881,6 @@ class AccountPurchases(Resource):
 
                 WHERE buyer_id = \'""" + buyerId + """\'
                 GROUP BY snap.payment_id;""",
->>>>>>> feature/stripe
                        "   SELECT * FROM ptyd_monday_zipcodes;"]
 
             
@@ -939,18 +894,18 @@ class AccountPurchases(Resource):
             del mondayZipsQuery
 
             for eachItem in items['result']:
-                last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
-                next_charge_date = None
+                # last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
+                # next_charge_date = None
 
-                if eachItem['payment_frequency'] == 'Weekly':
-                    next_charge_date = last_charge_date + timedelta(days=7)
-                elif eachItem['payment_frequency'] == 'Bi-Weekly':
-                    next_charge_date = last_charge_date + timedelta(days=14)
-                elif eachItem['payment_frequency'] == 'Monthly':
-                    next_charge_date = last_charge_date + timedelta(days=28)
+                # if eachItem['payment_frequency'] == 'Weekly':
+                #     next_charge_date = last_charge_date + timedelta(days=7)
+                # elif eachItem['payment_frequency'] == 'Bi-Weekly':
+                #     next_charge_date = last_charge_date + timedelta(days=14)
+                # elif eachItem['payment_frequency'] == 'Monthly':
+                #     next_charge_date = last_charge_date + timedelta(days=28)
 
-                eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
-                eachItem['next_charge_date'] = str(next_charge_date.date())
+                # eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
+                # eachItem['next_charge_date'] = str(next_charge_date.date())
 
                 if eachItem['delivery_zip'] in mondayZips:
                     eachItem['monday_available'] = True

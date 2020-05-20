@@ -1,9 +1,9 @@
-import React, {Component} from "react";
-import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
-import {Grid, Cell} from "react-mdl";
+import React, { Component } from "react";
+import { Card, CardDeck, Row, Col, Container } from "react-bootstrap";
+import { Grid, Cell } from "react-mdl";
 import IMG9 from "../../img/img9.webp";
-import {Link} from "react-router-dom";
-import {timingSafeEqual} from "crypto";
+import { Link } from "react-router-dom";
+import { timingSafeEqual } from "crypto";
 
 class Selectmealplan extends Component {
   constructor(props) {
@@ -16,37 +16,38 @@ class Selectmealplan extends Component {
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
     const mealPlans = api.result.MealPlans.result;
-    this.setState({mealPlans});
+    this.setState({ mealPlans });
+    console.log("meal plan api", this.state.mealPlans);
   }
   render() {
     return (
-      <section className='content-section'>
-        <div className='container font2' style={{width: "80%"}}>
+      <section className="content-section">
+        <div className="container font2" style={{ width: "80%" }}>
           <center>
-            <h2 className='font1' style={{color: "#4D4D4D"}}>
+            <h2 className="font1" style={{ color: "#4D4D4D" }}>
               SELECT A MEAL PLAN
             </h2>
-            <hr className='two' />
-            <article className='bottom_header'>
-              <h4 className='font-weight-normal font1'>
+            <hr className="two" />
+            <article className="bottom_header">
+              <h4 className="font-weight-normal font1">
                 LOCAL. ORGANIC. RESPONSIBLE.
               </h4>
-              <h4 className='font-weight-normal font1'>
+              <h4 className="font-weight-normal font1">
                 STRAIGHT TO YOUR DOOR
               </h4>
             </article>
             <CardDeck>
               {this.state.mealPlans.map(mealPlan => (
-                <Card className='p-0 border-0 w-auto shadow-none'>
+                <Card className="p-0 border-0 w-auto shadow-none">
                   {mealPlan.num_meals === 10 ? (
-                    <div className='rcorners font3 d-flex rcorner_color'>
-                      <h6 className='align-self-center mx-auto'>
+                    <div className="rcorners font3 d-flex rcorner_color">
+                      <h6 className="align-self-center mx-auto">
                         MOST POPULAR
                       </h6>
                     </div>
                   ) : (
-                    <div className='rcorners font3 d-flex'>
-                      <h6 className='align-self-center mx-auto'></h6>
+                    <div className="rcorners font3 d-flex">
+                      <h6 className="align-self-center mx-auto"></h6>
                     </div>
                   )}
 
@@ -56,18 +57,18 @@ class Selectmealplan extends Component {
                       (mealPlan.num_meals === 10 ? " card_color" : "")
                     }
                   >
-                    <Card.Header className='p-0 position-relative background_black'>
+                    <Card.Header className="p-0 position-relative background_black">
                       <Card.Img
-                        className='blackM background_black '
-                        variant='top'
+                        className="blackM background_black "
+                        variant="top"
                         src={mealPlan.photo_URL}
                         // style={{
                         //   "border-top-left-radius": "0px",
                         //   "border-top-right-radius": "0px",
                         // }}
                       />
-                      <Card.ImgOverlay className='d-flex'>
-                        <span className='px-0 align-self-center mx-auto selectmeal-center'>
+                      <Card.ImgOverlay className="d-flex">
+                        <span className="px-0 align-self-center mx-auto selectmeal-center">
                           {mealPlan.num_meals} MEALS
                         </span>
                       </Card.ImgOverlay>
@@ -76,26 +77,27 @@ class Selectmealplan extends Component {
                       <Card.Title>
                         <b>{mealPlan.num_meals} MEALS WEEKLY</b>
                       </Card.Title>
-                      <Card.Text style={{fontSize: "15px", color: "#888785"}}>
+                      <Card.Text style={{ fontSize: "15px", color: "#888785" }}>
                         from ${mealPlan.meal_plan_price_per_meal.toFixed(2)} per
                         meal
                       </Card.Text>
-                      <Card.Text style={{fontSize: "13px"}}>
+                      <Card.Text style={{ fontSize: "13px" }}>
                         {mealPlan.plan_headline}
                       </Card.Text>
                       <Card.Text>
-                        STARTING AT ${mealPlan.meal_plan_price.toFixed(2)} /week
+                        STARTING AT ${mealPlan.meal_weekly_price.toFixed(2)}{" "}
+                        /week
                       </Card.Text>
-                      <Card.Text style={{fontSize: "13px", color: "#888785"}}>
+                      <Card.Text style={{ fontSize: "13px", color: "#888785" }}>
                         Sales tax of 8.25% will be added
                       </Card.Text>
                       <Link
-                        style={{fontFamily: "Kalam", color: "white"}}
+                        style={{ fontFamily: "Kalam", color: "white" }}
                         to={mealPlan.RouteOnclick}
                       >
                         <button
-                          type='button'
-                          class='btn2 btn2-primary font4'
+                          type="button"
+                          class="btn2 btn2-primary font4"
                           style={{
                             marginTop: "10px",
                             paddingLeft: "10px",
@@ -110,16 +112,16 @@ class Selectmealplan extends Component {
                         </button>
                       </Link>
                       <img
-                        class='img-fluid'
+                        class="img-fluid"
                         src={IMG9}
-                        alt=''
+                        alt=""
                         style={{
                           width: "90%"
                         }}
                       />
                     </Card.Body>
                     <Card.Footer>
-                      <large className='text-muted align-self-center mx-auto'>
+                      <large className="text-muted align-self-center mx-auto">
                         {mealPlan.plan_footer}
                       </large>
                     </Card.Footer>
@@ -128,45 +130,45 @@ class Selectmealplan extends Component {
                 </Card>
               ))}
             </CardDeck>
-            <hr className='feedback_marginTop' />
-            <h3 class='font1 mt-5 mb-5' style={{color: "#196F3D"}}>
+            <hr className="feedback_marginTop" />
+            <h3 class="font1 mt-5 mb-5" style={{ color: "#196F3D" }}>
               Our Customers Say
             </h3>
-            <div class='font2'>
+            <div class="font2">
               <Container>
-                <Row style={{fontSize: "20px"}}>
+                <Row style={{ fontSize: "20px" }}>
                   <Col>
-                    <div className='shadow w-75'>
-                      <div className='mb-2'>
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
+                    <div className="shadow w-75">
+                      <div className="mb-2">
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
                       </div>
                       <p>Convenience and goodness</p>
                     </div>
                   </Col>
                   <Col>
-                    <div className='shadow w-75'>
-                      <div className='mb-2'>
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
+                    <div className="shadow w-75">
+                      <div className="mb-2">
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
                       </div>
                       <p>PTYD feels like family!</p>
                     </div>
                   </Col>
                   <Col>
-                    <div className='shadow w-75'>
-                      <div className='mb-2'>
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
+                    <div className="shadow w-75">
+                      <div className="mb-2">
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
+                        <span class="fa fa-star checked" />
                       </div>
                       <p>They make life SO easy!</p>
                     </div>
