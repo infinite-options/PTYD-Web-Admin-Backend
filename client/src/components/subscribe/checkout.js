@@ -142,6 +142,7 @@ class Checkout extends Component {
       .digest("hex");
     this.sendForm()
       .then(res => {
+        console.log("res: ", res);
         this.handleApi(res);
         this.setState({loading: false});
       })

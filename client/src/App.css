@@ -113,10 +113,11 @@ br {
   -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
   padding: 0.1rem 2rem;
-  font-size: 70%;
+  /* font-size: 70%; */
   text-transform: uppercase;
   letter-spacing: 0;
   border: 0;
+  line-height: 2;
   border-radius: 4px;
 }
 
@@ -347,8 +348,11 @@ hr.four {
   line-height: 35px;
 }
 .start_button {
-  margin-top: 10px;
+  margin-top: 15px;
   color: white;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  border-radius: 0.3rem;
 }
 .container_space {
   margin-top: 150px;
@@ -374,4 +378,22 @@ hr.four {
   z-index: 3;
   position: absolute;
   bottom: 300px;
+}
+
+.logo {
+  width: 88px;
+  height: 65px;
+}
+
+.socialBranchLogo {
+  width: 41px;
+  height: 41px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+  display: inline-block;
+  padding-top: 10px;
+}
+.sub_title {
+  font-weight: 500;
+  font-size: 25px;
 }
