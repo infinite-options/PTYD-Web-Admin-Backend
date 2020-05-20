@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Grid, Cell } from "react-mdl";
+import React, {Component} from "react";
+import {Grid, Cell} from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
+import {ButtonToolbar, Button, Modal, Card, Form} from "react-bootstrap";
 import Cookies from "js-cookie";
 
 class Mealschedule extends Component {
@@ -16,7 +16,7 @@ class Mealschedule extends Component {
     this.state = {
       menu: [],
       user_uid: this.props.appProps.user_uid,
-      purchase: { NextCharge: 0 },
+      purchase: {NextCharge: 0},
       subscribed: false,
       monday_available: false,
       paymentPlans: [],
@@ -186,7 +186,7 @@ class Mealschedule extends Component {
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[0];
         purchaseId = purchasesApi.result[0].purchase_id;
-        this.setState({ subscribed: true });
+        this.setState({subscribed: true});
         this.setState({
           subscribed: true,
           monday_available: purchasesApi.result[0].monday_available,
@@ -344,7 +344,7 @@ class Mealschedule extends Component {
     return (
       // <div>
       //   <section class="content-section">
-      <div class="container font2">
+      <div class='container font2'>
         <Grid>
           <Cell col={3}>
             {" "}
@@ -362,9 +362,9 @@ class Mealschedule extends Component {
                 ></img>
               </Cell> */}
               <Cell col={8}>
-                <h4 style={{overflowWrap:"anywhere"}}>
-                  Hi, {this.searchCookie4Name(document.cookie)}
-                  <th colSpan="2">{this.subscription_dropdown()}</th>
+                <h4 style={{overflowWrap: "anywhere"}}>
+                  Hi, {this.searchCookie4Name("loginStatus")}
+                  <th colSpan='2'>{this.subscription_dropdown()}</th>
                 </h4>
               </Cell>
             </Grid>
@@ -394,20 +394,20 @@ class Mealschedule extends Component {
           <Cell col={8}>
             <br />
             <br />
-            <h3 class="font1">
+            <h3 class='font1'>
               <b>Select Meals Around Your Schedule</b>
             </h3>
             <br />
             <div>{console.log(this.state.menu)}</div>
-            <div class="meals-button">
+            <div class='meals-button'>
               {this.state.menu.map(
                 eachWeek => (
                   console.log("meal printing", eachWeek.mealQuantities),
                   console.log("addon printing", eachWeek.addonQuantities),
                   (
                     <MealButton
-                      day1="Sunday"
-                      day2="Monday"
+                      day1='Sunday'
+                      day2='Monday'
                       saturdayDate={eachWeek.sat}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}
@@ -451,8 +451,8 @@ class Mealschedule extends Component {
     return (
       <FormControl>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
           value={this.state.selection}
           onChange={this.handleChange}
           // style={{ color: "white" }}
