@@ -156,9 +156,9 @@ class MakeChanges extends Component {
         alert("Error updating");
         return Promise.reject(error);
       } else {
-        alert(
-          "You have successfully updated your account payment information!"
-        );
+        // alert(
+        //   "You have successfully updated your account payment information!"
+        // );
         window.location.reload();
       }
 
