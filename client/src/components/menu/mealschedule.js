@@ -349,7 +349,7 @@ class Mealschedule extends Component {
           <Cell col={3}>
             {" "}
             <Grid>
-              <Cell col={4}>
+              {/* <Cell col={4}>
                 <img
                   style={{
                     borderRadius: "50%",
@@ -360,7 +360,7 @@ class Mealschedule extends Component {
                   src={IMG8}
                   alt="Avatar"
                 ></img>
-              </Cell>
+              </Cell> */}
               <Cell col={8}>
                 <h4>
                   Hi, {this.searchCookie4Name(document.cookie)}
