@@ -30,6 +30,7 @@ export default class MealButton extends Component {
       // buttonDisabled: true,
       buttonSelectKeepColor: false,
       buttonAddOnKeepColor: this.props.addonsSelected,
+      cancelAddonWithoutSave: false,
       mealQuantities: this.props.mealQuantities,
       addonQuantities: this.props.addonQuantities,
       maxmeals: this.props.maxmeals,
@@ -193,6 +194,16 @@ export default class MealButton extends Component {
         is_addons: true
       })
     });
+    if (
+      Object.values(this.state.addonQuantities).reduce(function(a, b) {
+        return a + b;
+      }, 0) === 1
+    ) {
+      console.log("if addon == 0");
+      this.setState({ buttonAddOnKeepColor: false });
+    } else {
+      this.setState({ buttonAddOnKeepColor: true });
+    }
   };
 
   closeButtonSelect = () => {
@@ -205,18 +216,33 @@ export default class MealButton extends Component {
     });
   };
   closeButtonAddOn = () => {
-    this.setState({
-      buttonAddOn: false,
-      buttonAddOnKeepColor: false
+    this.setState(
+      {
+        buttonAddOn: false
+        // buttonAddOnKeepColor: false
 
-      //    addonQuantities: this.state.addonQuantitiesOriginal,
-    });
+        //    addonQuantities: this.state.addonQuantitiesOriginal,
+      },
+      () => {
+        if (
+          Object.values(this.state.addonQuantities).reduce(function(a, b) {
+            return a + b;
+          }, 0) === 1
+        ) {
+          console.log("if addon == 0");
+          this.setState({ buttonAddOnKeepColor: false });
+        } else {
+          this.setState({ cancelAddonWithoutSave: true });
+        }
+      }
+    );
   };
   saveButtonAddOn = () => {
     console.log("its in save button addon");
     this.setState({
       buttonAddOn: false,
-      buttonAddOnKeepColor: true
+      cancelAddonWithoutSave: false
+      // buttonAddOnKeepColor: true
     });
     this.sendAddonForm();
   };
@@ -411,7 +437,11 @@ export default class MealButton extends Component {
             variant="outline-dark"
             style={
               (this.state.buttonAddOn ? orange : hide,
-              this.state.buttonAddOnKeepColor ? orange : hide)
+              this.state.buttonAddOnKeepColor
+                ? this.state.cancelAddonWithoutSave
+                  ? red
+                  : orange
+                : hide)
             }
             onClick={this.changeButtonAddOn}
           >
