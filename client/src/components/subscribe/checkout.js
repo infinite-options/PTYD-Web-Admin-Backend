@@ -226,6 +226,7 @@ class Checkout extends Component {
 
   handleApi(response) {
     if (
+      response !== undefined &&
       response.result.purchase.code == 281 &&
       response.result.payment.code == 281
     ) {
@@ -399,7 +400,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridPhoneNumber'>
                       <Form.Label>
                         Phone Number
-                      <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -417,7 +418,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridAddress'>
                       <Form.Label>
                         Address
-                      <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -430,10 +431,7 @@ class Checkout extends Component {
                       />
                     </Form.Group>
 
-                    <Form.Group
-                      as={Col}
-                      controlId='formGridAptNum'
-                    >
+                    <Form.Group as={Col} controlId='formGridAptNum'>
                       <Form.Label>
                         Apartment/Unit <b>(optional)</b>
                       </Form.Label>
@@ -665,7 +663,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={3} controlId='formGridPassword'>
                       <Form.Label>
                         Password
-                          <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -684,7 +682,6 @@ class Checkout extends Component {
                       />
                     </Form.Group>
                   </Form.Row>
-
 
                   <Button
                     onClick={this.checkout}
