@@ -362,7 +362,7 @@ class Mealschedule extends Component {
                 ></img>
               </Cell> */}
               <Cell col={8}>
-                <h4>
+                <h4 style={{overflowWrap:"anywhere"}}>
                   Hi, {this.searchCookie4Name(document.cookie)}
                   <th colSpan="2">{this.subscription_dropdown()}</th>
                 </h4>
