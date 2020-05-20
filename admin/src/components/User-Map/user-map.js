@@ -19,7 +19,7 @@ class UserMap extends Component {
   }
   render() {
     return (
-      <div style={{ margin: "1%" }}>
+      <div style={{ margin: "0%" }}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site

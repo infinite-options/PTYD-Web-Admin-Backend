@@ -178,7 +178,7 @@ class CreateMenu extends Component {
               {this.state.addShow ? this.addRowTemplate() : <div></div>}
             </Table>
             <Button
-              variant="primary"
+              variant="success"
               onClick={() => {
                 this.setState({ addShow: !this.state.addShow });
               }}

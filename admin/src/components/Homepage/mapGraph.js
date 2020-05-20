@@ -10,7 +10,7 @@ class MapGraph extends Component {
 
   initViz() {
     const vizUrl =
-      "https://public.tableau.com/views/DashboardFromPricingDB/Dashboard1?:display_count=y&publish=yes&:origin=viz_share_link";
+      "https://public.tableau.com/views/PTYD_meals_15873204059420/Final?:retry=yes&:display_count=y&:origin=viz_share_link";
     const vizContainer = this.vizContainer;
     let viz = new window.tableau.Viz(vizContainer, vizUrl);
   }
