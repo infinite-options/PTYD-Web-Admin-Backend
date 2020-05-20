@@ -16,10 +16,6 @@ from math import ceil
 # Import Bing API key into bing_api_key.py
 from env_keys import BING_API_KEY, RDS_PW
 
-# When deploying to Zappa, replace above statement with below:
-# BING_API_KEY = "AjarHaO5ugwlQDMfMsMEYziHW1Gugafz3e3CRGJy_a4KGHtYidc38JUGR1psA0A9"
-# RDS_PW = "prashant"
-
 import decimal
 import sys
 import json
