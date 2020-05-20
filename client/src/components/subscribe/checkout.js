@@ -227,6 +227,7 @@ class Checkout extends Component {
 
   handleApi(response) {
     if (
+      response !== undefined &&
       response.result.purchase.code == 281 &&
       response.result.payment.code == 281
     ) {
