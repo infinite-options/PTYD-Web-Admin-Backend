@@ -222,9 +222,14 @@ export default function Login(props) {
       }
       setLoading(false);
       window.location.reload(false);
-    } catch (e) {
-      console.log(e);
-      RaiseError(e);
+    } catch (err) {
+      if (err.response !== undefined) {
+        let msg = err.response.data.message;
+        RaiseError(msg);
+      }
+      if (typeof err === "string") {
+        RaiseError(err);
+      }
       setLoading(false);
     }
   }
@@ -267,9 +272,14 @@ export default function Login(props) {
         RaiseError("Wrong password");
       }
     } catch (err) {
-      RaiseError(err);
+      if (err.response !== undefined) {
+        let msg = err.response.data.message;
+        RaiseError(msg);
+      }
+      if (typeof err === "string") {
+        RaiseError(err);
+      }
       setLoading(false);
-    }
   }
 
   function checkLogin() {
@@ -280,8 +290,14 @@ export default function Login(props) {
         login(res);
       })
       .catch(err => {
+        if (err.response !== undefined) {
+          let msg = err.response.data.message;
+          RaiseError(msg);
+        }
+        if (typeof err === "string") {
+          RaiseError(err);
+        }
         setLoading(false);
-        RaiseError(err);
       });
 
     // await login(t);
