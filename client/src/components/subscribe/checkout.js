@@ -142,6 +142,7 @@ class Checkout extends Component {
       .digest("hex");
     this.sendForm()
       .then(res => {
+        console.log("res: ", res);
         this.handleApi(res);
         this.setState({loading: false});
       })
@@ -399,7 +400,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridPhoneNumber'>
                       <Form.Label>
                         Phone Number
-                      <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -417,7 +418,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridAddress'>
                       <Form.Label>
                         Address
-                      <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -430,10 +431,7 @@ class Checkout extends Component {
                       />
                     </Form.Group>
 
-                    <Form.Group
-                      as={Col}
-                      controlId='formGridAptNum'
-                    >
+                    <Form.Group as={Col} controlId='formGridAptNum'>
                       <Form.Label>
                         Apartment/Unit <b>(optional)</b>
                       </Form.Label>
@@ -665,7 +663,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={3} controlId='formGridPassword'>
                       <Form.Label>
                         Password
-                          <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -684,7 +682,6 @@ class Checkout extends Component {
                       />
                     </Form.Group>
                   </Form.Row>
-
 
                   <Button
                     onClick={this.checkout}
