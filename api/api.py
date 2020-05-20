@@ -163,8 +163,9 @@ class Plans(Resource):
                         plan_headline,
                         plan_footer,
                         num_meals,
+                        meal_weekly_price,
                         meal_plan_price,
-                        meal_plan_price/num_meals AS meal_plan_price_per_meal,
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal,
                         CONCAT('/', num_meals, '-meals-subscription') AS RouteOnclick
                     FROM ptyd_meal_plans
                     WHERE payment_frequency = \'Monthly\';""",
@@ -174,8 +175,9 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
+                        meal_weekly_price,
                         meal_plan_price,
-                        meal_plan_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 5;""",
                 """SELECT
@@ -184,8 +186,9 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
+                        meal_weekly_price,
                         meal_plan_price,
-                        meal_plan_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 10;""",
                 """SELECT
@@ -194,8 +197,9 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
+                        meal_weekly_price,
                         meal_plan_price,
-                        meal_plan_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 15;""",
                 """SELECT
@@ -204,8 +208,9 @@ class Plans(Resource):
                         payment_frequency,
                         photo_URL,
                         num_meals,
+                        meal_weekly_price,
                         meal_plan_price,
-                        meal_plan_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
                     FROM ptyd_meal_plans
                     WHERE num_meals = 20;"""]
 
