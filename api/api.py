@@ -14,11 +14,11 @@ from math import ceil
 
 # BING API KEY
 # Import Bing API key into bing_api_key.py
-#from env_keys import BING_API_KEY, RDS_PW
+from env_keys import BING_API_KEY, RDS_PW
 
 # When deploying to Zappa, replace above statement with below:
-BING_API_KEY = "AjarHaO5ugwlQDMfMsMEYziHW1Gugafz3e3CRGJy_a4KGHtYidc38JUGR1psA0A9"
-RDS_PW = "prashant"
+# BING_API_KEY = "AjarHaO5ugwlQDMfMsMEYziHW1Gugafz3e3CRGJy_a4KGHtYidc38JUGR1psA0A9"
+# RDS_PW = "prashant"
 
 import decimal
 import sys
@@ -1203,11 +1203,11 @@ class Checkout(Resource):
             dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
             dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '1'
-        elif frequency == 'Bi-Weekly':
+        elif frequency == '2 Week Pre-Pay':
             dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
             dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '2'
-        elif frequency == 'Monthly':
+        elif frequency == '4 Week Pre-Pay':
             dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
             dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '4'
@@ -1419,12 +1419,14 @@ class Checkout(Resource):
             #           print("snap")
 
             #           print(queries)
+            print ("I'm here")
             reply['payment'] = execute(queries[3], 'post', conn)
             # Add credit card verification code here
-
+            print ("I'm there")
             reply['purchase'] = execute(queries[4], 'post', conn)
+            print ("you here")
             reply['snapshot'] = execute(queries[5], 'post', conn)
-
+            print ("your there")
             response['message'] = 'Request successful.'
             response['result'] = reply
 
