@@ -567,7 +567,6 @@ export default class MealButton extends Component {
             ) : (
               <Button
                 variant="success"
-                // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                 href="/selectmealplan"
               >
                 Subscribe Now
@@ -662,11 +661,10 @@ export default class MealButton extends Component {
             <div>
               <Grid>
                 <Cell col={12}>
-                  <center>
-                    <h4 style={{ margin: "0" }}>
-                      {this.state.addons["Addons"].Category}
-                    </h4>
-                  </center>
+                  <h4 style={{ margin: "0" }}>
+                    {this.state.addons["Addons"].Category}
+                  </h4>
+                  <br />
                 </Cell>
 
                 {this.state.addons["Addons"].Menu.map(meal => (
