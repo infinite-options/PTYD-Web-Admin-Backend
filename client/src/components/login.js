@@ -217,11 +217,11 @@ export default function Login(props) {
         } else {
           props.history.push("/");
         }
-        setLoading(false);
-        window.location.reload(false);
       } else {
         props.history.push("/"); // should prompt something or asking for re-login
       }
+      setLoading(false);
+      window.location.reload(false);
     } catch (e) {
       console.log(e);
       RaiseError(e);
