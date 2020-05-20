@@ -442,11 +442,6 @@ export default class MealButton extends Component {
                 &nbsp;&nbsp;
                 <Button
                   variant="danger"
-                  // style={{
-                  //   backgroundColor: "pink",
-                  //   color: "black",
-                  //   float: "right"
-                  // }}
                   onClick={() => {
                     if (
                       this.state.maxmealsCopy !== this.state.maxmeals &&
@@ -470,7 +465,6 @@ export default class MealButton extends Component {
                   this.state.maxmeals === 0 ? (
                     <Button
                       variant="success"
-                      // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                       onClick={this.saveButtonActivateAddons}
                     >
                       Save changes
@@ -481,7 +475,6 @@ export default class MealButton extends Component {
                 ) : (
                   <Button
                     variant="success"
-                    // style={{ backgroundColor: "#A3C7AC", color: "black" }}
                     href="/selectmealplan"
                   >
                     Subscribe Now
