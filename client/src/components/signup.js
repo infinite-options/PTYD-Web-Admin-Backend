@@ -83,8 +83,9 @@ function SignUp(props) {
           setErro(err.response.data.result);
           //window.location.reload(false);
         } else {
-          console.log(`Error without response. Error's code is: ${err.status}`);
+          setErro(err);
         }
+        setLoading(false);
       });
   }
 
