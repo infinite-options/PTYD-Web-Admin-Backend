@@ -1051,7 +1051,7 @@ class SignUp(Resource):
             token = s.dumps(Email)
             msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[Email])
             link = url_for('confirm', token=token, hashed=hashed, _external=True)
-            msg.body = "Click on the link <a href={}> Please confirm to verify your email address. </a> ".format(link)
+            msg.body = "Click on the link {} to confirm to verify your email address.".format(link)
 
             mail.send(msg)
             #email verification testing is ended here...
@@ -1082,15 +1082,17 @@ class Coordinates:
         'key' : BING_API_KEY
         }
         coordinates = []
-
+        print("locations passed: {}".format(self.locations))
         for address in self.locations:
             formattedAddress = self.formatAddress(address)
+            print("before sending request")
             r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
                 '&maxResults=1&key={}'.format(params['key']))
+            print("result of the request: {}".format(r))
             results = r.json() 
-
+            print("results is: {}".format(results))
             try:
-                assert(results['resourceSets'][0]['estimatedTotal']) 
+                assert(results['resourceSets'][0]['estimatedTotal'])
                 point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
                 lat, lng = point[0], point[1]
             except:
@@ -1120,12 +1122,9 @@ def confirm(token, hashed):
     try:
         email = s.loads(token)#max_age = 86400 = 1 day
         #marking email confirmed in database, then...
-        print (email);
         conn = connect()
         query = """UPDATE ptyd_accounts SET email_verify = 1 WHERE user_email = \'""" + email + """\';""";
-        print(query)
         update = execute(query, 'post', conn)
-        print(update)
         if update.get('code') == 281:
             #redirect to login page
             return redirect('http://preptoyourdoor.netlify.app/login/{}/{}'.format(email, hashed))
@@ -1278,11 +1277,9 @@ class Checkout(Resource):
                     buyer_id = \'""" + data['user_uid'] + "\';"]
 
             userAuth = execute(queries[0], 'get', conn)
-            print("user_id: {}".format(data['user_uid']))
             possSocialAcc = execute(
                 "SELECT user_uid FROM ptyd_social_accounts WHERE user_uid = '" + data['user_uid'] + "';", 'get',
                 conn)
-            print(json.dumps(possSocialAcc, indent=1))
 
             if len(possSocialAcc['result']) != 0:
                 if possSocialAcc['result'][0]['user_uid'] == data['user_uid']:
@@ -1415,14 +1412,11 @@ class Checkout(Resource):
             #           print("snap")
 
             #           print(queries)
-            print ("I'm here")
+
             reply['payment'] = execute(queries[3], 'post', conn)
             # Add credit card verification code here
-            print ("I'm there")
             reply['purchase'] = execute(queries[4], 'post', conn)
-            print ("you here")
             reply['snapshot'] = execute(queries[5], 'post', conn)
-            print ("your there")
             response['message'] = 'Request successful.'
             response['result'] = reply
 
