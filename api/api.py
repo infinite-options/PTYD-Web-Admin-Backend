@@ -1051,10 +1051,10 @@ class SignUp(Resource):
             token = s.dumps(Email)
             msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[Email])
             link = url_for('confirm', token=token, hashed=hashed, _external=True)
-            msg.body = "Click on the link {} to confirm to verify your email address.".format(link)
+            msg.body = "Click on the link {} to verify your email address.".format(link)
 
             mail.send(msg)
-            #email verification testing is ended here...
+            #email verification testing s ended here...
 
             response['message'] = 'Request successful. An email has been sent and need to verify.'
             response['code'] = usnInsert['code']
@@ -1114,6 +1114,8 @@ class Coordinates:
     #returns an address formatted to be used for the Bing API to get locations
     def formatAddress(self, address):
         output = address.replace(" ", "%20")
+        if "." in output:
+            output = output.replace(".","")
         return output
 
 #confirmation page
