@@ -692,7 +692,7 @@ class Login(Resource):
         finally:
             disconnect(conn)
 
-
+#ADD Update to Payments
 class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
@@ -888,18 +888,18 @@ class AccountPurchases(Resource):
             del mondayZipsQuery
 
             for eachItem in items['result']:
-                last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
-                next_charge_date = None
+                # last_charge_date = datetime.strptime(eachItem['last_payment_time_stamp'], '%Y-%m-%d %H:%M:%S')
+                # next_charge_date = None
 
-                if eachItem['payment_frequency'] == 'Weekly':
-                    next_charge_date = last_charge_date + timedelta(days=7)
-                elif eachItem['payment_frequency'] == 'Bi-Weekly':
-                    next_charge_date = last_charge_date + timedelta(days=14)
-                elif eachItem['payment_frequency'] == 'Monthly':
-                    next_charge_date = last_charge_date + timedelta(days=28)
+                # if eachItem['payment_frequency'] == 'Weekly':
+                #     next_charge_date = last_charge_date + timedelta(days=7)
+                # elif eachItem['payment_frequency'] == 'Bi-Weekly':
+                #     next_charge_date = last_charge_date + timedelta(days=14)
+                # elif eachItem['payment_frequency'] == 'Monthly':
+                #     next_charge_date = last_charge_date + timedelta(days=28)
 
-                eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
-                eachItem['next_charge_date'] = str(next_charge_date.date())
+                #eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
+                #eachItem['next_charge_date'] = str(next_charge_date.date())
 
                 if eachItem['delivery_zip'] in mondayZips:
                     eachItem['monday_available'] = True
