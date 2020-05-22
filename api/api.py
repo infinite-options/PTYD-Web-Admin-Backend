@@ -1082,15 +1082,11 @@ class Coordinates:
         'key' : BING_API_KEY
         }
         coordinates = []
-        print("locations passed: {}".format(self.locations))
         for address in self.locations:
             formattedAddress = self.formatAddress(address)
-            print("before sending request")
             r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
                 '&maxResults=1&key={}'.format(params['key']))
-            print("result of the request: {}".format(r))
-            results = r.json() 
-            print("results is: {}".format(results))
+            results = r.json()
             try:
                 assert(results['resourceSets'][0]['estimatedTotal'])
                 point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
