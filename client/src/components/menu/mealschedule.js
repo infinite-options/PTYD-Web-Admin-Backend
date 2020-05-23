@@ -101,11 +101,11 @@ class Mealschedule extends Component {
       currentWeek.addonsSelected = false;
 
       for (let week in mselect_api.result.Meals) {
-        if (mselect_api.result.Meals[week].week_affected == currentWeek.sat) {
-          if (mselect_api.result.Meals[week].meal_selection == "SKIP") {
+        if (mselect_api.result.Meals[week].week_affected === currentWeek.sat) {
+          if (mselect_api.result.Meals[week].meal_selection === "SKIP") {
             currentWeek.deliverDay = "SKIP";
           } else if (
-            mselect_api.result.Meals[week].meal_selection == "SURPRISE"
+            mselect_api.result.Meals[week].meal_selection === "SURPRISE"
           ) {
             currentWeek.deliverDay =
               mselect_api.result.Meals[week].delivery_day;
@@ -247,8 +247,13 @@ class Mealschedule extends Component {
       currentWeek.addonsSelected = false;
 
       for (let week in mselect_api.result.Meals) {
-        if (mselect_api.result.Meals[week].week_affected == currentWeek.sat) {
-          if (mselect_api.result.Meals[week].meal_selection == "SKIP") {
+        console.log(`currentWeek.sat`, currentWeek.sat);
+        console.log(
+          `Meal week affected: `,
+          mselect_api.result.Meals[week].week_affected
+        );
+        if (mselect_api.result.Meals[week].week_affected === currentWeek.sat) {
+          if (mselect_api.result.Meals[week].meal_selection === "SKIP") {
             currentWeek.deliverDay = "SKIP";
           } else if (
             mselect_api.result.Meals[week].meal_selection == "SURPRISE"
@@ -288,6 +293,8 @@ class Mealschedule extends Component {
     console.log("plans_api", plans);
 
     var keys = Object.keys(plans);
+    console.log("plans: ", plans);
+    console.log("keys: ", keys);
     let new_plans = [];
     let skip = 0;
 
@@ -316,6 +323,7 @@ class Mealschedule extends Component {
   }
   //dropdown for different subscription
   async handleChange(event) {
+    console.log("event.target.value:", event.target.value);
     await this.setState({
       selection: event.target.value
     });
@@ -368,8 +376,6 @@ class Mealschedule extends Component {
       </div>
     );
     displayrows.push(tempelement);
-    // }
-    console.log("lololololol menu", this.state.menu);
     return (
       // <div>
       //   <section class="content-section">
@@ -378,7 +384,7 @@ class Mealschedule extends Component {
           <Cell col={3}>
             {" "}
             <Grid>
-              <Cell col={4}>
+              {/* <Cell col={4}>
                 <img
                   style={{
                     borderRadius: "50%",
@@ -389,10 +395,10 @@ class Mealschedule extends Component {
                   src={IMG8}
                   alt="Avatar"
                 ></img>
-              </Cell>
+              </Cell> */}
               <Cell col={8}>
-                <h4>
-                  Hi, {this.searchCookie4Name(document.cookie)}
+                <h4 style={{ overflowWrap: "anywhere" }}>
+                  Hi, {this.searchCookie4Name("loginStatus")}
                   <th colSpan="2">{this.subscription_dropdown()}</th>
                 </h4>
               </Cell>
@@ -421,14 +427,11 @@ class Mealschedule extends Component {
           </Cell>{" "}
           <Cell col={1}></Cell>
           <Cell col={8}>
-            <br />
-            <br />
-            <h3 class="font1">
+            <h3 className="font1">
               <b>Select Meals Around Your Schedule</b>
             </h3>
-            <br />
             <div>{console.log(this.state.menu)}</div>
-            <div class="meals-button">
+            <div className="meals-button">
               {this.state.menu.map(
                 eachWeek => (
                   console.log("meal printing", eachWeek.mealQuantities),
@@ -466,7 +469,7 @@ class Mealschedule extends Component {
   }
 
   subscription_dropdown = () => {
-    if (this.state.purchase_all == null) {
+    if (this.state.purchase_all === null) {
       return <div />;
     }
     let temp = [];

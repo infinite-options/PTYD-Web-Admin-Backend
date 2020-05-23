@@ -433,9 +433,6 @@ class MakeChanges extends Component {
                   onChange={this.handleChange}
                 />
               </Form.Group>
-
-              <br />
-              <br />
             </Form>
             {this.DeleteModal()}
             {/* {this.props.subscription} */}

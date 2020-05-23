@@ -27,33 +27,29 @@ class Landing extends Component {
     };
   }
   render() {
-    console.log(this.state.isLoggedIn);
     return (
-      <section class='content-section'>
-        <div class='container' style={{color: "white"}}>
+      <section className='content-section'>
+        <div className='container' style={{color: "white"}}>
           <img
-            class='img-fluid'
+            className='img-fluid'
             style={{width: "100%", height: "700px"}}
             src={IMG1}
             alt=''
           />
-          <div class='top-left font1'>
+          <div className='top-left font1'>
             <p className='home_title'>LOCAL</p>
             <p className='home_title'>ORGANIC</p>
             <p className='home_title'>RESPONSIBLE</p>
           </div>
-          <div class='bottom-left font2 home_subtitle' style={{}}>
+          <div className='bottom-left font2 home_subtitle' style={{}}>
             <p>Plant-based, ready to eat meals</p>
             <p>delivered to your doorstep.</p>
-            <a
-              class='btn1 btn1-primary font4 start_button btn-lg'
-              href='/signup'
-            >
+            <a className='btn1 btn1-primary start_button' href='/signup'>
               Get Started
             </a>
           </div>
 
-          <div class='bottom-left font2'>
+          <div className='bottom-left font2'>
             {/* {this.state.isLoggedIn === false && ( */}
             <a href='/login'>Already a Member? Sign in</a>
             {/* )} */}
@@ -66,8 +62,8 @@ class Landing extends Component {
                 THE ONLY ZERO WASTE MEAL DELIVERY SERVICE
               </h3>
             </center>
-            <hr class='one-half' />
-            <Container className=''>
+
+            <Container className='shadow-lg bg-white p-2 mb-2'>
               <Row
                 style={{
                   fontSize: "28px",
@@ -76,9 +72,15 @@ class Landing extends Component {
                   marginLeft: "5%"
                 }}
               >
-                <Col>CHOOSE YOUR MEALS</Col>
-                <Col>WEEKLY DELIVERY</Col>
-                <Col>RETURN YOUR JARS</Col>
+                <Col>
+                  <h4 className='text-wrap'>CHOOSE YOUR MEALS</h4>
+                </Col>
+                <Col>
+                  <h4 className='text-wrap'>WEEKLY DELIVERY</h4>
+                </Col>
+                <Col>
+                  <h4 className='text-wrap'>RETURN YOUR JARS</h4>
+                </Col>
               </Row>
               <Row
                 style={{
@@ -107,11 +109,11 @@ class Landing extends Component {
                 </Col>
               </Row>
             </Container>
-            <hr class='one-half' />
+
             <center>
               <button
                 type='button'
-                class='btn1 btn1-primary font4'
+                className='btn1 btn1-primary font4'
                 style={{
                   marginTop: "10px",
                   color: "white",
@@ -121,14 +123,12 @@ class Landing extends Component {
               >
                 Get Started
               </button>
-
-              <div class='g-signin2' data-onsuccess='onSignIn'></div>
             </center>
           </div>
         </div>
 
-        <div class='container container_space d-flex justify-content-center'>
-          <div class='font2'>
+        <div className='container container_space d-flex justify-content-center'>
+          <div className='font2'>
             <Grid className='mt-5'>
               <Cell col={8}>
                 <Container>
@@ -190,7 +190,7 @@ class Landing extends Component {
               </Cell>
               <Cell col={4}>
                 <img
-                  class='img-fluid'
+                  className='img-fluid'
                   style={{width: "80%", height: "100%"}}
                   src={IMG2}
                   alt=''
@@ -198,7 +198,7 @@ class Landing extends Component {
               </Cell>
               <button
                 type='button'
-                class='btn1 btn1-primary font4'
+                className='btn1 btn1-primary font4'
                 style={{
                   marginTop: "10px",
                   color: "white",
@@ -212,7 +212,7 @@ class Landing extends Component {
           </div>
         </div>
         <div
-          class='container background container_space'
+          className='container background container_space'
           style={{
             backgroundSize: "100% 100%"
           }}
@@ -227,43 +227,43 @@ class Landing extends Component {
                 height: "700px"
               }}
             >
-              <h2 class='font1'>DELIVERED WEEKLY</h2>
-              <h3 class='font1'>STRAIGHT TO YOUR DOOR</h3>
-              <hr class='three' />
-              <h5 class='font1'>&bull; READY-TO-EAT PLANT BASED MEALS</h5>
-              <h5 class='font1'>&bull; 100% GLUTEN, MEAT, AND DAIRY FREE</h5>
-              <h5 class='font1'>&bull; REAL WHOLE FOOD INGREDIENTS</h5>
-              <h5 class='font1'>&bull; NO PRESERVATIVES, EVER</h5>
-              <hr class='three' />
+              <h2 className='font1'>DELIVERED WEEKLY</h2>
+              <h3 className='font1'>STRAIGHT TO YOUR DOOR</h3>
+              <hr className='three' />
+              <h5 className='font1'>&bull; READY-TO-EAT PLANT BASED MEALS</h5>
+              <h5 className='font1'>
+                &bull; 100% GLUTEN, MEAT, AND DAIRY FREE
+              </h5>
+              <h5 className='font1'>&bull; REAL WHOLE FOOD INGREDIENTS</h5>
+              <h5 className='font1'>&bull; NO PRESERVATIVES, EVER</h5>
+              <hr className='three' />
               <h6 className='mt-5'>
                 <i>Pause anytime, no commitment.</i>
               </h6>
-              <h5 class='font1'>PLANS STARTING AT</h5>
-              <h4 class='font3'>
-                <large>$59</large> / WEEK
-              </h4>
+              <h5 className='font1'>PLANS STARTING AT</h5>
+              <h4 className='font3'>$59 / WEEK</h4>
             </div>
           </center>
         </div>
-        <div class='container container_space'>
-          <h3 class='font2' style={{color: "#196F3D"}}>
+        <div className='container container_space'>
+          <h3 className='font2' style={{color: "#196F3D"}}>
             FRESH MENU EVERY WEEK
           </h3>
-          <h5 class='font1'>
+          <h5 className='font1'>
             Organic. Seasonal. Local. Every week try something new. Your taste
             buds will thank you.{" "}
           </h5>
           <Grid>
             <Cell col={4}>
               <img
-                class='img-fluid'
+                className='img-fluid'
                 style={{width: "80%", height: "60%"}}
                 src={IMG4}
                 alt=''
               />
-              <h4 class='font2'>RAINBOW SALAD</h4>
+              <h4 className='font2'>RAINBOW SALAD</h4>
               <Cell col={10}>
-                <p class='font2'>
+                <p className='font2'>
                   All the colors for all the nutrients! This salad is perfect
                   for a lunch on the go. With delicious, freshly made cilantro
                   lime hummus, pickled onions, quinoa, and a fresh serving of
@@ -274,14 +274,14 @@ class Landing extends Component {
             </Cell>
             <Cell col={4}>
               <img
-                class='img-fluid'
+                className='img-fluid'
                 style={{width: "80%", height: "60%"}}
                 src={IMG5}
                 alt=''
               />
-              <h4 class='font2'>BBQ CHICKPEA SALAD</h4>
+              <h4 className='font2'>BBQ CHICKPEA SALAD</h4>
               <Cell col={10}>
-                <p class='font2'>
+                <p className='font2'>
                   Southern, smoky, spiced chickpeas smothered in the worlds best
                   BBQ Sauce. You'll want to order this when it comes on the
                   menu, trust me.
@@ -290,14 +290,14 @@ class Landing extends Component {
             </Cell>
             <Cell col={4}>
               <img
-                class='img-fluid'
+                className='img-fluid'
                 style={{width: "80%", height: "60%"}}
                 src={IMG6}
                 alt=''
               />
-              <h4 class='font2'>BLUEBERRY COCONUT OATS</h4>
+              <h4 className='font2'>BLUEBERRY COCONUT OATS</h4>
               <Cell col={10}>
-                <p class='font2'>
+                <p className='font2'>
                   Say hello to your new favorite breakfast. Eat in the car or
                   steal bites between emails. Fresh blueberries, coconut cream,
                   chia seeds and rolled oats. This meal has the antioxidants,
@@ -308,7 +308,7 @@ class Landing extends Component {
           </Grid>
           <button
             type='button'
-            class='btn1 btn1-primary font4'
+            className='btn1 btn1-primary font4'
             style={{
               marginTop: "10px",
               color: "white",
@@ -319,8 +319,8 @@ class Landing extends Component {
             BROWSE OUR MENU
           </button>
         </div>
-        <div class='container font2 container_space'>
-          <h3 class='font2'>What Our Community is Saying...</h3>
+        <div className='container font2 container_space'>
+          <h3 className='font2'>What Our Community is Saying...</h3>
           <CardDeck className='mb-5'>
             <Card className='p-3'>
               <Card.Body>
@@ -344,7 +344,7 @@ class Landing extends Component {
                   ></img>
                 </Cell>
                 <Cell col={7}>
-                  <h5 class='font2'>Veronica</h5>
+                  <h5 className='font2'>Veronica</h5>
                   <p>UX Designer</p>
                 </Cell>
               </Card.Footer>
@@ -400,7 +400,7 @@ class Landing extends Component {
                   ></img>
                 </Cell>
                 <Cell col={7}>
-                  <h5 class='font2'>Courtney</h5>
+                  <h5 className='font2'>Courtney</h5>
                   <p>Fitness Designer</p>
                 </Cell>
               </Card.Footer>
@@ -408,7 +408,7 @@ class Landing extends Component {
           </CardDeck>
           <button
             type='button'
-            class='btn1 btn1-primary font4'
+            className='btn1 btn1-primary font4'
             style={{
               marginTop: "10px",
               color: "white",
@@ -421,7 +421,7 @@ class Landing extends Component {
           <Grid>
             <center>
               <Cell col={8}>
-                <h3 class='font2' style={{lineHeight: "50px"}}>
+                <h3 className='font2' style={{lineHeight: "50px"}}>
                   "PTYD is so good and we love it so much, it feels like part of
                   our family! It's so thrilling to fill our fridge every week
                   with tasty surprises!"

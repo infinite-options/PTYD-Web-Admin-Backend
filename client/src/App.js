@@ -13,6 +13,8 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookies from "js-cookie";
 
+import logo from "./img/LOGO-homepage.png";
+
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -93,12 +95,7 @@ const App = props => {
           >
             <div style={{marginTop: "-25px"}}>
               <a className='navbar-brand' href='/'>
-                <img
-                  src='https://static.wixstatic.com/media/db4706_fb464984e3094a629a8bfb5297ca38c7~mv2.png/v1/fill/w_110,h_81,al_c,q_90/LOGO%2012_19_18%20.webp'
-                  width='88'
-                  height='65'
-                  alt=''
-                ></img>
+                <img src={logo} alt='Logo' className='logo'></img>
               </a>
               <p
                 className='font_9'
@@ -200,9 +197,9 @@ const App = props => {
                       color: "black"
                     }}
                   >
-                    <span class='font-weight-bold'>Hello </span>
+                    <span className='font-weight-bold'>Hello </span>
                     <span>{searchCookie4Login("loginStatus")}</span>
-                    <span class='font-weight-bold'>!</span>
+                    <span className='font-weight-bold'>!</span>
                   </p>
                 </div>
               ) : (
@@ -317,7 +314,7 @@ const App = props => {
           </Navigation>
         </Drawer>
 
-        <Content Style='padding-top:140px'>
+        <Content style={{paddingTop: "140px"}}>
           <div className='page-content' />
           <Main
             appProps={{
@@ -334,18 +331,21 @@ const App = props => {
         <footer className='container text-center font2'>
           <div className='row'>
             <div className='col'>
-              <div Style='margin-top:-10px'>
+              <div style={{marginTop: "-10px"}}>
                 <a className='navbar-brand' href='/'>
-                  <img
-                    src='https://static.wixstatic.com/media/db4706_fb464984e3094a629a8bfb5297ca38c7~mv2.png/v1/fill/w_110,h_81,al_c,q_90/LOGO%2012_19_18%20.webp'
-                    width='80'
-                    height='60'
-                    alt=''
-                  ></img>
+                  <img src={logo} alt='Logo' className='logo'></img>
                 </a>
                 <p
                   className='font_9'
-                  Style='font-size:11px; line-height:0.8em; text-align:center; letter-spacing:0.25em; font-size:11px; color:#E38B19; font-weight:bold;'
+                  style={{
+                    fontSize: "11px",
+                    lineHeight: "0.8em",
+                    textAlign: "center",
+                    letterSpacing: "0.25em",
+                    fontSize: "11px",
+                    color: "#E38B19",
+                    fontWeight: "bold"
+                  }}
                 >
                   AUSTIN, TX
                 </p>
@@ -354,19 +354,19 @@ const App = props => {
 
             <div className='col'>
               <Nav defaultActiveKey='/' className='flex-column'>
-                <Nav.Link Style='color:green' disabled>
+                <Nav.Link style={{color: "green"}} disabled>
                   Order
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Menu
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Plans
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   How it Works
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Delivery Area
                 </Nav.Link>
               </Nav>
@@ -374,22 +374,22 @@ const App = props => {
 
             <div className='col'>
               <Nav defaultActiveKey='/' className='flex-column'>
-                <Nav.Link Style='color:green' disabled>
+                <Nav.Link style={{color: "green"}} disabled>
                   Company
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Blog
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Our Service
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Our Team
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Jobs
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   Employee Portal
                 </Nav.Link>
               </Nav>
@@ -397,16 +397,16 @@ const App = props => {
 
             <div className='col'>
               <Nav defaultActiveKey='/' className='flex-column'>
-                <Nav.Link Style='color:green' disabled>
+                <Nav.Link style={{color: "green"}} disabled>
                   Questions & Contact
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   FAQs
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   512-522-9294
                 </Nav.Link>
-                <Nav.Link Style='color:black' href='/'>
+                <Nav.Link style={{color: "black"}} href='/'>
                   info@preptoyourdoor.com
                 </Nav.Link>
               </Nav>
@@ -414,7 +414,7 @@ const App = props => {
 
             <div className='col-md-4 flex-column'>
               <Nav defaultActiveKey='/'>
-                <Nav.Link Style='color:green' disabled>
+                <Nav.Link style={{color: "green"}} disabled>
                   Follow Us:
                 </Nav.Link>
               </Nav>
@@ -424,28 +424,20 @@ const App = props => {
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <img
-                    id='i3fogh650imageimageimage'
-                    alt='Grey Facebook Icon'
-                    data-type='image'
-                    itemProp='image'
-                    Style='width: 41px; height: 41px; object-fit: cover;'
-                    src='https://static.wixstatic.com/media/d3470ec8ca26475da4b228f0199b5d3d.png/v1/fill/w_51,h_51,al_c,q_95/d3470ec8ca26475da4b228f0199b5d3d.webp'
-                  ></img>
+                  <i
+                    className='fa fa-facebook-f fa-2x socialBranchLogo'
+                    style={{color: "grey"}}
+                  ></i>
                 </a>
                 <a
                   href='https://twitter.com/preptoyourdoor'
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <img
-                    id='i3fogh651imageimageimage'
-                    alt='Grey Twitter Icon'
-                    data-type='image'
-                    itemProp='image'
-                    Style='width: 41px; height: 41px; object-fit: cover;'
-                    src='https://static.wixstatic.com/media/7177d158c36d432b93f51e54f80e2f3c.png/v1/fill/w_51,h_51,al_c,q_95/7177d158c36d432b93f51e54f80e2f3c.webp'
-                  ></img>
+                  <i
+                    className='fa fa-twitter fa-2x socialBranchLogo'
+                    style={{color: "grey"}}
+                  ></i>
                 </a>
 
                 <a
@@ -453,27 +445,31 @@ const App = props => {
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <img
-                    id='i3fogh652imageimageimage'
-                    alt='Grey Instagram Icon'
-                    data-type='image'
-                    itemProp='image'
-                    Style='width: 41px; height: 41px; object-fit: cover;'
-                    src='https://static.wixstatic.com/media/d7ffe259c9e54f59837481b3dd0130eb.png/v1/fill/w_51,h_51,al_c,q_95/d7ffe259c9e54f59837481b3dd0130eb.webp'
-                  ></img>
+                  <i
+                    className='fa fa-instagram fa-2x socialBranchLogo'
+                    style={{color: "grey"}}
+                  ></i>
                 </a>
               </Nav>
               <Nav defaultActiveKey='/'>
-                <Nav.Link Style='color:green' disabled>
+                <Nav.Link style={{color: "green"}} disabled>
                   Join Our Mailing List
                 </Nav.Link>
                 <p> </p>
-                <p Style='font-size:12px; padding-top:25px; margin-left:-25px;'>
+                <p
+                  style={{
+                    fontSize: "12px",
+                    paddingTop: "25px",
+                    marginLeft: "-25px"
+                  }}
+                >
                   & Never Miss an Update
                 </p>
                 <p> </p>
-                <p Style='font-size:12px; padding-left:15px;'>Email Address:</p>
-                <Form Style='padding-left:10px;'>
+                <p style={{fontSize: "12px", paddingLeft: "15px"}}>
+                  Email Address:
+                </p>
+                <Form style={{paddingLeft: "10px"}}>
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridEmail'>
                       <Form.Control type='email' placeholder='Enter Email' />

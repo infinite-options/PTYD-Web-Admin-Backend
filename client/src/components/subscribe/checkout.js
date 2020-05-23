@@ -17,7 +17,8 @@ class Checkout extends Component {
       gift: "FALSE",
       password: null,
       salt: null,
-      loading: false
+      loading: false,
+      error: null
     };
 
     this.sendForm = this.sendForm.bind(this);
@@ -142,6 +143,7 @@ class Checkout extends Component {
       .digest("hex");
     this.sendForm()
       .then(res => {
+        console.log("res: ", res);
         this.handleApi(res);
         this.setState({loading: false});
       })
@@ -225,13 +227,19 @@ class Checkout extends Component {
   }
 
   handleApi(response) {
-    if (
-      response.result.purchase.code == 281 &&
-      response.result.payment.code == 281
-    ) {
-      this.props.history.push("/checkoutsuccess");
-    } else {
-      this.props.history.push("/checkout");
+    if (response !== undefined) {
+      if (
+        response.result !== undefined &&
+        response.result.purchase.code == 281 &&
+        response.result.payment.code == 281
+      ) {
+        this.props.history.push("/checkoutsuccess");
+      } else {
+        if (response.message !== undefined) {
+          this.setState({error: response.message});
+        }
+        this.props.history.push("/checkout");
+      }
     }
   }
 
@@ -277,8 +285,15 @@ class Checkout extends Component {
               </div>
             </div>
           )}
+          {this.state.error !== null && alert(this.state.error)}
           <Container>
-            <Row Style={this.state.loading ? "opacity: 0.5" : ""}>
+            <Row
+              Style={
+                this.state.loading || this.state.error !== null
+                  ? "opacity: 0.5"
+                  : ""
+              }
+            >
               <Col md={4}>
                 <div className='justify-content-md-center'>
                   <img
@@ -399,7 +414,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridPhoneNumber'>
                       <Form.Label>
                         Phone Number
-                      <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -417,7 +432,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} controlId='formGridAddress'>
                       <Form.Label>
                         Address
-                      <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -430,10 +445,7 @@ class Checkout extends Component {
                       />
                     </Form.Group>
 
-                    <Form.Group
-                      as={Col}
-                      controlId='formGridAptNum'
-                    >
+                    <Form.Group as={Col} controlId='formGridAptNum'>
                       <Form.Label>
                         Apartment/Unit <b>(optional)</b>
                       </Form.Label>
@@ -665,7 +677,7 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={3} controlId='formGridPassword'>
                       <Form.Label>
                         Password
-                          <span className='required-red'>
+                        <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
@@ -684,7 +696,6 @@ class Checkout extends Component {
                       />
                     </Form.Group>
                   </Form.Row>
-
 
                   <Button
                     onClick={this.checkout}
