@@ -1,12 +1,12 @@
-import React, {Component} from "react";
-import {Grid, Cell} from "react-mdl";
+import React, { Component } from "react";
+import { Grid, Cell } from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import {ButtonToolbar, Button, Modal, Card, Form} from "react-bootstrap";
+import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
 import Cookies from "js-cookie";
 
 class Mealschedule extends Component {
@@ -16,7 +16,7 @@ class Mealschedule extends Component {
     this.state = {
       menu: [],
       user_uid: this.props.appProps.user_uid,
-      purchase: {NextCharge: 0},
+      purchase: { NextCharge: 0 },
       subscribed: false,
       monday_available: false,
       paymentPlans: [],
@@ -51,17 +51,27 @@ class Mealschedule extends Component {
     return this.getCookieAttrHelper(cname, "first_name");
   }
   async changeMenuButtons() {
-    console.log(" here");
     let currPur = this.state.purchase_all[this.state.selection]; //t - change
     let purchaseId = currPur.purchase_id; //
-    console.log("purchase id chec", purchaseId);
+    console.log(" printing current purchase", currPur);
+
+    console.log("purchase id check1", purchaseId);
+
+    const res = await fetch(
+      this.props.match.params.startdate
+        ? this.props.API_URL + "/" + this.props.match.params.startdate
+        : this.props.API_URL
+    );
+    const api = await res.json();
+
     let monday_available = currPur.monday_available;
-    let api = this.state.api;
+    // let api = this.state.api;
     if (api === null) return;
     const mselect_res = await fetch(
       `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
     );
     const mselect_api = await mselect_res.json();
+    console.log("meal selecting print", mselect_api);
 
     let key;
     let sixWeekMenu = [];
@@ -116,6 +126,10 @@ class Mealschedule extends Component {
       for (let week in mselect_api.result.Addons) {
         if (mselect_api.result.Addons[week].week_affected == currentWeek.sat) {
           for (let mealId in mselect_api.result.Addons[week].meals_selected) {
+            if (mealId === "") {
+              console.log("alert weird empty string with a space");
+              continue;
+            }
             currentWeek.addonQuantities[mealId] =
               mselect_api.result.Addons[week].meals_selected[mealId];
             currentWeek.addonsSelected = true;
@@ -139,7 +153,7 @@ class Mealschedule extends Component {
         new_plans.push(x[j]);
       }
     }
-
+    console.log("menu six week menu", sixWeekMenu);
     this.setState(
       {
         menu: sixWeekMenu,
@@ -156,6 +170,7 @@ class Mealschedule extends Component {
     /*  PLEASE REPLACE THIS CODE WITH COOKIE
         DO NOT MAKE API CALL TO GET USER'S FIRST NAME
     */
+    console.log("runnning componentDidMount()");
     const accountres = await fetch(
       this.props.ACC_URL + "/" + this.state.user_uid
     );
@@ -175,7 +190,7 @@ class Mealschedule extends Component {
         : this.props.API_URL
     );
     const api = await res.json();
-
+    console.log("api", api);
     if (this.state.user_uid !== null) {
       const purchases = await fetch(
         `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
@@ -183,16 +198,22 @@ class Mealschedule extends Component {
       const purchasesApi = await purchases.json();
 
       // Check if user has any active subscriptions
-      if (purchasesApi.result.length !== 0) {
-        currPur = purchasesApi.result[0];
-        purchaseId = purchasesApi.result[0].purchase_id;
-        this.setState({subscribed: true});
-        this.setState({
-          subscribed: true,
-          monday_available: purchasesApi.result[0].monday_available,
-          purchase_all: purchasesApi.result,
-          api: api
-        });
+      if (purchasesApi.result.length != 0) {
+        currPur = purchasesApi.result[this.state.selection];
+        purchaseId = purchasesApi.result[this.state.selection].purchase_id;
+        this.setState({ subscribed: true });
+        this.setState(
+          {
+            subscribed: true,
+            monday_available:
+              purchasesApi.result[this.state.selection].monday_available,
+            purchase_all: purchasesApi.result,
+            api: api
+          },
+          () => {
+            console.log("api displaying", this.state.api);
+          }
+        );
       }
     }
 
@@ -218,6 +239,8 @@ class Mealschedule extends Component {
         {},
         currentWeek.mealQuantities
       );
+      console.log("addon quantities", currentWeek.mealQuantities);
+      console.log("addon quantities2", currentWeek.addonQuantities);
       currentWeek.maxmeals = currPur.MaximumMeals;
       currentWeek.deliverDay = "Sunday";
       currentWeek.surprise = true;
@@ -260,29 +283,31 @@ class Mealschedule extends Component {
           }
         }
       }
-
+      console.log("currentWeek", currentWeek);
       sixWeekMenu.push(currentWeek);
     }
-
+    console.log("sixWeekMenu", sixWeekMenu);
     const plans_res = await fetch(this.props.PLANS_URL);
     const plans_api = await plans_res.json();
-
     const plans = plans_api.result;
+    console.log("plans_api", plans);
+
     var keys = Object.keys(plans);
     console.log("plans: ", plans);
     console.log("keys: ", keys);
     let new_plans = [];
     let skip = 0;
-    for (let i in keys) {
-      if (skip === 0) {
-        skip++;
-        continue;
-      }
-      let x = plans[keys[i]].result;
-      for (let j = 0; j < x.length; j++) {
-        new_plans.push(x[j]);
+
+    for (let k of Object.keys(plans)) {
+      if (k !== "MealPlans") {
+        let x = plans[k].result;
+        for (let j = 0; j < x.length; j++) {
+          new_plans.push(x[j]);
+        }
       }
     }
+
+    console.log("plans", plans);
     console.log("test98", new_plans);
     this.setState(
       {
@@ -292,6 +317,7 @@ class Mealschedule extends Component {
       },
       () => {
         console.log("ccccccc", this.state.paymentPlans);
+        // window.location.reload(false);
       }
     );
   }
@@ -301,11 +327,15 @@ class Mealschedule extends Component {
     await this.setState({
       selection: event.target.value
     });
-    this.setState(() => {
-      this.changeMenuButtons();
-    });
+    this.setState(
+      () => {
+        this.changeMenuButtons();
+      },
+      () => {
+        // window.location.reload(false);
+      }
+    );
   }
-
   render() {
     let displayrows = [];
     let subscription_selection = this.state.purchase_all[this.state.selection];
@@ -349,7 +379,7 @@ class Mealschedule extends Component {
     return (
       // <div>
       //   <section class="content-section">
-      <div class='container font2'>
+      <div class="container font2">
         <Grid>
           <Cell col={3}>
             {" "}
@@ -367,9 +397,9 @@ class Mealschedule extends Component {
                 ></img>
               </Cell> */}
               <Cell col={8}>
-                <h4 style={{overflowWrap: "anywhere"}}>
+                <h4 style={{ overflowWrap: "anywhere" }}>
                   Hi, {this.searchCookie4Name("loginStatus")}
-                  <th colSpan='2'>{this.subscription_dropdown()}</th>
+                  <th colSpan="2">{this.subscription_dropdown()}</th>
                 </h4>
               </Cell>
             </Grid>
@@ -397,19 +427,19 @@ class Mealschedule extends Component {
           </Cell>{" "}
           <Cell col={1}></Cell>
           <Cell col={8}>
-            <h3 className='font1'>
+            <h3 className="font1">
               <b>Select Meals Around Your Schedule</b>
             </h3>
             <div>{console.log(this.state.menu)}</div>
-            <div className='meals-button'>
+            <div className="meals-button">
               {this.state.menu.map(
                 eachWeek => (
                   console.log("meal printing", eachWeek.mealQuantities),
                   console.log("addon printing", eachWeek.addonQuantities),
                   (
                     <MealButton
-                      day1='Sunday'
-                      day2='Monday'
+                      day1="Sunday"
+                      day2="Monday"
                       saturdayDate={eachWeek.sat}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}
@@ -453,8 +483,8 @@ class Mealschedule extends Component {
     return (
       <FormControl>
         <Select
-          labelId='demo-simple-select-label'
-          id='demo-simple-select'
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
           value={this.state.selection}
           onChange={this.handleChange}
           // style={{ color: "white" }}
