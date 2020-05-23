@@ -7,7 +7,6 @@ import defaultMeal from "../../img/default-meal.png";
 
 class EachAddon extends Component {
   render() {
-    console.log("EACH ADDON ", this.props);
     return (
       <div>
         {/* <center>

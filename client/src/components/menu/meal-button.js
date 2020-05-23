@@ -98,7 +98,10 @@ export default class MealButton extends Component {
       week_affected: nextProps.saturdayDate,
       menu: nextProps.menu,
       addons: nextProps.addons,
-      addonQuantities: nextProps.addonQuantities
+      addonQuantities: nextProps.addonQuantities,
+      buttonAddOnKeepColor: this.props.addonsSelected,
+      mealQuantities: nextProps.mealQuantities,
+      buttonAddOnKeepColor: nextProps.buttonAddOnKeepColor
     });
   }
   async componentDidMount() {
@@ -194,16 +197,23 @@ export default class MealButton extends Component {
         is_addons: true
       })
     });
-    if (
-      Object.values(this.state.addonQuantities).reduce(function(a, b) {
-        return a + b;
-      }, 0) === 1
-    ) {
-      console.log("if addon == 0");
-      this.setState({ buttonAddOnKeepColor: false });
-    } else {
-      this.setState({ buttonAddOnKeepColor: true });
-    }
+    console.log(this.state.addonQuantities);
+    // if (
+    //   Object.values(this.state.addonQuantities).reduce(function(a, b) {
+    //     return a + b;
+    //   }, 0) === 0
+    // ) {
+    //   console.log("if addon == 1");
+    //   this.setState({ buttonAddOnKeepColor: false });
+    // } else {
+    //   console.log(
+    //     "if not ",
+    //     Object.values(this.state.addonQuantities).reduce(function(a, b) {
+    //       return a + b;
+    //     }, 0)
+    //   );
+    //   this.setState({ buttonAddOnKeepColor: true });
+    // }
   };
 
   closeButtonSelect = () => {
@@ -227,7 +237,7 @@ export default class MealButton extends Component {
         if (
           Object.values(this.state.addonQuantities).reduce(function(a, b) {
             return a + b;
-          }, 0) === 1
+          }, 0) === 0
         ) {
           console.log("if addon == 0");
           this.setState({ buttonAddOnKeepColor: false });
@@ -294,6 +304,7 @@ export default class MealButton extends Component {
   }
 
   changeButtonSelect = () => {
+    this.SelectMealEachMeal();
     this.setState({
       buttonSelect: true,
       buttonSurprise: false,
@@ -313,7 +324,24 @@ export default class MealButton extends Component {
     this.sendForm();
   }
   changeButtonAddOn = () => {
+    // if (this.state.buttonSkip == true || this.state.buttonSurprise == true) {
+    // console.log(
+    //   "sum meals",
+    //   Object.values(this.state.mealQuantities).reduce((a, b) => a + b, 0)
+    // );
+    // if (this.state.buttonSkip == true || this.state.buttonSurprise == true) {
+    //   this.state.addonActivated = false;
+    // } else {
+    //   this.state.addonActivated = true;
+    // }
+    // if (Object.values(this.state.mealQuantities).reduce((a, b) => a + b, 0) == this.state.maxmeals) {
+    // if (this.state.maxmeals === 0) {
+    //   this.state.addonActivated = true;
+    // } else {
+    //   this.state.addonActivated = false;
+    // }
     this.setState({
+      addonActivated: true,
       buttonAddOn: true,
       buttonAddOnKeepColor: true,
       buttonSelect: false

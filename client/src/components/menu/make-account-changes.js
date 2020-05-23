@@ -56,17 +56,19 @@ class MakeChanges extends Component {
     this.setState(
       {
         changes: this.props
-      },
-      () => {
-        var dict = {};
-        this.state.changes.paymentplan.map(paymentPlan => {
-          let key = paymentPlan.meal_plan_desc
-            .concat(": $")
-            .concat(paymentPlan.meal_plan_price);
-          dict[key] = paymentPlan.meal_plan_id;
-        });
-        this.setState({ dict: dict });
       }
+      // ,() => {
+      //   var dict = {};
+      //   this.state.changes.paymentplan.map(paymentPlan => {
+      //     console.log("before dict");
+      //     let key = paymentPlan.meal_plan_desc
+      //       .concat(": $")
+      //       .concat(paymentPlan.meal_plan_price);
+      //     dict[key] = paymentPlan.meal_plan_id;
+      //     console.log("dict", dict);
+      //   });
+      //   this.setState({ dict: dict });
+      // }
     );
   }
 
@@ -265,6 +267,10 @@ class MakeChanges extends Component {
                     onChange={this.handleChange}
                   >
                     <option>Choose...</option>
+                    {console.log(
+                      "changes.paymentplan",
+                      this.state.changes.paymentplan
+                    )}
                     {this.state.changes.paymentplan.map(paymentPlan => (
                       <option>
                         {paymentPlan.meal_plan_desc
