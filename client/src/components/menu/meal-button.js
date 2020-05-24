@@ -501,7 +501,6 @@ export default class MealButton extends Component {
                       <Button
                         variant='success'
                         disabled={true}
-                        onClick={this.saveButtonActivateAddons}
                         style={{pointerEvents: "none"}}
                       >
                         Save
@@ -512,7 +511,6 @@ export default class MealButton extends Component {
                   <Button
                     variant='success'
                     onClick={this.saveButtonActivateAddons}
-                    style={{pointerEvents: "none"}}
                   >
                     Save
                   </Button>
