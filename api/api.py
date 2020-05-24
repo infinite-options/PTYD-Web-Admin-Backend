@@ -3159,7 +3159,8 @@ class UpdatePayments(Resource):
             cc_cvv = data['cc_cvv']
 
             print("data",data)
-            execute(""" CALL `ptyd`.`update_payments`(\'""" + str(cc_num) + """\', 
+            execute(""" CALL `ptyd`.`update_payments`(\'""" + str(purchase_id) + """\',
+                                                        \'""" + str(cc_num) + """\', 
                                                         \'""" + str(cc_exp_date) + """\',
                                                         \'""" + str(cc_cvv) + """\');
                                                         """, 'post', conn)
@@ -3206,6 +3207,59 @@ class addRecipe(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
+class Meal_Info1(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            date_affected = data['date_affected']
+
+            items = execute(""" select  
+                            pn.menu_category,
+                            pm.meal_name,
+                            pn.menu_type,
+                            pm.meal_category,
+                            ms.meal_selected,
+                            pm.extra_meal_price,
+                            pn.default_meal,
+                            ms.total
+                            from
+                        (SELECT
+                            delivery_day,
+                            week_affected, 
+                            meal_selected, 
+                            COUNT(n) as total from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                        FROM 
+                            ptyd_meals_selected 
+                        JOIN
+                            numbers
+                        ON char_length(meal_selection)
+                            - char_length(replace(meal_selection, ';', ''))
+                            >= n - 1) sub1
+                        WHERE week_affected LIKE \'""" + date_affected + """\'
+                        GROUP BY sub1.meal_selected) as ms
+                        join
+                        ptyd_menu pn
+                        on ms.week_affected = pn.menu_date
+                        and ms.meal_selected = pn.menu_meal_id
+                        join
+                        ptyd_meals pm
+                        on ms.meal_selected = pm.meal_id; """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+        
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 
 class TemplateApi(Resource):
     def get(self):
@@ -3257,6 +3311,8 @@ api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 api.add_resource(addRecipe, '/api/v2/add-recipe')
+api.add_resource(Meal_Info1, '/api/v2/mealInfo1')
+
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
