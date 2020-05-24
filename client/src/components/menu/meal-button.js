@@ -575,7 +575,7 @@ export default class MealButton extends Component {
             </Grid>
           ))}
         </div>
-        <Card.Body>
+        {/* <Card.Body>
           <center>
             &nbsp;&nbsp;
             <Button
@@ -613,7 +613,7 @@ export default class MealButton extends Component {
               </Button>
             )}
           </center>
-        </Card.Body>
+        </Card.Body> */}
       </Card>
     );
   };
