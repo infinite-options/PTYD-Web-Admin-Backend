@@ -3,15 +3,19 @@ import {Grid, Cell} from "react-mdl";
 import EachMeal from "./each-meal";
 import EachAddon from "./each-addon";
 
-import {ButtonToolbar, Button, Modal, Card} from "react-bootstrap";
+import {
+  ButtonToolbar,
+  Button,
+  Modal,
+  Card,
+  OverlayTrigger,
+  Tooltip
+} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
-
-    console.log("Props");
-    console.log(this.props);
 
     this.changeButtonSkip = this.changeButtonSkip.bind(this);
     this.changeButtonSurprise = this.changeButtonSurprise.bind(this);
@@ -50,7 +54,6 @@ export default class MealButton extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
-      console.log("we need to be hererererererere", nextProps, this.props);
       if (nextProps.surprise == false) {
         this.setState({
           buttonSurprise: false,
@@ -183,7 +186,6 @@ export default class MealButton extends Component {
   };
 
   sendAddonForm = () => {
-    console.log("its sending form from addon");
     fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
@@ -197,23 +199,6 @@ export default class MealButton extends Component {
         is_addons: true
       })
     });
-    console.log(this.state.addonQuantities);
-    // if (
-    //   Object.values(this.state.addonQuantities).reduce(function(a, b) {
-    //     return a + b;
-    //   }, 0) === 0
-    // ) {
-    //   console.log("if addon == 1");
-    //   this.setState({ buttonAddOnKeepColor: false });
-    // } else {
-    //   console.log(
-    //     "if not ",
-    //     Object.values(this.state.addonQuantities).reduce(function(a, b) {
-    //       return a + b;
-    //     }, 0)
-    //   );
-    //   this.setState({ buttonAddOnKeepColor: true });
-    // }
   };
 
   closeButtonSelect = () => {
@@ -239,16 +224,14 @@ export default class MealButton extends Component {
             return a + b;
           }, 0) === 0
         ) {
-          console.log("if addon == 0");
-          this.setState({ buttonAddOnKeepColor: false });
+          this.setState({buttonAddOnKeepColor: false});
         } else {
-          this.setState({ cancelAddonWithoutSave: true });
+          this.setState({cancelAddonWithoutSave: true});
         }
       }
     );
   };
   saveButtonAddOn = () => {
-    console.log("its in save button addon");
     this.setState({
       buttonAddOn: false,
       cancelAddonWithoutSave: false
@@ -324,22 +307,6 @@ export default class MealButton extends Component {
     this.sendForm();
   }
   changeButtonAddOn = () => {
-    // if (this.state.buttonSkip == true || this.state.buttonSurprise == true) {
-    // console.log(
-    //   "sum meals",
-    //   Object.values(this.state.mealQuantities).reduce((a, b) => a + b, 0)
-    // );
-    // if (this.state.buttonSkip == true || this.state.buttonSurprise == true) {
-    //   this.state.addonActivated = false;
-    // } else {
-    //   this.state.addonActivated = true;
-    // }
-    // if (Object.values(this.state.mealQuantities).reduce((a, b) => a + b, 0) == this.state.maxmeals) {
-    // if (this.state.maxmeals === 0) {
-    //   this.state.addonActivated = true;
-    // } else {
-    //   this.state.addonActivated = false;
-    // }
     this.setState({
       addonActivated: true,
       buttonAddOn: true,
@@ -495,7 +462,7 @@ export default class MealButton extends Component {
               Please Select {this.state.maxmeals} Meals:
             </h4>
             <div style={{float: "right"}}>
-              <Button
+              {/* <Button
                 variant='danger'
                 onClick={() => {
                   if (
@@ -514,18 +481,44 @@ export default class MealButton extends Component {
                 }}
               >
                 Close
-              </Button>
+              </Button> */}
               &nbsp;&nbsp;
               {this.state.subscribed ? (
-                this.state.maxmeals === 0 && (
+                this.state.maxmeals !== 0 ? (
+                  <OverlayTrigger
+                    key={"top"}
+                    placement={"top"}
+                    overlay={
+                      <Tooltip id='selectMealSaveButton'>
+                        <p>
+                          Select additional meals to activate this button or
+                          click "Surprise Me" to close this box.
+                        </p>
+                      </Tooltip>
+                    }
+                  >
+                    <span className='d-inline-block'>
+                      <Button
+                        variant='success'
+                        disabled={true}
+                        onClick={this.saveButtonActivateAddons}
+                        style={{pointerEvents: "none"}}
+                      >
+                        Save
+                      </Button>
+                    </span>
+                  </OverlayTrigger>
+                ) : (
                   <Button
                     variant='success'
                     onClick={this.saveButtonActivateAddons}
+                    style={{pointerEvents: "none"}}
                   >
-                    Save changes
+                    Save
                   </Button>
                 )
               ) : (
+                // )
                 <Button variant='success' href='/selectmealplan'>
                   Subscribe Now
                 </Button>
