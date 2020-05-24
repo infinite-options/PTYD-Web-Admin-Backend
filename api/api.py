@@ -748,7 +748,7 @@ class AccountPurchases(Resource):
                     ,purch.delivery_instructions
                     ,snap.weeks_remaining AS paid_weeks_remaining
                     ,snap.next_billing_date AS next_charge_date
-                    ,addon.total_addon_cost
+                    ,IFNULL(addon.total_addon_cost,0) AS weekly_addon_cost
                     ,pay.amount_due AS amount_due_before_addon
                     ,addon.week_affected
                 FROM (

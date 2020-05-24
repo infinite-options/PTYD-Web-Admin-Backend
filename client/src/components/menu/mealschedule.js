@@ -170,14 +170,14 @@ class Mealschedule extends Component {
     /*  PLEASE REPLACE THIS CODE WITH COOKIE
         DO NOT MAKE API CALL TO GET USER'S FIRST NAME
     */
-    console.log("runnning componentDidMount()");
-    const accountres = await fetch(
-      this.props.ACC_URL + "/" + this.state.user_uid
-    );
-    const accountapi = await accountres.json();
-    this.setState({
-      first_name: accountapi.result[0].first_name
-    });
+    // const accountres = await fetch(
+    //   this.props.ACC_URL + "/" + this.state.user_uid
+    // );
+    // const accountapi = await accountres.json();
+    // this.setState({
+    //   first_name: accountapi.result[0].first_name
+    // });
+    this.setState({ first_name: this.searchCookie4Name("loginStatus") });
 
     let currPur = {};
     let purchaseId = 0;
@@ -352,8 +352,10 @@ class Mealschedule extends Component {
         <p>
           Paid Weeks Remaining: {subscription_selection.paid_weeks_remaining}
         </p>
-        <p>Next Charge: ${subscription_selection.amount_due}</p>
+        <p>Next Charge: ${subscription_selection.amount_due_before_addon}</p>
         <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
+        <p>Next Addon Charge: ${subscription_selection.weekly_addon_cost}</p>
+        <p>Next Addon Charge Date:</p>
         <p>
           Coupons:{" "}
           {subscription_selection.coupon_id
