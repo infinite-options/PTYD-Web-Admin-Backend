@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- google login -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- <meta 
+      name="google-signin-client_id" 
+      content="339612599009-hlhr6l61j2jn1lecetl82tftei4oduie.apps.googleusercontent.com"> -->
+    <meta
+      name="google-signin-client_id" 
+      content="333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com"
+    >
+    <!-- <meta
+      name="333899878721"
+      content="333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com"
+    /> -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-165301097-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-165301097-1");
+    </script>
     <meta charset="utf-8" />
     <link rel="icon" href="ptyd.png" />
     <title>Prep to Your Door | Organic Meal Prep</title>
@@ -17,6 +43,16 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
     />
     <link rel="apple-touch-icon" href="ptyd.png" />
     <!--
@@ -37,6 +73,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
