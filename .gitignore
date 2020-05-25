@@ -10,3 +10,4 @@ yarn.lock
 env
 .vscode
 sample.py
+-X
