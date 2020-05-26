@@ -22,7 +22,7 @@ class Mealschedule extends Component {
       paymentPlans: [],
       purchase_all: [], //hold all subscriptions
       selection: 0,
-      api: null //initial result api call
+      api: null //initial result api call,
     };
     this.changeMenuButtons = this.changeMenuButtons.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -95,6 +95,8 @@ class Mealschedule extends Component {
         {},
         currentWeek.mealQuantities
       );
+      currentWeek.addonPrice = api.result[key].AddonPrice;
+      console.log("addonprice", api.result[key].AddonPrice);
       currentWeek.maxmeals = currPur.MaximumMeals;
       currentWeek.deliverDay = "Sunday";
       currentWeek.surprise = true;
@@ -139,7 +141,6 @@ class Mealschedule extends Component {
 
       sixWeekMenu.push(currentWeek);
     }
-
     const plans_res = await fetch(this.props.PLANS_URL);
     const plans_api = await plans_res.json();
 
@@ -170,14 +171,14 @@ class Mealschedule extends Component {
     /*  PLEASE REPLACE THIS CODE WITH COOKIE
         DO NOT MAKE API CALL TO GET USER'S FIRST NAME
     */
-    console.log("runnning componentDidMount()");
-    const accountres = await fetch(
-      this.props.ACC_URL + "/" + this.state.user_uid
-    );
-    const accountapi = await accountres.json();
-    this.setState({
-      first_name: accountapi.result[0].first_name
-    });
+    // const accountres = await fetch(
+    //   this.props.ACC_URL + "/" + this.state.user_uid
+    // );
+    // const accountapi = await accountres.json();
+    // this.setState({
+    //   first_name: accountapi.result[0].first_name
+    // });
+    this.setState({ first_name: this.searchCookie4Name("loginStatus") });
 
     let currPur = {};
     let purchaseId = 0;
@@ -239,7 +240,9 @@ class Mealschedule extends Component {
         {},
         currentWeek.mealQuantities
       );
-      console.log("addon quantities", currentWeek.mealQuantities);
+      currentWeek.addonPrice = api.result[key].AddonPrice;
+      console.log("addonprice", api.result[key].AddonPrice);
+      console.log("meal quantities", currentWeek.mealQuantities);
       console.log("addon quantities2", currentWeek.addonQuantities);
       currentWeek.maxmeals = currPur.MaximumMeals;
       currentWeek.deliverDay = "Sunday";
@@ -352,8 +355,13 @@ class Mealschedule extends Component {
         <p>
           Paid Weeks Remaining: {subscription_selection.paid_weeks_remaining}
         </p>
-        <p>Next Charge: ${subscription_selection.amount_due}</p>
+        <p>Next Charge: ${subscription_selection.amount_due_before_addon}</p>
         <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
+        <p>Next Addon Charge: ${subscription_selection.weekly_addon_cost}</p>
+        <p>
+          Next Addon Charge Date:{" "}
+          {subscription_selection.next_addon_charge_date}
+        </p>
         <p>
           Coupons:{" "}
           {subscription_selection.coupon_id
@@ -376,6 +384,8 @@ class Mealschedule extends Component {
       </div>
     );
     displayrows.push(tempelement);
+
+    // let addon_price_saved = subscription_selection.weekly_addon_cost;
     return (
       // <div>
       //   <section class="content-section">
@@ -447,6 +457,7 @@ class Mealschedule extends Component {
                       addons={eachWeek.addons}
                       mealQuantities={eachWeek.mealQuantities}
                       addonQuantities={eachWeek.addonQuantities}
+                      addon_price_saved={this.create_addon_price(eachWeek)}
                       maxmeals={eachWeek.maxmeals}
                       purchase_id={this.state.purchase.purchase_id}
                       deliverDay={eachWeek.deliverDay}
@@ -467,6 +478,28 @@ class Mealschedule extends Component {
       // </div>
     );
   }
+
+  create_addon_price = eachWeek => {
+    console.log("xxx");
+    let addon_price_saved = {};
+    let quantity = eachWeek.addonQuantities;
+    let price = eachWeek.addonPrice;
+    console.log("yyy", quantity, price);
+    for (var key in quantity) {
+      console.log(key);
+      let tempQuantity = quantity[key];
+      let tempPrice = price[key];
+      if (isNaN(tempQuantity * tempPrice)) {
+        console.log("naughty value");
+        addon_price_saved[key] = 0;
+        continue;
+      }
+      addon_price_saved[key] = tempQuantity * tempPrice;
+      // console.log(tempQuantity * tempPrice);
+    }
+    console.log("dict", addon_price_saved);
+    return addon_price_saved;
+  };
 
   subscription_dropdown = () => {
     if (this.state.purchase_all === null) {
