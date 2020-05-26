@@ -19,9 +19,7 @@ const ResetPassword = props => {
   const handleSubmitEmail = e => {
     console.log("handleSubmitEmail is called");
     e.preventDefault();
-    console.log("Loading", loading);
     setLoading(true);
-    console.log("loading after: ", loading);
     if (email.trim().length === 0) {
       RaiseError("Please enter your email address");
       setLoading(false);
@@ -29,7 +27,6 @@ const ResetPassword = props => {
       axios
         .get(props.RESET_PASSWORD_URL, {params: {email: email}})
         .then(res => {
-          console.log("res is for reset password: ", res);
           setLoading(false);
           setRequestChange(false);
           setConfirmChanged(true);
