@@ -717,8 +717,6 @@ class ResetPassword (Resource):
             conn = connect();
             #search for email;
             email = request.args.get('email');
-            old_password = request.args.get('oldPassword')
-            new_password = request.args.get('newPassword')
             if email == None:
                 response['message'] =  "Invalid Email Address"
                 return response, 400
@@ -727,49 +725,22 @@ class ResetPassword (Resource):
             user_lookup = execute(query, 'get', conn)
             if (user_lookup.get('code') == 280):
                 user_uid = user_lookup.get('result')[0].get('user_uid')
-                if (old_password == None and new_password == None):
-                    pass_temp = self.get_random_string()
-                    salt = getNow()
-                    pass_temp_hashed = sha512((pass_temp + salt).encode()).hexdigest()
-                    query = """UPDATE ptyd_passwords SET password_hash = '""" + pass_temp_hashed + """'
+                pass_temp = self.get_random_string()
+                salt = getNow()
+                pass_temp_hashed = sha512((pass_temp + salt).encode()).hexdigest()
+                query = """UPDATE ptyd_passwords SET password_hash = '""" + pass_temp_hashed + """'
                              , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
-                    #update database with temp password
-                    query_result = execute(query, 'post', conn)
-                    if (query_result.get('code') == 281):
-                        #send an email to client
-                        print("here")
-                        msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[email])
-                        print('there')
-                        msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(temp=pass_temp)
-                        mail.send(msg)
-                        response['message'] = "temporary password has been sent"
-                        return response, 200
-                    else:
-                        return 500
-                elif (old_password != None and new_password != None):
-                    #check the old_password in password table
-                    query = """SELECT password_salt FROM ptyd_passwords WHERE password_user_uid = '""" + user_uid + """' AND
-                                password_hash = '""" + old_password + "';"
-                    query_result = execute(query, 'get', conn)
-                    print(query_result)
-                    if (query_result.get('code') == 280 and query_result.get.result):
-                        salt = getNow()
-                        # new_password_hashed = sha512((new_password + salt).encode()).hexdigest()
-                        query = """UPDATE ptyd_passwords SET password_hash = '""" + new_password + """'
-                                                    , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
-                        update_result = execute(query, 'post', conn)
-                        if (update_result.get('code') == 281):
-                            response['message'] = "Password has been reset"
-                            return response, 200
-                        else:
-                            response['Message'] = "Internal Server Error"
-                            return response, 500
-                    else:
-                        response['message'] = "Wrong password"
-                        return response, 403
-                    #update the database and prompt to client
+                #update database with temp password
+                query_result = execute(query, 'post', conn)
+                if (query_result.get('code') == 281):
+                    # send an email to client
+                    msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[email])
+                    msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(temp=pass_temp)
+                    mail.send(msg)
+                    response['message'] = "A temporary password has been sent"
+                    return response, 200
                 else:
-                    return BadRequest()
+                    return 500
             else:
                 response['message'] ="User is not found"
                 return response, 404
@@ -779,6 +750,53 @@ class ResetPassword (Resource):
         finally:
             disconnect(conn)
 
+class ChangePassword(Resource):
+    def post(self):
+        response={};
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            print("data: ", data)
+            email = data['email']
+            old_pass = data['oldPassword']
+            new_pass = data['newPassword']
+            query = """SELECT user_uid FROM ptyd_accounts WHERE user_email = '""" + email + "';"
+            query_result = execute(query, 'get', conn)
+            print(query_result)
+            if (query_result.get('code') == 280):
+                user_uid = query_result.get('result')[0].get('user_uid')
+                query = """SELECT password_hash, password_salt FROM ptyd_passwords WHERE password_user_uid = '""" \
+                        + user_uid +"';"
+                query_result = execute(query, "get", conn)
+                print(query_result)
+                if (query_result.get('code') == 280):
+                    print(query_result.get('result')[0])
+                    salt = query_result.get('result')[0].get('password_salt')
+                    current_pass = query_result.get('result')[0].get('password_hash')
+                    old_pass_hashed = sha512((old_pass + salt).encode()).hexdigest()
+                    if (current_pass == old_pass_hashed):
+                        #change the password
+                        salt = getNow()
+                        new_password_hashed = sha512((new_pass + salt).encode()).hexdigest()
+                        query = """UPDATE ptyd_passwords SET password_hash = '""" + new_password_hashed \
+                                + "', password_salt = '" + salt + "' WHERE password_user_uid = '" + user_uid + "'; "
+                        query_result = execute (query, 'post', conn)
+                        print(query_result)
+                        if(query_result.get('code') == 281):
+                            response['message'] = "Password is changed"
+                            return response, 200
+                        else:
+                            return "Internal Server Error", 500
+                    else:
+                        return "Wrong password", 403
+                else:
+                    return "Internal Server Error", 500
+            else:
+                return "User is not found", 404
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
@@ -3552,6 +3570,7 @@ api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Login, '/api/v2/account/<string:accEmail>/<string:accPass>')
 api.add_resource(ResetPassword, '/api/v2/resetpassword')
+api.add_resource(ChangePassword, '/api/v2/changepassword')
 api.add_resource(Account, '/api/v2/account/<string:accId>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(SessionVerification, '/api/v2/sessionverification/<string:userUid>/<string:sessionId>')

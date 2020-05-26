@@ -40,20 +40,18 @@ const ResetPassword = props => {
     } else if (newPassword !== confirmNewPassword) {
       RaiseError("Confirm password mismatch");
     } else {
+      let change_password_url = `${props.DEV_URL}v2/changepassword`;
       axios
-        .get(props.RESET_PASSWORD_URL, {
-          params: {
-            email: email,
-            oldPassword: oldPassword,
-            newPassword: newPassword
-          }
+        .post(change_password_url, {
+          email: email,
+          oldPassword: oldPassword,
+          newPassword: newPassword
         })
         .then(res => {
           console.log("result after sending new password:", res);
           setLoading(false);
-          setConfirmChanged(false);
-          setRequestChange(false);
-          return <Login></Login>;
+          props.history.push("/login");
+          window.location.reload(false);
         })
         .catch(err => {
           if (err.respose !== undefined) {
