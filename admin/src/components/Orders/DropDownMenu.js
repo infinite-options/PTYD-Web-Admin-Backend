@@ -28,9 +28,9 @@ export default function DropDownMenu(props) {
           id="date-native-simple"
         >
           <option aria-label="None" value="" />
-          <option value={10}>May 24, 2020</option>
-          <option value={20}>May 25, 2020</option>
-          <option value={30}>May 26, 2020</option>
+          <option value={"2020-05-16"}>2020-05-16</option>
+          <option value={"2020-05-23"}>2020-05-23</option>
+          <option value={"2020-05-30"}>2020-05-30</option>
         </Select>
       </FormControl>
     </div>

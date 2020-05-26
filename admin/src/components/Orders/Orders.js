@@ -6,17 +6,23 @@ import EnhancedTable from "./EnhancedTable";
 import DropDownMenu from "./DropDownMenu";
 
 export default function Orders(props) {
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState("2020-05-23");
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [date]);
 
   const fetchData = async () => {
-    const res = await fetch(props.API_URL_Meal_Info1);
-    console.log("res", res);
-  };
+    const res = await (
+      await fetch(props.API_URL_Meal_Info1 + `?date=${date}`)
+    ).json();
 
+    setData(res.result.result);
+  };
+  if (data) {
+    console.log("true");
+  } else console.log("flase");
   const handleChange = (event) => {
     setDate(event.target.value);
   };
@@ -27,7 +33,7 @@ export default function Orders(props) {
         <Typography color="textPrimary">Create Menu</Typography>
       </Breadcrumbs>
       <DropDownMenu date={date} handleChange={handleChange} />
-      <EnhancedTable />
+      <EnhancedTable data={data} />
     </div>
   );
 }
