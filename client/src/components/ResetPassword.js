@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useState, useEffect} from "react";
 import {Form, Button, Container, Card} from "react-bootstrap";
 import axios from "axios";
 import Login from "./login";
@@ -11,7 +11,11 @@ const ResetPassword = props => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [confirmChanged, setConfirmChanged] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [second, setSecond] = useState(0);
 
+  useEffect(() => {
+    second > 0 && second < 11 && setTimeout(() => setSecond(second + 1), 1000);
+  }, [second]);
   const handleSubmitEmail = e => {
     console.log("handleSubmitEmail is called");
     e.preventDefault();
@@ -40,20 +44,21 @@ const ResetPassword = props => {
     } else if (newPassword !== confirmNewPassword) {
       RaiseError("Confirm password mismatch");
     } else {
+      let change_password_url = `${props.DEV_URL}v2/changepassword`;
       axios
-        .get(props.RESET_PASSWORD_URL, {
-          params: {
-            email: email,
-            oldPassword: oldPassword,
-            newPassword: newPassword
-          }
+        .post(change_password_url, {
+          email: email,
+          oldPassword: oldPassword,
+          newPassword: newPassword
         })
         .then(res => {
-          console.log("result after sending new password:", res);
           setLoading(false);
+          setSecond(1);
           setConfirmChanged(false);
-          setRequestChange(false);
-          return <Login></Login>;
+          setTimeout(() => {
+            props.history.push("/login");
+            window.location.reload(false);
+          }, 10000);
         })
         .catch(err => {
           if (err.respose !== undefined) {
@@ -74,6 +79,21 @@ const ResetPassword = props => {
             </div>
           </div>
         </div>
+      )}
+      {second > 0 && second < 10 && (
+        <Container>
+          <div class='tile is-ancestor'>
+            <div class='tile is-parent'>
+              <article class='tile is-child notification is-primary'>
+                <p class='title is-5'>Your password has been reset.</p>
+                <p class='subtitle'>
+                  This page will redirect to Login page after {10 - second}{" "}
+                  second.{" "}
+                </p>
+              </article>
+            </div>
+          </div>
+        </Container>
       )}
       <Container>
         {error !== null && error !== undefined && (
