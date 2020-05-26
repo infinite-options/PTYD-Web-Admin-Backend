@@ -434,6 +434,9 @@ export default function Login(props) {
           <div className='text-center'>
             <a href='/signup'>New User? Sign Up Here</a>
           </div>
+          <div className='text-center'>
+            <a href='/resetpassword'>Forgot password?</a>
+          </div>
         </div>
       </main>
     </Fragment>

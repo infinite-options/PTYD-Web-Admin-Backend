@@ -25,6 +25,7 @@ import SignUp from "./signup";
 import SocialSignUp from "./socialsignup";
 import SignupWaiting from "./SignupWaiting";
 import Login from "./login";
+import ResetPassword from "./ResetPassword";
 import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
@@ -225,6 +226,17 @@ export default function Main({appProps}) {
         exact
         path='/login/:email?/:password?'
         component={appProps.isAuthenticated ? LandingPage : Login}
+        appProps={{
+          appProps,
+          API_URL: `${DEV_URL}v2/accountsalt`,
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          SOCIAL_API_URL: `${DEV_URL}v2/social`
+        }}
+      />
+      <AppliedRoute
+        exact
+        path='/resetpassword'
+        component={ResetPassword}
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/accountsalt`,
