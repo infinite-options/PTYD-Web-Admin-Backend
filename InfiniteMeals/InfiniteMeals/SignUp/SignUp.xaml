@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="InfiniteMeals.SignUp.SignUp">
+    <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
+        <Entry Placeholder="Enter Username"></Entry>
+        <StackLayout Orientation="Horizontal">
+            <Entry Placeholder="First Name"></Entry>
+            <Entry Placeholder="Last Name"></Entry>
+        </StackLayout>
+        <Entry Placeholder="Email"></Entry>
+        <Entry Placeholder="Confirm Email"></Entry>
+        <Entry Placeholder="Password" IsPassword="True"></Entry>
+        <Entry Placeholder="Confirm Password" IsPassword="True"></Entry>
+        <Entry Placeholder="Enter Phone Number"></Entry>
+        <Label Text="Address"></Label>
+        <Editor></Editor>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Save Password"></Label>
+            <Switch IsToggled="False"></Switch>
+        </StackLayout>
+        <Button Text="Sign Up"></Button>
+        <Button Text="Already have account? Sign In" TextColor="Blue" Clicked="ClickedSignIn" ></Button>
+    </StackLayout>
+</ContentPage>

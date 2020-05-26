@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "3hDu9S7xfltWUfRsF/vgKcIaSxGISxPKTHr7QCVCL+E/SeIcfSUKC5UP2k6kXISK5Pk7G4oBn0BbP/vdxhrQFg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Sean\\Documents\\Infinite Options\\InfiniteMeals\\Prep-To-Your-Door\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Sean\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.essentials\\1.3.1\\xamarin.essentials.1.3.1.nupkg.sha512",
+    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.forms\\4.5.0.495\\xamarin.forms.4.5.0.495.nupkg.sha512"
+  ],
+  "logs": []
+}
