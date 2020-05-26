@@ -306,6 +306,16 @@ class Meals(Resource):
                     meal_id = eachMeal['meal_id']
                     mealQuantities[meal_id] = 0
         return mealQuantities
+        
+    def getAddonPrice(self, menu):
+        savedAddonPrice = {}
+        for key in ['Meals', 'Addons']:
+            for subMenu in menu[key]:
+                for eachMeal in menu[key][subMenu]['Menu']:
+                    related_price = eachMeal['extra_meal_price']
+                    meal_id = eachMeal['meal_id']
+                    savedAddonPrice[meal_id] = related_price
+        return savedAddonPrice
 
     # HTTP method GET
     # Optional parameter: startDate (YYYYMMDD)
@@ -468,6 +478,7 @@ class Meals(Resource):
                     }
 
                     week['MealQuantities'] = self.getMealQuantities(week)
+                    week['AddonPrice'] = self.getAddonPrice(week)
 
                     index = 'MenuForWeek' + str(i)
                     items[index] = week
@@ -705,6 +716,7 @@ class AccountPurchases(Resource):
             dayOfWeek = date.today().weekday()
             # Get the soonest Saturday, same day if today is Saturday
             sat = date.today() + timedelta(days=(12 - dayOfWeek) % 7)
+            thur = date.today() + timedelta(days=(10 - dayOfWeek) % 7)
 
             # If today is Thursday after 4PM
             if sat == date.today() and datetime.now().hour >= 16:
@@ -712,6 +724,7 @@ class AccountPurchases(Resource):
 
             #change sat into string
             sat = sat.strftime("%Y-%m-%d")
+            thur = thur.strftime("%Y-%m-%d")
             
 
             queries = ["""
@@ -749,6 +762,7 @@ class AccountPurchases(Resource):
                     ,snap.weeks_remaining AS paid_weeks_remaining
                     ,snap.next_billing_date AS next_charge_date
                     ,IFNULL(addon.total_addon_cost,0) AS weekly_addon_cost
+                    , \'""" + thur + """\' AS next_addon_charge_date
                     ,pay.amount_due AS amount_due_before_addon
                     ,addon.week_affected
                 FROM (

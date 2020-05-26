@@ -120,6 +120,7 @@ class EachAddon extends Component {
             onClick={() => {
               if (this.props.addonQuantities > 0) {
                 this.props.decrementAddon();
+                this.props.decrementAddonPrice();
               }
             }}
           >
@@ -149,6 +150,7 @@ class EachAddon extends Component {
             }}
             onClick={() => {
               this.props.incrementAddon();
+              this.props.incrementAddonPrice();
             }}
           >
             <b>+</b>
