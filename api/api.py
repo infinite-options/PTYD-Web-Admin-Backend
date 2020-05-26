@@ -3315,7 +3315,26 @@ class UpdateRecipe(Resource):
         finally:
             disconnect(conn)
 
+class DisplaySaturdays(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
 
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_saturdays;""", 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 
 class TemplateApi(Resource):
@@ -3367,6 +3386,7 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
+api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
