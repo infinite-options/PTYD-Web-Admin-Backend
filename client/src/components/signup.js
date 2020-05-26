@@ -28,11 +28,12 @@ function SignUp(props) {
   function sendForm(e) {
     e.preventDefault();
     if (email !== confirmEmail) {
-      return {code: 470, result: "Email mismatch."};
+      setErro("Email mismatch");
+      return;
     }
-
     if (password !== confirmPassword) {
-      return {code: 471, result: "Password mismatch."};
+      setErro("Password mismatch.");
+      return;
     }
     setLoading(true);
     var data = {

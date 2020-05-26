@@ -11,7 +11,8 @@ from decimal import Decimal
 from datetime import datetime, date, timedelta
 from hashlib import sha512
 from math import ceil
-
+import string
+import random
 # BING API KEY
 # Import Bing API key into bing_api_key.py
 from env_keys import BING_API_KEY, RDS_PW
@@ -694,6 +695,78 @@ class Login(Resource):
         finally:
             disconnect(conn)
 
+class ResetPassword (Resource):
+    def get_random_string(self, stringLength=8):
+        lettersAndDigits = string.ascii_letters + string.digits
+        return "".join([random.choice(lettersAndDigits) for i in range(stringLength)])
+
+    def get(self):
+        response={}
+        try:
+            conn = connect();
+            #search for email;
+            email = request.args.get('email');
+            old_password = request.args.get('oldPassword')
+            new_password = request.args.get('newPassword')
+            if email == None:
+                response['message'] =  "Invalid Email Address"
+                return response, 400
+            query = """SELECT * FROM ptyd_accounts 
+                    WHERE user_email ='""" + email + "';"
+            user_lookup = execute(query, 'get', conn)
+            if (user_lookup.get('code') == 280):
+                user_uid = user_lookup.get('result')[0].get('user_uid')
+                if (old_password == None and new_password == None):
+                    pass_temp = self.get_random_string()
+                    salt = getNow()
+                    pass_temp_hashed = sha512((pass_temp + salt).encode()).hexdigest()
+                    query = """UPDATE ptyd_passwords SET password_hash = '""" + pass_temp_hashed + """'
+                             , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
+                    #update database with temp password
+                    query_result = execute(query, 'post', conn)
+                    if (query_result.get('code') == 281):
+                        #send an email to client
+                        print("here")
+                        msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[email])
+                        print('there')
+                        msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(temp=pass_temp)
+                        mail.send(msg)
+                        response['message'] = "temporary password has been sent"
+                        return response, 200
+                    else:
+                        return 500
+                elif (old_password != None and new_password != None):
+                    #check the old_password in password table
+                    query = """SELECT password_salt FROM ptyd_passwords WHERE password_user_uid = '""" + user_uid + """' AND
+                                password_hash = '""" + old_password + "';"
+                    query_result = execute(query, 'get', conn)
+                    print(query_result)
+                    if (query_result.get('code') == 280 and query_result.get.result):
+                        salt = getNow()
+                        # new_password_hashed = sha512((new_password + salt).encode()).hexdigest()
+                        query = """UPDATE ptyd_passwords SET password_hash = '""" + new_password + """'
+                                                    , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
+                        update_result = execute(query, 'post', conn)
+                        if (update_result.get('code') == 281):
+                            response['message'] = "Password has been reset"
+                            return response, 200
+                        else:
+                            response['Message'] = "Internal Server Error"
+                            return response, 500
+                    else:
+                        response['message'] = "Wrong password"
+                        return response, 403
+                    #update the database and prompt to client
+                else:
+                    return BadRequest()
+            else:
+                response['message'] ="User is not found"
+                return response, 404
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class AccountPurchases(Resource):
     # HTTP method GET
@@ -940,14 +1013,12 @@ class SignUp(Resource):
             LastUpdate = CreateDate
             Referral = data['Referral']
 
-            print("Received:", data)
 
             queries = ["CALL get_new_user_id;"]
 
             NewUserIDresponse = execute(queries[0], 'get', conn)
             NewUserID = NewUserIDresponse['result'][0]['new_id']
 
-            print("NewUserID:", NewUserID)
 
             # Not storing customer addresses
             queries.append(
@@ -999,7 +1070,6 @@ class SignUp(Resource):
                     \'""" + DatetimeStamp + "\');")
 
             usnInsert = execute(queries[1], 'post', conn)
-            print ("User insert: {}".format(usnInsert.get('code')))
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
 
@@ -1017,8 +1087,6 @@ class SignUp(Resource):
                     response['result'] = 'Internal server error.'
 
                 response['code'] = usnInsert['code']
-                print(response['message'], response['result'], usnInsert['code'])
-                print('response will be sent to client')
                 return response, statusCode
 
             pwInsert = execute(queries[2], 'post', conn)
@@ -1043,7 +1111,6 @@ class SignUp(Resource):
                         'WARNING'] = "This user was signed up to the database but did not properly store their password. Their account cannot be logged into and must be reset by a system administrator."
                     response['code'] = 590
 
-                print(response['message'], response['result'], pwInsert['code'])
                 return response, 500
 
             #this part using for testing email verification
@@ -2341,8 +2408,6 @@ class SocialAccount(Resource):
                     FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
 
 
-            print('I\'m here')
-            print("data is {}".format(data));
             items = execute(queries[0], 'get', conn)
             #create a login attempt
             login_attempt = {
@@ -3421,6 +3486,7 @@ api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Login, '/api/v2/account/<string:accEmail>/<string:accPass>')
+api.add_resource(ResetPassword, '/api/v2/resetpassword')
 api.add_resource(Account, '/api/v2/account/<string:accId>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(SessionVerification, '/api/v2/sessionverification/<string:userUid>/<string:sessionId>')
