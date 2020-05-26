@@ -149,6 +149,7 @@ const ResetPassword = props => {
               <Form>
                 <Form.Group>
                   <Form.Control
+                    className='mb-3'
                     type='password'
                     placeholder='Enter the temporary password'
                     onChange={e => {
@@ -157,6 +158,7 @@ const ResetPassword = props => {
                     }}
                   />
                   <Form.Control
+                    className='mb-3'
                     type='password'
                     placeholder='Enter new password'
                     onChange={e => {
@@ -165,6 +167,7 @@ const ResetPassword = props => {
                     }}
                   />
                   <Form.Control
+                    className='mb-3'
                     type='password'
                     placeholder='Confirm new password'
                     onChange={e => {
