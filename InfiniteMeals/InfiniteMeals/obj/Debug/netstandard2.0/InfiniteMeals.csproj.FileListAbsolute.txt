@@ -2,11 +2,13 @@ C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\Infinit
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.dll
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\ref\InfiniteMeals.dll
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.pdb
+C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.csprojAssemblyReference.cache
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\App.xaml.g.cs
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Checkout\CheckOutPage.xaml.g.cs
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Kitchens\Controller\MainPage.xaml.g.cs
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Meals\MealSchedule.xaml.g.cs
+C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Meals\MealSelect\MealChoices.xaml.g.cs
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Meals\SelectMealOptions.xaml.g.cs
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Profile\UserProfile.xaml.g.cs
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\SignIn\SignIn.xaml.g.cs
@@ -22,5 +24,3 @@ C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\Infinit
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.dll
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ref\InfiniteMeals.dll
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.pdb
-C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Meals\MealSelect\MealChoices.xaml.g.cs
-C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.csprojAssemblyReference.cache

@@ -85,7 +85,6 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\InfiniteMeals\InfiniteMeals.csproj">
       <Project>{FFA4AB1B-A067-4B61-8A04-C2935EF04B39}</Project>
