@@ -97,7 +97,7 @@ class SelectPaymentPlan extends Component {
                               paymentPlan.meal_plan_desc
                             } Subscription - $${paymentPlan.meal_plan_price.toFixed(
                               2
-                            )} /week`,
+                            )}`,
                             total: paymentPlan.meal_plan_price.toFixed(2)
                           }
                         }}

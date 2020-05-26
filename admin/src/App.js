@@ -118,7 +118,7 @@ function App() {
                 color="secondary"
                 anchorOrigin={{
                   vertical: "top",
-                  horizontal: "right"
+                  horizontal: "right",
                 }}
               ></Badge>
             </Nav.Link>
@@ -130,7 +130,7 @@ function App() {
                 color="secondary"
                 anchorOrigin={{
                   vertical: "top",
-                  horizontal: "right"
+                  horizontal: "right",
                 }}
               ></Badge>
             </Nav.Link>
@@ -148,7 +148,18 @@ function App() {
               </NavDropdown.Item>
             </NavDropdown>
             &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/">Settings</Nav.Link>
+            <Nav.Link href="/">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/orders">Orders</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link>
+              <Badge
+                // badgeContent={42}
+                color="secondary"
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              ></Badge>
+            </Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link href="/">Profile</Nav.Link>&nbsp;&nbsp;&nbsp;
