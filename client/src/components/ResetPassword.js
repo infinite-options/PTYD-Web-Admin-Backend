@@ -33,6 +33,14 @@ const ResetPassword = props => {
           setLoading(false);
           setRequestChange(false);
           setConfirmChanged(true);
+        })
+        .catch(err => {
+          setLoading(false);
+          if (err.respose !== undefined) {
+            RaiseError(err.response.message);
+          } else if (typeof err === "string") {
+            RaiseError(err);
+          }
         });
     }
   };
@@ -61,6 +69,7 @@ const ResetPassword = props => {
           }, 10000);
         })
         .catch(err => {
+          setLoading(false);
           if (err.respose !== undefined) {
             RaiseError(err.response.message);
           } else if (typeof err === "string") {
