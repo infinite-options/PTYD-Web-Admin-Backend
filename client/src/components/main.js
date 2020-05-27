@@ -232,7 +232,8 @@ export default function Main({appProps}) {
           appProps,
           API_URL: `${DEV_URL}v2/accountsalt`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
-          SOCIAL_API_URL: `${DEV_URL}v2/social`
+          SOCIAL_API_URL: `${DEV_URL}v2/social`,
+          DEV_URL: DEV_URL
         }}
       />
       <AppliedRoute
