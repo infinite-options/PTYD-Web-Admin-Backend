@@ -12,12 +12,13 @@ const ResetPassword = props => {
   const [confirmChanged, setConfirmChanged] = useState(false);
   const [loading, setLoading] = useState(false);
   const [second, setSecond] = useState(0);
+  const [userID, setUserID] = useState(null);
 
   useEffect(() => {
     second > 0 && second < 11 && setTimeout(() => setSecond(second + 1), 1000);
   }, [second]);
+
   const handleSubmitEmail = e => {
-    console.log("handleSubmitEmail is called");
     e.preventDefault();
     setLoading(true);
     if (email.trim().length === 0) {
@@ -27,14 +28,19 @@ const ResetPassword = props => {
       axios
         .get(props.RESET_PASSWORD_URL, {params: {email: email}})
         .then(res => {
+          if (res.data.result !== undefined) {
+            setUserID(res.data.result.user_uid);
+          }
           setLoading(false);
           setRequestChange(false);
           setConfirmChanged(true);
         })
         .catch(err => {
           setLoading(false);
-          if (err.respose !== undefined) {
-            RaiseError(err.response.message);
+          if (err.response !== undefined) {
+            err.response.data.message === undefined
+              ? RaiseError(err.response.data)
+              : RaiseError(err.response.data.message);
           } else if (typeof err === "string") {
             RaiseError(err);
           }
@@ -52,12 +58,13 @@ const ResetPassword = props => {
       let change_password_url = `${props.DEV_URL}v2/changepassword`;
       axios
         .post(change_password_url, {
-          email: email,
-          oldPassword: oldPassword,
-          newPassword: newPassword
+          ID: userID,
+          old: oldPassword,
+          new: newPassword
         })
         .then(res => {
           setLoading(false);
+          RaiseError(null);
           setSecond(1);
           setConfirmChanged(false);
           setTimeout(() => {
@@ -67,8 +74,10 @@ const ResetPassword = props => {
         })
         .catch(err => {
           setLoading(false);
-          if (err.respose !== undefined) {
-            RaiseError(err.response.message);
+          if (err.response !== undefined) {
+            err.response.data.message === undefined
+              ? RaiseError(err.response.data)
+              : RaiseError(err.response.data.message);
           } else if (typeof err === "string") {
             RaiseError(err);
           }
@@ -93,7 +102,8 @@ const ResetPassword = props => {
               <article class='tile is-child notification is-primary'>
                 <p class='title is-5'>Your password has been reset.</p>
                 <p class='subtitle'>
-                  This page will redirect to Login page after {10 - second}{" "}
+                  This page will redirect to Login page after{" "}
+                  <span className='has-text-danger'>{10 - second} </span>
                   second.{" "}
                 </p>
               </article>
@@ -101,7 +111,7 @@ const ResetPassword = props => {
           </div>
         </Container>
       )}
-      <Container>
+      <Container Style={loading && "opacity : 0.5"}>
         {error !== null && error !== undefined && (
           <Fragment>
             <h6>

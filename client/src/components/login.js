@@ -224,10 +224,10 @@ export default function Login(props) {
       window.location.reload(false);
     } catch (err) {
       if (err.response !== undefined) {
-        let msg = err.response.data.message;
-        RaiseError(msg);
-      }
-      if (typeof err === "string") {
+        err.response.data.message === undefined
+          ? RaiseError(err.response.data)
+          : RaiseError(err.response.data.message);
+      } else if (typeof err === "string") {
         RaiseError(err);
       }
       setLoading(false);
@@ -273,10 +273,10 @@ export default function Login(props) {
       }
     } catch (err) {
       if (err.response !== undefined) {
-        let msg = err.response.data.message;
-        RaiseError(msg);
-      }
-      if (typeof err === "string") {
+        err.response.data.message === undefined
+          ? RaiseError(err.response.data)
+          : RaiseError(err.response.data.message);
+      } else if (typeof err === "string") {
         RaiseError(err);
       }
       setLoading(false);
@@ -292,10 +292,10 @@ export default function Login(props) {
       })
       .catch(err => {
         if (err.response !== undefined) {
-          let msg = err.response.data.message;
-          RaiseError(msg);
-        }
-        if (typeof err === "string") {
+          err.response.data.message === undefined
+            ? RaiseError(err.response.data)
+            : RaiseError(err.response.data.message);
+        } else if (typeof err === "string") {
           RaiseError(err);
         }
         setLoading(false);

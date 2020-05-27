@@ -26,10 +26,6 @@ class Mealschedule extends Component {
     };
     this.changeMenuButtons = this.changeMenuButtons.bind(this);
     this.handleChange = this.handleChange.bind(this);
-
-    function searchCookie4UserID(cname) {
-      this.getCookieAttrHelper(cname, "user_uid");
-    }
   }
 
   getCookieAttrHelper(cname, type) {
@@ -46,9 +42,14 @@ class Mealschedule extends Component {
       return null;
     }
   }
-
+  searchCookie4LoggedInBy(cname) {
+    return this.getCookieAttrHelper(cname, "loggedInBy");
+  }
   searchCookie4Name(cname) {
     return this.getCookieAttrHelper(cname, "first_name");
+  }
+  searchCookie4UserID(cname) {
+    return this.getCookieAttrHelper(cname, "user_uid");
   }
   async changeMenuButtons() {
     let currPur = this.state.purchase_all[this.state.selection]; //t - change
@@ -178,7 +179,7 @@ class Mealschedule extends Component {
     // this.setState({
     //   first_name: accountapi.result[0].first_name
     // });
-    this.setState({ first_name: this.searchCookie4Name("loginStatus") });
+    this.setState({first_name: this.searchCookie4Name("loginStatus")});
 
     let currPur = {};
     let purchaseId = 0;
@@ -414,6 +415,9 @@ class Mealschedule extends Component {
               </Cell>
             </Grid>
             <MakeChanges
+              user_uid={this.searchCookie4UserID("loginStatus")}
+              loggedInBy={this.searchCookie4LoggedInBy("loginStatus")}
+              DEV_URL={this.props.DEV_URL}
               DELETE_URL={this.props.DELETE_URL}
               UPDATE_URL={this.props.UPDATE_URL}
               UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}

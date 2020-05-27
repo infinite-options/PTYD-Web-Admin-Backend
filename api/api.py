@@ -738,6 +738,7 @@ class ResetPassword (Resource):
                     msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(temp=pass_temp)
                     mail.send(msg)
                     response['message'] = "A temporary password has been sent"
+                    response['result'] = {"user_uid":user_uid}
                     return response, 200
                 else:
                     return 500
@@ -756,43 +757,33 @@ class ChangePassword(Resource):
         try:
             conn = connect()
             data = request.get_json(force=True)
-            print("data: ", data)
-            email = data['email']
-            old_pass = data['oldPassword']
-            new_pass = data['newPassword']
-            query = """SELECT user_uid FROM ptyd_accounts WHERE user_email = '""" + email + "';"
-            query_result = execute(query, 'get', conn)
-            print(query_result)
-            if (query_result.get('code') == 280):
-                user_uid = query_result.get('result')[0].get('user_uid')
-                query = """SELECT password_hash, password_salt FROM ptyd_passwords WHERE password_user_uid = '""" \
+
+            user_uid = data['ID']
+            old_pass = data['old']
+            new_pass = data['new']
+            query = """SELECT password_hash, password_salt FROM ptyd_passwords WHERE password_user_uid = '""" \
                         + user_uid +"';"
-                query_result = execute(query, "get", conn)
-                print(query_result)
-                if (query_result.get('code') == 280):
-                    print(query_result.get('result')[0])
-                    salt = query_result.get('result')[0].get('password_salt')
-                    current_pass = query_result.get('result')[0].get('password_hash')
-                    old_pass_hashed = sha512((old_pass + salt).encode()).hexdigest()
-                    if (current_pass == old_pass_hashed):
-                        #change the password
-                        salt = getNow()
-                        new_password_hashed = sha512((new_pass + salt).encode()).hexdigest()
-                        query = """UPDATE ptyd_passwords SET password_hash = '""" + new_password_hashed \
-                                + "', password_salt = '" + salt + "' WHERE password_user_uid = '" + user_uid + "'; "
-                        query_result = execute (query, 'post', conn)
-                        print(query_result)
-                        if(query_result.get('code') == 281):
-                            response['message'] = "Password is changed"
-                            return response, 200
-                        else:
-                            return "Internal Server Error", 500
+            query_result = execute(query, "get", conn)
+            if (query_result.get('code') == 280):
+                salt = query_result.get('result')[0].get('password_salt')
+                current_pass = query_result.get('result')[0].get('password_hash')
+                old_pass_hashed = sha512((old_pass + salt).encode()).hexdigest()
+                if (current_pass == old_pass_hashed):
+                    #change the password
+                    salt = getNow()
+                    new_password_hashed = sha512((new_pass + salt).encode()).hexdigest()
+                    query = """UPDATE ptyd_passwords SET password_hash = '""" + new_password_hashed \
+                        + "', password_salt = '" + salt + "' WHERE password_user_uid = '" + user_uid + "'; "
+                    query_result = execute(query, 'post', conn)
+                    if(query_result.get('code') == 281):
+                        response['message'] = "Password is changed"
+                        return response, 200
                     else:
-                        return "Wrong password", 403
+                        return "Internal Server Error", 500
                 else:
-                    return "Internal Server Error", 500
+                    return "Wrong password", 401
             else:
-                return "User is not found", 404
+                return "No record found", 404
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:

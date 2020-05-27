@@ -106,7 +106,11 @@ export default function SocialSignUp(props) {
       }
     } catch (err) {
       setLoading(false);
-      RaiseError(err);
+      if (err.response !== undefined) {
+        RaiseError(err.response.message);
+      } else if (typeof err === "string") {
+        RaiseError(err);
+      }
     }
   }
   const loginSocial = async uid => {
@@ -138,7 +142,12 @@ export default function SocialSignUp(props) {
         window.location.reload(false);
       }
     } catch (err) {
-      RaiseError(err);
+      setLoading(false);
+      if (err.response !== undefined) {
+        RaiseError(err.response.message);
+      } else if (typeof err === "string") {
+        RaiseError(err);
+      }
     }
   };
   return (
@@ -258,10 +267,6 @@ export default function SocialSignUp(props) {
                             document.getElementById("weeklyUpdateCheck")
                               .checked == true
                           ) {
-                            console.log(
-                              document.getElementById("weeklyUpdateCheck")
-                                .checked
-                            );
                             setWeeklyUpdates("TRUE");
                           } else {
                             setWeeklyUpdates("FALSE");

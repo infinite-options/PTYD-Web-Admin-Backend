@@ -31,11 +31,11 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL =
-  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
+// const DEV_URL =
+//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
-// const DEV_URL = "http://localhost:2000/api/";
+const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({appProps}) {
   const [objectIndex, setObjectIndex] = useState(0);
@@ -107,6 +107,7 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          DEV_URL: DEV_URL,
           ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
