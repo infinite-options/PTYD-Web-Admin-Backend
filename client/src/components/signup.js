@@ -83,7 +83,7 @@ function SignUp(props) {
         if (err.response !== undefined) {
           setErro(err.response.data.result);
           //window.location.reload(false);
-        } else {
+        } else if (typeof err === "string") {
           setErro(err);
         }
         setLoading(false);
@@ -147,7 +147,7 @@ function SignUp(props) {
                     <span class='icon has-text-danger'>
                       <i className='fa fa-info-circle'></i>
                     </span>
-                    <span class='has-text-info'>{erro}</span>
+                    <span className='has-text-info'>{erro}</span>
                   </h6>
                 </Col>
                 <Col></Col>

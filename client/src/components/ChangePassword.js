@@ -1,12 +1,17 @@
 import React, {Fragment, useState} from "react";
-import {Container} from "react-bootstrap";
+import {Modal, Form, Button} from "react-bootstrap";
 import axios from "axios";
+
 const ChangePassword = props => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, RaiseError] = useState(null);
+  const [showModal, setShowModal] = useState(true);
+  const user_uid = props.user_uid;
+  const CHANGEPASSWORD_URL = `${props.DEV_URL}v2/changepassword`;
 
   const handleSubmitNewPassword = e => {
     e.preventDefault();
@@ -16,73 +21,129 @@ const ChangePassword = props => {
     } else if (newPassword !== confirmNewPassword) {
       RaiseError("Confirm password mismatch");
     } else {
+      console.log("userID in ChangePassword:", user_uid);
       axios
-        .post(props.CHANGE_PASSWORD_URL, {
-          email: email,
-          oldPassword: oldPassword,
-          newPassword: newPassword
+        .post(CHANGEPASSWORD_URL, {
+          ID: user_uid,
+          old: oldPassword,
+          new: newPassword
         })
         .then(res => {
-          console.log("result after sending new password:", res);
           setLoading(false);
-          props.history.push("/login");
-          window.location.reload(false);
+          setShowModal(false);
+          setConfirm(true);
+          RaiseError(null);
         })
         .catch(err => {
           setLoading(false);
-          if (err.respose !== undefined) {
-            RaiseError(err.response.message);
+          if (err.response !== undefined) {
+            err.response.data.message === undefined
+              ? RaiseError(err.response.data)
+              : RaiseError(err.response.data.message);
           } else if (typeof err === "string") {
             RaiseError(err);
           }
         });
     }
   };
+
+  const closeConfirmModal = () => {
+    setConfirm(false);
+    props.ShowHideChangePasswordModal();
+  };
   return (
     <Fragment>
-      <Container>
-        <Card>
-          <Card.Body>
-            <h5>
-              A temporary password has been sent to your email. Please using it
-              to complete this process.
-            </h5>
-            <Form>
-              <Form.Group>
-                <Form.Control
-                  type='password'
-                  placeholder='Enter the temporary password'
-                  onChange={e => {
-                    setOldPassword(e.target.value);
-                    RaiseError(null);
-                  }}
-                />
-                <Form.Control
-                  type='password'
-                  placeholder='Enter new password'
-                  onChange={e => {
-                    setNewPassword(e.target.value);
-                    RaiseError(null);
-                  }}
-                />
-                <Form.Control
-                  type='password'
-                  placeholder='Confirm new password'
-                  onChange={e => {
-                    setConfirmNewPassword(e.target.value);
-                    RaiseError(null);
-                  }}
-                />
-              </Form.Group>
-              <div className='text-center'>
-                <Button variant='primary' onClick={handleSubmitNewPassword}>
-                  Submit
-                </Button>
+      {confirm && (
+        <Modal
+          show={confirm}
+          aria-labelledby='contained-modal-title-vcenter'
+          centered
+        >
+          <Modal.Body>
+            <p>Your password has been changed successfully.</p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant='secondary' onClick={closeConfirmModal}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+      <Modal
+        show={showModal}
+        aria-labelledby='contained-modal-title-vcenter'
+        centered
+        size='lg'
+      >
+        <Modal.Header>
+          <Modal.Title>Change password</Modal.Title>
+          {error !== null && error !== undefined && (
+            <Fragment>
+              <h6>
+                <span className='icon has-text-danger'>
+                  <i className='fa fa-info-circle'></i>
+                </span>
+                <span className='has-text-danger'>{error}</span>
+              </h6>
+            </Fragment>
+          )}
+        </Modal.Header>
+        {loading && (
+          <div className='d-flex justify-content-center text_center'>
+            <div className='loading'>
+              <div className='spinner-border' role='status'>
+                <span className='sr-only'>Loading...</span>
               </div>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Container>
+            </div>
+          </div>
+        )}
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Control
+                className='mb-3'
+                type='password'
+                placeholder='Enter old password'
+                onChange={e => {
+                  setOldPassword(e.target.value);
+                  RaiseError(null);
+                }}
+              />
+              <Form.Control
+                className='mb-3'
+                type='password'
+                placeholder='Enter new password'
+                onChange={e => {
+                  setNewPassword(e.target.value);
+                  RaiseError(null);
+                }}
+              />
+              <Form.Control
+                className='mb-3'
+                type='password'
+                placeholder='Confirm new password'
+                onChange={e => {
+                  setConfirmNewPassword(e.target.value);
+                  RaiseError(null);
+                }}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant='secondary'
+            onClick={props.ShowHideChangePasswordModal}
+          >
+            Close
+          </Button>
+          <Button variant='primary' onClick={handleSubmitNewPassword}>
+            Save changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Fragment>
   );
 };
