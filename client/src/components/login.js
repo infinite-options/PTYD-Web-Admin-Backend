@@ -69,7 +69,6 @@ export default function Login(props) {
             }
           })
           .catch(err => {
-            console.log(err);
             document.cookie = `loginStatus=; path=/`;
             props.history.push("/login");
             window.location.reload(false);
@@ -90,7 +89,6 @@ export default function Login(props) {
   async function grabSocialUserInfo(email) {
     try {
       let res = await axios.get(`${props.SOCIAL_API_URL}/${email}`);
-      console.log(res.data);
       if (res.data !== undefined && res.data.result.result.length === 0) {
         // throw "No record found.";
         return null;
@@ -107,7 +105,7 @@ export default function Login(props) {
         {
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
-            "Access-Control-Allow-Origin": "*" // use this to prevent 405 error on Chrome
+            "Access-Control-Allow-Origin": "*"
           }
         }
       );
@@ -119,7 +117,13 @@ export default function Login(props) {
         return res1.data;
       }
     } catch (err) {
-      RaiseError(err);
+      if (err.response !== undefined) {
+        err.response.data.message === undefined
+          ? RaiseError(err.response.data)
+          : RaiseError(err.response.data.message);
+      } else if (typeof err === "string") {
+        RaiseError(err);
+      }
     }
   }
 
@@ -131,7 +135,6 @@ export default function Login(props) {
       const first_name = response.profileObj.givenName;
       const last_name = response.profileObj.familyName;
       let data = await grabSocialUserInfo(e);
-
       if (data === null) {
         //email not found --> render to signup for social
         props.history.push({
@@ -140,7 +143,7 @@ export default function Login(props) {
             lastname: last_name,
             firstname: first_name,
             email: e,
-            // social: "facebook",
+            social: "Google",
             accessToken: at,
             refreshToken: rt,
             SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
@@ -150,7 +153,7 @@ export default function Login(props) {
         socialLogin(data);
       }
     } else {
-      console.log("Google does not have file on this user. lol");
+      RaiseError("Google does not have file on this user. lol");
     }
   };
   // Maria Alejcgfbaifeg Changsky	104605834561957	pnkuzirrok_1587274227@tfbnw.net
@@ -167,7 +170,7 @@ export default function Login(props) {
         first_name += name[n] + " ";
       }
       let data = await grabSocialUserInfo(e);
-      console.log(data);
+
       if (data === null) {
         //email not found --> render to signup for social
         props.history.push({
@@ -176,7 +179,7 @@ export default function Login(props) {
             lastname: last_name,
             firstname: first_name,
             email: e,
-            // social: "facebook",
+            social: "Facebook",
             accessToken: at,
             refreshToken: rt,
             SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
@@ -186,7 +189,7 @@ export default function Login(props) {
         socialLogin(data);
       }
     } else {
-      console.log(`Facebook does not have any info about this user.`);
+      RaiseError(`Facebook does not have any info about this user.`);
     }
   };
 
@@ -242,7 +245,21 @@ export default function Login(props) {
     }
     const saltapi = await saltres.json();
     if (saltapi.result.length === 0) {
-      throw "Invalid Email Address.";
+      // send a request to look up in social login
+      let CHECK_SOCIAL_ACCOUNT_URL = `${props.DEV_URL}v2/social/${userEmail}`;
+      axios.get(CHECK_SOCIAL_ACCOUNT_URL).then(res => {
+        if (res.data !== undefined || res.data !== null) {
+          let result = res.data.result.result;
+          if (result.length === 0) {
+            RaiseError("No email address found");
+          } else {
+            result = result[0];
+            RaiseError(
+              `Your account should be logged in by "${result.user_social_media} login"`
+            );
+          }
+        }
+      });
     }
     const salt = saltapi.result[0].password_salt;
 

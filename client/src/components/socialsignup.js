@@ -12,7 +12,6 @@ import axios from "axios";
 
 export default function SocialSignUp(props) {
   const [email, setEmail] = useState("");
-  const [confirmEmail, setConfirmEmail] = useState("");
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -46,35 +45,12 @@ export default function SocialSignUp(props) {
     setAccessToken(state.accessToken);
     setRefreshToken(state.refreshToken);
     setSOCIAL_API_URL(state.SOCIAL_API_URL);
+    setSocialMedia(state.social);
   }
 
   async function sendForm(e) {
     e.preventDefault();
-    // if (email != confirmEmail) {
-    //   return "email mismatch";
-    // }
 
-    // let b = JSON.stringify({
-    //   FirstName: firstname,
-    //   LastName: lastname,
-    //   Email: email,
-    //   PhoneNumber: phoneNumber,
-    //   Referral: referral,
-    //   WeeklyUpdates: weeklyUpdates,
-    //   SocialMedia: socialMedia,
-    //   AccessToken: accessToken,
-    //   RefreshToken: refreshToken
-    // });
-
-    // fetch(props.API_URL, {
-    //   mode: "no-cors",
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: b
-    // })
     try {
       setLoading(true);
       const res = await axios.post(
