@@ -849,9 +849,13 @@ export default class MealButton extends Component {
               Close
             </Button> */}
             &nbsp;&nbsp;
-            {this.state.subscribed ? (
+            {close ? (
+              <Button variant="danger" onClick={this.closeButtonAddOn}>
+                Close
+              </Button>
+            ) : !close && this.state.subscribed ? (
               <Button variant="success" onClick={this.saveButtonAddOn}>
-                Save changes
+                Agree To Pay
               </Button>
             ) : (
               <Link to="/selectmealplan" className="btn btn-success">
