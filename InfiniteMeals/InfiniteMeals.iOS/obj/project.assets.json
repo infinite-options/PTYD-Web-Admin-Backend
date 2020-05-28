@@ -1962,11 +1962,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
       "projectName": "InfiniteMeals.iOS",
-      "projectPath": "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+      "projectPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/",
+      "outputPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
@@ -1981,8 +1981,8 @@
       "frameworks": {
         "xamarinios10": {
           "projectReferences": {
-            "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
-              "projectPath": "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
+            "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+              "projectPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
             }
           }
         }

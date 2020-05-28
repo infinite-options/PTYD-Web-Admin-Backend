@@ -1001,11 +1001,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "projectName": "InfiniteMeals",
-      "projectPath": "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/ptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
+      "outputPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Kristina/.config/NuGet/NuGet.Config"

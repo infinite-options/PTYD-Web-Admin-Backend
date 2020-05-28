@@ -13,6 +13,13 @@
 
     <StackLayout>
         <Label Text="Meals" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
+
+        <Picker Title="Categories"
+        Margin="20"
+        TitleColor="Green"
+        ItemsSource="{Binding Categories}"
+        ItemDisplayBinding="{Binding Name}" />
+
         <ListView ItemsSource="{Binding Meals}"
           HasUnevenRows="true"
           ItemSelected="OnListViewItemSelected">

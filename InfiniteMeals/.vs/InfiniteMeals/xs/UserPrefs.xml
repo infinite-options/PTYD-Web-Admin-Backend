@@ -1,23 +1,24 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/Meals/MealSelect/MealChoices.xaml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/App.xaml.cs">
     <Files>
-      <File FileName="InfiniteMeals/Meals/MealSelect/MealChoices.xaml.cs" Line="72" Column="66" />
-      <File FileName="InfiniteMeals/Meals/MealSelect/MealChoices.xaml" Line="55" Column="36" />
-      <File FileName="InfiniteMeals/Meals/MealSelect/Meal.cs" />
+      <File FileName="InfiniteMeals/Meals/MealSelect/MealChoices.xaml.cs" Line="37" Column="15" />
+      <File FileName="InfiniteMeals/Meals/MealSelect/MealChoices.xaml" Line="22" Column="1" />
+      <File FileName="InfiniteMeals/Meals/MealSelect/Meal.cs" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/Meals/MealSelect/Categories.cs" Line="3" Column="37" />
+      <File FileName="InfiniteMeals/MainPage.xaml" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/MainPage.xaml.cs" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/App.xaml" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/App.xaml.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="InfiniteMeals" expanded="True">
             <Node name="InfiniteMeals" expanded="True">
-              <Node name="Meals" expanded="True">
-                <Node name="MealSelect" expanded="True">
-                  <Node name="MealChoices.xaml" expanded="True" selected="True" />
-                </Node>
-                <Node name="MealSchedule.xaml" expanded="True" />
+              <Node name="App.xaml" expanded="True">
+                <Node name="App.xaml.cs" selected="True" />
               </Node>
-              <Node name="App.xaml" expanded="True" />
             </Node>
             <Node name="InfiniteMeals.Android" expanded="True">
               <Node name="Resources" expanded="True">

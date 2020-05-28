@@ -12,10 +12,30 @@ namespace InfiniteMeals.MealSelect
     public partial class MealChoices : ContentPage
     {
         public IList<Meal> Meals { get; private set; }
+        public IList<Categories> Categories { get; private set; }
 
         public MealChoices()
         {
             InitializeComponent();
+            Categories = new List<Categories>();
+
+            Categories.Add(new Categories
+            {
+                Name = "Weekly Specials"
+            });
+
+            Categories.Add(new Categories
+            {
+                Name = "Seasonal Favorites"
+            });
+
+            Categories.Add(new Categories
+            {
+                Name = "Smoothies"
+            });
+
+            //BindingContext = this;
+       
 
             Meals = new List<Meal>();
             Meals.Add(new Meal
