@@ -17,7 +17,7 @@ namespace InfiniteMeals
     public partial class MainPage : ContentPage
     {
 
-        ObservableCollection<KitchensModel> Kitchens = new ObservableCollection<KitchensModel>();
+        ObservableCollection<Kitchen> Kitchens = new ObservableCollection<Kitchen>();
 
 
         private async void ClickedSignUp(object sender, EventArgs e)
@@ -82,13 +82,13 @@ namespace InfiniteMeals
                     }
                     string delivery_hours = whenDelivering(dayOfWeekIndex, k);
                   
-                    this.Kitchens.Add(new KitchensModel()
+                    this.Kitchens.Add(new Kitchen()
                     {
-                        kitchen_id = k["kitchen_id"]["S"].ToString(),
+                        kitchenId = k["kitchen_id"]["S"].ToString(),
                         zipcode = formatZipcode(k["zipcode"]["S"].ToString()),
                         title = k["kitchen_name"]["S"].ToString(),
-                        open_hours = accepting_hours,
-                        delivery_period = delivery_hours,
+                        openHours = accepting_hours,
+                        deliveryPeriod = delivery_hours,
                         description = k["description"]["S"].ToString(),
                         isOpen = businessIsOpen,
                         status = (businessIsOpen == true) ? "Open now" : "Closed",
@@ -136,7 +136,7 @@ namespace InfiniteMeals
 
 
             // do something with the selection
-            var kitchen = e.SelectedItem as KitchensModel;
+            var kitchen = e.SelectedItem as Kitchen;
 
             // disable selection if the kitchen is closed
             if (kitchen.isOpen == false)
@@ -144,7 +144,7 @@ namespace InfiniteMeals
                 return;
             }
 
-            await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchen_id, kitchen.title, kitchen.zipcode));
+            await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchenId, kitchen.title, kitchen.zipcode));
         }
 
         //  Get integer index of day of the week, with 0 as Sunday

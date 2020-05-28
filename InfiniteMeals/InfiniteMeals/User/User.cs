@@ -6,21 +6,21 @@ namespace InfiniteMeals.User
 {
     public class User
     {
-        public int ID { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public int id { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
 
         public User() { }
         public User(String Username, string Password)
         {
-            this.Username = Username;
+            this.username = Username;
 
-            this.Password = Password;
+            this.password = Password;
         }
 
         public bool Authenticate(String Username, String Password)
         {
-            if(this.Username.Equals(Username) && this.Password.Equals(Password)){
+            if(this.username.Equals(Username) && this.password.Equals(Password)){
                 return true;
             }
             else

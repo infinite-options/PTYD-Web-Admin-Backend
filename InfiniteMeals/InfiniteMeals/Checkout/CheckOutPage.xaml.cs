@@ -13,7 +13,7 @@ namespace InfiniteMeals.Checkout
 {
     public class OrderInfo
     {
-        public string order_id = "";
+        public string orderId = "";
         public string email = ""; 
         public string name = "";
         public string phone = "";
@@ -27,8 +27,8 @@ namespace InfiniteMeals.Checkout
         //public string deliveryTime = "5:00 PM";
         //public string mealOption1 = "1";
         //public string mealOption2 = "1";
-        public string kitchen_id = "";
-        public List<Dictionary<string, string>> ordered_items = new List<Dictionary<string, string>>() ;
+        public string kitchenId = "";
+        public List<Dictionary<string, string>> orderedItems = new List<Dictionary<string, string>>() ;
     }
 
     public partial class CheckOutPage : ContentPage
@@ -75,11 +75,11 @@ namespace InfiniteMeals.Checkout
             Auto_Fill("state", stateField);
             Auto_Fill("zip", zipCodeField);
 
-            currentOrder.kitchen_id = kitchen_id;
+            currentOrder.kitchenId = kitchen_id;
 
             foreach (var meal in mealsOrdered)
             {
-                currentOrder.ordered_items.Add(new Dictionary<string, string>()
+                currentOrder.orderedItems.Add(new Dictionary<string, string>()
                 {
                     { "meal_id", meal.id },
                     { "qty", meal.order_qty.ToString() },
@@ -149,7 +149,7 @@ namespace InfiniteMeals.Checkout
             Guid g;
             // Create and display the value of two GUIDs.
             g = Guid.NewGuid();
-            currentOrder.order_id = g.ToString();
+            currentOrder.orderId = g.ToString();
 
             orderNamesStackLayout.Children.Add(taxLabel);
             orderNamesStackLayout.Children.Add(totalAmountTextLabel);
@@ -296,7 +296,7 @@ namespace InfiniteMeals.Checkout
 
             await sendOrderRequest(currentOrder);
             await DisplayAlert("Thank you!", "Your order has been placed." + System.Environment.NewLine + " An email receipt has been sent to " + currentOrder.email + ". Please complete the payment process by clicking the button below.", "Continue to PayPal");
-            Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.order_id + "/" + currentOrder.totalAmount));
+            Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.orderId + "/" + currentOrder.totalAmount));
 
             await Navigation.PopModalAsync();
             // "(Copyright Symbol) 2019 Infinite Options   v1.2"
