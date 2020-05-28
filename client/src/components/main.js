@@ -25,6 +25,8 @@ import SignUp from "./signup";
 import SocialSignUp from "./socialsignup";
 import SignupWaiting from "./SignupWaiting";
 import Login from "./login";
+import ResetPassword from "./ResetPassword";
+
 import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
@@ -105,6 +107,7 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          DEV_URL: DEV_URL,
           ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
@@ -229,7 +232,21 @@ export default function Main({appProps}) {
           appProps,
           API_URL: `${DEV_URL}v2/accountsalt`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
-          SOCIAL_API_URL: `${DEV_URL}v2/social`
+          SOCIAL_API_URL: `${DEV_URL}v2/social`,
+          DEV_URL: DEV_URL
+        }}
+      />
+      <AppliedRoute
+        exact
+        path='/resetpassword'
+        component={ResetPassword}
+        appProps={{
+          appProps,
+          DEV_URL: DEV_URL,
+          API_URL: `${DEV_URL}v2/accountsalt`,
+          SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          SOCIAL_API_URL: `${DEV_URL}v2/social`,
+          RESET_PASSWORD_URL: `${DEV_URL}v2/resetpassword`
         }}
       />
 

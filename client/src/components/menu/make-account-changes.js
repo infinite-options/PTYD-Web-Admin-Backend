@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import {Grid, Cell} from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
@@ -18,6 +18,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import ChangePassword from "../ChangePassword";
 
 class MakeChanges extends Component {
   constructor(props) {
@@ -29,7 +30,8 @@ class MakeChanges extends Component {
       init: 0,
       date: moment(this.props.cc_exp_date),
       dict: {},
-      open: false
+      open: false,
+      showPasswordChange: false
       // new_changed_subscription: changes.subscription
     };
   }
@@ -52,21 +54,24 @@ class MakeChanges extends Component {
       () => {}
     );
   };
+
   componentDidMount() {
     this.setState(
       {
         changes: this.props
-      },
-      () => {
-        var dict = {};
-        this.state.changes.paymentplan.map(paymentPlan => {
-          let key = paymentPlan.meal_plan_desc
-            .concat(": $")
-            .concat(paymentPlan.meal_plan_price);
-          dict[key] = paymentPlan.meal_plan_id;
-        });
-        this.setState({dict: dict});
       }
+      // ,() => {
+      //   var dict = {};
+      //   this.state.changes.paymentplan.map(paymentPlan => {
+      //     console.log("before dict");
+      //     let key = paymentPlan.meal_plan_desc
+      //       .concat(": $")
+      //       .concat(paymentPlan.meal_plan_price);
+      //     dict[key] = paymentPlan.meal_plan_id;
+      //     console.log("dict", dict);
+      //   });
+      //   this.setState({ dict: dict });
+      // }
     );
   }
 
@@ -195,7 +200,6 @@ class MakeChanges extends Component {
         alert("You have successfully deleted your subscription!");
         window.location.reload();
       }
-
       response.json();
     });
   }
@@ -216,13 +220,36 @@ class MakeChanges extends Component {
           }}
           onClick={() => {
             this.setState({modalShow: true});
+            this.setState({showPasswordChange: false});
           }}
         >
           Make Account Changes
         </button>
 
-        {this.state.modalShow ? this.MakeChangesModal() : <div />}
+        {this.state.modalShow &&
+          !this.state.showPasswordChange &&
+          this.MakeChangesModal()}
+        {this.state.showPasswordChange &&
+          !this.state.modalShow &&
+          this.ChangePasswordModal()}
       </ButtonToolbar>
+    );
+  };
+  ShowHideChangePasswordModal = () => {
+    this.state.modalShow
+      ? this.setState({modalShow: false})
+      : this.setState({modalShow: true});
+    this.state.showPasswordChange
+      ? this.setState({showPasswordChange: false})
+      : this.setState({showPasswordChange: true});
+  };
+  ChangePasswordModal = () => {
+    return (
+      <ChangePassword
+        ShowHideChangePasswordModal={this.ShowHideChangePasswordModal}
+        DEV_URL={this.props.DEV_URL}
+        user_uid={this.props.user_uid}
+      />
     );
   };
   MakeChangesModal = () => {
@@ -238,6 +265,11 @@ class MakeChanges extends Component {
           <Modal.Title id='contained-modal-title-vcenter'>
             Edit Profile
           </Modal.Title>
+          {this.props.loggedInBy === "direct" && (
+            <Button className='ml-3' onClick={this.ShowHideChangePasswordModal}>
+              Change Password
+            </Button>
+          )}
         </Modal.Header>
         <Modal.Body>
           <div class='scrollMenu-profile'>
@@ -265,6 +297,10 @@ class MakeChanges extends Component {
                     onChange={this.handleChange}
                   >
                     <option>Choose...</option>
+                    {console.log(
+                      "changes.paymentplan",
+                      this.state.changes.paymentplan
+                    )}
                     {this.state.changes.paymentplan.map(paymentPlan => (
                       <option>
                         {paymentPlan.meal_plan_desc

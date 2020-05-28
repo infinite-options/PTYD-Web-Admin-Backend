@@ -7,7 +7,6 @@ import defaultMeal from "../../img/default-meal.png";
 
 class EachAddon extends Component {
   render() {
-    console.log("EACH ADDON ", this.props);
     return (
       <div>
         {/* <center>
@@ -35,16 +34,13 @@ class EachAddon extends Component {
               maxHeight: "200px"
             }}
           >
-            
-              <img
-                class="img-fluid"
-                src={
-                  this.props.imgurl == null ? defaultMeal : this.props.imgurl
-                }
-                alt="no_meal_img"
-                resizeMode
-              />
-            
+            <img
+              class="img-fluid"
+              src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
+              alt="no_meal_img"
+              resizeMode
+            />
+
             {/* <div
                 class="bottom-right-meal-selection font2"
                 style={{
@@ -56,6 +52,19 @@ class EachAddon extends Component {
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               </div> */}
+
+            <div
+              class="top-right-meal-selection font2"
+              style={{
+                fontSize: "15px",
+                float: "right",
+                backgroundColor: "black",
+                lineHeight: "25px",
+                cursor: "default"
+              }}
+            >
+              <center>${this.props.extra_meal_price}</center>
+            </div>
             <OverlayTrigger
               placement="bottom"
               delay={{ show: 100, hide: 100 }}
@@ -92,44 +101,6 @@ class EachAddon extends Component {
           {/* </div> */}
         </div>
 
-        {/* <Grid>
-          <Cell col={7}>
-            <img class="img-fluid" src={this.props.imgurl} alt="no_meal_img" />
-          </Cell>
-          <Cell col={5}>
-            <div class="input-group">
-              <div id="input_div">
-                <input
-                  type="text"
-                  size="4"
-                  value={this.props.addonQuantities}
-                  id="count"
-                  style={{ textAlign: "center", width: "90%" }}
-                />
-                &nbsp;
-                <input
-                  type="button"
-                  value="-"
-                  onClick={() => {
-                    if (this.props.addonQuantities > 0) {
-                      this.props.decrementAddon();
-                    }
-                  }}
-                />
-                <input
-                  type="button"
-                  value="+"
-                  onClick={() => {
-                    this.props.incrementAddon();
-                  }}
-                />
-              </div>
-            </div>
-          </Cell>
-          <p>{this.props.ingridents}</p>
-          <p>{this.props.detail}</p>
-        </Grid> */}
-
         <div
           style={{
             textAlign: "center",
@@ -149,6 +120,7 @@ class EachAddon extends Component {
             onClick={() => {
               if (this.props.addonQuantities > 0) {
                 this.props.decrementAddon();
+                this.props.decrementAddonPrice();
               }
             }}
           >
@@ -178,6 +150,7 @@ class EachAddon extends Component {
             }}
             onClick={() => {
               this.props.incrementAddon();
+              this.props.incrementAddonPrice();
             }}
           >
             <b>+</b>

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import Jumbotron from "../Jumbotron/Jumbotron-customer";
 import { Table } from "react-bootstrap";
 import Button from "muicss/lib/react/button";
 import MaterialTable from "material-table";
@@ -32,11 +31,6 @@ class CustomerProfile extends Component {
   render() {
     return (
       <div style={{ margin: "1%" }}>
-        {/* <div className="scrollItem">Card</div> */}
-
-        {/* title for the site ----------------------------------------- */}
-        {/* <Jumbotron /> */}
-
         <MaterialTable
           style={{ boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)" }}
           title="Customer Profile"
