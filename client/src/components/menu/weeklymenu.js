@@ -23,6 +23,7 @@ class WeeklyMenu extends Component {
     this.setState({ currentWeek: this.props.objectIndex });
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
+    console.log(api)
     const sundayDate = api.result[this.state.currentWeek].Sunday;
     const mondayDate = api.result[this.state.currentWeek].Monday;
     const deliveryDates = sundayDate + " & " + mondayDate;
@@ -76,7 +77,7 @@ class WeeklyMenu extends Component {
                         alt="meal pic"
                       />
                       <Card.Body class="font2">
-                        <Card.Title>{meal.meal_desc}</Card.Title>
+                        <Card.Title>{meal.meal_name}</Card.Title>
                         <Card.Text>
                           Cal {meal.meal_calories}, Prot {meal.protein}, Carb{" "}
                           {meal.meal_carbs}, Sug {meal.meal_sugar}, Fat{" "}

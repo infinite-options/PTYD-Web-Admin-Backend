@@ -19,7 +19,6 @@ import Input from '@material-ui/core/Input';
 //const [value, setValue] = React.useState(null);
 const filter = createFilterOptions();
 
-
 class EditCreateMeal extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +26,7 @@ class EditCreateMeal extends Component {
       mealkeys: [],
       details: [],
       mealidkey: [],
-      allIngr : [],
+      allIngr: [],
       selection: 1,
       showAdd: false,
       allUnits : [],
@@ -68,9 +67,9 @@ class EditCreateMeal extends Component {
             };
 
     const createMeal = {
-        ...dummyEntry,
-        ...api.result
-    };         
+      ...dummyEntry,
+      ...api.result,
+    };
 
     for (var key in createMeal) {
       tempkeys.push(createMeal[key]["meal_name"]);
@@ -86,7 +85,6 @@ class EditCreateMeal extends Component {
           mapIngrNameToIngrIdLocal.set(createMeal[key]["ingredients"][i].name, createMeal[key]["ingredients"][i].ingredient_id);
           mapIngrUnitMeasureIdLocal.set(createMeal[key]["ingredients"][i].units, createMeal[key]["ingredients"][i].measure_id);
       }
-
     }
     let enterMeal = mealid[this.state.selection];
 
@@ -98,20 +96,26 @@ class EditCreateMeal extends Component {
 
     this.setState({ mealkeys: tempkeys, createMeal, mealidkey: mealid, allIngr : ingrs, allUnits : unit, currIngr : ingrArr, mapIngrNameToIngrId : mapIngrNameToIngrIdLocal, mapIngrUnitMeasureId : mapIngrUnitMeasureIdLocal});
   }
-  handleChange = event => {
+  handleChange = (event) => {
     console.log(event.target.value);
     this.setState({ selection: event.target.value });
     let enterMeal = this.state.mealidkey[event.target.value];
     let ingrArr = [];
-    for(let i = 0; i < this.state.createMeal[enterMeal]["ingredients"].length; i++) {
-           ingrArr.push(Object.assign({}, this.state.createMeal[enterMeal]["ingredients"][i]));
+    for (
+      let i = 0;
+      i < this.state.createMeal[enterMeal]["ingredients"].length;
+      i++
+    ) {
+      ingrArr.push(
+        Object.assign({}, this.state.createMeal[enterMeal]["ingredients"][i])
+      );
     }
     //console.log(JSON.stringify(this.state.createMeal));
     this.setState({ currIngr : ingrArr, addShow : false});
 
   };
 
-  onChange = event => {
+  onChange = (event) => {
     //console.log(event.target.value);
     this.setState({ newQty : event.target.value });
 
@@ -142,7 +146,6 @@ class EditCreateMeal extends Component {
       currIngr : currIngrNew
     });
     }
-
   };
 
   handleChange2new = (newValue) => {
@@ -179,7 +182,7 @@ class EditCreateMeal extends Component {
       currIngrNew[index].measure_id = "NewMeasureId";
     }
     this.setState({
-      currIngr : currIngrNew
+      currIngr: currIngrNew,
     });
   };
 
@@ -197,7 +200,7 @@ class EditCreateMeal extends Component {
     let currIngrNew = this.state.currIngr;
     currIngrNew[index].qty = newValue;
     this.setState({
-      currIngr : currIngrNew
+      currIngr: currIngrNew,
     });
   };
 
@@ -280,14 +283,8 @@ class EditCreateMeal extends Component {
   unitDropdown = (defaultUnit, index) => {
     let tempUnit = [];
     let unit = this.state.allUnits;
-    for(let j = 0; j < unit.length; j++){
-      tempUnit.push(
-        <MenuItem
-          value={unit[j]}
-        >
-        {unit[j]}
-        </MenuItem>
-        );
+    for (let j = 0; j < unit.length; j++) {
+      tempUnit.push(<MenuItem value={unit[j]}>{unit[j]}</MenuItem>);
     }
     return (
       <FormControl>
@@ -295,7 +292,7 @@ class EditCreateMeal extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.currIngr[index].units}
-          onChange={e => {
+          onChange={(e) => {
             this.handleChange3(e.target.value, index);
           }}
           // style={{ color: "white" }}
@@ -341,13 +338,7 @@ class EditCreateMeal extends Component {
     let tempmeal = [];
     let ingrs = this.state.allIngr;
     for (let i = 0; i < ingrs.length; i++) {
-      tempmeal.push(
-        <MenuItem
-          value={ingrs[i]}
-        >
-          {ingrs[i]}
-        </MenuItem>
-      );
+      tempmeal.push(<MenuItem value={ingrs[i]}>{ingrs[i]}</MenuItem>);
     }
     return (
       <FormControl>
@@ -355,7 +346,7 @@ class EditCreateMeal extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.currIngr[index].name}
-          onChange={e => {
+          onChange={(e) => {
             this.handleChange2(e.target.value, index);
           }}
           // style={{ color: "white" }}
@@ -370,131 +361,137 @@ class EditCreateMeal extends Component {
     let tempmeal = [];
     let ingrs = this.state.allIngr;
     const selectStyles = {
-      menu: base => ({
+      menu: (base) => ({
         ...base,
-        zIndex: 100
-      })
+        zIndex: 100,
+      }),
     };
 
     const customStyles = {
-  option: (provided, state) => ({
-    ...provided,
-    borderBottom: '1px dotted pink',
-    color: state.isSelected ? 'red' : 'blue',
-    padding: 20,
-  }),
-  control: () => ({
-    // none of react-select's styles are passed to <Control />
-    width: 200,
-  }),
-  singleValue: (provided, state) => {
-    const opacity = state.isDisabled ? 1: 1;
-    const transition = 'opacity 300ms';
+      option: (provided, state) => ({
+        ...provided,
+        borderBottom: "1px dotted pink",
+        color: state.isSelected ? "red" : "blue",
+        padding: 20,
+      }),
+      control: () => ({
+        // none of react-select's styles are passed to <Control />
+        width: 200,
+      }),
+      singleValue: (provided, state) => {
+        const opacity = state.isDisabled ? 1 : 1;
+        const transition = "opacity 300ms";
 
-    return { ...provided, opacity, transition };
-  }
-};
+        return { ...provided, opacity, transition };
+      },
+    };
     return (
- 
-        <SingleSelect
-          style={{ width: 100, zIndex : '1000', display : "top",background : "black", color: "red", backgroundColor: "black"}}
-          value="Europe"
-          options={ingrs}
-          //onChange={this.handleChange}
-          //styles={customStyles}
-           SelectProps={{
-            isCreatable: true,
-            isClearable: true,
-            menuColor: 'red',
-            styles:{width: 100, zIndex : 100, display : "block", zIndex : 1, background : "pink", color: "green", backgroundColor: "blue"}
-
-          }}
-        />
-
-    
+      <SingleSelect
+        style={{
+          width: 100,
+          zIndex: "1000",
+          display: "top",
+          background: "black",
+          color: "red",
+          backgroundColor: "black",
+        }}
+        value="Europe"
+        options={ingrs}
+        //onChange={this.handleChange}
+        //styles={customStyles}
+        SelectProps={{
+          isCreatable: true,
+          isClearable: true,
+          menuColor: "red",
+          styles: {
+            width: 100,
+            zIndex: 100,
+            display: "block",
+            zIndex: 1,
+            background: "pink",
+            color: "green",
+            backgroundColor: "blue",
+          },
+        }}
+      />
     );
   };
 
-
- ingrDropdown = (defaultIngr, index) => {
+  ingrDropdown = (defaultIngr, index) => {
     let tempmeal = [];
     let ingrs = this.state.allIngr;
     for (let i = 0; i < ingrs.length; i++) {
-         tempmeal.push( {title : ingrs[i]});
-    
-    }    
+      tempmeal.push({ title: ingrs[i] });
+    }
 
     return (
-
-    <Autocomplete
-      defaultValue={this.state.currIngr[index].name}
-      value={this.state.currIngr[index].name}
-      onChange={(e,v) => {
-            console.log(v);
-            this.handleChange2(v, index);
-          }}
-      filterOptions={(options, params) => {
-        console.log("filterOptions");
-        console.log(options);
-        console.log(params);
-        const filtered = filter(options, params);
-        console.log(filtered);
-
-        // Suggest the creation of a new value
-        if (params.inputValue !== '') {
-          filtered.push({
-            inputValue: params.inputValue,
-            title: `Add "${params.inputValue}"`,
-          });
-        }
-
-        return filtered;
+      <Autocomplete
+        defaultValue={this.state.currIngr[index].name}
+        value={this.state.currIngr[index].name}
+        onChange={(e, v) => {
+          console.log(v);
+          this.handleChange2(v, index);
         }}
-      selectOnFocus
-      clearOnBlur
-      handleHomeEndKeys
-      id="Add New or Select"
-      options={tempmeal}
-      getOptionLabel={(option) => {
-        // Value selected with enter, right from the input
-        //console.log("getOptionLabel");
-        //console.log(option);
-        if (typeof option === 'string') {
-          return option;
-        }
-        // Add "xxx" option created dynamically
-        if (option.inputValue) {
-          return option.inputValue;
-        }
-        // Regular option
-        return option.title;
-      }}
-      renderOption={(option) => option.title}
-      style={{ width: 300 }}
-      freeSolo
-      renderInput={(params) => (
-        <TextField {...params} label="Add New Or Select" variant="outlined" />
-      )}
-    />
- 
+        filterOptions={(options, params) => {
+          console.log("filterOptions");
+          console.log(options);
+          console.log(params);
+          const filtered = filter(options, params);
+          console.log(filtered);
 
+          // Suggest the creation of a new value
+          if (params.inputValue !== "") {
+            filtered.push({
+              inputValue: params.inputValue,
+              title: `Add "${params.inputValue}"`,
+            });
+          }
+
+          return filtered;
+        }}
+        selectOnFocus
+        clearOnBlur
+        handleHomeEndKeys
+        id="Add New or Select"
+        options={tempmeal}
+        getOptionLabel={(option) => {
+          // Value selected with enter, right from the input
+          //console.log("getOptionLabel");
+          //console.log(option);
+          if (typeof option === "string") {
+            return option;
+          }
+          // Add "xxx" option created dynamically
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          // Regular option
+          return option.title;
+        }}
+        renderOption={(option) => option.title}
+        style={{ width: 300 }}
+        freeSolo
+        renderInput={(params) => (
+          <TextField {...params} label="Add New Or Select" variant="outlined" />
+        )}
+      />
     );
-  };  
+  };
 
   qtyDropdown = (defaultQty, index) => {
     return (
-            <input
-                type='number'
-                step="0.1"
-                min='0'
-                max='1000000'
-                className='form-control'
-                value={this.state.currIngr[index].qty}
-                onChange={e => {
-                    this.handleChange4(e.target.value, index);
-                }}
-              />
-     );
+      <input
+        type="number"
+        step="0.1"
+        min="0"
+        max="1000000"
+        className="form-control"
+        value={this.state.currIngr[index].qty}
+        onChange={(e) => {
+          this.handleChange4(e.target.value, index);
+        }}
+      />
+    );
   };
 
   ingrDropdownNew = () => {
@@ -679,7 +676,7 @@ class EditCreateMeal extends Component {
       </tr>
     );
     this.setState({
-      temp: this.state.temp
+      temp: this.state.temp,
     });
   };
   addRowTemplate = () => {

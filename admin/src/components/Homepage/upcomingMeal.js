@@ -17,7 +17,7 @@ class UpcomingMeals extends Component {
       upcomingMeals: [],
       ingredients: [],
       datekeys: [],
-      selection: 0
+      selection: 0,
     };
   }
 
@@ -33,18 +33,18 @@ class UpcomingMeals extends Component {
 
     let tempkeys = [];
 
-    for (var key of Object.keys(upcomingMeals)) {
-      tempkeys.push(key);
-    }
+    // for (var key of Object.keys(upcomingMeals)) {
+    //   tempkeys.push(key);
+    // }
 
     this.setState({ upcomingMeals, ingredients, datekeys: tempkeys });
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     //get new dropdown value
     let x = this.state.datekeys[event.target.value];
     this.setState({
-      selection: event.target.value
+      selection: event.target.value,
     });
   };
   handleClick(event) {
@@ -113,7 +113,7 @@ class UpcomingMeals extends Component {
           <Card
             style={{
               // width: "100%",
-              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
             }}
           >
             <Card.Body>
@@ -142,7 +142,7 @@ class UpcomingMeals extends Component {
                     <tbody
                       style={{
                         height: "300px",
-                        overflowY: "scroll"
+                        overflowY: "scroll",
                       }}
                     >
                       {arr}
@@ -167,7 +167,7 @@ class UpcomingMeals extends Component {
           <Card
             style={{
               // width: "100%",
-              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
             }}
           >
             <Card.Body>
@@ -192,7 +192,7 @@ class UpcomingMeals extends Component {
                     <tbody
                       style={{
                         height: "300px",
-                        overflowY: "scroll"
+                        overflowY: "scroll",
                       }}
                     >
                       {arr2}

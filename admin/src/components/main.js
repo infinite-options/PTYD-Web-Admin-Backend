@@ -7,10 +7,10 @@ import UserMap from "./User-Map/user-map";
 import AppliedRoute from "./AppliedRoute";
 import EditCreateMeal from "./Edit-Meal/edit-create-meals";
 import CreateMenu from "./Create-Menu/create-menu";
+import Orders from "./Orders/Orders";
 
-//const DEV_URL =
-//"https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
-const DEV_URL = "http://localhost:2000/api/v2/";
+//const DEV_URL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
+ const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
   <Switch>
@@ -23,7 +23,7 @@ const Main = ({ appProps }) => (
         API_URL_MEALSELECT: `${DEV_URL}menu_display`,
         API_URL_INGREDIENTS: `${DEV_URL}displayIngredients`,
         API_URL_CUSTINFO: `${DEV_URL}customerinfo`,
-        API_URL_MEALINFO: `${DEV_URL}meal_info`
+        API_URL_MEALINFO: `${DEV_URL}meal_info`,
       }}
     />
     <AppliedRoute
@@ -32,7 +32,7 @@ const Main = ({ appProps }) => (
       component={CustomerProfile}
       appProps={{
         appProps,
-        API_URL_CUSTPROF: `${DEV_URL}customerprofile`
+        API_URL_CUSTPROF: `${DEV_URL}customerprofile`,
       }}
     />
     <AppliedRoute exact path="/userMap" component={UserMap} />
@@ -43,7 +43,7 @@ const Main = ({ appProps }) => (
       appProps={{
         appProps,
         API_URL_CREATEMEAL: `${DEV_URL}mealcreation`,
-        API_URL_TEMP: `${DEV_URL}templateapi`
+        API_URL_TEMP: `${DEV_URL}templateapi`,
       }}
     />
     <AppliedRoute
@@ -52,7 +52,16 @@ const Main = ({ appProps }) => (
       component={CreateMenu}
       appProps={{
         appProps,
-        API_URL_CREATEMENU: `${DEV_URL}create-menu`
+        API_URL_CREATEMENU: `${DEV_URL}create-menu`,
+      }}
+    />
+    <AppliedRoute
+      exact
+      path="/orders"
+      component={Orders}
+      appProps={{
+        appProps,
+        API_URL_Meal_Info1: `${DEV_URL}mealInfo1`,
       }}
     />
   </Switch>
