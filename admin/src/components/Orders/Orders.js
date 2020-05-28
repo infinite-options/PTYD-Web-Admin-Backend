@@ -1,28 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import EnhancedTable from "./EnhancedTable";
+import OrderTable from "./OrderTable";
+import IngredientTable from "./IngredientTable";
 import DropDownMenu from "./DropDownMenu";
+import { css } from "@emotion/core";
+import BeatLoader from "react-spinners/BeatLoader";
+
+const override = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+`;
 
 export default function Orders(props) {
   const [date, setDate] = useState("2020-05-23");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
   }, [date]);
 
   const fetchData = async () => {
+    setLoading(true);
+
     const res = await (
       await fetch(props.API_URL_Meal_Info1 + `?date=${date}`)
     ).json();
 
+    setLoading(false);
     setData(res.result.result);
   };
-  if (data) {
-    console.log("true");
-  } else console.log("flase");
+
   const handleChange = (event) => {
     setDate(event.target.value);
   };
@@ -33,7 +45,12 @@ export default function Orders(props) {
         <Typography color="textPrimary">Create Menu</Typography>
       </Breadcrumbs>
       <DropDownMenu date={date} handleChange={handleChange} />
-      <EnhancedTable data={data} />
+      {loading ? (
+        <BeatLoader css={override} color={"#36D7B7"} loading={loading} />
+      ) : (
+        <OrderTable data={data} />
+      )}
+      <IngredientTable />
     </div>
   );
 }
