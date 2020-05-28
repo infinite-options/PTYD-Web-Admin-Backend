@@ -245,27 +245,28 @@ export default class MealButton extends Component {
       //    maxmeals: this.state.maxmealsOriginal,
     });
   };
-  // closeButtonAddOn = () => {
-  //   this.setState(
-  //     {
-  //       buttonAddOn: false
-  //       // buttonAddOnKeepColor: false
+  closeButtonAddOn = () => {
+    this.setState(
+      {
+        buttonAddOn: false
+        // buttonAddOnKeepColor: false
 
-  //       //    addonQuantities: this.state.addonQuantitiesOriginal,
-  //     },
-  //     () => {
-  //       if (
-  //         Object.values(this.state.addonQuantities).reduce(function(a, b) {
-  //           return a + b;
-  //         }, 0) === 0
-  //       ) {
-  //         this.setState({buttonAddOnKeepColor: false});
-  //       } else {
-  //         this.setState({cancelAddonWithoutSave: true});
-  //       }
-  //     }
-  //   );
-  // };
+        //    addonQuantities: this.state.addonQuantitiesOriginal,
+      }
+      // ,() => {
+      //   if (
+      //     Object.values(this.state.addonQuantities).reduce(function(a, b) {
+      //       return a + b;
+      //     }, 0) === 0
+      //   ) {
+      //     this.setState({buttonAddOnKeepColor: false});
+      //   } else {
+      //     this.setState({cancelAddonWithoutSave: true});
+      //   }
+      // }
+    );
+    this.sendAddonForm();
+  };
   saveButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
@@ -654,6 +655,12 @@ export default class MealButton extends Component {
     );
   };
   SelectMealEachMealAddOn = () => {
+    let close = true;
+    if (this.state.total_addon_price !== 0) {
+      close = false;
+    } else {
+      close = true;
+    }
     return (
       <Card style={{ width: "92%" }}>
         <Card.Header>
@@ -665,13 +672,21 @@ export default class MealButton extends Component {
               <h4 className="font2" style={{ float: "left", margin: "0" }}>
                 Total Price: ${this.state.total_addon_price}
               </h4>
-              {/* <Button variant='danger' onClick={this.closeButtonAddOn}>
-                Close
-              </Button> */}
+              {/* {close ? (
+                <Button variant="danger" onClick={this.closeButtonAddOn}>
+                  Close
+                </Button>
+              ) : (
+                <div />
+              )} */}
               &nbsp;&nbsp;
-              {this.state.subscribed ? (
+              {close ? (
+                <Button variant="danger" onClick={this.closeButtonAddOn}>
+                  Close
+                </Button>
+              ) : !close && this.state.subscribed ? (
                 <Button variant="success" onClick={this.saveButtonAddOn}>
-                  Save changes
+                  Agree To Pay
                 </Button>
               ) : (
                 <Link to="/selectmealplan" className="btn btn-success">
