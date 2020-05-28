@@ -13,7 +13,7 @@
 namespace InfiniteMeals.SignIn {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("SignIn/SignIn.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("SignIn\\SignIn.xaml")]
     public partial class SignIn : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

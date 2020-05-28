@@ -35,7 +35,7 @@ namespace InfiniteMeals.Checkout
     {
         OrderInfo currentOrder = new OrderInfo();
 
-        ObservableCollection<MealsModel> mealsOrdered = new ObservableCollection<MealsModel>();
+        ObservableCollection<Meal> mealsOrdered = new ObservableCollection<Meal>();
 
         double totalCostsForMeals = 0;
 
@@ -58,7 +58,7 @@ namespace InfiniteMeals.Checkout
 
 
 
-        public CheckOutPage(ObservableCollection<MealsModel> meals, string kitchen_id, string kitchen_zipcode)
+        public CheckOutPage(ObservableCollection<Meal> meals, string kitchen_id, string kitchen_zipcode)
         {
             InitializeComponent();
 
@@ -83,7 +83,7 @@ namespace InfiniteMeals.Checkout
                 {
                     { "meal_id", meal.id },
                     { "qty", meal.order_qty.ToString() },
-                    { "name", meal.title },
+                    { "name", meal.name },
                     { "price", meal.price }
                 });
             }
@@ -125,7 +125,7 @@ namespace InfiniteMeals.Checkout
                 // create label for the UI
                 if (meal.order_qty >= 1)
                 {
-                    var mealNameLabel = new Label() { Text = meal.title, FontSize = 12 };
+                    var mealNameLabel = new Label() { Text = meal.name, FontSize = 12 };
                     var mealPriceAndQty = new Label() { Text = meal.order_qty.ToString() + "  x  " + "$ " + meal.price, FontSize = 12 };
                     orderNamesStackLayout.Children.Add(mealNameLabel);
                     orderPriceAndQtyLayout.Children.Add(mealPriceAndQty);

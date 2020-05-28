@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using InfiniteMeals.Meals.Model;
+
 namespace InfiniteMeals.MealSelect
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -21,17 +23,17 @@ namespace InfiniteMeals.MealSelect
 
             Categories.Add(new Categories
             {
-                Name = "Weekly Specials"
+                title = "Weekly Specials"
             });
 
             Categories.Add(new Categories
             {
-                Name = "Seasonal Favorites"
+                title = "Seasonal Favorites"
             });
 
             Categories.Add(new Categories
             {
-                Name = "Smoothies"
+                title = "Smoothies"
             });
 
             //BindingContext = this;
@@ -40,42 +42,42 @@ namespace InfiniteMeals.MealSelect
             Meals = new List<Meal>();
             Meals.Add(new Meal
             {
-                Name = "Savory Sweet Mashers w/ Collards & Swiss Chard",
-                Description = "Cal 456, Prot 15 , Carb 77, Sug 10, Fat 20, Sat 10",
-                ImageUrl = "mashers.jpg",
-                InfoUrl ="info.jpg"
+                name = "Savory Sweet Mashers w/ Collards & Swiss Chard",
+                description = "Cal 456, Prot 15 , Carb 77, Sug 10, Fat 20, Sat 10",
+                imageUrl = "mashers.jpg",
+                infoUrl ="info.jpg"
             });
 
             Meals.Add(new Meal
             {
-                Name = "Credo Nachos",
-                Description = "Cal 360, Prot 5, Carb 47, Sug 4, Fat 16, Sat 4.5",
-                ImageUrl = "nacho.jpg",
-                InfoUrl = "info.jpg"
+                name = "Credo Nachos",
+                description = "Cal 360, Prot 5, Carb 47, Sug 4, Fat 16, Sat 4.5",
+                imageUrl = "nacho.jpg",
+                infoUrl = "info.jpg"
             });
 
             Meals.Add(new Meal
             {
-                Name = "Curcuma Golden Oats",
-                Description = "Cal 409, Prot 5 , Carb 49, Sug 10, Fat 17, Sat 8",
-                ImageUrl = "oats.jpg",
-                InfoUrl = "info.jpg"
+                name = "Curcuma Golden Oats",
+                description = "Cal 409, Prot 5 , Carb 49, Sug 10, Fat 17, Sat 8",
+                imageUrl = "oats.jpg",
+                infoUrl = "info.jpg"
             });
 
             Meals.Add(new Meal
             {
-                Name = "Borscht",
-                Description = "Cal 376, Prot 5 , Carb 18, Sug 7, Fat 33, Sat 11",
-                ImageUrl = "borscht.jpg",
-                InfoUrl = "info.jpg"
+                name = "Borscht",
+                description = "Cal 376, Prot 5 , Carb 18, Sug 7, Fat 33, Sat 11",
+                imageUrl = "borscht.jpg",
+                infoUrl = "info.jpg"
             });
 
             Meals.Add(new Meal
             {
-                Name = "Lasagna",
-                Description = "Cal 360, Prot 15 , Carb 47, Sug 4, Fat 16, Sat 4.5",
-                ImageUrl = "lasagna.jpeg",
-                InfoUrl = "info.jpg"
+                name = "Lasagna",
+                description = "Cal 360, Prot 15 , Carb 47, Sug 4, Fat 16, Sat 4.5",
+                imageUrl = "lasagna.jpeg",
+                infoUrl = "info.jpg"
             });
 
             BindingContext = this;
@@ -96,7 +98,7 @@ namespace InfiniteMeals.MealSelect
        void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
        {
            Meal selectedItem = e.SelectedItem as Meal;
-           DisplayAlert("Nutrition Facts", selectedItem.Description.ToString(), "OK");
+           DisplayAlert("Nutrition Facts", selectedItem.description.ToString(), "OK");
         }
 
        /*

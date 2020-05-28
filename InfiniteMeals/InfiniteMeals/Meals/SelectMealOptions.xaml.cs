@@ -18,7 +18,7 @@ namespace InfiniteMeals.Meals
     {
         private int mealOrdersCount = 0;
 
-        public ObservableCollection<MealsModel> Meals = new ObservableCollection<MealsModel>();
+        public ObservableCollection<Meal> Meals = new ObservableCollection<Meal>();
 
         private string kitchenID;
         private string kitchenZipcode;
@@ -58,13 +58,13 @@ namespace InfiniteMeals.Meals
                     if (m["created_at"]["S"].ToString().Contains(todaysDate) || (Boolean)m["auto_renew"]["BOOL"])
                     {
                         NoMealsLabel.IsVisible = false;
-                        this.Meals.Add(new MealsModel()
+                        this.Meals.Add(new Meal()
                         {
-                            imageString = m["photo"]["S"].ToString(),
-                            title = m["meal_name"]["S"].ToString(),
+                            imageUrl = m["photo"]["S"].ToString(),
+                            name = m["meal_name"]["S"].ToString(),
                             price = m["price"]["S"].ToString(),
                             description = m["description"]["S"].ToString(),
-                            kitchen_id = m["kitchen_id"]["S"].ToString(),
+                            kitchenId = m["kitchen_id"]["S"].ToString(),
                             id = m["meal_id"]["S"].ToString(),
                             qty = 0
                         }
@@ -114,7 +114,7 @@ namespace InfiniteMeals.Meals
         private void reduceOrders(object sender, System.EventArgs e)
         {
             var button = (Button)sender;
-            var mealObject = (MealsModel)button.CommandParameter;
+            var mealObject = (Meal)button.CommandParameter;
 
             if (mealObject != null)
             {
@@ -130,7 +130,7 @@ namespace InfiniteMeals.Meals
         {
         
             var button = (Button)sender;
-            var mealObject = (MealsModel)button.CommandParameter;
+            var mealObject = (Meal)button.CommandParameter;
 
             if (mealObject != null)
             {

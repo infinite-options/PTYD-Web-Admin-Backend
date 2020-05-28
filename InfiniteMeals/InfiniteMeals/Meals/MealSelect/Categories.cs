@@ -1,9 +1,9 @@
 ﻿public class Categories
 {
-    public string Name { get; set; }
+    public string title { get; set; }
 
     public override string ToString()
     {
-        return Name;
+        return this.title;
     }
 }

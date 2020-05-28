@@ -13,7 +13,7 @@
 namespace InfiniteMeals.Subscribe {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Subscribe/FiveMeals.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Subscribe\\FiveMeals.xaml")]
     public partial class FiveMeals : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
