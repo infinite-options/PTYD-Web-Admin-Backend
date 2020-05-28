@@ -14,6 +14,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.495" />
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.107.2" />
+    <PackageReference Include="AWSSDK.CognitoIdentity" Version="3.3.101.88" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.106.10" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,5 +30,9 @@
     <EmbeddedResource Update="Meals\SelectMealOptions.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\" />
+    <Folder Include="Steppers\" />
   </ItemGroup>
 </Project>

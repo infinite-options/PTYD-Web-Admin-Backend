@@ -8,6 +8,7 @@ namespace InfiniteMeals {
             InitializeComponent();
 
             MainPage = new NavigationPage(new Kitchens.Controller.MainPage());
+            //MainPage = new MainPage() { BindingContext = new MainPageViewModel() };
         }
 
         protected override void OnStart() {

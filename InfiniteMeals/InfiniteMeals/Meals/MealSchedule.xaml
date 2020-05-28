@@ -34,12 +34,14 @@
 
             <Button ClassId = "SunButton" Text="Sunday" Grid.Column="0" BackgroundColor="#8FBC8F" Clicked="ClickedColor" />
             <Button ClassId = "MonButton" Text="Monday" Grid.Column="0" Grid.Row="1" Clicked="ClickedColor"/>
-            <Button ClassId = "SkipButton" Text="Skip This Week" Grid.Column="1" Grid.RowSpan="2" Clicked="ClickedColor"/>
-            <Button ClassId = "SelectButton" Text="Select Meal" Grid.Column="0" Grid.Row="2" Clicked="ClickedColor" BackgroundColor="#8FBC8F"/>
-            <Button ClassId = "SurpriseButton" Text="Surprise Me" Grid.Column ="1" Grid.Row="2" Clicked="ClickedColor"/>
-            <Button ClassId = "AddButton" Text="Add on" Grid.ColumnSpan="2" Grid.Row="3" Clicked="ClickedAddOn"/>
+            <Button ClassId = "SkipButton" Text="Skip This Week" Grid.Column="1" Grid.Row="1" Clicked="ClickedColor"/>
+            <Button ClassId = "SelectButton" Text="Select Meal" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Clicked="ClickedColor"/>
+            <Button ClassId = "SurpriseButton" BackgroundColor="#8FBC8F" Text="Surprise Me"  Grid.Column ="1" Grid.Row="0" Clicked="ClickedColor"/>
+            <Button ClassId = "AddButton" Text="Add on" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Clicked="ClickedAddOn"/>
             <Button Text="Next" Grid.ColumnSpan="2" Grid.Row="4" Margin="10" Clicked="ClickedSelectMeal" />
+
             <!--
+                            <Button Text="StepperTest" Grid.ColumnSpan="2" Grid.Row="4" Margin="10" Clicked="ClickedStepper" />
             <Button Text="Sunday" Grid.Column="0" Grid.Row="1"/>
             <Button Text="Monday" Grid.Column="1" Grid.Row="1"/>
             <Button Text="Skip This Week" Grid.Column="2" Grid.Row="1"/>

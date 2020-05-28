@@ -95,5 +95,10 @@ namespace InfiniteMeals.Meals
             }
         }
 
+        private async void ClickedStepper(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Steppers.BasicSteppers());
+        }
+
     }
 }

@@ -9,6 +9,10 @@
     ".NETStandard,Version=v2.0/": {
       "InfiniteMeals/1.0.0": {
         "dependencies": {
+          "AWSSDK.CognitoIdentity": "3.3.101.88",
+          "AWSSDK.Core": "3.3.107.2",
+          "AWSSDK.DynamoDBv2": "3.3.106.10",
+          "MvvmLightLibs": "5.4.1.1",
           "NETStandard.Library": "2.0.3",
           "Newtonsoft.Json": "12.0.3",
           "Xamarin.Essentials": "1.3.1",
@@ -18,7 +22,69 @@
           "InfiniteMeals.dll": {}
         }
       },
+      "AWSSDK.CognitoIdentity/3.3.101.88": {
+        "dependencies": {
+          "AWSSDK.Core": "3.3.107.2",
+          "AWSSDK.SecurityToken": "3.3.105.6"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AWSSDK.CognitoIdentity.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.101.88"
+          }
+        }
+      },
+      "AWSSDK.Core/3.3.107.2": {
+        "runtime": {
+          "lib/netstandard2.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.107.2"
+          }
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.3.106.10": {
+        "dependencies": {
+          "AWSSDK.Core": "3.3.107.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AWSSDK.DynamoDBv2.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.106.10"
+          }
+        }
+      },
+      "AWSSDK.SecurityToken/3.3.105.6": {
+        "dependencies": {
+          "AWSSDK.Core": "3.3.107.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AWSSDK.SecurityToken.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.105.6"
+          }
+        }
+      },
       "Microsoft.NETCore.Platforms/1.1.0": {},
+      "MvvmLightLibs/5.4.1.1": {
+        "runtime": {
+          "lib/net45/GalaSoft.MvvmLight.Extras.dll": {
+            "assemblyVersion": "5.4.1.0",
+            "fileVersion": "5.4.1.0"
+          },
+          "lib/net45/GalaSoft.MvvmLight.Platform.dll": {
+            "assemblyVersion": "5.4.1.0",
+            "fileVersion": "5.4.1.0"
+          },
+          "lib/net45/GalaSoft.MvvmLight.dll": {
+            "assemblyVersion": "5.4.1.0",
+            "fileVersion": "5.4.1.0"
+          },
+          "lib/net45/System.Windows.Interactivity.dll": {
+            "assemblyVersion": "4.5.0.0",
+            "fileVersion": "3.0.40218.0"
+          }
+        }
+      },
       "NETStandard.Library/2.0.3": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0"
@@ -75,12 +141,47 @@
       "serviceable": false,
       "sha512": ""
     },
+    "AWSSDK.CognitoIdentity/3.3.101.88": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Wchl6SX/fW1iFnPFnpjdXONr687DPJQBIPO/lz9h4N9Mvk5i4heFK2mkIr0qyDeKh2Zzax+Hv9/azeiBf2ZshQ==",
+      "path": "awssdk.cognitoidentity/3.3.101.88",
+      "hashPath": "awssdk.cognitoidentity.3.3.101.88.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.3.107.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V8WPPqmLAY/B9A0ojA6OfKzOs0dYkm2675sYbAey5VSLfq9vZ6lDN9kuF12ERwj0LLQMjDP6LxYC5RNS+0/iwA==",
+      "path": "awssdk.core/3.3.107.2",
+      "hashPath": "awssdk.core.3.3.107.2.nupkg.sha512"
+    },
+    "AWSSDK.DynamoDBv2/3.3.106.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YMpUjXZdGdswTmEiEn6K8AC1Ge4bGYT1opel2xO24A/GU8SlW3fDS54KeYdRpLGEAl8eQxSOm/SP5AVIT4Dz0g==",
+      "path": "awssdk.dynamodbv2/3.3.106.10",
+      "hashPath": "awssdk.dynamodbv2.3.3.106.10.nupkg.sha512"
+    },
+    "AWSSDK.SecurityToken/3.3.105.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SI0txqKjqi+fgO+QtaopOLWqwHMUTBRnAvb2VOPLZqzpc+Vf1cAzeMoBwhW7hPw9HqhOGhRT+Hsv4R99t7kdRA==",
+      "path": "awssdk.securitytoken/3.3.105.6",
+      "hashPath": "awssdk.securitytoken.3.3.105.6.nupkg.sha512"
+    },
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
       "path": "microsoft.netcore.platforms/1.1.0",
       "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "MvvmLightLibs/5.4.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xYpVzOYnIz/M6T0pdc3w5t0vrt2ZKspSS+CZjQ+pZE+5yHv9qXSWkncHJXb6D7Egstalso4ivnIUkA1xEClViw==",
+      "path": "mvvmlightlibs/5.4.1.1",
+      "hashPath": "mvvmlightlibs.5.4.1.1.nupkg.sha512"
     },
     "NETStandard.Library/2.0.3": {
       "type": "package",

@@ -125,11 +125,20 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.495" />
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="AWSSDK.Core">
+      <Version>3.3.107.2</Version>
+    </PackageReference>
+    <PackageReference Include="AWSSDK.CognitoIdentity">
+      <Version>3.3.101.88</Version>
+    </PackageReference>
+    <PackageReference Include="AWSSDK.DynamoDBv2">
+      <Version>3.3.106.10</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\InfiniteMeals\InfiniteMeals.csproj">
-      <Project>{FFA4AB1B-A067-4B61-8A04-C2935EF04B39}</Project>
+      <Project>{94FD6313-C377-44FA-AB2C-3F97CCF9154D}</Project>
       <Name>InfiniteMeals</Name>
     </ProjectReference>
   </ItemGroup>

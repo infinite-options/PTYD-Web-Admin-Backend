@@ -13,7 +13,7 @@
 namespace InfiniteMeals.Checkout {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Checkout\\CheckOutPage.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Checkout/CheckOutPage.xaml")]
     public partial class CheckOutPage : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

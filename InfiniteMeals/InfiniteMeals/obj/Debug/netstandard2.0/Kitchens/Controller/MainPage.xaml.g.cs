@@ -13,7 +13,7 @@
 namespace InfiniteMeals.Kitchens.Controller {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Kitchens\\Controller\\MainPage.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Kitchens/Controller/MainPage.xaml")]
     public partial class MainPage : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

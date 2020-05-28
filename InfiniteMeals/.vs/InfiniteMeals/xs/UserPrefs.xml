@@ -1,0 +1,38 @@
+﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/Meals/MealSelect/MealChoices.xaml">
+    <Files>
+      <File FileName="InfiniteMeals/Meals/MealSelect/MealChoices.xaml.cs" Line="72" Column="66" />
+      <File FileName="InfiniteMeals/Meals/MealSelect/MealChoices.xaml" Line="55" Column="36" />
+      <File FileName="InfiniteMeals/Meals/MealSelect/Meal.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="InfiniteMeals" expanded="True">
+            <Node name="InfiniteMeals" expanded="True">
+              <Node name="Meals" expanded="True">
+                <Node name="MealSelect" expanded="True">
+                  <Node name="MealChoices.xaml" expanded="True" selected="True" />
+                </Node>
+                <Node name="MealSchedule.xaml" expanded="True" />
+              </Node>
+              <Node name="App.xaml" expanded="True" />
+            </Node>
+            <Node name="InfiniteMeals.Android" expanded="True">
+              <Node name="Resources" expanded="True">
+                <Node name="drawable" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
