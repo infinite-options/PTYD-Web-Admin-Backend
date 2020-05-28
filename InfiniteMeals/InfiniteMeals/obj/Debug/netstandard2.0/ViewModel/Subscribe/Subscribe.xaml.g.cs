@@ -8,13 +8,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.Subscribe.TenMeals.xaml", "Subscribe/TenMeals.xaml", typeof(global::InfiniteMeals.Subscribe.TenMeals))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Subscribe.Subscribe.xaml", "ViewModel/Subscribe/Subscribe.xaml", typeof(global::InfiniteMeals.Subscribe.Subscribe))]
 
 namespace InfiniteMeals.Subscribe {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Subscribe\\TenMeals.xaml")]
-    public partial class TenMeals : global::Xamarin.Forms.ContentPage {
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Subscribe\\Subscribe.xaml")]
+    public partial class Subscribe : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private global::Xamarin.Forms.ImageButton mealimage;
@@ -26,11 +26,15 @@ namespace InfiniteMeals.Subscribe {
         private global::Xamarin.Forms.ImageButton mealimage2;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
+        private global::Xamarin.Forms.ImageButton mealimage3;
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private void InitializeComponent() {
-            global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(TenMeals));
+            global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(Subscribe));
             mealimage = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.ImageButton>(this, "mealimage");
             mealimage1 = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.ImageButton>(this, "mealimage1");
             mealimage2 = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.ImageButton>(this, "mealimage2");
+            mealimage3 = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.ImageButton>(this, "mealimage3");
         }
     }
 }

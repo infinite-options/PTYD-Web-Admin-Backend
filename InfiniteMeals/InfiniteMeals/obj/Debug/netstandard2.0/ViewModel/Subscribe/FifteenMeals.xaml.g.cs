@@ -8,12 +8,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.Subscribe.FifteenMeals.xaml", "Subscribe/FifteenMeals.xaml", typeof(global::InfiniteMeals.Subscribe.FifteenMeals))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Subscribe.FifteenMeals.xaml", "ViewModel/Subscribe/FifteenMeals.xaml", typeof(global::InfiniteMeals.Subscribe.FifteenMeals))]
 
 namespace InfiniteMeals.Subscribe {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Subscribe\\FifteenMeals.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Subscribe\\FifteenMeals.xaml")]
     public partial class FifteenMeals : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

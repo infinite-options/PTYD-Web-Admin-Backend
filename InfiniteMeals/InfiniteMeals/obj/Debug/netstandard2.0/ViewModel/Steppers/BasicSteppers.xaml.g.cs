@@ -8,12 +8,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.Steppers.BasicSteppers.xaml", "Steppers/BasicSteppers.xaml", typeof(global::InfiniteMeals.Steppers.BasicSteppers))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Steppers.BasicSteppers.xaml", "ViewModel/Steppers/BasicSteppers.xaml", typeof(global::InfiniteMeals.Steppers.BasicSteppers))]
 
 namespace InfiniteMeals.Steppers {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Steppers\\BasicSteppers.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Steppers\\BasicSteppers.xaml")]
     public partial class BasicSteppers : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

@@ -8,17 +8,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.Checkout.CheckOutPage.xaml", "Checkout/CheckOutPage.xaml", typeof(global::InfiniteMeals.Checkout.CheckOutPage))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.SignUp.SignUp.xaml", "ViewModel/SignUp/SignUp.xaml", typeof(global::InfiniteMeals.SignUp.SignUp))]
 
-namespace InfiniteMeals.Checkout {
+namespace InfiniteMeals.SignUp {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Checkout\\CheckOutPage.xaml")]
-    public partial class CheckOutPage : global::Xamarin.Forms.ContentPage {
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\SignUp\\SignUp.xaml")]
+    public partial class SignUp : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private void InitializeComponent() {
-            global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(CheckOutPage));
+            global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(SignUp));
         }
     }
 }

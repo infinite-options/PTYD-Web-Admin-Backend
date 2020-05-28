@@ -21,18 +21,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Meals\MealSchedule.xaml">
+    <EmbeddedResource Update="ViewModel\MealSelect\MealSchedule.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Meals\MealSelect\MealChoices.xaml">
+    <EmbeddedResource Update="ViewModel\MealSelect\MealChoices.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Meals\SelectMealOptions.xaml">
+    <EmbeddedResource Update="ViewModel\MealSelect\SelectMealOptions.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
-    <Folder Include="Steppers\" />
+    <Folder Include="ViewModel\Steppers\" />
   </ItemGroup>
 </Project>

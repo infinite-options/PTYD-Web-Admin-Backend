@@ -8,12 +8,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.Meals.MealSchedule.xaml", "Meals/MealSchedule.xaml", typeof(global::InfiniteMeals.Meals.MealSchedule))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.MealSelect.MealSchedule.xaml", "ViewModel/MealSelect/MealSchedule.xaml", typeof(global::InfiniteMeals.Meals.MealSchedule))]
 
 namespace InfiniteMeals.Meals {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Meals\\MealSchedule.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\MealSelect\\MealSchedule.xaml")]
     public partial class MealSchedule : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

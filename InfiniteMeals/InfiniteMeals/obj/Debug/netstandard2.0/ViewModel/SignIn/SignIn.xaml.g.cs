@@ -8,12 +8,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.SignIn.SignIn.xaml", "SignIn/SignIn.xaml", typeof(global::InfiniteMeals.SignIn.SignIn))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.SignIn.SignIn.xaml", "ViewModel/SignIn/SignIn.xaml", typeof(global::InfiniteMeals.SignIn.SignIn))]
 
 namespace InfiniteMeals.SignIn {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("SignIn\\SignIn.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\SignIn\\SignIn.xaml")]
     public partial class SignIn : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

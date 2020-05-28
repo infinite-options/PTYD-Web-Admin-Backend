@@ -8,17 +8,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.Meals.MealSelect.MealChoices.xaml", "Meals/MealSelect/MealChoices.xaml", typeof(global::InfiniteMeals.MealSelect.MealChoices))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Profile.UserProfile.xaml", "ViewModel/Profile/UserProfile.xaml", typeof(global::InfiniteMeals.Profile.UserProfile))]
 
-namespace InfiniteMeals.MealSelect {
+namespace InfiniteMeals.Profile {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Meals\\MealSelect\\MealChoices.xaml")]
-    public partial class MealChoices : global::Xamarin.Forms.ContentPage {
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Profile\\UserProfile.xaml")]
+    public partial class UserProfile : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private void InitializeComponent() {
-            global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(MealChoices));
+            global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(UserProfile));
         }
     }
 }

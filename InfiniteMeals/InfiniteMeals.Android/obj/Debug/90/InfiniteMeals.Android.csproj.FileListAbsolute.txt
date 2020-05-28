@@ -482,6 +482,14 @@ C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\Infinit
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GenerateJavaStubs.stamp
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\Sean\Documents\Infinite Options\InfiniteMeals\Prep-To-Your-Door\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_ResolveLibraryProjectImports.stamp
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.Android.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.Android.pdb
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals.apk
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals.aab
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals-Signed.aab
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals-Signed.apk
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.pdb
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\MonoAndroid,Version=v9.0.AssemblyAttributes.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\build.props
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\adb.props
@@ -519,14 +527,6 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Androi
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\R.txt
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\R.cs.flag
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\InfiniteMeals.Android.csproj.CoreCompileInputs.cache
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.Android.dll
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.Android.pdb
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals.apk
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals.aab
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals-Signed.aab
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\com.companyname.infinitemeals-Signed.apk
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.dll
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\bin\Debug\InfiniteMeals.pdb
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\XamlC.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\InfiniteMeals.Android.csproj.CopyComplete
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\InfiniteMeals.Android.dll
