@@ -406,9 +406,7 @@ export default class MealButton extends Component {
               onClick={this.changeButtonS}
               style={this.state.buttonS ? green : hide}
             >
-              <p>
-                {this.props.day1} {this.props.date1}
-              </p>
+              {this.props.day1} {this.props.date1}
             </Button>
             &nbsp;
             <Button
@@ -417,9 +415,7 @@ export default class MealButton extends Component {
               onClick={this.changeButtonM}
               style={this.state.buttonM ? green : hide}
             >
-              <p>
-                {this.props.day2} {this.props.date2}
-              </p>
+              {this.props.day2} {this.props.date2}
             </Button>
             &nbsp;
             <Button
@@ -428,7 +424,7 @@ export default class MealButton extends Component {
               style={this.state.buttonSkip ? orange : hide}
               onClick={this.changeButtonSkip}
             >
-              <p>Skip This Week</p>
+              Skip This Week
             </Button>
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -451,7 +447,7 @@ export default class MealButton extends Component {
             }
             onClick={this.changeButtonSelect}
           >
-            <p>Select Meal</p>
+            Select Meal
           </Button>
           {/* </Link> */}
           &nbsp;
