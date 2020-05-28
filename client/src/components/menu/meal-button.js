@@ -761,9 +761,11 @@ export default class MealButton extends Component {
                         // }}
                         incrementAddonPrice={() => {
                           // var stateCopy2 = Object.assign({}, this.state);
+                          let new_meal_price = parseFloat(
+                            meal.extra_meal_price
+                          );
                           let new_price =
-                            this.state.total_addon_price +
-                            meal.extra_meal_price;
+                            this.state.total_addon_price + new_meal_price;
                           let newprice_fixed2 = parseFloat(
                             new_price.toFixed(2)
                           );
@@ -773,9 +775,11 @@ export default class MealButton extends Component {
                         }}
                         decrementAddonPrice={() => {
                           // var stateCopy2 = Object.assign({}, this.state);
+                          let new_meal_price = parseFloat(
+                            meal.extra_meal_price
+                          );
                           let new_price =
-                            this.state.total_addon_price -
-                            meal.extra_meal_price;
+                            this.state.total_addon_price - new_meal_price;
                           let newprice_fixed2 = parseFloat(
                             new_price.toFixed(2)
                           );
@@ -834,6 +838,26 @@ export default class MealButton extends Component {
                         var stateCopy = Object.assign({}, this.state);
                         stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
                         this.setState(stateCopy);
+                      }}
+                      incrementAddonPrice={() => {
+                        // var stateCopy2 = Object.assign({}, this.state);
+                        let new_meal_price = parseFloat(meal.extra_meal_price);
+                        let new_price =
+                          this.state.total_addon_price + new_meal_price;
+                        let newprice_fixed2 = parseFloat(new_price.toFixed(2));
+                        this.setState({
+                          total_addon_price: newprice_fixed2
+                        });
+                      }}
+                      decrementAddonPrice={() => {
+                        // var stateCopy2 = Object.assign({}, this.state);
+                        let new_meal_price = parseFloat(meal.extra_meal_price);
+                        let new_price =
+                          this.state.total_addon_price - new_meal_price;
+                        let newprice_fixed2 = parseFloat(new_price.toFixed(2));
+                        this.setState({
+                          total_addon_price: newprice_fixed2
+                        });
                       }}
                     />
                   </Cell>
