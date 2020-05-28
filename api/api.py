@@ -788,6 +788,7 @@ class ChangePassword(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+#ADD Update to Payments
 class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
@@ -3531,6 +3532,28 @@ class Meal_Info1(Resource):
         finally:
             disconnect(conn)
 
+        
+class DisplaySaturdays(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_saturdays;""", 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 
 class TemplateApi(Resource):
     def get(self):
@@ -3586,6 +3609,7 @@ api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 api.add_resource(addRecipe, '/api/v2/add-recipe')
 api.add_resource(Meal_Info1, '/api/v2/mealInfo1')
 
+api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
