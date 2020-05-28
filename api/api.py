@@ -3553,6 +3553,204 @@ class DisplaySaturdays(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+class MenuCreation(Resource):
+    global RDS_PW
+    
+    #----------------- 
+    # POST for 1. pulling up the menu dates available. 2. Populating the menu type and meal if there is an existing one. 3. providing a list of meals and their
+    # average sold per posting
+    # ----------------
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(
+                    """ SELECT 
+                        menu_date,
+                        menu_type,
+                        meal_category,
+                        meal_name
+                        FROM 
+                        ptyd_menu
+                        JOIN ptyd_meals ON menu_meal_id=meal_id
+                        ORDER BY menu_date DESC ;""", 'get', conn)
+
+            # generated all of the menu dates available                
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['menu_date']
+                menuDates.append(placeHolder)
+            
+            # formated the menu dates into a list
+            menuDates = list( dict.fromkeys(menuDates) )
+
+            
+
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            
+
+            for index in range(len(menuDates)):
+                
+                
+
+                menuInfo =[]
+                for index2 in range(len(items['result'])):
+                    tempDict = {}
+                    if (items['result'][index2]['menu_date'] == menuDates[index]):
+                        
+                        key1 = "Menu_Type"
+                        key2 = "Meal_Name"
+                        
+                        menuType = items['result'][index2]['menu_type']
+                        mealNames = items['result'][index2]['meal_name']
+
+                        tempDict[key1] = menuType
+                        tempDict[key2] = mealNames
+                        
+                        menuInfo.append(tempDict)
+
+                
+                d[menuDates[index]] = menuInfo
+
+            
+            items = execute(
+                        """ SELECT C.meal_id, C.meal_category, C.meal_name, IFNULL(B.total_sold,0) AS total_sold, IFNULL(A.times_posted,0) AS times_posted, IFNULL(total_sold/times_posted,0) AS "Avg Sales/Posting"
+                            FROM 
+                                (SELECT 
+                                    menu_meal_id,
+                                    count(menu_meal_id) AS times_posted
+                                FROM 
+                                    ptyd_menu
+                                GROUP BY menu_meal_id) AS A
+                            JOIN 
+                            (SELECT
+                                meal_selected,
+                                
+                                meal_name AS Meal_Name,
+                                count(n) as total_sold from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                            FROM 
+                                ptyd_meals_selected 
+                            JOIN
+                                numbers
+                            ON char_length(meal_selection)
+                                - char_length(replace(meal_selection, ';', ''))
+                                >= n - 1) sub1
+                            JOIN 
+                                ptyd_meals
+                            ON sub1.meal_selected=meal_id
+                            GROUP BY sub1.meal_selected ) AS B
+                            ON
+                                B.meal_selected = A.menu_meal_id
+                            RIGHT JOIN 
+                                ptyd_meals C 
+                            ON A.menu_meal_id = C. meal_id;
+                        """, 'get', conn)
+            
+            #creating list of meal categories to isolate unique values
+            
+            mealCat = []
+            mealAvg = []
+            mealNames = []
+            mealPostings = []
+            mealTotalSold = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['meal_category']
+                mealCat.append(placeHolder)
+                placeHolder = items['result'][index]['meal_name']
+                mealNames.append(placeHolder)
+                placeHolder = items['result'][index]['Avg Sales/Posting']
+                mealAvg.append(placeHolder)
+                placeHolder = items['result'][index]['total_sold']
+                mealTotalSold.append(placeHolder)
+                placeHolder = items['result'][index]['times_posted']
+                mealPostings.append(placeHolder)
+
+
+            
+            
+
+            #mealNames = list( dict.fromkeys(mealNames) )
+          
+            # initializing empty dictionary with the meal categories as keys
+            mealList =[]
+            
+            for index in range(len(mealNames)):
+                tempDict = {}
+
+                key1 = "Meal_Name"
+                key2 = "Avg_Sales/Posting"
+                key3 = "Total_Posts"
+                key4 = "Total_Sold"
+                key5 = "Meal_Category"
+                tempDict[key5] = mealCat[index]
+                tempDict[key1] = mealNames[index]
+                tempDict[key2] = str(mealAvg[index])
+                tempDict[key3] = str(mealPostings[index])
+                tempDict[key4] = str(mealTotalSold[index])
+                mealList.append(tempDict)
+                
+
+            
+           #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
+
+            d2 = {}
+
+            for index in range(len(mealCat)):
+                key = mealCat[index]
+                d2[key] = "value"
+            
+            print("TEST -------------------")
+            print(d2)
+            for index in range(len(mealCat)):
+                tempList = []
+                
+                for index2 in range(len(items['result'])):
+                    
+                    if (items['result'][index2]['meal_category'] == mealCat[index]):
+                        tempDict = {}
+                        mealName = items['result'][index2]['meal_name']
+                        mealAvg = str(items['result'][index2]['Avg Sales/Posting'])
+                        mealTotalSold = str(items['result'][index2]['total_sold'])
+                        mealNumPostings = str(items['result'][index2]['times_posted'])
+                        key1 = "Meal_Name"
+                        key2 = "Avg_Sales_Posting"
+                        key3 = "Total_Sold"
+                        key4 = "Times_Posted"
+                        tempDict[key1] = mealName
+                        tempDict[key2] = mealAvg
+                        tempDict[key3] = mealTotalSold
+                        tempDict[key4] = mealNumPostings
+                        tempList.append(tempDict)
+                        print("tempDict --------------")
+                        print(tempDict)
+                print("TEMPLIST ____________________")
+                print(tempList)
+                d2[mealCat[index]] = tempList
+
+                        
+
+            print("TEST -------------")
+            print(d2)
+
+            response['message'] = 'successful'
+            
+            # response['menu_dates'] = menuDates
+            response['menus'] = d
+            response['result'] = d2
+            
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 class MealCreation(Resource):
     def listIngredients(self, result):
         response = {}
@@ -3701,6 +3899,7 @@ api.add_resource(CustomerProfile, '/api/v2/customerprofile')
 
 api.add_resource(MealInfo, '/api/v2/meal_info')
 api.add_resource(MealCreation, '/api/v2/mealcreation')
+api.add_resource(MenuCreation, '/api/v2/create-menu')
 api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
