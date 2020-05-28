@@ -706,7 +706,6 @@ class Login(Resource):
         finally:
             disconnect(conn)
 
-<<<<<<< HEAD
 class ResetPassword (Resource):
     def get_random_string(self, stringLength=8):
         lettersAndDigits = string.ascii_letters + string.digits
@@ -789,9 +788,7 @@ class ChangePassword(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-=======
 #ADD Update to Payments
->>>>>>> feature/stripe
 class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
@@ -1000,13 +997,8 @@ class AccountPurchases(Resource):
                 # elif eachItem['payment_frequency'] == 'Monthly':
                 #     next_charge_date = last_charge_date + timedelta(days=28)
 
-<<<<<<< HEAD
                 # eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
                 # eachItem['next_charge_date'] = str(next_charge_date.date())
-=======
-                #eachItem['paid_weeks_remaining'] = str(int((next_charge_date - datetime.now()).days / 7) + 1)
-                #eachItem['next_charge_date'] = str(next_charge_date.date())
->>>>>>> feature/stripe
 
                 if eachItem['delivery_zip'] in mondayZips:
                     eachItem['monday_available'] = True
@@ -3423,7 +3415,6 @@ class UpdateRecipe(Resource):
         finally:
             disconnect(conn)
 
-<<<<<<< HEAD
 class UpdatePayments(Resource):
     def patch(self):
         response = {}
@@ -3535,7 +3526,13 @@ class Meal_Info1(Resource):
             response['result'] = items
         
 
-=======
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+        
 class DisplaySaturdays(Resource):
     def get(self):
         response = {}
@@ -3551,7 +3548,6 @@ class DisplaySaturdays(Resource):
             response['message'] = 'successful'
             response['result'] = items
 
->>>>>>> feature/stripe
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -3610,13 +3606,10 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
-<<<<<<< HEAD
 api.add_resource(addRecipe, '/api/v2/add-recipe')
 api.add_resource(Meal_Info1, '/api/v2/mealInfo1')
 
-=======
 api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
->>>>>>> feature/stripe
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
