@@ -83,6 +83,13 @@
   left: 0.1px;
   float: right;
 }
+.top-right-meal-selection {
+  position: absolute;
+  top: 0.1px;
+  right: 0.1px;
+  left: 0.1px;
+  float: right;
+}
 
 /* Centered text */
 .centered {

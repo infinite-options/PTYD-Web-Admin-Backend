@@ -28,11 +28,12 @@ function SignUp(props) {
   function sendForm(e) {
     e.preventDefault();
     if (email !== confirmEmail) {
-      return {code: 470, result: "Email mismatch."};
+      setErro("Email mismatch");
+      return;
     }
-
     if (password !== confirmPassword) {
-      return {code: 471, result: "Password mismatch."};
+      setErro("Password mismatch.");
+      return;
     }
     setLoading(true);
     var data = {
@@ -82,7 +83,7 @@ function SignUp(props) {
         if (err.response !== undefined) {
           setErro(err.response.data.result);
           //window.location.reload(false);
-        } else {
+        } else if (typeof err === "string") {
           setErro(err);
         }
         setLoading(false);
@@ -146,7 +147,7 @@ function SignUp(props) {
                     <span class='icon has-text-danger'>
                       <i className='fa fa-info-circle'></i>
                     </span>
-                    <span class='has-text-info'>{erro}</span>
+                    <span className='has-text-info'>{erro}</span>
                   </h6>
                 </Col>
                 <Col></Col>

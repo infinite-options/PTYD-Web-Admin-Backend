@@ -11,7 +11,8 @@ from decimal import Decimal
 from datetime import datetime, date, timedelta
 from hashlib import sha512
 from math import ceil
-
+import string
+import random
 # BING API KEY
 # Import Bing API key into bing_api_key.py
 from env_keys import BING_API_KEY, RDS_PW
@@ -306,6 +307,16 @@ class Meals(Resource):
                     meal_id = eachMeal['meal_id']
                     mealQuantities[meal_id] = 0
         return mealQuantities
+        
+    def getAddonPrice(self, menu):
+        savedAddonPrice = {}
+        for key in ['Meals', 'Addons']:
+            for subMenu in menu[key]:
+                for eachMeal in menu[key][subMenu]['Menu']:
+                    related_price = eachMeal['extra_meal_price']
+                    meal_id = eachMeal['meal_id']
+                    savedAddonPrice[meal_id] = related_price
+        return savedAddonPrice
 
     # HTTP method GET
     # Optional parameter: startDate (YYYYMMDD)
@@ -468,6 +479,7 @@ class Meals(Resource):
                     }
 
                     week['MealQuantities'] = self.getMealQuantities(week)
+                    week['AddonPrice'] = self.getAddonPrice(week)
 
                     index = 'MenuForWeek' + str(i)
                     items[index] = week
@@ -694,7 +706,89 @@ class Login(Resource):
         finally:
             disconnect(conn)
 
+class ResetPassword (Resource):
+    def get_random_string(self, stringLength=8):
+        lettersAndDigits = string.ascii_letters + string.digits
+        return "".join([random.choice(lettersAndDigits) for i in range(stringLength)])
 
+    def get(self):
+        response={}
+        try:
+            conn = connect();
+            #search for email;
+            email = request.args.get('email');
+            if email == None:
+                response['message'] =  "Invalid Email Address"
+                return response, 400
+            query = """SELECT * FROM ptyd_accounts 
+                    WHERE user_email ='""" + email + "';"
+            user_lookup = execute(query, 'get', conn)
+            if (user_lookup.get('code') == 280):
+                user_uid = user_lookup.get('result')[0].get('user_uid')
+                pass_temp = self.get_random_string()
+                salt = getNow()
+                pass_temp_hashed = sha512((pass_temp + salt).encode()).hexdigest()
+                query = """UPDATE ptyd_passwords SET password_hash = '""" + pass_temp_hashed + """'
+                             , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
+                #update database with temp password
+                query_result = execute(query, 'post', conn)
+                if (query_result.get('code') == 281):
+                    # send an email to client
+                    msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[email])
+                    msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(temp=pass_temp)
+                    mail.send(msg)
+                    response['message'] = "A temporary password has been sent"
+                    response['result'] = {"user_uid":user_uid}
+                    return response, 200
+                else:
+                    return 500
+            else:
+                response['message'] ="User is not found"
+                return response, 404
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class ChangePassword(Resource):
+    def post(self):
+        response={};
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            user_uid = data['ID']
+            old_pass = data['old']
+            new_pass = data['new']
+            query = """SELECT password_hash, password_salt FROM ptyd_passwords WHERE password_user_uid = '""" \
+                        + user_uid +"';"
+            query_result = execute(query, "get", conn)
+            if (query_result.get('code') == 280):
+                salt = query_result.get('result')[0].get('password_salt')
+                current_pass = query_result.get('result')[0].get('password_hash')
+                old_pass_hashed = sha512((old_pass + salt).encode()).hexdigest()
+                if (current_pass == old_pass_hashed):
+                    #change the password
+                    salt = getNow()
+                    new_password_hashed = sha512((new_pass + salt).encode()).hexdigest()
+                    query = """UPDATE ptyd_passwords SET password_hash = '""" + new_password_hashed \
+                        + "', password_salt = '" + salt + "' WHERE password_user_uid = '" + user_uid + "'; "
+                    query_result = execute(query, 'post', conn)
+                    if(query_result.get('code') == 281):
+                        response['message'] = "Password is changed"
+                        return response, 200
+                    else:
+                        return "Internal Server Error", 500
+                else:
+                    return "Wrong password", 401
+            else:
+                return "No record found", 404
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+#ADD Update to Payments
 class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
@@ -705,6 +799,7 @@ class AccountPurchases(Resource):
             dayOfWeek = date.today().weekday()
             # Get the soonest Saturday, same day if today is Saturday
             sat = date.today() + timedelta(days=(12 - dayOfWeek) % 7)
+            thur = date.today() + timedelta(days=(10 - dayOfWeek) % 7)
 
             # If today is Thursday after 4PM
             if sat == date.today() and datetime.now().hour >= 16:
@@ -712,6 +807,7 @@ class AccountPurchases(Resource):
 
             #change sat into string
             sat = sat.strftime("%Y-%m-%d")
+            thur = thur.strftime("%Y-%m-%d")
             
 
             queries = ["""
@@ -748,7 +844,8 @@ class AccountPurchases(Resource):
                     ,purch.delivery_instructions
                     ,snap.weeks_remaining AS paid_weeks_remaining
                     ,snap.next_billing_date AS next_charge_date
-                    ,addon.total_addon_cost
+                    ,IFNULL(addon.total_addon_cost,0) AS weekly_addon_cost
+                    , \'""" + thur + """\' AS next_addon_charge_date
                     ,pay.amount_due AS amount_due_before_addon
                     ,addon.week_affected
                 FROM (
@@ -940,14 +1037,12 @@ class SignUp(Resource):
             LastUpdate = CreateDate
             Referral = data['Referral']
 
-            print("Received:", data)
 
             queries = ["CALL get_new_user_id;"]
 
             NewUserIDresponse = execute(queries[0], 'get', conn)
             NewUserID = NewUserIDresponse['result'][0]['new_id']
 
-            print("NewUserID:", NewUserID)
 
             # Not storing customer addresses
             queries.append(
@@ -999,7 +1094,6 @@ class SignUp(Resource):
                     \'""" + DatetimeStamp + "\');")
 
             usnInsert = execute(queries[1], 'post', conn)
-            print ("User insert: {}".format(usnInsert.get('code')))
             if usnInsert['code'] != 281:
                 response['message'] = 'Request failed.'
 
@@ -1017,8 +1111,6 @@ class SignUp(Resource):
                     response['result'] = 'Internal server error.'
 
                 response['code'] = usnInsert['code']
-                print(response['message'], response['result'], usnInsert['code'])
-                print('response will be sent to client')
                 return response, statusCode
 
             pwInsert = execute(queries[2], 'post', conn)
@@ -1043,7 +1135,6 @@ class SignUp(Resource):
                         'WARNING'] = "This user was signed up to the database but did not properly store their password. Their account cannot be logged into and must be reset by a system administrator."
                     response['code'] = 590
 
-                print(response['message'], response['result'], pwInsert['code'])
                 return response, 500
 
             #this part using for testing email verification
@@ -2341,8 +2432,6 @@ class SocialAccount(Resource):
                     FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
 
 
-            print('I\'m here')
-            print("data is {}".format(data));
             items = execute(queries[0], 'get', conn)
             #create a login attempt
             login_attempt = {
@@ -3443,6 +3532,28 @@ class Meal_Info1(Resource):
         finally:
             disconnect(conn)
 
+        
+class DisplaySaturdays(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_saturdays;""", 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 
 class TemplateApi(Resource):
     def get(self):
@@ -3472,6 +3583,8 @@ api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
 api.add_resource(Login, '/api/v2/account/<string:accEmail>/<string:accPass>')
+api.add_resource(ResetPassword, '/api/v2/resetpassword')
+api.add_resource(ChangePassword, '/api/v2/changepassword')
 api.add_resource(Account, '/api/v2/account/<string:accId>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
 api.add_resource(SessionVerification, '/api/v2/sessionverification/<string:userUid>/<string:sessionId>')
@@ -3496,6 +3609,7 @@ api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 api.add_resource(addRecipe, '/api/v2/add-recipe')
 api.add_resource(Meal_Info1, '/api/v2/mealInfo1')
 
+api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')

@@ -17,7 +17,6 @@ class Selectmealplan extends Component {
     const api = await res.json();
     const mealPlans = api.result.MealPlans.result;
     this.setState({mealPlans});
-    console.log("meal plan api", this.state.mealPlans);
   }
   render() {
     return (
