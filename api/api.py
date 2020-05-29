@@ -816,7 +816,7 @@ class AccountPurchases(Resource):
                     ,pay.buyer_id
                     ,pay.coupon_id
                     ,pay.gift
-                    ,(pay.amount_due + IFNULL(addon.total_addon_cost,0)) AS amount_due
+                    ,(pay.amount_due + IFNULL(addon.total_charge,0)) AS amount_due
                     ,pay.amount_paid
                     ,snap_purchase_id AS purchase_id
                     ,pay.payment_time_stamp AS last_payment_time_stamp
@@ -844,7 +844,7 @@ class AccountPurchases(Resource):
                     ,purch.delivery_instructions
                     ,snap.weeks_remaining AS paid_weeks_remaining
                     ,snap.next_billing_date AS next_charge_date
-                    ,IFNULL(addon.total_addon_cost,0) AS weekly_addon_cost
+                    ,IFNULL(addon.total_charge,0) AS weekly_addon_cost
                     , \'""" + thur + """\' AS next_addon_charge_date
                     ,pay.amount_due AS amount_due_before_addon
                     ,addon.week_affected
@@ -939,36 +939,66 @@ class AccountPurchases(Resource):
                 LEFT JOIN (
                 -- ADDON query
                 SELECT
-                    A.purchase_id
-                    ,A.week_affected
-                    ,A.addon_selected
-                    ,SUM(A.total) as num_of_addons
-                    ,SUM((A.total * B.price)) AS total_addon_cost
-                FROM (
-                SELECT
-                    purchase_id,
+                purchase_id,
                     week_affected,
-                    addon_selected,
-                    COUNT(n) as total from (select purchase_id, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as addon_selected,n
-                FROM
-                ptyd_addons_selected
-                JOIN
-                numbers
-                ON char_length(meal_selection)
-                    - char_length(replace(meal_selection, ';', ''))
-                    >= n - 1) sub1
-                WHERE week_affected = \'""" + sat + """\'  -- AND delivery_day NOT LIKE "Monday"
-                GROUP BY sub1.addon_selected,purchase_id
-                ORDER BY purchase_id ASC
-                ) A
-                JOIN (
+                    SUM(total) AS total_addons,
+                    SUM(charge) AS total_charge
+                FROM ( # QUERY 11
+                SELECT purchase_id
+                , week_affected
+                , meal_selected
+                , meal_name
+                , COUNT(num) as total
+                , extra_meal_price
+                , COUNT(num) * extra_meal_price as charge
+                FROM (
+                SELECT *
+                , substring_index(substring_index(meal_selection,';',n),';',-1) AS meal_selected
+                , n AS num
+                FROM (# QUERY 1
                 SELECT
-                    meal_id
-                    ,extra_meal_price AS price
-                FROM 
-                    ptyd_meals 
-                ) B ON addon_selected = meal_id
-                GROUP BY A.purchase_id
+                ms1.purchase_id
+                -- ,ms2.purchase_id
+                , ms1.week_affected
+                -- , ms2.week_affected
+                , "0" AS num_meals
+                , "0" AS delivery_day
+                , ms1.meal_selection
+                -- , ms1.selection_time
+                -- , ms2.latest_selection
+                -- , ms1.delivery_day
+                FROM ptyd.ptyd_addons_selected AS ms1
+                INNER JOIN (
+                SELECT
+                purchase_id
+                , week_affected
+                , meal_selection
+                , MAX(selection_time) AS latest_selection
+                -- , delivery_day
+                FROM ptyd.ptyd_addons_selected
+                GROUP BY purchase_id
+                , week_affected
+                ) as ms2
+                ON ms1.purchase_id = ms2.purchase_id
+                AND ms1.week_affected = ms2.week_affected
+                AND ms1.selection_time = ms2.latest_selection
+                ORDER BY purchase_id
+                , week_affected)
+                AS combined
+                JOIN numbers ON char_length(meal_selection) - char_length(replace(meal_selection, ';', '')) >= n - 1)
+                AS sub
+                LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
+                GROUP BY purchase_id
+                , week_affected
+                , meal_selected
+                ORDER BY purchase_id
+                , week_affected
+                , num_meals
+                , meal_selected)
+                    AS addons
+                WHERE week_affected ="\'""" + sat + """\'"
+                GROUP BY purchase_id,
+                week_affected
                 ) addon
                 ON snap_purchase_id = addon.purchase_id
 

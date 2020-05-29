@@ -509,13 +509,41 @@ class Mealschedule extends Component {
     if (this.state.purchase_all === null) {
       return <div />;
     }
+    let count = 1;
     let temp = [];
+    let existed_meal_subscription = [];
     for (let i = 0; i < this.state.purchase_all.length; i++) {
-      temp.push(
-        <MenuItem value={i}>
-          {this.state.purchase_all[i].meal_plan_desc}
-        </MenuItem>
-      );
+      if (
+        !(
+          this.state.purchase_all[i].meal_plan_desc in existed_meal_subscription
+        )
+      ) {
+        temp.push(
+          <MenuItem value={i}>
+            {this.state.purchase_all[i].meal_plan_desc}
+          </MenuItem>
+        );
+        existed_meal_subscription.push(
+          this.state.purchase_all[i].meal_plan_desc
+        );
+        console.log(
+          "distinct subscription",
+          this.state.purchase_all[i].meal_plan_desc,
+          existed_meal_subscription
+        );
+      } else {
+        console.log(
+          "repeated subscription",
+          this.state.purchase_all[i].meal_plan_desc,
+          count
+        );
+        temp.push(
+          <MenuItem value={i}>
+            {(this.state.purchase_all[i].meal_plan_desc, count)}
+          </MenuItem>
+        );
+        count += 1;
+      }
     }
     return (
       <FormControl>
