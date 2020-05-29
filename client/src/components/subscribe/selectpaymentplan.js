@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
-import IMG9 from "../../img/img9.webp";
+import IMG9 from "../../img/creditCard.png";
 import {Link} from "react-router-dom";
 
 class SelectPaymentPlan extends Component {
@@ -83,7 +83,7 @@ class SelectPaymentPlan extends Component {
                         meal
                       </Card.Text>
                       <Card.Title>
-                        ${paymentPlan.meal_plan_price.toFixed(2)} /week
+                        ${paymentPlan.meal_weekly_price.toFixed(2)} /week
                       </Card.Title>
                       <Card.Text style={{fontSize: "13px", color: "#888785"}}>
                         Sales tax of 8.25% will be added
@@ -97,7 +97,7 @@ class SelectPaymentPlan extends Component {
                               paymentPlan.meal_plan_desc
                             } Subscription - $${paymentPlan.meal_plan_price.toFixed(
                               2
-                            )} /week`,
+                            )}`,
                             total: paymentPlan.meal_plan_price.toFixed(2)
                           }
                         }}

@@ -21,37 +21,27 @@ class EachAddon extends Component {
             )}
           </h6>
         </center> */}
-        
+
         <div class="container-select-meal" style={{ color: "white" }}>
           {/* <div class='meal-img-wrapper2' style={{objectFit: "cover", width:"100%", height: "100%"}}> */}
-            <div class="meal-img-wrapper" style={{ overflow:"hidden", width: "100%", minWidth:"100%", height:"200px", maxHeight:"200px"}}>
-              <OverlayTrigger
-                placement="bottom"
-                delay={{ show: 100, hide: 100 }}
-                popperConfig={{
-                  modifiers: {
-                    preventOverflow: {
-                      boundariesElement: 'offsetParent'
-                    }
-                  }
-                }}
-                overlay={
-                  <Tooltip id="button-tooltip">
-                    <p>{this.props.detail}</p>
-                    <p>
-                      <strong>Ingredients:</strong> {this.props.ingridents}
-                    </p>
-                  </Tooltip>
-                }
-              >
-                <img
-                  class="img-fluid"
-                  src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
-                  alt="no_meal_img"
-                  resizeMode
-                />
-              </OverlayTrigger>
-              {/* <div
+          <div
+            class="meal-img-wrapper"
+            style={{
+              overflow: "hidden",
+              width: "100%",
+              minWidth: "100%",
+              height: "200px",
+              maxHeight: "200px"
+            }}
+          >
+            <img
+              class="img-fluid"
+              src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
+              alt="no_meal_img"
+              resizeMode
+            />
+
+            {/* <div
                 class="bottom-right-meal-selection font2"
                 style={{
                   fontSize: "20px",
@@ -62,13 +52,26 @@ class EachAddon extends Component {
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               </div> */}
-              <OverlayTrigger
+
+            <div
+              class="top-right-meal-selection font2"
+              style={{
+                fontSize: "15px",
+                float: "right",
+                backgroundColor: "black",
+                lineHeight: "25px",
+                cursor: "default"
+              }}
+            >
+              <center>${this.props.extra_meal_price}</center>
+            </div>
+            <OverlayTrigger
               placement="bottom"
               delay={{ show: 100, hide: 100 }}
               popperConfig={{
                 modifiers: {
                   preventOverflow: {
-                    boundariesElement: 'offsetParent'
+                    boundariesElement: "offsetParent"
                   }
                 }
               }}
@@ -87,53 +90,16 @@ class EachAddon extends Component {
                   fontSize: "15px",
                   float: "right",
                   backgroundColor: "black",
-                  lineHeight: "25px"
+                  lineHeight: "25px",
+                  cursor: "default"
                 }}
               >
                 <center>{this.props.mealTitle}</center>
               </div>
             </OverlayTrigger>
-            </div>
+          </div>
           {/* </div> */}
         </div>
-
-        {/* <Grid>
-          <Cell col={7}>
-            <img class="img-fluid" src={this.props.imgurl} alt="no_meal_img" />
-          </Cell>
-          <Cell col={5}>
-            <div class="input-group">
-              <div id="input_div">
-                <input
-                  type="text"
-                  size="4"
-                  value={this.props.addonQuantities}
-                  id="count"
-                  style={{ textAlign: "center", width: "90%" }}
-                />
-                &nbsp;
-                <input
-                  type="button"
-                  value="-"
-                  onClick={() => {
-                    if (this.props.addonQuantities > 0) {
-                      this.props.decrementAddon();
-                    }
-                  }}
-                />
-                <input
-                  type="button"
-                  value="+"
-                  onClick={() => {
-                    this.props.incrementAddon();
-                  }}
-                />
-              </div>
-            </div>
-          </Cell>
-          <p>{this.props.ingridents}</p>
-          <p>{this.props.detail}</p>
-        </Grid> */}
 
         <div
           style={{
@@ -154,6 +120,7 @@ class EachAddon extends Component {
             onClick={() => {
               if (this.props.addonQuantities > 0) {
                 this.props.decrementAddon();
+                this.props.decrementAddonPrice();
               }
             }}
           >
@@ -168,7 +135,7 @@ class EachAddon extends Component {
               textAlign: "center",
               width: "40px",
               height: "40px",
-              borderRadius: "50%",
+              borderRadius: "50%"
             }}
           />
           <Button
@@ -183,6 +150,7 @@ class EachAddon extends Component {
             }}
             onClick={() => {
               this.props.incrementAddon();
+              this.props.incrementAddonPrice();
             }}
           >
             <b>+</b>
