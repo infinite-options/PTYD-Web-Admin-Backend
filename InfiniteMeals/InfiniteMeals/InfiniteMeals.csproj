@@ -34,5 +34,7 @@
   <ItemGroup>
     <Folder Include="Tests\" />
     <Folder Include="ViewModel\Steppers\" />
+    <Folder Include="Model\Database\" />
+    <Folder Include="ViewModel\Dbvm\" />
   </ItemGroup>
 </Project>

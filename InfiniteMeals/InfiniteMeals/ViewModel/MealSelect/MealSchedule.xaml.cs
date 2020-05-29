@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -21,6 +22,15 @@ namespace InfiniteMeals.Meals
         public MealSchedule()
         {
             InitializeComponent();
+            getData();
+        }
+
+        private async void getData()
+        {
+            string json = new WebClient().DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
+            System.Diagnostics.Debug.WriteLine(json);
+            //var obj = JsonConvert.DeserializeObject<InfiniteMeals.Model.Database.Test>(json);
+           //System.Diagnostics.Debug.WriteLine(obj.MenuList[0].MealName);
         }
 
         private async void ClickedSelectMeal(object sender, EventArgs e)
