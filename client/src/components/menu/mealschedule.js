@@ -26,6 +26,7 @@ class Mealschedule extends Component {
     };
     this.changeMenuButtons = this.changeMenuButtons.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.getRefresh = this.getRefresh.bind(this);
   }
 
   getCookieAttrHelper(cname, type) {
@@ -340,6 +341,28 @@ class Mealschedule extends Component {
       }
     );
   }
+  async getRefresh() {
+    if (this.state.user_uid == null) return;
+    console.log("getting refresh", this.state);
+    let currPur = {};
+    let purchaseId = 0;
+    if (this.state.user_uid !== null) {
+      const purchases = await fetch(
+        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+      );
+      const purchasesApi = await purchases.json();
+
+      // Check if user has any active subscriptions
+      if (purchasesApi.result.length != 0) {
+        currPur = purchasesApi.result[this.state.selection];
+        purchaseId = purchasesApi.result[this.state.selection].purchase_id;
+        this.setState({
+          purchase_all: purchasesApi.result
+        });
+      }
+    }
+    console.log("done getting refresh");
+  }
   render() {
     let displayrows = [];
     let subscription_selection = this.state.purchase_all[this.state.selection];
@@ -470,6 +493,7 @@ class Mealschedule extends Component {
                       addonsSelected={eachWeek.addonsSelected}
                       monday_available={this.state.monday_available}
                       MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
+                      api_refresh={this.getRefresh}
                     />
                   )
                 )
@@ -526,18 +550,7 @@ class Mealschedule extends Component {
         existed_meal_subscription[
           this.state.purchase_all[i].meal_plan_desc
         ] = 1;
-
-        console.log(
-          "distinct subscription",
-          this.state.purchase_all[i].meal_plan_desc,
-          existed_meal_subscription
-        );
       } else {
-        console.log(
-          "repeated subscription",
-          this.state.purchase_all[i].meal_plan_desc,
-          existed_meal_subscription[this.state.purchase_all[i].meal_plan_desc]
-        );
         existed_meal_subscription[
           this.state.purchase_all[i].meal_plan_desc
         ] += 1;

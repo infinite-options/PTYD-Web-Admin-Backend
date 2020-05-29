@@ -214,6 +214,7 @@ export default class MealButton extends Component {
         return Promise.reject(error);
       } else {
         console.log("You have successfully update addon information!");
+        this.props.api_refresh();
       }
       console.log("addon result", response.json());
     });
