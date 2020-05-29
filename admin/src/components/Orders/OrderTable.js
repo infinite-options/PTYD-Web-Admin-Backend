@@ -16,8 +16,6 @@ import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 
@@ -70,7 +68,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function EnhancedTableHead(props) {
+function OrderTableHead(props) {
   const [headCells, setHeadCells] = React.useState([]);
   const isInitialMount = React.useRef(true);
 
@@ -147,7 +145,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-EnhancedTableHead.propTypes = {
+OrderTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -178,7 +176,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnhancedTableToolbar = (props) => {
+const OrderTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
 
@@ -225,7 +223,7 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-EnhancedTableToolbar.propTypes = {
+OrderTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
@@ -253,7 +251,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EnhancedTable(props) {
+export default function OrderTable(props) {
   const isInitialMount = React.useRef(true);
   const [rows, setRows] = React.useState([]);
 
@@ -282,7 +280,7 @@ export default function EnhancedTable(props) {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-  console.log(props.data, "data");
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((n) => n.menu_category);
@@ -329,15 +327,15 @@ export default function EnhancedTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <OrderTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
             size={"medium"}
-            aria-label="enhanced table"
+            aria-label="order table"
           >
-            <EnhancedTableHead
+            <OrderTableHead
               classes={classes}
               numSelected={selected.length}
               order={order}
@@ -352,7 +350,7 @@ export default function EnhancedTable(props) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.menu_category);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                  const labelId = `order-table-checkbox-${index}`;
 
                   return (
                     <TableRow

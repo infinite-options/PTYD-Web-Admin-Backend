@@ -710,6 +710,7 @@ class ResetPassword (Resource):
     def get_random_string(self, stringLength=8):
         lettersAndDigits = string.ascii_letters + string.digits
         return "".join([random.choice(lettersAndDigits) for i in range(stringLength)])
+<<<<<<< HEAD
 
     def get(self):
         response={}
@@ -758,6 +759,56 @@ class ChangePassword(Resource):
             conn = connect()
             data = request.get_json(force=True)
 
+=======
+
+    def get(self):
+        response={}
+        try:
+            conn = connect();
+            #search for email;
+            email = request.args.get('email');
+            if email == None:
+                response['message'] =  "Invalid Email Address"
+                return response, 400
+            query = """SELECT * FROM ptyd_accounts 
+                    WHERE user_email ='""" + email + "';"
+            user_lookup = execute(query, 'get', conn)
+            if (user_lookup.get('code') == 280):
+                user_uid = user_lookup.get('result')[0].get('user_uid')
+                pass_temp = self.get_random_string()
+                salt = getNow()
+                pass_temp_hashed = sha512((pass_temp + salt).encode()).hexdigest()
+                query = """UPDATE ptyd_passwords SET password_hash = '""" + pass_temp_hashed + """'
+                             , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
+                #update database with temp password
+                query_result = execute(query, 'post', conn)
+                if (query_result.get('code') == 281):
+                    # send an email to client
+                    msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[email])
+                    msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(temp=pass_temp)
+                    mail.send(msg)
+                    response['message'] = "A temporary password has been sent"
+                    response['result'] = {"user_uid":user_uid}
+                    return response, 200
+                else:
+                    return 500
+            else:
+                response['message'] ="User is not found"
+                return response, 404
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class ChangePassword(Resource):
+    def post(self):
+        response={};
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+>>>>>>> master
             user_uid = data['ID']
             old_pass = data['old']
             new_pass = data['new']
@@ -3524,6 +3575,41 @@ class Meal_Info1(Resource):
             date = request.args.get("date")
             # date_affected = data['date_affected']
 
+<<<<<<< HEAD
+            items = execute(""" select distinct temp1.*,COALESCE(temp2.total, 0) AS "Total"
+                                from
+                                (SELECT
+                                    menu_date,
+                                    menu_category,
+                                    meal_category, 
+                                    menu_type,
+                                    meal_cat,
+                                    meal_id,
+                                    meals.meal_name,
+                                    default_meal,
+                                    extra_meal_price,
+                                    meal_photo_url
+                                FROM ptyd.ptyd_menu menu
+                                JOIN ptyd.ptyd_meals meals
+                                ON menu.menu_meal_id = meals.meal_id 
+                                where menu_date=\'""" + date + """\') temp1
+                                left join 
+                                (SELECT 
+                                    delivery_day,
+                                    week_affected, 
+                                    meal_selected, 
+                                    COUNT(n) as total from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                                FROM  
+                                    ptyd_meals_selected 
+                                JOIN
+                                    numbers  
+                                ON char_length(meal_selection) 
+                                    - char_length(replace(meal_selection, ';', ''))
+                                    >= n - 1) sub1
+                                WHERE week_affected LIKE \'""" + date + """\' 
+                                GROUP BY sub1.meal_selected) temp2
+                                on temp1.meal_id = temp2.meal_selected; """, 'get', conn)
+=======
             items = execute(""" select  
                             pn.menu_category,
                             pm.meal_name,
@@ -3555,6 +3641,7 @@ class Meal_Info1(Resource):
                         join
                         ptyd_meals pm
                         on ms.meal_selected = pm.meal_id; """, 'get', conn)
+>>>>>>> master
 
             response['message'] = 'successful'
             response['result'] = items
