@@ -509,9 +509,9 @@ class Mealschedule extends Component {
     if (this.state.purchase_all === null) {
       return <div />;
     }
-    let count = 1;
     let temp = [];
-    let existed_meal_subscription = [];
+    let existed_meal_subscription = {};
+
     for (let i = 0; i < this.state.purchase_all.length; i++) {
       if (
         !(
@@ -523,9 +523,10 @@ class Mealschedule extends Component {
             {this.state.purchase_all[i].meal_plan_desc}
           </MenuItem>
         );
-        existed_meal_subscription.push(
+        existed_meal_subscription[
           this.state.purchase_all[i].meal_plan_desc
-        );
+        ] = 1;
+
         console.log(
           "distinct subscription",
           this.state.purchase_all[i].meal_plan_desc,
@@ -535,14 +536,20 @@ class Mealschedule extends Component {
         console.log(
           "repeated subscription",
           this.state.purchase_all[i].meal_plan_desc,
-          count
+          existed_meal_subscription[this.state.purchase_all[i].meal_plan_desc]
         );
+        existed_meal_subscription[
+          this.state.purchase_all[i].meal_plan_desc
+        ] += 1;
         temp.push(
           <MenuItem value={i}>
-            {(this.state.purchase_all[i].meal_plan_desc, count)}
+            {this.state.purchase_all[i].meal_plan_desc +
+              " " +
+              existed_meal_subscription[
+                this.state.purchase_all[i].meal_plan_desc
+              ]}
           </MenuItem>
         );
-        count += 1;
       }
     }
     return (
