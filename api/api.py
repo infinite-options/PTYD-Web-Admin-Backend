@@ -710,7 +710,6 @@ class ResetPassword (Resource):
     def get_random_string(self, stringLength=8):
         lettersAndDigits = string.ascii_letters + string.digits
         return "".join([random.choice(lettersAndDigits) for i in range(stringLength)])
-<<<<<<< HEAD
 
     def get(self):
         response={}
@@ -759,56 +758,6 @@ class ChangePassword(Resource):
             conn = connect()
             data = request.get_json(force=True)
 
-=======
-
-    def get(self):
-        response={}
-        try:
-            conn = connect();
-            #search for email;
-            email = request.args.get('email');
-            if email == None:
-                response['message'] =  "Invalid Email Address"
-                return response, 400
-            query = """SELECT * FROM ptyd_accounts 
-                    WHERE user_email ='""" + email + "';"
-            user_lookup = execute(query, 'get', conn)
-            if (user_lookup.get('code') == 280):
-                user_uid = user_lookup.get('result')[0].get('user_uid')
-                pass_temp = self.get_random_string()
-                salt = getNow()
-                pass_temp_hashed = sha512((pass_temp + salt).encode()).hexdigest()
-                query = """UPDATE ptyd_passwords SET password_hash = '""" + pass_temp_hashed + """'
-                             , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
-                #update database with temp password
-                query_result = execute(query, 'post', conn)
-                if (query_result.get('code') == 281):
-                    # send an email to client
-                    msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[email])
-                    msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(temp=pass_temp)
-                    mail.send(msg)
-                    response['message'] = "A temporary password has been sent"
-                    response['result'] = {"user_uid":user_uid}
-                    return response, 200
-                else:
-                    return 500
-            else:
-                response['message'] ="User is not found"
-                return response, 404
-
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-class ChangePassword(Resource):
-    def post(self):
-        response={};
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
->>>>>>> master
             user_uid = data['ID']
             old_pass = data['old']
             new_pass = data['new']
