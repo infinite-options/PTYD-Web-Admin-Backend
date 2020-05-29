@@ -358,7 +358,7 @@ class Mealschedule extends Component {
         </p>
         <p>Next Charge: ${subscription_selection.amount_due_before_addon}</p>
         <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
-        <p>Next Addon Charge: ${subscription_selection.weekly_addon_cost}</p>
+        <p>Next Addon Charge: ${subscription_selection.total_charge}</p>
         <p>
           Next Addon Charge Date:{" "}
           {subscription_selection.next_addon_charge_date}

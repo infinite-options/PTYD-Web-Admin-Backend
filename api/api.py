@@ -805,9 +805,12 @@ class AccountPurchases(Resource):
             if sat == date.today() and datetime.now().hour >= 16:
                 sat += timedelta(days=7)
 
+            
+
             #change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
+            print(sat)
             
 
             queries = ["""
@@ -844,10 +847,10 @@ class AccountPurchases(Resource):
                     ,purch.delivery_instructions
                     ,snap.weeks_remaining AS paid_weeks_remaining
                     ,snap.next_billing_date AS next_charge_date
-                    ,IFNULL(addon.total_charge,0) AS weekly_addon_cost
-                    , \'""" + thur + """\' AS next_addon_charge_date
+                    ,IFNULL(addon.total_charge, 0.00) AS total_charge
                     ,pay.amount_due AS amount_due_before_addon
                     ,addon.week_affected
+                    , \'""" + thur + """\' AS next_addon_charge_date
                 FROM (
                 -- Snapshot Query
                 SELECT 
@@ -938,67 +941,67 @@ class AccountPurchases(Resource):
                 ON purch.meal_plan_id = plans.meal_plan_id
                 LEFT JOIN (
                 -- ADDON query
-                SELECT
-                purchase_id,
-                    week_affected,
-                    SUM(total) AS total_addons,
-                    SUM(charge) AS total_charge
-                FROM ( # QUERY 11
-                SELECT purchase_id
-                , week_affected
-                , meal_selected
-                , meal_name
-                , COUNT(num) as total
-                , extra_meal_price
-                , COUNT(num) * extra_meal_price as charge
-                FROM (
-                SELECT *
-                , substring_index(substring_index(meal_selection,';',n),';',-1) AS meal_selected
-                , n AS num
-                FROM (# QUERY 1
-                SELECT
-                ms1.purchase_id
-                -- ,ms2.purchase_id
-                , ms1.week_affected
-                -- , ms2.week_affected
-                , "0" AS num_meals
-                , "0" AS delivery_day
-                , ms1.meal_selection
-                -- , ms1.selection_time
-                -- , ms2.latest_selection
-                -- , ms1.delivery_day
-                FROM ptyd.ptyd_addons_selected AS ms1
-                INNER JOIN (
-                SELECT
-                purchase_id
-                , week_affected
-                , meal_selection
-                , MAX(selection_time) AS latest_selection
-                -- , delivery_day
-                FROM ptyd.ptyd_addons_selected
-                GROUP BY purchase_id
-                , week_affected
-                ) as ms2
-                ON ms1.purchase_id = ms2.purchase_id
-                AND ms1.week_affected = ms2.week_affected
-                AND ms1.selection_time = ms2.latest_selection
-                ORDER BY purchase_id
-                , week_affected)
-                AS combined
-                JOIN numbers ON char_length(meal_selection) - char_length(replace(meal_selection, ';', '')) >= n - 1)
-                AS sub
-                LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
-                GROUP BY purchase_id
-                , week_affected
-                , meal_selected
-                ORDER BY purchase_id
-                , week_affected
-                , num_meals
-                , meal_selected)
-                    AS addons
-                WHERE week_affected ="\'""" + sat + """\'"
-                GROUP BY purchase_id,
-                week_affected
+                        SELECT
+                            purchase_id,
+                            week_affected,
+                            SUM(total) AS total_addons,
+                            SUM(charge) AS total_charge
+                        FROM ( # QUERY 11
+                            SELECT purchase_id
+                                , week_affected
+                                , meal_selected
+                                , meal_name
+                                , COUNT(num) as total
+                                , extra_meal_price
+                                , COUNT(num) * extra_meal_price as charge
+                            FROM (
+                                SELECT *
+                                    , substring_index(substring_index(meal_selection,';',n),';',-1) AS meal_selected
+                                    , n AS num
+                                FROM (# QUERY 1
+                                    SELECT
+                                        ms1.purchase_id
+                                        -- ,ms2.purchase_id
+                                        , ms1.week_affected
+                                        -- , ms2.week_affected
+                                        , "0" AS num_meals
+                                        , "0" AS delivery_day
+                                        , ms1.meal_selection
+                                        -- , ms1.selection_time
+                                        -- , ms2.latest_selection
+                                        -- , ms1.delivery_day
+                                    FROM ptyd.ptyd_addons_selected AS ms1
+                                    INNER JOIN (
+                                        SELECT
+                                            purchase_id
+                                            , week_affected
+                                            , meal_selection
+                                            , MAX(selection_time) AS latest_selection
+                                            -- , delivery_day
+                                        FROM ptyd.ptyd_addons_selected
+                                        GROUP BY purchase_id
+                                            , week_affected
+                                    ) as ms2 
+                                    ON ms1.purchase_id = ms2.purchase_id 
+                                        AND ms1.week_affected = ms2.week_affected 
+                                        AND ms1.selection_time = ms2.latest_selection
+                                    ORDER BY purchase_id
+                                        , week_affected)
+                                        AS combined
+                                    JOIN numbers ON char_length(meal_selection) - char_length(replace(meal_selection, ';', '')) >= n - 1)
+                                AS sub
+                            LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
+                            GROUP BY purchase_id
+                                , week_affected
+                                , meal_selected
+                            ORDER BY purchase_id
+                                , week_affected
+                                , num_meals
+                                , meal_selected)
+                            AS addons
+                        WHERE week_affected = \'""" + sat + """\'
+                        GROUP BY purchase_id,
+                            week_affected
                 ) addon
                 ON snap_purchase_id = addon.purchase_id
 
@@ -3412,6 +3415,7 @@ class UpdateSubscription(Resource):
         finally:
             disconnect(conn)
 
+'''
 class UpdateRecipe(Resource):
     def patch(self):
         response = {}
@@ -3444,7 +3448,7 @@ class UpdateRecipe(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
+'''
 class UpdatePayments(Resource):
     def patch(self):
         response = {}
@@ -3472,7 +3476,7 @@ class UpdatePayments(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
+'''
 class addRecipe(Resource):
     global RDS_PW
 
@@ -3585,6 +3589,90 @@ class DisplaySaturdays(Resource):
             disconnect(conn)
 
 
+class EditMeals(Resource):
+    def patch(self):
+        response = {}
+        items = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+            print("pre",data)
+
+            #checking to see if it's a new meal or editing an existing one 
+            if data['meal_id'] == "NewMealId":
+                
+                #generating new meal id
+                mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
+                mealId = mealIdQuery['result'][0]['new_id']
+
+                #inserting partial entry into meals table
+                items['new_meal_insert'] = execute(""" INSERT INTO 
+                                                            ptyd_meals(meal_id,meal_category,meal_name,meal_desc,extra_meal_price) 
+                                                        VALUES 
+                                                            (\'""" + str(mealId) + """\','NEEDS CATEGORY'
+                                                            ,\'""" + data['meal_name'] + """\','NEEDS DESCRIPTION ','100000');
+                                                            """, 'post', conn)
+
+            else:
+                #defaulting to entered meal id if user is editing an existing one 
+                mealId= data['meal_id']
+
+            numRecipeInserts = 0
+            
+            #iterating through the dictionary of ingredients
+            for ingredient in data['ingredients']:
+                print("******************") 
+                print(ingredient['ingredient_id'])     
+                #checking to see if the ingredient is a new ingredient or an existing one -- if the ingredient is new generate an id and post to ingredient
+                if ingredient['ingredient_id'] == "NewIngrId":
+
+                                  
+                    ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
+                    ingredientId = ingredientIdQuery ['result'][0]['new_id']
+
+                    items['new_ingredient_insert'] = execute(""" INSERT INTO 
+                                                                    ptyd_ingredients(ingredient_id,ingredient_desc,package_size,ingredient_measure_id,ingredient_cost) 
+                                                                VALUES 
+                                                                    (\'""" + str(ingredientId) + """\',\'""" + ingredient['name'] + """\','NEEDS STANDARD PACKAGE SIZE ',
+                                                                    ,\'""" + ingredient['measure_id'] + """\','NEEDS INGREDIENT COST');
+                                                            """, 'post', conn)
+                else:
+                    ingredientId = ingredient['ingredient_id']
+                print("*********************")
+                print("mealID")
+                print(mealId)
+                print("ingredientId")
+                print(ingredientId)
+                print("getNow()")
+                print(getNow())
+                print("ingredient qty")
+                print(ingredient['qty'])
+                print("ingredient measure")
+                print(ingredient['measure_id'])
+                #insert ingredient into recipe table attached to the meal
+                items['recipe_insert'] = execute(""" INSERT INTO
+                                                        ptyd_recipes(recipe_meal_id,recipe_ingredient_id,recipe_ingredient_qty,recipe_measure_id,recipe_last_update)
+                                                    VALUES
+                                                        ( \'""" + str(mealID) + """\', 
+                                                        \'""" + str(ingredientId) + """\', 
+                                                        \'""" + str(ingredient['qty']) + """\', 
+                                                        \'""" + str(ingredient['measure_id']) + """\', 
+                                                        \'""" + str(getNow()) + """\');
+                                                """, 'post', conn)
+                print("AFTER EXECUTE")
+                numRecipeInserts += 1
+
+            response['message'] = 'Post Request Succesful'
+            
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+'''
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -3624,6 +3712,8 @@ api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
+api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
+api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Admin page
 # ---------- Admin page -----------------------------
@@ -3636,31 +3726,38 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
+'''
 api.add_resource(addRecipe, '/api/v2/add-recipe')
 api.add_resource(Meal_Info1, '/api/v2/mealInfo1')
 
 api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
+'''
+api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
+api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
 api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers', '/api/v2/chargesubscribers/<string:affectedDate>')
 
 
-api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
-api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
+
 
 '''
 #-----------Stripe Resrouces--------------------
 api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
 '''
 # in progress
-api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
 api.add_resource(UpdatePayments, '/api/v2/update-payments')
+
+'''
+api.add_resource(EditMeals, '/api/v2/edit-meals')
+
+
 
 
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
+'''
 
-api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')
@@ -3669,3 +3766,4 @@ api.add_resource(TemplateApi, '/api/v2/templateapi')
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=2000)
+
