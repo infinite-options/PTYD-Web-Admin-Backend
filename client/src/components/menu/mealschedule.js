@@ -358,7 +358,7 @@ class Mealschedule extends Component {
         </p>
         <p>Next Charge: ${subscription_selection.amount_due_before_addon}</p>
         <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
-        <p>Next Addon Charge: ${subscription_selection.weekly_addon_cost}</p>
+        <p>Next Addon Charge: ${subscription_selection.total_charge}</p>
         <p>
           Next Addon Charge Date:{" "}
           {subscription_selection.next_addon_charge_date}
@@ -510,12 +510,47 @@ class Mealschedule extends Component {
       return <div />;
     }
     let temp = [];
+    let existed_meal_subscription = {};
+
     for (let i = 0; i < this.state.purchase_all.length; i++) {
-      temp.push(
-        <MenuItem value={i}>
-          {this.state.purchase_all[i].meal_plan_desc}
-        </MenuItem>
-      );
+      if (
+        !(
+          this.state.purchase_all[i].meal_plan_desc in existed_meal_subscription
+        )
+      ) {
+        temp.push(
+          <MenuItem value={i}>
+            {this.state.purchase_all[i].meal_plan_desc}
+          </MenuItem>
+        );
+        existed_meal_subscription[
+          this.state.purchase_all[i].meal_plan_desc
+        ] = 1;
+
+        console.log(
+          "distinct subscription",
+          this.state.purchase_all[i].meal_plan_desc,
+          existed_meal_subscription
+        );
+      } else {
+        console.log(
+          "repeated subscription",
+          this.state.purchase_all[i].meal_plan_desc,
+          existed_meal_subscription[this.state.purchase_all[i].meal_plan_desc]
+        );
+        existed_meal_subscription[
+          this.state.purchase_all[i].meal_plan_desc
+        ] += 1;
+        temp.push(
+          <MenuItem value={i}>
+            {this.state.purchase_all[i].meal_plan_desc +
+              " " +
+              existed_meal_subscription[
+                this.state.purchase_all[i].meal_plan_desc
+              ]}
+          </MenuItem>
+        );
+      }
     }
     return (
       <FormControl>
