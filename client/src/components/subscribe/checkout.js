@@ -166,8 +166,7 @@ class Checkout extends Component {
       "cc_cvv",
       "cc_exp_month",
       "cc_exp_year",
-      "billing_zip",
-      // "password"
+      "billing_zip"
     ];
 
     //  Check if fields are null/empty
@@ -189,7 +188,7 @@ class Checkout extends Component {
     if (this.state.purchase.cc_num.length != 16) {
       return true;
     }
-    //  Disable submit if cc_cvv isn't 3 characters
+    //  Disable submit if cc_num isn't 16 characters
     if (this.state.purchase.cc_cvv.length != 3) {
       return true;
     }
@@ -223,10 +222,6 @@ class Checkout extends Component {
         return true;
       }
     }
-
-    // Disable submit if password field is empty
-    if (this.state.password < 1)
-      return true;
 
     return false;
   }
@@ -504,7 +499,6 @@ class Checkout extends Component {
                         <option>Choose...</option>
                         <option>TX</option>
                       </Form.Control>
-                      {this.state.purchase.delivery_state.length !== 2 ? (<span className='required-red'>State is required</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridZip'>
@@ -628,7 +622,6 @@ class Checkout extends Component {
                         <option>11</option>
                         <option>12</option>
                       </Form.Control>
-                      {isNaN(this.state.purchase.cc_exp_month) ? (<span className='required-red'>Expiration month is required</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} md={3} controlId='formGridCardYear'>
@@ -657,7 +650,6 @@ class Checkout extends Component {
                         <option>2028</option>
                         <option>2029</option>
                       </Form.Control>
-                      {isNaN(this.state.purchase.cc_exp_year) ? (<span className='required-red'>Expiration year is required</span>) : ''}
                     </Form.Group>
                   </Form.Row>
 
