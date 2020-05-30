@@ -1,4 +1,4 @@
-IsIncrementalBuild=false
+IsIncrementalBuild=true
 IsLocal=
 EnableLLVM=False
 UseConcurrentGC=true
