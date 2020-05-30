@@ -8,12 +8,14 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 class Mealschedule extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      select_date: this.props.match.params.startdate,
       menu: [],
       user_uid: this.props.appProps.user_uid,
       purchase: { NextCharge: 0 },
@@ -193,12 +195,23 @@ class Mealschedule extends Component {
         : this.props.API_URL
     );
     const api = await res.json();
-    console.log("api", api);
+    // console.log("api", api);
     if (this.state.user_uid !== null) {
-      const purchases = await fetch(
-        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+      // const purchases = await fetch(
+      //   `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+      // );
+      console.log("before purchasesApi");
+
+      if (this.state.select_date === undefined) {
+        this.setState({ select_date: null });
+      }
+      const purchases = await axios.get(
+        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`,
+        { params: { startdate: this.state.select_date } }
       );
-      const purchasesApi = await purchases.json();
+      const purchasesApi = purchases.data;
+      console.log("purchaseApi", purchasesApi);
+      // const purchasesApi = await purchases.json();
 
       // Check if user has any active subscriptions
       if (purchasesApi.result.length != 0) {
