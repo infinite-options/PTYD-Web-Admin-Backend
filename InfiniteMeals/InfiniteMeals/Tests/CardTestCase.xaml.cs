@@ -25,10 +25,10 @@ namespace InfiniteMeals.Tests {
             System.Diagnostics.Debug.WriteLine("Diners: " + CardParser.validateCard(36817133562731));
             System.Diagnostics.Debug.WriteLine("Diners: " + CardParser.validateCard(30284958217394));
             System.Diagnostics.Debug.WriteLine("MasterCard: " + CardParser.validateCard(5272714214304400));
-            System.Diagnostics.Debug.WriteLine("MasterCard: " + CardParser.validateCard(4485943428975756));
+            System.Diagnostics.Debug.WriteLine("MasterCard: " + CardParser.validateCard(5304238005599053));
             System.Diagnostics.Debug.WriteLine("Discover: " + CardParser.validateCard(6011411130389136));
             System.Diagnostics.Debug.WriteLine("Discover: " + CardParser.validateCard(6011093033795278));
-            System.Diagnostics.Debug.WriteLine("JCB: " + CardParser.validateCard(3096424357950485));
+            System.Diagnostics.Debug.WriteLine("JCB: " + CardParser.validateCard(3530111333300000));
             System.Diagnostics.Debug.WriteLine("JCB: " + CardParser.validateCard(3528373068549300));
 
         }
