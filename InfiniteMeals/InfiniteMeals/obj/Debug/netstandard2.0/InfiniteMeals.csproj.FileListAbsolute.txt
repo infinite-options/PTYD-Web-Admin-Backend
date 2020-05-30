@@ -105,3 +105,4 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.dll
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ref\InfiniteMeals.dll
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.pdb
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Tests\CardTestCase.xaml.g.cs

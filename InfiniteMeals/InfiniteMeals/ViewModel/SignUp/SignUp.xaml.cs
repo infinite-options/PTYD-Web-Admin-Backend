@@ -13,6 +13,11 @@ namespace InfiniteMeals.SignUp {
         public SignUp() {
             InitializeComponent();
         }
+
+        private async void ClickedSignUp(object sender, EventArgs e) {
+
+            await Navigation.PushAsync(new MainPage());
+        }
         
         private async void ClickedSignIn(object sender, EventArgs e)
         {

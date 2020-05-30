@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Tests\CardTestCase.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\MealSelect\MealSchedule.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -32,7 +35,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tests\" />
     <Folder Include="ViewModel\Steppers\" />
   </ItemGroup>
 </Project>

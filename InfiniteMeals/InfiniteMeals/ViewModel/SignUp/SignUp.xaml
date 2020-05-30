@@ -22,7 +22,7 @@
             <Label Text="Save Password"></Label>
             <Switch IsToggled="False"></Switch>
         </StackLayout>
-        <Button Text="Sign Up"></Button>
+        <Button Text="Sign Up" Clicked="ClickedSignUp"></Button>
         <Button Text="Already have account? Sign In" TextColor="Blue" Clicked="ClickedSignIn" ></Button>
     </StackLayout>
 </ContentPage>
