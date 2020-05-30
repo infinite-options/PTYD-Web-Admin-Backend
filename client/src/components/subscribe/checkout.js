@@ -572,7 +572,7 @@ class Checkout extends Component {
                         name='cc_num'
                         onChange={this.handleChange}
                       />
-                      {/^.{16}$/.test(this.state.purchase.cc_num) ? '' : (<span className='required-red'>Invalid Credit Card Number</span>)}
+                      {/^\d{16}$/.test(this.state.purchase.cc_num) ? '' : (<span className='required-red'>Invalid Credit Card Number</span>)}
                     </Form.Group>
                   </Form.Row>
 
