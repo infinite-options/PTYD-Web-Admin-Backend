@@ -223,10 +223,6 @@ class Checkout extends Component {
       }
     }
 
-    // Disable submit if password field is empty
-    if (this.state.password < 1)
-      return true;
-
     return false;
   }
 
@@ -696,10 +692,10 @@ class Checkout extends Component {
                     <Form.Group as={Col} md={3} controlId='formGridPassword'>
                       <Form.Label>
                         Password
-                        <span className='required-red'>
+                        {/* <span className='required-red'>
                           {" "}
                           <b>*</b>
-                        </span>
+                        </span> */}
                       </Form.Label>
                       <Form.Control
                         type='password'
@@ -713,7 +709,6 @@ class Checkout extends Component {
                         onChange={this.handlePwChange}
                         disabled={!this.state.password_salt ? true : false}
                       />
-                      {!this.state.password ? (<span className='required-red'>Password is required</span>) : ''}
                     </Form.Group>
                   </Form.Row>
 
