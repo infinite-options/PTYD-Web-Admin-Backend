@@ -685,7 +685,7 @@ class Checkout extends Component {
                           <b>*</b>
                         </span>
                       </Form.Label>
-                      <Form.Control as='select'>
+                      <Form.Control as='select' value={this.state.purchase.delivery_region}>
                         <option>Choose...</option>
                         <option>US</option>
                       </Form.Control>
