@@ -793,24 +793,37 @@ class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
         response = {}
+        
+        try:
+            start_date = request.args.get('startdate')
+
+            if start_date is not None:
+                startDate = datetime.strptime(start_date, "%Y%m%d")
+                now = startDate
+            else:
+                now = date.today()
+            
+        except:
+            raise BadRequest('Request failed, bad startDate parameter.')
+
         try:
             conn = connect()
 
-            dayOfWeek = date.today().weekday()
+            dayOfWeek = now.weekday()
             # Get the soonest Saturday, same day if today is Saturday
-            sat = date.today() + timedelta(days=(12 - dayOfWeek) % 7)
-            thur = date.today() + timedelta(days=(10 - dayOfWeek) % 7)
+            sat = now + timedelta(days=(12 - dayOfWeek) % 7)
+            thur = now + timedelta(days=(10 - dayOfWeek) % 7)
 
             # If today is Thursday after 4PM
-            if sat == date.today() and datetime.now().hour >= 16:
-                sat += timedelta(days=7)
+            # if sat == now and now.hour >= 16:
+            #     sat += timedelta(days=7)
 
             
-
+            
             #change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
-            print(sat)
+            
             
 
             queries = ["""
