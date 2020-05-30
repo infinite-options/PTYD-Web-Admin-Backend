@@ -31,8 +31,8 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL =
-  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
+// const DEV_URL =
+//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
 // const DEV_URL = "http://localhost:2000/api/";

@@ -1210,8 +1210,9 @@ class Coordinates:
             formattedAddress = self.formatAddress(address)
             r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
                 '&maxResults=1&key={}'.format(params['key']))
-            results = r.json()
+
             try:
+                results = r.json()
                 assert(results['resourceSets'][0]['estimatedTotal'])
                 point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
                 lat, lng = point[0], point[1]
@@ -1369,10 +1370,7 @@ class Checkout(Resource):
             if paymentId == None:
                 paymentId = '200-000001'
 
-            print(snapshotId)
-            print(purchaseId)
-            print(paymentId)
-            print("data['salt]: {}".format(data['salt']))
+
             mealPlan = data['item'].split(' Subscription')[0]
 
             queries = ["""
