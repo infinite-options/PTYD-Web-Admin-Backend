@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -16,7 +16,7 @@ const override = css`
 `;
 
 export default function Orders(props) {
-  const [date, setDate] = useState("2020-05-23");
+  const [date, setDate] = useState("2020-05-30");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,14 +25,16 @@ export default function Orders(props) {
   }, [date]);
 
   const fetchData = async () => {
-    setLoading(true);
-
-    const res = await (
-      await fetch(props.API_URL_Meal_Info1 + `?date=${date}`)
-    ).json();
-
+    try {
+      setLoading(true);
+      const res = await (
+        await fetch(props.API_URL + `mealInfo1?date=${date}`)
+      ).json();
+      setData(res.result.result);
+    } catch (error) {
+      console.log("res", error);
+    }
     setLoading(false);
-    setData(res.result.result);
   };
 
   const handleChange = (event) => {
