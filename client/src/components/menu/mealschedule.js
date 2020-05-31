@@ -173,8 +173,8 @@ class Mealschedule extends Component {
         ? this.props.API_URL + "/" + this.props.match.params.startdate
         : this.props.API_URL
     );
-    console.log("API_URL: ", this.props.API_URL);
 
+    // API_URL: https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals
     const api = await res.json();
     console.log("api", api);
     if (this.state.user_uid !== null) {
@@ -493,6 +493,7 @@ class Mealschedule extends Component {
                   addonsSelected={eachWeek.addonsSelected}
                   monday_available={this.state.monday_available}
                   MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
+                  DEV_URL={this.props.DEV_URL}
                   // api_refresh={this.getRefresh}
                   nextAddonChargeDate={
                     this.state.purchase_all[this.state.selection]
