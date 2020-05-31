@@ -248,7 +248,8 @@ export default class MealButton extends Component {
   };
   closeButtonAddOn = () => {
     this.setState({
-      buttonAddOn: false
+      buttonAddOn: false,
+      selectMealDisable: false
     });
     this.sendAddonForm();
   };
@@ -273,7 +274,8 @@ export default class MealButton extends Component {
       buttonM: false,
       buttonSkip: false,
       buttonDisabled: false,
-      dayToDeliver: "Sunday"
+      dayToDeliver: "Sunday",
+      selectMealDisable: false
     });
     this.sendForm();
   }
@@ -287,7 +289,8 @@ export default class MealButton extends Component {
       buttonS: false,
       buttonSkip: false,
       buttonDisabled: false,
-      dayToDeliver: "Monday"
+      dayToDeliver: "Monday",
+      selectMealDisable: false
     });
     this.sendForm();
   }
@@ -297,7 +300,7 @@ export default class MealButton extends Component {
       buttonM: false,
       buttonS: false,
       buttonSkip: true,
-
+      selectMealDisable: true,
       buttonSurprise: false,
       buttonSelect: false,
       buttonAddOn: false,
