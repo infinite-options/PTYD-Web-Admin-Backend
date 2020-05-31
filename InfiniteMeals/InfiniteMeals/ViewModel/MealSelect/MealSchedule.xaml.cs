@@ -22,20 +22,6 @@ namespace InfiniteMeals.Meals {
 
         public MealSchedule() {
             InitializeComponent();
-            getData();
-        }
-
-        private async void getData() {
-    
-
-            HttpClient client = new HttpClient();
-            var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
-            var obj = JsonConvert.DeserializeObject<Data>(content); // access database info from obj
-            System.Diagnostics.Debug.WriteLine("test");
-            System.Diagnostics.Debug.WriteLine(obj.Message);
-            System.Diagnostics.Debug.WriteLine(obj.Result.MenuForWeek1.Meals.Weekly.Menu[0].MealName);
-        
-
         }
 
         private async void ClickedSelectMeal(object sender, EventArgs e) {
