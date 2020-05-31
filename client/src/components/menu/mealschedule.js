@@ -173,8 +173,10 @@ class Mealschedule extends Component {
         ? this.props.API_URL + "/" + this.props.match.params.startdate
         : this.props.API_URL
     );
+    console.log("API_URL: ", this.props.API_URL);
+
     const api = await res.json();
-    // console.log("api", api);
+    console.log("api", api);
     if (this.state.user_uid !== null) {
       if (this.state.select_date === undefined) {
         this.setState({select_date: null});
@@ -201,14 +203,18 @@ class Mealschedule extends Component {
           nextAddonCharge:
             purchasesApi.result[this.state.selection].total_charge
         });
-        console.log("selection in componentDidMount: ", this.state.selection);
-        console.log("addon Charge: ", this.state.nextAddonCharge);
       }
+      console.log(
+        "nextAddonChargeDate: ",
+        purchasesApi.result[this.state.selection].next_addon_charge_date
+      );
     }
+
     const mselect_res = await fetch(
       `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
     );
     const mselect_api = await mselect_res.json();
+    console.log("mselect_api", mselect_api);
     let key;
     let sixWeekMenu = [];
     let weekNum;
@@ -477,6 +483,7 @@ class Mealschedule extends Component {
                 eachWeek => (
                   console.log("meal printing", eachWeek.mealQuantities),
                   console.log("addon printing", eachWeek.addonQuantities),
+                  console.log(" : ", eachWeek.sun),
                   (
                     <MealButton
                       day1='Sunday'

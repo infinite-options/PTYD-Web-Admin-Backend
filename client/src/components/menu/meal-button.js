@@ -118,6 +118,13 @@ export default class MealButton extends Component {
     });
   }
   async componentDidMount() {
+    console.log("eachweek date1 ", this.props.date1);
+    console.log("eachweek date2 ", this.props.date2);
+    const today = new Date();
+    console.log("today: ", today);
+    const thursday = new Date(2020, 4, 28, 16, 0, 0);
+
+    console.log("thurday: ", thursday);
     if (this.props.surprise == false) {
       this.setState({
         buttonSurprise: false,
@@ -379,6 +386,10 @@ export default class MealButton extends Component {
     } else {
       this.state.buttonAddOnKeepColor = true;
     }
+    const today = new Date();
+    console.log("today: ", today);
+    const thursday = new Date(2020, 4, 28, 16, 0, 0);
+
     return (
       <div>
         <ButtonToolbar className='mb-5'>

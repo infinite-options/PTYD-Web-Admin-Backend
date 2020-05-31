@@ -341,10 +341,13 @@ class Meals(Resource):
             i = 1
             for date in dates['result']:
                 # only grab 6 weeks worth of menus
+                print (date)
                 if i == 7:
                     break
                 # convert string to datetime
                 stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
+
+
                 # Roll calendar at 4PM Monday
                 if now - timedelta(days=1, hours=16) < stamp:
                     weekly_special = execute(
@@ -442,7 +445,20 @@ class Meals(Resource):
                         LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                         WHERE menu_category LIKE 'ADD_ON_%'
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+                    print("here")
 
+                    print("stamp: ", stamp)
+
+                    thursday = stamp - timedelta(days=2)
+
+                    today = datetime.now();
+                    print("Thurday: ", thursday);
+                    print("today: ", today)
+
+                    if today > thursday:
+                        print("broke")
+                        stamp = stamp + timedelta(days=7)
+                    print("stamp: ", stamp)
                     week = {
                         'SaturdayDate': str(stamp.date()),
                         'SundayDate': str((stamp + timedelta(days=1)).date()),
