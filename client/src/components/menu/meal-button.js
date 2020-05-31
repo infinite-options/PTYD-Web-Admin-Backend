@@ -110,7 +110,7 @@ export default class MealButton extends Component {
       addonQuantities: nextProps.addonQuantities,
       // buttonAddOnKeepColor: this.props.addonsSelected,
       mealQuantities: nextProps.mealQuantities,
-      buttonAddOnKeepColor: nextProps.buttonAddOnKeepColor
+      buttonAddOnKeepColor: nextProps.buttonAddOnKeepColor,
       total_addon_price: Object.values(nextProps.addon_price_saved).reduce(
         (a, b) => a + b,
         0
@@ -236,7 +236,6 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSelectKeepColor: true,
       flag: false
-
     });
   };
   closeButtonAddOn = () => {
