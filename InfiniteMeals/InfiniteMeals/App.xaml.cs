@@ -9,6 +9,7 @@ namespace InfiniteMeals {
         public App() {
             InitializeComponent();
 
+ 
             MainPage = new NavigationPage(new MainPage());
             //MainPage = new MainPage() { BindingContext = new MainPageViewModel() };
         }

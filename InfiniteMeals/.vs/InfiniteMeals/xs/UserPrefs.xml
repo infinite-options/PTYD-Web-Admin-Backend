@@ -3,7 +3,7 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml">
     <Files>
       <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml" Line="72" Column="31" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="103" Column="23" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

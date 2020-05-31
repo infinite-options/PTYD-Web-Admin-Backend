@@ -15,9 +15,5 @@ namespace InfiniteMeals.Utilities.Converters {
             this.cardNumberRegex = cardNumberRegex;
             this.cardType = cardType;
         }
-
-
-
-
     }
 }
