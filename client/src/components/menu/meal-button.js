@@ -111,20 +111,13 @@ export default class MealButton extends Component {
       // buttonAddOnKeepColor: this.props.addonsSelected,
       mealQuantities: nextProps.mealQuantities,
       buttonAddOnKeepColor: nextProps.buttonAddOnKeepColor
-      // total_addon_price: Object.values(nextProps.addon_price_saved).reduce(
-      //   (a, b) => a + b,
-      //   0
-      // )
+      total_addon_price: Object.values(nextProps.addon_price_saved).reduce(
+        (a, b) => a + b,
+        0
+      )
     });
   }
   async componentDidMount() {
-    //  var stateCopy = await Object.assign({}, this.state);
-    //  this.setState({
-    //    maxmealsOriginal: stateCopy.maxmeals,
-    //    mealQuantitiesOriginal: stateCopy.mealQuantities,
-    //    addonQuantitiesOriginal: stateCopy.addonQuantities,
-    //  });
-    console.log("add on inside meal button: ", this.props.addon);
     if (this.props.surprise == false) {
       this.setState({
         buttonSurprise: false,
@@ -196,8 +189,6 @@ export default class MealButton extends Component {
   };
 
   sendAddonForm = () => {
-    console.log("its sending form from addon", this.state.addonQuantities);
-    console.log("week affected: ", this.state.week_affected);
     fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
@@ -245,8 +236,7 @@ export default class MealButton extends Component {
       buttonSelect: false,
       buttonSelectKeepColor: true,
       flag: false
-      //    mealQuantities: this.state.mealQuantitiesOriginal,
-      //    maxmeals: this.state.maxmealsOriginal,
+
     });
   };
   closeButtonAddOn = () => {
@@ -261,12 +251,6 @@ export default class MealButton extends Component {
       cancelAddonWithoutSave: false
       // buttonAddOnKeepColor: true
     });
-    console.log(
-      "week_affected: ",
-      this.state.week_affected,
-      "nextAddonChargeDate: ",
-      this.props.nextAddonChargeDate
-    );
 
     this.state.week_affected < this.props.nextAddonChargeDate &&
       this.props.nextAddonChargeChange(this.state.total_addon_price);
