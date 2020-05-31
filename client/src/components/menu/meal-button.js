@@ -275,7 +275,8 @@ export default class MealButton extends Component {
       buttonSkip: false,
       buttonDisabled: false,
       dayToDeliver: "Sunday",
-      selectMealDisable: false
+      selectMealDisable: false,
+      addonButtonDisable: false
     });
     this.sendForm();
   }
@@ -290,7 +291,8 @@ export default class MealButton extends Component {
       buttonSkip: false,
       buttonDisabled: false,
       dayToDeliver: "Monday",
-      selectMealDisable: false
+      selectMealDisable: false,
+      addonButtonDisable: false
     });
     this.sendForm();
   }
@@ -341,7 +343,8 @@ export default class MealButton extends Component {
       buttonAddOn: true,
       buttonAddOnKeepColor: true,
       buttonSelect: false,
-      selectMealDisable: true
+      selectMealDisable: true,
+      disableSunMon: true
     });
   };
   specialRequest = () => {
