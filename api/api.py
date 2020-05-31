@@ -353,6 +353,8 @@ class Meals(Resource):
                     break
                 # convert string to datetime
                 stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
+
+                print("Stamp before change: ", stamp)
                 # Roll calendar at 4PM Monday
                 if now - timedelta(days=1, hours=16) < stamp:
                     weekly_special = execute(
@@ -450,49 +452,62 @@ class Meals(Resource):
                         LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                         WHERE menu_category LIKE 'ADD_ON_%'
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
+                    print("here")
 
-                    week = {
-                        'SaturdayDate': str(stamp.date()),
-                        'SundayDate': str((stamp + timedelta(days=1)).date()),
-                        'Sunday': str((stamp + timedelta(days=1)).date().strftime('%b %-d')),
-                        'Monday': str((stamp + timedelta(days=2)).date().strftime('%b %-d')),
-                        'Meals': {
-                            'Weekly': {
-                                'Category': "WEEKLY SPECIALS",
-                                'Menu': weekly_special['result']
+                    print("stamp: ", stamp)
+
+                    thursday = stamp - timedelta(days=2)
+
+                    today = datetime.now();
+                    print("Thurday: ", thursday);
+                    print("today: ", today)
+
+                    if today < thursday:
+                        print("broke")
+                        # stamp = stamp + timedelta(days=7)
+
+                        week = {
+                            'SaturdayDate': str(stamp.date()),
+                            'SundayDate': str((stamp + timedelta(days=1)).date()),
+                            'Sunday': str((stamp + timedelta(days=1)).date().strftime('%b %-d')),
+                            'Monday': str((stamp + timedelta(days=2)).date().strftime('%b %-d')),
+                            'Meals': {
+                                'Weekly': {
+                                    'Category': "WEEKLY SPECIALS",
+                                    'Menu': weekly_special['result']
+                                },
+                                'Seasonal': {
+                                    'Category': "SEASONAL FAVORITES",
+                                    'Menu': seasonal_special['result']
+                                },
+                                'Smoothies': {
+                                    'Category': "SMOOTHIES",
+                                    'Menu': smoothies['result']
+                                }
                             },
-                            'Seasonal': {
-                                'Category': "SEASONAL FAVORITES",
-                                'Menu': seasonal_special['result']
-                            },
-                            'Smoothies': {
-                                'Category': "SMOOTHIES",
-                                'Menu': smoothies['result']
-                            }
-                        },
-                        'Addons': {
                             'Addons': {
-                                'Category': "ADD ONS",
-                                'Menu': addon['result']
-                            },
-                            'Weekly': {
-                                'Category': "ADD MORE MEALS",
-                                'Menu': weekly_special['result'] + seasonal_special['result']
-                            },
-                            'Smoothies': {
-                                'Category': "ADD MORE SMOOTHIES",
-                                'Menu': smoothies['result']
+                                'Addons': {
+                                    'Category': "ADD ONS",
+                                    'Menu': addon['result']
+                                },
+                                'Weekly': {
+                                    'Category': "ADD MORE MEALS",
+                                    'Menu': weekly_special['result'] + seasonal_special['result']
+                                },
+                                'Smoothies': {
+                                    'Category': "ADD MORE SMOOTHIES",
+                                    'Menu': smoothies['result']
+                                }
                             }
                         }
-                    }
 
-                    week['MealQuantities'] = self.getMealQuantities(week)
-                    week['AddonPrice'] = self.getAddonPrice(week)
+                        week['MealQuantities'] = self.getMealQuantities(week)
+                        week['AddonPrice'] = self.getAddonPrice(week)
 
-                    index = 'MenuForWeek' + str(i)
-                    items[index] = week
+                        index = 'MenuForWeek' + str(i)
+                        items[index] = week
 
-                    i += 1
+                        i += 1
 
             # Finish Line
             response['message'] = 'Request successful.'
@@ -730,9 +745,6 @@ class ResetPassword (Resource):
         lettersAndDigits = string.ascii_letters + string.digits
         return "".join([random.choice(lettersAndDigits) for i in range(stringLength)])
 
-
-<< << << < HEAD
-
     def get(self):
         response = {}
         try:
@@ -785,61 +797,6 @@ class ChangePassword(Resource):
             data = request.get_json(force=True)
 
 
-== == == =
-
-    def get(self):
-        response = {}
-        try:
-            conn = connect();
-            # search for email;
-            email = request.args.get('email');
-            if email == None:
-                response['message'] = "Invalid Email Address"
-                return response, 400
-            query = """SELECT * FROM ptyd_accounts
-                    WHERE user_email ='""" + email + "';"
-            user_lookup = execute(query, 'get', conn)
-            if (user_lookup.get('code') == 280):
-                user_uid = user_lookup.get('result')[0].get('user_uid')
-                pass_temp = self.get_random_string()
-                salt = getNow()
-                pass_temp_hashed = sha512(
-                    (pass_temp + salt).encode()).hexdigest()
-                query = """UPDATE ptyd_passwords SET password_hash = '""" + pass_temp_hashed + """'
-                             , password_salt = '""" + salt + "' WHERE password_user_uid = '" + user_uid + "';"
-                # update database with temp password
-                query_result = execute(query, 'post', conn)
-                if (query_result.get('code') == 281):
-                    # send an email to client
-                    msg = Message(
-                        "Email Verification", sender='ptydtesting@gmail.com', recipients=[email])
-                    msg.body = "Your temporary password is {temp}. Please use it to reset your password".format(
-                        temp=pass_temp)
-                    mail.send(msg)
-                    response['message'] = "A temporary password has been sent"
-                    response['result'] = {"user_uid": user_uid}
-                    return response, 200
-                else:
-                    return 500
-            else:
-                response['message'] = "User is not found"
-                return response, 404
-
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-
-class ChangePassword(Resource):
-    def post(self):
-        response = {};
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-
->>>>>> > a38c841819a0f350adc7f1a2568102d671287d8b
             user_uid = data['ID']
             old_pass = data['old']
             new_pass = data['new']
@@ -878,19 +835,34 @@ class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
         response = {}
+        
+        try:
+            start_date = request.args.get('startdate')
+
+            if start_date is not None:
+                startDate = datetime.strptime(start_date, "%Y%m%d")
+                now = startDate
+            else:
+                now = date.today()
+            
+        except:
+            raise BadRequest('Request failed, bad startDate parameter.')
+
         try:
             conn = connect()
 
-            dayOfWeek = date.today().weekday()
+            dayOfWeek = now.weekday()
             # Get the soonest Saturday, same day if today is Saturday
-            sat = date.today() + timedelta(days=(12 - dayOfWeek) % 7)
-            thur = date.today() + timedelta(days=(10 - dayOfWeek) % 7)
+            sat = now + timedelta(days=(12 - dayOfWeek) % 7)
+            thur = now + timedelta(days=(10 - dayOfWeek) % 7)
 
             # If today is Thursday after 4PM
-            if sat == date.today() and datetime.now().hour >= 16:
-                sat += timedelta(days=7)
+            # if sat == now and now.hour >= 16:
+            #     sat += timedelta(days=7)
 
-            # change sat into string
+            if now + timedelta(days=7) > thur:
+                thur += timedelta(days=7)
+            #change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
             
@@ -901,7 +873,7 @@ class AccountPurchases(Resource):
                     ,pay.buyer_id
                     ,pay.coupon_id
                     ,pay.gift
-                    ,(pay.amount_due + IFNULL(addon.total_addon_cost,0)) AS amount_due
+                    ,(pay.amount_due + IFNULL(addon.total_charge,0)) AS amount_due
                     ,pay.amount_paid
                     ,snap_purchase_id AS purchase_id
                     ,pay.payment_time_stamp AS last_payment_time_stamp
@@ -929,10 +901,10 @@ class AccountPurchases(Resource):
                     ,purch.delivery_instructions
                     ,snap.weeks_remaining AS paid_weeks_remaining
                     ,snap.next_billing_date AS next_charge_date
-                    ,IFNULL(addon.total_addon_cost,0) AS weekly_addon_cost
-                    , \'""" + thur + """\' AS next_addon_charge_date
+                    ,IFNULL(addon.total_charge, 0.00) AS total_charge
                     ,pay.amount_due AS amount_due_before_addon
                     ,addon.week_affected
+                    , \'""" + thur + """\' AS next_addon_charge_date
                 FROM (
                 -- Snapshot Query
                 SELECT 
@@ -1023,37 +995,67 @@ class AccountPurchases(Resource):
                 ON purch.meal_plan_id = plans.meal_plan_id
                 LEFT JOIN (
                 -- ADDON query
-                SELECT
-                    A.purchase_id
-                    ,A.week_affected
-                    ,A.addon_selected
-                    ,SUM(A.total) as num_of_addons
-                    ,SUM((A.total * B.price)) AS total_addon_cost
-                FROM (
-                SELECT
-                    purchase_id,
-                    week_affected,
-                    addon_selected,
-                    COUNT(n) as total from (select purchase_id, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as addon_selected,n
-                FROM
-                ptyd_addons_selected
-                JOIN
-                numbers
-                ON char_length(meal_selection)
-                    - char_length(replace(meal_selection, ';', ''))
-                    >= n - 1) sub1
-                WHERE week_affected = \'""" + sat + """\'  -- AND delivery_day NOT LIKE "Monday"
-                GROUP BY sub1.addon_selected,purchase_id
-                ORDER BY purchase_id ASC
-                ) A
-                JOIN (
-                SELECT
-                    meal_id
-                    ,extra_meal_price AS price
-                FROM 
-                    ptyd_meals 
-                ) B ON addon_selected = meal_id
-                GROUP BY A.purchase_id
+                        SELECT
+                            purchase_id,
+                            week_affected,
+                            SUM(total) AS total_addons,
+                            SUM(charge) AS total_charge
+                        FROM ( # QUERY 11
+                            SELECT purchase_id
+                                , week_affected
+                                , meal_selected
+                                , meal_name
+                                , COUNT(num) as total
+                                , extra_meal_price
+                                , COUNT(num) * extra_meal_price as charge
+                            FROM (
+                                SELECT *
+                                    , substring_index(substring_index(meal_selection,';',n),';',-1) AS meal_selected
+                                    , n AS num
+                                FROM (# QUERY 1
+                                    SELECT
+                                        ms1.purchase_id
+                                        -- ,ms2.purchase_id
+                                        , ms1.week_affected
+                                        -- , ms2.week_affected
+                                        , "0" AS num_meals
+                                        , "0" AS delivery_day
+                                        , ms1.meal_selection
+                                        -- , ms1.selection_time
+                                        -- , ms2.latest_selection
+                                        -- , ms1.delivery_day
+                                    FROM ptyd.ptyd_addons_selected AS ms1
+                                    INNER JOIN (
+                                        SELECT
+                                            purchase_id
+                                            , week_affected
+                                            , meal_selection
+                                            , MAX(selection_time) AS latest_selection
+                                            -- , delivery_day
+                                        FROM ptyd.ptyd_addons_selected
+                                        GROUP BY purchase_id
+                                            , week_affected
+                                    ) as ms2 
+                                    ON ms1.purchase_id = ms2.purchase_id 
+                                        AND ms1.week_affected = ms2.week_affected 
+                                        AND ms1.selection_time = ms2.latest_selection
+                                    ORDER BY purchase_id
+                                        , week_affected)
+                                        AS combined
+                                    JOIN numbers ON char_length(meal_selection) - char_length(replace(meal_selection, ';', '')) >= n - 1)
+                                AS sub
+                            LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
+                            GROUP BY purchase_id
+                                , week_affected
+                                , meal_selected
+                            ORDER BY purchase_id
+                                , week_affected
+                                , num_meals
+                                , meal_selected)
+                            AS addons
+                        WHERE week_affected = \'""" + sat + """\'
+                        GROUP BY purchase_id,
+                            week_affected
                 ) addon
                 ON snap_purchase_id = addon.purchase_id
 
@@ -1260,10 +1262,12 @@ class Coordinates:
         coordinates = []
         for address in self.locations:
             formattedAddress = self.formatAddress(address)
+            print ("address: ", address)
             r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
                 '&maxResults=1&key={}'.format(params['key']))
-            results = r.json()
+            print("result:", r)
             try:
+                results = r.json()
                 assert(results['resourceSets'][0]['estimatedTotal'])
                 point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
                 lat, lng = point[0], point[1]
@@ -1421,10 +1425,7 @@ class Checkout(Resource):
             if paymentId == None:
                 paymentId = '200-000001'
 
-            print(snapshotId)
-            print(purchaseId)
-            print(paymentId)
-            print("data['salt]: {}".format(data['salt']))
+
             mealPlan = data['item'].split(' Subscription')[0]
 
             queries = ["""
@@ -3467,6 +3468,7 @@ class UpdateSubscription(Resource):
         finally:
             disconnect(conn)
 
+'''
 class UpdateRecipe(Resource):
     def patch(self):
         response = {}
@@ -3499,7 +3501,7 @@ class UpdateRecipe(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
+'''
 class UpdatePayments(Resource):
     def patch(self):
         response = {}
@@ -3527,7 +3529,7 @@ class UpdatePayments(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
+'''
 class addRecipe(Resource):
     global RDS_PW
 
@@ -3575,6 +3577,7 @@ class All_Meals(Resource):
             date = request.args.get("date")
             # date_affected = data['date_affected']
 
+<<<<<<< HEAD
             items = execute("""SELECT 
                                     allmeals.*,
                                     meals_ordered.*
@@ -3780,6 +3783,75 @@ class All_Meals(Resource):
                                     menu_date,
                                     menu_category
                                     ;""", 'get', conn)
+=======
+<<<<<<< HEAD
+            items = execute(""" select distinct temp1.*,COALESCE(temp2.total, 0) AS "Total"
+                                from
+                                (SELECT
+                                    menu_date,
+                                    menu_category,
+                                    meal_category, 
+                                    menu_type,
+                                    meal_cat,
+                                    meal_id,
+                                    meals.meal_name,
+                                    default_meal,
+                                    extra_meal_price,
+                                    meal_photo_url
+                                FROM ptyd.ptyd_menu menu
+                                JOIN ptyd.ptyd_meals meals
+                                ON menu.menu_meal_id = meals.meal_id 
+                                where menu_date=\'""" + date + """\') temp1
+                                left join 
+                                (SELECT 
+                                    delivery_day,
+                                    week_affected, 
+                                    meal_selected, 
+                                    COUNT(n) as total from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                                FROM  
+                                    ptyd_meals_selected 
+                                JOIN
+                                    numbers  
+                                ON char_length(meal_selection) 
+                                    - char_length(replace(meal_selection, ';', ''))
+                                    >= n - 1) sub1
+                                WHERE week_affected LIKE \'""" + date + """\' 
+                                GROUP BY sub1.meal_selected) temp2
+                                on temp1.meal_id = temp2.meal_selected; """, 'get', conn)
+=======
+            items = execute(""" select  
+                            pn.menu_category,
+                            pm.meal_name,
+                            pn.menu_type,
+                            pm.meal_category,
+                            ms.meal_selected,
+                            pm.extra_meal_price,
+                            pn.default_meal,
+                            ms.total
+                            from
+                        (SELECT
+                            delivery_day,
+                            week_affected, 
+                            meal_selected, 
+                            COUNT(n) as total from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                        FROM 
+                            ptyd_meals_selected 
+                        JOIN
+                            numbers
+                        ON char_length(meal_selection)
+                            - char_length(replace(meal_selection, ';', ''))
+                            >= n - 1) sub1
+                        WHERE week_affected LIKE \'""" + date + """\'
+                        GROUP BY sub1.meal_selected) as ms
+                        join
+                        ptyd_menu pn
+                        on ms.week_affected = pn.menu_date
+                        and ms.meal_selected = pn.menu_meal_id
+                        join
+                        ptyd_meals pm
+                        on ms.meal_selected = pm.meal_id; """, 'get', conn)
+>>>>>>> master
+>>>>>>> 991e02a91ed4f10a0c6816aa47e913b9bfb93f7e
 
             response['message'] = 'successful'
             response['result'] = items
@@ -3813,6 +3885,90 @@ class DisplaySaturdays(Resource):
         finally:
             disconnect(conn)
 
+
+class EditMeals(Resource):
+    def patch(self):
+        response = {}
+        items = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+            print("pre",data)
+
+            #checking to see if it's a new meal or editing an existing one 
+            if data['meal_id'] == "NewMealId":
+                
+                #generating new meal id
+                mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
+                mealId = mealIdQuery['result'][0]['new_id']
+
+                #inserting partial entry into meals table
+                items['new_meal_insert'] = execute(""" INSERT INTO 
+                                                            ptyd_meals(meal_id,meal_category,meal_name,meal_desc,extra_meal_price) 
+                                                        VALUES 
+                                                            (\'""" + str(mealId) + """\','NEEDS CATEGORY'
+                                                            ,\'""" + data['meal_name'] + """\','NEEDS DESCRIPTION ','100000');
+                                                            """, 'post', conn)
+
+            else:
+                #defaulting to entered meal id if user is editing an existing one 
+                mealId= data['meal_id']
+
+            numRecipeInserts = 0
+            
+            #iterating through the dictionary of ingredients
+            for ingredient in data['ingredients']:
+                print("******************") 
+                print(ingredient['ingredient_id'])     
+                #checking to see if the ingredient is a new ingredient or an existing one -- if the ingredient is new generate an id and post to ingredient
+                if ingredient['ingredient_id'] == "NewIngrId":
+
+                                  
+                    ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
+                    ingredientId = ingredientIdQuery ['result'][0]['new_id']
+
+                    items['new_ingredient_insert'] = execute(""" INSERT INTO 
+                                                                    ptyd_ingredients(ingredient_id,ingredient_desc,package_size,ingredient_measure_id,ingredient_cost) 
+                                                                VALUES 
+                                                                    (\'""" + str(ingredientId) + """\',\'""" + ingredient['name'] + """\','NEEDS STANDARD PACKAGE SIZE ',
+                                                                    ,\'""" + ingredient['measure_id'] + """\','NEEDS INGREDIENT COST');
+                                                            """, 'post', conn)
+                else:
+                    ingredientId = ingredient['ingredient_id']
+                print("*********************")
+                print("mealID")
+                print(mealId)
+                print("ingredientId")
+                print(ingredientId)
+                print("getNow()")
+                print(getNow())
+                print("ingredient qty")
+                print(ingredient['qty'])
+                print("ingredient measure")
+                print(ingredient['measure_id'])
+                #insert ingredient into recipe table attached to the meal
+                items['recipe_insert'] = execute(""" INSERT INTO
+                                                        ptyd_recipes(recipe_meal_id,recipe_ingredient_id,recipe_ingredient_qty,recipe_measure_id,recipe_last_update)
+                                                    VALUES
+                                                        ( \'""" + str(mealID) + """\', 
+                                                        \'""" + str(ingredientId) + """\', 
+                                                        \'""" + str(ingredient['qty']) + """\', 
+                                                        \'""" + str(ingredient['measure_id']) + """\', 
+                                                        \'""" + str(getNow()) + """\');
+                                                """, 'post', conn)
+                print("AFTER EXECUTE")
+                numRecipeInserts += 1
+
+            response['message'] = 'Post Request Succesful'
+            
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+'''
 
 class TemplateApi(Resource):
     def get(self):
@@ -3853,6 +4009,8 @@ api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
+api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
+api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Admin page
 # ---------- Admin page -----------------------------
@@ -3865,31 +4023,38 @@ api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
+'''
 api.add_resource(addRecipe, '/api/v2/add-recipe')
 api.add_resource(All_Meals, '/api/v2/All_Meals')
 
 api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
+'''
+api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
+api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
 # Automated APIs
 api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
 api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers', '/api/v2/chargesubscribers/<string:affectedDate>')
 
 
-api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
-api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
+
 
 '''
 # -----------Stripe Resrouces--------------------
 api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
 '''
 # in progress
-api.add_resource(UpdateSubscription, '/api/v2/update-subscription')
 api.add_resource(UpdatePayments, '/api/v2/update-payments')
+
+'''
+api.add_resource(EditMeals, '/api/v2/edit-meals')
+
+
 
 
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
+'''
 
-api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Template
 api.add_resource(TemplateApi, '/api/v2/templateapi')
@@ -3898,3 +4063,4 @@ api.add_resource(TemplateApi, '/api/v2/templateapi')
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=2000)
+

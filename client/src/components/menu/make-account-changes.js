@@ -1,5 +1,5 @@
-import React, {Component, Fragment} from "react";
-import {Grid, Cell} from "react-mdl";
+import React, { Component, Fragment } from "react";
+import { Grid, Cell } from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import {
@@ -31,15 +31,16 @@ class MakeChanges extends Component {
       date: moment(this.props.cc_exp_date),
       dict: {},
       open: false,
-      showPasswordChange: false
+      showPasswordChange: false,
+      changed_subscription: false
       // new_changed_subscription: changes.subscription
     };
   }
   handleClickOpen = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   };
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({ open: false });
   };
   handleChange = event => {
     const target = event.target;
@@ -112,6 +113,9 @@ class MakeChanges extends Component {
     if (temp == null) {
       temp = this.props.meal_plan_id;
     }
+    // if (changed_subscription){
+    //   for (key in )
+    // }
     fetch(this.props.UPDATE_URL, {
       method: "PATCH",
       headers: {
@@ -207,8 +211,8 @@ class MakeChanges extends Component {
     return (
       <ButtonToolbar>
         <button
-          type='button'
-          class='btn2 btn2-primary font4'
+          type="button"
+          class="btn2 btn2-primary font4"
           style={{
             marginTop: "10px",
             paddingLeft: "10px",
@@ -219,8 +223,8 @@ class MakeChanges extends Component {
             fontSize: "12px"
           }}
           onClick={() => {
-            this.setState({modalShow: true});
-            this.setState({showPasswordChange: false});
+            this.setState({ modalShow: true });
+            this.setState({ showPasswordChange: false });
           }}
         >
           Make Account Changes
@@ -237,11 +241,11 @@ class MakeChanges extends Component {
   };
   ShowHideChangePasswordModal = () => {
     this.state.modalShow
-      ? this.setState({modalShow: false})
-      : this.setState({modalShow: true});
+      ? this.setState({ modalShow: false })
+      : this.setState({ modalShow: true });
     this.state.showPasswordChange
-      ? this.setState({showPasswordChange: false})
-      : this.setState({showPasswordChange: true});
+      ? this.setState({ showPasswordChange: false })
+      : this.setState({ showPasswordChange: true });
   };
   ChangePasswordModal = () => {
     return (
@@ -256,45 +260,54 @@ class MakeChanges extends Component {
     return (
       <Modal
         show={this.state.modalShow}
-        onHide={() => this.setState({modalShow: false})}
-        size='lg'
-        aria-labelledby='contained-modal-title-vcenter'
+        onHide={() => this.setState({ modalShow: false })}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-vcenter'>
+          <Modal.Title id="contained-modal-title-vcenter">
             Edit Profile
           </Modal.Title>
           {this.props.loggedInBy === "direct" && (
-            <Button className='ml-3' onClick={this.ShowHideChangePasswordModal}>
+            <Button className="ml-3" onClick={this.ShowHideChangePasswordModal}>
               Change Password
             </Button>
           )}
         </Modal.Header>
         <Modal.Body>
-          <div class='scrollMenu-profile'>
-            <h5 style={{marginTop: "0"}}>Subscription Details</h5>
+          <div class="scrollMenu-profile">
+            <h5 style={{ marginTop: "0" }}>Subscription Details</h5>
             <Form>
               <Form.Row>
                 <Form.Group
                   as={Col}
                   md={6}
-                  controlId='formGridCardSubscription'
+                  controlId="formGridCardSubscription"
                 >
                   <Form.Label>Current Subscription</Form.Label>
 
                   <Form.Control
-                    type='text'
+                    type="text"
                     value={this.state.changes.subscription}
                   />
                 </Form.Group>
-                <Form.Group as={Col} md={6} controlId='formGridCardPayment'>
+                <Form.Group as={Col} md={6} controlId="formGridCardPayment">
                   <Form.Label>Change Subscription</Form.Label>
                   <Form.Control
-                    as='select'
-                    name='subscription'
+                    as="select"
+                    name="subscription"
                     // value={this.state.changes.subscription}
-                    onChange={this.handleChange}
+                    onChange={
+                      this.handleChange
+                      // () => {
+                      // this.setState({ changed_subscription: true });
+                      // console.log(
+                      //   "changed_subscription",
+                      //   this.state.changed_subscription
+                      // );
+                      // this.handleChange();}
+                    }
                   >
                     <option>Choose...</option>
                     {console.log(
@@ -313,11 +326,11 @@ class MakeChanges extends Component {
               </Form.Row>
               <h5>Credit Card Details</h5>
               <Form.Row>
-                <Form.Group as={Col} md={6} controlId='formGridCardNumber'>
+                <Form.Group as={Col} md={6} controlId="formGridCardNumber">
                   <Form.Label>Credit Card Number</Form.Label>
                   <Form.Control
-                    placeholder='Enter Card Number'
-                    name='cc_num'
+                    placeholder="Enter Card Number"
+                    name="cc_num"
                     value={this.state.changes.cc_num}
                     onChange={this.handleChange}
                   />
@@ -325,22 +338,22 @@ class MakeChanges extends Component {
               </Form.Row>
 
               <Form.Row>
-                <Form.Group as={Col} md={4} controlId='formGridCardCvc'>
+                <Form.Group as={Col} md={4} controlId="formGridCardCvc">
                   <Form.Label>CVV</Form.Label>
                   <Form.Control
-                    placeholder='123'
-                    name='cc_cvv'
+                    placeholder="123"
+                    name="cc_cvv"
                     value={this.state.changes.cc_cvv}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} md={4} controlId='formGridCardMonth'>
+                <Form.Group as={Col} md={4} controlId="formGridCardMonth">
                   <Form.Label>Month</Form.Label>
 
                   <Form.Control
-                    as='select'
-                    name='cc_exp_month'
+                    as="select"
+                    name="cc_exp_month"
                     onChange={event => {
                       // this.setState({ month: event.target.value });
                       this.setState({
@@ -364,11 +377,11 @@ class MakeChanges extends Component {
                   </Form.Control>
                 </Form.Group>
 
-                <Form.Group as={Col} md={4} controlId='formGridCardYear'>
+                <Form.Group as={Col} md={4} controlId="formGridCardYear">
                   <Form.Label>Year</Form.Label>
                   <Form.Control
-                    as='select'
-                    name='cc_exp_year'
+                    as="select"
+                    name="cc_exp_year"
                     onChange={event => {
                       this.setState({
                         date: this.state.date.year(event.target.value)
@@ -391,11 +404,11 @@ class MakeChanges extends Component {
                 </Form.Group>
               </Form.Row>
               <h5>Delivery Details</h5>
-              <Form.Group controlId='formGridAddress'>
+              <Form.Group controlId="formGridAddress">
                 <Form.Label>Address</Form.Label>
                 <Form.Control
-                  placeholder='1234 Main St'
-                  name='delivery_address'
+                  placeholder="1234 Main St"
+                  name="delivery_address"
                   value={this.state.changes.delivery_address}
                   onChange={this.handleChange}
                 />
@@ -404,8 +417,8 @@ class MakeChanges extends Component {
               <Form.Group
                 as={Col}
                 md={4}
-                Style='margin-left:-15px;'
-                controlId='formGridAptNum'
+                Style="margin-left:-15px;"
+                controlId="formGridAptNum"
                 value={this.state.changes.delivery_address_unit}
                 onChange={this.handleChange}
               >
@@ -413,29 +426,29 @@ class MakeChanges extends Component {
                   Apartment/Unit <b>(Optional)</b>
                 </Form.Label>
                 <Form.Control
-                  placeholder='Apartment, studio, or floor'
-                  name='delivery_address_unit'
+                  placeholder="Apartment, studio, or floor"
+                  name="delivery_address_unit"
                   value={this.state.changes.delivery_address_unit}
                   onChange={this.handleChange}
                 />
               </Form.Group>
 
               <Form.Row>
-                <Form.Group as={Col} controlId='formGridCity'>
+                <Form.Group as={Col} controlId="formGridCity">
                   <Form.Label>City</Form.Label>
                   <Form.Control
-                    placeholder='Prep City'
-                    name='delivery_city'
+                    placeholder="Prep City"
+                    name="delivery_city"
                     value={this.state.changes.delivery_city}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} controlId='formGridState'>
+                <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>State</Form.Label>
                   <Form.Control
-                    as='select'
-                    name='delivery_state'
+                    as="select"
+                    name="delivery_state"
                     value={this.state.changes.delivery_state}
                     onChange={this.handleChange}
                   >
@@ -444,21 +457,21 @@ class MakeChanges extends Component {
                   </Form.Control>
                 </Form.Group>
 
-                <Form.Group as={Col} controlId='formGridZip'>
+                <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Zip</Form.Label>
                   <Form.Control
-                    placeholder='12345'
-                    name='delivery_zip'
+                    placeholder="12345"
+                    name="delivery_zip"
                     value={this.state.changes.delivery_zip}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
               </Form.Row>
-              <Form.Group controlId='exampleForm.ControlTextarea1'>
+              <Form.Group controlId="exampleForm.ControlTextarea1">
                 <Form.Label>Instructions</Form.Label>
                 <Form.Control
-                  placeholder='Instruction notes'
-                  name='delivery_instructions'
+                  placeholder="Instruction notes"
+                  name="delivery_instructions"
                   value={this.state.changes.delivery_instructions}
                   onChange={this.handleChange}
                 />
@@ -470,13 +483,13 @@ class MakeChanges extends Component {
         </Modal.Body>
         <Modal.Footer>
           <Tooltip
-            title='This will permanently delete your subscription'
-            placement='left'
+            title="This will permanently delete your subscription"
+            placement="left"
           >
             <Button
-              variant='danger'
-              type='submit'
-              style={{float: "left"}}
+              variant="danger"
+              type="submit"
+              style={{ float: "left" }}
               onClick={this.handleClickOpen}
             >
               Delete My Subscription
@@ -484,8 +497,8 @@ class MakeChanges extends Component {
           </Tooltip>
           {/* {this.state.modalShowDelete ? this.DeleteModal() : <div />} */}
           <Button
-            variant='success'
-            type='submit'
+            variant="success"
+            type="submit"
             onClick={() => {
               this.update_subscription();
               this.update_subscription_payment();
@@ -494,9 +507,9 @@ class MakeChanges extends Component {
             Save Changes
           </Button>
           <Button
-            variant='light'
+            variant="light"
             onClick={() => {
-              this.setState({modalShow: false, changes: this.props});
+              this.setState({ modalShow: false, changes: this.props });
             }}
           >
             Close
@@ -512,20 +525,20 @@ class MakeChanges extends Component {
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{"Warning"}</DialogTitle>
           <DialogContent>
-            <DialogContentText id='alert-dialog-description'>
+            <DialogContentText id="alert-dialog-description">
               Are you sure you want to delete your subscription?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color='primary'>
+            <Button onClick={this.handleClose} color="primary">
               No,Keep
             </Button>
-            <Button onClick={this.delete} variant='danger' autoFocus>
+            <Button onClick={this.delete} variant="danger" autoFocus>
               Yes,Delete
             </Button>
           </DialogActions>

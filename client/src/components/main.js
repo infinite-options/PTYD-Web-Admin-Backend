@@ -127,6 +127,7 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          DEV_URL: DEV_URL,
           ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
