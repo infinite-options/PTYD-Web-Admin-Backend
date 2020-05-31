@@ -31,6 +31,7 @@ export default function DropDownMenu(props) {
           <option value={"2020-05-16"}>2020-05-16</option>
           <option value={"2020-05-23"}>2020-05-23</option>
           <option value={"2020-05-30"}>2020-05-30</option>
+          <option value={"2020-07-11"}>2020-07-11</option>
         </Select>
       </FormControl>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -16,7 +16,7 @@ const override = css`
 `;
 
 export default function Orders(props) {
-  const [date, setDate] = useState("2020-05-23");
+  const [date, setDate] = useState("2020-07-11");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ export default function Orders(props) {
     setLoading(true);
 
     const res = await (
-      await fetch(props.API_URL_Meal_Info1 + `?date=${date}`)
+      await fetch(props.API_URL + `All_Meals?date=${date}`)
     ).json();
 
     setLoading(false);
@@ -38,6 +38,7 @@ export default function Orders(props) {
   const handleChange = (event) => {
     setDate(event.target.value);
   };
+
   return (
     <div style={{ padding: "10px 20px" }}>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "10px" }}>
