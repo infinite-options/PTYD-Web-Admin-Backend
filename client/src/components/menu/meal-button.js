@@ -255,8 +255,8 @@ export default class MealButton extends Component {
   saveButtonAddOn = () => {
     this.setState({
       buttonAddOn: false,
-      cancelAddonWithoutSave: false
-      // buttonAddOnKeepColor: true
+      cancelAddonWithoutSave: false,
+      selectMealDisable: false
     });
 
     this.state.week_affected < this.props.nextAddonChargeDate &&
@@ -448,7 +448,11 @@ export default class MealButton extends Component {
           {/* </Link> */}
           &nbsp;
           <Button
-            disabled={this.state.buttonDisabled || !this.state.subscribed}
+            disabled={
+              this.state.buttonDisabled ||
+              !this.state.subscribed ||
+              this.state.selectMealDisable
+            }
             variant='outline-dark'
             ref={button => (this.button2 = button)}
             onClick={this.changeButtonSurprise}
