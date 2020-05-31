@@ -341,13 +341,12 @@ class Meals(Resource):
             i = 1
             for date in dates['result']:
                 # only grab 6 weeks worth of menus
-                print (date)
                 if i == 7:
                     break
                 # convert string to datetime
                 stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
 
-
+                print("Stamp before change: ", stamp)
                 # Roll calendar at 4PM Monday
                 if now - timedelta(days=1, hours=16) < stamp:
                     weekly_special = execute(
@@ -455,52 +454,52 @@ class Meals(Resource):
                     print("Thurday: ", thursday);
                     print("today: ", today)
 
-                    if today > thursday:
+                    if today < thursday:
                         print("broke")
-                        stamp = stamp + timedelta(days=7)
-                    print("stamp: ", stamp)
-                    week = {
-                        'SaturdayDate': str(stamp.date()),
-                        'SundayDate': str((stamp + timedelta(days=1)).date()),
-                        'Sunday': str((stamp + timedelta(days=1)).date().strftime('%b %-d')),
-                        'Monday': str((stamp + timedelta(days=2)).date().strftime('%b %-d')),
-                        'Meals': {
-                            'Weekly': {
-                                'Category': "WEEKLY SPECIALS",
-                                'Menu': weekly_special['result']
+                        # stamp = stamp + timedelta(days=7)
+
+                        week = {
+                            'SaturdayDate': str(stamp.date()),
+                            'SundayDate': str((stamp + timedelta(days=1)).date()),
+                            'Sunday': str((stamp + timedelta(days=1)).date().strftime('%b %-d')),
+                            'Monday': str((stamp + timedelta(days=2)).date().strftime('%b %-d')),
+                            'Meals': {
+                                'Weekly': {
+                                    'Category': "WEEKLY SPECIALS",
+                                    'Menu': weekly_special['result']
+                                },
+                                'Seasonal': {
+                                    'Category': "SEASONAL FAVORITES",
+                                    'Menu': seasonal_special['result']
+                                },
+                                'Smoothies': {
+                                    'Category': "SMOOTHIES",
+                                    'Menu': smoothies['result']
+                                }
                             },
-                            'Seasonal': {
-                                'Category': "SEASONAL FAVORITES",
-                                'Menu': seasonal_special['result']
-                            },
-                            'Smoothies': {
-                                'Category': "SMOOTHIES",
-                                'Menu': smoothies['result']
-                            }
-                        },
-                        'Addons': {
                             'Addons': {
-                                'Category': "ADD ONS",
-                                'Menu': addon['result']
-                            },
-                            'Weekly': {
-                                'Category': "ADD MORE MEALS",
-                                'Menu': weekly_special['result'] + seasonal_special['result']
-                            },
-                            'Smoothies': {
-                                'Category': "ADD MORE SMOOTHIES",
-                                'Menu': smoothies['result']
+                                'Addons': {
+                                    'Category': "ADD ONS",
+                                    'Menu': addon['result']
+                                },
+                                'Weekly': {
+                                    'Category': "ADD MORE MEALS",
+                                    'Menu': weekly_special['result'] + seasonal_special['result']
+                                },
+                                'Smoothies': {
+                                    'Category': "ADD MORE SMOOTHIES",
+                                    'Menu': smoothies['result']
+                                }
                             }
                         }
-                    }
 
-                    week['MealQuantities'] = self.getMealQuantities(week)
-                    week['AddonPrice'] = self.getAddonPrice(week)
+                        week['MealQuantities'] = self.getMealQuantities(week)
+                        week['AddonPrice'] = self.getAddonPrice(week)
 
-                    index = 'MenuForWeek' + str(i)
-                    items[index] = week
+                        index = 'MenuForWeek' + str(i)
+                        items[index] = week
 
-                    i += 1
+                        i += 1
 
             # Finish Line
             response['message'] = 'Request successful.'
@@ -834,12 +833,11 @@ class AccountPurchases(Resource):
             # if sat == now and now.hour >= 16:
             #     sat += timedelta(days=7)
 
-            
-            
+            if now + timedelta(days=7) > thur:
+                thur += timedelta(days=7)
             #change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
-            
             
 
             queries = ["""

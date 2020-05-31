@@ -239,11 +239,6 @@ class Mealschedule extends Component {
       currentWeek.addonsSelected = false;
 
       for (let week in mselect_api.result.Meals) {
-        console.log(`currentWeek.sat`, currentWeek.sat);
-        console.log(
-          `Meal week affected: `,
-          mselect_api.result.Meals[week].week_affected
-        );
         if (mselect_api.result.Meals[week].week_affected === currentWeek.sat) {
           if (mselect_api.result.Meals[week].meal_selection === "SKIP") {
             currentWeek.deliverDay = "SKIP";
@@ -275,7 +270,6 @@ class Mealschedule extends Component {
           }
         }
       }
-      console.log("currentWeek", currentWeek);
       sixWeekMenu.push(currentWeek);
     }
     console.log("sixWeekMenu", sixWeekMenu);
