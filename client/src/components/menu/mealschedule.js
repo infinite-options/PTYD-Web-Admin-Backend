@@ -395,6 +395,34 @@ class Mealschedule extends Component {
                   <th colSpan='2'>{this.subscription_dropdown()}</th>
                 </h4>
               </Cell>
+              <MakeChanges
+                user_uid={this.searchCookie4UserID("loginStatus")}
+                loggedInBy={this.searchCookie4LoggedInBy("loginStatus")}
+                DEV_URL={this.props.DEV_URL}
+                DELETE_URL={this.props.DELETE_URL}
+                UPDATE_URL={this.props.UPDATE_URL}
+                UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}
+                meal_plan_id={this.state.purchase.meal_plan_id}
+                subscription={this.state.purchase.meal_plan_desc}
+                meal_plan_price={this.state.purchase.amount_due}
+                paymentplan={this.state.paymentPlans}
+                payment_plan={this.state.purchase.payment_frequency}
+                cc_num={this.state.purchase.cc_num}
+                cc_exp_date={this.state.purchase.cc_exp_date}
+                cc_cvv={this.state.purchase.cc_cvv}
+                delivery_address={this.state.purchase.delivery_address}
+                delivery_address_unit={
+                  this.state.purchase.delivery_address_unit
+                }
+                delivery_city={this.state.purchase.delivery_city}
+                delivery_state={this.state.purchase.delivery_state}
+                delivery_zip={this.state.purchase.delivery_zip}
+                delivery_instructions={
+                  this.state.purchase.delivery_instructions
+                }
+                purchase_id={this.state.purchase.purchase_id}
+              />
+              {displayrows}
               <div>
                 <h4>Subscription Details</h4>
                 <p>My Subscription: {subscription_selection.meal_plan_desc}</p>
@@ -437,30 +465,6 @@ class Mealschedule extends Component {
                 </p>
               </div>
             </Grid>
-            <MakeChanges
-              user_uid={this.searchCookie4UserID("loginStatus")}
-              loggedInBy={this.searchCookie4LoggedInBy("loginStatus")}
-              DEV_URL={this.props.DEV_URL}
-              DELETE_URL={this.props.DELETE_URL}
-              UPDATE_URL={this.props.UPDATE_URL}
-              UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}
-              meal_plan_id={this.state.purchase.meal_plan_id}
-              subscription={this.state.purchase.meal_plan_desc}
-              meal_plan_price={this.state.purchase.amount_due}
-              paymentplan={this.state.paymentPlans}
-              payment_plan={this.state.purchase.payment_frequency}
-              cc_num={this.state.purchase.cc_num}
-              cc_exp_date={this.state.purchase.cc_exp_date}
-              cc_cvv={this.state.purchase.cc_cvv}
-              delivery_address={this.state.purchase.delivery_address}
-              delivery_address_unit={this.state.purchase.delivery_address_unit}
-              delivery_city={this.state.purchase.delivery_city}
-              delivery_state={this.state.purchase.delivery_state}
-              delivery_zip={this.state.purchase.delivery_zip}
-              delivery_instructions={this.state.purchase.delivery_instructions}
-              purchase_id={this.state.purchase.purchase_id}
-            />
-            {displayrows}
           </Cell>{" "}
           <Cell col={1}></Cell>
           <Cell col={8}>
