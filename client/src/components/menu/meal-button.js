@@ -44,6 +44,7 @@ export default class MealButton extends Component {
         (a, b) => a + b,
         0
       ),
+      // total_addon_price: 0,
       addonActivated: false,
       flag: false,
       mondayAvailable: this.props.monday_available,
@@ -109,11 +110,11 @@ export default class MealButton extends Component {
       addonQuantities: nextProps.addonQuantities,
       // buttonAddOnKeepColor: this.props.addonsSelected,
       mealQuantities: nextProps.mealQuantities,
-      buttonAddOnKeepColor: nextProps.buttonAddOnKeepColor,
-      total_addon_price: Object.values(nextProps.addon_price_saved).reduce(
-        (a, b) => a + b,
-        0
-      )
+      buttonAddOnKeepColor: nextProps.buttonAddOnKeepColor
+      // total_addon_price: Object.values(nextProps.addon_price_saved).reduce(
+      //   (a, b) => a + b,
+      //   0
+      // )
     });
   }
   async componentDidMount() {
@@ -123,7 +124,7 @@ export default class MealButton extends Component {
     //    mealQuantitiesOriginal: stateCopy.mealQuantities,
     //    addonQuantitiesOriginal: stateCopy.addonQuantities,
     //  });
-
+    console.log("add on inside meal button: ", this.props.addon);
     if (this.props.surprise == false) {
       this.setState({
         buttonSurprise: false,
@@ -196,6 +197,7 @@ export default class MealButton extends Component {
 
   sendAddonForm = () => {
     console.log("its sending form from addon", this.state.addonQuantities);
+    console.log("week affected: ", this.state.week_affected);
     fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
@@ -215,7 +217,7 @@ export default class MealButton extends Component {
         return Promise.reject(error);
       } else {
         console.log("You have successfully update addon information!");
-        this.props.api_refresh();
+        // this.props.api_refresh();
       }
       console.log("addon result", response.json());
     });
@@ -248,25 +250,9 @@ export default class MealButton extends Component {
     });
   };
   closeButtonAddOn = () => {
-    this.setState(
-      {
-        buttonAddOn: false
-        // buttonAddOnKeepColor: false
-
-        //    addonQuantities: this.state.addonQuantitiesOriginal,
-      }
-      // ,() => {
-      //   if (
-      //     Object.values(this.state.addonQuantities).reduce(function(a, b) {
-      //       return a + b;
-      //     }, 0) === 0
-      //   ) {
-      //     this.setState({buttonAddOnKeepColor: false});
-      //   } else {
-      //     this.setState({cancelAddonWithoutSave: true});
-      //   }
-      // }
-    );
+    this.setState({
+      buttonAddOn: false
+    });
     this.sendAddonForm();
   };
   saveButtonAddOn = () => {
@@ -275,6 +261,15 @@ export default class MealButton extends Component {
       cancelAddonWithoutSave: false
       // buttonAddOnKeepColor: true
     });
+    console.log(
+      "week_affected: ",
+      this.state.week_affected,
+      "nextAddonChargeDate: ",
+      this.props.nextAddonChargeDate
+    );
+
+    this.state.week_affected < this.props.nextAddonChargeDate &&
+      this.props.nextAddonChargeChange(this.state.total_addon_price);
     this.sendAddonForm();
   };
 
@@ -505,26 +500,6 @@ export default class MealButton extends Component {
               Please Select {this.state.maxmeals} Meals:
             </h4>
             <div style={{float: "right"}}>
-              {/*<Button
-                variant="danger"
-                onClick={() => {
-                  if (
-                    this.state.maxmealsCopy !== this.state.maxmeals &&
-                    this.state.flag === false
-                  ) {
-                    alert(
-                      "Are you sure you want to close without saving your changes?"
-                    );
-                    this.setState({
-                      flag: true
-                    });
-                    return;
-                  }
-                  this.closeButtonSelect();
-                }}
-              >
-                Close
-              </Button> */}
               &nbsp;&nbsp;
               {this.state.subscribed ? (
                 this.state.maxmeals !== 0 ? (
@@ -615,45 +590,6 @@ export default class MealButton extends Component {
             </Grid>
           ))}
         </div>
-        {/* <Card.Body>
-          <center>
-            &nbsp;&nbsp;
-            <Button
-              variant="danger"
-              onClick={() => {
-                if (
-                  this.state.maxmealsCopy !== this.state.maxmeals &&
-                  this.state.flag === false
-                ) {
-                  alert("Are you sure you want to close without saving?");
-
-                  this.setState({
-                    flag: true
-                  });
-                  return;
-                }
-                this.closeButtonSelect();
-              }}
-            >
-              Close
-            </Button>
-            &nbsp;&nbsp;
-            {this.state.subscribed ? (
-              this.state.maxmeals === 0 && (
-                <Button
-                  variant="success"
-                  onClick={this.saveButtonActivateAddons}
-                >
-                  Save changes
-                </Button>
-              )
-            ) : (
-              <Button variant="success" href="/selectmealplan">
-                Subscribe Now
-              </Button>
-            )}
-          </center>
-        </Card.Body> */}
       </Card>
     );
   };
@@ -675,13 +611,6 @@ export default class MealButton extends Component {
               <h4 className='font2' style={{float: "left", margin: "0"}}>
                 Total Price: ${this.state.total_addon_price}
               </h4>
-              {/* {close ? (
-                <Button variant="danger" onClick={this.closeButtonAddOn}>
-                  Close
-                </Button>
-              ) : (
-                <div />
-              )} */}
               &nbsp;&nbsp;
               {close ? (
                 <Button variant='danger' onClick={this.closeButtonAddOn}>
@@ -746,22 +675,6 @@ export default class MealButton extends Component {
                           stateCopy.addonQuantities[meal.menu_meal_id] -= 1;
                           this.setState(stateCopy);
                         }}
-                        // incrementAddonPrice={() => {
-                        //   var stateCopy2 = Object.assign({}, this.state);
-                        //   stateCopy2.new_price =
-                        //     this.state.total_addon_price +
-                        //     meal.extra_meal_price;
-                        //   console.log(
-                        //     "increment addon price",
-                        //     stateCopy2.new_price,
-                        //     this.state.total_addon_price,
-                        //     meal.extra_meal_price
-                        //   );
-                        //   let fixedStateCopy2 = stateCopy2.new_price;
-                        //   this.setState({
-                        //     total_addon_price: fixedStateCopy2
-                        //   });
-                        // }}
                         incrementAddonPrice={() => {
                           // var stateCopy2 = Object.assign({}, this.state);
                           let new_meal_price = parseFloat(
@@ -799,7 +712,6 @@ export default class MealButton extends Component {
           </div>
         ) : (
           <div>
-            {/* {Object.keys(this.props.addons["Addons"]).map(key => ( */}
             <div>
               <Grid>
                 <Cell col={12}>
@@ -843,7 +755,6 @@ export default class MealButton extends Component {
                         this.setState(stateCopy);
                       }}
                       incrementAddonPrice={() => {
-                        // var stateCopy2 = Object.assign({}, this.state);
                         let new_meal_price = parseFloat(meal.extra_meal_price);
                         let new_price =
                           this.state.total_addon_price + new_meal_price;
@@ -853,7 +764,6 @@ export default class MealButton extends Component {
                         });
                       }}
                       decrementAddonPrice={() => {
-                        // var stateCopy2 = Object.assign({}, this.state);
                         let new_meal_price = parseFloat(meal.extra_meal_price);
                         let new_price =
                           this.state.total_addon_price - new_meal_price;
@@ -872,9 +782,6 @@ export default class MealButton extends Component {
         )}
         <Card.Body>
           <center>
-            {/* <Button variant='danger' onClick={this.closeButtonAddOn}>
-              Close
-            </Button> */}
             &nbsp;&nbsp;
             {close ? (
               <Button variant='danger' onClick={this.closeButtonAddOn}>
