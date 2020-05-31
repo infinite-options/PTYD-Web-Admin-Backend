@@ -204,10 +204,6 @@ class Mealschedule extends Component {
             purchasesApi.result[this.state.selection].total_charge
         });
       }
-      console.log(
-        "nextAddonChargeDate: ",
-        purchasesApi.result[this.state.selection].next_addon_charge_date
-      );
     }
 
     const mselect_res = await fetch(
@@ -479,41 +475,34 @@ class Mealschedule extends Component {
             </h3>
             <div>{console.log(this.state.menu)}</div>
             <div className='meals-button'>
-              {this.state.menu.map(
-                eachWeek => (
-                  console.log("meal printing", eachWeek.mealQuantities),
-                  console.log("addon printing", eachWeek.addonQuantities),
-                  console.log(" : ", eachWeek.sun),
-                  (
-                    <MealButton
-                      day1='Sunday'
-                      day2='Monday'
-                      saturdayDate={eachWeek.sat}
-                      date1={eachWeek.sun}
-                      date2={eachWeek.mon}
-                      menu={eachWeek.menu}
-                      addons={eachWeek.addons}
-                      mealQuantities={eachWeek.mealQuantities}
-                      addonQuantities={eachWeek.addonQuantities}
-                      addon_price_saved={this.create_addon_price(eachWeek)}
-                      maxmeals={eachWeek.maxmeals}
-                      purchase_id={this.state.purchase.purchase_id}
-                      deliverDay={eachWeek.deliverDay}
-                      subscribed={this.state.subscribed}
-                      surprise={eachWeek.surprise}
-                      addonsSelected={eachWeek.addonsSelected}
-                      monday_available={this.state.monday_available}
-                      MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
-                      // api_refresh={this.getRefresh}
-                      nextAddonChargeDate={
-                        this.state.purchase_all[this.state.selection]
-                          .next_addon_charge_date
-                      }
-                      nextAddonChargeChange={this.nextAddonChargeChange}
-                    />
-                  )
-                )
-              )}
+              {this.state.menu.map(eachWeek => (
+                <MealButton
+                  day1='Sunday'
+                  day2='Monday'
+                  saturdayDate={eachWeek.sat}
+                  date1={eachWeek.sun}
+                  date2={eachWeek.mon}
+                  menu={eachWeek.menu}
+                  addons={eachWeek.addons}
+                  mealQuantities={eachWeek.mealQuantities}
+                  addonQuantities={eachWeek.addonQuantities}
+                  addon_price_saved={this.create_addon_price(eachWeek)}
+                  maxmeals={eachWeek.maxmeals}
+                  purchase_id={this.state.purchase.purchase_id}
+                  deliverDay={eachWeek.deliverDay}
+                  subscribed={this.state.subscribed}
+                  surprise={eachWeek.surprise}
+                  addonsSelected={eachWeek.addonsSelected}
+                  monday_available={this.state.monday_available}
+                  MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
+                  // api_refresh={this.getRefresh}
+                  nextAddonChargeDate={
+                    this.state.purchase_all[this.state.selection]
+                      .next_addon_charge_date
+                  }
+                  nextAddonChargeChange={this.nextAddonChargeChange}
+                />
+              ))}
             </div>
           </Cell>
         </Grid>
