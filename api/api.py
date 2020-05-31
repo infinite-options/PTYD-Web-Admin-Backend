@@ -3567,6 +3567,8 @@ class addRecipe(Resource):
         finally:
             disconnect(conn)
 
+'''
+
 class All_Meals(Resource):
     def get(self):
         response = {}
@@ -3577,7 +3579,6 @@ class All_Meals(Resource):
             date = request.args.get("date")
             # date_affected = data['date_affected']
 
-<<<<<<< HEAD
             items = execute("""SELECT 
                                     allmeals.*,
                                     meals_ordered.*
@@ -3714,7 +3715,6 @@ class All_Meals(Resource):
                                                                 ,MID(dm.default_meals, 59,10)) 
                                                                 as def_20_meal
                                                     FROM (
-
                                                         SELECT defaultmeal.menu_date
                                                             , defaultmeal.menu_category
                                                             , defaultmeal.menu_type
@@ -3725,7 +3725,6 @@ class All_Meals(Resource):
                                                             SELECT * FROM ptyd.ptyd_menu menu
                                                             WHERE default_meal = "TRUE")
                                                             AS defaultmeal
-
                                                         GROUP BY defaultmeal.menu_date)
                                                         AS dm)
                                                     AS def_meals
@@ -3783,75 +3782,6 @@ class All_Meals(Resource):
                                     menu_date,
                                     menu_category
                                     ;""", 'get', conn)
-=======
-<<<<<<< HEAD
-            items = execute(""" select distinct temp1.*,COALESCE(temp2.total, 0) AS "Total"
-                                from
-                                (SELECT
-                                    menu_date,
-                                    menu_category,
-                                    meal_category, 
-                                    menu_type,
-                                    meal_cat,
-                                    meal_id,
-                                    meals.meal_name,
-                                    default_meal,
-                                    extra_meal_price,
-                                    meal_photo_url
-                                FROM ptyd.ptyd_menu menu
-                                JOIN ptyd.ptyd_meals meals
-                                ON menu.menu_meal_id = meals.meal_id 
-                                where menu_date=\'""" + date + """\') temp1
-                                left join 
-                                (SELECT 
-                                    delivery_day,
-                                    week_affected, 
-                                    meal_selected, 
-                                    COUNT(n) as total from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
-                                FROM  
-                                    ptyd_meals_selected 
-                                JOIN
-                                    numbers  
-                                ON char_length(meal_selection) 
-                                    - char_length(replace(meal_selection, ';', ''))
-                                    >= n - 1) sub1
-                                WHERE week_affected LIKE \'""" + date + """\' 
-                                GROUP BY sub1.meal_selected) temp2
-                                on temp1.meal_id = temp2.meal_selected; """, 'get', conn)
-=======
-            items = execute(""" select  
-                            pn.menu_category,
-                            pm.meal_name,
-                            pn.menu_type,
-                            pm.meal_category,
-                            ms.meal_selected,
-                            pm.extra_meal_price,
-                            pn.default_meal,
-                            ms.total
-                            from
-                        (SELECT
-                            delivery_day,
-                            week_affected, 
-                            meal_selected, 
-                            COUNT(n) as total from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
-                        FROM 
-                            ptyd_meals_selected 
-                        JOIN
-                            numbers
-                        ON char_length(meal_selection)
-                            - char_length(replace(meal_selection, ';', ''))
-                            >= n - 1) sub1
-                        WHERE week_affected LIKE \'""" + date + """\'
-                        GROUP BY sub1.meal_selected) as ms
-                        join
-                        ptyd_menu pn
-                        on ms.week_affected = pn.menu_date
-                        and ms.meal_selected = pn.menu_meal_id
-                        join
-                        ptyd_meals pm
-                        on ms.meal_selected = pm.meal_id; """, 'get', conn)
->>>>>>> master
->>>>>>> 991e02a91ed4f10a0c6816aa47e913b9bfb93f7e
 
             response['message'] = 'successful'
             response['result'] = items
@@ -3863,6 +3793,7 @@ class All_Meals(Resource):
         finally:
             disconnect(conn)
 
+'''
         
 class DisplaySaturdays(Resource):
     def get(self):
@@ -4025,10 +3956,10 @@ api.add_resource(AdminMenu, '/api/v2/menu_display')
 api.add_resource(displayIngredients, '/api/v2/displayIngredients')
 '''
 api.add_resource(addRecipe, '/api/v2/add-recipe')
-api.add_resource(All_Meals, '/api/v2/All_Meals')
 
 api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
 '''
+api.add_resource(All_Meals, '/api/v2/All_Meals')
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
