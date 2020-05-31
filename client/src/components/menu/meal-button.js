@@ -33,6 +33,7 @@ export default class MealButton extends Component {
       requestModal: false,
       // buttonDisabled: true,
       addonButtonDisable: false,
+      selectMealDisable: false,
       buttonSelectKeepColor: false,
       buttonAddOnKeepColor: false,
       cancelAddonWithoutSave: false,
@@ -336,7 +337,8 @@ export default class MealButton extends Component {
       addonActivated: true,
       buttonAddOn: true,
       buttonAddOnKeepColor: true,
-      buttonSelect: false
+      buttonSelect: false,
+      selectMealDisable: true
     });
   };
   specialRequest = () => {
@@ -428,7 +430,7 @@ export default class MealButton extends Component {
             }}
           > */}
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={this.state.buttonDisabled || this.state.selectMealDisable}
             variant='outline-dark'
             ref={button => (this.button = button)}
             style={
