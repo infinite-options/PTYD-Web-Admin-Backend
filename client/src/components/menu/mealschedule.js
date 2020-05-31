@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Grid, Cell } from "react-mdl";
+import React, {Component} from "react";
+import {Grid, Cell} from "react-mdl";
 import IMG8 from "../../img/img8.jpeg";
 import MealButton from "./meal-button";
 import MakeChanges from "./make-account-changes";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
+import {ButtonToolbar, Button, Modal, Card, Form} from "react-bootstrap";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -18,17 +18,19 @@ class Mealschedule extends Component {
       select_date: this.props.match.params.startdate,
       menu: [],
       user_uid: this.props.appProps.user_uid,
-      purchase: { NextCharge: 0 },
+      purchase: {NextCharge: 0},
       subscribed: false,
       monday_available: false,
       paymentPlans: [],
       purchase_all: [], //hold all subscriptions
       selection: 0,
-      api: null //initial result api call,
+      api: null,
+      nextAddonCharge: 0
     };
     this.changeMenuButtons = this.changeMenuButtons.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.getRefresh = this.getRefresh.bind(this);
+    // this.getRefresh = this.getRefresh.bind(this);
+    this.nextAddonChargeChange = this.nextAddonChargeChange.bind(this);
   }
 
   getCookieAttrHelper(cname, type) {
@@ -57,9 +59,6 @@ class Mealschedule extends Component {
   async changeMenuButtons() {
     let currPur = this.state.purchase_all[this.state.selection]; //t - change
     let purchaseId = currPur.purchase_id; //
-    console.log(" printing current purchase", currPur);
-
-    console.log("purchase id check1", purchaseId);
 
     const res = await fetch(
       this.props.match.params.startdate
@@ -75,7 +74,6 @@ class Mealschedule extends Component {
       `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
     );
     const mselect_api = await mselect_res.json();
-    console.log("meal selecting print", mselect_api);
 
     let key;
     let sixWeekMenu = [];
@@ -83,7 +81,6 @@ class Mealschedule extends Component {
     if (api.result === null) {
       return;
     }
-    console.log("resule", api.result);
     for (weekNum = 1; weekNum < 7; weekNum++) {
       key = "MenuForWeek" + weekNum;
       if (!(key in api.result)) break;
@@ -100,7 +97,6 @@ class Mealschedule extends Component {
         currentWeek.mealQuantities
       );
       currentWeek.addonPrice = api.result[key].AddonPrice;
-      console.log("addonprice", api.result[key].AddonPrice);
       currentWeek.maxmeals = currPur.MaximumMeals;
       currentWeek.deliverDay = "Sunday";
       currentWeek.surprise = true;
@@ -133,7 +129,6 @@ class Mealschedule extends Component {
         if (mselect_api.result.Addons[week].week_affected == currentWeek.sat) {
           for (let mealId in mselect_api.result.Addons[week].meals_selected) {
             if (mealId === "") {
-              console.log("alert weird empty string with a space");
               continue;
             }
             currentWeek.addonQuantities[mealId] =
@@ -158,31 +153,15 @@ class Mealschedule extends Component {
         new_plans.push(x[j]);
       }
     }
-    console.log("menu six week menu", sixWeekMenu);
-    this.setState(
-      {
-        menu: sixWeekMenu,
-        purchase: currPur,
-        paymentPlans: new_plans,
-        monday_available: monday_available
-      },
-      () => {
-        console.log("ccccccc", this.state.paymentPlans);
-      }
-    );
+    this.setState({
+      menu: sixWeekMenu,
+      purchase: currPur,
+      paymentPlans: new_plans,
+      monday_available: monday_available
+    });
   }
   async componentDidMount() {
-    /*  PLEASE REPLACE THIS CODE WITH COOKIE
-        DO NOT MAKE API CALL TO GET USER'S FIRST NAME
-    */
-    // const accountres = await fetch(
-    //   this.props.ACC_URL + "/" + this.state.user_uid
-    // );
-    // const accountapi = await accountres.json();
-    // this.setState({
-    //   first_name: accountapi.result[0].first_name
-    // });
-    this.setState({ first_name: this.searchCookie4Name("loginStatus") });
+    this.setState({first_name: this.searchCookie4Name("loginStatus")});
 
     let currPur = {};
     let purchaseId = 0;
@@ -197,17 +176,12 @@ class Mealschedule extends Component {
     const api = await res.json();
     // console.log("api", api);
     if (this.state.user_uid !== null) {
-      // const purchases = await fetch(
-      //   `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
-      // );
-      console.log("before purchasesApi");
-
       if (this.state.select_date === undefined) {
-        this.setState({ select_date: null });
+        this.setState({select_date: null});
       }
       const purchases = await axios.get(
         `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`,
-        { params: { startdate: this.state.select_date } }
+        {params: {startdate: this.state.select_date}}
       );
       const purchasesApi = purchases.data;
       console.log("purchaseApi", purchasesApi);
@@ -217,22 +191,20 @@ class Mealschedule extends Component {
       if (purchasesApi.result.length != 0) {
         currPur = purchasesApi.result[this.state.selection];
         purchaseId = purchasesApi.result[this.state.selection].purchase_id;
-        this.setState({ subscribed: true });
-        this.setState(
-          {
-            subscribed: true,
-            monday_available:
-              purchasesApi.result[this.state.selection].monday_available,
-            purchase_all: purchasesApi.result,
-            api: api
-          },
-          () => {
-            console.log("api displaying", this.state.api);
-          }
-        );
+        this.setState({subscribed: true});
+        this.setState({
+          subscribed: true,
+          monday_available:
+            purchasesApi.result[this.state.selection].monday_available,
+          purchase_all: purchasesApi.result,
+          api: api,
+          nextAddonCharge:
+            purchasesApi.result[this.state.selection].total_charge
+        });
+        console.log("selection in componentDidMount: ", this.state.selection);
+        console.log("addon Charge: ", this.state.nextAddonCharge);
       }
     }
-
     const mselect_res = await fetch(
       `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
     );
@@ -325,57 +297,47 @@ class Mealschedule extends Component {
       }
     }
 
-    console.log("plans", plans);
-    console.log("test98", new_plans);
-    this.setState(
-      {
-        menu: sixWeekMenu,
-        purchase: currPur,
-        paymentPlans: new_plans
-      },
-      () => {
-        console.log("ccccccc", this.state.paymentPlans);
-        // window.location.reload(false);
-      }
-    );
+    this.setState({
+      menu: sixWeekMenu,
+      purchase: currPur,
+      paymentPlans: new_plans
+    });
   }
   //dropdown for different subscription
   async handleChange(event) {
-    console.log("event.target.value:", event.target.value);
     await this.setState({
       selection: event.target.value
     });
-    this.setState(
-      () => {
-        this.changeMenuButtons();
-      },
-      () => {
-        // window.location.reload(false);
-      }
-    );
+    this.setState(() => {
+      this.changeMenuButtons();
+    });
   }
-  async getRefresh() {
-    if (this.state.user_uid == null) return;
-    console.log("getting refresh", this.state);
-    let currPur = {};
-    let purchaseId = 0;
-    if (this.state.user_uid !== null) {
-      const purchases = await fetch(
-        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
-      );
-      const purchasesApi = await purchases.json();
+  // async getRefresh() {
+  //   if (this.state.user_uid == null) return;
+  //   console.log("getting refresh", this.state);
+  //   let currPur = {};
+  //   let purchaseId = 0;
+  //   if (this.state.user_uid !== null) {
+  //     const purchases = await fetch(
+  //       `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+  //     );
+  //     const purchasesApi = await purchases.json();
 
-      // Check if user has any active subscriptions
-      if (purchasesApi.result.length != 0) {
-        currPur = purchasesApi.result[this.state.selection];
-        purchaseId = purchasesApi.result[this.state.selection].purchase_id;
-        this.setState({
-          purchase_all: purchasesApi.result
-        });
-      }
-    }
-    console.log("done getting refresh");
-  }
+  //     // Check if user has any active subscriptions
+  //     if (purchasesApi.result.length != 0) {
+  //       currPur = purchasesApi.result[this.state.selection];
+  //       purchaseId = purchasesApi.result[this.state.selection].purchase_id;
+  //       this.setState({
+  //         purchase_all: purchasesApi.result
+  //       });
+  //     }
+  //   }
+  //   console.log("done getting refresh");
+  // }
+  nextAddonChargeChange = newTotal => {
+    this.setState({nextAddonCharge: newTotal});
+  };
+
   render() {
     let displayrows = [];
     let subscription_selection = this.state.purchase_all[this.state.selection];
@@ -384,71 +346,100 @@ class Mealschedule extends Component {
     }
     console.log("selection", subscription_selection);
     // for (let i = 0; i < subscription_selection.length; i++) {
-    let tempelement = (
-      <div>
-        <h4>Subscription Details</h4>
-        <p>My Subscription: {subscription_selection.meal_plan_desc}</p>
-        <p>Payment Plan: {subscription_selection.payment_frequency}</p>
-        <p>
-          Paid Weeks Remaining: {subscription_selection.paid_weeks_remaining}
-        </p>
-        <p>Next Charge: ${subscription_selection.amount_due_before_addon}</p>
-        <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
-        <p>Next Addon Charge: ${subscription_selection.total_charge}</p>
-        <p>
-          Next Addon Charge Date:{" "}
-          {subscription_selection.next_addon_charge_date}
-        </p>
-        <p>
-          Coupons:{" "}
-          {subscription_selection.coupon_id
-            ? subscription_selection.coupon_id
-            : "None"}
-        </p>
-        <h4>Credit Card Details</h4>{" "}
-        <p>Credit Card: {subscription_selection.cc_num}</p>
-        <p>Expiration Date: {subscription_selection.cc_exp_date}</p>
-        <p>CVV: {subscription_selection.cc_cvv}</p>
-        <h4>Delivery Details</h4>{" "}
-        <p>Address: {subscription_selection.delivery_address}</p>
-        <p>Unit: {subscription_selection.delivery_address_unit}</p>
-        <p>
-          City, State ZIP: {subscription_selection.delivery_city},{" "}
-          {subscription_selection.delivery_state}{" "}
-          {subscription_selection.delivery_zip}
-        </p>
-        <p>Instructions: {subscription_selection.delivery_instructions}</p>
-      </div>
-    );
-    displayrows.push(tempelement);
+    // let tempelement = (
+    // <div>
+    //   <h4>Subscription Details</h4>
+    //   <p>My Subscription: {subscription_selection.meal_plan_desc}</p>
+    //   <p>Payment Plan: {subscription_selection.payment_frequency}</p>
+    //   <p>
+    //     Paid Weeks Remaining: {subscription_selection.paid_weeks_remaining}
+    //   </p>
+    //   <p>Next Charge: ${subscription_selection.amount_due_before_addon}</p>
+    //   <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
+    //   <p>Next Addon Charge: ${subscription_selection.total_charge}</p>
+    //   <p>
+    //     Next Addon Charge Date:{" "}
+    //     {subscription_selection.next_addon_charge_date}
+    //   </p>
+    //   <p>
+    //     Coupons:{" "}
+    //     {subscription_selection.coupon_id
+    //       ? subscription_selection.coupon_id
+    //       : "None"}
+    //   </p>
+    //   <h4>Credit Card Details</h4>{" "}
+    //   <p>Credit Card: {subscription_selection.cc_num}</p>
+    //   <p>Expiration Date: {subscription_selection.cc_exp_date}</p>
+    //   <p>CVV: {subscription_selection.cc_cvv}</p>
+    //   <h4>Delivery Details</h4>{" "}
+    //   <p>Address: {subscription_selection.delivery_address}</p>
+    //   <p>Unit: {subscription_selection.delivery_address_unit}</p>
+    //   <p>
+    //     City, State ZIP: {subscription_selection.delivery_city},{" "}
+    //     {subscription_selection.delivery_state}{" "}
+    //     {subscription_selection.delivery_zip}
+    //   </p>
+    //   <p>Instructions: {subscription_selection.delivery_instructions}</p>
+    // </div>
+    // );
+    // displayrows.push(tempelement);
 
     // let addon_price_saved = subscription_selection.weekly_addon_cost;
     return (
       // <div>
       //   <section class="content-section">
-      <div class="container font2">
+      <div class='container font2'>
         <Grid>
           <Cell col={3}>
             {" "}
             <Grid>
-              {/* <Cell col={4}>
-                <img
-                  style={{
-                    borderRadius: "50%",
-                    width: "70px",
-                    height: "70px",
-                    marginTop: "10px"
-                  }}
-                  src={IMG8}
-                  alt="Avatar"
-                ></img>
-              </Cell> */}
               <Cell col={8}>
-                <h4 style={{ overflowWrap: "anywhere" }}>
+                <h4 style={{overflowWrap: "anywhere"}}>
                   Hi, {this.searchCookie4Name("loginStatus")}
-                  <th colSpan="2">{this.subscription_dropdown()}</th>
+                  <th colSpan='2'>{this.subscription_dropdown()}</th>
                 </h4>
               </Cell>
+              <div>
+                <h4>Subscription Details</h4>
+                <p>My Subscription: {subscription_selection.meal_plan_desc}</p>
+                <p>Payment Plan: {subscription_selection.payment_frequency}</p>
+                <p>
+                  Paid Weeks Remaining:{" "}
+                  {subscription_selection.paid_weeks_remaining}
+                </p>
+                <p>
+                  Next Charge: ${subscription_selection.amount_due_before_addon}
+                </p>
+                <p>
+                  Next Charge Date: {subscription_selection.next_charge_date}
+                </p>
+                <p>Next Addon Charge: ${this.state.nextAddonCharge}</p>
+                <p>
+                  Next Addon Charge Date:{" "}
+                  {subscription_selection.next_addon_charge_date}
+                </p>
+                <p>
+                  Coupons:{" "}
+                  {subscription_selection.coupon_id
+                    ? subscription_selection.coupon_id
+                    : "None"}
+                </p>
+                <h4>Credit Card Details</h4>{" "}
+                <p>Credit Card: {subscription_selection.cc_num}</p>
+                <p>Expiration Date: {subscription_selection.cc_exp_date}</p>
+                <p>CVV: {subscription_selection.cc_cvv}</p>
+                <h4>Delivery Details</h4>{" "}
+                <p>Address: {subscription_selection.delivery_address}</p>
+                <p>Unit: {subscription_selection.delivery_address_unit}</p>
+                <p>
+                  City, State ZIP: {subscription_selection.delivery_city},{" "}
+                  {subscription_selection.delivery_state}{" "}
+                  {subscription_selection.delivery_zip}
+                </p>
+                <p>
+                  Instructions: {subscription_selection.delivery_instructions}
+                </p>
+              </div>
             </Grid>
             <MakeChanges
               user_uid={this.searchCookie4UserID("loginStatus")}
@@ -477,19 +468,19 @@ class Mealschedule extends Component {
           </Cell>{" "}
           <Cell col={1}></Cell>
           <Cell col={8}>
-            <h3 className="font1">
+            <h3 className='font1'>
               <b>Select Meals Around Your Schedule</b>
             </h3>
             <div>{console.log(this.state.menu)}</div>
-            <div className="meals-button">
+            <div className='meals-button'>
               {this.state.menu.map(
                 eachWeek => (
                   console.log("meal printing", eachWeek.mealQuantities),
                   console.log("addon printing", eachWeek.addonQuantities),
                   (
                     <MealButton
-                      day1="Sunday"
-                      day2="Monday"
+                      day1='Sunday'
+                      day2='Monday'
                       saturdayDate={eachWeek.sat}
                       date1={eachWeek.sun}
                       date2={eachWeek.mon}
@@ -506,7 +497,12 @@ class Mealschedule extends Component {
                       addonsSelected={eachWeek.addonsSelected}
                       monday_available={this.state.monday_available}
                       MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
-                      api_refresh={this.getRefresh}
+                      // api_refresh={this.getRefresh}
+                      nextAddonChargeDate={
+                        this.state.purchase_all[this.state.selection]
+                          .next_addon_charge_date
+                      }
+                      nextAddonChargeChange={this.nextAddonChargeChange}
                     />
                   )
                 )
@@ -538,7 +534,6 @@ class Mealschedule extends Component {
       addon_price_saved[key] = tempQuantity * tempPrice;
       // console.log(tempQuantity * tempPrice);
     }
-    console.log("dict", addon_price_saved);
     return addon_price_saved;
   };
 
@@ -581,8 +576,8 @@ class Mealschedule extends Component {
     return (
       <FormControl>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
           value={this.state.selection}
           onChange={this.handleChange}
           // style={{ color: "white" }}

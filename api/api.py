@@ -1221,9 +1221,10 @@ class Coordinates:
         coordinates = []
         for address in self.locations:
             formattedAddress = self.formatAddress(address)
+            print ("address: ", address)
             r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
                 '&maxResults=1&key={}'.format(params['key']))
-
+            print("result:", r)
             try:
                 results = r.json()
                 assert(results['resourceSets'][0]['estimatedTotal'])
