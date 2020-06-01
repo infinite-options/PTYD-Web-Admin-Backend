@@ -5,7 +5,7 @@ export default class Selector extends Component {
     super(props);
     this.state = {
       purchases: this.props.purchases,
-      currentPurchase: purchases[0]
+      currentPurchase: this.props.purchases[0]
     };
   }
   ChangePurchase = event => {
