@@ -83,9 +83,10 @@ export default class MealSchedule extends Component {
     console.log("showMakeChange: ", this.state.showHideMakeChange);
   };
 
-  ChangeCurrentPurchase(purchasID) {
+  ChangeCurrentPurchase(purchase) {
     // this function use for update current purchase which is selected from children
     // need a helper function to get the purchase by using purchaseID
+    this.setState({currentPurchase: purchase});
   }
   render() {
     console.log("rendering...");

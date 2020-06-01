@@ -4,10 +4,14 @@ export default class Selector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      purchases: this.props.purchases
+      purchases: this.props.purchases,
+      currentPurchase: purchases[0]
     };
   }
-
+  ChangePurchase = event => {
+    this.setState({currentPurchase: this.state.purchases[event.target.value]});
+    this.props.ChangeCurrentPurchase(this.state.currentPurchase);
+  };
   render() {
     return (
       <Fragment>
