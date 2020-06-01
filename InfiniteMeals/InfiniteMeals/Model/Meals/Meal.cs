@@ -18,7 +18,6 @@ namespace InfiniteMeals.Meals.Model
         public string infoUrl { get; set; }
 
 
-
         //public int meal_qty;
         public int qty {
             get { return order_qty; }

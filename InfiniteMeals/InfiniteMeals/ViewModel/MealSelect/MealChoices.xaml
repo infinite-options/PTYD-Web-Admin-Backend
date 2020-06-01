@@ -47,8 +47,6 @@
                            HeightRequest="20"
                            WidthRequest="20"/>
                      <Stepper x:Name="_stepper"
-                              HeightRequest="1"
-                              WidthRequest="1"
                               Grid.Column="2"
                              Value="0"
                              Maximum="10"
@@ -88,9 +86,7 @@
                         IMAGES NOT SUPPORTED YET
                     <Image Grid.RowSpan="1"
                            Source="{Binding imageUrl}"
-                           Aspect="AspectFill"
-                           HeightRequest="60"
-                           WidthRequest="60" />
+                           Aspect="AspectFill" />
                     -->
                     <Label Grid.Column="1"
                            Text="{Binding name}"
@@ -104,8 +100,6 @@
                            HeightRequest="20"
                            WidthRequest="20"/>
                     <Stepper x:Name="_stepper"
-                              HeightRequest="1"
-                              WidthRequest="1"
                               Grid.Column="2"
                              Value="0"
                              Maximum="10"
@@ -161,8 +155,6 @@
                            HeightRequest="20"
                            WidthRequest="20"/>
                     <Stepper x:Name="_stepper"
-                              HeightRequest="1"
-                              WidthRequest="1"
                               Grid.Column="2"
                              Value="0"
                              Maximum="10"
