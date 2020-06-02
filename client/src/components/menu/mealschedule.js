@@ -9,6 +9,7 @@ import AccountInfo from "./AccountInfo";
 import MakeChange from "./MakeChange";
 import MealButtons from "./MealButton";
 import Selector from "./Selector";
+
 export default class MealSchedule extends Component {
   constructor(props) {
     super(props);
@@ -79,8 +80,6 @@ export default class MealSchedule extends Component {
     this.state.showHideMakeChange
       ? this.setState({showHideMakeChange: false})
       : this.setState({showHideMakeChange: true});
-
-    console.log("showMakeChange: ", this.state.showHideMakeChange);
   };
 
   ChangeCurrentPurchase(purchase) {
@@ -89,15 +88,10 @@ export default class MealSchedule extends Component {
     this.setState({currentPurchase: purchase});
   }
   render() {
-    console.log("rendering...");
-    console.log(
-      "showHideMakeChange in render: ",
-      this.state.showHideMakeChange
-    );
     return (
       <div className='container font2'>
         <Grid>
-          <Cell col={3}>
+          <Cell col={4}>
             <h4>Hi! {this.state.firstname}</h4>
             <Row className='mb-1'>
               <Selector
@@ -117,7 +111,7 @@ export default class MealSchedule extends Component {
 
             <AccountInfo />
           </Cell>{" "}
-          <Cell col={9}>
+          <Cell col={8}>
             {/* run a loop to create 6 week's buttons */}
             <MealButtons />
           </Cell>

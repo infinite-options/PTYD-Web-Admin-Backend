@@ -1,12 +1,23 @@
 import React, {Component} from "react";
-import {Button, ButtonToolbar} from "react-bootstrap";
+import {
+  Button,
+  ButtonToolbar,
+  Tooltip,
+  Card,
+  Modal,
+  OverlayTrigger
+} from "react-bootstrap";
+import {Grid, Cell} from "react-mdl";
+
+import EachMeal from "./EachMeal";
+import EachAddon from "./EachAddon";
 
 export default class MealButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPurchase: {}, // get from meal schedule
-      menu: [], // get from meal schedule. this is 6 week menu
+      sixWeekMenu: [], // get from meal schedule. this is 6 week menu
 
       //some variable to control button
       sundayButton: {
@@ -24,6 +35,7 @@ export default class MealButton extends Component {
       selectButton: {
         chosen: false,
         red: false,
+        showModal: false,
         active: true
       },
       surpriseButton: {
@@ -33,8 +45,12 @@ export default class MealButton extends Component {
       addonButton: {
         chosen: false,
         red: false,
+        showModal: false,
         active: true
-      }
+      },
+
+      // Local variable
+      mealLeft: 0
     };
   }
   componentDidMount = prevProps => {
@@ -122,7 +138,8 @@ export default class MealButton extends Component {
       },
       selectButton: {
         ...prevState.selectButton,
-        active: false
+        active: false,
+        showModal: false
       },
       surpriseButton: {
         ...prevState.surpriseButton,
@@ -130,6 +147,7 @@ export default class MealButton extends Component {
       },
       addonButton: {
         ...prevState.addonButton,
+        showModal: false,
         active: false
       }
     }));
@@ -153,6 +171,7 @@ export default class MealButton extends Component {
         ...prevState.selectButton,
         chosen: true,
         red: true,
+        showModal: true,
         active: true
       },
       surpriseButton: {
@@ -224,11 +243,55 @@ export default class MealButton extends Component {
         ...prevState.addonButton,
         chosen: true,
         red: true,
+        showModal: true,
         active: true
       }
     }));
   };
 
+  incrementMaxMeal = () => {
+    this.setState({mealLeft: this.state.mealLeft + 1});
+  };
+
+  decrementMaxMeal = () => {
+    this.setState({mealLeft: this.state.mealLeft - 1});
+  };
+
+  saveSelectMeal = () => {
+    // set state for all button
+    this.setState(prevState => ({
+      sundayButton: {
+        ...prevState.sundayButton,
+        active: true
+      },
+      mondayButton: {
+        ...prevState.mondayButton,
+        active: true
+      },
+      skipButton: {
+        ...prevState.skipButton,
+        active: true
+      },
+      selectButton: {
+        ...prevState.selectButton,
+        chosen: true,
+        red: false,
+        showModal: false,
+        active: true
+      },
+      surpriseButton: {
+        ...prevState.surpriseButton,
+        active: true
+      },
+      addonButton: {
+        ...prevState.addonButton,
+        active: true
+      }
+    }));
+    // update local variable
+
+    // send request to save to serve
+  };
   render() {
     const orange = {
       width: "95px",
@@ -347,6 +410,154 @@ export default class MealButton extends Component {
           >
             Add Local Treats
           </Button>
+          {this.state.selectButton.showModal && (
+            <Card style={{width: "92%"}}>
+              <Card.Header>
+                <Modal.Title style={{width: "100%"}}>
+                  <h4 style={{float: "left", margin: "0"}} class='font2'>
+                    Please Select {this.state.maxmeals} Meals:
+                  </h4>
+                  <div style={{float: "right"}}>
+                    &nbsp;&nbsp;
+                    {this.state.maxmeals !== 0 ? (
+                      <OverlayTrigger
+                        key={"top"}
+                        placement={"top"}
+                        overlay={
+                          <Tooltip id='selectMealSaveButton'>
+                            <p>
+                              Select additional meals to activate this button or
+                              click "Surprise Me" to close this box.
+                            </p>
+                          </Tooltip>
+                        }
+                      >
+                        <span className='d-inline-block'>
+                          <Button
+                            variant='success'
+                            disabled={true}
+                            style={{pointerEvents: "none"}}
+                          >
+                            Save
+                          </Button>
+                        </span>
+                      </OverlayTrigger>
+                    ) : (
+                      <Button variant='success' onClick={this.saveSelectMeal}>
+                        Save
+                      </Button>
+                    )}
+                  </div>
+                </Modal.Title>
+              </Card.Header>
+              <div class='scrollMenu'>
+                {Object.keys(this.state.sixWeekMenu).map(key => (
+                  <Grid>
+                    <Cell col={12}>
+                      <h4 style={{margin: "0"}}>
+                        {this.state.sixWeekMenu[key].Category}
+                      </h4>
+                    </Cell>
+
+                    {this.state.sixWeekMenu[key].Menu.map(meal => (
+                      <Cell col={4}>
+                        <EachMeal
+                          mealTitle={meal.meal_name}
+                          ingridents={"Ingredients: " + meal.meal_desc}
+                          detail={
+                            "Cal " +
+                            meal.meal_calories +
+                            ", Prot " +
+                            meal.meal_protein +
+                            ", Carb " +
+                            meal.meal_carbs +
+                            ", Sug " +
+                            meal.meal_sugar +
+                            ", Fib " +
+                            meal.meal_fiber +
+                            ", Fat " +
+                            meal.meal_fat +
+                            ", Sat " +
+                            meal.meal_sat
+                          }
+                          imgurl={meal.meal_photo_url}
+                          maxmeals={this.state.maxmeals}
+                          mealQuantities={
+                            this.state.mealQuantities[meal.meal_id]
+                          }
+                          incrementMaxMeal={this.incrementMealLeft}
+                          decrementMaxMeal={this.decrementMealLeft}
+                        />
+                      </Cell>
+                    ))}
+                  </Grid>
+                ))}
+              </div>
+            </Card>
+          )}
+          {this.state.addonButton.showModal && (
+            <Card style={{width: "92%"}}>
+              <Card.Header>
+                <Modal.Title style={{width: "100%"}}>
+                  <h4 className='font2' style={{float: "left", margin: "0"}}>
+                    Add Local Treats:
+                  </h4>
+                  <div style={{float: "right"}}>
+                    <h4 className='font2' style={{float: "left", margin: "0"}}>
+                      Total Price: ${this.state.total_addon_price}
+                    </h4>
+                    &nbsp;&nbsp;
+                    <Button variant='danger' onClick={this.closeButtonAddOn}>
+                      Close
+                    </Button>
+                    <Button variant='success' onClick={this.saveButtonAddOn}>
+                      Agree To Pay
+                    </Button>
+                  </div>
+                </Modal.Title>
+              </Card.Header>
+              <div class='scrollMenu'>
+                {Object.keys(this.state.sixWeekMenu).map(key => (
+                  <Grid>
+                    <Cell col={12}>
+                      <h4 style={{margin: "0"}}>
+                        {this.state.sixWeekMenu[key].Category}
+                      </h4>
+                    </Cell>
+
+                    {this.state.sixWeekMenu[key].Menu.map(meal => (
+                      <Cell col={4}>
+                        <EachAddon
+                          mealTitle={meal.meal_name}
+                          extra_meal_price={meal.extra_meal_price}
+                          ingridents={"Ingredients: " + meal.meal_desc}
+                          detail={
+                            "Cal " +
+                            meal.meal_calories +
+                            ", Prot " +
+                            meal.meal_protein +
+                            ", Carb " +
+                            meal.meal_carbs +
+                            ", Sug " +
+                            meal.meal_sugar +
+                            ", Fib " +
+                            meal.meal_fiber +
+                            ", Fat " +
+                            meal.meal_fat +
+                            ", Sat " +
+                            meal.meal_sat
+                          }
+                          imgurl={meal.meal_photo_url}
+                          incrementMaxMeal={this.incrementMealLeft}
+                          decrementMaxMeal={this.decrementMealLeft}
+                        />
+                      </Cell>
+                    ))}
+                  </Grid>
+                ))}
+              </div>
+            </Card>
+          )}
         </ButtonToolbar>
       </div>
     );
