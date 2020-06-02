@@ -73,7 +73,7 @@ namespace InfiniteMeals.MealSelect
                     name = MenuForWeek1Names[placeHolder],
                     description = MenuForWeek1Desc[placeHolder],
                     imageUrl= MenuForWeek1Image[placeHolder],
-                    infoUrl = "info.jpg",
+                    infoUrl = "https://lh3.googleusercontent.com/proxy/Qx2SUkXKZlrr5vwfQtmFspzAWcZIWsPzJk40_-rI917XZv3KT5Ci6jnNf3PXli9jf9Fi6f5NUzCz4ynJBJqGBBHSY5JchT7gJfQeLgRTFldp8BFY9I7osH368zSmLkIaXg",
                 }) ;
             }
 
@@ -87,7 +87,7 @@ namespace InfiniteMeals.MealSelect
                     name = SeasMenuForWeek1Names[placeHolderSeas],
                     description = SeasMenuForWeek1Desc[placeHolderSeas],
                     //imageUrl = SeasMenuForWeek1Image[placeHolderSeas],
-                    infoUrl = "info.jpg",
+                    infoUrl = "https://lh3.googleusercontent.com/proxy/Qx2SUkXKZlrr5vwfQtmFspzAWcZIWsPzJk40_-rI917XZv3KT5Ci6jnNf3PXli9jf9Fi6f5NUzCz4ynJBJqGBBHSY5JchT7gJfQeLgRTFldp8BFY9I7osH368zSmLkIaXg",
                 });
             }
 
@@ -114,8 +114,13 @@ namespace InfiniteMeals.MealSelect
             await Navigation.PushAsync(new MealSelect.MealChoices());
         }
 
+        private async void ClickedSelect(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MealSelect.MealChoices());
+        }
 
-       private void ClickedInfo(object sender, EventArgs e)
+
+        private void ClickedInfo(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("here " + sender);
             //DisplayAlert("Nutrition Facts", item.Description.ToString() , "OK");

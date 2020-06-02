@@ -8,69 +8,80 @@
     <ContentPage.Content>
 
         <StackLayout>
-            <Label Text="Date Placeholder" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
-            <Grid ColumnSpacing="8" HorizontalOptions="FillAndExpand"  x:Name="ButtonStack">
+            <Label Text="Dates" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
+            <Grid x:Name="ButtonStack">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="16.66*" />
                 <ColumnDefinition Width="16.66*" />
-                <!--
-                <ColumnDefinition Width="16.66*" />
-                <ColumnDefinition Width="16.66*" />
-                <ColumnDefinition Width="16.66*" />
-                <ColumnDefinition Width="16.66*" />
-                -->
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="15*" />
-                <RowDefinition Height="15*" />
-                <RowDefinition Height="15*" />
-                <RowDefinition Height="15*" />
-                <RowDefinition Height="15*" />
-                <!--
-                <RowDefinition Height="15*" />
-                -->
-
+                <RowDefinition Height="16.66*" />
+                <RowDefinition Height="16.66*" />
+                <RowDefinition Height="16.66*" />
+                <RowDefinition Height="16.66*" />
+                <RowDefinition Height="16.66*" />
             </Grid.RowDefinitions>
 
-            <Button ClassId = "SunButton" Text="Sunday" Grid.Column="0" BackgroundColor="#8FBC8F" Clicked="ClickedColor" />
-            <Button ClassId = "MonButton" Text="Monday" Grid.Column="0" Grid.Row="1" Clicked="ClickedColor"/>
-            <Button ClassId = "SkipButton" Text="Skip This Week" Grid.Column="1" Grid.Row="1" Clicked="ClickedColor"/>
-            <Button ClassId = "SelectButton" Text="Select Meal" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Clicked="ClickedColor"/>
-            <Button ClassId = "SurpriseButton" BackgroundColor="#8FBC8F" Text="Surprise Me"  Grid.Column ="1" Grid.Row="0" Clicked="ClickedColor"/>
-            <Button ClassId = "AddButton" Text="Add on" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Clicked="ClickedAddOn"/>
-            <Button Text="Next" Grid.ColumnSpan="2" Grid.Row="4" Margin="10" Clicked="ClickedSelectMeal" />
-
-            <!--
-                            <Button Text="StepperTest" Grid.ColumnSpan="2" Grid.Row="4" Margin="10" Clicked="ClickedStepper" />
-            <Button Text="Sunday" Grid.Column="0" Grid.Row="1"/>
-            <Button Text="Monday" Grid.Column="1" Grid.Row="1"/>
-            <Button Text="Skip This Week" Grid.Column="2" Grid.Row="1"/>
-            <Button Text="Select Meal" Grid.Column="3" Grid.Row="1"/>
-            <Button Text="Surprise Me" Grid.Column="4" Grid.Row="1"/>
-            <Button Text="Add on" Grid.Column="5" Grid.Row="1"/>
-
-            <Button Text="Sunday" Grid.Column="0" Grid.Row="2"/>
-            <Button Text="Monday" Grid.Column="1" Grid.Row="2"/>
-            <Button Text="Skip This Week" Grid.Column="2" Grid.Row="2"/>
-            <Button Text="Select Meal" Grid.Column="3" Grid.Row="2"/>
-            <Button Text="Surprise Me" Grid.Column="4" Grid.Row="2"/>
-            <Button Text="Add on" Grid.Column="5" Grid.Row="2"/>
-
-            <Button Text="Sunday" Grid.Column="0" Grid.Row="3"/>
-            <Button Text="Monday" Grid.Column="1" Grid.Row="3"/>
-            <Button Text="Skip This Week" Grid.Column="2" Grid.Row="3"/>
-            <Button Text="Select Meal" Grid.Column="3" Grid.Row="3"/>
-            <Button Text="Surprise Me" Grid.Column="4" Grid.Row="3"/>
-            <Button Text="Add on" Grid.Column="5" Grid.Row="3"/>
-
-            -->
-
-        </Grid>
-
+            <Button ClassId = "SunButton"
+                    Margin="30,0,0,0"
+                    WidthRequest="150"
+                    HeightRequest="150"
+                    HorizontalOptions="Start"
+                    Text="Sunday"
+                    Grid.Column="0"
+                    BackgroundColor="#8FBC8F"
+                    Clicked="ClickedColor" />
+            <Button ClassId = "MonButton"
+                    Margin="30,0,0,0"
+                    WidthRequest="150"
+                    HeightRequest="150"
+                    HorizontalOptions="Start"
+                    Text="Monday"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Clicked="ClickedColor"/>
+            <Button ClassId = "SkipButton"
+                    Margin="0,0,30,0"
+                    WidthRequest="150"
+                    HeightRequest="150"
+                    HorizontalOptions="End"
+                    Text="Skip This Week"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Clicked="ClickedColor"/>
+            <Button ClassId = "SelectButton"
+                    Margin="30,0,0,0"
+                    WidthRequest="150"
+                    HorizontalOptions="Start"
+                    HeightRequest="175"
+                    VerticalOptions="Start"
+                    Text="Select Meal"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Grid.RowSpan="2"
+                    Clicked="ClickedSelectMeal"/>
+            <Button ClassId = "SurpriseButton"
+                    Margin="0,0,30,0"
+                    WidthRequest="150"
+                    HeightRequest="150"
+                    HorizontalOptions="End"
+                    BackgroundColor="#8FBC8F"
+                    Text="Surprise Me"
+                    Grid.Column ="1"
+                    Grid.Row="0"
+                    Clicked="ClickedColor"/>
+            <Button ClassId = "AddButton"
+                    Margin="0,0,30,0"
+                    WidthRequest="150"
+                    HorizontalOptions="End"
+                    HeightRequest="175"
+                    VerticalOptions="Start"
+                    Text="Add Local Treats"
+                    Grid.Column="1"
+                    Grid.Row="2"
+                    Grid.RowSpan="2"
+                    Clicked="ClickedAddOnNav"/>
+            </Grid>
         </StackLayout>
-
-   
-
-
     </ContentPage.Content>
 </ContentPage>

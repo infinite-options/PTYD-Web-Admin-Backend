@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using InfiniteMeals.Model.Database;
+using InfiniteMeals.Meals.Model;
 
 namespace InfiniteMeals.Meals {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -17,14 +18,42 @@ namespace InfiniteMeals.Meals {
         int ctr = 2;
         bool disabled = false;
         List<String> order = new List<String>();
-
+        public IList<Dates> SundayDates { get; private set; }
+        public IList<Dates> MondayDates { get; private set; }
         String green = "#8FBC8F";
 
         public MealSchedule() {
             InitializeComponent();
+            getData();
+        }
+
+        private async void getData()
+        {
+            List<String> sundaySched = new List<String>();
+            List<String> mondaySched = new List<String>();
+
+            HttpClient client = new HttpClient();
+            var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
+            var obj = JsonConvert.DeserializeObject<Data>(content);
+
+            sundaySched.Add(obj.Result.MenuForWeek1.Sunday);
+            mondaySched.Add(obj.Result.MenuForWeek1.Monday);
+
+            /*SundayDates.Add(new Dates
+            {
+               sundayDate = sundaySched[0],
+            });
+
+            MondayDates.Add(new Dates
+            {
+                mondayDate = mondaySched[0],
+            });*/
+
+            BindingContext = this;
         }
 
         private async void ClickedSelectMeal(object sender, EventArgs e) {
+            ClickedColor(sender, e);
             if (ctr == 2 | disabled == true)
                 await Navigation.PushAsync(new MealSelect.MealChoices());
             else {
@@ -65,8 +94,6 @@ namespace InfiniteMeals.Meals {
                     }
                 }
             }
-
-            System.Diagnostics.Debug.WriteLine(btn.ClassId + " bye " + disabled);
         }
 
         private void ClickedAddOn(object sender, EventArgs e) {
@@ -84,6 +111,12 @@ namespace InfiniteMeals.Meals {
 
         private async void ClickedStepper(object sender, EventArgs e) {
             await Navigation.PushAsync(new Steppers.BasicSteppers());
+        }
+
+        private async void ClickedAddOnNav(object sender, EventArgs e)
+        {
+            ClickedAddOn(sender, e);
+            await Navigation.PushAsync(new MealSelect.AddOnChoices());
         }
 
     }

@@ -18,8 +18,6 @@ namespace InfiniteMeals.Meals.Model
         public string infoUrl { get; set; }
 
 
-
-
         //public int meal_qty;
         public int qty {
             get { return order_qty; }
@@ -29,7 +27,6 @@ namespace InfiniteMeals.Meals.Model
                 PropertyChanged(this, new PropertyChangedEventArgs("order_qty"));
             }
         }
-
 
         public override string ToString() {
             return this.name;
