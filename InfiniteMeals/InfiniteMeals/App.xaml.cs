@@ -14,7 +14,7 @@ namespace InfiniteMeals {
             InitializeComponent();
  
             
-            MainPage = new NavigationPage(new ViewModel.Checkout.Shipping());
+            MainPage = new NavigationPage(new MainPage());
             //MainPage = new MainPage() { BindingContext = new MainPageViewModel() };
         }
 

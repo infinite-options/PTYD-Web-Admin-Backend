@@ -10,14 +10,20 @@
             
             <Grid.RowDefinitions>
                 <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <BoxView/>
-            <Image Source="payment_status.png" Grid.ColumnSpan="2"/>
+            <BoxView Grid.Row="0"/>
+            <Image Grid.Row="0" Source="paymentStatus.png" VerticalOptions="Center" Grid.ColumnSpan="2"/>
  
 
         </Grid>   

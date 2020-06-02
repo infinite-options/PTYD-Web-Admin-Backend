@@ -23,7 +23,7 @@
                     <RowDefinition Height="200" />
                 </Grid.RowDefinitions>
 
-                <ImageButton x:Name="mealimage" HorizontalOptions="CenterAndExpand" Grid.Row="0"/>
+                <ImageButton x:Name="mealimage" HorizontalOptions="CenterAndExpand" Grid.Row="0" Clicked="ClickedWeekToWeek"/>
                 <Label Text="week to week" Grid.Row="0" HorizontalOptions="Start" VerticalOptions="Center"/>
                 <ImageButton x:Name="mealimage1"  HorizontalOptions="CenterAndExpand" Grid.Row="1"/>
                 <Label Text="2 week prepay" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Center"/>

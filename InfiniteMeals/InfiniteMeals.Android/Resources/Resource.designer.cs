@@ -8379,10 +8379,10 @@ namespace InfiniteMeals.Droid
 			public const int oats = 2131165307;
 			
 			// aapt resource value: 0x7F07007C
-			public const int payment_status = 2131165308;
+			public const int paymentStatus = 2131165308;
 			
 			// aapt resource value: 0x7F07007D
-			public const int shipping_status = 2131165309;
+			public const int shippingStatus = 2131165309;
 			
 			// aapt resource value: 0x7F07007E
 			public const int tooltip_frame_dark = 2131165310;

@@ -7,5 +7,12 @@
              x:Class="InfiniteMeals.App">
     <Application.Resources>
 
+        <ResourceDictionary>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="#28a745"/>
+                <Setter Property="BarTextColor" Value="White"/>
+            </Style>
+        </ResourceDictionary>
+
     </Application.Resources>
 </Application>

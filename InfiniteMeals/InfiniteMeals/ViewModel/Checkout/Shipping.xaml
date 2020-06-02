@@ -4,10 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="InfiniteMeals.ViewModel.Checkout.Shipping">
+             x:Class="InfiniteMeals.ViewModel.Checkout.Delivery">
     <ContentPage.Content>
 
-            <Grid>
+        <Grid>
                 
                 <Grid.RowDefinitions>
                     <RowDefinition/>     <?status  ?>
@@ -26,55 +26,69 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
-                
-                
-        
-                <BoxView/>
-                <Image Source="shipping_status.png" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
+
+
+            
+            <BoxView Grid.Row="0"/>
+                <Image Source="shippingStatus.png" Grid.ColumnSpan="2"/>
 
                 <BoxView Grid.Row="1"/>
-                <Label Grid.Row="1" Text="  First Name" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
+                <Label x:Name="firstNameLabel" Grid.Row="1" Text="  First Name" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
                 <BoxView Grid.Column="1" Grid.Row="1"/>
-                <Entry Grid.Column="1" Grid.Row="1" VerticalOptions="Center"/>
+                <Entry x:Name="firstNameEntry" Placeholder="First Name" Grid.Column="1" Grid.Row="1" VerticalOptions="Center" Unfocused="firstNameEntryUnfocused"/>
+                <Label x:Name="firstNameWarning" Grid.Column="1" Grid.Row="1" Text="First Name is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
 
-                <BoxView Grid.Row="2"/>
-                <Label Grid.Row="2" Text="  Last Name" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                 <BoxView Grid.Row="2"/>
+                <Label x:Name="lastNameLabel" Grid.Row="2" Text="  Last Name" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
                 <BoxView  Grid.Column="1" Grid.Row="2"/>
-                <Entry Grid.Column="1" Grid.Row="2" VerticalOptions="Center"/>
+                <Entry x:Name="lastNameEntry" Placeholder="Last Name" Grid.Column="1" Grid.Row="2" VerticalOptions="Center" Unfocused="lastNameEntryUnfocused"/>
+                <Label x:Name="lastNameWarning" Grid.Column="1" Grid.Row="2" Text="Last Name is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
+            
 
                 <BoxView  Grid.Row="3"/>
-                <Label Grid.Row="3" Text="  Phone Number" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <Label x:Name="phoneNumberLabel" Grid.Row="3" Text="  Phone Number" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
                 <BoxView  Grid.Column="1" Grid.Row="3"/>
-                <Entry Grid.Column="1" Grid.Row="3" VerticalOptions="Center" Keyboard="Telephone"/>
+                    <StackLayout Grid.Column="1" Grid.Row="3" Orientation="Horizontal">
+                        <Entry x:Name="firstPhoneNumberEntry" Placeholder="###" Grid.Column="1" Grid.Row="3" VerticalOptions="CenterAndExpand" Keyboard="Telephone" MaxLength="3" TextChanged="firstPhoneNumberEntryTextChanged" Unfocused="phoneNumberEntryUnfocused"/>
+                        <Label Text="-"  Grid.Column="1" Grid.Row="3" VerticalOptions="CenterAndExpand" FontSize="Large"/>
+                        <Entry x:Name="middlePhoneNumberEntry" Placeholder="###" Grid.Column="1" Grid.Row="3" VerticalOptions="CenterAndExpand" Keyboard="Telephone" MaxLength="3" TextChanged="middlePhoneNumberEntryTextChanged" Unfocused="phoneNumberEntryUnfocused"/>
+                        <Label Text="-"  Grid.Column="1" Grid.Row="3" VerticalOptions="CenterAndExpand" FontSize="Large"/>
+                        <Entry x:Name="lastPhoneNumberEntry" Placeholder="####" Grid.Column="1" Grid.Row="3" VerticalOptions="CenterAndExpand" Keyboard="Telephone" MaxLength="4" Unfocused="phoneNumberEntryUnfocused"/>
+                    </StackLayout>
+                <Label x:Name="phoneNumberWarning" Grid.Column="1" Grid.Row="3" Text="Phone Number is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
+            
 
                 <BoxView  Grid.Row="4"/>
-                <Label Grid.Row="4" Text="  Address" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <Label x:Name="addressLabel" Grid.Row="4" Text="  Address" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
                 <BoxView  Grid.Column="1" Grid.Row="4"/>
-                <Entry Grid.Column="1" Grid.Row="4" VerticalOptions="Center"/>
+                <Entry x:Name="addressEntry" Placeholder="Address" Grid.Column="1" Grid.Row="4" VerticalOptions="Center" Unfocused="addressEntryUnfocused"/>
+                <Label x:Name="addressWarning" Grid.Column="1" Grid.Row="4" Text="Address is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
 
                 <BoxView  Grid.Row="5"/>
-                <Label Grid.Row="5" Text="  Zip Code" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <Label x:Name="zipCodeLabel" Grid.Row="5" Text="  Zip Code" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
                 <BoxView  Grid.Column="1" Grid.Row="5"/>
-                <Entry Grid.Column="1" Grid.Row="5" VerticalOptions="Center" Keyboard="Numeric"/>
+                <Entry x:Name="zipCodeEntry" Placeholder="Zip Code" Grid.Column="1" Grid.Row="5" VerticalOptions="Center" Keyboard="Numeric" MaxLength="5" Unfocused="zipCodeEntryUnfocused"/>
+                <Label x:Name="zipCodeWarning" Grid.Column="1" Grid.Row="5" Text="Zip Code is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
 
                 <BoxView  Grid.Row="6"/>
-                <Label Grid.Row="6" Text="  City" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
+                <Label x:Name="cityLabel" Grid.Row="6" Text="  City" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
                 <BoxView  Grid.Column="1" Grid.Row="6"/>
-                <Entry Grid.Column="1" Grid.Row="6" VerticalOptions="Center"/>
+                <Entry x:Name="cityEntry" Placeholder="City" Grid.Column="1" Grid.Row="6" VerticalOptions="Center" Unfocused="cityEntryUnfocused"/>
+                <Label x:Name="cityWarning" Grid.Column="1" Grid.Row="6" Text="City is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
 
                 <BoxView  Grid.Row="7"/>
-                <Label Grid.Row="7" Text="  State" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
+                <Label x:Name="stateLabel" Grid.Row="7" Text="  State" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
                 <BoxView  Grid.Column="1" Grid.Row="7"/>
-                <Entry Grid.Column="1" Grid.Row="7" VerticalOptions="Center"/>
-                
+                <Entry x:Name="stateEntry" Placeholder="State (e.g. CA)" Grid.Column="1" Grid.Row="7" VerticalOptions="Center" MaxLength="2" Unfocused="stateEntryUnfocused"/>
+                <Label x:Name="stateWarning" Grid.Column="1" Grid.Row="7" Text="State is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
 
                 <BoxView Grid.Row="8" Grid.ColumnSpan="2" />
-                <Button Grid.Row="8" Grid.ColumnSpan="2" Text="Continue" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#2699FB" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill"></Button>
+                <Button Grid.Row="8" Grid.ColumnSpan="2" Text="Continue" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#28a745" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="ContinueToPaymentClicked"></Button>
 
 
 
