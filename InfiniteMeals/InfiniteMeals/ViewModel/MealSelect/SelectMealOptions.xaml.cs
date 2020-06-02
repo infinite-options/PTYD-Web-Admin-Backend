@@ -103,7 +103,7 @@ namespace InfiniteMeals.Meals
             }
             else
             {
-                var secondPage = new Checkout.CheckOutPage(Meals, kitchenID, kitchenZipcode);
+                var secondPage = new ViewModel.Checkout.CheckOutPage(Meals, kitchenID, kitchenZipcode);
                 await Navigation.PushAsync(secondPage);
             }
 

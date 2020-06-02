@@ -1,4 +1,6 @@
-﻿using System;
+﻿using InfiniteMeals.Meals.Model;
+using System;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -6,11 +8,13 @@ using Xamarin.Forms.Xaml;
 
 namespace InfiniteMeals {
     public partial class App : Application {
+
+        
         public App() {
             InitializeComponent();
-
  
-            MainPage = new NavigationPage(new MainPage());
+            
+            MainPage = new NavigationPage(new ViewModel.Checkout.Shipping());
             //MainPage = new MainPage() { BindingContext = new MainPageViewModel() };
         }
 

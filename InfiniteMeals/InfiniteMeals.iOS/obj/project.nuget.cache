@@ -1,22 +1,22 @@
 {
   "version": 2,
-  "dgSpecHash": "tydGt7ybAXy77GE5c+j1EXxKh5M6l4Zr9iozlro8Et0ppt2hZbg9wE8Vge6yX0lxMlt9fux3UBPGwsvqMJt1Yw==",
+  "dgSpecHash": "EZN/RGufUtk/XWbZ1JUqsHQpCGeyQQHH3S997NBPrms+4tHv7QMQiNvirGkkMKvJf2kPZet6KgHhot21hFswVA==",
   "success": true,
-  "projectFilePath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+  "projectFilePath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\InfiniteMeals.iOS.csproj",
   "expectedPackageFiles": [
-    "/Users/Kristina/.nuget/packages/awssdk.cognitoidentity/3.3.101.88/awssdk.cognitoidentity.3.3.101.88.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/awssdk.core/3.3.107.2/awssdk.core.3.3.107.2.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/awssdk.dynamodbv2/3.3.106.10/awssdk.dynamodbv2.3.3.106.10.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/awssdk.securitytoken/3.3.105.6/awssdk.securitytoken.3.3.105.6.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/commonservicelocator/2.0.2/commonservicelocator.2.0.2.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/mvvmlightlibs/5.4.1.1/mvvmlightlibs.5.4.1.1.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/pclcrypto/1.0.2.15130/pclcrypto.1.0.2.15130.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/pclstorage/1.0.2/pclstorage.1.0.2.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/validation/2.0.6.15003/validation.2.0.6.15003.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/xamarin.essentials/1.3.1/xamarin.essentials.1.3.1.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/xamarin.forms/4.5.0.495/xamarin.forms.4.5.0.495.nupkg.sha512"
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.cognitoidentity\\3.3.101.88\\awssdk.cognitoidentity.3.3.101.88.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.core\\3.3.107.2\\awssdk.core.3.3.107.2.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.dynamodbv2\\3.3.106.10\\awssdk.dynamodbv2.3.3.106.10.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.securitytoken\\3.3.105.6\\awssdk.securitytoken.3.3.105.6.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\commonservicelocator\\2.0.2\\commonservicelocator.2.0.2.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\mvvmlightlibs\\5.4.1.1\\mvvmlightlibs.5.4.1.1.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\pclcrypto\\1.0.2.15130\\pclcrypto.1.0.2.15130.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\pclstorage\\1.0.2\\pclstorage.1.0.2.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\validation\\2.0.6.15003\\validation.2.0.6.15003.nupkg.sha512",
+    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.essentials\\1.3.1\\xamarin.essentials.1.3.1.nupkg.sha512",
+    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.forms\\4.5.0.495\\xamarin.forms.4.5.0.495.nupkg.sha512"
   ],
   "logs": [
     {

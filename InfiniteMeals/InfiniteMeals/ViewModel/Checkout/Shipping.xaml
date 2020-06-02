@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="InfiniteMeals.ViewModel.Checkout.Shipping">
+    <ContentPage.Content>
+
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition/>     <?status  ?>
+                    <RowDefinition/>    <?first name row  ?>
+                    <RowDefinition/>    <?last name row  ?>
+                    <RowDefinition/>    <?phone number row  ?>
+                    <RowDefinition/>    <?address row  ?>
+                    <RowDefinition/>    <?zip code row  ?>
+                    <RowDefinition/>    <?city row  ?>
+                    <RowDefinition/>    <?state row  ?>
+                
+                <RowDefinition Height="75" />
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="1.5*"/>
+                </Grid.ColumnDefinitions>
+                
+                
+        
+                <BoxView/>
+                <Image Source="shipping_status.png" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
+
+                <BoxView Grid.Row="1"/>
+                <Label Grid.Row="1" Text="  First Name" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
+                <BoxView Grid.Column="1" Grid.Row="1"/>
+                <Entry Grid.Column="1" Grid.Row="1" VerticalOptions="Center"/>
+
+
+                <BoxView Grid.Row="2"/>
+                <Label Grid.Row="2" Text="  Last Name" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <BoxView  Grid.Column="1" Grid.Row="2"/>
+                <Entry Grid.Column="1" Grid.Row="2" VerticalOptions="Center"/>
+
+                <BoxView  Grid.Row="3"/>
+                <Label Grid.Row="3" Text="  Phone Number" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <BoxView  Grid.Column="1" Grid.Row="3"/>
+                <Entry Grid.Column="1" Grid.Row="3" VerticalOptions="Center" Keyboard="Telephone"/>
+
+                <BoxView  Grid.Row="4"/>
+                <Label Grid.Row="4" Text="  Address" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <BoxView  Grid.Column="1" Grid.Row="4"/>
+                <Entry Grid.Column="1" Grid.Row="4" VerticalOptions="Center"/>
+
+
+                <BoxView  Grid.Row="5"/>
+                <Label Grid.Row="5" Text="  Zip Code" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <BoxView  Grid.Column="1" Grid.Row="5"/>
+                <Entry Grid.Column="1" Grid.Row="5" VerticalOptions="Center" Keyboard="Numeric"/>
+
+
+                <BoxView  Grid.Row="6"/>
+                <Label Grid.Row="6" Text="  City" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
+                <BoxView  Grid.Column="1" Grid.Row="6"/>
+                <Entry Grid.Column="1" Grid.Row="6" VerticalOptions="Center"/>
+
+
+                <BoxView  Grid.Row="7"/>
+                <Label Grid.Row="7" Text="  State" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
+                <BoxView  Grid.Column="1" Grid.Row="7"/>
+                <Entry Grid.Column="1" Grid.Row="7" VerticalOptions="Center"/>
+                
+
+
+                <BoxView Grid.Row="8" Grid.ColumnSpan="2" />
+                <Button Grid.Row="8" Grid.ColumnSpan="2" Text="Continue" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#2699FB" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill"></Button>
+
+
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
