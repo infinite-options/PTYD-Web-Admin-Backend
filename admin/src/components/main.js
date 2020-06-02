@@ -61,7 +61,6 @@ const Main = ({ appProps }) => (
       path="/orders"
       component={Orders}
       appProps={{
-        appProps,
         API_URL: `${DEV_URL}`,
       }}
     />

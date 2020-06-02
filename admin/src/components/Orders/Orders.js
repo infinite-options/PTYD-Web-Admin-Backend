@@ -7,6 +7,8 @@ import IngredientTable from "./IngredientTable";
 import DropDownMenu from "./DropDownMenu";
 import { css } from "@emotion/core";
 import BeatLoader from "react-spinners/BeatLoader";
+import { MdError } from "react-icons/md";
+import useFetch from "../hooks/useFetch";
 
 const override = css`
   display: flex;
@@ -15,25 +17,18 @@ const override = css`
   height: 30vh;
 `;
 
+const centerStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "30vh",
+};
+
 export default function Orders(props) {
   const [date, setDate] = useState("2020-07-11");
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchData();
-  }, [date]);
-
-  const fetchData = async () => {
-    setLoading(true);
-
-    const res = await (
-      await fetch(props.API_URL + `All_Meals?date=${date}`)
-    ).json();
-
-    setLoading(false);
-    setData(res.result.result);
-  };
+  const order = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
+  // const ingredient = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
 
   const handleChange = (event) => {
     setDate(event.target.value);
@@ -46,12 +41,27 @@ export default function Orders(props) {
         <Typography color="textPrimary">Create Menu</Typography>
       </Breadcrumbs>
       <DropDownMenu date={date} handleChange={handleChange} />
-      {loading ? (
-        <BeatLoader css={override} color={"#36D7B7"} loading={loading} />
+      {order.loading ? (
+        <BeatLoader css={override} color={"#36D7B7"} loading={order.loading} />
+      ) : order.error ? (
+        <h3 style={centerStyle}>
+          <MdError style={{ color: "#F40057" }} />
+          &nbsp;Failed to fetch data for Order's table
+        </h3>
       ) : (
-        <OrderTable data={data} />
+        <OrderTable data={order.data} />
       )}
-      <IngredientTable />
+
+      {/* {ingredient.loading ? (
+        <BeatLoader css={override} color={"#36D7B7"} loading={ingredient.loading} />
+      ) : ingredient.error ? (
+        <h3 style={centerStyle}>
+          <MdError style={{ color: "#F40057" }} />
+          &nbsp;Failed to fetch data for Ingredient's table
+        </h3>
+      ) : (
+        <OrderTable data={ingredient.data} />
+      )} */}
     </div>
   );
 }
