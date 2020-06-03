@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using InfiniteMeals.ViewModel.Checkout;
+
 namespace InfiniteMeals.Subscribe
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -19,6 +21,10 @@ namespace InfiniteMeals.Subscribe
             mealimage.Source = ImageSource.FromFile("mealplan.jpg");
             mealimage1.Source = ImageSource.FromFile("mealplan.jpg");
             mealimage2.Source = ImageSource.FromFile("mealplan.jpg");
+        }
+
+        private async void ClickedWeekToWeek(object sender, EventArgs e) {
+            await Navigation.PushAsync(new Delivery());
         }
     }
 }

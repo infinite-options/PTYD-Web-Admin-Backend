@@ -9,7 +9,7 @@ using InfiniteMeals.Meals.Model;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 
-namespace InfiniteMeals.Checkout
+namespace InfiniteMeals.ViewModel.Checkout
 {
     public class OrderInfo
     {
