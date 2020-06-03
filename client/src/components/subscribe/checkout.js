@@ -222,6 +222,9 @@ class Checkout extends Component {
         return true;
       }
     }
+    
+    if ((this.searchCookie4loginMethod("loginStatus") !== "social") && (!this.state.password))
+      return true;
 
     return false;
   }
@@ -709,6 +712,7 @@ class Checkout extends Component {
                         onChange={this.handlePwChange}
                         disabled={!this.state.password_salt ? true : false}
                       />
+                      {(this.searchCookie4loginMethod("loginStatus") !== "social") && (!this.state.password) ? <span className='required-red'>Password is required</span> : '' }
                     </Form.Group>
                   </Form.Row>
 
