@@ -18,7 +18,7 @@ namespace InfiniteMeals.MealSelect
     {
         public IList<Meal> AddOn { get; private set; }
         public IList<Meal> MoreMeals { get; private set; }
-
+        String infoImg = "https://lh3.googleusercontent.com/proxy/lXPs9WZSFSubCC2_cszRiL0UkkXCUNE-_22roiboV5EXKF9AA2XLb_ckud7YWpBq21XLz04t53RVSktSGcXfupYKP17AJaRe5wy1QK0nfxFk0iX6eXUDf4EzAThH8nfLYJxcmqC3qWK77GGh4zlT4Pxlf0k";
         public AddOnChoices()
         {
             InitializeComponent();
@@ -59,8 +59,8 @@ namespace InfiniteMeals.MealSelect
                     price = "Add On Cost: $" + AddPrice[placeHolder],
                     description = AddDesc[placeHolder],
                     imageUrl = AddImage[placeHolder],
-                    infoUrl = "https://lh3.googleusercontent.com/proxy/Qx2SUkXKZlrr5vwfQtmFspzAWcZIWsPzJk40_-rI917XZv3KT5Ci6jnNf3PXli9jf9Fi6f5NUzCz4ynJBJqGBBHSY5JchT7gJfQeLgRTFldp8BFY9I7osH368zSmLkIaXg",
-                });
+                    infoUrl = infoImg,
+                }) ;
             }
 
             for (int j = 0; j < obj.Result.MenuForWeek1.Addons.Weekly.Menu.Length; j++)
@@ -76,7 +76,7 @@ namespace InfiniteMeals.MealSelect
                     price = "Add On Cost: $" + AddMealPrice[j],
                     description = AddMealDesc[j],
                     //imageUrl = AddImage[placeHolder],
-                    infoUrl = "https://lh3.googleusercontent.com/proxy/Qx2SUkXKZlrr5vwfQtmFspzAWcZIWsPzJk40_-rI917XZv3KT5Ci6jnNf3PXli9jf9Fi6f5NUzCz4ynJBJqGBBHSY5JchT7gJfQeLgRTFldp8BFY9I7osH368zSmLkIaXg",
+                    infoUrl = infoImg,
                 });
             }
 

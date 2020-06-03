@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs" Line="49" Column="55" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml" Line="53" Column="44" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml" Line="7" Column="13" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="146" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -17,18 +17,14 @@
               <Node name="ViewModel" expanded="True">
                 <Node name="MealSelect" expanded="True">
                   <Node name="AddOnChoices.xaml" expanded="True" />
-                  <Node name="MealChoices.xaml" expanded="True" />
-                  <Node name="MealSchedule.xaml" expanded="True" selected="True" />
-                  <Node name="SelectMealOptions.xaml" expanded="True" />
+                  <Node name="MealChoices.xaml" expanded="True">
+                    <Node name="MealChoices.xaml.cs" selected="True" />
+                  </Node>
+                  <Node name="MealSchedule.xaml" expanded="True" />
                 </Node>
               </Node>
-              <Node name="MainPage.xaml" expanded="True" />
             </Node>
-            <Node name="InfiniteMeals.Android" expanded="True">
-              <Node name="Resources" expanded="True">
-                <Node name="drawable" expanded="True" />
-              </Node>
-            </Node>
+            <Node name="InfiniteMeals.Android" expanded="True" />
           </Node>
         </State>
       </Pad>

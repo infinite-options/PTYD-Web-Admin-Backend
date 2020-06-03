@@ -2,15 +2,40 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InfiniteMeals.MealSelect.MealChoices">
-
+<ContentPage.Content>
+		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
+            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+                    <ViewCell Height="300">
+                        <Grid>
+                            <Label Text="{Binding name}"></Label>
+                            <Image Source="{Binding imageUrl}"></Image>
+                            <ImageButton Source="{Binding infoUrl}"></ImageButton>
+                     <Stepper x:Name="_stepper"
+                             Value="0"
+                             Maximum="10"
+                             Increment="1"
+                              />
+                    <Label 
+                           Text="{Binding Source={x:Reference _stepper}, Path=Value, StringFormat='Quantity: {0:F0}'}"
+/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</ContentPage.Content>
+    </ContentPage>
+<!--
     <StackLayout>
         <Label Text="Meals" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
-        <ListView ItemsSource="{Binding Meals}"
+        <ListView
+          ItemsSource="{Binding Meals}"
           HasUnevenRows="true"
           Margin="20"
           ItemSelected="OnListViewItemSelected"
           ItemTapped="OnListViewItemTapped">
-
         <ListView.ItemTemplate>
         <DataTemplate>
             <ViewCell>
@@ -77,12 +102,10 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                        <!--
-                        IMAGES NOT SUPPORTED YET
                     <Image Grid.RowSpan="1"
                            Source="{Binding imageUrl}"
                            Aspect="AspectFill" />
-                        -->
+
                     <Label Grid.Column="1"
                            Text="{Binding name}"
                            FontAttributes="Bold"/>
@@ -130,13 +153,13 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <!--
+
                     <Image Grid.RowSpan="1"
                            Source="{Binding imageUrl}"
                            Aspect="AspectFill"
                            HeightRequest="60"
                            WidthRequest="60" />
-                        -->
+
                     <Label Grid.Column="1"
                            Text="{Binding name}"
                            FontAttributes="Bold"/>
@@ -166,3 +189,4 @@
         </ListView>
     </StackLayout>
 </ContentPage>
+-->

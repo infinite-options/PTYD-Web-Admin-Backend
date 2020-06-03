@@ -2,15 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InfiniteMeals.MealSelect.AddOnChoices">
-
-    <!--
-    <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Subscribe" Clicked="ClickedSubscribe"/>
-        <ToolbarItem Text="Menu" Clicked="ClickedMealSchedule"/>
-        <ToolbarItem Text="User Profile" Clicked="ClickedUserProfile" />
-    </ContentPage.ToolbarItems>
-    -->
-
+    <Frame>
+           <Grid BindableLayout.ItemsSource="{Binding AddOn}">
+            <Frame BorderColor="Black"
+                   BackgroundColor="White">
+            </Frame>
+            <Label Text="{Binding name}"/>
+        </Grid>
+    </Frame>
+    </ContentPage>
+<!--
     <StackLayout>
         <Label Text="Add Ons" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
         <ListView ItemsSource="{Binding AddOn}"
@@ -88,13 +89,13 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <!--
+
                     <Image Grid.RowSpan="1"
                            Source="{Binding imageUrl}"
                            Aspect="AspectFill"
                            HeightRequest="60"
                            WidthRequest="60" />
-                    -->
+
                     <Label Grid.Column="1"
                            Text="{Binding name}"
                            FontAttributes="Bold"/>
@@ -131,3 +132,4 @@
         </ListView>
     </StackLayout>
 </ContentPage>
+   -->

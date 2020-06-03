@@ -10,6 +10,7 @@ using InfiniteMeals.Meals.Model;
 using System.Net.Http;
 using InfiniteMeals.Model.Database;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace InfiniteMeals.MealSelect
 {
@@ -17,10 +18,14 @@ namespace InfiniteMeals.MealSelect
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MealChoices : ContentPage
     {
+        private ObservableCollection<MealGroup> grouped { get; set; }
+
         public IList<Meal> Meals { get; private set; }
         public IList<Meal> SeasonalMeals { get; private set; }
         public IList<Meal> Smoothies { get; private set; }
-
+        public IList<Meal> AllMeals { get; private set; }
+        public Label quantity;
+        String infoImg = "https://lh3.googleusercontent.com/proxy/lXPs9WZSFSubCC2_cszRiL0UkkXCUNE-_22roiboV5EXKF9AA2XLb_ckud7YWpBq21XLz04t53RVSktSGcXfupYKP17AJaRe5wy1QK0nfxFk0iX6eXUDf4EzAThH8nfLYJxcmqC3qWK77GGh4zlT4Pxlf0k";
         public MealChoices()
         {
             InitializeComponent();
@@ -52,8 +57,15 @@ namespace InfiniteMeals.MealSelect
             List<String> SmoothiesNames = new List<String>();
             List<String> SmoothiesDesc = new List<String>();
             List<String> SmoothiesImage = new List<String>();
+            var lstView = new ListView();
 
+            // Grouping
+            grouped = new ObservableCollection<MealGroup>();
+            var mealGroup = new MealGroup() { LongName = "Meals", ShortName= "m"};
+            var seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+            var smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
+            // Data
             HttpClient client = new HttpClient();
             var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
             var obj = JsonConvert.DeserializeObject<Data>(content);
@@ -61,54 +73,94 @@ namespace InfiniteMeals.MealSelect
 
             for(int placeHolder = 0; placeHolder < obj.Result.MenuForWeek1.Meals.Weekly.Menu.Length; placeHolder++)
             {
-                MenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealName);
+
+                /*MenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealName);
                 MenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealDesc);
                 MenuForWeek1Prot.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealFat);
                 MenuForWeek1Sugar.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealSugar);
                 MenuForWeek1Fat.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealFat);
-                MenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl.ToString());
+                MenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl.ToString());*/
 
-                Meals.Add(new Meal
+                mealGroup.Add(new Meal
                 {
-                    name = MenuForWeek1Names[placeHolder],
-                    description = MenuForWeek1Desc[placeHolder],
-                    imageUrl= MenuForWeek1Image[placeHolder],
-                    infoUrl = "https://lh3.googleusercontent.com/proxy/Qx2SUkXKZlrr5vwfQtmFspzAWcZIWsPzJk40_-rI917XZv3KT5Ci6jnNf3PXli9jf9Fi6f5NUzCz4ynJBJqGBBHSY5JchT7gJfQeLgRTFldp8BFY9I7osH368zSmLkIaXg",
+                    name = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealName,
+                    description = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealDesc,
+                    imageUrl= obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl.ToString(),
+                    infoUrl = infoImg,
                 }) ;
+
             }
 
             for (int placeHolderSeas = 0; placeHolderSeas < obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length; placeHolderSeas++)
             {
-                SeasMenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName);
+               /* SeasMenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName);
                 SeasMenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc);
-                //SeasMenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString());
-                SeasonalMeals.Add(new Meal
+                //SeasMenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString());*/
+
+                seasonalMealGroup.Add(new Meal
                 {
-                    name = SeasMenuForWeek1Names[placeHolderSeas],
-                    description = SeasMenuForWeek1Desc[placeHolderSeas],
+                    name = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName,
+                    description = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc,
                     //imageUrl = SeasMenuForWeek1Image[placeHolderSeas],
-                    infoUrl = "https://lh3.googleusercontent.com/proxy/Qx2SUkXKZlrr5vwfQtmFspzAWcZIWsPzJk40_-rI917XZv3KT5Ci6jnNf3PXli9jf9Fi6f5NUzCz4ynJBJqGBBHSY5JchT7gJfQeLgRTFldp8BFY9I7osH368zSmLkIaXg",
+                    infoUrl = infoImg,
                 });
+
             }
 
             for (int smooth = 0; smooth < obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length; smooth++)
             {
-                SmoothiesNames.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName);
+                /*SmoothiesNames.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName);
                 SmoothiesDesc.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc);
-                //SmoothiesImage.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl.ToString());
-                Smoothies.Add(new Meal
+                //SmoothiesImage.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl.ToString());*/
+                smoothieGroup.Add(new Meal
                 {
-                    name = SmoothiesNames[smooth],
-                    description = SmoothiesDesc[smooth],
+                    name = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName,
+                    description = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc,
                     //imageUrl = SmoothiesImage[smooth],
-                    infoUrl = "info.jpg",
+                    infoUrl = infoImg,
+
                 });
             }
 
-            BindingContext = this;
+            grouped.Add(mealGroup);
+            grouped.Add(seasonalMealGroup);
+            grouped.Add(smoothieGroup);
+            lstView.ItemsSource = grouped;
+            lstView.IsGroupingEnabled = true;
+            lstView.GroupDisplayBinding = new Binding("LongName");
+            lstView.GroupShortNameBinding = new Binding("ShortName");
 
+            lstView.ItemTemplate = new DataTemplate(() =>
+            {
+                var grid = new Grid { VerticalOptions = LayoutOptions.FillAndExpand , HorizontalOptions = LayoutOptions.FillAndExpand };
+                var nameLabel = new Label { FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.StartAndExpand };
+                var imgLabel = new Image { WidthRequest = 60, Aspect=Aspect.AspectFill, HorizontalOptions= LayoutOptions.StartAndExpand } ;
+                var imgButton = new ImageButton { WidthRequest = 20, HeightRequest=20, Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.StartAndExpand, VerticalOptions= LayoutOptions.StartAndExpand};
+                var steppers = new Stepper { Value = 0, Maximum = 10, Increment = 1 };
+                quantity = new Label { FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.StartAndExpand };
+
+                nameLabel.SetBinding(Label.TextProperty, "name");
+                imgLabel.SetBinding(Image.SourceProperty, "imageUrl");
+                imgButton.SetBinding(Image.SourceProperty, "infoUrl");
+        
+
+                grid.Children.Add(imgLabel, 0, 0);
+                grid.Children.Add(nameLabel, 1, 0);
+                grid.Children.Add(imgButton, 2, 0);
+                grid.Children.Add(steppers, 3, 0);
+                grid.Children.Add(quantity, 4, 0);
+
+                return new ViewCell { View = grid };
+            });
+
+            Content = lstView;
+            BindingContext = this;
         }
 
+        void OnValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            quantity.Text = String.Format("Stepper value is {0:F1}", e.NewValue);
+        }
         private async void ClickedSelectMeal(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new MealSelect.MealChoices());
