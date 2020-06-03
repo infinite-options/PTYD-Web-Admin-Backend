@@ -5,9 +5,9 @@ export default class EachAddon extends Component {
   render() {
     return (
       <div>
-        <div class='container-select-meal' style={{color: "white"}}>
+        <div className='container-select-meal' style={{color: "white"}}>
           <div
-            class='meal-img-wrapper'
+            className='meal-img-wrapper'
             style={{
               overflow: "hidden",
               width: "100%",
@@ -16,9 +16,14 @@ export default class EachAddon extends Component {
               maxHeight: "200px"
             }}
           >
-            <img class='img-fluid' src={""} alt='no_meal_img' resizeMode />
+            <img
+              className='img-fluid'
+              src={""}
+              alt='no_meal_img'
+              resizemode='true'
+            />
             <div
-              class='top-right-meal-selection font2'
+              className='top-right-meal-selection font2'
               style={{
                 fontSize: "15px",
                 float: "right",
@@ -49,7 +54,7 @@ export default class EachAddon extends Component {
               }
             >
               <div
-                class='bottom-right-meal-selection font2'
+                className='bottom-right-meal-selection font2'
                 style={{
                   fontSize: "15px",
                   float: "right",

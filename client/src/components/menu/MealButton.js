@@ -303,11 +303,11 @@ export default class MealButton extends Component {
   };
 
   incrementMaxMeal = () => {
-    this.setState({mealLeft: this.state.mealLeft + 1});
+    this.setState({mealLeft: this.state.maxMeals + 1});
   };
 
   decrementMaxMeal = () => {
-    this.setState({mealLeft: this.state.mealLeft - 1});
+    this.setState({mealLeft: this.state.maxMeals - 1});
   };
 
   saveSelectMeal = () => {
@@ -578,14 +578,13 @@ export default class MealButton extends Component {
               </Card.Header>
               <div className='scrollMenu'>
                 {Object.values(this.state.weekMenu.Addons).map(addon => (
-                  <Grid>
+                  <Grid key={addon.Category}>
                     <Cell col={12}>
                       <h4 style={{margin: "0"}}>{addon.Category}</h4>
                     </Cell>
 
                     {addon.Menu.map(description => (
-                      <Cell col={4}>
-                        {console.log("description: ", description)}
+                      <Cell col={4} key={description.meal_id}>
                         <EachAddon
                           description={description}
                           incrementMealLeft={this.incrementMealLeft}
