@@ -109,4 +109,3 @@ C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/De
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.dll
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ref/InfiniteMeals.dll
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.pdb
-/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csprojAssemblyReference.cache

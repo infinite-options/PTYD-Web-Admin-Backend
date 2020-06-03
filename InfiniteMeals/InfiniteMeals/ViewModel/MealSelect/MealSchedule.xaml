@@ -6,11 +6,14 @@
              mc:Ignorable="d"
              x:Class="InfiniteMeals.Meals.MealSchedule" Title="Select Meals Around Your Schedule">
     <ContentPage.Content>
-
-        <StackLayout>
-            <Label Text="Dates" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
-            <Grid x:Name="ButtonStack">
+        <StackLayout BindingContext="{Binding SundayDates}">
+            <Label Text="Dates" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Grid x:Name="ButtonStack"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center">
+               
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="16.66*" />
                 <ColumnDefinition Width="16.66*" />
                 <ColumnDefinition Width="16.66*" />
             </Grid.ColumnDefinitions>
@@ -23,63 +26,84 @@
             </Grid.RowDefinitions>
 
             <Button ClassId = "SunButton"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    BorderColor="Black"
+                    BorderWidth="0.1"
                     Margin="30,0,0,0"
-                    WidthRequest="150"
-                    HeightRequest="150"
-                    HorizontalOptions="Start"
-                    Text="Sunday"
+                    VerticalOptions="Start"
+                    Text="Sunday&#x0a;Jun 7"
+                    HorizontalOptions="Center"
                     Grid.Column="0"
+                    Grid.Row="0"
                     BackgroundColor="#8FBC8F"
                     Clicked="ClickedColor" />
+                    <!--
+                    Text="{Binding sundayDate}"
+                    -->
+
             <Button ClassId = "MonButton"
-                    Margin="30,0,0,0"
-                    WidthRequest="150"
-                    HeightRequest="150"
-                    HorizontalOptions="Start"
-                    Text="Monday"
-                    Grid.Column="0"
-                    Grid.Row="1"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="0.1"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Center"
+                    Text="Monday&#x0a;Jun 8"
+                    Grid.Column="1"
+                    Grid.Row="0"
                     Clicked="ClickedColor"/>
             <Button ClassId = "SkipButton"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    BorderWidth="0.1"
                     Margin="0,0,30,0"
-                    WidthRequest="150"
-                    HeightRequest="150"
-                    HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Center"
                     Text="Skip This Week"
-                    Grid.Column="1"
-                    Grid.Row="1"
+                    Grid.Column="2"
+                    Grid.Row="0"
                     Clicked="ClickedColor"/>
             <Button ClassId = "SelectButton"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="0.1"
+                    HorizontalOptions="Center"
                     Margin="30,0,0,0"
-                    WidthRequest="150"
-                    HorizontalOptions="Start"
-                    HeightRequest="175"
                     VerticalOptions="Start"
                     Text="Select Meal"
                     Grid.Column="0"
-                    Grid.Row="2"
-                    Grid.RowSpan="2"
+                    Grid.Row="1"
                     Clicked="ClickedSelectMeal"/>
             <Button ClassId = "SurpriseButton"
-                    Margin="0,0,30,0"
-                    WidthRequest="150"
-                    HeightRequest="150"
-                    HorizontalOptions="End"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    BorderColor="Black"
+                    BorderWidth="0.1"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Center"
                     BackgroundColor="#8FBC8F"
                     Text="Surprise Me"
                     Grid.Column ="1"
-                    Grid.Row="0"
+                    Grid.Row="1"
                     Clicked="ClickedColor"/>
             <Button ClassId = "AddButton"
+                    WidthRequest="100"
+                    HeightRequest="100"
                     Margin="0,0,30,0"
-                    WidthRequest="150"
-                    HorizontalOptions="End"
-                    HeightRequest="175"
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F5F5F5"
+                    BorderColor="Black"
+                    BorderWidth="0.1"
                     VerticalOptions="Start"
                     Text="Add Local Treats"
-                    Grid.Column="1"
-                    Grid.Row="2"
-                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    Grid.Row="1"
                     Clicked="ClickedAddOnNav"/>
             </Grid>
         </StackLayout>

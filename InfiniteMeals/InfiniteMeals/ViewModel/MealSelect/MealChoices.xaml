@@ -3,14 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InfiniteMeals.MealSelect.MealChoices">
 
-    <!--
-    <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Subscribe" Clicked="ClickedSubscribe"/>
-        <ToolbarItem Text="Menu" Clicked="ClickedMealSchedule"/>
-        <ToolbarItem Text="User Profile" Clicked="ClickedUserProfile" />
-    </ContentPage.ToolbarItems>
-    -->
-
     <StackLayout>
         <Label Text="Meals" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
         <ListView ItemsSource="{Binding Meals}"
@@ -18,6 +10,7 @@
           Margin="20"
           ItemSelected="OnListViewItemSelected"
           ItemTapped="OnListViewItemTapped">
+
         <ListView.ItemTemplate>
         <DataTemplate>
             <ViewCell>
@@ -58,9 +51,10 @@
                            HorizontalOptions="Center"
                            VerticalOptions="CenterAndExpand" />
                     </Grid>
-                 </ViewCell>
+            </ViewCell>
              </DataTemplate>
             </ListView.ItemTemplate>
+
         </ListView>
 
         <Label Text="Seasonal Meals" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
@@ -82,12 +76,13 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <!--
+
+                        <!--
                         IMAGES NOT SUPPORTED YET
                     <Image Grid.RowSpan="1"
                            Source="{Binding imageUrl}"
                            Aspect="AspectFill" />
-                    -->
+                        -->
                     <Label Grid.Column="1"
                            Text="{Binding name}"
                            FontAttributes="Bold"/>
@@ -136,13 +131,12 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <!--
-                        IMAGES ARE NOT SUPPORTED YET
                     <Image Grid.RowSpan="1"
                            Source="{Binding imageUrl}"
                            Aspect="AspectFill"
                            HeightRequest="60"
                            WidthRequest="60" />
-                    -->
+                        -->
                     <Label Grid.Column="1"
                            Text="{Binding name}"
                            FontAttributes="Bold"/>
