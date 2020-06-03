@@ -1,7 +1,7 @@
-import React, {Component, Fragment} from "react";
+import React, { Component, Fragment } from "react";
 
-import {Grid, Cell} from "react-mdl";
-import {Button, Row} from "react-bootstrap";
+import { Grid, Cell } from "react-mdl";
+import { Button, Row } from "react-bootstrap";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -20,7 +20,7 @@ export default class MealSchedule extends Component {
       userID: this.props.appProps.user_uid, // user ID
       firstname: this.searchCookie4Name("loginStatus"),
       showHideMakeChange: false,
-      error: null
+      error: null,
     };
   }
 
@@ -66,41 +66,41 @@ export default class MealSchedule extends Component {
           ? this.props.API_URL + "/" + this.props.match.params.startdate
           : this.props.API_URL
       )
-      .then(res => {
+      .then((res) => {
         const data = res.data;
         console.log("Data: ", data);
       })
-      .catch(err => {
-        this.setState({error: err});
+      .catch((err) => {
+        this.setState({ error: err });
         // do something to prompt the error to the user
       });
   };
 
   ChangeAccountInfo = () => {
     this.state.showHideMakeChange
-      ? this.setState({showHideMakeChange: false})
-      : this.setState({showHideMakeChange: true});
+      ? this.setState({ showHideMakeChange: false })
+      : this.setState({ showHideMakeChange: true });
   };
 
   ChangeCurrentPurchase(purchase) {
     // this function use for update current purchase which is selected from children
     // need a helper function to get the purchase by using purchaseID
-    this.setState({currentPurchase: purchase});
+    this.setState({ currentPurchase: purchase });
   }
   render() {
     return (
-      <div className='container font2'>
+      <div className="container font2">
         <Grid>
           <Cell col={4}>
             <h4>Hi! {this.state.firstname}</h4>
-            <Row className='mb-1'>
+            <Row className="mb-1">
               <Selector
                 purchases={this.state.purchases}
                 ChangeCurrentPurchase={this.ChangeCurrentPurchase}
               />
             </Row>
 
-            <Row className='mb-1'>
+            <Row className="mb-1">
               <Button onClick={this.ChangeAccountInfo}>
                 Change Accont Info
               </Button>
