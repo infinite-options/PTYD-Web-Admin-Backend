@@ -420,15 +420,18 @@ class Landing extends Component {
           >
             TRY US TODAY
           </button>
+
           <Grid>
             <center>
-              <Cell col={8}>
-                <h3 className='font2' style={{lineHeight: "50px"}}>
-                  "PTYD is so good and we love it so much, it feels like part of
-                  our family! It's so thrilling to fill our fridge every week
-                  with tasty surprises!"
-                </h3>
-              </Cell>
+              <div className='container_space'>
+                <Cell col={8}>
+                  <h3 className='font2' style={{lineHeight: "50px"}}>
+                    "PTYD is so good and we love it so much, it feels like part of
+                    our family! It's so thrilling to fill our fridge every week
+                    with tasty surprises!"
+                  </h3>
+                </Cell>
+              </div>
 
               <div className='container_space'>
                 <Grid className='sponsors'>
