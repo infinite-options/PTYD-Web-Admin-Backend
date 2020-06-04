@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml" Line="7" Column="13" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="146" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="165" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="171" Column="67" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,15 +16,19 @@
               </Node>
               <Node name="ViewModel" expanded="True">
                 <Node name="MealSelect" expanded="True">
-                  <Node name="AddOnChoices.xaml" expanded="True" />
-                  <Node name="MealChoices.xaml" expanded="True">
-                    <Node name="MealChoices.xaml.cs" selected="True" />
+                  <Node name="AddOnChoices.xaml" expanded="True">
+                    <Node name="AddOnChoices.xaml.cs" selected="True" />
                   </Node>
+                  <Node name="MealChoices.xaml" expanded="True" />
                   <Node name="MealSchedule.xaml" expanded="True" />
                 </Node>
               </Node>
             </Node>
-            <Node name="InfiniteMeals.Android" expanded="True" />
+            <Node name="InfiniteMeals.Android" expanded="True">
+              <Node name="Resources" expanded="True">
+                <Node name="drawable" expanded="True" />
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>

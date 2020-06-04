@@ -25,7 +25,7 @@ namespace InfiniteMeals.MealSelect
         public IList<Meal> Smoothies { get; private set; }
         public IList<Meal> AllMeals { get; private set; }
         public Label quantity;
-        String infoImg = "https://lh3.googleusercontent.com/proxy/lXPs9WZSFSubCC2_cszRiL0UkkXCUNE-_22roiboV5EXKF9AA2XLb_ckud7YWpBq21XLz04t53RVSktSGcXfupYKP17AJaRe5wy1QK0nfxFk0iX6eXUDf4EzAThH8nfLYJxcmqC3qWK77GGh4zlT4Pxlf0k";
+        String infoImg = "info.jpg";
         public MealChoices()
         {
             InitializeComponent();
@@ -57,7 +57,7 @@ namespace InfiniteMeals.MealSelect
             List<String> SmoothiesNames = new List<String>();
             List<String> SmoothiesDesc = new List<String>();
             List<String> SmoothiesImage = new List<String>();
-            var lstView = new ListView();
+            var lstView = new ListView { HasUnevenRows = true};
 
             // Grouping
             grouped = new ObservableCollection<MealGroup>();
@@ -132,25 +132,68 @@ namespace InfiniteMeals.MealSelect
 
             lstView.ItemTemplate = new DataTemplate(() =>
             {
-                var grid = new Grid { VerticalOptions = LayoutOptions.FillAndExpand , HorizontalOptions = LayoutOptions.FillAndExpand };
-                var nameLabel = new Label { FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.StartAndExpand };
-                var imgLabel = new Image { WidthRequest = 60, Aspect=Aspect.AspectFill, HorizontalOptions= LayoutOptions.StartAndExpand } ;
-                var imgButton = new ImageButton { WidthRequest = 20, HeightRequest=20, Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.StartAndExpand, VerticalOptions= LayoutOptions.StartAndExpand};
-                var steppers = new Stepper { Value = 0, Maximum = 10, Increment = 1 };
-                quantity = new Label { FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.StartAndExpand };
+                var grid = new Grid { HeightRequest = 100,
+                    VerticalOptions = LayoutOptions.FillAndExpand
+                };
+                var nameLabel = new Label {
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center };
+                var imgLabel = new Image
+                {
+                    WidthRequest = 200,
+                    HeightRequest = 100,
+                    Aspect = Aspect.AspectFill,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+                var infoButton = new ImageButton {
+                    WidthRequest = 20,
+                    HeightRequest = 20,
+                    Aspect = Aspect.AspectFit,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions= LayoutOptions.Center,
+            };
+                infoButton.Margin = new Thickness(50,0,0,0);
+                var steppers = new Stepper {
+                    Value = 0,
+                    Maximum = 10,
+                    Increment = 1,
+                    HeightRequest = 50
+                };
+
+                Label displayLabel = new Label
+                {
+                    Text = "0",
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+
+                steppers.ValueChanged += (sender, e) =>
+                {
+                    displayLabel.Text = string.Format("{0}", steppers.Value);
+                };
+
+                quantity = new Label {
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalTextAlignment = TextAlignment.Start,
+                    VerticalTextAlignment=  TextAlignment.Center,
+                };
+                quantity.Margin = new Thickness(0, 0, 100, 0);
 
                 nameLabel.SetBinding(Label.TextProperty, "name");
                 imgLabel.SetBinding(Image.SourceProperty, "imageUrl");
-                imgButton.SetBinding(Image.SourceProperty, "infoUrl");
-        
-
+                infoButton.SetBinding(Image.SourceProperty, "infoUrl");
+                
                 grid.Children.Add(imgLabel, 0, 0);
+                imgLabel.SetValue(Grid.RowSpanProperty, 2);
                 grid.Children.Add(nameLabel, 1, 0);
-                grid.Children.Add(imgButton, 2, 0);
-                grid.Children.Add(steppers, 3, 0);
-                grid.Children.Add(quantity, 4, 0);
+                grid.Children.Add(infoButton, 2, 0);
+                grid.Children.Add(steppers, 2, 1);
+                steppers.SetValue(Grid.ColumnSpanProperty, 2);
+                grid.Children.Add(displayLabel, 3, 0);
 
-                return new ViewCell { View = grid };
+                return new ViewCell { View = grid, Height = 100};
             });
 
             Content = lstView;

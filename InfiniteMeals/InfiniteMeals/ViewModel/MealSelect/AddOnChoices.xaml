@@ -2,15 +2,34 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InfiniteMeals.MealSelect.AddOnChoices">
-    <Frame>
-           <Grid BindableLayout.ItemsSource="{Binding AddOn}">
-            <Frame BorderColor="Black"
-                   BackgroundColor="White">
-            </Frame>
-            <Label Text="{Binding name}"/>
-        </Grid>
-    </Frame>
-    </ContentPage>
+<ContentPage.Content>
+		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
+            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+                    <ViewCell Height="100">
+                        <Grid>
+                             <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                            <Label Text="{Binding name}"></Label>
+                            <Label Text="{Binding price}"></Label>
+                            <Image Source="{Binding imageUrl}" Grid.RowSpan="2"></Image>
+                            <ImageButton Source="{Binding infoUrl}"></ImageButton>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</ContentPage.Content>
+</ContentPage>
 <!--
     <StackLayout>
         <Label Text="Add Ons" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>

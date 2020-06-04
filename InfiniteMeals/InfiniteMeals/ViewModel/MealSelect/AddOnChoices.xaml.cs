@@ -10,15 +10,18 @@ using InfiniteMeals.Meals.Model;
 using System.Net.Http;
 using InfiniteMeals.Model.Database;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace InfiniteMeals.MealSelect
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddOnChoices : ContentPage
     {
+        private ObservableCollection<MealGroup> grouped { get; set; }
         public IList<Meal> AddOn { get; private set; }
         public IList<Meal> MoreMeals { get; private set; }
-        String infoImg = "https://lh3.googleusercontent.com/proxy/lXPs9WZSFSubCC2_cszRiL0UkkXCUNE-_22roiboV5EXKF9AA2XLb_ckud7YWpBq21XLz04t53RVSktSGcXfupYKP17AJaRe5wy1QK0nfxFk0iX6eXUDf4EzAThH8nfLYJxcmqC3qWK77GGh4zlT4Pxlf0k";
+        public Label quantity;
+        String infoImg = "info.jpg";
         public AddOnChoices()
         {
             InitializeComponent();
@@ -41,6 +44,12 @@ namespace InfiniteMeals.MealSelect
             List<String> AddMealPrice = new List<String>();
             List<String> AddMealImage = new List<String>();
 
+            // Grouping
+            grouped = new ObservableCollection<MealGroup>();
+            var addAddOnGroup = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
+            var addMealGroup = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
+            var addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+
             HttpClient client = new HttpClient();
             var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
             var obj = JsonConvert.DeserializeObject<Data>(content);
@@ -53,7 +62,7 @@ namespace InfiniteMeals.MealSelect
                 AddPrice.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].ExtraMealPrice);
                 AddImage.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealPhotoUrl.ToString());
 
-                AddOn.Add(new Meal
+                addAddOnGroup.Add(new Meal
                 {
                     name = AddNames[placeHolder],
                     price = "Add On Cost: $" + AddPrice[placeHolder],
@@ -70,7 +79,7 @@ namespace InfiniteMeals.MealSelect
                 AddMealPrice.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].ExtraMealPrice);
                 //AddMealImage.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[placeHolder].MealPhotoUrl.ToString());
 
-                MoreMeals.Add(new Meal
+                addMealGroup.Add(new Meal
                 {
                     name = AddMealName[j],
                     price = "Add On Cost: $" + AddMealPrice[j],
@@ -80,8 +89,115 @@ namespace InfiniteMeals.MealSelect
                 });
             }
 
-            BindingContext = this;
+            for (int k = 0; k < obj.Result.MenuForWeek1.Addons.Smoothies.Menu.Length; k++)
+            {
+                AddMealName.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName);
+                System.Diagnostics.Debug.WriteLine("hello " + obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName);
+                AddMealDesc.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealDesc);
+                AddMealPrice.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].ExtraMealPrice);
+                //AddMealImage.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[placeHolder].MealPhotoUrl.ToString());
 
+                addSmoothieGroup.Add(new Meal
+                {
+                    name = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName,
+                    price = "Add On Cost: $" + obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].ExtraMealPrice,
+                    description = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealDesc,
+                    //imageUrl = AddImage[placeHolder],
+                    infoUrl = infoImg,
+                });
+            }
+
+            grouped.Add(addAddOnGroup);
+            grouped.Add(addMealGroup);
+            grouped.Add(addSmoothieGroup);
+            lstView.ItemsSource = grouped;
+            lstView.IsGroupingEnabled = true;
+            lstView.GroupDisplayBinding = new Binding("LongName");
+            lstView.GroupShortNameBinding = new Binding("ShortName");
+
+            lstView.ItemTemplate = new DataTemplate(() =>
+            {
+                var grid = new Grid
+                {
+                    HeightRequest = 100,
+                    VerticalOptions = LayoutOptions.FillAndExpand
+                };
+                var nameLabel = new Label
+                {
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var costLabel= new Label
+                {
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var imgLabel = new Image
+                {
+                    WidthRequest = 200,
+                    HeightRequest = 100,
+                    Aspect = Aspect.AspectFill,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+                var infoButton = new ImageButton
+                {
+                    WidthRequest = 20,
+                    HeightRequest = 20,
+                    Aspect = Aspect.AspectFit,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Center,
+                };
+                infoButton.Margin = new Thickness(50, 0, 0, 0);
+                var steppers = new Stepper
+                {
+                    Value = 0,
+                    Maximum = 10,
+                    Increment = 1,
+                    HeightRequest = 50
+                };
+
+                Label displayLabel = new Label
+                {
+                    Text = "0",
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+
+                steppers.ValueChanged += (sender, e) =>
+                {
+                    displayLabel.Text = string.Format("{0}", steppers.Value);
+                    costLabel.Text = string.Format("Add On Cost: ${0}", steppers.Value * 11.99);
+                };
+
+                quantity = new Label
+                {
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalTextAlignment = TextAlignment.Start,
+                    VerticalTextAlignment = TextAlignment.Center,
+                };
+                quantity.Margin = new Thickness(0, 0, 100, 0);
+
+                nameLabel.SetBinding(Label.TextProperty, "name");
+                costLabel.SetBinding(Label.TextProperty, "price");
+                imgLabel.SetBinding(Image.SourceProperty, "imageUrl");
+                infoButton.SetBinding(Image.SourceProperty, "infoUrl");
+
+                grid.Children.Add(imgLabel, 0, 0);
+                imgLabel.SetValue(Grid.RowSpanProperty, 2);
+                grid.Children.Add(nameLabel, 1, 0);
+                grid.Children.Add(costLabel, 1, 1);
+                grid.Children.Add(infoButton, 2, 0);
+                grid.Children.Add(steppers, 2, 1);
+                steppers.SetValue(Grid.ColumnSpanProperty, 2);
+                grid.Children.Add(displayLabel, 3, 0);
+
+                return new ViewCell { View = grid, Height = 100 };
+            });
+
+            Content = lstView;
+            BindingContext = this;
         }
 
         void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)

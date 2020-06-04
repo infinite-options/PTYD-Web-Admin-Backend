@@ -4,29 +4,31 @@
              x:Class="InfiniteMeals.MealSelect.MealChoices">
 <ContentPage.Content>
 		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
-            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True">
 			<ListView.ItemTemplate>
 				<DataTemplate>
-                    <ViewCell Height="300">
+                    <ViewCell Height="100">
                         <Grid>
+                             <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                             <Label Text="{Binding name}"></Label>
-                            <Image Source="{Binding imageUrl}"></Image>
+                            <Image Source="{Binding imageUrl}" Grid.RowSpan="2"></Image>
                             <ImageButton Source="{Binding infoUrl}"></ImageButton>
-                     <Stepper x:Name="_stepper"
-                             Value="0"
-                             Maximum="10"
-                             Increment="1"
-                              />
-                    <Label 
-                           Text="{Binding Source={x:Reference _stepper}, Path=Value, StringFormat='Quantity: {0:F0}'}"
-/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
 	</ContentPage.Content>
-    </ContentPage>
+</ContentPage>
 <!--
     <StackLayout>
         <Label Text="Meals" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
