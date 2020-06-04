@@ -58,10 +58,12 @@ class Landing extends Component {
           </div>
         </div>
         <div className='container'>
-          <div className='container font2 feedback_marginTop'>
+          <div className='container font2'>
             <center>
-              <h3 className='font1 zero-waste'>THE ONLY ZERO WASTE</h3>
-              <h3 className='font1 zero-waste'>MEAL DELIVERY SERVICE</h3>
+              <div className='zero-waste-container'>
+                <h3 className='font1 zero-waste'>THE ONLY ZERO WASTE</h3>
+                <h3 className='font1 zero-waste'>MEAL DELIVERY SERVICE</h3>
+              </div>
             </center>
 
             <Container className='shadow-lg bg-white p-2 mb-2'>
@@ -246,11 +248,11 @@ class Landing extends Component {
             </div>
           </center>
         </div>
-        <div className='container container_space'>
-          <h3 className='font2' style={{color: "#196F3D"}}>
+        <div className='container container_space' style={{textAlign:"center"}}>
+          <h3 className='font1' style={{color: "#196F3D", textAlign: "center", fontWeight:"bold", fontSize: "36px", color: "#617221"}}>
             FRESH MENU EVERY WEEK
           </h3>
-          <h5 className='font1'>
+          {/* <h5 className='font1'>
             Organic. Seasonal. Local. Every week try something new. Your taste
             buds will thank you.{" "}
           </h5>
@@ -306,7 +308,7 @@ class Landing extends Component {
                 </p>
               </Cell>
             </Cell>
-          </Grid>
+          </Grid> */}
           <button
             type='button'
             className='btn1 btn1-primary font4'
@@ -317,7 +319,7 @@ class Landing extends Component {
               fontSize: "17px"
             }}
           >
-            BROWSE OUR MENU
+            SEE WHAT'S ON THE MENU NEXT WEEK
           </button>
         </div>
         <div className='container font2 container_space'>

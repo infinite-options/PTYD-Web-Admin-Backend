@@ -16,6 +16,7 @@
   font-weight: bold;
   line-height: 1.4em;
   font-size: 41px;
+  letter-spacing: .25em;
 }
 
 /* Bottom left text */
@@ -358,8 +359,9 @@ hr.four {
 .bottom_header {
   margin-bottom: 50px;
 }
-.feedback_marginTop {
-  margin-top: 150px;
+.zero-waste-container {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .home_title {
   font-size: 40px;
