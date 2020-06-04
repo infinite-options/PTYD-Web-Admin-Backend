@@ -289,6 +289,20 @@ hr.four {
   font-family: "Montserrat", sans-serif;
 }
 
+.font9 {
+  font-size: 11px;
+  line-height: 0.8em;
+  text-align: center;
+  letter-spacing: 0.25em;
+  color: #E38B19;
+  font-weight: bold;
+  margin-top: -8px;
+}
+
+.logo-austin-houston {
+  margin-top: 10px;
+}
+
 .scrollMenu-profile {
   overflow: auto;
   height: 450px;

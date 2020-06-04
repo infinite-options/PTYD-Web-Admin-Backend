@@ -93,23 +93,14 @@ const App = props => {
             style={{minHeight: "140px", backgroundColor: "white"}}
             activeKey='/home'
           >
-            <div style={{marginTop: "-25px"}}>
+            <div style={{textAlign: "center"}}>
               <a className='navbar-brand' href='/'>
                 <img src={logo} alt='Logo' className='logo'></img>
               </a>
-              <p
-                className='font_9'
-                style={{
-                  fontSize: "11px",
-                  lineHeight: "0.8em",
-                  textAlign: "center",
-                  letterSpacing: "0.25em",
-                  color: "#E38B19",
-                  fontWeight: "bold"
-                }}
-              >
-                AUSTIN, TX
-              </p>
+              <div class='logo-austin-houston'>
+                <p className='font9'>AUSTIN &</p>
+                <p className='font9'>HOUSTON</p>  
+              </div>
             </div>
 
             <Nav.Item style={{marginTop: "30px"}}>
@@ -328,27 +319,17 @@ const App = props => {
 
         <hr></hr>
 
-        <footer className='container text-center font2'>
+        <footer className='container font2'>
           <div className='row'>
             <div className='col'>
-              <div style={{marginTop: "-10px"}}>
+              <div style={{textAlign: "center"}}>
                 <a className='navbar-brand' href='/'>
                   <img src={logo} alt='Logo' className='logo'></img>
                 </a>
-                <p
-                  className='font_9'
-                  style={{
-                    fontSize: "11px",
-                    lineHeight: "0.8em",
-                    textAlign: "center",
-                    letterSpacing: "0.25em",
-                    fontSize: "11px",
-                    color: "#E38B19",
-                    fontWeight: "bold"
-                  }}
-                >
-                  AUSTIN, TX
-                </p>
+                <div className='logo-austin-houston'>
+                  <p className='font9'>AUSTIN &</p>
+                  <p className='font9'>HOUSTON</p>
+                </div>
               </div>
             </div>
 
