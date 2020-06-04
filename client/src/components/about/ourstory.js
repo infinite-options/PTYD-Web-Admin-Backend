@@ -17,6 +17,8 @@ import LOGOFRONKS from "../../img/logo-fronks.png"
 import LOGOJBG from "../../img/logo-jbg.png"
 import LOGOYELLOWBIRD from "../../img/logo-yellowbird.png"
 import LOGOSIETE from "../../img/logo-siete.png"
+import LOGOFAVE from "../../img/logo-award-fave.png"
+import LOGOAU40 from "../../img/logo-award-au40.png"
 
 class Ourstory extends Component {
   render() {
@@ -281,8 +283,7 @@ class Ourstory extends Component {
               <br />
             </div>
             <hr class="one" />
-            <br />
-            <br />
+            <br /><br /><br /><br />
             <h5 class="font1">A special thanks to these “team members” too!</h5>
             <br />
 
@@ -313,12 +314,29 @@ class Ourstory extends Component {
               </Cell>
             </Grid>
             
-            {/* <img
-              class="img-fluid"
-              style={{ width: "60%", height: "30%" }}
-              src={COMPANY}
-              alt=""
-            /> */}
+            <br />
+              <Grid className='awards'>
+                <Cell col={3} align='middle'></Cell>
+                <Cell col={3} align='middle'>
+                  <img src={LOGOAU40} alt='au40' />
+                </Cell>
+                <Cell col={3} align='middle'>
+                  <img src={LOGOFAVE} alt='fave' />
+                </Cell>                
+                <Cell col={3} align='middle'></Cell>
+                <Cell col={3} align='middle'></Cell>
+                <Cell col={3} align='middle'>
+                  <p class='font2'>Austin Under 40 2020 Finalist</p>
+                  <p class='font2'>Culinary Arts, Events, and Hospitality</p>
+                </Cell>
+                <Cell col={3} align='middle'>
+                  <p class='font2'>FAVE 2019 Winner</p>
+                  <p class='font2'>FAVE Sustainable Business</p>
+                </Cell>                
+                <Cell col={3} align='middle'></Cell>
+              </Grid>
+            <br /><br />
+
           </center>
         </div>
       </div>
