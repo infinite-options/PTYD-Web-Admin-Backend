@@ -16,6 +16,8 @@ import LOGOFRONKS from "../img/logo-fronks.png";
 import LOGOJBG from "../img/logo-jbg.png";
 import LOGOYELLOWBIRD from "../img/logo-yellowbird.png";
 import LOGOSIETE from "../img/logo-siete.png";
+import LOGOFAVE from "../img/logo-award-fave.png"
+import LOGOAU40 from "../img/logo-award-au40.png"
 import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 
@@ -454,6 +456,11 @@ class Landing extends Component {
                   <Cell col={3} align='middle'>
                     <img src={LOGOSIETE} alt='siete' />
                   </Cell>
+                </Grid>
+
+                <Grid className='awards'>
+                  <Cell col={6} align='middle'></Cell>
+                  <Cell col={6} align='middle'></Cell>
                 </Grid>
               </div>
             </center>
