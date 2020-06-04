@@ -593,6 +593,7 @@
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/mipmap-xxxhdpi/icon.png
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/mipmap-xxxhdpi/launcher_foreground.png
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/info.jpg
+/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/defaultmeal.png
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/mealplan.jpg
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/homepage.jpg
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/lasagna.jpeg

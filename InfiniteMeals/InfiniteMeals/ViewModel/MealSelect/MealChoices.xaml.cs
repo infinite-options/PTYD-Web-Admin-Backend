@@ -73,19 +73,27 @@ namespace InfiniteMeals.MealSelect
 
             for(int placeHolder = 0; placeHolder < obj.Result.MenuForWeek1.Meals.Weekly.Menu.Length; placeHolder++)
             {
-
+                String imageMeal;
                 /*MenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealName);
                 MenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealDesc);
                 MenuForWeek1Prot.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealFat);
                 MenuForWeek1Sugar.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealSugar);
                 MenuForWeek1Fat.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealFat);
                 MenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl.ToString());*/
+                if(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl== null)
+                {
+                    imageMeal = "defaultmeal.png";
+                }
+                else
+                {
+                    imageMeal = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl.ToString();
+                }
 
                 mealGroup.Add(new Meal
                 {
                     name = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealName,
                     description = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealDesc,
-                    imageUrl= obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl.ToString(),
+                    imageUrl= imageMeal,
                     infoUrl = infoImg,
                 }) ;
 
@@ -93,30 +101,48 @@ namespace InfiniteMeals.MealSelect
 
             for (int placeHolderSeas = 0; placeHolderSeas < obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length; placeHolderSeas++)
             {
-               /* SeasMenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName);
-                SeasMenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc);
-                //SeasMenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString());*/
-
+                String imageMeal;
+                /* SeasMenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName);
+                 SeasMenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc);
+                 //SeasMenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString());*/
+                if (obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                {
+                    imageMeal = "defaultmeal.png";
+                }
+                else
+                {
+                    imageMeal = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
+                }
                 seasonalMealGroup.Add(new Meal
                 {
                     name = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName,
                     description = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc,
-                    //imageUrl = SeasMenuForWeek1Image[placeHolderSeas],
+                    imageUrl = imageMeal,
                     infoUrl = infoImg,
                 });
 
             }
 
-            for (int smooth = 0; smooth < obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length; smooth++)
+            for (int smooth = 0; smooth < obj.Result.MenuForWeek1.Meals.Smoothies.Menu.Length; smooth++)
             {
+                String imageMeal;
                 /*SmoothiesNames.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName);
                 SmoothiesDesc.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc);
                 //SmoothiesImage.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl.ToString());*/
+
+                if (obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl == null)
+                {
+                    imageMeal = "defaultmeal.png";
+                }
+                else
+                {
+                    imageMeal = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl.ToString();
+                }
                 smoothieGroup.Add(new Meal
                 {
                     name = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName,
                     description = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc,
-                    //imageUrl = SmoothiesImage[smooth],
+                    imageUrl = imageMeal,
                     infoUrl = infoImg,
 
                 });

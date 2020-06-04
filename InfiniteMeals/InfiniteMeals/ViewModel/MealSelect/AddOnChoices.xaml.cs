@@ -57,52 +57,76 @@ namespace InfiniteMeals.MealSelect
 
             for (int placeHolder = 0; placeHolder < obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu.Length; placeHolder++)
             {
+                String imageMeal;
                 AddNames.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealName);
                 AddDesc.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealDesc);
                 AddPrice.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].ExtraMealPrice);
-                AddImage.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealPhotoUrl.ToString());
+
+                if (obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealPhotoUrl == null)
+                {
+                    imageMeal = "defaultmeal.png";
+                }
+                else
+                {
+                    imageMeal = obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealPhotoUrl.ToString();
+                }
 
                 addAddOnGroup.Add(new Meal
                 {
                     name = AddNames[placeHolder],
                     price = "Add On Cost: $" + AddPrice[placeHolder],
                     description = AddDesc[placeHolder],
-                    imageUrl = AddImage[placeHolder],
+                    imageUrl = imageMeal,
                     infoUrl = infoImg,
                 }) ;
             }
 
             for (int j = 0; j < obj.Result.MenuForWeek1.Addons.Weekly.Menu.Length; j++)
             {
+                String imageMeal;
                 AddMealName.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealName);
                 AddMealDesc.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealDesc);
                 AddMealPrice.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].ExtraMealPrice);
-                //AddMealImage.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[placeHolder].MealPhotoUrl.ToString());
-
+                if (obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealPhotoUrl == null)
+                {
+                    imageMeal = "defaultmeal.png";
+                }
+                else
+                {
+                    imageMeal = obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealPhotoUrl.ToString();
+                }
                 addMealGroup.Add(new Meal
                 {
                     name = AddMealName[j],
                     price = "Add On Cost: $" + AddMealPrice[j],
                     description = AddMealDesc[j],
-                    //imageUrl = AddImage[placeHolder],
+                    imageUrl = imageMeal,
                     infoUrl = infoImg,
                 });
             }
 
             for (int k = 0; k < obj.Result.MenuForWeek1.Addons.Smoothies.Menu.Length; k++)
             {
+                String imageMeal;
                 AddMealName.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName);
                 System.Diagnostics.Debug.WriteLine("hello " + obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName);
                 AddMealDesc.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealDesc);
                 AddMealPrice.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].ExtraMealPrice);
-                //AddMealImage.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[placeHolder].MealPhotoUrl.ToString());
+                if (obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealPhotoUrl == null)
+                {
+                    imageMeal = "defaultmeal.png";
+                }
+                else
+                {
+                    imageMeal = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealPhotoUrl.ToString();
+                }
 
                 addSmoothieGroup.Add(new Meal
                 {
                     name = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName,
                     price = "Add On Cost: $" + obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].ExtraMealPrice,
                     description = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealDesc,
-                    //imageUrl = AddImage[placeHolder],
+                    imageUrl =  imageMeal,
                     infoUrl = infoImg,
                 });
             }
@@ -165,6 +189,13 @@ namespace InfiniteMeals.MealSelect
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
 
+                Label subtotalLabel = new Label
+                {
+                    Text = "$0.00",
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+
                 steppers.ValueChanged += (sender, e) =>
                 {
                     displayLabel.Text = string.Format("{0}", steppers.Value);
@@ -183,7 +214,6 @@ namespace InfiniteMeals.MealSelect
                 costLabel.SetBinding(Label.TextProperty, "price");
                 imgLabel.SetBinding(Image.SourceProperty, "imageUrl");
                 infoButton.SetBinding(Image.SourceProperty, "infoUrl");
-
                 grid.Children.Add(imgLabel, 0, 0);
                 imgLabel.SetValue(Grid.RowSpanProperty, 2);
                 grid.Children.Add(nameLabel, 1, 0);
