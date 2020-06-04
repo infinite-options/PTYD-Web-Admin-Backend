@@ -457,11 +457,28 @@ class Landing extends Component {
                     <img src={LOGOSIETE} alt='siete' />
                   </Cell>
                 </Grid>
-
+                <br /><br />
                 <Grid className='awards'>
-                  <Cell col={6} align='middle'></Cell>
-                  <Cell col={6} align='middle'></Cell>
+                  <Cell col={3} align='middle'></Cell>
+                  <Cell col={3} align='middle'>
+                    <img src={LOGOAU40} alt='au40' />
+                  </Cell>
+                  <Cell col={3} align='middle'>
+                    <img src={LOGOFAVE} alt='fave' />
+                  </Cell>                
+                  <Cell col={3} align='middle'></Cell>
+                  <Cell col={3} align='middle'></Cell>
+                  <Cell col={3} align='middle'>
+                    <p>Austin Under 40 2020 Finalist</p>
+                    <p>Culinary Arts, Events, and Hospitality</p>
+                  </Cell>
+                  <Cell col={3} align='middle'>
+                    <p>FAVE 2019 Winner</p>
+                    <p>FAVE Sustainable Business</p>
+                  </Cell>                
+                  <Cell col={3} align='middle'></Cell>
                 </Grid>
+                <br /><br />
               </div>
             </center>
           </Grid>
