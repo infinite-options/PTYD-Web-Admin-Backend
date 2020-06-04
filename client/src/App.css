@@ -11,6 +11,13 @@
   position: relative;
   color: black;
 }
+
+.zero-waste {
+  font-weight: bold;
+  line-height: 1.4em;
+  font-size: 41px;
+}
+
 /* Bottom left text */
 .bottom-left {
   position: absolute;

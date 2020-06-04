@@ -7,7 +7,6 @@ import IMG6 from "../img/img6.jpg";
 import HUMAN1 from "../img/human1.png";
 import HUMAN2 from "../img/human2.png";
 import HUMAN3 from "../img/human3.png";
-// import COMPANY from "../img/company.png";
 import LOGOBOULDIN from "../img/logo-bouldinfoodforest.jpg";
 import LOGOFOX7 from "../img/logo-fox7austin.jpg";
 import LOGOCREDO from "../img/logo-credo.jpg";
@@ -46,6 +45,7 @@ class Landing extends Component {
           <div className='bottom-left font2 home_subtitle' style={{}}>
             <p>Plant-based, ready to eat meals</p>
             <p>delivered to your doorstep.</p>
+            <br/>
             <a className='btn1 btn1-primary start_button' href='/signup'>
               Get Started
             </a>
@@ -60,9 +60,8 @@ class Landing extends Component {
         <div className='container'>
           <div className='container font2 feedback_marginTop'>
             <center>
-              <h3 className='font3'>
-                THE ONLY ZERO WASTE MEAL DELIVERY SERVICE
-              </h3>
+              <h3 className='font1 zero-waste'>THE ONLY ZERO WASTE</h3>
+              <h3 className='font1 zero-waste'>MEAL DELIVERY SERVICE</h3>
             </center>
 
             <Container className='shadow-lg bg-white p-2 mb-2'>
