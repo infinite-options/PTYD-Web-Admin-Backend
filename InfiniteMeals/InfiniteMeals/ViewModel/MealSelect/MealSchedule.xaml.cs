@@ -18,9 +18,12 @@ namespace InfiniteMeals.Meals {
         int ctr = 2;
         bool disabled = false;
         List<String> order = new List<String>();
+
         public IList<Dates> SundayDates { get; private set; }
         public IList<Dates> MondayDates { get; private set; }
+
         String green = "#8FBC8F";
+        String def = "#F5F5F5";
 
         public MealSchedule() {
             InitializeComponent();
@@ -31,6 +34,8 @@ namespace InfiniteMeals.Meals {
         {
             List<String> sundaySched = new List<String>();
             List<String> mondaySched = new List<String>();
+            SundayDates = new List<Dates>();
+            MondayDates = new List<Dates>();
 
             HttpClient client = new HttpClient();
             var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
@@ -39,15 +44,15 @@ namespace InfiniteMeals.Meals {
             sundaySched.Add(obj.Result.MenuForWeek1.Sunday);
             mondaySched.Add(obj.Result.MenuForWeek1.Monday);
 
-            /*SundayDates.Add(new Dates
+            SundayDates.Add(new Dates
             {
-               sundayDate = sundaySched[0],
+               sundayDate = sundaySched[0].ToString(),
             });
 
             MondayDates.Add(new Dates
             {
-                mondayDate = mondaySched[0],
-            });*/
+                mondayDate = mondaySched[0].ToString(),
+            });
 
             BindingContext = this;
         }
@@ -67,7 +72,7 @@ namespace InfiniteMeals.Meals {
             // Change button colors
             if (btn.ClassId == "SkipButton") {
                 if (btn.BackgroundColor.Equals(Color.FromHex(green))) {
-                    btn.BackgroundColor = Color.Default;
+                    btn.BackgroundColor = (Color.FromHex(def));
                     disabled = false;
                     ctr = 0;
                 }
@@ -80,7 +85,7 @@ namespace InfiniteMeals.Meals {
             }
             else {
                 if (disabled == false) {
-                    if (btn.BackgroundColor.Equals(Color.Default)) {
+                    if (btn.BackgroundColor.Equals(Color.FromHex(def))) {
                         if (ctr < 2) {
                             btn.BackgroundColor = Color.FromHex(green);
                             order.Add(btn.Text);
@@ -88,7 +93,7 @@ namespace InfiniteMeals.Meals {
                         }
                     }
                     else {
-                        btn.BackgroundColor = Color.Default;
+                        btn.BackgroundColor = (Color.FromHex(def));
                         order.Remove(btn.Text);
                         ctr--;
                     }
@@ -101,11 +106,11 @@ namespace InfiniteMeals.Meals {
 
             Button btn = (Button)sender;
 
-            if (btn.BackgroundColor.Equals(Color.Default)) {
+            if (btn.BackgroundColor.Equals(Color.FromHex(def))) {
                 btn.BackgroundColor = Color.FromHex("#F9E29C");
             }
             else {
-                btn.BackgroundColor = Color.Default;
+                btn.BackgroundColor = (Color.FromHex(def));
             }
         }
 
