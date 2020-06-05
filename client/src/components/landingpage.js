@@ -43,9 +43,10 @@ class Landing extends Component {
             <p className='home_title'>RESPONSIBLE</p>
           </div>
           <div className='bottom-left font2 home_subtitle' style={{}}>
-            <p>Plant-based, ready to eat meals</p>
-            <p>delivered to your doorstep.</p>
-            <br/><br/>
+            <div className='plant-based-text'>
+              <p>Plant-based, ready to eat meals</p>
+              <p>delivered to your doorstep.</p>
+            </div>
             <a className='btn1 btn1-primary start_button' href='/signup'>
               Get Started
             </a>
@@ -66,23 +67,42 @@ class Landing extends Component {
               </div>
             </center>
 
-            <Container className='shadow-lg bg-white p-2 mb-2'>
+            <div className='box-shadow-top'>&#x200b;</div> 
+            <Grid className='zero-waste-subtext'>
+              <Cell col={4} className='zero-waste-cell'>
+                <h4 className='font1 zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
+                  <p>Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.</p>
+              </Cell>
+              <Cell col={4} className='zero-waste-cell'>
+                <h4 className='font1 zero-waste-subtitle text-wrap'>WEEKLY DELIVERY</h4>
+                  <p>Seamless non-contact delivery in Austin & Houston.</p>
+              </Cell>
+              <Cell col={4} className='zero-waste-cell'>
+                <h4 className='font1 zero-waste-subtitle text-wrap'>RETURN YOUR JARS</h4>
+                  <p>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
+              </Cell>
+            </Grid>
+            <div className='box-shadow-bottom'>&#x200b;</div>
+
+            {/* <Container className='shadow-lg bg-white p-2 mb-2'>
               <Row
                 style={{
-                  fontSize: "28px",
-                  color: "#196F3D",
-                  paddingTop: "0",
-                  marginLeft: "5%"
+                  fontSize: "30px",
+                  color: "#617221",
+                  // paddingTop: "0",
+                  // marginLeft: "5%"
                 }}
               >
+
                 <Col>
-                  <h4 className='text-wrap'>CHOOSE YOUR MEALS</h4>
+                  <Cell col={10}>
+                  <h4 className='font1 text-wrap'>CHOOSE YOUR MEALS</h4></Cell>
                 </Col>
                 <Col>
-                  <h4 className='text-wrap'>WEEKLY DELIVERY</h4>
+                  <h4 className='font1 text-wrap'>WEEKLY DELIVERY</h4>
                 </Col>
                 <Col>
-                  <h4 className='text-wrap'>RETURN YOUR JARS</h4>
+                  <h4 className='font1 text-wrap'>RETURN YOUR JARS</h4>
                 </Col>
               </Row>
               <Row
@@ -90,11 +110,11 @@ class Landing extends Component {
                   fontSize: "15px",
                   color: "#4D4D4D",
                   lineHeight: "25px",
-                  marginLeft: "5%"
+                  // marginLeft: "5%"
                 }}
               >
                 <Col>
-                  <Cell col={11}>
+                  <Cell col={10}>
                     Every Monday, we'll release a new menu. Order 5 to 20 meals
                     for delivery.
                   </Cell>
@@ -111,17 +131,17 @@ class Landing extends Component {
                   </Cell>
                 </Col>
               </Row>
-            </Container>
+            </Container> */}
 
             <center>
               <button
                 type='button'
-                className='btn1 btn1-primary font4'
+                className='btn1 btn1-primary start_button'
                 style={{
-                  marginTop: "10px",
-                  color: "white",
-                  size: "10px",
-                  fontSize: "17px"
+                  // marginTop: "10px",
+                  // color: "white",
+                  // size: "10px",
+                  // fontSize: "17px"
                 }}
               >
                 Get Started
