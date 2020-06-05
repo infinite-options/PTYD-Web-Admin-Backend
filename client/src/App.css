@@ -123,6 +123,17 @@
   text-align: left;
 }
 
+.four-items-grid {
+  font-size: 14px;
+  color: #4D4D4D;
+  /* line-height: 20px; */
+}
+
+.four-items-grid h4 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
 .delivered-weekly-image {
   width: 700px;
   background-size: 100%;

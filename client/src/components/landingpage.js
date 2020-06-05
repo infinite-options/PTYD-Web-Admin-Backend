@@ -150,83 +150,89 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div className='container container_space d-flex justify-content-center'>
+        <div className='container  d-flex justify-content-center'>
           <div className='font2'>
             <Grid className='mt-5'>
-              <Cell col={8}>
-                <Container>
+              <Cell col={9}>
+                <Container className='four-items-grid'>
                   <Row style={{fontSize: "28px"}}>
-                    <Col>LOCAL FARMS</Col>
-                    <Col>REUSABLE PACKAGING</Col>
+                    {/* <Col>LOCAL FARMS</Col>
+                    <Col>REUSABLE PACKAGING</Col> */}
                   </Row>
                   <Row
-                    style={{
-                      fontSize: "13px",
-                      color: "#4D4D4D",
-                      lineHeight: "20px"
-                    }}
+                    // style={{
+                    //   fontSize: "13px",
+                    //   color: "#4D4D4D",
+                    //   lineHeight: "20px"
+                    // }}
                   >
                     <Col>
-                      <Cell col={10}>
-                        Our organic produce comes directly from small Texas
+                      <Cell col={9}>
+                        <h4 className='font1'>LOCAL FARMS</h4>
+                        <p>Our organic produce comes directly from small Texas
                         farms to the PTYD kitchen. No middle men or long transit
                         times. We provide the most nutrient rich ingredients
-                        straight to your door.
+                        straight to your door.</p>
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={11}>
-                        Did you know that every piece of plastic ever produced,
+                      <Cell col={12}>
+                        <h4 className='font1'>REUSABLE PACKAGING</h4>
+                        <p>Did you know that every piece of plastic ever produced,
                         still exists today? Enjoy a plastic-free experience with
-                        your PTYD deliveries.
+                        your PTYD deliveries.</p>
                       </Cell>
                     </Col>
                   </Row>
                   <Row style={{fontSize: "28px"}} className='mt-5'>
-                    <Col>ZERO WASTE</Col>
-                    <Col>ORGANIC PRODUCE</Col>
+                    {/* <Col>ZERO WASTE</Col>
+                    <Col>ORGANIC PRODUCE</Col> */}
                   </Row>
                   <Row
-                    style={{
-                      fontSize: "13px",
-                      color: "#4D4D4D",
-                      lineHeight: "20px"
-                    }}
+                    // style={{
+                    //   fontSize: "13px",
+                    //   color: "#4D4D4D",
+                    //   lineHeight: "20px"
+                    // }}
                   >
                     <Col>
-                      <Cell col={10}>
+                      <Cell col={9}>
+                        <h4 className='font1'>ZERO WASTE</h4><p>
                         Nearly 40% of all food grown in the United States is
                         thrown away. In our kitchen, all food scraps are
-                        composted to make healthy organic soil.{" "}
+                        composted to make healthy organic soil.{" "}</p>
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={11}>
+                      <Cell col={12}>
+                        <h4 className='font1'>ORGANIC PRODUCE</h4>
+                        <p>
                         Once upon a time, all food was organic. Healthy soil
                         means healthy nutrients and healthy bodies. We source
                         100% organic ingredients, so there's no pesticides,
-                        herbicides or sprays in your food, ever.
+                        herbicides or sprays in your food, ever.</p>
                       </Cell>
                     </Col>
                   </Row>
                 </Container>
               </Cell>
-              <Cell col={4}>
+              <Cell col={3}>
                 <img
                   className='img-fluid'
-                  style={{width: "80%", height: "100%"}}
+                  style={{width: "100%", height: "100%"}}
                   src={IMG2}
                   alt=''
                 />
               </Cell>
               <button
                 type='button'
-                className='btn1 btn1-primary font4'
+                className='btn1 btn1-primary start_button'
                 style={{
-                  marginTop: "10px",
-                  color: "white",
-                  size: "10px",
-                  fontSize: "17px"
+                //   marginTop: "10px",
+                //   color: "white",
+                //   size: "10px",
+                //   fontSize: "17px"
+                  marginLeft: "32px"
                 }}
               >
                 EAT BETTER NOW
