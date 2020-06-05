@@ -214,39 +214,47 @@ class Landing extends Component {
             </Grid>
           </div>
         </div>
+{/* 
+        <div className='container background container_space delivered-weekly-image'>
+          <div className='d-flex justify-content-center delivered-weekly-container'>
+
+          </div>
+        </div> */}
+
+
+
         <div
           className='container background container_space'
           style={{
             backgroundSize: "100% 100%"
           }}
         >
-          <center className='d-flex justify-content-center'>
-            <div
-              className='p-5'
-              style={{
-                color: "white",
-                backgroundColor: "#467844",
-                width: "700px",
-                height: "700px"
-              }}
-            >
-              <h2 className='font1'>DELIVERED WEEKLY</h2>
-              <h3 className='font1'>STRAIGHT TO YOUR DOOR</h3>
-              <hr className='three' />
-              <h5 className='font1'>&bull; READY-TO-EAT PLANT BASED MEALS</h5>
-              <h5 className='font1'>
-                &bull; 100% GLUTEN, MEAT, AND DAIRY FREE
-              </h5>
-              <h5 className='font1'>&bull; REAL WHOLE FOOD INGREDIENTS</h5>
-              <h5 className='font1'>&bull; NO PRESERVATIVES, EVER</h5>
-              <hr className='three' />
-              <h6 className='mt-5'>
-                <i>Pause anytime, no commitment.</i>
-              </h6>
-              <h5 className='font1'>PLANS STARTING AT</h5>
-              <h4 className='font3'>$59 / WEEK</h4>
+          <div className='d-flex justify-content-center' style={{padding: "80px 0 80px 0"}}>
+            <div className='delivered-weekly-container'>
+              <div className='delivered-weekly-container2'>
+                <div className='delivered-titles-container'>
+                  <h2 className='font1 delivered-title'>DELIVERED WEEKLY</h2>
+                  <h3 className='font1 delivered-title2'>STRAIGHT TO YOUR DOOR</h3>
+                </div>
+                <hr className='three' />
+                <div className='delivered-weekly-bullets-container'>
+                  <h5 className='font1 delivered-bullets-text'>&bull; READY-TO-EAT PLANT BASED MEALS</h5>
+                  <h5 className='font1 delivered-bullets-text'>&bull; 100% GLUTEN, MEAT, AND DAIRY FREE</h5>
+                  <h5 className='font1 delivered-bullets-text'>&bull; REAL WHOLE FOOD INGREDIENTS</h5>
+                  <h5 className='font1 delivered-bullets-text'>&bull; NO PRESERVATIVES, EVER</h5>
+                </div>
+                <hr className='three' />
+                <h6 className='font1' style={{fontWeight: "bold"}}>
+                  <i>Pause anytime, no commitment.</i>
+                </h6>
+                <h5 className='font1 delivered-plans-start'>PLANS STARTING AT</h5>
+                <div className='delivered-price-container'>
+                  <h4 className='font1 delivered-price'>$59</h4>
+                  <h4 className='font1 delivered-week'> / WEEK</h4>
+                </div>
+              </div>
             </div>
-          </center>
+          </div>
         </div>
         <div className='container container_space' style={{textAlign:"center"}}>
           <h3 className='font1' style={{color: "#196F3D", textAlign: "center", fontWeight:"bold", fontSize: "36px", color: "#617221"}}>
