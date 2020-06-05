@@ -12,6 +12,58 @@
   color: black;
 }
 
+/* Top left text */
+.top-left {
+  position: absolute;
+  top: 90px;
+  left: 16px;
+  float: left;
+  margin-left: 1.5em;
+}
+
+.home_title {
+  font-size: 55px;
+  line-height: 55px;
+  /* text-shadow: 2px 2px 10px white; */
+  margin: 0;
+  padding: 0;
+}
+.home_subtitle {
+  margin-bottom: 200px;
+}
+.home_subtitle p {
+  font-size: 20px;
+  text-shadow: 2px 2px 12px white;
+  line-height: 35px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Bottom left text */
+.bottom-left {
+  position: absolute;
+  bottom: 8px;
+  /* float: left; */
+  /* left: 16px; */
+  /* font-size: 15px; */
+  margin-left: 1.8em;
+  padding-bottom: 10px;
+}
+
+.bottom-left a {
+  color: white;
+  transition: .2s;
+}
+
+.bottom-left a:hover {
+  color: white;
+  text-decoration: none;
+}
+
+#already-a-member:hover {
+  color: #607122;
+}
+
 .zero-waste {
   font-weight: bold;
   line-height: 1.4em;
@@ -83,6 +135,23 @@
   font-weight: bold;
 }
 
+.fresh-menu-title {
+  text-align: center; 
+  font-weight: bold;
+  font-size: 37px; 
+  color: #617221;
+}
+
+.fresh-menu-subtitle-container {
+  margin: 0 0 20px 0;
+}
+
+.fresh-menu-subtitle {
+  font-size: 22px;
+  margin: 5px;
+  padding: 0;
+}
+
 .award-text * {
   margin: 0;
   padding: 0;
@@ -93,27 +162,6 @@
 
 .award-text {
   margin-top: -25px;
-}
-
-/* Bottom left text */
-.bottom-left {
-  position: absolute;
-  bottom: 8px;
-  left: 16px;
-  font-size: 15px;
-  margin-left: 1.5em;
-}
-
-/* Top left text */
-.top-left {
-  position: absolute;
-  top: 8px;
-  left: 16px;
-  float: left;
-  margin-left: 0.5em;
-  margin-top: 2em;
-  font-size: 52px;
-  letter-spacing: 1.5px;
 }
 
 /* Top right text */
@@ -213,21 +261,16 @@ br {
 }
 
 .btn1-primary {
-  background-color: #cd790c;
+  background-color: #cd790a;
   opacity: 1;
-}
-
-.btn1-primary:hover {
-  background-color: #427c42;
-}
-
-.btn1-primary:focus {
-  background-color: #427c42;
+  transition: .2s;
   color: white;
 }
 
-.btn1-primary:active {
-  background-color: #427c42 !important;
+.btn1-primary:hover {
+  background-color: #607122;
+  color: white;
+  text-decoration: none;
 }
 
 hr.one {
@@ -435,24 +478,11 @@ hr.four {
   margin-top: 50px;
   margin-bottom: 50px;
 }
-.home_title {
-  font-size: 40px;
-  line-height: 55px;
-  text-shadow: 2px 2px 10px white;
-  font-weight: normal;
-}
-.home_subtitle {
-  margin-bottom: 200px;
-}
-.home_subtitle p {
-  font-size: 21px;
-  text-shadow: 2px 2px 10px white;
-  line-height: 35px;
-}
+
 .start_button {
   margin-top: 15px;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2rem;
   font-size: 1.25rem;
   border-radius: 0.3rem;
 }

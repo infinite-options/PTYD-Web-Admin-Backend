@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
-import IMG4 from "../img/img4.jpg";
-import IMG5 from "../img/img5.jpg";
-import IMG6 from "../img/img6.jpg";
+// import IMG4 from "../img/img4.jpg";
+// import IMG5 from "../img/img5.jpg";
+// import IMG6 from "../img/img6.jpg";
 import HUMAN1 from "../img/human1.png";
 import HUMAN2 from "../img/human2.png";
 import HUMAN3 from "../img/human3.png";
@@ -45,7 +45,7 @@ class Landing extends Component {
           <div className='bottom-left font2 home_subtitle' style={{}}>
             <p>Plant-based, ready to eat meals</p>
             <p>delivered to your doorstep.</p>
-            <br/>
+            <br/><br/>
             <a className='btn1 btn1-primary start_button' href='/signup'>
               Get Started
             </a>
@@ -53,7 +53,7 @@ class Landing extends Component {
 
           <div className='bottom-left font2'>
             {/* {this.state.isLoggedIn === false && ( */}
-            <a href='/login'>Already a Member? Sign in</a>
+            <a id='already-a-member' href='/login'><u>Already a Member? Sign In</u></a>
             {/* )} */}
           </div>
         </div>
@@ -257,9 +257,13 @@ class Landing extends Component {
           </div>
         </div>
         <div className='container container_space' style={{textAlign:"center"}}>
-          <h3 className='font1' style={{color: "#196F3D", textAlign: "center", fontWeight:"bold", fontSize: "36px", color: "#617221"}}>
-            FRESH MENU EVERY WEEK
-          </h3>
+          <h3 className='font1 fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
+          <div className='fresh-menu-subtitle-container'>
+            <h5 className='font1 fresh-menu-subtitle'>With over 100 seasonal recipes on rotation, every week you'll try something new. </h5>
+            <h5 className='font1 fresh-menu-subtitle'>Here's a taste of our rotating menu:</h5>
+          </div>
+
+
           {/* <h5 className='font1'>
             Organic. Seasonal. Local. Every week try something new. Your taste
             buds will thank you.{" "}
