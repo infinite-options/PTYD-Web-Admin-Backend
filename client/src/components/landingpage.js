@@ -219,7 +219,7 @@ class Landing extends Component {
               <Cell col={3}>
                 <img
                   className='img-fluid'
-                  style={{width: "100%", height: "100%"}}
+                  style={{width: "100%", height: "100%", marginTop: "30px"}}
                   src={IMG2}
                   alt=''
                 />
@@ -290,6 +290,7 @@ class Landing extends Component {
           </div>
 
 
+
           {/* <h5 className='font1'>
             Organic. Seasonal. Local. Every week try something new. Your taste
             buds will thank you.{" "}
@@ -349,17 +350,18 @@ class Landing extends Component {
           </Grid> */}
           <button
             type='button'
-            className='btn1 btn1-primary font4'
-            style={{
-              marginTop: "10px",
-              color: "white",
-              size: "10px",
-              fontSize: "17px"
-            }}
+            className='btn1 btn1-primary start_button font2'
+            // style={{
+            //   marginTop: "10px",
+            //   color: "white",
+            //   size: "10px",
+            //   fontSize: "17px"
+            // }}
           >
             SEE WHAT'S ON THE MENU NEXT WEEK
           </button>
         </div>
+
         <div className='container font2 container_space'>
           <h3 className='font2'>What Our Community is Saying...</h3>
           <CardDeck className='mb-5'>
@@ -449,13 +451,13 @@ class Landing extends Component {
           </CardDeck>
           <button
             type='button'
-            className='btn1 btn1-primary font4'
-            style={{
-              marginTop: "10px",
-              color: "white",
-              size: "10px",
-              fontSize: "17px"
-            }}
+            className='btn1 btn1-primary font2 start_button'
+            // style={{
+            //   marginTop: "10px",
+            //   color: "white",
+            //   size: "10px",
+            //   fontSize: "17px"
+            // }}
           >
             TRY US TODAY
           </button>
@@ -472,7 +474,7 @@ class Landing extends Component {
                 </Cell>
               </div>
 
-              <div className='container_space'>
+              <div className='container_space bottom_header'>
                 <Grid className='sponsors'>
                   <Cell col={3} align='middle'>
                     <img src={LOGOJBG} alt='jbg' />
@@ -499,7 +501,6 @@ class Landing extends Component {
                     <img src={LOGOSIETE} alt='siete' />
                   </Cell>
                 </Grid>
-                <br /><br />
                 <Grid className='awards'>
                   <Cell col={3} align='middle'></Cell>
                   <Cell col={3} align='middle'>
@@ -524,7 +525,6 @@ class Landing extends Component {
                   </Cell>                
                   <Cell col={3} align='middle'></Cell>
                 </Grid>
-                <br /><br />
               </div>
             </center>
           </Grid>

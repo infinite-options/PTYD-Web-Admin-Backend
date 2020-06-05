@@ -215,6 +215,10 @@
   padding: 0;
 }
 
+.awards {
+  padding-bottom: 100px;
+}
+
 .award-text * {
   margin: 0;
   padding: 0;
