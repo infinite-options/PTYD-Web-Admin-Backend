@@ -64,11 +64,18 @@
   color: #607122;
 }
 
+.zero-waste-container {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
 .zero-waste {
   font-weight: bold;
   line-height: 1.4em;
   font-size: 41px;
   letter-spacing: .25em;
+  margin: 0;
+  padding: 0;
 }
 
 .delivered-weekly-image {
@@ -472,10 +479,6 @@ hr.four {
 }
 
 .bottom_header {
-  margin-bottom: 50px;
-}
-.zero-waste-container {
-  margin-top: 50px;
   margin-bottom: 50px;
 }
 
