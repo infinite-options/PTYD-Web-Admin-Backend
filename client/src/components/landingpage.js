@@ -346,8 +346,8 @@ class Landing extends Component {
                   <img
                     style={{
                       borderRadius: "50%",
-                      width: "60px",
-                      height: "60px",
+                      // width: "60px",
+                      // height: "60px",
                       marginTop: "10px"
                     }}
                     src={HUMAN1}
@@ -374,8 +374,8 @@ class Landing extends Component {
                   <img
                     style={{
                       borderRadius: "50%",
-                      width: "60px",
-                      height: "60px",
+                      // width: "60px",
+                      // height: "60px",
                       marginTop: "10px"
                     }}
                     src={HUMAN2}
@@ -402,8 +402,8 @@ class Landing extends Component {
                   <img
                     style={{
                       borderRadius: "50%",
-                      width: "60px",
-                      height: "60px",
+                      // width: "60px",
+                      // height: "60px",
                       marginTop: "10px"
                     }}
                     src={HUMAN3}
