@@ -338,16 +338,16 @@ const App = props => {
                 <Nav.Link style={{color: "green"}} disabled>
                   Order
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Menu
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Plans
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   How it Works
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Delivery Area
                 </Nav.Link>
               </Nav>
@@ -358,19 +358,19 @@ const App = props => {
                 <Nav.Link style={{color: "green"}} disabled>
                   Company
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Blog
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Our Service
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Our Team
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Jobs
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   Employee Portal
                 </Nav.Link>
               </Nav>
@@ -381,15 +381,18 @@ const App = props => {
                 <Nav.Link style={{color: "green"}} disabled>
                   Questions & Contact
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   FAQs
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   512-522-9294
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' style={{color: "black"}} href='/'>
                   info@preptoyourdoor.com
                 </Nav.Link>
+                <Nav.Link id='footer-margin-padding' disabled>&#8203;</Nav.Link>
+                <Nav.Link disabled id='footer-margin-padding' className='font1'  style={{color: "black"}} href='/'>Made with 🧡 in Austin, TX</Nav.Link>
+                <Nav.Link disabled id='footer-margin-padding' className='font1' style={{color: "black"}} href='/'>© Prep To Your Door</Nav.Link>
               </Nav>
             </div>
 
@@ -399,7 +402,7 @@ const App = props => {
                   Follow Us:
                 </Nav.Link>
               </Nav>
-              <Nav defaultActiveKey='/'>
+              <Nav defaultActiveKey='/' style={{marginLeft: "12px"}}>
                 <a
                   href='https://www.facebook.com/preptoyourdoor'
                   target='_blank'
@@ -436,20 +439,20 @@ const App = props => {
                 <Nav.Link style={{color: "green"}} disabled>
                   Join Our Mailing List
                 </Nav.Link>
-                <p> </p>
+                {/* <p> </p> */}
                 <p
                   style={{
                     fontSize: "12px",
                     paddingTop: "25px",
-                    marginLeft: "-25px"
+                    marginLeft: "-140px"
                   }}
                 >
-                  & Never Miss an Update
+                  & Never miss an update
                 </p>
-                <p> </p>
-                <p style={{fontSize: "12px", paddingLeft: "15px"}}>
-                  Email Address:
-                </p>
+                {/* <p> </p> */}
+                {/* <p style={{fontSize: "12px", paddingLeft: "15px"}}>
+                  Email Address
+                </p> */}
                 <Form style={{paddingLeft: "10px"}}>
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridEmail'>
@@ -457,8 +460,8 @@ const App = props => {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
-                      <Button variant='primary' type='submit'>
-                        Submit
+                      <Button variant='light' type='submit' className='font2'>
+                        Subscribe
                       </Button>
                     </Form.Group>
                   </Form.Row>
@@ -466,6 +469,7 @@ const App = props => {
               </Nav>
             </div>
           </div>
+          <br/>
         </footer>
       </Layout>
     </div>
