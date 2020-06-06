@@ -17,7 +17,7 @@ export default class MealButton extends Component {
       currentAddonSelected: {},
       //some variable to control button
       sundayButton: {
-        chosen: false,
+        chosen: true,
         isDisabled: false,
       },
       mondayButton: {
@@ -35,7 +35,7 @@ export default class MealButton extends Component {
         isDisabled: false,
       },
       surpriseButton: {
-        chosen: false,
+        chosen: true,
         isDisabled: false,
       },
       addonButton: {
@@ -57,6 +57,7 @@ export default class MealButton extends Component {
         let data;
         if (res.data.result !== undefined) {
           data = res.data.result;
+          console.log(res, "data");
           if (data.Meals.length > 0) {
             for (let meal of data.Meals) {
               if (meal.week_affected === this.props.weekMenu.SaturdayDate) {
@@ -329,11 +330,11 @@ export default class MealButton extends Component {
   };
 
   incrementMaxMeal = () => {
-    this.setState({ mealLeft: this.state.mealLeft + 1 });
+    // this.setState({ mealLeft: this.state.mealLeft + 1 });
   };
 
   decrementMaxMeal = () => {
-    this.setState({ mealLeft: this.state.mealLeft - 1 });
+    // this.setState({ mealLeft: this.state.mealLeft - 1 });
   };
 
   saveSelectMeal = () => {
@@ -341,42 +342,105 @@ export default class MealButton extends Component {
     this.setState((prevState) => ({
       sundayButton: {
         ...prevState.sundayButton,
-        active: true,
+        isDisabled: false,
       },
       mondayButton: {
         ...prevState.mondayButton,
-        active: true,
+        isDisabled: false,
       },
       skipButton: {
         ...prevState.skipButton,
-        active: true,
+        isDisabled: false,
       },
       selectButton: {
         ...prevState.selectButton,
         chosen: true,
         red: false,
         showModal: false,
-        active: true,
+        isDisabled: false,
       },
       surpriseButton: {
         ...prevState.surpriseButton,
-        active: true,
+        isDisabled: false,
       },
       addonButton: {
         ...prevState.addonButton,
-        active: true,
+        isDisabled: false,
       },
     }));
     // update local variable
 
     // send request to save to serve
+    const {
+      purchase_id,
+      week_affected,
+      delivery_day,
+      meal_selection,
+      meals_selected,
+    } = this.state.currentMealSelected;
+    fetch(
+      `${this.props.MEAL_SELECT_API_URL}/${this.state.currentMealSelected.purchase_id}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          purchase_id: purchase_id,
+          week_affected: week_affected,
+          meal_quantities: meals_selected,
+          delivery_day: delivery_day,
+          default_selected: this.state.surpriseButton.isDisabled,
+          is_addons: false,
+        }),
+      }
+    );
   };
 
-  incrementMealLeft = () => {
+  incrementMealLeft = (id) => {
+    if (id in this.state.currentMealSelected.meals_selected) {
+      this.setState((prevState) => ({
+        currentMealSelected: {
+          ...prevState.currentMealSelected,
+          meals_selected: {
+            ...prevState.currentMealSelected.meals_selected,
+            [id]: prevState.currentMealSelected.meals_selected[id] + 1,
+          },
+        },
+      }));
+    } else {
+      this.setState((prevState) => ({
+        currentMealSelected: {
+          ...prevState.currentMealSelected,
+          meals_selected: {
+            ...prevState.currentMealSelected.meals_selected,
+            [id]: 1,
+          },
+        },
+      }));
+    }
     console.log("incrementMealLeft is called.");
   };
 
-  decrementMealLeft = () => {
+  decrementMealLeft = (id) => {
+    if (id in this.state.currentMealSelected.meals_selected) {
+      if (this.state.currentMealSelected.meals_selected[id] >= 1) {
+        this.setState((prevState) => ({
+          currentMealSelected: {
+            ...prevState.currentMealSelected,
+            meals_selected: {
+              ...prevState.currentMealSelected.meals_selected,
+              [id]: prevState.currentMealSelected.meals_selected[id] - 1,
+            },
+          },
+        }));
+      } else {
+        alert("Cannot get negative meals");
+      }
+    } else {
+      alert("Cannot get negative meals");
+    }
     console.log("decrementMealleft is called");
   };
 
@@ -475,7 +539,8 @@ export default class MealButton extends Component {
               onClick={this.clickSunday}
               style={sundayColor}
             >
-              Sunday {weekMenu.Sunday}
+              Sunday {"\n"}
+              {weekMenu.Sunday}
             </Button>
             &nbsp;
             <Button
@@ -484,7 +549,8 @@ export default class MealButton extends Component {
               onClick={this.clickMonday}
               style={mondayColor}
             >
-              Monday {weekMenu.Moday}
+              Monday {"\n"}
+              {weekMenu.Monday}
             </Button>
             &nbsp;
             <Button
@@ -526,12 +592,16 @@ export default class MealButton extends Component {
           {/*This part is for two modal. Select Meal Modal and Add Local Treats Modal */}
           {this.state.selectButton.showModal && (
             <SelectMealModal
-              mealLeft={this.state.mealLeft}
+              mealLeft={mealLeft}
               Meals={this.state.weekMenu.Meals}
               incrementMealLeft={this.incrementMealLeft}
               decrementMealLeft={this.decrementMealLeft}
+              incrementMaxMeal={this.incrementMaxMeal}
+              decrementMaxMeal={this.decrementMaxMeal}
               clickSkip={this.clickSkip}
               clickSurprise={this.clickSurprise}
+              currentMealSelected={this.state.currentMealSelected}
+              saveSelectMeal={this.saveSelectMeal}
             />
           )}
           {this.state.addonButton.showModal && (

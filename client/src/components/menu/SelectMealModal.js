@@ -24,7 +24,7 @@ export default function SelectMealModal(props) {
     height: "700px",
     width: "600px",
   };
-
+  console.log(props.mealLeft, "mealleft");
   return (
     <Card style={modalStyle}>
       <Card.Header>
@@ -34,20 +34,17 @@ export default function SelectMealModal(props) {
           </h4>
           <div style={{ float: "right" }}>
             &nbsp;&nbsp;
+            <Button style={{ marginRight: "10px" }} onClick={props.clickSkip}>
+              Skip This Week
+            </Button>
+            <Button
+              style={{ marginRight: "10px" }}
+              onClick={props.clickSurprise}
+            >
+              Surprise Me!
+            </Button>
             {props.mealLeft !== 0 ? (
               <span className="d-inline-block">
-                <Button
-                  style={{ marginRight: "10px" }}
-                  onClick={props.clickSkip}
-                >
-                  Skip This Week
-                </Button>
-                <Button
-                  style={{ marginRight: "10px" }}
-                  onClick={props.clickSurprise}
-                >
-                  Surprise Me!
-                </Button>
                 <Tippy
                   content="Select additional meals to activate this button or click
                   'Skip This Week'/'Surprise Me' to close this box."
@@ -64,7 +61,7 @@ export default function SelectMealModal(props) {
                 </Tippy>
               </span>
             ) : (
-              <Button variant="success" onClick={this.saveSelectMeal}>
+              <Button variant="success" onClick={props.saveSelectMeal}>
                 Save
               </Button>
             )}
@@ -78,15 +75,30 @@ export default function SelectMealModal(props) {
               <h4 style={{ margin: "0" }}>{meal.Category}</h4>
             </Cell>
 
-            {meal.Menu.map((description) => (
-              <Cell col={4} key={description.meal_id}>
-                <EachMeal
-                  description={description}
-                  incrementMealLeft={props.incrementMealLeft}
-                  decrementMealLeft={props.decrementMealLeft}
-                />
-              </Cell>
-            ))}
+            {meal.Menu.map((description) => {
+              let quantity = 0;
+              for (let [k, v] of Object.entries(
+                props.currentMealSelected.meals_selected
+              )) {
+                if (k === description.meal_id) {
+                  quantity = v;
+                }
+              }
+              return (
+                <Cell col={4} key={description.meal_id}>
+                  <EachMeal
+                    id={description.meal_id}
+                    description={description}
+                    incrementMealLeft={props.incrementMealLeft}
+                    decrementMealLeft={props.decrementMealLeft}
+                    incrementMaxMeal={props.incrementMaxMeal}
+                    decrementMaxMeal={props.decrementMaxMeal}
+                    currentMealSelected={props.currentMealSelected}
+                    quantity={quantity}
+                  />
+                </Cell>
+              );
+            })}
           </Grid>
         ))}
       </div>
