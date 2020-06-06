@@ -19,6 +19,7 @@ import LOGOFAVE from "../img/logo-award-fave.png"
 import LOGOAU40 from "../img/logo-award-au40.png"
 import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
+import MenuCarousel from "./menucarousel";
 
 class Landing extends Component {
   constructor(props) {
@@ -289,7 +290,7 @@ class Landing extends Component {
             <h5 className='font1 fresh-menu-subtitle'>Here's a taste of our rotating menu:</h5>
           </div>
 
-
+          <MenuCarousel className='carousel-space'/>
 
           {/* <h5 className='font1'>
             Organic. Seasonal. Local. Every week try something new. Your taste
@@ -351,12 +352,12 @@ class Landing extends Component {
           <button
             type='button'
             className='btn1 btn1-primary start_button font2'
-            // style={{
-            //   marginTop: "10px",
+            style={{
+              marginTop: "60px",
             //   color: "white",
             //   size: "10px",
             //   fontSize: "17px"
-            // }}
+            }}
           >
             SEE WHAT'S ON THE MENU NEXT WEEK
           </button>

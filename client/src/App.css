@@ -113,9 +113,9 @@
   font-size: 16px;
 }
 
-.zero-waste-subtext h4 {
-  /* margin-left: 12px; */
-}
+/* .zero-waste-subtext h4 {
+  margin-left: 12px;
+} */
 
 .zero-waste-cell {
   padding: 0 20px 0 20px;
@@ -213,6 +213,38 @@
   font-size: 22px;
   margin: 5px;
   padding: 0;
+}
+
+.menu-carousel-img {
+  width: 290px;
+  height: 290px;
+  padding: 10px;
+  transition: .2s;
+}
+
+.menu-carousel-img:hover {
+  opacity: .8;
+}
+
+.slider-arrow {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+.arrow-btn {
+  margin-top: 125px;
+  z-index: 1;
+}
+.arrow-btn img {
+  fill: green;
+}
+.prev {
+  float: left;
+  margin-left: -50px;
+}
+.next {
+  float: right;
+  margin-right: -20px;
 }
 
 .awards {
