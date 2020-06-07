@@ -3,6 +3,8 @@ import {Layout, Header, Navigation, Drawer, Content} from "react-mdl";
 import {Link} from "react-router-dom";
 
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import Main from "./components/main";
 
 import Nav from "react-bootstrap/Nav";
@@ -10,7 +12,6 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Cookies from "js-cookie";
 
 import logo from "./img/LOGO-homepage.png";
@@ -76,24 +77,27 @@ const App = props => {
   }
 
   let stuff = !isAuthenticating && (
-    <div className='demo-big-content'>
+    <div 
+      // className='demo-big-content'
+    >
       <Layout>
         <Header
           className='header-color'
-          title={
-            <span>
-              <span style={{color: "#ddd"}}>Area / </span>
-              <strong>The Title</strong>
-            </span>
-          }
+          // title={
+          //   <span>
+          //     <span style={{color: "white"}}>Area / </span>
+          //     <strong>The Title</strong>
+          //   </span>
+          // }
+          style={{background: "white"}}
           scroll
         >
           <Nav
             className='navbar fixed-top justify-content-center font2'
-            style={{minHeight: "140px", backgroundColor: "white"}}
+            style={{minHeight: "140px", backgroundColor: "white", padding: "0 150px 0 150px"}}
             activeKey='/home'
           >
-            <div style={{textAlign: "center"}}>
+            <div className='mx-auto' style={{textAlign: "center"}}>
               <a className='navbar-brand' href='/'>
                 <img src={logo} alt='Logo' className='logo'></img>
               </a>
@@ -103,12 +107,14 @@ const App = props => {
               </div>
             </div>
 
-            <Nav.Item style={{marginTop: "30px"}}>
+            <Nav.Item className='mx-auto' style={{marginTop: "30px"}}>
               <Nav.Link style={{color: "black"}} href='/selectmealplan'>
                 SUBSCRIBE
               </Nav.Link>
             </Nav.Item>
+
             <NavDropdown
+              className='mx-auto' 
               title='MENU'
               id='nav-dropdown'
               style={{marginTop: "30px", color: "black"}}
@@ -130,17 +136,26 @@ const App = props => {
               )}
             </NavDropdown>
 
-            <Nav.Item style={{marginTop: "30px"}}>
+            <Nav.Item 
+              className='mx-auto' 
+              style={{marginTop: "30px"}}
+            >
               <Nav.Link style={{color: "black"}} href='/findus'>
                 FIND US
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item style={{marginTop: "30px"}}>
+            
+            <Nav.Item 
+              className='mx-auto' 
+              style={{marginTop: "30px"}}
+            >
               <Nav.Link style={{color: "black"}} href='/giftcards'>
                 GIFT CARDS
               </Nav.Link>
             </Nav.Item>
+            
             <NavDropdown
+              className='mx-auto' 
               title='ABOUT'
               id='nav-dropdown'
               style={{marginTop: "30px", color: "black"}}
@@ -158,13 +173,14 @@ const App = props => {
               </NavDropdown.Item>
               <NavDropdown.Item href='/jobs'>JOBS</NavDropdown.Item>
             </NavDropdown>
+{/*             
             <Nav.Item style={{marginTop: "30px"}}>
               <Nav.Link style={{color: "black"}} href='/get100'>
                 GET $100
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
 
-            <div className='' style={{paddingTop: "66px"}}>
+            <div className='mx-auto' style={{paddingTop: "66px"}}>
               {searchCookie4Login("loginStatus") !== null ? (
                 <div>
                   <a href='/logout'>
@@ -221,7 +237,7 @@ const App = props => {
           </Nav>
         </Header>
 
-        <Drawer
+        {/* <Drawer
           style={{backgroundColor: "#493f3f"}}
           className='header-color-background'
           title={
@@ -303,7 +319,7 @@ const App = props => {
               )}
             </div>
           </Navigation>
-        </Drawer>
+        </Drawer> */}
 
         <Content style={{paddingTop: "140px"}}>
           <div className='page-content' />
@@ -458,7 +474,9 @@ const App = props => {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
-                      <a type='submit' className='subscribe-btn font2'>
+                      <a 
+                      // type='submit' 
+                      className='subscribe-btn font2'>
                         Subscribe
                       </a>
                     </Form.Group>

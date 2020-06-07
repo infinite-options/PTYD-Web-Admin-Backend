@@ -31,7 +31,7 @@ class Landing extends Component {
   render() {
     return (
       <section className='content-section'>
-        <div className='container' style={{color: "white"}}>
+        <div className='container' style={{color: "white", marginTop: "-30px"}}>
           <img
             className='img-fluid'
             style={{width: "100%", height: "700px"}}
@@ -136,15 +136,9 @@ class Landing extends Component {
 
             <center>
               <a
-                type='button'
+                // type='button'
                 href='/signup'
                 className='btn1 btn1-primary start_button'
-                style={{
-                  // marginTop: "10px",
-                  // color: "white",
-                  // size: "10px",
-                  // fontSize: "17px"
-                }}
               >
                 Get Started
               </a>
@@ -227,7 +221,7 @@ class Landing extends Component {
                 />
               </Cell>
               <a
-                type='button'
+                // type='button'
                 href='/signup'
                 className='btn1 btn1-primary start_button'
                 style={{
@@ -354,7 +348,7 @@ class Landing extends Component {
           }}
         >
           <a
-            type='button'
+            // type='button'
             href='/signup'
             className='btn1 btn1-primary start_button font2'
           >
@@ -450,15 +444,9 @@ class Landing extends Component {
             </Card>
           </CardDeck>
           <a
-            type='button'
+            // type='button'
             href='/signup'
             className='btn1 btn1-primary font2 start_button'
-            // style={{
-            //   marginTop: "10px",
-            //   color: "white",
-            //   size: "10px",
-            //   fontSize: "17px"
-            // }}
           >
             TRY US TODAY
           </a>
