@@ -7,29 +7,55 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using InfiniteMeals.Model.Checkout;
+
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Delivery : ContentPage {
+        
         public Delivery() {
             InitializeComponent();
         }
 
         // clicked continue button event handler
         private async void ContinueToPaymentClicked(object sender, EventArgs e) {
-            if (String.IsNullOrEmpty(this.firstNameEntry.Text) || String.IsNullOrEmpty(this.lastNameEntry.Text) || String.IsNullOrEmpty(this.addressEntry.Text) || String.IsNullOrEmpty(this.zipCodeEntry.Text) ||
+            if (String.IsNullOrEmpty(this.firstNameEntry.Text) || String.IsNullOrEmpty(this.lastNameEntry.Text) || String.IsNullOrEmpty(this.addressOneEntry.Text) || String.IsNullOrEmpty(this.zipCodeEntry.Text) ||
                String.IsNullOrEmpty(this.cityEntry.Text) || String.IsNullOrEmpty(this.stateEntry.Text)) { // checks that all fields are filled out
-                await DisplayAlert("Error", "Please fill all fields", "OK");
+                await DisplayAlert("Error: Empty Field(s)", "Please fill all fields", "OK");
             }
             else if (this.firstPhoneNumberEntry.Text.Length < 3 || this.middlePhoneNumberEntry.Text.Length < 3 || this.lastPhoneNumberEntry.Text.Length < 4) { // checks if the phone number is valid (10 digits)
-                await DisplayAlert("Error: Phone Number", "Please enter in a valid phone number", "OK");
+                await DisplayAlert("Error: Invalid Phone Number", "Please enter a valid phone number", "OK");
             }
             else if (this.zipCodeEntry.Text.Length < 5) { // checks if the zip code is valid (5 digits)
-                await DisplayAlert("Error: Zip Code", "Please enter in a valid zip code", "OK");
-            } else if(this.stateEntry.Text.Length != 2) { // checks if the state is valid (2 characters)
-                await DisplayAlert("Error: State", "Please enter in a valid state", "OK");
+                await DisplayAlert("Error: Invalid Zip Code", "Please enter a valid zip code", "OK");
+            }
+            else if (this.stateEntry.Text.Length != 2) { // checks if the state is valid (2 characters)
+                await DisplayAlert("Error: Invalid State", "Please enter a valid state", "OK");
             }
             else { // go to payment page if all fields are valid
-                await Navigation.PushAsync(new Payment());
+                ShippingInformation shipInfo = new ShippingInformation {
+                    firstName = this.firstNameEntry.Text,
+                    lastName = this.lastNameEntry.Text,
+                    phoneNumber = this.firstPhoneNumberEntry.Text + this.middlePhoneNumberEntry.Text + this.lastPhoneNumberEntry.Text,
+                    addressOne = this.addressOneEntry.Text,
+                    addressTwo = this.addressTwoEntry.Text,
+                    zipCode = this.zipCodeEntry.Text,
+                    city = this.cityEntry.Text,
+                    state = this.stateEntry.Text
+                    
+                };
+                System.Diagnostics.Debug.WriteLine(shipInfo.firstName);
+                System.Diagnostics.Debug.WriteLine(shipInfo.lastName);
+                System.Diagnostics.Debug.WriteLine(shipInfo.phoneNumber);
+                System.Diagnostics.Debug.WriteLine(shipInfo.addressOne);
+                System.Diagnostics.Debug.WriteLine(shipInfo.addressTwo);
+                System.Diagnostics.Debug.WriteLine(shipInfo.zipCode);
+                System.Diagnostics.Debug.WriteLine(shipInfo.city);
+                System.Diagnostics.Debug.WriteLine(shipInfo.state);
+                var paymentPage = new Payment();
+                paymentPage.BindingContext = shipInfo;
+                
+                await Navigation.PushAsync(paymentPage);
             }
         }
 

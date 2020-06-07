@@ -11,20 +11,56 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition Height="75"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <BoxView Grid.Row="0"/>
-            <Image Grid.Row="0" Source="paymentStatus.png" VerticalOptions="Center" Grid.ColumnSpan="2"/>
- 
+            <Image Grid.Row="0" Source="paymentStatus.png" HorizontalOptions="Start" VerticalOptions="Start" Grid.ColumnSpan="2"/>
+
+            <BoxView Grid.Row="1"/>
+            <Label Grid.Row="1" Grid.ColumnSpan="2" Text="Delivery Instructions" TextColor="Black" FontSize="Large" FontAttributes="Bold" VerticalOptions="End"/>
+            <Editor Grid.Row="2" Grid.ColumnSpan="2" Placeholder="Delivery Instructions"/>
+
+            <BoxView Grid.Row="3"/>
+            <Label Grid.Row="3" Text="Payment" TextColor="Black" FontSize="Large" FontAttributes="Bold"/>
+
+            <BoxView Grid.Row="4"/>
+            <Label Grid.Row="4" Text="Card Number" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
+            <Entry x:Name="cardNumberNameEntry" Grid.Column="1" Grid.Row="4"  Placeholder="Card Number"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" MaxLength="16" Keyboard="Numeric"/>
+
+
+            <BoxView Grid.Row="5"/>
+            <Label Grid.Row="5" Text="Cardholder Name" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
+            <Entry x:Name="cardHolderNameEntry" Grid.Column="1" Grid.Row="5" Placeholder="Cardholder Name"  HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+
+            <BoxView Grid.Row="6"/>
+            <Label Grid.Row="6" Text="Expiration Date" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
+            <Entry x:Name="expirationDateEntry" Grid.Column="1" Grid.Row="6" Placeholder="Expiration Date"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" Keyboard="Numeric"/>
+           
+            <BoxView Grid.Row="7"/>
+            <Label Grid.Row="7" Text="CVV" TextColor="Black" VerticalOptions="Center" FontSize="Medium"/>
+            <Entry x:Name="cvvEntry" Grid.Column="1" Grid.Row="7" Placeholder="###"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" MaxLength="3" Keyboard="Numeric"/>
+
+            
+
+
+            <BoxView Grid.Row="8" Grid.ColumnSpan="2" />
+            <Button Grid.Row="8" Grid.ColumnSpan="2" Text="Continue" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#28a745" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+
+
+
+
 
         </Grid>   
             
