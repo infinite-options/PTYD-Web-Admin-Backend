@@ -135,8 +135,9 @@ class Landing extends Component {
             </Container> */}
 
             <center>
-              <button
+              <a
                 type='button'
+                href='/signup'
                 className='btn1 btn1-primary start_button'
                 style={{
                   // marginTop: "10px",
@@ -146,7 +147,7 @@ class Landing extends Component {
                 }}
               >
                 Get Started
-              </button>
+              </a>
             </center>
           </div>
         </div>
@@ -225,8 +226,9 @@ class Landing extends Component {
                   alt=''
                 />
               </Cell>
-              <button
+              <a
                 type='button'
+                href='/signup'
                 className='btn1 btn1-primary start_button'
                 style={{
                 //   marginTop: "10px",
@@ -237,18 +239,10 @@ class Landing extends Component {
                 }}
               >
                 EAT BETTER NOW
-              </button>
+              </a>
             </Grid>
           </div>
         </div>
-{/* 
-        <div className='container background container_space delivered-weekly-image'>
-          <div className='d-flex justify-content-center delivered-weekly-container'>
-
-          </div>
-        </div> */}
-
-
 
         <div
           className='container background container_space'
@@ -271,7 +265,7 @@ class Landing extends Component {
                   <h5 className='font1 delivered-bullets-text'>&bull; NO PRESERVATIVES, EVER</h5>
                 </div>
                 <hr className='three' />
-                <h6 className='font1' style={{fontWeight: "bold"}}>
+                <h6 className='font1' style={{fontWeight: "bold", paddingBottom: "20px"}}>
                   <i>Pause anytime, no commitment.</i>
                 </h6>
                 <h5 className='font1 delivered-plans-start'>PLANS STARTING AT</h5>
@@ -349,18 +343,23 @@ class Landing extends Component {
               </Cell>
             </Cell>
           </Grid> */}
-          <button
+        </div>
+
+        <div
+          className='container'
+          style={{
+            backgroundSize: "100% 100%",
+            textAlign: "center",
+            marginTop: "50px"
+          }}
+        >
+          <a
             type='button'
+            href='/signup'
             className='btn1 btn1-primary start_button font2'
-            style={{
-              marginTop: "60px",
-            //   color: "white",
-            //   size: "10px",
-            //   fontSize: "17px"
-            }}
           >
             SEE WHAT'S ON THE MENU NEXT WEEK
-          </button>
+          </a>
         </div>
 
         <div className='container font2 container_space'>
@@ -450,8 +449,9 @@ class Landing extends Component {
               </Card.Footer>
             </Card>
           </CardDeck>
-          <button
+          <a
             type='button'
+            href='/signup'
             className='btn1 btn1-primary font2 start_button'
             // style={{
             //   marginTop: "10px",
@@ -461,7 +461,7 @@ class Landing extends Component {
             // }}
           >
             TRY US TODAY
-          </button>
+          </a>
 
           <Grid>
             <center>
