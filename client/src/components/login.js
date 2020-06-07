@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-
+import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import crypto from "crypto";
 import FacebookLogin from "react-facebook-login";
@@ -22,6 +22,7 @@ export default function Login(props) {
   const [loginStatus, setLoginStatus] = useState("");
   const [salt, setSalt] = useState("");
   const [error, RaiseError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -41,7 +42,7 @@ export default function Login(props) {
 
   async function onLoad() {
     // fill it up when needed
-    let data;
+    let data, loginSession;
     let params = props.match.params;
     let ip_res = await getIp();
     let browser_type = getBrowser().browser_type;
@@ -54,16 +55,20 @@ export default function Login(props) {
           })
           .then(res => {
             data = res.data.result.result[0];
-            let first = data.first_name;
-            let uid = data.user_uid;
-            let login_id = data.login_id;
-            let session_id = data.session_id;
-            document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_id:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
-            props.history.push("/selectmealplan");
-            window.location.reload(false);
+            loginSession = res.data.login_attempt_log;
+            if (data.email_verify === 0) {
+              throw "Your email need to be verified before you can log in.";
+            } else {
+              let first = data.first_name;
+              let uid = data.user_uid;
+              let login_id = loginSession.login_id;
+              let session_id = loginSession.session_id;
+              document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+              props.history.push("/selectmealplan");
+              window.location.reload(false);
+            }
           })
           .catch(err => {
-            console.log(err);
             document.cookie = `loginStatus=; path=/`;
             props.history.push("/login");
             window.location.reload(false);
@@ -84,7 +89,6 @@ export default function Login(props) {
   async function grabSocialUserInfo(email) {
     try {
       let res = await axios.get(`${props.SOCIAL_API_URL}/${email}`);
-      console.log(res.data);
       if (res.data !== undefined && res.data.result.result.length === 0) {
         // throw "No record found.";
         return null;
@@ -101,7 +105,7 @@ export default function Login(props) {
         {
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
-            "Access-Control-Allow-Origin": "*" // use this to prevent 405 error on Chrome
+            "Access-Control-Allow-Origin": "*"
           }
         }
       );
@@ -113,7 +117,13 @@ export default function Login(props) {
         return res1.data;
       }
     } catch (err) {
-      console.log(err);
+      if (err.response !== undefined) {
+        err.response.data.message === undefined
+          ? RaiseError(err.response.data)
+          : RaiseError(err.response.data.message);
+      } else if (typeof err === "string") {
+        RaiseError(err);
+      }
     }
   }
 
@@ -125,7 +135,6 @@ export default function Login(props) {
       const first_name = response.profileObj.givenName;
       const last_name = response.profileObj.familyName;
       let data = await grabSocialUserInfo(e);
-
       if (data === null) {
         //email not found --> render to signup for social
         props.history.push({
@@ -134,7 +143,7 @@ export default function Login(props) {
             lastname: last_name,
             firstname: first_name,
             email: e,
-            // social: "facebook",
+            social: "Google",
             accessToken: at,
             refreshToken: rt,
             SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
@@ -144,7 +153,7 @@ export default function Login(props) {
         socialLogin(data);
       }
     } else {
-      console.log("Google does not have file on this user. lol");
+      RaiseError("Google does not have file on this user. lol");
     }
   };
   // Maria Alejcgfbaifeg Changsky	104605834561957	pnkuzirrok_1587274227@tfbnw.net
@@ -161,6 +170,7 @@ export default function Login(props) {
         first_name += name[n] + " ";
       }
       let data = await grabSocialUserInfo(e);
+
       if (data === null) {
         //email not found --> render to signup for social
         props.history.push({
@@ -169,7 +179,7 @@ export default function Login(props) {
             lastname: last_name,
             firstname: first_name,
             email: e,
-            // social: "facebook",
+            social: "Facebook",
             accessToken: at,
             refreshToken: rt,
             SOCIAL_API_URL: `${props.SOCIAL_API_URL}acc`
@@ -179,12 +189,11 @@ export default function Login(props) {
         socialLogin(data);
       }
     } else {
-      console.log(`Facebook does not have any info about this user.`);
+      RaiseError(`Facebook does not have any info about this user.`);
     }
   };
 
   function socialLogin(data) {
-    console.log(data);
     const log_attemp = data.login_attempt_log;
     const result = data.result.result[0];
     let uid = result.user_uid;
@@ -211,12 +220,20 @@ export default function Login(props) {
         } else {
           props.history.push("/");
         }
-        window.location.reload(false);
       } else {
         props.history.push("/"); // should prompt something or asking for re-login
       }
-    } catch (e) {
-      console.log(e);
+      setLoading(false);
+      window.location.reload(false);
+    } catch (err) {
+      if (err.response !== undefined) {
+        err.response.data.message === undefined
+          ? RaiseError(err.response.data)
+          : RaiseError(err.response.data.message);
+      } else if (typeof err === "string") {
+        RaiseError(err);
+      }
+      setLoading(false);
     }
   }
   async function grabLoginInfoForUser(userEmail, userPass) {
@@ -228,7 +245,21 @@ export default function Login(props) {
     }
     const saltapi = await saltres.json();
     if (saltapi.result.length === 0) {
-      throw "Invalid Email Address.";
+      // send a request to look up in social login
+      let CHECK_SOCIAL_ACCOUNT_URL = `${props.DEV_URL}v2/social/${userEmail}`;
+      axios.get(CHECK_SOCIAL_ACCOUNT_URL).then(res => {
+        if (res.data !== undefined || res.data !== null) {
+          let result = res.data.result.result;
+          if (result.length === 0) {
+            RaiseError("No email address found");
+          } else {
+            result = result[0];
+            RaiseError(
+              `Your account should be logged in by "${result.user_social_media} login"`
+            );
+          }
+        }
+      });
     }
     const salt = saltapi.result[0].password_salt;
 
@@ -248,143 +279,183 @@ export default function Login(props) {
       );
       if (res.status === 200) {
         //success
-        return res.data;
+        if (res.data.result.result[0].email_verify === 0) {
+          throw "Your email need to be verified before log in.";
+        } else {
+          return res.data;
+        }
       } else {
+        setLoading(false);
         RaiseError("Wrong password");
       }
     } catch (err) {
-      RaiseError(err);
+      if (err.response !== undefined) {
+        err.response.data.message === undefined
+          ? RaiseError(err.response.data)
+          : RaiseError(err.response.data.message);
+      } else if (typeof err === "string") {
+        RaiseError(err);
+      }
+      setLoading(false);
     }
   }
 
-  async function checkLogin() {
+  function checkLogin() {
     // let t = [];
-    await grabLoginInfoForUser(email, password)
-      .then(res => login(res))
-      .catch(err => RaiseError(err));
+    setLoading(true);
+    grabLoginInfoForUser(email, password)
+      .then(res => {
+        login(res);
+      })
+      .catch(err => {
+        if (err.response !== undefined) {
+          err.response.data.message === undefined
+            ? RaiseError(err.response.data)
+            : RaiseError(err.response.data.message);
+        } else if (typeof err === "string") {
+          RaiseError(err);
+        }
+        setLoading(false);
+      });
 
     // await login(t);
   }
-  async function login(response) {
-    if (response.auth_success === true) {
-      // setLoginStatus("Logged In");
-      let first = response.result.result[0].first_name;
-      let uid = response.result.result[0].user_uid;
-      let login_id = response.login_attempt_log.login_id;
-      let session_id = response.login_attempt_log.session_id;
-      document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
-      //check for purchases
-      checkForPurchased(uid);
-    } else {
-      document.cookie = `loginStatus=; path=/`;
+  function login(response) {
+    if (response !== undefined) {
+      if (response.auth_success === true) {
+        // setLoginStatus("Logged In");
+        let first = response.result.result[0].first_name;
+        let uid = response.result.result[0].user_uid;
+        let login_id = response.login_attempt_log.login_id;
+        let session_id = response.login_attempt_log.session_id;
+        document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
+        //check for purchases
+        checkForPurchased(uid);
+      } else {
+        document.cookie = `loginStatus=; path=/`;
+        setLoading(false);
+      }
     }
   }
-
   return (
-    <main Style='margin-top:-80px;'>
-      <div class='container text-center' Style='margin-top:-40px;'>
-        <h1>Login</h1>
-        {error !== null && error !== undefined && (
-          <Fragment>
-            <h6>
-              <span className='icon has-text-danger'>
-                <i className='fa fa-info-circle'></i>
-              </span>
-              <span className='has-text-danger'>{error}</span>
-            </h6>
-          </Fragment>
-        )}
-        <div class='row'>
-          <Col></Col>
-          <Container className='justify-content-center bg-success'>
-            <Row>
-              <Col>
-                <Form onSubmit={handleSubmit} autoComplete='off'>
-                  <Form.Label>Email</Form.Label>
-                  <InputGroup className='mb-3'>
-                    <FormControl
-                      type='email'
-                      value={email}
-                      onChange={e => {
-                        setEmail(e.target.value);
-                        RaiseError(null);
-                      }}
-                      id='userForm'
-                      placeholder='Enter Email'
-                      aria-label='Email'
-                      aria-describedby='basic-addon1'
-                    />
-                  </InputGroup>
+    <Fragment>
+      {loading && (
+        <div className='d-flex justify-content-center'>
+          <div className='loading'>
+            <div className='spinner-border' role='status'>
+              <span className='sr-only'>Loading...</span>
+            </div>
+          </div>
+        </div>
+      )}
+      <main Style={"margin-top:-80px;" + (loading ? "opacity: 0.5" : "")}>
+        <div class='container text-center' Style='margin-top:-40px;'>
+          <h1>Login</h1>
+          {error !== null && error !== undefined && (
+            <Fragment>
+              <h6>
+                <span className='icon has-text-danger'>
+                  <i className='fa fa-info-circle'></i>
+                </span>
+                <span className='has-text-danger'>{error}</span>
+              </h6>
+            </Fragment>
+          )}
+          <div class='row'>
+            <Col></Col>
+            <Container className='justify-content-center bg-success'>
+              <Row>
+                <Col>
+                  <Form onSubmit={handleSubmit} autoComplete='off'>
+                    <Form.Label>Email</Form.Label>
+                    <InputGroup className='mb-3'>
+                      <FormControl
+                        type='email'
+                        value={email}
+                        onChange={e => {
+                          setEmail(e.target.value);
+                          RaiseError(null);
+                        }}
+                        id='userForm'
+                        placeholder='Enter Email'
+                        aria-label='Email'
+                        aria-describedby='basic-addon1'
+                      />
+                    </InputGroup>
 
-                  <Form.Label>Password</Form.Label>
-                  <InputGroup className='mb-3'>
-                    <FormControl
-                      value={password}
-                      onChange={e => {
-                        setPassword(e.target.value);
-                        RaiseError(null);
-                      }}
-                      id='passForm'
-                      placeholder='Enter Password'
-                      aria-label='Password'
-                      aria-describedby='basic-addon2'
-                      type='password'
-                    />
-                  </InputGroup>
+                    <Form.Label>Password</Form.Label>
+                    <InputGroup className='mb-3'>
+                      <FormControl
+                        value={password}
+                        onChange={e => {
+                          setPassword(e.target.value);
+                          RaiseError(null);
+                        }}
+                        id='passForm'
+                        placeholder='Enter Password'
+                        aria-label='Password'
+                        aria-describedby='basic-addon2'
+                        type='password'
+                      />
+                    </InputGroup>
 
-                  <Button
-                    variant='dark'
-                    onClick={checkLogin}
-                    disabled={!validateForm()}
-                    type='submit'
+                    <Button
+                      variant='dark'
+                      onClick={checkLogin}
+                      disabled={!validateForm()}
+                      type='submit'
+                    >
+                      Sign In
+                    </Button>
+                  </Form>
+                </Col>
+              </Row>
+
+              <h4>Or Login With Social Media!</h4>
+
+              <Row>
+                <Col>
+                  <div
+                    Style={{
+                      width: "200px"
+                    }}
                   >
-                    Sign In
-                  </Button>
-                </Form>
-              </Col>
-            </Row>
+                    <FacebookLogin
+                      appId='508721976476931'
+                      autoLoad={false}
+                      fields='name,email,picture'
+                      onClick='return false'
+                      callback={responseFacebook}
+                      size='small'
+                      textButton='FB Login'
+                    />
+                  </div>
+                </Col>
 
-            <h4>Or Login With Social Media!</h4>
-
-            <Row>
-              <Col>
-                <div
-                  Style={{
-                    width: "200px"
-                  }}
-                >
-                  <FacebookLogin
-                    appId='508721976476931'
-                    autoLoad={false}
-                    fields='name,email,picture'
-                    onClick='return false'
-                    callback={responseFacebook}
-                    size='small'
-                    textButton='FB Login'
+                <Col>
+                  <GoogleLogin
+                    clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
+                    buttonText='Login'
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    isSignedIn={false}
+                    disable={false}
+                    cookiePolicy={"single_host_origin"}
                   />
-                </div>
-              </Col>
-
-              <Col>
-                <GoogleLogin
-                  clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
-                  buttonText='Login'
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
-                  isSignedIn={false}
-                  disable={false}
-                  cookiePolicy={"single_host_origin"}
-                />
-                {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
-              </Col>
-            </Row>
-          </Container>
-          <Col></Col>
+                  {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
+                </Col>
+              </Row>
+            </Container>
+            <Col></Col>
+          </div>
+          <div className='text-center'>
+            <a href='/signup'>New User? Sign Up Here</a>
+          </div>
+          <div className='text-center'>
+            <a href='/resetpassword'>Forgot password?</a>
+          </div>
         </div>
-        <div className='text-center'>
-          <a href='/signup'>New User? Sign Up Here</a>
-        </div>
-      </div>
-    </main>
+      </main>
+    </Fragment>
   );
 }

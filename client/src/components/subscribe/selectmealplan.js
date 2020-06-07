@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
-import IMG9 from "../../img/img9.webp";
+import IMG9 from "../../img/creditCard.png";
 import {Link} from "react-router-dom";
 import {timingSafeEqual} from "crypto";
 
@@ -84,7 +84,8 @@ class Selectmealplan extends Component {
                         {mealPlan.plan_headline}
                       </Card.Text>
                       <Card.Text>
-                        STARTING AT ${mealPlan.meal_plan_price.toFixed(2)} /week
+                        STARTING AT ${mealPlan.meal_weekly_price.toFixed(2)}{" "}
+                        /week
                       </Card.Text>
                       <Card.Text style={{fontSize: "13px", color: "#888785"}}>
                         Sales tax of 8.25% will be added
@@ -119,7 +120,7 @@ class Selectmealplan extends Component {
                       />
                     </Card.Body>
                     <Card.Footer>
-                      <large className='text-muted'>
+                      <large className='text-muted align-self-center mx-auto'>
                         {mealPlan.plan_footer}
                       </large>
                     </Card.Footer>
@@ -136,7 +137,7 @@ class Selectmealplan extends Component {
               <Container>
                 <Row style={{fontSize: "20px"}}>
                   <Col>
-                    <div className='shadow w-75'>
+                    <div className='shadow w-75 pt-3 pb-1'>
                       <div className='mb-2'>
                         <span class='fa fa-star checked' />
                         <span class='fa fa-star checked' />
@@ -148,7 +149,7 @@ class Selectmealplan extends Component {
                     </div>
                   </Col>
                   <Col>
-                    <div className='shadow w-75'>
+                    <div className='shadow w-75 pt-3 pb-1'>
                       <div className='mb-2'>
                         <span class='fa fa-star checked' />
                         <span class='fa fa-star checked' />
@@ -160,7 +161,7 @@ class Selectmealplan extends Component {
                     </div>
                   </Col>
                   <Col>
-                    <div className='shadow w-75'>
+                    <div className='shadow w-75 pt-3 pb-1'>
                       <div className='mb-2'>
                         <span class='fa fa-star checked' />
                         <span class='fa fa-star checked' />

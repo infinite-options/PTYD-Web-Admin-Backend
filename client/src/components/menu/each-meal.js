@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 //import { Grid, Cell } from "react-mdl";
-import { Alert, Tooltip, OverlayTrigger, Button } from "react-bootstrap";
+import {Alert, Tooltip, OverlayTrigger, Button} from "react-bootstrap";
 import defaultMeal from "../../img/default-meal.png";
 
 //  Replace FINDUS1 below with this.props.imgurl
@@ -22,8 +22,18 @@ class EachMeal extends Component {
           </h6>
           {/* <h4>{this.props.maxmeals}</h4> */}
         </center>
-        <div class="container-select-meal" style={{ color: "white" }}>
+        <div class='container-select-meal' style={{color: "white"}}>
           <div
+            class='meal-img-wrapper'
+            style={{
+              overflow: "hidden",
+              width: "100%",
+              minWidth: "100%",
+              height: "200px",
+              maxHeight: "200px"
+            }}
+          >
+            {/* <div
             class="meal-img-wrapper"
             style={{
               overflow: "hidden",
@@ -51,16 +61,13 @@ class EachMeal extends Component {
                   </p>
                 </Tooltip>
               }
-            >
-              <img
-                class="img-fluid"
-                src={
-                  this.props.imgurl == null ? defaultMeal : this.props.imgurl
-                }
-                alt="no_meal_img"
-                resizeMode
-              />
-            </OverlayTrigger>
+            > */}
+            <img
+              class='img-fluid'
+              src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
+              alt='no_meal_img'
+              resizeMode
+            />
             {/* <div
               class="bottom-right-meal-selection font2"
               style={{
@@ -73,8 +80,8 @@ class EachMeal extends Component {
               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             </div> */}
             <OverlayTrigger
-              placement="bottom"
-              delay={{ show: 100, hide: 100 }}
+              placement='bottom'
+              delay={{show: 100, hide: 100}}
               popperConfig={{
                 modifiers: {
                   preventOverflow: {
@@ -83,7 +90,7 @@ class EachMeal extends Component {
                 }
               }}
               overlay={
-                <Tooltip id="button-tooltip">
+                <Tooltip id='button-tooltip'>
                   <p>{this.props.detail}</p>
                   <p>
                     <strong>Ingredients:</strong> {this.props.ingridents}
@@ -92,7 +99,7 @@ class EachMeal extends Component {
               }
             >
               <div
-                class="bottom-right-meal-selection font2"
+                class='bottom-right-meal-selection font2'
                 style={{
                   fontSize: "15px",
                   float: "right",
@@ -112,7 +119,7 @@ class EachMeal extends Component {
           }}
         >
           <Button
-            variant="outline-dark"
+            variant='outline-dark'
             style={{
               width: "35px",
               height: "35px",
@@ -130,10 +137,10 @@ class EachMeal extends Component {
             <b>-</b>
           </Button>
           <input
-            type="text"
-            size="1"
+            type='text'
+            size='1'
             value={this.props.mealQuantities}
-            id="count"
+            id='count'
             style={{
               textAlign: "center",
               width: "40px",
@@ -142,7 +149,7 @@ class EachMeal extends Component {
             }}
           />
           <Button
-            variant="outline-success"
+            variant='outline-success'
             style={{
               width: "35px",
               height: "35px",
