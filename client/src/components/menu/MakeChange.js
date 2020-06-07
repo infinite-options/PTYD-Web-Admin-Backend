@@ -9,6 +9,7 @@ import {
   Col,
   OverlayTrigger
 } from "react-bootstrap";
+
 export default class MakeChange extends Component {
   constructor(props) {
     super(props);

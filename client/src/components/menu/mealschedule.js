@@ -147,6 +147,8 @@ export default class MealSchedule extends Component {
                 <MakeChange
                   ChangeAccountInfo={this.ChangeAccountInfo}
                   currentPurchase={this.state.currentPurchase}
+                  purchases={this.state.purchases}
+                  mealPlans={this.state.mealPlans}
                 />
               )}
               <AccountInfo currentPurchase={this.state.currentPurchase} />

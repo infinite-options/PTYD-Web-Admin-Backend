@@ -513,7 +513,7 @@ class Meals(Resource):
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
-
+            print("broke .here")
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -3638,41 +3638,6 @@ class Meal_Info1(Resource):
             date = request.args.get("date")
             # date_affected = data['date_affected']
 
-<<<<<<< HEAD
-            items = execute(""" select distinct temp1.*,COALESCE(temp2.total, 0) AS "Total"
-                                from
-                                (SELECT
-                                    menu_date,
-                                    menu_category,
-                                    meal_category, 
-                                    menu_type,
-                                    meal_cat,
-                                    meal_id,
-                                    meals.meal_name,
-                                    default_meal,
-                                    extra_meal_price,
-                                    meal_photo_url
-                                FROM ptyd.ptyd_menu menu
-                                JOIN ptyd.ptyd_meals meals
-                                ON menu.menu_meal_id = meals.meal_id 
-                                where menu_date=\'""" + date + """\') temp1
-                                left join 
-                                (SELECT 
-                                    delivery_day,
-                                    week_affected, 
-                                    meal_selected, 
-                                    COUNT(n) as total from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
-                                FROM  
-                                    ptyd_meals_selected 
-                                JOIN
-                                    numbers  
-                                ON char_length(meal_selection) 
-                                    - char_length(replace(meal_selection, ';', ''))
-                                    >= n - 1) sub1
-                                WHERE week_affected LIKE \'""" + date + """\' 
-                                GROUP BY sub1.meal_selected) temp2
-                                on temp1.meal_id = temp2.meal_selected; """, 'get', conn)
-=======
             items = execute(""" select  
                             pn.menu_category,
                             pm.meal_name,
@@ -3704,7 +3669,6 @@ class Meal_Info1(Resource):
                         join
                         ptyd_meals pm
                         on ms.meal_selected = pm.meal_id; """, 'get', conn)
->>>>>>> master
 
             response['message'] = 'successful'
             response['result'] = items
