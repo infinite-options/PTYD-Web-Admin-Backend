@@ -455,7 +455,7 @@ class Meals(Resource):
                     print("today: ", today)
 
                     if today < thursday:
-                        print("broke")
+
                         # stamp = stamp + timedelta(days=7)
 
                         week = {
@@ -504,7 +504,7 @@ class Meals(Resource):
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
-
+            print("broke .here")
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
