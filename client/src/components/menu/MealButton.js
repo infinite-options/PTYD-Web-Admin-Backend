@@ -17,7 +17,7 @@ export default class MealButton extends Component {
       currentAddonSelected: {},
       //some variable to control button
       sundayButton: {
-        chosen: true,
+        chosen: false,
         isDisabled: false,
       },
       mondayButton: {
@@ -35,7 +35,7 @@ export default class MealButton extends Component {
         isDisabled: false,
       },
       surpriseButton: {
-        chosen: true,
+        chosen: false,
         isDisabled: false,
       },
       addonButton: {
@@ -74,6 +74,43 @@ export default class MealButton extends Component {
           }
         }
       })
+      .then(() => {
+        if (this.state.currentMealSelected.delivery_day === "Sunday") {
+          this.setState((prevState) => ({
+            sundayButton: { ...prevState, chosen: true },
+          }));
+        }
+        if (this.state.currentMealSelected.delivery_day === "Monday") {
+          this.setState((prevState) => ({
+            mondayButton: { ...prevState, chosen: true },
+          }));
+        }
+        if (this.state.currentMealSelected.delivery_day === "SKIP") {
+          this.setState((prevState) => ({
+            skipButton: { ...prevState, chosen: true },
+            selectButton: { chosen: false, isDisabled: true },
+            surpriseButton: { chosen: false, isDisabled: true },
+            addonButton: { chosen: false, isDisabled: true },
+          }));
+        }
+        if (
+          this.state.currentMealSelected.meal_selection === "SURPRISE" ||
+          Object.keys(this.state.currentMealSelected.meal_selection).length ===
+            0
+        ) {
+          this.setState((prevState) => ({
+            surpriseButton: { ...prevState, chosen: true },
+          }));
+        }
+        if (
+          this.state.currentMealSelected.meal_selection.length > 0 &&
+          this.state.currentMealSelected.meal_selection !== "SKIP"
+        ) {
+          this.setState((prevState) => ({
+            selectButton: { ...prevState, chosen: true },
+          }));
+        }
+      })
       .catch((err) => {
         this.props.SetError(err);
       });
@@ -103,8 +140,8 @@ export default class MealButton extends Component {
       });
     }
   };
-  clickSunday = () => {
-    this.setState((prevState) => ({
+  clickSunday = async () => {
+    await this.setState((prevState) => ({
       sundayButton: {
         ...prevState.sundayButton,
         chosen: true,
@@ -119,22 +156,32 @@ export default class MealButton extends Component {
         isDisabled: false,
       },
       selectButton: {
-        ...prevState.selectButton,
+        chosen:
+          prevState.currentMealSelected.meal_selection.length > 0 &&
+          prevState.currentMealSelected.meal_selection !== "SURPRISE",
         isDisabled: false,
       },
       surpriseButton: {
-        ...prevState.surpriseButton,
+        chosen:
+          prevState.currentMealSelected.meal_selection.length === 0 ||
+          prevState.currentMealSelected.meal_selection === "SURPRISE",
         isDisabled: false,
       },
       addonButton: {
         ...prevState.addonButton,
         isDisabled: false,
       },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: "Sunday",
+      },
     }));
+
+    this.saveSelectMealAPI();
   };
 
-  clickMonday = () => {
-    this.setState((prevState) => ({
+  clickMonday = async () => {
+    await this.setState((prevState) => ({
       sundayButton: {
         ...prevState.sundayButton,
         chosen: false,
@@ -149,22 +196,31 @@ export default class MealButton extends Component {
         isDisabled: false,
       },
       selectButton: {
-        ...prevState.selectButton,
+        chosen:
+          prevState.currentMealSelected.meal_selection.length > 0 &&
+          prevState.currentMealSelected.meal_selection !== "SURPRISE",
         isDisabled: false,
       },
       surpriseButton: {
-        ...prevState.surpriseButton,
+        chosen:
+          prevState.currentMealSelected.meal_selection.length === 0 ||
+          prevState.currentMealSelected.meal_selection === "SURPRISE",
         isDisabled: false,
       },
       addonButton: {
         ...prevState.addonButton,
         isDisabled: false,
       },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: "Monday",
+      },
     }));
+    this.saveSelectMealAPI();
   };
 
-  clickSkip = () => {
-    this.setState((prevState) => ({
+  clickSkip = async () => {
+    await this.setState((prevState) => ({
       sundayButton: {
         ...prevState.sundayButton,
         chosen: false,
@@ -195,9 +251,14 @@ export default class MealButton extends Component {
         red: false,
         showModal: false,
         isDisabled: true,
+      },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: "SKIP",
       },
     }));
     // send a form to database to write a
+    this.saveSelectMealAPI();
   };
   clickSelect = () => {
     this.setState((prevState) => ({
@@ -260,6 +321,10 @@ export default class MealButton extends Component {
       addonButton: {
         ...prevState.addonButton,
         isDisabled: false,
+      },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        meal_selection: "SURPRISE",
       },
     }));
     //send a request to database
@@ -371,6 +436,10 @@ export default class MealButton extends Component {
     // update local variable
 
     // send request to save to serve
+    this.saveSelectMealAPI();
+  };
+
+  saveSelectMealAPI = () => {
     const {
       purchase_id,
       week_affected,
@@ -539,8 +608,8 @@ export default class MealButton extends Component {
               onClick={this.clickSunday}
               style={sundayColor}
             >
-              Sunday {"\n"}
-              {weekMenu.Sunday}
+              Sunday
+              <div>{weekMenu.Sunday}</div>
             </Button>
             &nbsp;
             <Button
@@ -549,8 +618,8 @@ export default class MealButton extends Component {
               onClick={this.clickMonday}
               style={mondayColor}
             >
-              Monday {"\n"}
-              {weekMenu.Monday}
+              Monday
+              <div>{weekMenu.Monday}</div>
             </Button>
             &nbsp;
             <Button
