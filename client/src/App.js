@@ -431,7 +431,7 @@ const App = props => {
                 >
                   <i
                     className='fa fa-instagram fa-2x socialBranchLogo'
-                    style={{color: "grey"}}
+                    style={{color: "grey", marginLeft: "2px"}}
                   ></i>
                 </a>
               </Nav>
@@ -439,7 +439,6 @@ const App = props => {
                 <Nav.Link style={{color: "green"}} disabled>
                   Join Our Mailing List
                 </Nav.Link>
-                {/* <p> </p> */}
                 <p
                   style={{
                     fontSize: "12px",
@@ -449,7 +448,6 @@ const App = props => {
                 >
                   & Never miss an update
                 </p>
-                {/* <p> </p> */}
                 {/* <p style={{fontSize: "12px", paddingLeft: "15px"}}>
                   Email Address
                 </p> */}
@@ -460,9 +458,9 @@ const App = props => {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
-                      <Button variant='light' type='submit' className='font2'>
+                      <a type='submit' className='subscribe-btn font2'>
                         Subscribe
-                      </Button>
+                      </a>
                     </Form.Group>
                   </Form.Row>
                 </Form>

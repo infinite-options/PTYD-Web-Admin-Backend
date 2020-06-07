@@ -393,7 +393,6 @@ br {
   -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
   padding: 0.1rem 2rem;
-  /* font-size: 70%; */
   text-transform: uppercase;
   letter-spacing: 0;
   border: 0;
@@ -409,7 +408,26 @@ br {
 }
 
 .btn1-primary:hover {
-  background-color: #607122;
+  /* background-color: #607122; */
+  background-color: #467844;
+  color: white;
+  text-decoration: none;
+}
+
+.subscribe-btn {
+  background-color: #467844;
+  color: white !important;
+  padding: 0.2rem .5rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  border: 0;
+  line-height: 2;
+  border-radius: 4px;
+  transition: .2s;
+}
+
+.subscribe-btn:hover {
+  background-color: #325a2f;
   color: white;
   text-decoration: none;
 }
@@ -658,7 +676,7 @@ hr.four {
   width: 41px;
   height: 41px;
   margin-bottom: 0px;
-  margin-right: 10px;
+  margin-right: 8px;
   display: inline-block;
   padding-top: 10px;
 }
