@@ -103,13 +103,16 @@ namespace InfiniteMeals.ViewModel.Checkout {
             }
         }
 
-        // function to show warning if zip code entry is empty
+        // function to show warning if zip code entry is empty or invalid
         private void zipCodeEntryUnfocused(object sender, FocusEventArgs e) {
             Entry zipCodeEntry = (Entry)sender; // cast sender as entry
             if (String.IsNullOrEmpty(zipCodeEntry.Text)) {
                 this.zipCodeWarning.IsVisible = true; // show warning if zip code entry is empty
+            } else if(!String.IsNullOrEmpty(zipCodeEntry.Text) && zipCodeEntry.Text.Length < 5) {
+                this.zipCodeWarning.Text = "Enter a valid zip code";
+                this.zipCodeWarning.IsVisible = true;
             }
-            else if (!String.IsNullOrEmpty(zipCodeEntry.Text) && this.zipCodeWarning.IsVisible == true) {
+            else if (!String.IsNullOrEmpty(zipCodeEntry.Text) && zipCodeEntry.Text.Length == 5 &&  this.zipCodeWarning.IsVisible == true) {
                 this.zipCodeWarning.IsVisible = false; // hide warning if zip code entry is filled
             }
         }
@@ -125,15 +128,18 @@ namespace InfiniteMeals.ViewModel.Checkout {
             }
         }
 
-        // function to show warning if state entry is empty
+        // function to show warning if state entry is empty or invalid
         private void stateEntryUnfocused(object sender, FocusEventArgs e) {
             Entry stateEntry = (Entry)sender; // cast sender as entry
             if (String.IsNullOrEmpty(stateEntry.Text)) {
                 this.stateWarning.IsVisible = true; // show warning if state entry is empty
-            }
-            else if (!String.IsNullOrEmpty(stateEntry.Text) && this.stateWarning.IsVisible == true) {
+            } else if(!String.IsNullOrEmpty(stateEntry.Text) && stateEntry.Text.Length < 2) {
+                this.stateWarning.Text = "Enter a valid state";
+                this.stateWarning.IsVisible = true;
+            }   
+            else if (!String.IsNullOrEmpty(stateEntry.Text) && stateEntry.Text.Length == 2 && this.stateWarning.IsVisible == true) {
                 this.stateWarning.IsVisible = false; // hide warning if state entry is filled
-            }
+            } 
         }
 
         // function to automatically go from first phone number entry to middle phone number entry when filled

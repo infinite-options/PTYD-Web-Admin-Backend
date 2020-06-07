@@ -90,7 +90,7 @@
                 <Label x:Name="stateLabel" Grid.Row="8" Text="  State" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium"/>
                 <BoxView  Grid.Column="1" Grid.Row="8"/>
                 <Entry x:Name="stateEntry" Placeholder="State (e.g. CA)" Grid.Column="1" Grid.Row="8" VerticalOptions="Center" MaxLength="2" Unfocused="stateEntryUnfocused"/>
-                <Label x:Name="stateWarning" Grid.Column="1" Grid.Row="7" Text="State is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
+                <Label x:Name="stateWarning" Grid.Column="1" Grid.Row="8" Text="State is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
 
                 <BoxView Grid.Row="9" Grid.ColumnSpan="2" />

@@ -16,7 +16,8 @@ namespace InfiniteMeals.Utilities.Converters {
         Discover, 
         JCB, 
         Amex
-
        
     }
+
+
 }
