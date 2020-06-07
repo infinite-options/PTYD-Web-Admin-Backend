@@ -4,7 +4,7 @@
              x:Class="InfiniteMeals.MealSelect.MealChoices">
 <ContentPage.Content>
 		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
-            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True">
+            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True" >
 			<ListView.ItemTemplate>
 				<DataTemplate>
                     <ViewCell Height="100">

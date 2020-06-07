@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="115" Column="18" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs" Line="69" Column="33" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml" Line="113" Column="42" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -11,16 +11,14 @@
           <Node name="InfiniteMeals" expanded="True">
             <Node name="InfiniteMeals" expanded="True">
               <Node name="Model" expanded="True">
-                <Node name="Database" expanded="True" />
                 <Node name="Meals" expanded="True" />
               </Node>
               <Node name="ViewModel" expanded="True">
                 <Node name="MealSelect" expanded="True">
-                  <Node name="AddOnChoices.xaml" expanded="True">
-                    <Node name="AddOnChoices.xaml.cs" selected="True" />
-                  </Node>
                   <Node name="MealChoices.xaml" expanded="True" />
-                  <Node name="MealSchedule.xaml" expanded="True" />
+                  <Node name="MealSchedule.xaml" expanded="True">
+                    <Node name="MealSchedule.xaml.cs" selected="True" />
+                  </Node>
                 </Node>
               </Node>
             </Node>

@@ -26,6 +26,7 @@
             </Grid.RowDefinitions>
 
             <Button ClassId = "SunButton"
+                    x:Name="SundayButton"
                     WidthRequest="100"
                     HeightRequest="100"
                     BorderColor="Black"
@@ -43,6 +44,7 @@
                     -->
 
             <Button ClassId = "MonButton"
+                    x:Name="MondayButton"
                     BackgroundColor="#F5F5F5"
                     BorderColor="Black"
                     BorderWidth="0.1"
@@ -55,6 +57,7 @@
                     Grid.Row="0"
                     Clicked="ClickedColor"/>
             <Button ClassId = "SkipButton"
+                    x:Name="SkipButton"
                     BackgroundColor="#F5F5F5"
                     BorderColor="Black"
                     WidthRequest="100"
@@ -68,6 +71,7 @@
                     Grid.Row="0"
                     Clicked="ClickedColor"/>
             <Button ClassId = "SelectButton"
+                    x:Name="SelectButton"
                     WidthRequest="100"
                     HeightRequest="100"
                     BackgroundColor="#F5F5F5"
@@ -81,6 +85,7 @@
                     Grid.Row="1"
                     Clicked="ClickedSelectMeal"/>
             <Button ClassId = "SurpriseButton"
+                    x:Name="SurpriseButton"
                     WidthRequest="100"
                     HeightRequest="100"
                     BorderColor="Black"
@@ -93,6 +98,7 @@
                     Grid.Row="1"
                     Clicked="ClickedColor"/>
             <Button ClassId = "AddButton"
+                    x:Name="AddonButton"
                     WidthRequest="100"
                     HeightRequest="100"
                     Margin="0,0,30,0"
@@ -104,7 +110,7 @@
                     Text="Add Local Treats"
                     Grid.Column="2"
                     Grid.Row="1"
-                    Clicked="ClickedAddOnNav"/>
+                    Clicked="ClickedAddOn"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

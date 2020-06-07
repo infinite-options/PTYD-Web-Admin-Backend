@@ -11,6 +11,7 @@ using System.Net.Http;
 using InfiniteMeals.Model.Database;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace InfiniteMeals.MealSelect
 {
@@ -99,12 +100,12 @@ namespace InfiniteMeals.MealSelect
 
             }
 
-            for (int placeHolderSeas = 0; placeHolderSeas < obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length; placeHolderSeas++)
+ /*           for (int placeHolderSeas = 0; placeHolderSeas < obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length; placeHolderSeas++)
             {
                 String imageMeal;
-                /* SeasMenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName);
+                 SeasMenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName);
                  SeasMenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc);
-                 //SeasMenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString());*/
+                 //SeasMenuForWeek1Image.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString());
                 if (obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
                 {
                     imageMeal = "defaultmeal.png";
@@ -126,9 +127,9 @@ namespace InfiniteMeals.MealSelect
             for (int smooth = 0; smooth < obj.Result.MenuForWeek1.Meals.Smoothies.Menu.Length; smooth++)
             {
                 String imageMeal;
-                /*SmoothiesNames.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName);
+                SmoothiesNames.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName);
                 SmoothiesDesc.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc);
-                //SmoothiesImage.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl.ToString());*/
+                //SmoothiesImage.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl.ToString());
 
                 if (obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl == null)
                 {
@@ -147,7 +148,8 @@ namespace InfiniteMeals.MealSelect
 
                 });
             }
-
+   */
+    
             grouped.Add(mealGroup);
             grouped.Add(seasonalMealGroup);
             grouped.Add(smoothieGroup);
@@ -181,6 +183,14 @@ namespace InfiniteMeals.MealSelect
                     VerticalOptions= LayoutOptions.Center,
             };
                 infoButton.Margin = new Thickness(50,0,0,0);
+   
+
+                infoButton.Command = selectCommand;
+                infoButton.CommandParameter = new Binding("{Source={x:Reference Meal}, Path=BindingContext}");
+                infoButton.BindingContext = new Binding("{Source={x:Reference lstView}, Path=BindingContext}");
+                //infoButton.SetBinding(Button.CommandProperty, new Binding("selectCommand"));
+                //infoButton.SetBinding(Button.CommandParameterProperty, new Binding("{Binding Source={x:Reference Meal}, Path=BindingContext}"));
+                //infoButton.SetBinding(Button.BindingContextProperty, new Binding("{Binding Source={x:Reference lstView}, Path=BindingContext}"));
                 var steppers = new Stepper {
                     Value = 0,
                     Maximum = 10,
@@ -240,14 +250,7 @@ namespace InfiniteMeals.MealSelect
             await Navigation.PushAsync(new MealSelect.MealChoices());
         }
 
-
-        private void ClickedInfo(object sender, EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("here " + sender);
-            //DisplayAlert("Nutrition Facts", item.Description.ToString() , "OK");
-        }
-
-       void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
+        void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
        {
            Meal selectedItem = e.SelectedItem as Meal;
            DisplayAlert("Ingredients", selectedItem.description.ToString(), "OK");
@@ -256,7 +259,39 @@ namespace InfiniteMeals.MealSelect
          void OnListViewItemTapped(object sender, ItemTappedEventArgs e)
        {
            Meal tappedItem = e.Item as Meal;
-       }
+           DisplayAlert("Ingredients", tappedItem.description.ToString(), "OK");
+
+        }
+
+        public Command selectCommand = new Command((object item) =>
+        {
+            Meal obj = item as Meal;
+            System.Diagnostics.Debug.WriteLine(obj.description.ToString() + " made it here");
+            //DisplayAlert("Ingredients", obj.description.ToString(), "OK");
+        });
+
+        /*
+        private void onInfoClick(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var item = button?.BindingContext as Meal;
+            var vm = BindingContext as MealGroup;
+            vm?.selectCommand.Execute(item);
+
+        }
+
+        public Command<MealGroup> selectCommand
+        {
+            get
+            {
+                return new Command<MealGroup>((e) =>
+                {
+                    var item = e as MealGroup;
+                    DisplayAlert("Ingredients", item.ToString(), "OK");
+                });
+            }
+        }
+                */
 
     }
 
