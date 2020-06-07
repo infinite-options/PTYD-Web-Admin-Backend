@@ -138,6 +138,7 @@ namespace InfiniteMeals.MealSelect
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
             lstView.GroupShortNameBinding = new Binding("ShortName");
+            lstView.Header = "Total Add On Cost: $";
 
             lstView.ItemTemplate = new DataTemplate(() =>
             {
@@ -239,10 +240,12 @@ namespace InfiniteMeals.MealSelect
         void OnListViewItemTapped(object sender, ItemTappedEventArgs e)
         {
             Meal tappedItem = e.Item as Meal;
+            DisplayAlert("Ingredients", tappedItem.description.ToString(), "OK");
         }
 
         void OnInfoClicked(object sender, EventArgs e)
         {
+            OnListViewItemTapped(sender, (ItemTappedEventArgs)e );
         }
     }
 }

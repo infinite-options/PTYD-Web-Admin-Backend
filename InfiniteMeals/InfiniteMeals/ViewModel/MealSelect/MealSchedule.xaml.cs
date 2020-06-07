@@ -57,28 +57,31 @@ namespace InfiniteMeals.Meals {
             BindingContext = this;
         }
 
-        private async void ClickedSelectMeal(object sender, EventArgs e) {
-            ClickedColor(sender, e);
-            if (ctr == 2 | disabled == true)
-                await Navigation.PushAsync(new MealSelect.MealChoices());
-            else {
-                // Toast to user
-            }
-        }
-
         private void ClickedColor(object sender, EventArgs e) {
             Button btn = (Button)sender;
-            System.Diagnostics.Debug.WriteLine(btn.ClassId + " hi " + disabled);
+            System.Diagnostics.Debug.WriteLine("Class ID" + btn.ClassId + "Disabled? " + disabled + " Ctr " + ctr);
             // Change button colors
+            // CAN ONLY CHOOSE 2 BUTTONS + ADD ON, OR SKIP
+            // IF SKIP BUTTON IS CHOSEN, DISABLE EVERYTHING
+            // IF MONDAY IS SELECTED, CAN'T CHOOSE SUNDAY OR SKIP
+            // IF SUNDAY IS SELECTED, CAN'T CHOOSE MONDAT OR SKIP
+            // IF SELECT IS SELECTED, CAN'T CHOOSE SKIP OR SURPRISE
+            // IF SURPRISE IS SELECTED, CAN'T CHOOSE SKIP
+
+
             if (btn.ClassId == "SkipButton") {
-                if (btn.BackgroundColor.Equals(Color.FromHex(green))) {
+                if (btn.BackgroundColor.Equals(Color.FromHex(green)) |
+                    SundayButton.BackgroundColor.Equals(Color.FromHex(green)) |
+                    MondayButton.BackgroundColor.Equals(Color.FromHex(green)) |
+                    SelectButton.BackgroundColor.Equals(Color.FromHex(green)) |
+                    SurpriseButton.BackgroundColor.Equals(Color.FromHex(green)))
+                    {
                     btn.BackgroundColor = (Color.FromHex(def));
                     disabled = false;
                     ctr = 0;
                 }
-                else if (btn.BackgroundColor.Equals(Color.Default)) {
+                else if (btn.BackgroundColor.Equals(Color.FromHex(def))) {
                     btn.BackgroundColor = Color.FromHex(green);
-
                     disabled = true;
                     ctr = 2;
                 }
@@ -86,31 +89,40 @@ namespace InfiniteMeals.Meals {
             else {
                 if (disabled == false) {
                     if (btn.BackgroundColor.Equals(Color.FromHex(def))) {
-                        if (ctr < 2) {
+                        if (btn.ClassId.Equals("MonButton"))
+                        {
+                            btn.BackgroundColor = Color.FromHex(green);
+                            SundayButton.BackgroundColor = Color.FromHex(def);
+                        }
+                        else if(btn.ClassId.Equals("SunButton"))
+                        {
+                            btn.BackgroundColor = Color.FromHex(green);
+                            MondayButton.BackgroundColor = Color.FromHex(def);
+                        }
+
+                        if (btn.ClassId.Equals("SelectButton"))
+                        {
+                            btn.BackgroundColor = Color.FromHex(green);
+                            SurpriseButton.BackgroundColor = Color.FromHex(def);
+                        }
+                        else if (btn.ClassId.Equals("SurpriseButton"))
+                        {
+                            btn.BackgroundColor = Color.FromHex(green);
+                            SelectButton.BackgroundColor = Color.FromHex(def);
+                        }
+                        else
+                        {
                             btn.BackgroundColor = Color.FromHex(green);
                             order.Add(btn.Text);
-                            ctr++;
+                            ctr--;
                         }
                     }
                     else {
                         btn.BackgroundColor = (Color.FromHex(def));
                         order.Remove(btn.Text);
-                        ctr--;
+                        ctr++;
                     }
                 }
-            }
-        }
-
-        private void ClickedAddOn(object sender, EventArgs e) {
-            // Change button colors
-
-            Button btn = (Button)sender;
-
-            if (btn.BackgroundColor.Equals(Color.FromHex(def))) {
-                btn.BackgroundColor = Color.FromHex("#F9E29C");
-            }
-            else {
-                btn.BackgroundColor = (Color.FromHex(def));
             }
         }
 
@@ -118,11 +130,47 @@ namespace InfiniteMeals.Meals {
             await Navigation.PushAsync(new Steppers.BasicSteppers());
         }
 
-        private async void ClickedAddOnNav(object sender, EventArgs e)
+        private async void ClickedAddOn(object sender, EventArgs e)
+        {
+            // Change button colors
+
+            Button btn = (Button)sender;
+
+            if (btn.BackgroundColor.Equals(Color.FromHex(def)) &&
+                SkipButton.BackgroundColor.Equals(Color.FromHex(def)))
+            {
+                btn.BackgroundColor = Color.FromHex("#F9E29C");
+                await Navigation.PushAsync(new MealSelect.AddOnChoices());
+            }
+            else
+            {
+                btn.BackgroundColor = (Color.FromHex(def));
+            }
+        }
+
+       /* private async void ClickedAddOnNav(object sender, EventArgs e)
         {
             ClickedAddOn(sender, e);
             await Navigation.PushAsync(new MealSelect.AddOnChoices());
         }
+       */
+        private async void ClickedSelectMeal(object sender, EventArgs e)
+        {
+            ClickedColor(sender, e);
+            if(SkipButton.BackgroundColor.Equals(Color.FromHex(green)) |
+               SurpriseButton.BackgroundColor.Equals(Color.FromHex(green)))
+            {
+                // Toast must not skip delivery
+            }
+            else if (SundayButton.BackgroundColor.Equals(Color.FromHex(green))
+                | MondayButton.BackgroundColor.Equals(Color.FromHex(green)))
+                await Navigation.PushAsync(new MealSelect.MealChoices());
+            else
+            {
+                // Toast to user, must pick day
+            }
+        }
+
 
     }
 }
