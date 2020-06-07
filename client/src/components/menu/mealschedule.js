@@ -1,7 +1,7 @@
-import React, {Component, Fragment} from "react";
+import React, { Component, Fragment } from "react";
 
-import {Grid, Cell} from "react-mdl";
-import {Button, Row} from "react-bootstrap";
+import { Grid, Cell } from "react-mdl";
+import { Button, Row } from "react-bootstrap";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -24,7 +24,7 @@ export default class MealSchedule extends Component {
       showHideMakeChange: false,
 
       //handle error
-      error: null
+      error: null,
     };
     this.ChangeCurrentPurchase = this.ChangeCurrentPurchase.bind(this);
   }
@@ -73,51 +73,51 @@ export default class MealSchedule extends Component {
           ? this.props.API_URL + "/" + this.props.match.params.startdate
           : this.props.API_URL
       )
-      .then(res => {
+      .then((res) => {
         if (res.data !== undefined && res.data.result !== undefined) {
-          this.setState({menu: res.data.result});
+          this.setState({ menu: res.data.result });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.response);
-        this.setState({error: err.response});
+        this.setState({ error: err.response });
         // do something to prompt the error to the user
       });
 
     // getting all purchases which user have
     axios
       .get(`${this.props.PURCHASE_API_URL}/${this.state.userID}`, {
-        params: {startdate: this.state.select_date}
+        params: { startdate: this.state.select_date },
       })
-      .then(res => {
+      .then((res) => {
         if (res.data !== undefined && res.data.result !== undefined) {
-          this.setState({purchases: res.data.result});
+          this.setState({ purchases: res.data.result });
           //set currentPurchase for the first purchase in purchases array
           // this is done in componentDidMount to load currentPurchase for the
           // frist time the page is loaded
-          this.setState({currentPurchase: res.data.result[0]});
+          this.setState({ currentPurchase: res.data.result[0] });
         }
       })
-      .catch(err => {
-        this.setState({error: err.response});
+      .catch((err) => {
+        this.setState({ error: err.response });
         console.log(err.response);
       });
   };
 
   ChangeAccountInfo = () => {
     this.state.showHideMakeChange
-      ? this.setState({showHideMakeChange: false})
-      : this.setState({showHideMakeChange: true});
+      ? this.setState({ showHideMakeChange: false })
+      : this.setState({ showHideMakeChange: true });
   };
 
-  ChangeCurrentPurchase = purchase => {
+  ChangeCurrentPurchase = (purchase) => {
     // this function use for update current purchase which is selected from children
     // need a helper function to get the purchase by using purchaseID
-    this.setState({currentPurchase: purchase});
+    this.setState({ currentPurchase: purchase });
   };
 
-  SetError = err => {
-    this.setState({error: err});
+  SetError = (err) => {
+    this.setState({ error: err });
   };
   render() {
     /*because menu is an object so we have to convert it to array before we run the loop
@@ -126,20 +126,20 @@ export default class MealSchedule extends Component {
     console.log("current purchase: ", this.state.currentPurchase);
 
     return (
-      <div className='container font2'>
+      <div className="container font2">
         <Grid>
           <Cell col={4}>
-            <div className='box'>
+            <div className="box">
               <h4>Hi! {this.state.firstname}</h4>
-              <Row className='mb-1'>
+              <Row className="mb-1">
                 <Selector
                   purchases={this.state.purchases}
                   ChangeCurrentPurchase={this.ChangeCurrentPurchase}
                 />
               </Row>
 
-              <Row className='mb-1'>
-                <Button onClick={this.ChangeAccountInfo} size='lg' block>
+              <Row className="mb-1">
+                <Button onClick={this.ChangeAccountInfo} size="lg" block>
                   Change Accont Info
                 </Button>
               </Row>
@@ -157,8 +157,8 @@ export default class MealSchedule extends Component {
           <Cell col={8}>
             {/* run a loop to create 6 week's buttons */}
 
-            <div className='container'>
-              {sixWeekMenu.map(element => (
+            <div className="container">
+              {sixWeekMenu.map((element) => (
                 <MealButtons
                   key={element[0]}
                   maxMeals={this.state.currentPurchase.MaximumMeals}

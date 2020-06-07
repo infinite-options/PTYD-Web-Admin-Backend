@@ -1,17 +1,9 @@
 import React, {Component} from "react";
-import {
-  Button,
-  ButtonToolbar,
-  Tooltip,
-  Card,
-  Modal,
-  OverlayTrigger
-} from "react-bootstrap";
-import {Grid, Cell} from "react-mdl";
+import {Button, ButtonToolbar} from "react-bootstrap";
 import axios from "axios";
 
-import EachMeal from "./EachMeal";
-import EachAddon from "./EachAddon";
+import SelectMealModal from "./SelectMealModal";
+import AddonModal from "./AddonModal";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -26,31 +18,31 @@ export default class MealButton extends Component {
       //some variable to control button
       sundayButton: {
         chosen: false,
-        active: true
+        isDisabled: false
       },
       mondayButton: {
         chosen: false,
-        active: true
+        isDisabled: false
       },
       skipButton: {
         chosen: false,
-        active: true
+        isDisabled: false
       },
       selectButton: {
         chosen: false,
         red: false,
         showModal: false,
-        active: true
+        isDisabled: false
       },
       surpriseButton: {
         chosen: false,
-        active: true
+        isDisabled: false
       },
       addonButton: {
         chosen: false,
         red: false,
         showModal: false,
-        active: true
+        isDisabled: false
       }
     };
   }
@@ -65,6 +57,7 @@ export default class MealButton extends Component {
         let data;
         if (res.data.result !== undefined) {
           data = res.data.result;
+          console.log(res, "data");
           if (data.Meals.length > 0) {
             for (let meal of data.Meals) {
               if (meal.week_affected === this.props.weekMenu.SaturdayDate) {
@@ -79,6 +72,43 @@ export default class MealButton extends Component {
               }
             }
           }
+        }
+      })
+      .then(() => {
+        if (this.state.currentMealSelected.delivery_day === "Sunday") {
+          this.setState(prevState => ({
+            sundayButton: {...prevState, chosen: true}
+          }));
+        }
+        if (this.state.currentMealSelected.delivery_day === "Monday") {
+          this.setState(prevState => ({
+            mondayButton: {...prevState, chosen: true}
+          }));
+        }
+        if (this.state.currentMealSelected.delivery_day === "SKIP") {
+          this.setState(prevState => ({
+            skipButton: {...prevState, chosen: true},
+            selectButton: {chosen: false, isDisabled: true},
+            surpriseButton: {chosen: false, isDisabled: true},
+            addonButton: {chosen: false, isDisabled: true}
+          }));
+        }
+        if (
+          this.state.currentMealSelected.meal_selection === "SURPRISE" ||
+          Object.keys(this.state.currentMealSelected.meal_selection).length ===
+            0
+        ) {
+          this.setState(prevState => ({
+            surpriseButton: {...prevState, chosen: true}
+          }));
+        }
+        if (
+          this.state.currentMealSelected.meal_selection.length > 0 &&
+          this.state.currentMealSelected.meal_selection !== "SKIP"
+        ) {
+          this.setState(prevState => ({
+            selectButton: {...prevState, chosen: true}
+          }));
         }
       })
       .catch(err => {
@@ -110,131 +140,156 @@ export default class MealButton extends Component {
       });
     }
   };
-  clickSunday = () => {
-    this.setState(prevState => ({
+  clickSunday = async () => {
+    await this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        chosen: true,
-        active: true
+        chosen: true
       },
       mondayButton: {
         ...prevState.mondayButton,
-        chosen: false,
-        active: true
+        chosen: false
       },
       skipButton: {
         ...prevState.skipButton,
         chosen: false,
-        active: true
+        isDisabled: false
       },
       selectButton: {
-        ...prevState.selectButton,
-        active: true
+        chosen:
+          prevState.currentMealSelected.meal_selection.length > 0 &&
+          prevState.currentMealSelected.meal_selection !== "SURPRISE",
+        isDisabled: false
       },
       surpriseButton: {
-        ...prevState.surpriseButton,
-        active: true
+        chosen:
+          prevState.currentMealSelected.meal_selection.length === 0 ||
+          prevState.currentMealSelected.meal_selection === "SURPRISE",
+        isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
-        active: true
+        isDisabled: false
+      },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: "Sunday"
       }
     }));
+
+    this.saveSelectMealAPI();
   };
 
-  clickMonday = () => {
-    this.setState(prevState => ({
+  clickMonday = async () => {
+    await this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        chosen: false,
-        active: true
+        chosen: false
       },
       mondayButton: {
         ...prevState.mondayButton,
-        chosen: true,
-        active: true
+        chosen: true
       },
       skipButton: {
         ...prevState.skipButton,
         chosen: false,
-        active: true
+        isDisabled: false
       },
       selectButton: {
-        ...prevState.selectButton,
-        active: true
+        chosen:
+          prevState.currentMealSelected.meal_selection.length > 0 &&
+          prevState.currentMealSelected.meal_selection !== "SURPRISE",
+        isDisabled: false
       },
       surpriseButton: {
-        ...prevState.surpriseButton,
-        active: true
+        chosen:
+          prevState.currentMealSelected.meal_selection.length === 0 ||
+          prevState.currentMealSelected.meal_selection === "SURPRISE",
+        isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
-        active: true
+        isDisabled: false
+      },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: "Monday"
       }
     }));
+    this.saveSelectMealAPI();
   };
 
-  clickSkip = () => {
-    this.setState(prevState => ({
+  clickSkip = async () => {
+    await this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        active: true
+        chosen: false,
+        isDisabled: false
       },
       mondayButton: {
         ...prevState.mondayButton,
-        active: true
+        chosen: false,
+        isDisabled: false
       },
       skipButton: {
         ...prevState.skipButton,
         chosen: true,
-        active: true
+        isDisabled: false
       },
       selectButton: {
-        ...prevState.selectButton,
-        active: false,
-        showModal: false
-      },
-      surpriseButton: {
-        ...prevState.surpriseButton,
-        active: false
-      },
-      addonButton: {
-        ...prevState.addonButton,
+        chosen: false,
+        red: false,
         showModal: false,
-        active: false
+        isDisabled: true
+      },
+      surpriseButton: {
+        chosen: false,
+        isDisabled: true
+      },
+      addonButton: {
+        chosen: false,
+        red: false,
+        showModal: false,
+        isDisabled: true
+      },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: "SKIP"
       }
     }));
     // send a form to database to write a
+    this.saveSelectMealAPI();
   };
   clickSelect = () => {
     this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        active: false
+        // chosen: false,
+        isDisabled: true
       },
       mondayButton: {
         ...prevState.mondayButton,
-        active: false
+        // chosen: false,
+        isDisabled: true
       },
       skipButton: {
         ...prevState.skipButton,
-        active: true
+        isDisabled: false
       },
       selectButton: {
-        ...prevState.selectButton,
         chosen: true,
         red: true,
         showModal: true,
-        active: true
+        isDisabled: false
       },
       surpriseButton: {
         ...prevState.surpriseButton,
         chosen: false,
-        active: true
+        isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
-        active: false
+        isDisabled: true
       }
     }));
   };
@@ -242,29 +297,34 @@ export default class MealButton extends Component {
     this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        active: true
+        isDisabled: false
       },
       mondayButton: {
         ...prevState.mondayButton,
-        active: true
+        isDisabled: false
       },
       skipButton: {
         ...prevState.skipButton,
-        active: true
+        isDisabled: false
       },
       selectButton: {
         ...prevState.selectButton,
+        showModal: false,
         chosen: false,
-        active: true
+        isDisabled: false
       },
       surpriseButton: {
         ...prevState.surpriseButton,
         chosen: true,
-        active: true
+        isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
-        active: true
+        isDisabled: false
+      },
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        meal_selection: "SURPRISE"
       }
     }));
     //send a request to database
@@ -274,40 +334,72 @@ export default class MealButton extends Component {
     this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        active: false
+        isDisabled: true
       },
       mondayButton: {
         ...prevState.mondayButton,
-        active: false
+        isDisabled: true
       },
       skipButton: {
         ...prevState.skipButton,
-        active: true
+        isDisabled: false
       },
       selectButton: {
         ...prevState.selectButton,
-        active: false
+        isDisabled: true
       },
       surpriseButton: {
         ...prevState.surpriseButton,
-        active: false
+        isDisabled: true
       },
       addonButton: {
         ...prevState.addonButton,
         chosen: true,
         red: true,
         showModal: true,
-        active: true
+        isDisabled: false
+      }
+    }));
+  };
+
+  closeAddonModal = () => {
+    this.setState(prevState => ({
+      sundayButton: {
+        ...prevState.sundayButton,
+        isDisabled: false
+      },
+      mondayButton: {
+        ...prevState.mondayButton,
+        isDisabled: false
+      },
+      skipButton: {
+        ...prevState.skipButton,
+        isDisabled: false
+      },
+      selectButton: {
+        ...prevState.selectButton,
+        isDisabled: false
+      },
+      surpriseButton: {
+        ...prevState.surpriseButton,
+        isDisabled: false
+      },
+      addonButton: {
+        ...prevState.addonButton,
+        chosen: false,
+        red: false,
+        showModal: false,
+        isDisabled: false
       }
     }));
   };
 
   incrementMaxMeal = () => {
-    this.setState({mealLeft: this.state.maxMeals + 1});
+    // this.setState({ mealLeft: this.state.mealLeft + 1 });
   };
 
   decrementMaxMeal = () => {
-    this.setState({mealLeft: this.state.maxMeals - 1});
+    // this.setState({ mealLeft: this.state.mealLeft - 1 });
   };
 
   saveSelectMeal = () => {
@@ -315,45 +407,122 @@ export default class MealButton extends Component {
     this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        active: true
+        isDisabled: false
       },
       mondayButton: {
         ...prevState.mondayButton,
-        active: true
+        isDisabled: false
       },
       skipButton: {
         ...prevState.skipButton,
-        active: true
+        isDisabled: false
       },
       selectButton: {
         ...prevState.selectButton,
         chosen: true,
         red: false,
         showModal: false,
-        active: true
+        isDisabled: false
       },
       surpriseButton: {
         ...prevState.surpriseButton,
-        active: true
+        isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
-        active: true
+        isDisabled: false
       }
     }));
     // update local variable
 
     // send request to save to serve
+    this.saveSelectMealAPI();
   };
 
-  incrementMealLeft = () => {
+  saveSelectMealAPI = () => {
+    const {
+      purchase_id,
+      week_affected,
+      delivery_day,
+      meal_selection,
+      meals_selected
+    } = this.state.currentMealSelected;
+    fetch(
+      `${this.props.MEAL_SELECT_API_URL}/${this.state.currentMealSelected.purchase_id}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          purchase_id: purchase_id,
+          week_affected: week_affected,
+          meal_quantities: meals_selected,
+          delivery_day: delivery_day,
+          default_selected: this.state.surpriseButton.isDisabled,
+          is_addons: false
+        })
+      }
+    );
+  };
+
+  incrementMealLeft = id => {
+    if (id in this.state.currentMealSelected.meals_selected) {
+      this.setState(prevState => ({
+        currentMealSelected: {
+          ...prevState.currentMealSelected,
+          meals_selected: {
+            ...prevState.currentMealSelected.meals_selected,
+            [id]: prevState.currentMealSelected.meals_selected[id] + 1
+          }
+        }
+      }));
+    } else {
+      this.setState(prevState => ({
+        currentMealSelected: {
+          ...prevState.currentMealSelected,
+          meals_selected: {
+            ...prevState.currentMealSelected.meals_selected,
+            [id]: 1
+          }
+        }
+      }));
+    }
     console.log("incrementMealLeft is called.");
   };
 
-  decrementMealLeft = () => {
+  decrementMealLeft = id => {
+    if (id in this.state.currentMealSelected.meals_selected) {
+      if (this.state.currentMealSelected.meals_selected[id] >= 1) {
+        this.setState(prevState => ({
+          currentMealSelected: {
+            ...prevState.currentMealSelected,
+            meals_selected: {
+              ...prevState.currentMealSelected.meals_selected,
+              [id]: prevState.currentMealSelected.meals_selected[id] - 1
+            }
+          }
+        }));
+      } else {
+        alert("Cannot get negative meals");
+      }
+    } else {
+      alert("Cannot get negative meals");
+    }
     console.log("decrementMealleft is called");
   };
+
   render() {
+    const {
+      sundayButton,
+      mondayButton,
+      skipButton,
+      selectButton,
+      surpriseButton,
+      addonButton
+    } = this.state;
+
     const orange = {
       width: "95px",
       height: "95px",
@@ -384,30 +553,24 @@ export default class MealButton extends Component {
     var sundayColor, mondayColor, selectColor, addonColor;
     //sunday button
 
-    sundayColor =
-      this.state.sundayButton.chosen && !this.state.skipButton.chosen
-        ? green
-        : clear;
+    sundayColor = sundayButton.chosen ? green : clear;
 
     //Monday button
-    mondayColor =
-      this.state.mondayButton.chosen && !this.state.skipButton.chosen
-        ? green
-        : clear;
+    mondayColor = mondayButton.chosen ? green : clear;
 
     //select button
 
-    if (this.state.selectButton.chosen && this.state.selectButton.red) {
+    if (selectButton.chosen && selectButton.red) {
       selectColor = red;
-    } else if (this.state.selectButton.chosen && !this.state.selectButton.red) {
+    } else if (selectButton.chosen && !selectButton.red) {
       selectColor = green;
     } else {
       selectColor = clear;
     }
     //addon button
-    if (this.state.addonButton.chosen && this.state.addonButton.red) {
+    if (addonButton.chosen && addonButton.red) {
       addonColor = red;
-    } else if (this.state.addonButton.chosen && !this.state.addonButton.red) {
+    } else if (addonButton.chosen && !addonButton.red) {
       addonColor = green;
     } else {
       addonColor = clear;
@@ -438,27 +601,29 @@ export default class MealButton extends Component {
     return (
       <div>
         <ButtonToolbar className='mb-5'>
-          <div className='radio'>
+          <div className='radio' style={{position: "relative"}}>
             <Button
               variant='outline-dark'
-              disabled={!this.state.sundayButton.active}
+              disabled={sundayButton.isDisabled}
               onClick={this.clickSunday}
               style={sundayColor}
             >
-              Sunday {weekMenu.Sunday}
+              Sunday
+              <div>{weekMenu.Sunday}</div>
             </Button>
             &nbsp;
             <Button
               variant='outline-dark'
-              disabled={!this.state.mondayButton.active}
+              disabled={mondayButton.isDisabled}
               onClick={this.clickMonday}
               style={mondayColor}
             >
-              Monday {weekMenu.Moday}
+              Monday
+              <div>{weekMenu.Monday}</div>
             </Button>
             &nbsp;
             <Button
-              disabled={!this.state.skipButton.active}
+              disabled={skipButton.isDisabled}
               variant='outline-dark'
               style={this.state.skipButton.chosen ? orange : clear}
               onClick={this.clickSkip}
@@ -468,7 +633,7 @@ export default class MealButton extends Component {
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button
-            disabled={!this.state.selectButton.active}
+            disabled={selectButton.isDisabled}
             variant='outline-dark'
             style={selectColor}
             onClick={this.clickSelect}
@@ -477,7 +642,7 @@ export default class MealButton extends Component {
           </Button>
           &nbsp;
           <Button
-            disabled={!this.state.surpriseButton.active}
+            disabled={surpriseButton.isDisabled}
             variant='outline-dark'
             onClick={this.clickSurprise}
             style={this.state.surpriseButton.chosen ? green : clear}
@@ -486,7 +651,7 @@ export default class MealButton extends Component {
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button
-            disabled={!this.state.addonButton.active}
+            disabled={addonButton.isDisabled}
             variant='outline-dark'
             style={addonColor}
             onClick={this.clickAddOn}
@@ -495,107 +660,28 @@ export default class MealButton extends Component {
           </Button>
           {/*This part is for two modal. Select Meal Modal and Add Local Treats Modal */}
           {this.state.selectButton.showModal && (
-            <Card style={{width: "92%"}}>
-              <Card.Header>
-                <Modal.Title style={{width: "100%"}}>
-                  <h4 style={{float: "left", margin: "0"}} className='font2'>
-                    Please Select {mealLeft} Meals:
-                  </h4>
-                  <div style={{float: "right"}}>
-                    &nbsp;&nbsp;
-                    {this.state.mealLeft !== 0 ? (
-                      <OverlayTrigger
-                        key={"top"}
-                        placement={"top"}
-                        overlay={
-                          <Tooltip id='selectMealSaveButton'>
-                            <p>
-                              Select additional meals to activate this button or
-                              click "Surprise Me" to close this box.
-                            </p>
-                          </Tooltip>
-                        }
-                      >
-                        <span className='d-inline-block'>
-                          <Button
-                            variant='success'
-                            disabled={true}
-                            style={{pointerEvents: "none"}}
-                          >
-                            Save
-                          </Button>
-                        </span>
-                      </OverlayTrigger>
-                    ) : (
-                      <Button variant='success' onClick={this.saveSelectMeal}>
-                        Save
-                      </Button>
-                    )}
-                  </div>
-                </Modal.Title>
-              </Card.Header>
-              <div className='scrollMenu'>
-                {Object.values(this.state.weekMenu.Meals).map(meal => (
-                  <Grid key={meal.Category}>
-                    <Cell col={12}>
-                      <h4 style={{margin: "0"}}>{meal.Category}</h4>
-                    </Cell>
-
-                    {meal.Menu.map(description => (
-                      <Cell col={4} key={description.meal_id}>
-                        <EachMeal
-                          description={description}
-                          incrementMealLeft={this.incrementMealLeft}
-                          decrementMealLeft={this.decrementMealLeft}
-                        />
-                      </Cell>
-                    ))}
-                  </Grid>
-                ))}
-              </div>
-            </Card>
+            <SelectMealModal
+              mealLeft={mealLeft}
+              Meals={this.state.weekMenu.Meals}
+              incrementMealLeft={this.incrementMealLeft}
+              decrementMealLeft={this.decrementMealLeft}
+              incrementMaxMeal={this.incrementMaxMeal}
+              decrementMaxMeal={this.decrementMaxMeal}
+              clickSkip={this.clickSkip}
+              clickSurprise={this.clickSurprise}
+              currentMealSelected={this.state.currentMealSelected}
+              saveSelectMeal={this.saveSelectMeal}
+            />
           )}
           {this.state.addonButton.showModal && (
-            <Card style={{width: "92%"}}>
-              <Card.Header>
-                <Modal.Title style={{width: "100%"}}>
-                  <h4 className='font2' style={{float: "left", margin: "0"}}>
-                    Add Local Treats:
-                  </h4>
-                  <div style={{float: "right"}}>
-                    <h4 className='font2' style={{float: "left", margin: "0"}}>
-                      Total Price: ${this.state.total_addon_price}
-                    </h4>
-                    &nbsp;&nbsp;
-                    <Button variant='danger' onClick={this.closeButtonAddOn}>
-                      Close
-                    </Button>
-                    <Button variant='success' onClick={this.saveButtonAddOn}>
-                      Agree To Pay
-                    </Button>
-                  </div>
-                </Modal.Title>
-              </Card.Header>
-              <div className='scrollMenu'>
-                {Object.values(this.state.weekMenu.Addons).map(addon => (
-                  <Grid key={addon.Category}>
-                    <Cell col={12}>
-                      <h4 style={{margin: "0"}}>{addon.Category}</h4>
-                    </Cell>
-
-                    {addon.Menu.map(description => (
-                      <Cell col={4} key={description.meal_id}>
-                        <EachAddon
-                          description={description}
-                          incrementMealLeft={this.incrementMealLeft}
-                          decrementMealLeft={this.decrementMealLeft}
-                        />
-                      </Cell>
-                    ))}
-                  </Grid>
-                ))}
-              </div>
-            </Card>
+            <AddonModal
+              total_addon_price={this.total_addon_price}
+              closeAddonModal={this.closeAddonModal}
+              saveButtonAddOn={this.saveButtonAddOn}
+              Addons={this.state.weekMenu.Addons}
+              incrementMealLeft={this.incrementMealLeft}
+              decrementMealLeft={this.decrementMealLeft}
+            />
           )}
         </ButtonToolbar>
       </div>
