@@ -62,7 +62,7 @@ const Main = ({ appProps }) => (
       component={Orders}
       appProps={{
         appProps,
-        API_URL_Meal_Info1: `${DEV_URL}mealInfo1`,
+        API_URL_Meal_Info1: `${DEV_URL}All_Meals`,
       }}
     />
   </Switch>
