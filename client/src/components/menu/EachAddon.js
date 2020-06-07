@@ -18,7 +18,7 @@ export default class EachAddon extends Component {
           >
             <img
               className='img-fluid'
-              src={""}
+              src={this.props.description.meal_photo_url}
               alt='no_meal_img'
               resizemode='true'
             />
@@ -32,7 +32,7 @@ export default class EachAddon extends Component {
                 cursor: "default"
               }}
             >
-              <center>${this.props.extra_meal_price}</center>
+              <center>${this.props.description.extra_meal_price}</center>
             </div>
             <OverlayTrigger
               placement='bottom'
@@ -46,9 +46,10 @@ export default class EachAddon extends Component {
               }}
               overlay={
                 <Tooltip id='button-tooltip'>
-                  <p>{this.props.detail}</p>
+                  <p>{this.props.description.meal_name}</p>
                   <p>
-                    <strong>Ingredients:</strong> {this.props.ingridents}
+                    <strong>Ingredients:</strong>{" "}
+                    {this.props.description.meal_desc}
                   </p>
                 </Tooltip>
               }
@@ -63,7 +64,7 @@ export default class EachAddon extends Component {
                   cursor: "default"
                 }}
               >
-                <center>{this.props.mealTitle}</center>
+                <center>{this.props.description.meal_name}</center>
               </div>
             </OverlayTrigger>
           </div>

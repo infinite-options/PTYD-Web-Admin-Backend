@@ -464,10 +464,6 @@ class Meals(Resource):
                     print("today: ", today)
 
                     if today < thursday:
-<<<<<<< HEAD
-
-=======
->>>>>>> mealschedule-rewrite-young
                         # stamp = stamp + timedelta(days=7)
 
                         week = {
