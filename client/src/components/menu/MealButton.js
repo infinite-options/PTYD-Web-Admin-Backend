@@ -75,19 +75,22 @@ export default class MealButton extends Component {
         }
       })
       .then(() => {
-        if (this.state.currentMealSelected.delivery_day === "Sunday") {
+        if (Object.keys(this.state.currentMealSelected).length === 0) {
           this.setState((prevState) => ({
-            sundayButton: { ...prevState, chosen: true },
+            sundayButton: { ...prevState.sundayButton, chosen: true },
+            surpriseButton: { ...prevState.surpriseButton, chosen: true },
           }));
-        }
-        if (this.state.currentMealSelected.delivery_day === "Monday") {
+        } else if (this.state.currentMealSelected.delivery_day === "Sunday") {
           this.setState((prevState) => ({
-            mondayButton: { ...prevState, chosen: true },
+            sundayButton: { ...prevState.sundayButton, chosen: true },
           }));
-        }
-        if (this.state.currentMealSelected.delivery_day === "SKIP") {
+        } else if (this.state.currentMealSelected.delivery_day === "Monday") {
           this.setState((prevState) => ({
-            skipButton: { ...prevState, chosen: true },
+            mondayButton: { ...prevState.mondayButton, chosen: true },
+          }));
+        } else if (this.state.currentMealSelected.delivery_day === "SKIP") {
+          this.setState((prevState) => ({
+            skipButton: { ...prevState.skipButton, chosen: true },
             selectButton: { chosen: false, isDisabled: true },
             surpriseButton: { chosen: false, isDisabled: true },
             addonButton: { chosen: false, isDisabled: true },
@@ -99,15 +102,20 @@ export default class MealButton extends Component {
             0
         ) {
           this.setState((prevState) => ({
-            surpriseButton: { ...prevState, chosen: true },
+            surpriseButton: { ...prevState.surpriseButton, chosen: true },
           }));
-        }
-        if (
+        } else if (
           this.state.currentMealSelected.meal_selection.length > 0 &&
           this.state.currentMealSelected.meal_selection !== "SKIP"
         ) {
           this.setState((prevState) => ({
-            selectButton: { ...prevState, chosen: true },
+            selectButton: { ...prevState.selectButton, chosen: true },
+          }));
+        }
+
+        if (Object.keys(this.state.currentAddonSelected).length > 0) {
+          this.setState((prevState) => ({
+            addonButton: { ...prevState.addonButton, chosen: true },
           }));
         }
       })
@@ -492,6 +500,31 @@ export default class MealButton extends Component {
     console.log("incrementMealLeft is called.");
   };
 
+  incrementAddon = (id) => {
+    if (id in this.state.currentAddonSelected.meals_selected) {
+      this.setState((prevState) => ({
+        currentAddonSelected: {
+          ...prevState.currentAddonSelected,
+          meals_selected: {
+            ...prevState.currentAddonSelected.meals_selected,
+            [id]: prevState.currentAddonSelected.meals_selected[id] + 1,
+          },
+        },
+      }));
+    } else {
+      this.setState((prevState) => ({
+        currentAddonSelected: {
+          ...prevState.currentAddonSelected,
+          meals_selected: {
+            ...prevState.currentAddonSelected.meals_selected,
+            [id]: 1,
+          },
+        },
+      }));
+    }
+    console.log("incrementMealLeft is called.");
+  };
+
   decrementMealLeft = (id) => {
     if (id in this.state.currentMealSelected.meals_selected) {
       if (this.state.currentMealSelected.meals_selected[id] >= 1) {
@@ -509,6 +542,27 @@ export default class MealButton extends Component {
       }
     } else {
       alert("Cannot get negative meals");
+    }
+    console.log("decrementMealleft is called");
+  };
+
+  decrementAddon = (id) => {
+    if (id in this.state.currentAddonSelected.meals_selected) {
+      if (this.state.currentAddonSelected.meals_selected[id] >= 1) {
+        this.setState((prevState) => ({
+          currentAddonSelected: {
+            ...prevState.currentAddonSelected,
+            meals_selected: {
+              ...prevState.currentAddonSelected.meals_selected,
+              [id]: prevState.currentAddonSelected.meals_selected[id] - 1,
+            },
+          },
+        }));
+      } else {
+        alert("Cannot get negative addons");
+      }
+    } else {
+      alert("Cannot get negative addons");
     }
     console.log("decrementMealleft is called");
   };
@@ -571,7 +625,7 @@ export default class MealButton extends Component {
     if (addonButton.chosen && addonButton.red) {
       addonColor = red;
     } else if (addonButton.chosen && !addonButton.red) {
-      addonColor = green;
+      addonColor = orange;
     } else {
       addonColor = clear;
     }
@@ -679,8 +733,11 @@ export default class MealButton extends Component {
               closeAddonModal={this.closeAddonModal}
               saveButtonAddOn={this.saveButtonAddOn}
               Addons={this.state.weekMenu.Addons}
+              incrementAddon={this.incrementAddon}
+              decrementAddon={this.decrementAddon}
               incrementMealLeft={this.incrementMealLeft}
               decrementMealLeft={this.decrementMealLeft}
+              currentAddonSelected={this.state.currentAddonSelected}
             />
           )}
         </ButtonToolbar>

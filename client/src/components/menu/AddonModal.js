@@ -51,16 +51,27 @@ export default function AddonModal(props) {
               <h4 style={{ margin: "0" }}>{addon.Category}</h4>
             </Cell>
 
-            {addon.Menu.map((description) => (
-              <Cell col={4}>
-                {console.log("description: ", description)}
-                <EachAddon
-                  description={description}
-                  incrementMealLeft={props.incrementMealLeft}
-                  decrementMealLeft={props.decrementMealLeft}
-                />
-              </Cell>
-            ))}
+            {addon.Menu.map((description) => {
+              let quantity = 0;
+              for (let [k, v] of Object.entries(
+                props.currentAddonSelected.meals_selected
+              )) {
+                if (k === description.menu_meal_id) {
+                  quantity = v;
+                }
+              }
+              return (
+                <Cell col={4}>
+                  {console.log("description: ", description)}
+                  <EachAddon
+                    description={description}
+                    incrementMealLeft={props.incrementMealLeft}
+                    decrementMealLeft={props.decrementMealLeft}
+                    quantity={quantity}
+                  />
+                </Cell>
+              );
+            })}
           </Grid>
         ))}
       </div>
