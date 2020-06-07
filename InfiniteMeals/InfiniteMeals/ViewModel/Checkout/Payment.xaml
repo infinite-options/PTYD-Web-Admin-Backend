@@ -47,8 +47,17 @@
             
             <BoxView Grid.Row="6"/>
             <Label Grid.Row="6" Text="Expiration Date" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
-            <Entry x:Name="expirationDateEntry" Grid.Column="1" Grid.Row="6" Placeholder="Expiration Date"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" Keyboard="Numeric" Unfocused="expirationDateEntryUnfocused"/>
+
+            <StackLayout Grid.Column="1" Grid.Row="6" Orientation="Horizontal">
+                <Entry x:Name="expirationMonthEntry" Grid.Column="1" Grid.Row="6" Placeholder="MM"  HorizontalOptions="Start" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" TextChanged="expirationMonthEntryTextChanged" Unfocused="expirationDateEntryUnfocused"/>
+                <Label Grid.Column="1" Grid.Row="6" HorizontalOptions="Start" VerticalOptions="Center" Text="/" FontSize="Large"/>
+                <Entry x:Name="expirationYearEntry" Grid.Column="1" Grid.Row="6" Placeholder="YY"  HorizontalOptions="Center" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" Unfocused="expirationDateEntryUnfocused"/>
+            </StackLayout>
             <Label x:Name="expirationDateWarning" Grid.Column="1" Grid.Row="6" Text="Expiration Date is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
+            
+            
+            
+            
             
             <BoxView Grid.Row="7"/>
             <Label Grid.Row="7" Text="CVV" TextColor="Black" VerticalOptions="Center" FontSize="Medium"/>

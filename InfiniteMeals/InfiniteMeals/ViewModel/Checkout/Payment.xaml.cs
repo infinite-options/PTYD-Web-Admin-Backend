@@ -21,7 +21,8 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
         private async void ContinueToSummaryClicked(object sender, EventArgs e) {
             if(String.IsNullOrEmpty(this.cardNumberEntry.Text) || String.IsNullOrEmpty(this.cardholderNameEntry.Text)
-                || String.IsNullOrEmpty(this.expirationDateEntry.Text) || String.IsNullOrEmpty(this.cvvEntry.Text)) {
+                || String.IsNullOrEmpty(this.expirationMonthEntry.Text) || 
+                String.IsNullOrEmpty(this.expirationYearEntry.Text) || String.IsNullOrEmpty(this.cvvEntry.Text)) {
                 await DisplayAlert("Error: Empty Field(s)", "Please fill all fields", "OK");
             }
         }
@@ -53,8 +54,12 @@ namespace InfiniteMeals.ViewModel.Checkout {
             Entry expirationDateEntry = (Entry)sender; // cast sender as entry
             if (String.IsNullOrEmpty(expirationDateEntry.Text)) {
                 this.expirationDateWarning.IsVisible = true; // show warning if expiration date entry is empty
+            } else if(!String.IsNullOrEmpty(expirationDateEntry.Text) && expirationDateEntry.Text.Length < 2) {
+                this.expirationDateWarning.Text = "Enter a valid date";
+                this.expirationDateWarning.IsVisible = true;
             }
-            else if (!String.IsNullOrEmpty(expirationDateEntry.Text) && this.expirationDateWarning.IsVisible == true) {
+            else if (!(String.IsNullOrEmpty(this.expirationMonthEntry.Text)) && !(String.IsNullOrEmpty(this.expirationYearEntry.Text))
+                && this.expirationMonthEntry.Text.Length == 2 && this.expirationYearEntry.Text.Length == 2 && this.expirationDateWarning.IsVisible == true) {
                 this.expirationDateWarning.IsVisible = false; // hide warning if expiration date entry is filled
             }
         }
@@ -69,6 +74,15 @@ namespace InfiniteMeals.ViewModel.Checkout {
             }
             else if (!String.IsNullOrEmpty(cvvEntry.Text) && cvvEntry.Text.Length == 3 && this.cvvWarning.IsVisible == true) {
                 this.cvvWarning.IsVisible = false; // hide warning if cvv entry is filled
+            }
+        }
+
+        // function to automatically go from expiration month to expiration year when filled
+        private void expirationMonthEntryTextChanged(object sender, TextChangedEventArgs e) {
+            Entry expirationMonthEntry = (Entry)sender;
+            if(!String.IsNullOrEmpty(expirationMonthEntry.Text) && expirationMonthEntry.Text.Length == 2) {
+                expirationMonthEntry.Unfocus();
+                this.expirationYearEntry.Focus();
             }
         }
     }
