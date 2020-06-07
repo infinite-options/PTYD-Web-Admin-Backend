@@ -216,16 +216,17 @@
 }
 
 .menu-carousel-img {
-  width: 290px;
-  height: 290px;
-  /* padding: 4px; */
+  width: 270px;
+  height: 270px;
+  /* margin: 0 2px 0 2px; */
   transition: .2s;
 }
 
 .menu-carousel-img-container {
   position: relative;
-  padding: 0;
-  width: 290px;
+  margin:0;
+  padding:0;
+  width: 270px;
   display: block;
   cursor: pointer;
   overflow: hidden;
@@ -238,8 +239,8 @@
   left: 0;
   color: #fff;
   background-color: rgba(200, 200, 200, 0.5);
-  width: 290px;
-  height: 290px;
+  width: 270px;
+  height: 270px;
   -webkit-transition: all 400ms ease-out;
   -moz-transition: all 400ms ease-out;
   -o-transition: all 400ms ease-out;
