@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Card, Modal } from "react-bootstrap";
-import { Grid, Cell } from "react-mdl";
+import {Button, Card, Modal} from "react-bootstrap";
+import {Grid, Cell} from "react-mdl";
 import EachMeal from "./EachMeal";
 import PropTypes from "prop-types";
 import Tippy from "@tippyjs/react";
@@ -12,7 +12,7 @@ SelectMealModal.propTypes = {
   incrementMealLeft: PropTypes.func,
   decrementMealLeft: PropTypes.func,
   clickSkip: PropTypes.func,
-  clickSurprise: PropTypes.func,
+  clickSurprise: PropTypes.func
 };
 
 export default function SelectMealModal(props) {
@@ -22,36 +22,33 @@ export default function SelectMealModal(props) {
     left: "10%",
     zIndex: "50",
     height: "700px",
-    width: "600px",
+    width: "600px"
   };
   console.log(props.mealLeft, "mealleft");
   return (
     <Card style={modalStyle}>
       <Card.Header>
-        <Modal.Title style={{ width: "100%" }}>
-          <h4 style={{ float: "left", margin: "0" }} className="font2">
+        <Modal.Title style={{width: "100%"}}>
+          <h4 style={{float: "left", margin: "0"}} className='font2'>
             Please Select {props.mealLeft} Meals:
           </h4>
-          <div style={{ float: "right" }}>
+          <div style={{float: "right"}}>
             &nbsp;&nbsp;
-            <Button style={{ marginRight: "10px" }} onClick={props.clickSkip}>
+            <Button style={{marginRight: "10px"}} onClick={props.clickSkip}>
               Skip This Week
             </Button>
-            <Button
-              style={{ marginRight: "10px" }}
-              onClick={props.clickSurprise}
-            >
+            <Button style={{marginRight: "10px"}} onClick={props.clickSurprise}>
               Surprise Me!
             </Button>
             {props.mealLeft !== 0 ? (
-              <span className="d-inline-block">
+              <span className='d-inline-block'>
                 <Tippy
                   content="Select additional meals to activate this button or click
                   'Skip This Week'/'Surprise Me' to close this box."
                 >
                   <span>
                     <Button
-                      variant="success"
+                      variant='success'
                       disabled={true}
                       //   style={{ pointerEvents: "auto" }}
                     >
@@ -61,29 +58,32 @@ export default function SelectMealModal(props) {
                 </Tippy>
               </span>
             ) : (
-              <Button variant="success" onClick={props.saveSelectMeal}>
+              <Button variant='success' onClick={props.saveSelectMeal}>
                 Save
               </Button>
             )}
           </div>
         </Modal.Title>
       </Card.Header>
-      <div className="scrollMenu">
-        {Object.values(props.Meals).map((meal) => (
+      <div className='scrollMenu'>
+        {Object.values(props.Meals).map(meal => (
           <Grid key={meal.Category}>
             <Cell col={12}>
-              <h4 style={{ margin: "0" }}>{meal.Category}</h4>
+              <h4 style={{margin: "0"}}>{meal.Category}</h4>
             </Cell>
 
-            {meal.Menu.map((description) => {
+            {meal.Menu.map(description => {
               let quantity = 0;
-              for (let [k, v] of Object.entries(
-                props.currentMealSelected.meals_selected
-              )) {
-                if (k === description.meal_id) {
-                  quantity = v;
+              if (props.currentMealSelected.meals_selected !== undefined) {
+                for (let [k, v] of Object.entries(
+                  props.currentMealSelected.meals_selected
+                )) {
+                  if (k === description.meal_id) {
+                    quantity = v;
+                  }
                 }
               }
+
               return (
                 <Cell col={4} key={description.meal_id}>
                   <EachMeal

@@ -2283,18 +2283,22 @@ class MealSelection(Resource):
             disconnect(conn)
 
     def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
+        if mealSelection is not None:
+            mealSelectionString = ""
+            for mealId in mealSelection:
+                for mealCount in range(mealSelection[mealId]):
+                    mealSelectionString += mealId + ";"
+            # Remove last semicolon
+            return mealSelectionString[:-1]
+        else:
+            return ""
 
     def postQuery(self, purchaseId, data):
         selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+        
         if data['is_addons'] == True:
             mealSelection = self.formatMealSelection(data['addon_quantities'])
+
             query = """
                 INSERT INTO ptyd_addons_selected
                 (
@@ -2309,6 +2313,7 @@ class MealSelection(Resource):
                     \'""" + selectionTime + """\',
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + "\');"
+            print("query ", query)
         else:
             # Handle SKIP request
             if data['delivery_day'] == 'SKIP':
@@ -2320,7 +2325,6 @@ class MealSelection(Resource):
             else:
                 mealSelection = self.formatMealSelection(
                     data['meal_quantities'])
-
             query = """
                 INSERT INTO ptyd_meals_selected
                 (
@@ -2337,7 +2341,6 @@ class MealSelection(Resource):
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + """\',
                     \'""" + data['delivery_day'] + "\');"
-
         return query
 
     # HTTP method POST
@@ -2374,9 +2377,7 @@ class MealSelection(Resource):
                 # 500: Internal server error
                 return response, 500
             #               print("purchase_id:", purchaseId)
-
             queries.append(self.postQuery(purchaseId, data))
-
             execute(queries[1], 'post', conn)
 
             response['message'] = 'Request successful.'
