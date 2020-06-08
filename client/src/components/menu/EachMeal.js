@@ -121,9 +121,7 @@ export default class EachMeal extends Component {
                 );
                 return;
               }
-              console.log(this.props.id);
               this.props.incrementMealLeft(this.props.id);
-              this.props.decrementMaxMeal();
             }}
           >
             <b>+</b>

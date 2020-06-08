@@ -97,44 +97,25 @@ export default class MealButton extends Component {
           //   sundayButton: {...prevState.sundayButton, chosen: true},
           //   surpriseButton: {...prevState.surpriseButton, chosen: true}
           // }));
-          this.setSunday();
-          this.setSurprise();
+          this.clickSunday();
+          this.clickSurprise();
         } else if (this.state.currentMealSelected.delivery_day === "Sunday") {
           this.setSunday();
         } else if (this.state.currentMealSelected.delivery_day === "Monday") {
-          this.setState(prevState => ({
-            mondayButton: {...prevState.mondayButton, chosen: true}
-          }));
+          this.setMonday();
         } else if (this.state.currentMealSelected.delivery_day === "SKIP") {
-          // this.setState(prevState => ({
-          //   skipButton: {...prevState.skipButton, chosen: true},
-          //   selectButton: {chosen: false, isDisabled: true},
-          //   surpriseButton: {chosen: false, isDisabled: true},
-          //   addonButton: {chosen: false, isDisabled: true}
-          // }));
           this.setSkip();
         }
-        if (
-          this.state.currentMealSelected.meal_selection === "SURPRISE" ||
-          Object.keys(this.state.currentMealSelected.meal_selection).length ===
-            0
-        ) {
-          this.setState(prevState => ({
-            surpriseButton: {...prevState.surpriseButton, chosen: true}
-          }));
+        if (this.state.currentMealSelected.meal_selection === "SURPRISE") {
+          this.setSurprise();
         } else if (
           this.state.currentMealSelected.meal_selection.length > 0 &&
-          this.state.currentMealSelected.meal_selection !== "SKIP"
+          this.state.currentMealSelected.delivery_day !== "SKIP"
         ) {
-          this.setState(prevState => ({
-            selectButton: {...prevState.selectButton, chosen: true}
-          }));
+          this.setSelect();
         }
-
         if (Object.keys(this.state.currentAddonSelected).length > 0) {
-          this.setState(prevState => ({
-            addonButton: {...prevState.addonButton, chosen: true}
-          }));
+          this.setAddon();
         } else {
           this.setState(prevState => ({
             addonButton: {...prevState.addonButton, chosen: false}
@@ -193,34 +174,18 @@ export default class MealButton extends Component {
         isDisabled: false
       },
       selectButton: {
-        chosen:
-          Object.keys(this.state.currentMealSelected).length !== 0
-            ? true
-            : false,
+        ...prevState.selectButton,
         isDisabled: false
       },
       surpriseButton: {
-        chosen:
-          Object.keys(this.state.currentMealSelected).length !== 0 &&
-          Object.keys(this.state.currentMealSelected.meals_selected).length !==
-            0
-            ? true
-            : false,
+        ...prevState.surpriseButton,
         isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
         isDisabled: false
-      },
-      currentMealSelected: {
-        ...prevState.currentMealSelected,
-        delivery_day: "Sunday"
       }
     }));
-  };
-  clickSunday = async () => {
-    await this.setSunday();
-    this.saveSelectMealAPI();
   };
   setMonday = () => {
     this.setState(prevState => ({
@@ -238,35 +203,61 @@ export default class MealButton extends Component {
         isDisabled: false
       },
       selectButton: {
-        chosen:
-          Object.keys(this.state.currentMealSelected).length !== 0 &&
-          Object.keys(this.state.currentMealSelected.meals_selected).length !==
-            0
-            ? true
-            : false,
+        ...prevState.selectButton,
         isDisabled: false
       },
       surpriseButton: {
-        chosen:
-          Object.keys(this.state.currentMealSelected).length === 0
-            ? true
-            : false,
+        ...prevState.surpriseButton,
         isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
         isDisabled: false
-      },
-      currentMealSelected: {
-        ...prevState.currentMealSelected,
-        delivery_day: "Monday"
       }
     }));
   };
-  clickMonday = async () => {
-    await this.setMonday();
+  clickDay = async day => {
+    // set properties for other button
+    if (day === "sunday") {
+      await this.setSunday();
+    } else {
+      await this.setMonday();
+    }
+    // update the delivery day for currentMealSelected
+    await this.setState(prevState => ({
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: day === "sunday" ? "Sunday" : "Monday",
+        meal_selection:
+          prevState.currentMealSelected.meal_selection === "SKIP"
+            ? ""
+            : prevState.currentMealSelected.meal_selection
+      }
+    }));
+    //Check for "Select" or "Surprise" button
+    // which ones is gonna be shown up
+    let mealSelected = this.state.currentMealSelected.meals_selected;
+    if (mealSelected !== undefined && Object.keys(mealSelected).length > 0) {
+      // there are selected meals
+      this.setSelect();
+    } else {
+      this.clickSurprise();
+    }
+    // check for "Add Local Treats"
+    // Should it be shown up or not
+    let addonSelected = this.state.currentAddonSelected.meal_selected;
+    if (addonSelected !== undefined && Object.keys(addonSelected).length > 0) {
+      this.setAddon();
+    }
+    // update the delivery day for database
     this.saveSelectMealAPI();
   };
+
+  // clickMonday = async () => {
+  //   await this.setMonday();
+  //   this.saveSelectMealAPI();
+  // };
+
   setSkip = () => {
     this.setState(prevState => ({
       sundayButton: {
@@ -299,38 +290,43 @@ export default class MealButton extends Component {
         red: false,
         showModal: false,
         isDisabled: true
-      },
-      currentMealSelected: {
-        ...prevState.currentMealSelected,
-        delivery_day: "SKIP"
       }
     }));
   };
   clickSkip = async () => {
+    // Disable all other buttons except Sunday and Monday buttons
     await this.setSkip();
+    // Set delivery day and meals selection to SKIP
+    await this.setState(prevState => ({
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        delivery_day: "SKIP",
+        meal_selection: "SKIP"
+      }
+    }));
     // send a form to database to write a
     this.saveSelectMealAPI();
   };
-  clickSelect = () => {
+  setSelect = () => {
     this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
         // chosen: false,
-        isDisabled: true
+        isDisabled: false
       },
       mondayButton: {
         ...prevState.mondayButton,
         // chosen: false,
-        isDisabled: true
+        isDisabled: false
       },
       skipButton: {
         ...prevState.skipButton,
+        chosen: false,
         isDisabled: false
       },
       selectButton: {
+        ...prevState.selectButton,
         chosen: true,
-        red: true,
-        showModal: true,
         isDisabled: false
       },
       surpriseButton: {
@@ -340,7 +336,17 @@ export default class MealButton extends Component {
       },
       addonButton: {
         ...prevState.addonButton,
-        isDisabled: true
+        isDisabled: false
+      }
+    }));
+  };
+  clickSelect = async () => {
+    await this.setSelect();
+    this.setState(prevState => ({
+      selectButton: {
+        ...prevState.selectButton,
+        showModal: true,
+        red: true
       }
     }));
   };
@@ -357,12 +363,14 @@ export default class MealButton extends Component {
       },
       skipButton: {
         ...prevState.skipButton,
+        chosen: false,
         isDisabled: false
       },
       selectButton: {
         ...prevState.selectButton,
         showModal: false,
         chosen: false,
+        red: false,
         isDisabled: false
       },
       surpriseButton: {
@@ -373,28 +381,32 @@ export default class MealButton extends Component {
       addonButton: {
         ...prevState.addonButton,
         isDisabled: false
-      },
+      }
+    }));
+  };
+  clickSurprise = async () => {
+    //set properties for all other buttons
+    await this.setSurprise();
+    // update state for currentMealSelected
+    await this.setState(prevState => ({
       currentMealSelected: {
         ...prevState.currentMealSelected,
         meal_selection: "SURPRISE"
       }
     }));
-  };
-  clickSurprise = () => {
-    this.setSurprise();
     //send a request to database
     this.saveSelectMealAPI();
   };
   /* Addon button is clicked. All others button will inactive. until Agree to Pay is clicked */
-  clickAddOn = () => {
+  setAddon = () => {
     this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
-        isDisabled: true
+        isDisabled: false
       },
       mondayButton: {
         ...prevState.mondayButton,
-        isDisabled: true
+        isDisabled: false
       },
       skipButton: {
         ...prevState.skipButton,
@@ -402,50 +414,64 @@ export default class MealButton extends Component {
       },
       selectButton: {
         ...prevState.selectButton,
-        isDisabled: true
+        isDisabled: false
       },
       surpriseButton: {
         ...prevState.surpriseButton,
-        isDisabled: true
+        isDisabled: false
       },
       addonButton: {
         ...prevState.addonButton,
         chosen: true,
-        red: true,
-        showModal: true,
         isDisabled: false
       }
     }));
   };
 
-  closeAddonModal = () => {
+  clickAddon = () => {
+    this.setAddon();
+    console.log("addon shows up");
     this.setState(prevState => ({
+      addonButton: {
+        ...prevState.addonButton,
+        red: true,
+        showModal: true
+      },
       sundayButton: {
         ...prevState.sundayButton,
-        isDisabled: false
+        isDisabled: true
       },
       mondayButton: {
         ...prevState.mondayButton,
-        isDisabled: false
+        isDisabled: true
       },
       skipButton: {
         ...prevState.skipButton,
-        isDisabled: false
+        isDisabled: true
       },
       selectButton: {
         ...prevState.selectButton,
-        isDisabled: false
+        isDisabled: true
       },
       surpriseButton: {
         ...prevState.surpriseButton,
-        isDisabled: false
-      },
+        isDisabled: true
+      }
+    }));
+  };
+  closeAddonModal = () => {
+    let addonSelected = this.state.currentAddonSelected.meal_selected;
+    let choose = false;
+    if (addonSelected !== undefined && Object.keys(addonSelected).length > 0) {
+      choose = true;
+    }
+    this.setAddon();
+    this.setState(prevState => ({
       addonButton: {
         ...prevState.addonButton,
-        chosen: false,
         red: false,
         showModal: false,
-        isDisabled: false
+        chosen: choose
       }
     }));
   };
@@ -458,9 +484,25 @@ export default class MealButton extends Component {
     // this.setState({ mealLeft: this.state.mealLeft - 1 });
   };
 
-  saveSelectMeal = () => {
+  //helper function to create a new string for meal selection
+  concatMealSelection = (mealSelection, mealSelected) => {
+    let newValue = ""; // create a new value for meal_selection
+    for (let key of Object.keys(mealSelected)) {
+      let loop_times = parseInt(mealSelected[key]);
+      for (let i = 0; i < loop_times; i++) {
+        if (newValue === "") {
+          newValue = newValue + key;
+        } else {
+          newValue = newValue + ";" + key;
+        }
+      }
+    }
+    return newValue;
+  };
+
+  saveSelectMeal = async () => {
     // set state for all button
-    this.setState(prevState => ({
+    await this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
         isDisabled: false
@@ -491,11 +533,19 @@ export default class MealButton extends Component {
     }));
     // update local variable
 
+    let mealSelection = this.state.currentMealSelected.meal_selection;
+    let mealSelected = this.state.currentMealSelected.meals_selected;
+    await this.setState(prevState => ({
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        meal_selection: this.concatMealSelection(mealSelection, mealSelected)
+      }
+    }));
     // send request to save to serve
     this.saveSelectMealAPI();
   };
-  saveButtonAddOn = () => {
-    this.setState(prevState => ({
+  saveButtonAddOn = async () => {
+    await this.setState(prevState => ({
       sundayButton: {
         ...prevState.sundayButton,
         isDisabled: false
@@ -526,22 +576,31 @@ export default class MealButton extends Component {
       }
     }));
     //check if we change the addon of the current week
-
     if (
       this.state.currentPurchase.week_affected ===
       this.state.weekMenu.SaturdayDate
     ) {
       //update currentPurchase
-      this.setState(prevState => ({
+      await this.setState(prevState => ({
         currentPurchase: {
           ...prevState.currentPurchase,
-          total_charge: this.state.totalAddonPrice
+          total_charge: parseInt(this.state.totalAddonPrice)
         }
       }));
       //update parent
       console.log("calling changeCurrentCharge from MealButton");
       this.props.ChangeCurrentAddonCharge(this.state.totalAddonPrice);
     }
+
+    //Update local variables
+    let mealSelection = this.state.currentAddonSelected.meal_selection;
+    let mealSelected = this.state.currentAddonSelected.meals_selected;
+    await this.setState(prevState => ({
+      currentAddonSelected: {
+        ...prevState.currentAddonSelected,
+        meal_selection: this.concatMealSelection(mealSelection, mealSelected)
+      }
+    }));
     //update database
     this.saveAddonAPI();
   };
@@ -553,53 +612,65 @@ export default class MealButton extends Component {
       meal_selection,
       meals_selected
     } = this.state.currentMealSelected;
-    console.log("delivery day: ", delivery_day);
-    console.log("meal selected: ", meals_selected);
-    console.log("sundayDate: ", this.state.weekMenu);
-    fetch(
-      `${this.props.MEAL_SELECT_API_URL}/${this.state.currentPurchase.purchase_id}`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          purchase_id:
-            purchase_id !== undefined
-              ? purchase_id
-              : this.state.currentPurchase.purchase_id,
-          week_affected:
-            week_affected !== undefined
-              ? week_affected
-              : this.state.weekMenu.SaturdayDate,
-          meal_quantities: meals_selected === undefined ? null : meals_selected,
-          delivery_day: delivery_day === undefined ? "Sunday" : delivery_day,
-          default_selected: this.state.surpriseButton.isDisabled,
-          is_addons: false
-        })
-      }
-    );
-  };
-  saveAddonAPI = () => {
-    const {
-      purchase_id,
-      week_affected,
 
-      meal_selection,
-      meals_selected
-    } = this.state.currentAddonSelected;
-    fetch(`${this.props.MEAL_SELECT_API_URL}/${purchase_id}`, {
+    // set parameters for sending form
+    console.log("meal_selection: ", meal_selection);
+    let defaultSelected = meal_selection === "SURPRISE" ? true : false;
+    console.log("defaultSelected: ", defaultSelected);
+    let purchaseID =
+      purchase_id !== undefined
+        ? purchase_id
+        : this.state.currentPurchase.purchase_id;
+    let weekAffected =
+      week_affected !== undefined
+        ? week_affected
+        : this.state.weekMenu.SaturdayDate;
+    let mealQuantities = meals_selected === undefined ? null : meals_selected;
+    let deliveryDay = delivery_day === undefined ? "Sunday" : delivery_day;
+    //sending request to the server
+
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseID}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        purchase_id: purchase_id,
-        week_affected: week_affected,
-        addon_quantities: meals_selected,
-        default_selected: this.state.surpriseButton.isDisabled,
+        purchase_id: purchaseID,
+        week_affected: weekAffected,
+        meal_quantities: mealQuantities,
+        delivery_day: deliveryDay,
+        default_selected: defaultSelected,
+        is_addons: false // distinguished between save Select and save Add Local Treats. can pass this as parameter if we don't want duplicated code.
+      })
+    });
+  };
+  saveAddonAPI = () => {
+    const {
+      purchase_id,
+      week_affected,
+      meals_selected
+    } = this.state.currentAddonSelected;
+
+    let purchaseID =
+      purchase_id !== undefined
+        ? purchase_id
+        : this.state.currentPurchase.purchase_id;
+    let weekAffected =
+      week_affected !== undefined
+        ? week_affected
+        : this.state.weekMenu.SaturdayDate;
+    let addonQuantities = meals_selected === undefined ? null : meals_selected;
+    fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseID}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        purchase_id: purchaseID,
+        week_affected: weekAffected,
+        addon_quantities: addonQuantities,
         is_addons: true
       })
     });
@@ -622,11 +693,6 @@ export default class MealButton extends Component {
       this.setState(prevState => ({
         currentMealSelected: {
           ...prevState.currentMealSelected,
-          week_affected: this.state.weekMenu.SaturdayDate, // need to know which week is affected.
-          purchase_id: this.state.currentPurchase.purchase_id,
-          delivery_day: this.state.sundayButton.chosen
-            ? this.state.weekMenu.sundayDate
-            : this.state.weekMenu.mondayDate,
           meals_selected: {
             ...prevState.currentMealSelected.meals_selected,
             [id]: 1
@@ -654,8 +720,6 @@ export default class MealButton extends Component {
       this.setState(prevState => ({
         currentAddonSelected: {
           ...prevState.currentAddonSelected,
-          week_affected: this.state.weekMenu.SaturdayDate, // need to know which week is affected.
-          purchase_id: this.state.currentPurchase.purchase_id,
           meals_selected: {
             ...prevState.currentAddonSelected.meals_selected,
             [id]: 1
@@ -818,7 +882,9 @@ export default class MealButton extends Component {
             <Button
               variant='outline-dark'
               disabled={sundayButton.isDisabled}
-              onClick={this.clickSunday}
+              onClick={() => {
+                this.clickDay("sunday");
+              }}
               style={sundayColor}
             >
               Sunday
@@ -828,7 +894,9 @@ export default class MealButton extends Component {
             <Button
               variant='outline-dark'
               disabled={mondayButton.isDisabled}
-              onClick={this.clickMonday}
+              onClick={() => {
+                this.clickDay("monday");
+              }}
               style={mondayColor}
             >
               Monday
@@ -867,7 +935,7 @@ export default class MealButton extends Component {
             disabled={addonButton.isDisabled}
             variant='outline-dark'
             style={addonColor}
-            onClick={this.clickAddOn}
+            onClick={this.clickAddon}
           >
             Add Local Treats
           </Button>

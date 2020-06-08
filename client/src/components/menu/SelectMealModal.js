@@ -91,8 +91,6 @@ export default function SelectMealModal(props) {
                     description={description}
                     incrementMealLeft={props.incrementMealLeft}
                     decrementMealLeft={props.decrementMealLeft}
-                    incrementMaxMeal={props.incrementMaxMeal}
-                    decrementMaxMeal={props.decrementMaxMeal}
                     currentMealSelected={props.currentMealSelected}
                     quantity={quantity}
                   />

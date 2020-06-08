@@ -2317,7 +2317,6 @@ class MealSelection(Resource):
                     \'""" + selectionTime + """\',
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + "\');"
-            print("query ", query)
         else:
             # Handle SKIP request
             if data['delivery_day'] == 'SKIP':
@@ -2327,12 +2326,7 @@ class MealSelection(Resource):
                 mealSelection = 'SURPRISE'
             # Handle custom meal selection
             else:
-                print("inside function")
                 mealSelection = self.formatMealSelection(data['meal_quantities'])
-                print("mealSelection: ", mealSelection)
-                print("purchasedID: ", purchaseID)
-                print("data['week_affected']", data['week_affected'])
-                print("data['delivery_day']", data['delivery_day'])
             query = """
                 INSERT INTO ptyd_meals_selected
                 (
