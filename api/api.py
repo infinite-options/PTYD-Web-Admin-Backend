@@ -2115,6 +2115,7 @@ class ChargeSubscribers(Resource):
 
 
 class MealSelection(Resource):
+
     def readQuery(self, items):
         print(items)
         for item in items:
@@ -2136,6 +2137,7 @@ class MealSelection(Resource):
     def get(self, purchaseId):
         response = {}
         items = {}
+        print('I made change onn this')
         try:
             conn = connect()
 
