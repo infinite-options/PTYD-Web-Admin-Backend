@@ -58,8 +58,9 @@ mail = Mail(app)
 # API
 api = Api(app)
 
-getToday = lambda: datetime.strftime(date.today(), "%Y-%m-%d")
-getNow = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+
+def getToday(): return datetime.strftime(date.today(), "%Y-%m-%d")
+def getNow(): return datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
 # Connect to MySQL database (API v2)
 
@@ -458,12 +459,11 @@ class Meals(Resource):
 
                     thursday = stamp - timedelta(days=2)
 
-                    today = datetime.now();
-                    print("Thurday: ", thursday);
+                    today = datetime.now()
+                    print("Thurday: ", thursday)
                     print("today: ", today)
 
                     if today < thursday:
-                        print("broke")
                         # stamp = stamp + timedelta(days=7)
 
                         week = {
@@ -500,6 +500,7 @@ class Meals(Resource):
                                 }
                             }
                         }
+                        print("broke")
 
                         week['MealQuantities'] = self.getMealQuantities(week)
                         week['AddonPrice'] = self.getAddonPrice(week)
@@ -512,7 +513,7 @@ class Meals(Resource):
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
-
+            print("broke .here")
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -589,7 +590,7 @@ class Account(Resource):
                         last_update,
                         referral_source
                     FROM ptyd_accounts""" +
-                    "\nWHERE user_uid = " + "\'" + accId + "\';"]
+                "\nWHERE user_uid = " + "\'" + accId + "\';"]
 
             items = execute(queries[0], 'get', conn)
             user_uid = items['result'][0]['user_uid']
@@ -748,9 +749,9 @@ class ResetPassword (Resource):
     def get(self):
         response = {}
         try:
-            conn = connect();
+            conn = connect()
             # search for email;
-            email = request.args.get('email');
+            email = request.args.get('email')
             if email == None:
                 response['message'] = "Invalid Email Address"
                 return response, 400
@@ -791,7 +792,7 @@ class ResetPassword (Resource):
 
 class ChangePassword(Resource):
     def post(self):
-        response = {};
+        response = {}
         try:
             conn = connect()
             data = request.get_json(force=True)
@@ -801,7 +802,7 @@ class ChangePassword(Resource):
             old_pass = data['old']
             new_pass = data['new']
             query = """SELECT password_hash, password_salt FROM ptyd_passwords WHERE password_user_uid = '""" \
-                        + user_uid + "';"
+                + user_uid + "';"
             query_result = execute(query, "get", conn)
             if (query_result.get('code') == 280):
                 salt = query_result.get('result')[0].get('password_salt')
@@ -831,11 +832,13 @@ class ChangePassword(Resource):
         finally:
             disconnect(conn)
 # ADD Update to Payments
+
+
 class AccountPurchases(Resource):
     # HTTP method GET
     def get(self, buyerId):
         response = {}
-        
+
         try:
             start_date = request.args.get('startdate')
 
@@ -844,7 +847,7 @@ class AccountPurchases(Resource):
                 now = startDate
             else:
                 now = date.today()
-            
+
         except:
             raise BadRequest('Request failed, bad startDate parameter.')
 
@@ -862,10 +865,9 @@ class AccountPurchases(Resource):
 
             if now + timedelta(days=7) > thur:
                 thur += timedelta(days=7)
-            #change sat into string
+            # change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
-            
 
             queries = ["""
                 SELECT 
@@ -1063,8 +1065,6 @@ class AccountPurchases(Resource):
                 GROUP BY snap.payment_id;""",
                        "   SELECT * FROM ptyd_monday_zipcodes;"]
 
-            
-
             items = execute(queries[0], 'get', conn)
             mondayZipsQuery = execute(queries[1], 'get', conn)
 
@@ -1103,9 +1103,12 @@ class AccountPurchases(Resource):
 
 '''This part use for testing of sending confirmation email'''
 
-s = URLSafeTimedSerializer('thisisaverysecretkey')  # should put the secret key in this.
+# should put the secret key in this.
+s = URLSafeTimedSerializer('thisisaverysecretkey')
 
 '''Confirmation testing is ended here'''
+
+
 class SignUp(Resource):
     # HTTP method POST
     def post(self):
@@ -1124,12 +1127,10 @@ class SignUp(Resource):
             LastUpdate = CreateDate
             Referral = data['Referral']
 
-
             queries = ["CALL get_new_user_id;"]
 
             NewUserIDresponse = execute(queries[0], 'get', conn)
             NewUserID = NewUserIDresponse['result'][0]['new_id']
-
 
             # Not storing customer addresses
             queries.append(
@@ -1227,9 +1228,12 @@ class SignUp(Resource):
             # this part using for testing email verification
 
             token = s.dumps(Email)
-            msg = Message("Email Verification", sender='ptydtesting@gmail.com', recipients=[Email])
-            link = url_for('confirm', token=token, hashed=hashed, _external=True)
-            msg.body = "Click on the link {} to verify your email address.".format(link)
+            msg = Message("Email Verification",
+                          sender='ptydtesting@gmail.com', recipients=[Email])
+            link = url_for('confirm', token=token,
+                           hashed=hashed, _external=True)
+            msg.body = "Click on the link {} to verify your email address.".format(
+                link)
 
             mail.send(msg)
             # email verification testing s ended here...
@@ -1247,24 +1251,25 @@ class SignUp(Resource):
         finally:
             disconnect(conn)
 
+
 class Coordinates:
-    # array of addresses such as 
-    # ['Dunning Ln, Austin, TX 78746', '12916 Cardinal Flower Drive, Austin, TX 78739', '51 Rainey St., austin, TX 78701']
+    # array of addresses such as
+    #['Dunning Ln, Austin, TX 78746', '12916 Cardinal Flower Drive, Austin, TX 78739', '51 Rainey St., austin, TX 78701']
     def __init__(self, locations):
         self.locations = locations
-    
+
     def calculateFromLocations(self):
         global BING_API_KEY
 
         params = {
-        'key' : BING_API_KEY
+            'key': BING_API_KEY
         }
         coordinates = []
         for address in self.locations:
             formattedAddress = self.formatAddress(address)
-            print ("address: ", address)
-            r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),\
-                '&maxResults=1&key={}'.format(params['key']))
+            print("address: ", address)
+            r = requests.get('http://dev.virtualearth.net/REST/v1/Locations/{}'.format(formattedAddress),
+                             '&maxResults=1&key={}'.format(params['key']))
             print("result:", r)
             try:
                 results = r.json()
@@ -1272,7 +1277,7 @@ class Coordinates:
                 point = results['resourceSets'][0]['resources'][0]['geocodePoints'][0]['coordinates']
                 lat, lng = point[0], point[1]
             except:
-                lat,lng = None, None
+                lat, lng = None, None
 
             # appends a dictionary of latitude and longitude points for the given address
             coordinates.append({
@@ -1291,17 +1296,20 @@ class Coordinates:
     def formatAddress(self, address):
         output = address.replace(" ", "%20")
         if "." in output:
-            output = output.replace(".","")
+            output = output.replace(".", "")
         return output
 
 # confirmation page
+
+
 @app.route('/api/v2/confirm/<token>/<hashed>', methods=['GET'])
 def confirm(token, hashed):
     try:
-        email = s.loads(token)#max_age = 86400 = 1 day
+        email = s.loads(token)  # max_age = 86400 = 1 day
         # marking email confirmed in database, then...
         conn = connect()
-        query = """UPDATE ptyd_accounts SET email_verify = 1 WHERE user_email = \'""" + email + """\';""";
+        query = """UPDATE ptyd_accounts SET email_verify = 1 WHERE user_email = \'""" + \
+            email + """\';"""
         update = execute(query, 'post', conn)
         if update.get('code') == 281:
             # redirect to login page
@@ -1309,15 +1317,17 @@ def confirm(token, hashed):
         else:
             print("Error happened while confirming an email address.")
             error = "Confirm error."
-            err_code = 401 # Verification code is incorrect
+            err_code = 401  # Verification code is incorrect
             return error, err_code
     except (SignatureExpired, BadTimeSignature) as err:
-        status=403 #forbidden
+        status = 403  # forbidden
         return str(err), status
     finally:
         disconnect(conn)
 
 # NEED CODE FOR NON-RECURRING ONE TIME PLANS
+
+
 class Checkout(Resource):
     def getPaymentQuery(self, data, paymentId, purchaseId):
         query = """ INSERT INTO ptyd_payments
@@ -1374,15 +1384,20 @@ class Checkout(Resource):
         # Set next billing date to Friday after the end date
         if frequency == 'Weekly':
             dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (
+                thurs + timedelta(days=7)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '1'
         elif frequency == '2 Week Pre-Pay':
-            dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
+            dates['endDate'] = (thurs + timedelta(days=11)
+                                ).strftime("%Y-%m-%d")
+            dates['billingDate'] = (
+                thurs + timedelta(days=14)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '2'
         elif frequency == '4 Week Pre-Pay':
-            dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
+            dates['endDate'] = (thurs + timedelta(days=25)
+                                ).strftime("%Y-%m-%d")
+            dates['billingDate'] = (
+                thurs + timedelta(days=28)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '4'
 
         return dates
@@ -1404,8 +1419,10 @@ class Checkout(Resource):
             else:
                 DeliveryUnit = 'NULL'
 
-            purchaseIDresponse = execute("CALL get_new_purchase_id;", 'get', conn)
-            paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
+            purchaseIDresponse = execute(
+                "CALL get_new_purchase_id;", 'get', conn)
+            paymentIDresponse = execute(
+                "CALL get_new_payment_id;", 'get', conn)
             snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
 
             print(snapshotIDresponse)
@@ -1424,7 +1441,6 @@ class Checkout(Resource):
 
             if paymentId == None:
                 paymentId = '200-000001'
-
 
             mealPlan = data['item'].split(' Subscription')[0]
 
@@ -1453,7 +1469,8 @@ class Checkout(Resource):
 
             userAuth = execute(queries[0], 'get', conn)
             possSocialAcc = execute(
-                "SELECT user_uid FROM ptyd_social_accounts WHERE user_uid = '" + data['user_uid'] + "';", 'get',
+                "SELECT user_uid FROM ptyd_social_accounts WHERE user_uid = '" +
+                data['user_uid'] + "';", 'get',
                 conn)
 
             if len(possSocialAcc['result']) != 0:
@@ -1480,7 +1497,8 @@ class Checkout(Resource):
             if mealPlanQuery['code'] == 280:
                 print("Getting meal plan ID...")
                 mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
-                dates = self.getDates(mealPlanQuery['result'][0]['payment_frequency'])
+                dates = self.getDates(
+                    mealPlanQuery['result'][0]['payment_frequency'])
                 print("Meal Plan ID:", mealPlanId)
             else:
                 response['message'] = 'Could not retrieve meal ID of requested plan.'
@@ -1502,7 +1520,8 @@ class Checkout(Resource):
                 if delivery_coord[key] == None:
                     delivery_coord[key] = 'NULL'
                 else:
-                    delivery_coord[key] = '\'' + str(delivery_coord[key]) + '\''
+                    delivery_coord[key] = '\'' + \
+                        str(delivery_coord[key]) + '\''
 
             queries.append(
                 """ INSERT INTO ptyd_purchases
@@ -1604,8 +1623,10 @@ class Checkout(Resource):
             disconnect(conn)
 
 # Call this API from another source every Monday at midnight
+
+
 class UpdatePurchases(Resource):
-    def post(self, affectedDate = None):
+    def post(self, affectedDate=None):
         response = {}
         items = []
 
@@ -1613,12 +1634,16 @@ class UpdatePurchases(Resource):
             if affectedDate:
                 affDateObj = datetime.strptime(affectedDate, "%Y%m%d")
                 print(affDateObj)
-                thisSat = datetime.strftime(affDateObj - timedelta(days=((affDateObj.weekday() - 5) % 7)), "%Y-%m-%d")
-                nextSat = datetime.strftime(affDateObj + timedelta(days=(5 - affDateObj.weekday() % 7)), "%Y-%m-%d")
+                thisSat = datetime.strftime(
+                    affDateObj - timedelta(days=((affDateObj.weekday() - 5) % 7)), "%Y-%m-%d")
+                nextSat = datetime.strftime(
+                    affDateObj + timedelta(days=(5 - affDateObj.weekday() % 7)), "%Y-%m-%d")
             else:
                 # Get following Saturday (same day if Saturday) as a string
-                thisSat = datetime.strftime(date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
-                nextSat = datetime.strftime(date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
+                thisSat = datetime.strftime(
+                    date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
+                nextSat = datetime.strftime(
+                    date.today() + timedelta(days=(5 - date.today().weekday() % 7)), "%Y-%m-%d")
         except:
             print('Error: Bad parameter.')
             raise BadRequest('Request failed, bad affectedDate parameter.')
@@ -1760,7 +1785,8 @@ class UpdatePurchases(Resource):
 
             for eachPurchase in allPurchases:
                 #               print(eachPurchase)
-                newSnapshotQuery = execute("CALL get_snapshots_id", 'get', conn)
+                newSnapshotQuery = execute(
+                    "CALL get_snapshots_id", 'get', conn)
 
                 if newSnapshotQuery['code'] != 280:
                     response['message'] = 'Could not generate new snapshot ID.'
@@ -1899,17 +1925,22 @@ class ChargeSubscribers(Resource):
         # Set next billing date to Friday after the end date
         if frequency == 1:
             dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=7)).strftime("%Y-%m-%d")
+            dates['billingDate'] = (
+                thurs + timedelta(days=7)).strftime("%Y-%m-%d")
         elif frequency == 2:
-            dates['endDate'] = (thurs + timedelta(days=11)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=14)).strftime("%Y-%m-%d")
+            dates['endDate'] = (thurs + timedelta(days=11)
+                                ).strftime("%Y-%m-%d")
+            dates['billingDate'] = (
+                thurs + timedelta(days=14)).strftime("%Y-%m-%d")
         elif frequency == 4:
-            dates['endDate'] = (thurs + timedelta(days=25)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (thurs + timedelta(days=28)).strftime("%Y-%m-%d")
+            dates['endDate'] = (thurs + timedelta(days=25)
+                                ).strftime("%Y-%m-%d")
+            dates['billingDate'] = (
+                thurs + timedelta(days=28)).strftime("%Y-%m-%d")
 
         return dates
 
-    def post(self, affectedDate = None):
+    def post(self, affectedDate=None):
         response = {}
         items = []
 
@@ -1980,8 +2011,10 @@ class ChargeSubscribers(Resource):
                 return response, 500
 
             for eachPayment in duePayments['result']:
-                newSnapshotQuery = execute("CALL get_snapshots_id", 'get', conn)
-                newPaymentQuery = execute("CALL get_new_payment_id", 'get', conn)
+                newSnapshotQuery = execute(
+                    "CALL get_snapshots_id", 'get', conn)
+                newPaymentQuery = execute(
+                    "CALL get_new_payment_id", 'get', conn)
 
                 if newSnapshotQuery['code'] != 280:
                     response['message'] = 'Could not generate new snapshot ID.'
@@ -2034,7 +2067,8 @@ class ChargeSubscribers(Resource):
                 items.append(execute(query, 'post', conn))
 
                 # New snapshot
-                dates = self.getDates(eachPayment['subscription_weeks'], paramDate)
+                dates = self.getDates(
+                    eachPayment['subscription_weeks'], paramDate)
                 query = """
                     INSERT INTO ptyd_snapshots
                     (
@@ -2082,7 +2116,9 @@ class ChargeSubscribers(Resource):
 
 
 class MealSelection(Resource):
+
     def readQuery(self, items):
+        print(items)
         for item in items:
             item['meals_selected'] = {}
             if item['meal_selection'] == 'SKIP':
@@ -2102,6 +2138,8 @@ class MealSelection(Resource):
     def get(self, purchaseId):
         response = {}
         items = {}
+
+        print('I made change onn this')
         try:
             conn = connect()
 
@@ -2122,9 +2160,9 @@ class MealSelection(Resource):
 #                           FROM ptyd_snapshots
 #                           GROUP BY purchase_id
 #                               , week_affected)
-#                           AS snap2 
-#                       ON snap1.purchase_id = snap2.purchase_id 
-#                           AND snap1.week_affected = snap2.week_affected 
+#                           AS snap2
+#                       ON snap1.purchase_id = snap2.purchase_id
+#                           AND snap1.week_affected = snap2.week_affected
 #                           AND snap1.snapshot_timestamp = snap2.latest_snapshot)
 #                       AS active
 #                   LEFT JOIN (
@@ -2145,12 +2183,12 @@ class MealSelection(Resource):
 #                       FROM ptyd_meals_selected
 #                       GROUP BY purchase_id
 #                           , week_affected)
-#                       AS ms2 
-#                   ON ms1.purchase_id = ms2.purchase_id 
-#                       AND ms1.week_affected = ms2.week_affected 
+#                       AS ms2
+#                   ON ms1.purchase_id = ms2.purchase_id
+#                       AND ms1.week_affected = ms2.week_affected
 #                       AND ms1.selection_time = ms2.latest_selection)
 #                   AS latest_sel
-#               ON latest_active.purchase_id = latest_sel.purchase_id 
+#               ON latest_active.purchase_id = latest_sel.purchase_id
 #                   AND latest_active.week_affected = latest_sel.week_affected
 #               WHERE
 #                   latest_active.purchase_id = \'""" + purchaseId + """\'
@@ -2159,7 +2197,7 @@ class MealSelection(Resource):
 #                   ms1.purchase_id
 #                   , ms1.week_affected
 #                   , ms1.meal_selection
-#                   
+#
 #               FROM ptyd_addons_selected AS ms1
 #               INNER JOIN (
 #                   SELECT
@@ -2170,7 +2208,7 @@ class MealSelection(Resource):
 #                   FROM ptyd_addons_selected
 #                   GROUP BY purchase_id
 #                       , week_affected
-#               ) as ms2 
+#               ) as ms2
 #               ON
 #                   ms1.purchase_id = ms2.purchase_id
 #               AND
@@ -2249,18 +2287,22 @@ class MealSelection(Resource):
             disconnect(conn)
 
     def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
+        if mealSelection is not None:
+            mealSelectionString = ""
+            for mealId in mealSelection:
+                for mealCount in range(mealSelection[mealId]):
+                    mealSelectionString += mealId + ";"
+            # Remove last semicolon
+            return mealSelectionString[:-1]
+        else:
+            return ""
 
     def postQuery(self, purchaseId, data):
         selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+        
         if data['is_addons'] == True:
             mealSelection = self.formatMealSelection(data['addon_quantities'])
+
             query = """
                 INSERT INTO ptyd_addons_selected
                 (
@@ -2275,6 +2317,7 @@ class MealSelection(Resource):
                     \'""" + selectionTime + """\',
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + "\');"
+            print("query ", query)
         else:
             # Handle SKIP request
             if data['delivery_day'] == 'SKIP':
@@ -2284,8 +2327,8 @@ class MealSelection(Resource):
                 mealSelection = 'SURPRISE'
             # Handle custom meal selection
             else:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
-
+                mealSelection = self.formatMealSelection(
+                    data['meal_quantities'])
             query = """
                 INSERT INTO ptyd_meals_selected
                 (
@@ -2302,7 +2345,6 @@ class MealSelection(Resource):
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + """\',
                     \'""" + data['delivery_day'] + "\');"
-
         return query
 
     # HTTP method POST
@@ -2339,9 +2381,7 @@ class MealSelection(Resource):
                 # 500: Internal server error
                 return response, 500
             #               print("purchase_id:", purchaseId)
-
             queries.append(self.postQuery(purchaseId, data))
-
             execute(queries[1], 'post', conn)
 
             response['message'] = 'Request successful.'
@@ -2351,6 +2391,7 @@ class MealSelection(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class SocialSignUp(Resource):
     # HTTP method POST
@@ -2399,15 +2440,15 @@ class SocialSignUp(Resource):
                     )
                     VALUES
                     (""" +
-                        "\'" + NewUserID + "\'," +
-                        "\'" + Email + "\'," +
-                        "\'" + FirstName + "\'," +
-                        "\'" + LastName + "\'," +
-                        "\'" + PhoneNumber + "\'," +
-                        "\'" + WeeklyUpdates + "\'," +
-                        "\'" + CreateDate + "\'," +
-                        "\'" + LastUpdate + "\'," +
-                        "\'" + Referral + "\', \'1\');")
+                "\'" + NewUserID + "\'," +
+                "\'" + Email + "\'," +
+                "\'" + FirstName + "\'," +
+                "\'" + LastName + "\'," +
+                "\'" + PhoneNumber + "\'," +
+                "\'" + WeeklyUpdates + "\'," +
+                "\'" + CreateDate + "\'," +
+                "\'" + LastUpdate + "\'," +
+                "\'" + Referral + "\', \'1\');")
 
             # Query [2]
             queries.append("""
@@ -2446,7 +2487,8 @@ class SocialSignUp(Resource):
                     response['result'] = 'Internal server error.'
 
                 response['code'] = usnInsert['code']
-                print(response['message'], response['result'], usnInsert['code'])
+                print(response['message'],
+                      response['result'], usnInsert['code'])
                 return response, statusCode
 
             socInsert = execute(queries[2], 'post', conn)
@@ -2454,11 +2496,12 @@ class SocialSignUp(Resource):
             if socInsert['code'] != 281:
                 response['message'] = 'Request failed.'
                 response['result'] = 'Could not commit password.'
-                print(response['message'], response['result'], socInsert['code'])
+                print(response['message'],
+                      response['result'], socInsert['code'])
                 return response, 500
 
             response['message'] = 'Request successful.'
-            response['result'] = {'user_uid':NewUserID}
+            response['result'] = {'user_uid': NewUserID}
 
             print(response)
             return response, 200
@@ -2468,6 +2511,8 @@ class SocialSignUp(Resource):
             disconnect(conn)
 
 # Social Media Login API
+
+
 class Social(Resource):
 
     # HTTP method GET
@@ -2477,7 +2522,7 @@ class Social(Resource):
             conn = connect()
 
             queries = [
-            """     SELECT
+                """     SELECT
                         user_uid,
                         user_email,
                         user_social_media,
@@ -2497,6 +2542,7 @@ class Social(Resource):
         finally:
             disconnect(conn)
 
+
 class SocialAccount(Resource):
 
     # HTTP method POST
@@ -2506,7 +2552,7 @@ class SocialAccount(Resource):
             conn = connect()
             data = request.get_json(force=True)
             queries = [
-            """     SELECT
+                """     SELECT
                         user_uid,
                         first_name,
                         last_name,
@@ -2515,8 +2561,7 @@ class SocialAccount(Resource):
                         create_date,
                         last_update,
                         referral_source
-                    FROM ptyd_accounts WHERE user_uid = '""" + uid + "';" ]
-
+                    FROM ptyd_accounts WHERE user_uid = '""" + uid + "';"]
 
             items = execute(queries[0], 'get', conn)
             # create a login attempt
@@ -2528,7 +2573,8 @@ class SocialAccount(Resource):
                 'browser_type': data['browser_type'],
             }
 
-            response['login_attempt_log'] = LogLoginAttempt(login_attempt, conn)
+            response['login_attempt_log'] = LogLoginAttempt(
+                login_attempt, conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -2538,6 +2584,7 @@ class SocialAccount(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 class CheckEmail(Resource):
 
@@ -2550,7 +2597,8 @@ class CheckEmail(Resource):
             conn = connect()
 
             queries = []
-            queries.append( "SELECT user_email FROM ptyd_accounts WHERE user_email = '" + email + "';" )
+            queries.append(
+                "SELECT user_email FROM ptyd_accounts WHERE user_email = '" + email + "';")
 
             users = execute(queries[0], 'get', conn)
 
@@ -2600,7 +2648,8 @@ class CheckEmail(Resource):
                 mealSelection = 'SURPRISE'
             # Handle custom meal selection
             else:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
+                mealSelection = self.formatMealSelection(
+                    data['meal_quantities'])
 
             query = """
                 INSERT INTO ptyd_meals_selected
@@ -2667,6 +2716,7 @@ class CheckEmail(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 '''
 class MealSelection(Resource):
@@ -2823,6 +2873,8 @@ class MealSelection(Resource):
         finally:
             disconnect(conn)
 '''
+
+
 class CustomerInfo(Resource):
 
     # def ___inti__(self):
@@ -2836,7 +2888,8 @@ class CustomerInfo(Resource):
         if dict1["frequency"] == "Monthly":
             end_date = start_date + relativedelta(months=1)
         else:
-            end_date = start_date + timedelta(days=map_subs[dict1["frequency"]])
+            end_date = start_date + \
+                timedelta(days=map_subs[dict1["frequency"]])
 
         curr_date = datetime.now()
         delta = end_date - curr_date
@@ -2867,7 +2920,7 @@ class CustomerInfo(Resource):
         #         if delta.days<0:
         #             # res["weeks_left"] = "Expired"
         #             res = "Expired"
-        #         else:    
+        #         else:
         #             # res["weeks_left"] = delta.days//7
         #             res=delta.days//7
         #     else:
@@ -2890,7 +2943,8 @@ class CustomerInfo(Resource):
                         ptyd_meal_plans meal on pur.meal_plan_id = meal.meal_plan_id"""
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
-            list1 = list(map(self.jsonify_one, cus_info['CustomerInfo']['result']))
+            list1 = list(
+                map(self.jsonify_one, cus_info['CustomerInfo']['result']))
 
             cus_info['CustomerInfo']['result'] = list1
             response['message'] = 'Request successful.'
@@ -2913,7 +2967,7 @@ class CustomerProfile(Resource):
             conn = connect()
 
             # -- select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name, concat(ptyd_accounts.user_address,', ',ptyd_accounts.user_city,', ',
-            # -- ptyd_accounts.user_state,' ',ptyd_accounts.user_zip) as Address, 
+            # -- ptyd_accounts.user_state,' ',ptyd_accounts.user_zip) as Address,
             # -- ptyd_accounts.user_gender as Gender, DATEDIFF(CURDATE(),ptyd_accounts.create_date) AS 'Num_of_days' from ptyd_accounts
             queries = """select concat(ptyd_accounts.first_name,' ',ptyd_accounts.last_name) as Full_name,
                             pur.start_date as start_date, meal.payment_frequency as frequency, meal.meal_plan_desc as Current_subscription,
@@ -2931,7 +2985,8 @@ class CustomerProfile(Resource):
                             group by pay.buyer_id"""
 
             cus_info['CustomerInfo'] = execute(queries, 'get', conn)
-            list1 = list(map(CustomerInfo.jsonify_one, cus_info['CustomerInfo']['result']))
+            list1 = list(map(CustomerInfo.jsonify_one,
+                             cus_info['CustomerInfo']['result']))
             response['message'] = 'Request successful.'
             response['result'] = cus_info
 
@@ -3320,37 +3375,39 @@ class CancelSubscriptionNow(Resource):
 
     def patch(self):
         response = {}
-        
+
         try:
             conn = connect()
             data = request.get_json(force=True)
-            
-            newSnapshotQuery = execute("""CALL get_snapshots_id();""", 'get', conn)
-            
+
+            newSnapshotQuery = execute(
+                """CALL get_snapshots_id();""", 'get', conn)
+
             purchase_id = data['purchase_id']
 
             snapshotId = newSnapshotQuery['result'][0]['new_id']
 
-            
+            execute(""" CALL `ptyd`.`user_cancel_now_update_snapshot`( \'""" + snapshotId +
+                    """\' , \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_payments` SET `recurring` = 'FALSE' WHERE (`payment_id` = (SELECT payment_id FROM ptyd_snapshots WHERE purchase_id = \'""" +
+                    purchase_id + """\' ORDER BY snapshot_timestamp DESC LIMIT 1) );""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" +
+                    purchase_id + """\');""", 'post', conn)
 
-            execute(""" CALL `ptyd`.`user_cancel_now_update_snapshot`( \'""" + snapshotId + """\' , \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
-            execute("""UPDATE `ptyd`.`ptyd_payments` SET `recurring` = 'FALSE' WHERE (`payment_id` = (SELECT payment_id FROM ptyd_snapshots WHERE purchase_id = \'""" + purchase_id + """\' ORDER BY snapshot_timestamp DESC LIMIT 1) );""", 'post', conn)
-            execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" + purchase_id + """\');""",'post',conn)
-            
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
 
+
 class DoNotRenewSubscription(Resource):
     def patch(self):
         response = {}
-        
+
         try:
             conn = connect()
             data = request.get_json(force=True)
-            
 
             newSnapshotQuery = execute("CALL get_snapshots_id;", 'get', conn)
 
@@ -3360,16 +3417,18 @@ class DoNotRenewSubscription(Resource):
 
             print(snapshotId)
 
-            execute(""" CALL `ptyd`.`user_cancel_later_update_snapshot`(\'""" + snapshotId + """\', \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
-            execute("""UPDATE `ptyd`.`ptyd_payments` SET `recurring` = 'FALSE' WHERE (`payment_id` = (SELECT payment_id FROM ptyd_snapshots WHERE purchase_id = \'""" + purchase_id + """\' ORDER BY snapshot_timestamp DESC LIMIT 1) );""", 'post', conn)
-            execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" + purchase_id + """\');""",'post',conn)
-            
+            execute(""" CALL `ptyd`.`user_cancel_later_update_snapshot`(\'""" + snapshotId +
+                    """\', \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_payments` SET `recurring` = 'FALSE' WHERE (`payment_id` = (SELECT payment_id FROM ptyd_snapshots WHERE purchase_id = \'""" +
+                    purchase_id + """\' ORDER BY snapshot_timestamp DESC LIMIT 1) );""", 'post', conn)
+            execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" +
+                    purchase_id + """\');""", 'post', conn)
+
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
 
 
 class ZipCodes(Resource):
@@ -3379,7 +3438,8 @@ class ZipCodes(Resource):
         try:
             conn = connect()
 
-            items = execute(""" SELECT * FROM ptyd_monday_zipcodes; """, 'get', conn)
+            items = execute(
+                """ SELECT * FROM ptyd_monday_zipcodes; """, 'get', conn)
 
             response['message'] = 'successful'
             response['result'] = items
@@ -3389,6 +3449,7 @@ class ZipCodes(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 '''
 class GetTestKey(Resource):
@@ -3423,12 +3484,12 @@ class StripeTestPayment(Resource):
 class UpdateSubscription(Resource):
     def patch(self):
         response = {}
-        
+
         try:
             conn = connect()
             data = request.get_json(force=True)
-            
-            print("pre",data)
+
+            print("pre", data)
 
             meal_plan_id = data['meal_plan_id']
             purchase_id = data['purchase_id']
@@ -3447,7 +3508,7 @@ class UpdateSubscription(Resource):
             # if (delivery_address_unit == None):
             #     delivery_address_unit = ""
 
-            print("data",data)
+            print("data", data)
             # test=execute(""" CALL `ptyd`.`update_purchase`(\'""" + str(purchase_id) + """\', \'""" + str(meal_plan_id) + """\', \'""" + str(delivery_address) + """\', \'""" + str(delivery_address_unit) + """\', \'""" + str(delivery_city) + """\', \'""" + str(delivery_state) + """\', \'""" + str(delivery_zip) + """\', \'""" + str(delivery_instructions) + """\'); """, 'post', conn)
             # print("test",test)
             execute(""" CALL `ptyd`.`update_purchase`(\'""" + str(purchase_id) + """\',
@@ -3459,14 +3520,15 @@ class UpdateSubscription(Resource):
                                                            \'""" + str(delivery_zip) + """\', 
                                                            \'""" + str(delivery_instructions) + """\');
                                                             """, 'post', conn)
-            
+
             # curl -X PATCH -H "Content-Type: application/json" http://127.0.0.1:2000/api/v2/update-subscription --data '{"purchase_id":"300-00004","meal_plan_id":"800-000007","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip”:"95130","delivery_instructions":"N/A"}'
-            
+
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 
 '''
 class UpdateRecipe(Resource):
@@ -3502,33 +3564,37 @@ class UpdateRecipe(Resource):
         finally:
             disconnect(conn)
 '''
+
+
 class UpdatePayments(Resource):
     def patch(self):
         response = {}
-        
+
         try:
             conn = connect()
             data = request.get_json(force=True)
-            
-            print("pre",data)
+
+            print("pre", data)
 
             purchase_id = data['purchase_id']
-            cc_num = data['cc_num'][-4:] 
+            cc_num = data['cc_num'][-4:]
             cc_exp_date = data['cc_exp_date']
             cc_cvv = data['cc_cvv']
 
-            print("data",data)
+            print("data", data)
             execute(""" CALL `ptyd`.`update_payments`(\'""" + str(purchase_id) + """\',
                                                         \'""" + str(cc_num) + """\', 
                                                         \'""" + str(cc_exp_date) + """\',
                                                         \'""" + str(cc_cvv) + """\');
                                                         """, 'post', conn)
-            
+
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
+
 '''
 class addRecipe(Resource):
     global RDS_PW
@@ -3901,6 +3967,7 @@ class EditMeals(Resource):
             disconnect(conn)
 '''
 
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -3933,10 +4000,11 @@ api.add_resource(ResetPassword, '/api/v2/resetpassword')
 api.add_resource(ChangePassword, '/api/v2/changepassword')
 api.add_resource(Account, '/api/v2/account/<string:accId>')
 api.add_resource(AccountSalt, '/api/v2/accountsalt/<string:accEmail>')
-api.add_resource(SessionVerification, '/api/v2/sessionverification/<string:userUid>/<string:sessionId>')
+api.add_resource(SessionVerification,
+                 '/api/v2/sessionverification/<string:userUid>/<string:sessionId>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
-api.add_resource(MealSelection, '/api/v2/mealseection/<string:purchaseId>')
+api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
@@ -3964,9 +4032,10 @@ api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
 # Automated APIs
-api.add_resource(UpdatePurchases, '/api/v2/updatepurchases', '/api/v2/updatepurchases/<string:affectedDate>')
-api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers', '/api/v2/chargesubscribers/<string:affectedDate>')
-
+api.add_resource(UpdatePurchases, '/api/v2/updatepurchases',
+                 '/api/v2/updatepurchases/<string:affectedDate>')
+api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers',
+                 '/api/v2/chargesubscribers/<string:affectedDate>')
 
 
 
@@ -3994,4 +4063,3 @@ api.add_resource(TemplateApi, '/api/v2/templateapi')
 # Make sure port number is unused (i.e. don't use numbers 0-1023)
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=2000)
-
