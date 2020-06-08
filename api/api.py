@@ -2327,8 +2327,12 @@ class MealSelection(Resource):
                 mealSelection = 'SURPRISE'
             # Handle custom meal selection
             else:
-                mealSelection = self.formatMealSelection(
-                    data['meal_quantities'])
+                print("inside function")
+                mealSelection = self.formatMealSelection(data['meal_quantities'])
+                print("mealSelection: ", mealSelection)
+                print("purchasedID: ", purchaseID)
+                print("data['week_affected']", data['week_affected'])
+                print("data['delivery_day']", data['delivery_day'])
             query = """
                 INSERT INTO ptyd_meals_selected
                 (
@@ -2345,6 +2349,7 @@ class MealSelection(Resource):
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + """\',
                     \'""" + data['delivery_day'] + "\');"
+            print("inside postquery")
         return query
 
     # HTTP method POST
@@ -2381,7 +2386,9 @@ class MealSelection(Resource):
                 # 500: Internal server error
                 return response, 500
             #               print("purchase_id:", purchaseId)
+            print("here")
             queries.append(self.postQuery(purchaseId, data))
+            print("there")
             execute(queries[1], 'post', conn)
 
             response['message'] = 'Request successful.'

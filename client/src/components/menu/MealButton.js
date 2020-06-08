@@ -555,6 +555,7 @@ export default class MealButton extends Component {
     } = this.state.currentMealSelected;
     console.log("delivery day: ", delivery_day);
     console.log("meal selected: ", meals_selected);
+    console.log("sundayDate: ", this.state.weekMenu);
     fetch(
       `${this.props.MEAL_SELECT_API_URL}/${this.state.currentPurchase.purchase_id}`,
       {
@@ -573,7 +574,7 @@ export default class MealButton extends Component {
               ? week_affected
               : this.state.weekMenu.SaturdayDate,
           meal_quantities: meals_selected === undefined ? null : meals_selected,
-          delivery_day: delivery_day,
+          delivery_day: delivery_day === undefined ? "Sunday" : delivery_day,
           default_selected: this.state.surpriseButton.isDisabled,
           is_addons: false
         })
