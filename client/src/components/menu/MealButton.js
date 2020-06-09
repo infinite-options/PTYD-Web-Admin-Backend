@@ -48,6 +48,45 @@ export default class MealButton extends Component {
     };
   }
 
+  //reset function for all buttons
+  resetButtons = () => {
+    this.setState(prevState => ({
+      sundayButton: {
+        ...prevState.sundayButton,
+        chosen: false,
+        isDisabled: false
+      },
+      mondayButton: {
+        ...prevState.mondayButton,
+        chosen: false,
+        isDisabled: false
+      },
+      skipButton: {
+        ...prevState.skipButton,
+        chosen: false,
+        isDisabled: false
+      },
+      selectButton: {
+        ...prevState.selectButton,
+        chosen: false,
+        red: false,
+        showModal: false,
+        isDisabled: false
+      },
+      surpriseButton: {
+        ...prevState.surpriseButton,
+        chosen: false,
+        isDisabled: false
+      },
+      addonButton: {
+        ...prevState.addonButton,
+        chosen: false,
+        red: false,
+        showModal: false,
+        isDisabled: false
+      }
+    }));
+  };
   //helper function to get the current selected meal and addon for only current week
   getCurrentSelected = () => {
     //call the server to get new meal selected
@@ -97,7 +136,8 @@ export default class MealButton extends Component {
           //   sundayButton: {...prevState.sundayButton, chosen: true},
           //   surpriseButton: {...prevState.surpriseButton, chosen: true}
           // }));
-          this.clickSunday();
+          console.log("set everything for the first time");
+          this.clickDay("sunday");
           this.clickSurprise();
         } else if (this.state.currentMealSelected.delivery_day === "Sunday") {
           this.setSunday();
@@ -155,7 +195,8 @@ export default class MealButton extends Component {
         maxMeals: this.props.maxMeals
       });
       //get meals and addon out of the result object
-      this.getCurrentSelected();
+      await this.resetButtons();
+      await this.getCurrentSelected();
     }
   };
   setSunday = () => {
@@ -237,10 +278,11 @@ export default class MealButton extends Component {
     //Check for "Select" or "Surprise" button
     // which ones is gonna be shown up
     let mealSelected = this.state.currentMealSelected.meals_selected;
+    let mealSelection = this.state.currentMealSelected.meal_selection;
     if (mealSelected !== undefined && Object.keys(mealSelected).length > 0) {
       // there are selected meals
       this.setSelect();
-    } else {
+    } else if (mealSelection === "" || mealSelection === "SKIP") {
       this.clickSurprise();
     }
     // check for "Add Local Treats"
