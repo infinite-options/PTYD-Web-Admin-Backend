@@ -112,7 +112,7 @@ export default class MealButton extends Component {
             for (let addon of data.Addons) {
               if (addon.week_affected === this.props.weekMenu.SaturdayDate) {
                 this.setState({currentAddonSelected: addon});
-                //calculate the total add on price for each week
+                //calculate the total add on price for first week
                 let priceList = this.props.weekMenu.AddonPrice;
                 let total = 0;
                 for (let key of Object.keys(addon.meals_selected)) {
@@ -154,7 +154,8 @@ export default class MealButton extends Component {
         ) {
           this.setSelect();
         }
-        if (Object.keys(this.state.currentAddonSelected).length > 0) {
+        let mealSelection = this.state.currentAddonSelected.meal_selection;
+        if (mealSelection !== undefined && mealSelection.length > 0) {
           this.setAddon();
         } else {
           this.setState(prevState => ({
