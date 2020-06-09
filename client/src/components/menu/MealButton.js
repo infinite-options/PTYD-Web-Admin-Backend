@@ -612,7 +612,7 @@ export default class MealButton extends Component {
       },
       addonButton: {
         ...prevState.addonButton,
-        chosen: this.state.totalAddonPrice ? true : false,
+        chosen: parseInt(this.state.totalAddonPrice) !== 0 ? true : false,
         red: false,
         showModal: false,
         isDisabled: false
