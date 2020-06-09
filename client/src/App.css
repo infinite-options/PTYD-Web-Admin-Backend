@@ -274,6 +274,9 @@
   height: 100%;
   width: 100%;
 }
+.slider-arrow:hover {
+  cursor: pointer;
+}
 .arrow-btn {
   margin-top: 125px;
   z-index: 1;

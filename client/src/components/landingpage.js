@@ -146,9 +146,9 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div className='container  d-flex justify-content-center'>
+        <div className='container d-flex justify-content-center'>
           <div className='font2'>
-            <Grid className='mt-5'>
+            <Grid>
               <Cell col={9}>
                 <Container className='four-items-grid'>
                   <Row style={{fontSize: "28px"}}>

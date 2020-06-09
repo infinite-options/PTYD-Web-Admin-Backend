@@ -77,9 +77,7 @@ const App = props => {
   }
 
   let stuff = !isAuthenticating && (
-    <div 
-      // className='demo-big-content'
-    >
+    <div>
       <Layout>
         <Header
           className='header-color'
