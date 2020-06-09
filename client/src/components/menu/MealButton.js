@@ -131,8 +131,8 @@ export default class MealButton extends Component {
           //   sundayButton: {...prevState.sundayButton, chosen: true},
           //   surpriseButton: {...prevState.surpriseButton, chosen: true}
           // }));
-          this.clickDay("sunday");
-          this.clickSurprise();
+          this.clickDay("sunday", true);
+          this.clickSurprise(true);
         } else if (this.state.currentMealSelected.delivery_day === "Sunday") {
           this.setSunday();
         } else if (this.state.currentMealSelected.delivery_day === "Monday") {
@@ -252,7 +252,7 @@ export default class MealButton extends Component {
       }
     }));
   };
-  clickDay = async day => {
+  clickDay = async (day, first) => {
     // set properties for other button
     if (day === "sunday") {
       await this.setSunday();
@@ -287,7 +287,10 @@ export default class MealButton extends Component {
       this.setAddon();
     }
     // update the delivery day for database
-    this.saveSelectMealAPI();
+    if (!first) {
+      //first time running, everything just keep local, not writtinng into database
+      this.saveSelectMealAPI();
+    }
   };
 
   // clickMonday = async () => {
@@ -421,7 +424,7 @@ export default class MealButton extends Component {
       }
     }));
   };
-  clickSurprise = async () => {
+  clickSurprise = async first => {
     //set properties for all other buttons
     await this.setSurprise();
     // update state for currentMealSelected
@@ -432,7 +435,9 @@ export default class MealButton extends Component {
       }
     }));
     //send a request to database
-    this.saveSelectMealAPI();
+    if (!first) {
+      this.saveSelectMealAPI();
+    }
   };
   /* Addon button is clicked. All others button will inactive. until Agree to Pay is clicked */
   setAddon = () => {
@@ -927,7 +932,7 @@ export default class MealButton extends Component {
               variant='outline-dark'
               disabled={sundayButton.isDisabled}
               onClick={() => {
-                this.clickDay("sunday");
+                this.clickDay("sunday", false);
               }}
               style={sundayColor}
             >
@@ -939,7 +944,7 @@ export default class MealButton extends Component {
               variant='outline-dark'
               disabled={mondayButton.isDisabled}
               onClick={() => {
-                this.clickDay("monday");
+                this.clickDay("monday", false);
               }}
               style={mondayColor}
             >
