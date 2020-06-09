@@ -34,7 +34,7 @@ export default function AddonModal(props) {
               Total Price: ${props.totalAddonPrice}
             </h4>
             &nbsp;&nbsp;
-            {props.totalAddonPrice === 0 && (
+            {parseInt(props.totalAddonPrice) === 0 && (
               <Button variant='danger' onClick={props.closeAddonModal}>
                 Close
               </Button>

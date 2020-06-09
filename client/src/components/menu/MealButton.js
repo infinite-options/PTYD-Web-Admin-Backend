@@ -90,17 +90,13 @@ export default class MealButton extends Component {
   //helper function to get the current selected meal and addon for only current week
   getCurrentSelected = () => {
     //call the server to get new meal selected
-    console.log("getCurrentSelected is called");
-
     let new_purchaseID = this.props.currentPurchase.purchase_id;
-    console.log("new_purchasesID: ", new_purchaseID);
     axios
       .get(`${this.props.MEAL_SELECT_API_URL}/${new_purchaseID}`)
       .then(res => {
         let data;
         if (res.data.result !== undefined) {
           data = res.data.result;
-          console.log("data: ", data);
           if (data.Meals.length > 0) {
             for (let meal of data.Meals) {
               if (meal.week_affected === this.props.weekMenu.SaturdayDate) {
@@ -130,13 +126,11 @@ export default class MealButton extends Component {
         }
       })
       .then(() => {
-        console.log("then inside the getcurrentSelected is called");
         if (Object.keys(this.state.currentMealSelected).length === 0) {
           // this.setState(prevState => ({
           //   sundayButton: {...prevState.sundayButton, chosen: true},
           //   surpriseButton: {...prevState.surpriseButton, chosen: true}
           // }));
-          console.log("set everything for the first time");
           this.clickDay("sunday");
           this.clickSurprise();
         } else if (this.state.currentMealSelected.delivery_day === "Sunday") {
@@ -515,6 +509,11 @@ export default class MealButton extends Component {
         red: false,
         showModal: false,
         chosen: choose
+      },
+      currentAddonSelected: {
+        ...prevState.currentAddonSelected,
+        meal_selection: {},
+        meals_selected: {}
       }
     }));
   };
@@ -627,12 +626,13 @@ export default class MealButton extends Component {
       await this.setState(prevState => ({
         currentPurchase: {
           ...prevState.currentPurchase,
-          total_charge: parseInt(this.state.totalAddonPrice)
+          total_charge: parseFloat(this.state.totalAddonPrice)
         }
       }));
       //update parent
       console.log("calling changeCurrentCharge from MealButton");
-      this.props.ChangeCurrentAddonCharge(this.state.totalAddonPrice);
+      let totalAddonPrice = parseFloat(this.state.totalAddonPrice).toFixed(2);
+      this.props.ChangeCurrentAddonCharge(totalAddonPrice);
     }
 
     //Update local variables
@@ -820,9 +820,10 @@ export default class MealButton extends Component {
     let newTotal = (
       parseFloat(this.state.totalAddonPrice) - parseFloat(price)
     ).toFixed(2);
-    if (this.state.totalAddonPrice > 0 && newTotal >= 0) {
+    let totalAddonPrice = parseFloat(this.state.totalAddonPrice).toFixed(2);
+    if (totalAddonPrice > 0 && newTotal >= 0) {
       this.setState({
-        totalAddonPrice: parseFloat(newTotal)
+        totalAddonPrice: newTotal
       });
     }
   };

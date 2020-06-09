@@ -9,7 +9,6 @@ export default class AccountInfo extends Component {
   }
   componentDidUpdate = prevProps => {
     if (prevProps.currentPurchase !== this.props.currentPurchase) {
-      console.log("detected changing in currentPurchase");
       this.setState({
         currentPurchase: this.props.currentPurchase
       });
@@ -24,9 +23,11 @@ export default class AccountInfo extends Component {
         <p>My Subscription: {current.meal_plan_desc}</p>
         <p>Payment Plan: {current.payment_frequency}</p>
         <p>Paid Weeks Remaining: {current.paid_weeks_remaining}</p>
-        <p>Next Charge: {current.amount_due}</p>
+        <p>Next Charge: {parseFloat(current.amount_due).toFixed(2)}</p>
         <p>Next Charge Date: {current.next_charge_date}</p>
-        <p>Next Addon Charge: {this.props.addonCharge}</p>
+        <p>
+          Next Addon Charge: {parseFloat(this.props.addonCharge).toFixed(2)}
+        </p>
         <p>Next Addon Charge Date: {current.next_addon_charge_date}</p>
         <p>Coupons: {current.coupon_id ? current.coupon_id : 0}</p>
         <h4>Credit Card Details</h4>

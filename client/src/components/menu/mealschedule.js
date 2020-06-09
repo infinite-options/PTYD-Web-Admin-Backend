@@ -93,7 +93,6 @@ export default class MealSchedule extends Component {
       })
       .then(res => {
         if (res.data !== undefined && res.data.result !== undefined) {
-          console.log("data after calling api: ", res.data.result);
           this.setState({purchases: res.data.result});
           //set currentPurchase for the first purchase in purchases array
           // this is done in componentDidMount to load currentPurchase for the
