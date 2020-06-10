@@ -167,6 +167,21 @@ namespace InfiniteMeals.MealSelect
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
             lstView.GroupShortNameBinding = new Binding("ShortName");
+            subtotalLabel = new Label
+            {
+                TextColor = Color.White,
+                Text = "Agree to Pay: $0.00",
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+
+            StackLayout sl = new StackLayout
+            {
+                BackgroundColor = Color.Black,
+                HeightRequest = 50,
+            };
+            sl.Children.Add(subtotalLabel);
+            lstView.Footer = sl;
 
             lstView.ItemTemplate = new DataTemplate(() =>
             {
@@ -203,11 +218,14 @@ namespace InfiniteMeals.MealSelect
                     VerticalOptions = LayoutOptions.Center
                 };
                 infoButton.Margin = new Thickness(50, 0, 0, 0);
-                //infoButton.Command = onInfoCommand;
-                //infoButton.BindingContext = new Binding(source: "lstView", path: "BindingContext");
-                //infoButton.CommandParameter = new Binding(source: "grid", path: "BindingContext");
-
-                 //infoButton.Clicked += OnInfoClicked;
+                infoButton.Clicked += (sender, e) =>
+                {
+                    ImageButton stepper = sender as ImageButton;
+                    var model = stepper.BindingContext as Meal;
+                    //Button infoB = sender as Button;
+                   // var model = infoB.BindingContext as Meal;
+                    DisplayAlert("Ingredients", model.description.ToString(), "OK");
+                };
 
                 var steppers = new Stepper
                 {
@@ -217,22 +235,32 @@ namespace InfiniteMeals.MealSelect
                     HeightRequest = 50
                 };
 
-                subtotalLabel = new Label
-                {
-                    Text = "(uninitialized)",
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
-                };
-
                 steppers.ValueChanged += (sender, e) =>
                 {
                     Stepper stepper = sender as Stepper;
                     var model = stepper.BindingContext as Meal;
-                    model.qty = (int) steppers.Value;
-                    model.total = model.qty * model.price;
-                    subTotal += model.total;
-                    //subtotalLabel.Text = string.Format(" Subtotal: ${0}", subTotal);
-                    //System.Diagnostics.Debug.WriteLine(model.price + " " + model.name + " " + model.qty + " " + model.total + " " + subTotal);
+                    var stepperVal = stepper.Value;
+
+
+                    if (stepperVal > model.qty)
+                    {
+                        model.qty = (int)steppers.Value;
+                        //model.total = model.qty * model.price;
+                        subTotal += model.price;
+                    }
+                    else if (stepperVal < model.qty)
+                    {
+
+                        model.qty = (int)steppers.Value;
+                        subTotal -= model.price;
+                        if (subTotal < 0)
+                        {
+                            subTotal = 0.00;
+                        }
+                    }
+
+                    subtotalLabel.Text = string.Format("Agree to Pay: ${0}", subTotal);
+                    System.Diagnostics.Debug.WriteLine(model.price + " " + model.name + " " + model.qty + " " + model.total + " " + subTotal);
                 };
 
                 Label quantity = new Label
@@ -255,7 +283,7 @@ namespace InfiniteMeals.MealSelect
                 grid.Children.Add(nameLabel, 1, 0);
                 grid.Children.Add(quantity, 3, 0);
                 grid.Children.Add(costLabel, 1, 1);
-                //grid.Children.Add(infoButton, 2, 0);
+                grid.Children.Add(infoButton, 2, 0);
                 grid.Children.Add(steppers, 2, 1);
                 steppers.SetValue(Grid.ColumnSpanProperty, 2);
 
@@ -279,10 +307,9 @@ namespace InfiniteMeals.MealSelect
 
         void OnInfoClicked(Object sender, EventArgs args)
         {
-            Button btn = sender as Button;
-            System.Diagnostics.Debug.WriteLine(" hello");
-            Meal mealSelected = btn.BindingContext as Meal;
-           DisplayAlert("Ingredients", mealSelected.description.ToString(), "OK");
+            Button infoB = sender as Button;
+            var model = infoB.BindingContext as Meal;
+            DisplayAlert("Ingredients", model.description.ToString(), "OK");
         }
 
         void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
