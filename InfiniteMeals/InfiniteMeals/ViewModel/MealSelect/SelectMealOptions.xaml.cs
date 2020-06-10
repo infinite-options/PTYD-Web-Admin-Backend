@@ -62,7 +62,7 @@ namespace InfiniteMeals.Meals
                         {
                             imageUrl = m["photo"]["S"].ToString(),
                             name = m["meal_name"]["S"].ToString(),
-                            price = m["price"]["S"].ToString(),
+                            //price = m["price"]["S"].ToString(),
                             description = m["description"]["S"].ToString(),
                             kitchenId = m["kitchen_id"]["S"].ToString(),
                             id = m["meal_id"]["S"].ToString(),
@@ -95,7 +95,7 @@ namespace InfiniteMeals.Meals
             });
         }
 
-        async void Handle_Clicked(object sender, System.EventArgs e)
+       async void Handle_Clicked(object sender, System.EventArgs e)
         {
             if (mealOrdersCount == 0)
             {
@@ -103,8 +103,8 @@ namespace InfiniteMeals.Meals
             }
             else
             {
-                var secondPage = new ViewModel.Checkout.CheckOutPage(Meals, kitchenID, kitchenZipcode);
-                await Navigation.PushAsync(secondPage);
+                //var secondPage = new ViewModel.Checkout.CheckOutPage(Meals, kitchenID, kitchenZipcode);
+               // await Navigation.PushAsync(secondPage);
             }
 
             //var checkoutPage = new CheckOutPage();

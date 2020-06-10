@@ -60,21 +60,10 @@ namespace InfiniteMeals.Meals {
         private void ClickedColor(object sender, EventArgs e) {
             Button btn = (Button)sender;
             System.Diagnostics.Debug.WriteLine("Class ID" + btn.ClassId + "Disabled? " + disabled + " Ctr " + ctr);
-            // Change button colors
-            // CAN ONLY CHOOSE 2 BUTTONS + ADD ON, OR SKIP
-            // IF SKIP BUTTON IS CHOSEN, DISABLE EVERYTHING
-            // IF MONDAY IS SELECTED, CAN'T CHOOSE SUNDAY OR SKIP
-            // IF SUNDAY IS SELECTED, CAN'T CHOOSE MONDAT OR SKIP
-            // IF SELECT IS SELECTED, CAN'T CHOOSE SKIP OR SURPRISE
-            // IF SURPRISE IS SELECTED, CAN'T CHOOSE SKIP
 
 
             if (btn.ClassId == "SkipButton") {
-                if (btn.BackgroundColor.Equals(Color.FromHex(green)) |
-                    SundayButton.BackgroundColor.Equals(Color.FromHex(green)) |
-                    MondayButton.BackgroundColor.Equals(Color.FromHex(green)) |
-                    SelectButton.BackgroundColor.Equals(Color.FromHex(green)) |
-                    SurpriseButton.BackgroundColor.Equals(Color.FromHex(green)))
+                if (btn.BackgroundColor.Equals(Color.FromHex(green)))
                     {
                     btn.BackgroundColor = (Color.FromHex(def));
                     disabled = false;
@@ -82,19 +71,47 @@ namespace InfiniteMeals.Meals {
                 }
                 else if (btn.BackgroundColor.Equals(Color.FromHex(def))) {
                     btn.BackgroundColor = Color.FromHex(green);
+                    SundayButton.BackgroundColor = Color.FromHex(def);
+                    MondayButton.BackgroundColor = Color.FromHex(def);
+                    AddonButton.BackgroundColor = Color.FromHex(def);
+                    SurpriseButton.BackgroundColor = Color.FromHex(def);
+                    SelectButton.BackgroundColor = Color.FromHex(def);
                     disabled = true;
                     ctr = 2;
                 }
             }
             else {
-                if (disabled == false) {
-                    if (btn.BackgroundColor.Equals(Color.FromHex(def))) {
+                if (disabled == true)
+                {
+                    if (btn.BackgroundColor.Equals(Color.FromHex(def)))
+                    {
                         if (btn.ClassId.Equals("MonButton"))
                         {
                             btn.BackgroundColor = Color.FromHex(green);
                             SundayButton.BackgroundColor = Color.FromHex(def);
+                            SkipButton.BackgroundColor = Color.FromHex(def);
+                            disabled = false;
                         }
-                        else if(btn.ClassId.Equals("SunButton"))
+                        else if (btn.ClassId.Equals("SunButton"))
+                        {
+                            btn.BackgroundColor = Color.FromHex(green);
+                            MondayButton.BackgroundColor = Color.FromHex(def);
+                            SkipButton.BackgroundColor = Color.FromHex(def);
+                            disabled = false;
+                        }
+                    }
+                }
+                else if (disabled == false)
+                {
+                    if (btn.BackgroundColor.Equals(Color.FromHex(def)))
+                    {
+                        if (btn.ClassId.Equals("MonButton"))
+                        {
+                            btn.BackgroundColor = Color.FromHex(green);
+                            SundayButton.BackgroundColor = Color.FromHex(def);
+
+                        }
+                        else if (btn.ClassId.Equals("SunButton"))
                         {
                             btn.BackgroundColor = Color.FromHex(green);
                             MondayButton.BackgroundColor = Color.FromHex(def);
@@ -117,7 +134,8 @@ namespace InfiniteMeals.Meals {
                             ctr--;
                         }
                     }
-                    else {
+                    else
+                    {
                         btn.BackgroundColor = (Color.FromHex(def));
                         order.Remove(btn.Text);
                         ctr++;
@@ -141,6 +159,7 @@ namespace InfiniteMeals.Meals {
             {
                 btn.BackgroundColor = Color.FromHex("#F9E29C");
                 await Navigation.PushAsync(new MealSelect.AddOnChoices());
+                //await Navigation.PushAsync(new MealSelect.MealChoices());
             }
             else
             {
@@ -148,12 +167,12 @@ namespace InfiniteMeals.Meals {
             }
         }
 
-       /* private async void ClickedAddOnNav(object sender, EventArgs e)
+        private async void ClickedAddOnNav(object sender, EventArgs e)
         {
             ClickedAddOn(sender, e);
             await Navigation.PushAsync(new MealSelect.AddOnChoices());
         }
-       */
+
         private async void ClickedSelectMeal(object sender, EventArgs e)
         {
             ClickedColor(sender, e);

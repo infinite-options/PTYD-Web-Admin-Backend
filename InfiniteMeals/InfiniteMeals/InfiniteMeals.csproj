@@ -51,4 +51,7 @@
   <ItemGroup>
     <Folder Include="ViewModel\Steppers\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ViewModel\Subscribe\AddOnChoices.xaml.cs" />
+  </ItemGroup>
 </Project>
