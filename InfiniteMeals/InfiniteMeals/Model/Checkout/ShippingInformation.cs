@@ -40,5 +40,10 @@ namespace InfiniteMeals.Model.Checkout {
             this.city = city;
             this.state = state;
         }
+
+        public override string ToString() {
+            return this.firstName + "\n" + this.lastName + "\n" + this.phoneNumber + "\n" + this.addressOne + "\n" + 
+                this.addressTwo + "\n" + this.zipCode + "\n" + this.city + "\n" + this.state;
+        }
     }
 }

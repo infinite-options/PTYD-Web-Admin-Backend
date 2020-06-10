@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "v24kDJhJ7eyhOlmHtiIHluAqK/00oB2XY9Du71+gEsb7EAo6X6nKYR6En0frz+U8GLSqABg9e3PEG5aXgBp7NQ==",
+  "dgSpecHash": "2C7BHYvZOmhCVZehl4CKNFc36SJ1WkEUr6pBd02kM1RncAPJKbWvdooBtr8ShgS2s0xpPn5lzXESH3pafnsVGQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\InfiniteMeals.Android.csproj",
   "expectedPackageFiles": [
@@ -9,11 +9,13 @@
     "C:\\Users\\Sean\\.nuget\\packages\\awssdk.dynamodbv2\\3.3.106.10\\awssdk.dynamodbv2.3.3.106.10.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\awssdk.securitytoken\\3.3.105.6\\awssdk.securitytoken.3.3.105.6.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\commonservicelocator\\2.0.2\\commonservicelocator.2.0.2.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\microsoft.bcl\\1.1.10\\microsoft.bcl.1.1.10.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\microsoft.bcl.build\\1.0.14\\microsoft.bcl.build.1.0.14.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\microsoft.net.http\\2.2.29\\microsoft.net.http.2.2.29.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\mvvmlightlibs\\5.4.1.1\\mvvmlightlibs.5.4.1.1.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\pclcrypto\\1.0.2.15130\\pclcrypto.1.0.2.15130.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\pclstorage\\1.0.2\\pclstorage.1.0.2.nupkg.sha512",
-    "C:\\Users\\Sean\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\validation\\2.0.6.15003\\validation.2.0.6.15003.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.android.arch.core.common\\1.1.1.3\\xamarin.android.arch.core.common.1.1.1.3.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.android.arch.core.runtime\\1.1.1.3\\xamarin.android.arch.core.runtime.1.1.1.3.nupkg.sha512",
@@ -52,8 +54,14 @@
     "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.android.support.vector.drawable\\28.0.0.3\\xamarin.android.support.vector.drawable.28.0.0.3.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.android.support.versionedparcelable\\28.0.0.3\\xamarin.android.support.versionedparcelable.28.0.0.3.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.android.support.viewpager\\28.0.0.3\\xamarin.android.support.viewpager.28.0.0.3.nupkg.sha512",
-    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.essentials\\1.3.1\\xamarin.essentials.1.3.1.nupkg.sha512",
-    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.forms\\4.5.0.495\\xamarin.forms.4.5.0.495.nupkg.sha512"
+    "C:\\Users\\Sean\\.nuget\\packages\\xamarin.build.download\\0.4.11\\xamarin.build.download.0.4.11.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\xamarin.essentials\\1.5.3.2\\xamarin.essentials.1.5.3.2.nupkg.sha512",
+    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.forms\\4.5.0.495\\xamarin.forms.4.5.0.495.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\xamarin.forms.maps\\4.6.0.847\\xamarin.forms.maps.4.6.0.847.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\xamarin.googleplayservices.base\\71.1610.0\\xamarin.googleplayservices.base.71.1610.0.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\xamarin.googleplayservices.basement\\71.1620.0\\xamarin.googleplayservices.basement.71.1620.0.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\xamarin.googleplayservices.maps\\71.1610.0\\xamarin.googleplayservices.maps.71.1610.0.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\xamarin.googleplayservices.tasks\\71.1601.0\\xamarin.googleplayservices.tasks.71.1601.0.nupkg.sha512"
   ],
   "logs": [
     {
@@ -62,6 +70,46 @@
       "warningLevel": 1,
       "message": "PCLCrypto 1.0.2.15130 depends on Validation (>= 2.0.6 && < 3.0.0) but Validation 2.0.6 was not found. An approximate best match of Validation 2.0.6.15003 was resolved.",
       "libraryId": "Validation",
+      "targetGraphs": [
+        "MonoAndroid,Version=v9.0"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package downgrade: AWSSDK.DynamoDBv2 from 3.3.106.16 to 3.3.106.10. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.DynamoDBv2 (>= 3.3.106.16) \r\n InfiniteMeals.Android -> AWSSDK.DynamoDBv2 (>= 3.3.106.10)",
+      "libraryId": "AWSSDK.DynamoDBv2",
+      "targetGraphs": [
+        "MonoAndroid,Version=v9.0"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package downgrade: AWSSDK.CognitoIdentity from 3.3.101.94 to 3.3.101.88. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.CognitoIdentity (>= 3.3.101.94) \r\n InfiniteMeals.Android -> AWSSDK.CognitoIdentity (>= 3.3.101.88)",
+      "libraryId": "AWSSDK.CognitoIdentity",
+      "targetGraphs": [
+        "MonoAndroid,Version=v9.0"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package downgrade: AWSSDK.Core from 3.3.107.8 to 3.3.107.2. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.Core (>= 3.3.107.8) \r\n InfiniteMeals.Android -> AWSSDK.Core (>= 3.3.107.2)",
+      "libraryId": "AWSSDK.Core",
+      "targetGraphs": [
+        "MonoAndroid,Version=v9.0"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package downgrade: Xamarin.Forms from 4.6.0.847 to 4.5.0.495. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> Xamarin.Forms (>= 4.6.0.847) \r\n InfiniteMeals.Android -> Xamarin.Forms (>= 4.5.0.495)",
+      "libraryId": "Xamarin.Forms",
       "targetGraphs": [
         "MonoAndroid,Version=v9.0"
       ]

@@ -10,15 +10,15 @@
         <Grid>
                 
                 <Grid.RowDefinitions>
-                    <RowDefinition/>    <?status  ?>
-                    <RowDefinition/>    <?first name row  ?>
-                    <RowDefinition/>    <?last name row  ?>
-                    <RowDefinition/>    <?phone number row  ?>
-                    <RowDefinition/>    <?address row  ?>
-                    <RowDefinition/>    <?zip code row  ?>
-                    <RowDefinition/>    <?city row  ?>
-                    <RowDefinition/>    <?state row  ?>
-                    <RowDefinition/>    <?state row  ?>
+                    <RowDefinition/>    <!-- status row   -->
+                    <RowDefinition/>    <!-- first name row   -->
+                    <RowDefinition/>    <!-- last name row -->
+                    <RowDefinition/>    <!-- phone number row -->
+                    <RowDefinition/>    <!-- address row -->
+                    <RowDefinition/>    <!-- zip code row -->
+                    <RowDefinition/>    <!-- city row -->
+                    <RowDefinition/>    <!--state row -->
+                    <RowDefinition/>    <!--state row -->
 
                 <RowDefinition Height="75" />
                 </Grid.RowDefinitions>
@@ -30,7 +30,7 @@
 
 
             
-            <BoxView Grid.Row="0"/>
+                <BoxView Grid.Row="0"/>
                 <Image Source="shippingStatus.png" Grid.ColumnSpan="2"/>
 
                 <BoxView Grid.Row="1"/>
@@ -66,13 +66,13 @@
                 <Entry x:Name="addressOneEntry" Placeholder="Address Line 1" Grid.Column="1" Grid.Row="4" VerticalOptions="Center" Unfocused="addressEntryUnfocused"/>
                 <Label x:Name="addressWarning" Grid.Column="1" Grid.Row="4" Text="Address is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
-            <BoxView  Grid.Row="5"/>
-            <Label x:Name="addressTwoLabel" Grid.Row="5" Text="  Address Line 2" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
-            <BoxView  Grid.Column="1" Grid.Row="5"/>
-            <Entry x:Name="addressTwoEntry" Placeholder="Address Line 2" Grid.Column="1" Grid.Row="5" VerticalOptions="Center"/>
+                <BoxView  Grid.Row="5"/>
+                <Label x:Name="addressTwoLabel" Grid.Row="5" Text="  Address Line 2" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
+                <BoxView  Grid.Column="1" Grid.Row="5"/>
+                <Entry x:Name="addressTwoEntry" Placeholder="Address Line 2" Grid.Column="1" Grid.Row="5" VerticalOptions="Center"/>
             
 
-            <BoxView  Grid.Row="6"/>
+                <BoxView  Grid.Row="6"/>
                 <Label x:Name="zipCodeLabel" Grid.Row="6" Text="  Zip Code" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Medium" />
                 <BoxView  Grid.Column="1" Grid.Row="6"/>
                 <Entry x:Name="zipCodeEntry" Placeholder="Zip Code" Grid.Column="1" Grid.Row="6" VerticalOptions="Center" Keyboard="Numeric" MaxLength="5" Unfocused="zipCodeEntryUnfocused"/>

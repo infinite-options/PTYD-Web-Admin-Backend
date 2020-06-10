@@ -6,10 +6,144 @@
              mc:Ignorable="d"
              x:Class="InfiniteMeals.ViewModel.Checkout.Summary">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+    
+
+    <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>    <!-- status bar -->
+                    <RowDefinition Height="1.5*"/>    <!-- shipping info -->
+                    <RowDefinition Height="0.75*"/>    <!-- delivery info -->
+                    <RowDefinition/>    <!-- payment info -->
+                    <RowDefinition Height="75"/>
+            </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+            <BoxView Grid.Row="0"/>
+            <Image Grid.Row="0" Grid.ColumnSpan="2" Source="summaryStatus" VerticalOptions="Start"  />
+
+            <BoxView Grid.Row="1"/>
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                <BoxView Grid.Row="0"/>
+                <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Shipping Details" TextColor="Black" FontSize="Large" FontAttributes="Bold"/>
+
+                <BoxView Grid.Row="1"/>
+                    <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Label Grid.Column="0" Grid.Row="1"  Text="First Name: "/>
+                        <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.firstName}"/>
+                    </StackLayout>
+                
+                <StackLayout Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Label Grid.Column="2" Grid.Row="1"  Text="Last Name: "/>
+                    <Label Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.lastName}"/>
+                </StackLayout>
+                
+                
+                <BoxView Grid.Row="2"/>
+                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="2"  Text="Address Line 1: "/>
+                    <Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressOne}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Label Grid.Column="2" Grid.Row="2"  Text="Address Line 2: "/>
+                    <Label Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressTwo}"/>
+                </StackLayout>
+
+                <BoxView Grid.Row="3"/>
+                    <StackLayout Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Label Grid.Column="0" Grid.Row="3"  Text="Phone Number: "/>
+                        <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding shippingInformation.phoneNumber}"/>
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Label Grid.Column="2" Grid.Row="3"  Text="Zip Code: "/>
+                        <Label Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding shippingInformation.zipCode}"/>
+                    </StackLayout>
+
+
+                    <StackLayout Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Label Grid.Column="0" Grid.Row="4"  Text="City: "/>
+                        <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding shippingInformation.city}"/>
+                    </StackLayout>
+
+
+                    <StackLayout Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Label Grid.Column="2" Grid.Row="4"  Text="State: "/>
+                        <Label Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding shippingInformation.state}"/>
+                    </StackLayout>
+                </Grid> 
+
+                <BoxView Grid.Row="2"/>
+                    <Grid Grid.ColumnSpan="2" Grid.Row="2" >
+                <Label Grid.Row="0" Text="Delivery Details" TextColor="Black" FontSize="Large" FontAttributes="Bold"/>
+                <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding paymentInformation.deliveryInstructions}"/>
+            </Grid>
+               
+            
+            <BoxView Grid.Row="3"/>
+                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+
+                <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Payment Details" TextColor="Black"  FontSize="Large" FontAttributes="Bold"/>
+                    
+                <StackLayout Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="1"  Text="Card Number: "/>
+                    <Label Grid.Column="0" Grid.Row="1" Text="{Binding paymentInformation.cardNumber}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                    <Label Grid.Column="1" Grid.Row="1"  Text="Cardholder Name: "/>
+                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding paymentInformation.cardHolderName}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="0" Grid.Row="2" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="2"  Text="Expiration Date: "/>
+                    <Label Grid.Column="0" Grid.Row="2" Text="{Binding paymentInformation.expirationMonth}"/>
+                    <Label Grid.Column="0" Grid.Row="2" Text="/" />
+                    <Label Grid.Column="0" Grid.Row="2" Text="{Binding paymentInformation.expirationYear}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+                    <Label Grid.Column="1" Grid.Row="2"  Text="CVV: "/>
+                    <Label Grid.Column="1" Grid.Row="2" Text="{Binding paymentInformation.cvv}"/>
+                </StackLayout>
+
+            </Grid>
+
+
+            <BoxView Grid.Row="4" Grid.ColumnSpan="2" />
+            <Button Grid.Row="4" Grid.ColumnSpan="2" Text="Confirm" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#28a745" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill"></Button>
+
+
+
+        </Grid>
+        
+        
+            
+
     </ContentPage.Content>
 </ContentPage>
