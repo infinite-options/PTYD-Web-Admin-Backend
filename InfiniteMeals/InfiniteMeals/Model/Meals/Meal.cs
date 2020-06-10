@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace InfiniteMeals.Meals.Model
 {
@@ -10,31 +11,82 @@ namespace InfiniteMeals.Meals.Model
         public string ShortName { get; set; }
     }
 
-    public class Meal
+    public class Meal : INotifyPropertyChanged
     {
-        //public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        int qty1;
+        double _totalCost, _subtotal;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public enum Category { Meals, SeasonalMeals, Smoothies };
         public string imageUrl { get; set; }
         public string name { get; set; }
         public string description { get; set; }
-        public string price { get; set; }
+        public double price { get; set; }
         public string id { get; set; }
         public string kitchenId { get; set; }
         public string kitchenName { get; set; }
         public int order_qty { get; set; }
         public string infoUrl { get; set; }
         public Category category { get; set; }
-
         public int meal_qty;
-        public int qty {
-            get { return order_qty; }
+        //public int  qty { get; set; }
+        //public int qty;
+
+        public double total
+        {
             set
             {
-                order_qty = value;
-                //PropertyChanged(this, new PropertyChangedEventArgs("order_qty"));
+                if (_totalCost != value)
+                {
+                    _totalCost = value;
+                    OnPropertyChanged("total");
+                }
+            }
+            get
+            {
+                return _totalCost;
+            }
+
+        }
+        public int qty
+        {
+            set
+            {
+                if (qty1 != value)
+                {
+                    qty1 = (int) value;
+                    OnPropertyChanged("qty");
+                }
+            }
+            get
+            {
+                return qty1;
             }
         }
 
+        public double Subtotal
+        {
+            set
+            {
+                if (_subtotal != value)
+                {
+                    _subtotal = value;
+                    OnPropertyChanged("Subtotal");
+                }
+            }
+            get
+            {
+                return _subtotal;
+            }
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
         public override string ToString() {
             return this.name;
         }

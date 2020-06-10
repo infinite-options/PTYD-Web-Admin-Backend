@@ -87,10 +87,6 @@ C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/De
 C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ViewModel/Checkout/Summary.xaml.g.cs
 C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ViewModel/MealSelect/AddOnChoices.xaml.g.cs
 >>>>>>> 4c4e82d01b1396f3759db2b73242e19907ff6df4
-/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.deps.json
-/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.dll
-/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/ref/InfiniteMeals.dll
-/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.pdb
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/App.xaml.g.cs
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/MainPage.xaml.g.cs
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/Tests/CardTestCase.xaml.g.cs
@@ -115,8 +111,11 @@ C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/De
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.AssemblyInfoInputs.cache
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.AssemblyInfo.cs
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csproj.CoreCompileInputs.cache
+/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.deps.json
+/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.dll
+/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/ref/InfiniteMeals.dll
+/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.pdb
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/XamlC.stamp
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.dll
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ref/InfiniteMeals.dll
 /Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.pdb
-/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csprojAssemblyReference.cache

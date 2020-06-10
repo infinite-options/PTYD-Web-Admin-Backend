@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace InfiniteMeals.ViewModel.Checkout
 {
-    public class OrderInfo
+ /*   public class OrderInfo
     {
         public string orderId = "";
         public string email = ""; 
@@ -385,4 +385,5 @@ namespace InfiniteMeals.ViewModel.Checkout
             return "";
         }
     }
+ */
 }
