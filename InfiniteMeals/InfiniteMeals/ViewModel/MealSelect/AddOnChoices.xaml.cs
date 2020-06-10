@@ -245,7 +245,6 @@ namespace InfiniteMeals.MealSelect
                     if (stepperVal > model.qty)
                     {
                         model.qty = (int)steppers.Value;
-                        //model.total = model.qty * model.price;
                         subTotal += model.price;
                     }
                     else if (stepperVal < model.qty)
@@ -265,10 +264,9 @@ namespace InfiniteMeals.MealSelect
 
                 Label quantity = new Label
                 {
-                    WidthRequest = 20,
-                    HeightRequest = 20,
-                    HorizontalOptions = LayoutOptions.Start,
-                    VerticalOptions = LayoutOptions.Center
+                    FontSize = 15,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
                 };
 
                 nameLabel.SetBinding(Label.TextProperty, "name");
