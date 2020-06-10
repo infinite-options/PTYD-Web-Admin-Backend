@@ -2,9 +2,7 @@
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
   <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="261" Column="1" />
-      <File FileName="InfiniteMeals/Model/Meals/Meal.cs" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="269" Column="66" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -20,6 +18,7 @@
                   <Node name="AddOnChoices.xaml" expanded="True">
                     <Node name="AddOnChoices.xaml.cs" selected="True" />
                   </Node>
+                  <Node name="MealChoices.xaml" expanded="True" />
                 </Node>
               </Node>
             </Node>

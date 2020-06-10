@@ -43,6 +43,7 @@ namespace InfiniteMeals.MealSelect
             List<String> MenuForWeek1Names = new List<String>();
             List<String> MenuForWeek1Desc = new List<String>();
             List<String> MenuForWeek1Image = new List<String>();
+            List<int> MenuQty = new List<int>();
 
             //Nutrition Facts Normal Meals
             List<double?> MenuForWeek1Fat = new List<double?>();
@@ -53,11 +54,14 @@ namespace InfiniteMeals.MealSelect
             List<String> SeasMenuForWeek1Names = new List<String>();
             List<String> SeasMenuForWeek1Desc = new List<String>();
             List<String> SeasMenuForWeek1Image = new List<String>();
+            List<int> SeasonalQty = new List<int>();
 
             // Smoothies
             List<String> SmoothiesNames = new List<String>();
             List<String> SmoothiesDesc = new List<String>();
             List<String> SmoothiesImage = new List<String>();
+            List<int> SmoothieQty = new List<int>();
+
             var lstView = new ListView { HasUnevenRows = true};
 
             // Grouping
@@ -98,7 +102,8 @@ namespace InfiniteMeals.MealSelect
                     description = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealDesc,
                     imageUrl= imageMeal,
                     infoUrl = infoImg,
-                }) ;
+                    qty = 0
+                }); ;
 
             }
 
@@ -123,6 +128,7 @@ namespace InfiniteMeals.MealSelect
                     description = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc,
                     imageUrl = imageMeal,
                     infoUrl = infoImg,
+                    qty = 0,
                 });
 
             }
@@ -148,7 +154,7 @@ namespace InfiniteMeals.MealSelect
                     description = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc,
                     imageUrl = imageMeal,
                     infoUrl = infoImg,
-
+                    qty = 0,
                 });
             }
     
@@ -177,6 +183,13 @@ namespace InfiniteMeals.MealSelect
                     HorizontalOptions = LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
+                Label quantity = new Label
+                {
+                    WidthRequest = 20,
+                    HeightRequest = 20,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Center
+                };
                 var infoButton = new ImageButton {
                     WidthRequest = 20,
                     HeightRequest = 20,
@@ -184,15 +197,14 @@ namespace InfiniteMeals.MealSelect
                     HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions= LayoutOptions.Center,
             };
-                infoButton.Margin = new Thickness(50,0,0,0);
-   
+                infoButton.Margin = new Thickness(50, 0, 0, 0);
+                infoButton.Clicked += (sender, e) =>
+                {
+                    ImageButton stepper = sender as ImageButton;
+                    var model = stepper.BindingContext as Meal;
+                    DisplayAlert("Ingredients", model.description.ToString(), "OK");
+                };
 
-                infoButton.Command = selectCommand;
-                infoButton.CommandParameter = new Binding("{Source={x:Reference Meal}, Path=BindingContext}");
-                infoButton.BindingContext = new Binding("{Source={x:Reference lstView}, Path=BindingContext}");
-                //infoButton.SetBinding(Button.CommandProperty, new Binding("selectCommand"));
-                //infoButton.SetBinding(Button.CommandParameterProperty, new Binding("{Binding Source={x:Reference Meal}, Path=BindingContext}"));
-                //infoButton.SetBinding(Button.BindingContextProperty, new Binding("{Binding Source={x:Reference lstView}, Path=BindingContext}"));
                 var steppers = new Stepper {
                     Value = 0,
                     Maximum = 10,
@@ -200,36 +212,32 @@ namespace InfiniteMeals.MealSelect
                     HeightRequest = 50
                 };
 
-                Label displayLabel = new Label
-                {
-                    Text = "0",
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
-                };
-
                 steppers.ValueChanged += (sender, e) =>
                 {
-                    displayLabel.Text = string.Format("{0}", steppers.Value);
+                    Stepper stepper = sender as Stepper;
+                    var model = stepper.BindingContext as Meal;
+                    var stepperVal = stepper.Value;
+                    model.qty = (int) stepperVal;
+                    System.Diagnostics.Debug.WriteLine(model.price + " " + model.name + " " + model.qty + " " + model.total);
                 };
 
                 quantity = new Label {
+                    FontSize = 15,
                     FontAttributes = FontAttributes.Bold,
-                    HorizontalTextAlignment = TextAlignment.Start,
                     VerticalTextAlignment=  TextAlignment.Center,
                 };
-                quantity.Margin = new Thickness(0, 0, 100, 0);
 
                 nameLabel.SetBinding(Label.TextProperty, "name");
                 imgLabel.SetBinding(Image.SourceProperty, "imageUrl");
                 infoButton.SetBinding(Image.SourceProperty, "infoUrl");
-                
+                quantity.SetBinding(Label.TextProperty, "qty");
                 grid.Children.Add(imgLabel, 0, 0);
                 imgLabel.SetValue(Grid.RowSpanProperty, 2);
                 grid.Children.Add(nameLabel, 1, 0);
                 grid.Children.Add(infoButton, 2, 0);
                 grid.Children.Add(steppers, 2, 1);
                 steppers.SetValue(Grid.ColumnSpanProperty, 2);
-                grid.Children.Add(displayLabel, 3, 0);
+                grid.Children.Add(quantity, 3, 0);
 
                 return new ViewCell { View = grid, Height = 100};
             });
