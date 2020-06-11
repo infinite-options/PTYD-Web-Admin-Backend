@@ -21,15 +21,18 @@ export default function Meals( props ) {
 	const [ currentMeal, setCurrentMeal ]         = React.useState( {} ),
 	      [ currentAddon, setCurrentAddon ]       = React.useState( {} ),
 	      [ totalAddonPrice, setTotalAddonPrice ] = React.useState( '0' ),
-	      [ buttonChosen, setButtonChosen ]       = React.useState( undefined ),
+	      [ dayChosen, setDayChosen ]             = React.useState( undefined ),
+	      [ optionChosen, setOptionChosen ]       = React.useState( undefined ),
+	      [ addonChosen, setAddonChosen ]         = React.useState( false ),
 	      [ buttonDisabled, setButtonDisabled ]   = React.useState( undefined ),
 	      [ selectMealModal, setSelectMealModal ] = React.useState( false ),
 	      [ addonModal, setAddonModal ]           = React.useState( false );
 	
 	function clickSurprise( first ) {
 		//set properties for all other buttons
-		setButtonChosen( 'surprise' );
-		setButtonDisabled( undefined );
+		setOptionChosen( 'surprise' );
+		setSelectMealModal( false );
+		setAddonModal( false );
 		// update state for currentMealSelected
 		setCurrentMeal( prev => ( {
 			...prev,
@@ -43,8 +46,10 @@ export default function Meals( props ) {
 	
 	function clickDay( day, first ) {
 		// set properties for other button
-		setButtonChosen( day );
+		setDayChosen( day );
 		setButtonDisabled( undefined );
+		setSelectMealModal( false );
+		setAddonModal( false );
 		// update the delivery day for currentMealSelected
 		const meal_selection = currentMeal.meal_selection === 'SKIP'
 			? '' : currentMeal.meal_selection;
@@ -58,8 +63,7 @@ export default function Meals( props ) {
 		let mealSelected = currentMeal.meals_selected;
 		if ( mealSelected !== undefined && Object.keys( mealSelected ).length > 0 ) {
 			// there are selected meals
-			setButtonChosen( 'select' );
-			setButtonDisabled( undefined );
+			setOptionChosen( 'select' );
 		} else if ( meal_selection === '' || meal_selection === 'SKIP' ) {
 			clickSurprise();
 		}
@@ -67,8 +71,7 @@ export default function Meals( props ) {
 		// Should it be shown up or not
 		let addonSelected = currentAddon.meal_selected;
 		if ( addonSelected !== undefined && Object.keys( addonSelected ).length > 0 ) {
-			setButtonChosen( 'addon' );
-			setButtonDisabled( undefined );
+			setAddonChosen( true );
 		}
 		// update the delivery day for database
 		if ( !first ) {
@@ -78,13 +81,17 @@ export default function Meals( props ) {
 	}
 	
 	function clickSkip() {
-		setButtonChosen( 'skip' );
+		setDayChosen( undefined );
+		setOptionChosen( undefined );
+		setAddonChosen( undefined );
 		setButtonDisabled( [ false, false, false, true, true, true ] );
 		setCurrentMeal( prev => ( {
 			...prev,
 			delivery_day:   'SKIP',
 			meal_selection: 'SKIP'
 		} ) );
+		setSelectMealModal( false );
+		setAddonModal( false );
 		saveSelectMealAPI( props, currentMeal );
 	}
 	
@@ -93,8 +100,12 @@ export default function Meals( props ) {
 		setCurrentMeal( {} );
 		setCurrentAddon( {} );
 		//get meals and addon out of the result object
-		setButtonChosen( undefined );
+		setDayChosen( undefined );
+		setOptionChosen( undefined );
+		setAddonChosen( undefined );
 		setButtonDisabled( undefined );
+		setSelectMealModal( false );
+		setAddonModal( false );
 	}, [ currentPurchase.purchase_id ] );
 	
 	React.useEffect( () => {
@@ -139,32 +150,34 @@ export default function Meals( props ) {
 					clickDay( 'sunday', true ).then();
 					clickSurprise( true );
 				} else if ( currentMeal.delivery_day === 'Sunday' ) {
-					setButtonChosen( 'sunday' );
+					setDayChosen( 'sunday' );
 					setButtonDisabled( undefined );
 				} else if ( currentMeal.delivery_day === 'Monday' ) {
-					setButtonChosen( 'monday' );
+					setDayChosen( 'monday' );
 					setButtonDisabled( undefined );
 				} else if ( currentMeal.delivery_day === 'SKIP' ) {
-					setButtonChosen( 'skip' );
+					setDayChosen( undefined );
+					setOptionChosen( undefined );
+					setAddonChosen( undefined );
 					setButtonDisabled( [ false, false, false, true, true, true ] );
 				}
 				if ( currentMeal.meal_selection === 'SURPRISE' ) {
-					setButtonChosen( 'surprise' );
+					setOptionChosen( 'surprise' );
 					setButtonDisabled( undefined );
 				} else if (
 					currentMeal.meal_selection.length > 0 &&
 					currentMeal.delivery_day !== 'SKIP'
 				) {
-					setButtonChosen( 'select' );
+					setOptionChosen( 'select' );
 					setButtonDisabled( undefined );
 				}
 				let mealSelection = currentAddon.meal_selection;
 				if ( mealSelection !== undefined && mealSelection.length > 0 ) {
-					setButtonChosen( 'addon' );
+					setAddonChosen( true );
 					setButtonDisabled( undefined );
 				} else {
-					if ( buttonChosen === 'addon' ) {
-						setButtonChosen( undefined );
+					if ( addonChosen ) {
+						setAddonChosen( false );
 						setButtonDisabled( undefined );
 					}
 				}
@@ -218,10 +231,12 @@ export default function Meals( props ) {
 	
 	return <ButtonToolbar className='mb-5'>
 		<Buttons
-			buttonChosen={buttonChosen}
-			setButtonChosen={setButtonChosen}
+			dayChosen={dayChosen}
+			optionChosen={optionChosen}
+			setOptionChosen={setOptionChosen}
+			addonChosen={addonChosen}
+			setAddonChosen={setAddonChosen}
 			buttonDisabled={buttonDisabled}
-			setButtonDisabled={setButtonDisabled}
 			weekMenu={weekMenu}
 			clickDay={clickDay}
 			clickSurprise={clickSurprise}
@@ -239,8 +254,7 @@ export default function Meals( props ) {
 			clickSurprise={clickSurprise}
 			currentMealSelected={currentMeal}
 			saveSelectMeal={() => {
-				setButtonChosen( 'select' );
-				setButtonDisabled( undefined );
+				setOptionChosen( 'select' );
 				setCurrentMeal( prev => ( {
 					...prev,
 					meal_selection: concatMealSelection( currentMeal.meal_selection, currentMeal.meals_selected )
@@ -255,8 +269,7 @@ export default function Meals( props ) {
 				if ( addonSelected !== undefined && Object.keys( addonSelected ).length > 0 ) {
 					choose = true;
 				}
-				setButtonChosen( choose ? 'addon' : undefined );
-				setButtonDisabled( undefined );
+				setAddonChosen( choose );
 				setAddonModal( false );
 				setCurrentAddon( prev => ( {
 					...prev,
@@ -265,8 +278,7 @@ export default function Meals( props ) {
 				} ) );
 			}}
 			saveButtonAddOn={() => {
-				setButtonChosen( parseInt( totalAddonPrice ) !== 0 ? 'addon' : buttonChosen );
-				setButtonDisabled( undefined );
+				setAddonChosen( parseInt( totalAddonPrice ) !== 0 );
 				setAddonModal( false );
 				//check if we change the addon of the current week
 				if ( currentPurchase.week_affected === weekMenu.SaturdayDate ) {

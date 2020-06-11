@@ -6,10 +6,12 @@ import { clear, green, orange } from './colors';
 
 export default function Buttons( props ) {
 	const {
-		      buttonChosen,
-		      setButtonChosen,
+		      dayChosen,
+		      optionChosen,
+		      setOptionChosen,
+		      addonChosen,
+		      setAddonChosen,
 		      buttonDisabled,
-		      setButtonDisabled,
 		      weekMenu,
 		      clickDay,
 		      clickSurprise,
@@ -18,29 +20,13 @@ export default function Buttons( props ) {
 		      setAddonModal
 	      } = props;
 	
-	// defined color for buttons
-	let selectColor, addonColor;
-	
-	//select button
-	if ( buttonChosen === 'select' ) {
-		selectColor = /*selectButton.red ? red :*/ green;
-	} else {
-		selectColor = clear;
-	}
-	//addon button
-	if ( buttonChosen === 'addon' ) {
-		addonColor = /*addonButton.red ? red :*/ orange;
-	} else {
-		addonColor = clear;
-	}
-	
 	return <>
 		<div className='radio' style={{ position: 'relative' }}>
 			<Button
 				variant='outline-dark'
 				disabled={buttonDisabled && buttonDisabled[ 0 ]}
 				onClick={() => clickDay( 'sunday', false )}
-				style={buttonChosen === 'sunday' ? green : clear}>
+				style={dayChosen === 'sunday' ? green : clear}>
 				Sunday
 				<div>{weekMenu.Sunday}</div>
 			</Button>
@@ -49,7 +35,7 @@ export default function Buttons( props ) {
 				variant='outline-dark'
 				disabled={buttonDisabled && buttonDisabled[ 1 ]}
 				onClick={() => clickDay( 'monday', false )}
-				style={buttonChosen === 'monday' ? green : clear}>
+				style={dayChosen === 'monday' ? green : clear}>
 				Monday
 				<div>{weekMenu.Monday}</div>
 			</Button>
@@ -57,7 +43,7 @@ export default function Buttons( props ) {
 			<Button
 				disabled={buttonDisabled && buttonDisabled[ 2 ]}
 				variant='outline-dark'
-				style={buttonChosen === 'skip' ? orange : clear}
+				style={dayChosen === undefined ? orange : clear}
 				onClick={clickSkip}>
 				Skip This Week
 			</Button>
@@ -66,10 +52,9 @@ export default function Buttons( props ) {
 		<Button
 			disabled={buttonDisabled && buttonDisabled[ 3 ]}
 			variant='outline-dark'
-			style={selectColor}
+			style={optionChosen === 'select' ? green : clear}
 			onClick={() => {
-				setButtonChosen( 'select' );
-				setButtonDisabled( undefined );
+				setOptionChosen( 'select' );
 				setSelectMealModal( true );
 			}}>
 			Select Meal
@@ -79,17 +64,16 @@ export default function Buttons( props ) {
 			disabled={buttonDisabled && buttonDisabled[ 4 ]}
 			variant='outline-dark'
 			onClick={clickSurprise}
-			style={buttonChosen === 'surprise' ? green : clear}>
+			style={optionChosen === 'surprise' ? green : clear}>
 			Surprise Me!
 		</Button>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<Button
 			disabled={buttonDisabled && buttonDisabled[ 5 ]}
 			variant='outline-dark'
-			style={addonColor}
+			style={addonChosen ? orange : clear}
 			onClick={() => {
-				setButtonChosen( 'addon' );
-				setButtonDisabled( undefined );
+				setAddonChosen( true );
 				setAddonModal( true );
 			}}>
 			Add Local Treats
