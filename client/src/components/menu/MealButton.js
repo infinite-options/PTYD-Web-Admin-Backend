@@ -143,6 +143,7 @@ export default class MealButton extends Component {
         if (this.state.currentMealSelected.meal_selection === "SURPRISE") {
           this.setSurprise();
         } else if (
+          this.state.currentMealSelected.meal_selection !== undefined &&
           this.state.currentMealSelected.meal_selection.length > 0 &&
           this.state.currentMealSelected.delivery_day !== "SKIP"
         ) {
@@ -158,7 +159,9 @@ export default class MealButton extends Component {
         }
       })
       .catch(err => {
-        this.props.SetError(err);
+        if (typeof err === "string") this.props.SetError(err);
+        else this.props.SetError(err.response);
+        console.log(err);
       });
   };
 

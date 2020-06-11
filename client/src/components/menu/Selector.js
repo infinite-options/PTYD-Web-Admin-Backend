@@ -21,7 +21,7 @@ export default class Selector extends Component {
   render() {
     return (
       <Fragment>
-        <select onChange={this.ChangePurchase}>
+        <select onChange={this.ChangePurchase} className='select'>
           {this.state.purchases.map((purchase, key) => (
             <option key={key} value={key}>
               {purchase.meal_plan_desc}
