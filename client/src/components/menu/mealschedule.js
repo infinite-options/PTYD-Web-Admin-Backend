@@ -16,8 +16,7 @@ export default class MealSchedule extends Component {
     this.state = {
       purchases: [], // use for loading all purchases that user have, key for this object is purchases_id
       currentPurchase: {}, // get from purchases_id
-      menu: {}, // menu for 6 week
-      startdate: this.props.match.params.startdate,
+      menu: {}, // menu for 6 week,
       mealPlans: [], // we're gonna need this for changing meal plan in change account info
       userID: this.props.appProps.user_uid, // user ID
       firstname: this.searchCookie4Name("loginStatus"),
@@ -90,7 +89,7 @@ export default class MealSchedule extends Component {
     // getting all purchases which user have
     axios
       .get(`${this.props.PURCHASE_API_URL}/${this.state.userID}`, {
-        params: {startdate: this.state.startdate}
+        params: {startdate: this.props.match.params.startdate}
       })
       .then(res => {
         if (res.data !== undefined && res.data.result !== undefined) {
