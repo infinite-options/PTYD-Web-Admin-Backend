@@ -470,7 +470,7 @@ const App = props => {
                   ></i>
                 </a>
               </Nav>
-              <Nav defaultActiveKey='/'>
+              <Nav defaultActiveKey='/' style={{marginTop: "40px"}}>
                 <Nav.Link style={{color: "green"}} disabled>
                   Join Our Mailing List
                 </Nav.Link>
