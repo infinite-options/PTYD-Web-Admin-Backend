@@ -150,11 +150,11 @@ class Landing extends Component {
           <div className='font2'>
             <Grid>
               <Cell col={9}>
-                <Container className='four-items-grid'>
-                  <Row style={{fontSize: "28px"}}>
+                <Container className='four-items-grid' style={{marginTop: "50px", marginLeft: "20px"}}>
+                  {/* <Row style={{fontSize: "28px"}}> */}
                     {/* <Col>LOCAL FARMS</Col>
                     <Col>REUSABLE PACKAGING</Col> */}
-                  </Row>
+                  {/* </Row> */}
                   <Row
                     // style={{
                     //   fontSize: "13px",
@@ -172,7 +172,7 @@ class Landing extends Component {
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={12}>
+                      <Cell col={11} style={{marginLeft:"-50px"}}>
                         <h4 className='font1'>REUSABLE PACKAGING</h4>
                         <p>Did you know that every piece of plastic ever produced,
                         still exists today? Enjoy a plastic-free experience with
@@ -190,6 +190,7 @@ class Landing extends Component {
                     //   color: "#4D4D4D",
                     //   lineHeight: "20px"
                     // }}
+                    style={{marginTop: "-40px"}}
                   >
                     <Col>
                       <Cell col={9}>
@@ -200,7 +201,7 @@ class Landing extends Component {
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={12}>
+                      <Cell col={11} style={{marginLeft:"-50px"}}>
                         <h4 className='font1'>ORGANIC PRODUCE</h4>
                         <p>
                         Once upon a time, all food was organic. Healthy soil
@@ -215,7 +216,7 @@ class Landing extends Component {
               <Cell col={3}>
                 <img
                   className='img-fluid'
-                  style={{width: "100%", height: "100%", marginTop: "30px"}}
+                  style={{width: "100%", height: "75%", margin: "80px 0 0 -30px", objectFit:"cover"}}
                   src={IMG2}
                   alt=''
                 />
@@ -229,7 +230,7 @@ class Landing extends Component {
                 //   color: "white",
                 //   size: "10px",
                 //   fontSize: "17px"
-                  marginLeft: "32px"
+                  marginLeft: "45px"
                 }}
               >
                 EAT BETTER NOW
