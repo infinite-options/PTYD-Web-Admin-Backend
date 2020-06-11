@@ -215,6 +215,7 @@ const App = props => {
                       variant='success'
                       size='sm'
                       onClick={() => window.location.reload(false)}
+                      style={{marginBottom: "25px"}}
                     >
                       Login
                     </Button>

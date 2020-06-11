@@ -49,7 +49,7 @@ class Landing extends Component {
               <p>Plant-based, ready to eat meals</p>
               <p>delivered to your doorstep.</p>
             </div>
-            <a className='btn1 btn1-primary start_button' href='/signup'>
+            <a className='btn1 btn1-primary start_button' href='/selectmealplan'>
               Get Started
             </a>
           </div>
@@ -138,7 +138,7 @@ class Landing extends Component {
             <center>
               <a
                 // type='button'
-                href='/signup'
+                href='/selectmealplan'
                 className='btn1 btn1-primary start_button'
               >
                 Get Started
@@ -224,7 +224,7 @@ class Landing extends Component {
               </Cell>
               <a
                 // type='button'
-                href='/signup'
+                href='/selectmealplan'
                 className='btn1 btn1-primary start_button'
                 style={{
                 //   marginTop: "10px",
@@ -351,7 +351,7 @@ class Landing extends Component {
         >
           <a
             // type='button'
-            href='/signup'
+            href='/selectmealplan'
             className='btn1 btn1-primary start_button font2'
           >
             SEE WHAT'S ON THE MENU NEXT WEEK
@@ -366,7 +366,7 @@ class Landing extends Component {
           <div style={{marginTop: "30px"}}></div>
           <a
             // type='button'
-            href='/signup'
+            href='/selectmealplan'
             className='btn1 btn1-primary font2 start_button'
           >
             TRY US TODAY
