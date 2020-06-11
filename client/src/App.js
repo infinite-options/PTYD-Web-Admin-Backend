@@ -92,7 +92,7 @@ const App = props => {
         >
           <Nav
             className='navbar fixed-top justify-content-center font2'
-            style={{minHeight: "140px", backgroundColor: "white", padding: "0 150px 0 150px"}}
+            style={{minHeight: "140px", backgroundColor: "white", padding: "12px 130px 0 130px"}}
             activeKey='/home'
           >
             <div className='mx-auto' style={{textAlign: "center"}}>
@@ -105,7 +105,7 @@ const App = props => {
               </div>
             </div>
 
-            <Nav.Item className='mx-auto' style={{marginTop: "30px"}}>
+            <Nav.Item className='mx-auto' style={{marginTop: "50px"}}>
               <Nav.Link style={{color: "black"}} href='/selectmealplan'>
                 SUBSCRIBE
               </Nav.Link>
@@ -115,7 +115,7 @@ const App = props => {
               className='mx-auto' 
               title='MENU'
               id='nav-dropdown'
-              style={{marginTop: "30px", color: "black"}}
+              style={{marginTop: "50px", color: "black"}}
             >
               {isAuthenticated && (
                 <Fragment>
@@ -136,7 +136,7 @@ const App = props => {
 
             <Nav.Item 
               className='mx-auto' 
-              style={{marginTop: "30px"}}
+              style={{marginTop: "50px"}}
             >
               <Nav.Link style={{color: "black"}} href='/findus'>
                 FIND US
@@ -145,7 +145,7 @@ const App = props => {
             
             <Nav.Item 
               className='mx-auto' 
-              style={{marginTop: "30px"}}
+              style={{marginTop: "50px"}}
             >
               <Nav.Link style={{color: "black"}} href='/giftcards'>
                 GIFT CARDS
@@ -156,7 +156,7 @@ const App = props => {
               className='mx-auto' 
               title='ABOUT'
               id='nav-dropdown'
-              style={{marginTop: "30px", color: "black"}}
+              style={{marginTop: "50px", color: "black"}}
             >
               <NavDropdown.Item href='/howitworks'>
                 HOW IT WORKS
@@ -178,47 +178,67 @@ const App = props => {
               </Nav.Link>
             </Nav.Item> */}
 
-            <div className='mx-auto' style={{paddingTop: "66px"}}>
+            <div className='mx-auto'>
               {searchCookie4Login("loginStatus") !== null ? (
                 <div>
-                  <a href='/logout'>
-                    <Button
-                      id='logoutButton'
-                      variant='success'
-                      size='sm'
-                      onClick={() => {
-                        document.cookie = "loginStatus=; path=/";
-                        window.location.reload(false);
-                      }}
-                    >
-                      Log Out
-                    </Button>
-                  </a>
                   <p
                     id='loginStatus'
                     style={{
                       fontSize: "20px",
                       textAlign: "right",
-                      color: "black"
+                      color: "black",
+                      marginBottom:"5px",
+                      paddingTop:"20px"
                     }}
                   >
-                    <span className='font-weight-bold'>Hello </span>
+                    <span>Hello, </span>
                     <span>{searchCookie4Login("loginStatus")}</span>
-                    <span className='font-weight-bold'>!</span>
+                    <span>!</span>
                   </p>
+                  <a href='/logout'>
+                    <a
+                      id='logoutButton'
+                      variant='success'
+                      // size='sm'
+                      onClick={() => {
+                        document.cookie = "loginStatus=; path=/";
+                        window.location.reload(false);
+                      }}
+                      style={{
+                        textDecoration:"none",
+                        color:"black",
+                        float:"right"
+                      }}
+                    >
+                      <u>Log Out</u>
+                    </a>
+                  </a>
+                  
                 </div>
               ) : (
-                <>
+                <div>
+                  <div>
+                    <a href='/selectmealplan'
+                      className='top-btn1 top-btn1-primary'
+                      // size='sm'
+                      style={{
+                        float:"right",
+                        marginBottom:"10px"
+                      }}
+                      >
+                        Get Started
+                    </a>
+                  </div>
                   <a href='/login'>
-                    <Button
+                    <a
                       id='loginButton'
-                      variant='success'
-                      size='sm'
+                      // variant='success'
+                      // size='sm'
                       onClick={() => window.location.reload(false)}
-                      style={{marginBottom: "25px"}}
+                      style={{textDecoration:"none", color: "black", float:"right"}}
                     >
-                      Login
-                    </Button>
+                      <u>Login</u>
+                    </a>
                   </a>
                   <p
                     id='loginStatus'
@@ -230,7 +250,7 @@ const App = props => {
                   >
                     {searchCookie4Login("loginStatus")}
                   </p>
-                </>
+                </div>
               )}
             </div>
           </Nav>

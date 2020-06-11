@@ -35,7 +35,7 @@ class Landing extends Component {
         <div className='container' style={{color: "white", marginTop: "-45px"}}>
           <img
             className='img-fluid'
-            style={{width: "100%", height: "700px"}}
+            style={{width: "100%", height: "800px", objectFit:"cover"}}
             src={IMG1}
             alt=''
           />

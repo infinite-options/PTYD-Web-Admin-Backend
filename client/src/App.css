@@ -393,6 +393,27 @@ br {
 
 /* button */
 
+.top-btn1 {
+  padding: 0.1rem .5rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  border: 0;
+  line-height: 1.5;
+  border-radius: 4px;
+}
+
+.top-btn1-primary {
+  background-color:#467844;
+  opacity: 1;
+  transition: .2s;
+  color: white;
+}
+.top-btn1-primary:hover {
+  background-color: #cd790a;
+  color: white;
+  text-decoration:none;
+}
+
 .btn1 {
   /* -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important;
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0) !important; */
