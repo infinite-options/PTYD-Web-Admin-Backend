@@ -334,7 +334,7 @@ const App = props => {
         <hr></hr>
 
         <footer className='container font2'>
-          <div className='row'>
+          <div className='row' style={{marginBottom: "20px"}}>
             <div className='col'>
               <div style={{textAlign: "center"}}>
                 <a className='navbar-brand' href='/'>
@@ -483,7 +483,6 @@ const App = props => {
               </Nav>
             </div>
           </div>
-          <br/>
         </footer>
       </Layout>
     </div>

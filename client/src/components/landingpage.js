@@ -381,7 +381,7 @@ class Landing extends Component {
                   ></img>
                 </Cell>
                 <Cell col={7}>
-                  <h5 className='font2'>Veronica</h5>
+                  <h5 className='font2' style={{marginBottom:"0"}}>Veronica</h5>
                   <p>UX Designer</p>
                 </Cell>
               </Card.Footer>
@@ -409,7 +409,7 @@ class Landing extends Component {
                   ></img>
                 </Cell>
                 <Cell col={7}>
-                  <h5>Luke</h5>
+                  <h5 className='font2' style={{marginBottom:"0"}}>Luke</h5>
                   <p>Tech</p>
                 </Cell>
               </Card.Footer>
@@ -437,7 +437,7 @@ class Landing extends Component {
                   ></img>
                 </Cell>
                 <Cell col={7}>
-                  <h5 className='font2'>Courtney</h5>
+                  <h5 className='font2' style={{marginBottom:"0"}}>Courtney</h5>
                   <p>Fitness Designer</p>
                 </Cell>
               </Card.Footer>
