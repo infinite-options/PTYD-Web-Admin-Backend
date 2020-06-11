@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
+import {Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 
 import IMG1 from "../img/img1.jpg";
@@ -32,7 +32,7 @@ class Landing extends Component {
   render() {
     return (
       <section className='content-section'>
-        <div className='container' style={{color: "white", marginTop: "-30px"}}>
+        <div className='container' style={{color: "white", marginTop: "-45px"}}>
           <img
             className='img-fluid'
             style={{width: "100%", height: "700px"}}
@@ -73,15 +73,15 @@ class Landing extends Component {
             <Grid className='zero-waste-subtext'>
               <Cell col={4} className='zero-waste-cell'>
                 <h4 className='font1 zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
-                  <p>Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.</p>
+                  <p style={{marginLeft:"6px"}}>Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.</p>
               </Cell>
               <Cell col={4} className='zero-waste-cell'>
                 <h4 className='font1 zero-waste-subtitle text-wrap'>WEEKLY DELIVERY</h4>
-                  <p>Seamless non-contact delivery in Austin & Houston.</p>
+                  <p style={{marginLeft:"34px"}}>Seamless non-contact delivery in Austin & Houston.</p>
               </Cell>
               <Cell col={4} className='zero-waste-cell'>
                 <h4 className='font1 zero-waste-subtitle text-wrap'>RETURN YOUR JARS</h4>
-                  <p>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
+                  <p style={{marginLeft:"24px"}}>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
               </Cell>
             </Grid>
             <div className='box-shadow-bottom'>&#x200b;</div>
@@ -378,8 +378,7 @@ class Landing extends Component {
 
           <Grid>
             <center>
-
-              <div className='container_space bottom_header'>
+              <div className='bottom_header' style={{marginTop: "50px"}}>
                 <Grid className='sponsors'>
                   <Cell col={3} align='middle'>
                     <img src={LOGOJBG} alt='jbg' />

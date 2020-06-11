@@ -81,22 +81,18 @@
 }
 
 .zero-waste-subtext {
-  /* margin:0; */
   text-align: center;
-  /* box-shadow:         0 10px 5px -6px grey;
-  -webkit-box-shadow: 0 10px 5px -6px grey;
-  -moz-box-shadow:    0 10px 5px -6px grey; */
 }
 
 .box-shadow-top {
   box-shadow:inset 0 -15px 10px -16px grey;
   margin: auto;
-  width: 930px;
+  width: 960px;
 }
 .box-shadow-bottom {
   box-shadow:inset 0 15px 10px -16px grey;
   margin: auto;
-  width: 930px;
+  width: 960px;
   padding-bottom: 25px;
 }
 
@@ -121,7 +117,7 @@
 .zero-waste-cell {
   padding: 0 20px 0 20px;
   display: inline-block;
-  text-align: left;
+  text-align: center;
 }
 
 .four-items-grid {
