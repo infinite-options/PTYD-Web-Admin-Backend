@@ -1,31 +1,35 @@
-import React, { Component } from "react";
-import { Grid, Cell } from "react-mdl";
-import IMG8 from "../../img/img8.jpeg";
-import MealButton from "./meal-button";
-import MakeChanges from "./make-account-changes";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import { ButtonToolbar, Button, Modal, Card, Form } from "react-bootstrap";
-import Cookies from "js-cookie";
+import React, {Component, Fragment} from "react";
 
-class Mealschedule extends Component {
+import {Grid, Cell} from "react-mdl";
+import {Button, Row} from "react-bootstrap";
+import Cookies from "js-cookie";
+import axios from "axios";
+
+import AccountInfo from "./AccountInfo";
+import MakeChange from "./MakeChange";
+import MealButtons from "./MealButton";
+import Selector from "./Selector";
+
+export default class MealSchedule extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      menu: [],
-      user_uid: this.props.appProps.user_uid,
-      purchase: { NextCharge: 0 },
-      subscribed: false,
-      monday_available: false,
-      paymentPlans: [],
-      purchase_all: [], //hold all subscriptions
-      selection: 0,
-      api: null //initial result api call,
+      purchases: [], // use for loading all purchases that user have, key for this object is purchases_id
+      currentPurchase: {}, // get from purchases_id
+      menu: {}, // menu for 6 week
+
+      mealPlans: [], // we're gonna need this for changing meal plan in change account info
+      userID: this.props.appProps.user_uid, // user ID
+      firstname: this.searchCookie4Name("loginStatus"),
+      showHideMakeChange: false,
+
+      //handle addonCharge for AccountInfo component
+      addonCharge: 0,
+
+      //handle error
+      error: null
     };
-    this.changeMenuButtons = this.changeMenuButtons.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.ChangeCurrentPurchase = this.ChangeCurrentPurchase.bind(this);
   }
 
   getCookieAttrHelper(cname, type) {
@@ -42,6 +46,11 @@ class Mealschedule extends Component {
       return null;
     }
   }
+  /* these functions are using for getting information from cookies.
+    Parameter for these functions is the name of the cookies's variable
+    which we want to get info. For our app, using "loginStatus" for the
+    parameter to get first name, userID ...from cookies.
+  */
   searchCookie4LoggedInBy(cname) {
     return this.getCookieAttrHelper(cname, "loggedInBy");
   }
@@ -51,486 +60,131 @@ class Mealschedule extends Component {
   searchCookie4UserID(cname) {
     return this.getCookieAttrHelper(cname, "user_uid");
   }
-  async changeMenuButtons() {
-    let currPur = this.state.purchase_all[this.state.selection]; //t - change
-    let purchaseId = currPur.purchase_id; //
-    console.log(" printing current purchase", currPur);
 
-    console.log("purchase id check1", purchaseId);
+  componentDidMount = () => {
+    // loading everything we need and keep it local
+    // get purchases for server
+    // using url = this.props.API_URL if there is no "startdate" variable in the request
+    // using url = this
+    // "startdate" variable is used for expand weeks (during testing)
+    // example: this.props.match.params.startdate ? this.props.API_URL + "/" + this.props.match.params.startdate : this.props.API_URL
 
-    const res = await fetch(
-      this.props.match.params.startdate
-        ? this.props.API_URL + "/" + this.props.match.params.startdate
-        : this.props.API_URL
-    );
-    const api = await res.json();
-
-    let monday_available = currPur.monday_available;
-    // let api = this.state.api;
-    if (api === null) return;
-    const mselect_res = await fetch(
-      `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
-    );
-    const mselect_api = await mselect_res.json();
-    console.log("meal selecting print", mselect_api);
-
-    let key;
-    let sixWeekMenu = [];
-    let weekNum;
-    if (api.result === null) {
-      return;
-    }
-    console.log("resule", api.result);
-    for (weekNum = 1; weekNum < 7; weekNum++) {
-      key = "MenuForWeek" + weekNum;
-      if (!(key in api.result)) break;
-
-      let currentWeek = {};
-      currentWeek.sat = api.result[key].SaturdayDate;
-      currentWeek.sun = api.result[key].Sunday;
-      currentWeek.mon = api.result[key].Monday;
-      currentWeek.menu = api.result[key].Meals;
-      currentWeek.addons = api.result[key].Addons;
-      currentWeek.mealQuantities = api.result[key].MealQuantities;
-      currentWeek.addonQuantities = Object.assign(
-        {},
-        currentWeek.mealQuantities
-      );
-      currentWeek.addonPrice = api.result[key].AddonPrice;
-      console.log("addonprice", api.result[key].AddonPrice);
-      currentWeek.maxmeals = currPur.MaximumMeals;
-      currentWeek.deliverDay = "Sunday";
-      currentWeek.surprise = true;
-      currentWeek.addonsSelected = false;
-
-      for (let week in mselect_api.result.Meals) {
-        if (mselect_api.result.Meals[week].week_affected === currentWeek.sat) {
-          if (mselect_api.result.Meals[week].meal_selection === "SKIP") {
-            currentWeek.deliverDay = "SKIP";
-          } else if (
-            mselect_api.result.Meals[week].meal_selection === "SURPRISE"
-          ) {
-            currentWeek.deliverDay =
-              mselect_api.result.Meals[week].delivery_day;
-          } else {
-            for (let mealId in mselect_api.result.Meals[week].meals_selected) {
-              currentWeek.mealQuantities[mealId] =
-                mselect_api.result.Meals[week].meals_selected[mealId];
-              currentWeek.maxmeals -=
-                mselect_api.result.Meals[week].meals_selected[mealId];
-              currentWeek.deliverDay =
-                mselect_api.result.Meals[week].delivery_day;
-              currentWeek.surprise = false;
-            }
-          }
+    //setting menu for 6 weeks
+    axios
+      .get(
+        this.props.match.params.startdate
+          ? this.props.API_URL + "/" + this.props.match.params.startdate
+          : this.props.API_URL
+      )
+      .then(res => {
+        if (res.data !== undefined && res.data.result !== undefined) {
+          this.setState({menu: res.data.result});
         }
-      }
+      })
+      .catch(err => {
+        this.setState({error: err.response});
+        // do something to prompt the error to the user
+      });
 
-      for (let week in mselect_api.result.Addons) {
-        if (mselect_api.result.Addons[week].week_affected == currentWeek.sat) {
-          for (let mealId in mselect_api.result.Addons[week].meals_selected) {
-            if (mealId === "") {
-              console.log("alert weird empty string with a space");
-              continue;
-            }
-            currentWeek.addonQuantities[mealId] =
-              mselect_api.result.Addons[week].meals_selected[mealId];
-            currentWeek.addonsSelected = true;
-          }
+    // getting all purchases which user have
+    axios
+      .get(`${this.props.PURCHASE_API_URL}/${this.state.userID}`, {
+        params: {startdate: this.state.select_date}
+      })
+      .then(res => {
+        if (res.data !== undefined && res.data.result !== undefined) {
+          this.setState({purchases: res.data.result});
+          //set currentPurchase for the first purchase in purchases array
+          // this is done in componentDidMount to load currentPurchase for the
+          // frist time the page is loaded
+          this.setState({
+            currentPurchase: res.data.result[0],
+            addonCharge: res.data.result[0].total_charge
+          });
         }
-      }
+      })
+      .catch(err => {
+        this.setState({error: err.response});
+        console.log(err.response);
+      });
+  };
 
-      sixWeekMenu.push(currentWeek);
-    }
-    const plans_res = await fetch(this.props.PLANS_URL);
-    const plans_api = await plans_res.json();
+  ChangeAccountInfo = () => {
+    this.state.showHideMakeChange
+      ? this.setState({showHideMakeChange: false})
+      : this.setState({showHideMakeChange: true});
+  };
 
-    const plans = plans_api.result;
-    var keys = Object.keys(plans);
-    let new_plans = [];
-
-    for (let i in keys) {
-      let x = plans[keys[i]].result;
-      for (let j = 1; j < x.length; j++) {
-        new_plans.push(x[j]);
-      }
-    }
-    console.log("menu six week menu", sixWeekMenu);
-    this.setState(
-      {
-        menu: sixWeekMenu,
-        purchase: currPur,
-        paymentPlans: new_plans,
-        monday_available: monday_available
-      },
-      () => {
-        console.log("ccccccc", this.state.paymentPlans);
-      }
-    );
-  }
-  async componentDidMount() {
-    /*  PLEASE REPLACE THIS CODE WITH COOKIE
-        DO NOT MAKE API CALL TO GET USER'S FIRST NAME
-    */
-    // const accountres = await fetch(
-    //   this.props.ACC_URL + "/" + this.state.user_uid
-    // );
-    // const accountapi = await accountres.json();
-    // this.setState({
-    //   first_name: accountapi.result[0].first_name
-    // });
-    this.setState({ first_name: this.searchCookie4Name("loginStatus") });
-
-    let currPur = {};
-    let purchaseId = 0;
-    //  Handle startdate parameter on URL with ternary operator
-    //  Use this to turn back / forward time
-    //  Make sure to disable this when putting into production
-    const res = await fetch(
-      this.props.match.params.startdate
-        ? this.props.API_URL + "/" + this.props.match.params.startdate
-        : this.props.API_URL
-    );
-    const api = await res.json();
-    console.log("api", api);
-    if (this.state.user_uid !== null) {
-      const purchases = await fetch(
-        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
-      );
-      const purchasesApi = await purchases.json();
-
-      // Check if user has any active subscriptions
-      if (purchasesApi.result.length != 0) {
-        currPur = purchasesApi.result[this.state.selection];
-        purchaseId = purchasesApi.result[this.state.selection].purchase_id;
-        this.setState({ subscribed: true });
-        this.setState(
-          {
-            subscribed: true,
-            monday_available:
-              purchasesApi.result[this.state.selection].monday_available,
-            purchase_all: purchasesApi.result,
-            api: api
-          },
-          () => {
-            console.log("api displaying", this.state.api);
-          }
-        );
-      }
-    }
-
-    const mselect_res = await fetch(
-      `${this.props.MEAL_SELECT_API_URL}/${purchaseId}`
-    );
-    const mselect_api = await mselect_res.json();
-    let key;
-    let sixWeekMenu = [];
-    let weekNum;
-    for (weekNum = 1; weekNum < 7; weekNum++) {
-      key = "MenuForWeek" + weekNum;
-      if (!(key in api.result)) break;
-
-      let currentWeek = {};
-      currentWeek.sat = api.result[key].SaturdayDate;
-      currentWeek.sun = api.result[key].Sunday;
-      currentWeek.mon = api.result[key].Monday;
-      currentWeek.menu = api.result[key].Meals;
-      currentWeek.addons = api.result[key].Addons;
-      currentWeek.mealQuantities = api.result[key].MealQuantities;
-      currentWeek.addonQuantities = Object.assign(
-        {},
-        currentWeek.mealQuantities
-      );
-      currentWeek.addonPrice = api.result[key].AddonPrice;
-      console.log("addonprice", api.result[key].AddonPrice);
-      console.log("meal quantities", currentWeek.mealQuantities);
-      console.log("addon quantities2", currentWeek.addonQuantities);
-      currentWeek.maxmeals = currPur.MaximumMeals;
-      currentWeek.deliverDay = "Sunday";
-      currentWeek.surprise = true;
-      currentWeek.addonsSelected = false;
-
-      for (let week in mselect_api.result.Meals) {
-        console.log(`currentWeek.sat`, currentWeek.sat);
-        console.log(
-          `Meal week affected: `,
-          mselect_api.result.Meals[week].week_affected
-        );
-        if (mselect_api.result.Meals[week].week_affected === currentWeek.sat) {
-          if (mselect_api.result.Meals[week].meal_selection === "SKIP") {
-            currentWeek.deliverDay = "SKIP";
-          } else if (
-            mselect_api.result.Meals[week].meal_selection == "SURPRISE"
-          ) {
-            currentWeek.deliverDay =
-              mselect_api.result.Meals[week].delivery_day;
-          } else {
-            for (let mealId in mselect_api.result.Meals[week].meals_selected) {
-              currentWeek.mealQuantities[mealId] =
-                mselect_api.result.Meals[week].meals_selected[mealId];
-              currentWeek.maxmeals -=
-                mselect_api.result.Meals[week].meals_selected[mealId];
-              currentWeek.deliverDay =
-                mselect_api.result.Meals[week].delivery_day;
-              currentWeek.surprise = false;
-            }
-          }
-        }
-      }
-
-      for (let week in mselect_api.result.Addons) {
-        if (mselect_api.result.Addons[week].week_affected == currentWeek.sat) {
-          for (let mealId in mselect_api.result.Addons[week].meals_selected) {
-            currentWeek.addonQuantities[mealId] =
-              mselect_api.result.Addons[week].meals_selected[mealId];
-            currentWeek.addonsSelected = true;
-          }
-        }
-      }
-      console.log("currentWeek", currentWeek);
-      sixWeekMenu.push(currentWeek);
-    }
-    console.log("sixWeekMenu", sixWeekMenu);
-    const plans_res = await fetch(this.props.PLANS_URL);
-    const plans_api = await plans_res.json();
-    const plans = plans_api.result;
-    console.log("plans_api", plans);
-
-    var keys = Object.keys(plans);
-    console.log("plans: ", plans);
-    console.log("keys: ", keys);
-    let new_plans = [];
-    let skip = 0;
-
-    for (let k of Object.keys(plans)) {
-      if (k !== "MealPlans") {
-        let x = plans[k].result;
-        for (let j = 0; j < x.length; j++) {
-          new_plans.push(x[j]);
-        }
-      }
-    }
-
-    console.log("plans", plans);
-    console.log("test98", new_plans);
-    this.setState(
-      {
-        menu: sixWeekMenu,
-        purchase: currPur,
-        paymentPlans: new_plans
-      },
-      () => {
-        console.log("ccccccc", this.state.paymentPlans);
-        // window.location.reload(false);
-      }
-    );
-  }
-  //dropdown for different subscription
-  async handleChange(event) {
-    console.log("event.target.value:", event.target.value);
-    await this.setState({
-      selection: event.target.value
-    });
-    this.setState(
-      () => {
-        this.changeMenuButtons();
-      },
-      () => {
-        // window.location.reload(false);
-      }
-    );
-  }
+  ChangeCurrentPurchase = purchase => {
+    // this function use for update current purchase which is selected from children
+    // need a helper function to get the purchase by using purchaseID
+    this.setState({currentPurchase: purchase});
+    this.setState({addonCharge: purchase.total_charge});
+  };
+  ChangeCurrentAddonCharge = total => {
+    this.setState({addonCharge: total});
+    console.log("changeCurrentAddon Charge in mealschedule is called");
+  };
+  SetError = err => {
+    this.setState({error: err});
+  };
   render() {
-    let displayrows = [];
-    let subscription_selection = this.state.purchase_all[this.state.selection];
-    if (subscription_selection == null) {
-      return <div></div>;
-    }
-    console.log("selection", subscription_selection);
-    // for (let i = 0; i < subscription_selection.length; i++) {
-    let tempelement = (
-      <div>
-        <h4>Subscription Details</h4>
-        <p>My Subscription: {subscription_selection.meal_plan_desc}</p>
-        <p>Payment Plan: {subscription_selection.payment_frequency}</p>
-        <p>
-          Paid Weeks Remaining: {subscription_selection.paid_weeks_remaining}
-        </p>
-        <p>Next Charge: ${subscription_selection.amount_due_before_addon}</p>
-        <p>Next Charge Date: {subscription_selection.next_charge_date}</p>
-        <p>Next Addon Charge: ${subscription_selection.weekly_addon_cost}</p>
-        <p>
-          Next Addon Charge Date:{" "}
-          {subscription_selection.next_addon_charge_date}
-        </p>
-        <p>
-          Coupons:{" "}
-          {subscription_selection.coupon_id
-            ? subscription_selection.coupon_id
-            : "None"}
-        </p>
-        <h4>Credit Card Details</h4>{" "}
-        <p>Credit Card: {subscription_selection.cc_num}</p>
-        <p>Expiration Date: {subscription_selection.cc_exp_date}</p>
-        <p>CVV: {subscription_selection.cc_cvv}</p>
-        <h4>Delivery Details</h4>{" "}
-        <p>Address: {subscription_selection.delivery_address}</p>
-        <p>Unit: {subscription_selection.delivery_address_unit}</p>
-        <p>
-          City, State ZIP: {subscription_selection.delivery_city},{" "}
-          {subscription_selection.delivery_state}{" "}
-          {subscription_selection.delivery_zip}
-        </p>
-        <p>Instructions: {subscription_selection.delivery_instructions}</p>
-      </div>
-    );
-    displayrows.push(tempelement);
+    /*because menu is an object so we have to convert it to array before we run the loop
+     to create 6 weeks buttons. */
+    let sixWeekMenu = Object.entries(this.state.menu);
 
-    // let addon_price_saved = subscription_selection.weekly_addon_cost;
     return (
-      // <div>
-      //   <section class="content-section">
-      <div class="container font2">
+      <div className='container font2'>
         <Grid>
-          <Cell col={3}>
-            {" "}
-            <Grid>
-              {/* <Cell col={4}>
-                <img
-                  style={{
-                    borderRadius: "50%",
-                    width: "70px",
-                    height: "70px",
-                    marginTop: "10px"
-                  }}
-                  src={IMG8}
-                  alt="Avatar"
-                ></img>
-              </Cell> */}
-              <Cell col={8}>
-                <h4 style={{ overflowWrap: "anywhere" }}>
-                  Hi, {this.searchCookie4Name("loginStatus")}
-                  <th colSpan="2">{this.subscription_dropdown()}</th>
-                </h4>
-              </Cell>
-            </Grid>
-            <MakeChanges
-              user_uid={this.searchCookie4UserID("loginStatus")}
-              loggedInBy={this.searchCookie4LoggedInBy("loginStatus")}
-              DEV_URL={this.props.DEV_URL}
-              DELETE_URL={this.props.DELETE_URL}
-              UPDATE_URL={this.props.UPDATE_URL}
-              UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}
-              meal_plan_id={this.state.purchase.meal_plan_id}
-              subscription={this.state.purchase.meal_plan_desc}
-              meal_plan_price={this.state.purchase.amount_due}
-              paymentplan={this.state.paymentPlans}
-              payment_plan={this.state.purchase.payment_frequency}
-              cc_num={this.state.purchase.cc_num}
-              cc_exp_date={this.state.purchase.cc_exp_date}
-              cc_cvv={this.state.purchase.cc_cvv}
-              delivery_address={this.state.purchase.delivery_address}
-              delivery_address_unit={this.state.purchase.delivery_address_unit}
-              delivery_city={this.state.purchase.delivery_city}
-              delivery_state={this.state.purchase.delivery_state}
-              delivery_zip={this.state.purchase.delivery_zip}
-              delivery_instructions={this.state.purchase.delivery_instructions}
-              purchase_id={this.state.purchase.purchase_id}
-            />
-            {displayrows}
-          </Cell>{" "}
-          <Cell col={1}></Cell>
-          <Cell col={8}>
-            <h3 className="font1">
-              <b>Select Meals Around Your Schedule</b>
-            </h3>
-            <div>{console.log(this.state.menu)}</div>
-            <div className="meals-button">
-              {this.state.menu.map(
-                eachWeek => (
-                  console.log("meal printing", eachWeek.mealQuantities),
-                  console.log("addon printing", eachWeek.addonQuantities),
-                  (
-                    <MealButton
-                      day1="Sunday"
-                      day2="Monday"
-                      saturdayDate={eachWeek.sat}
-                      date1={eachWeek.sun}
-                      date2={eachWeek.mon}
-                      menu={eachWeek.menu}
-                      addons={eachWeek.addons}
-                      mealQuantities={eachWeek.mealQuantities}
-                      addonQuantities={eachWeek.addonQuantities}
-                      addon_price_saved={this.create_addon_price(eachWeek)}
-                      maxmeals={eachWeek.maxmeals}
-                      purchase_id={this.state.purchase.purchase_id}
-                      deliverDay={eachWeek.deliverDay}
-                      subscribed={this.state.subscribed}
-                      surprise={eachWeek.surprise}
-                      addonsSelected={eachWeek.addonsSelected}
-                      monday_available={this.state.monday_available}
-                      MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL}
-                    />
-                  )
-                )
+          <Cell col={4}>
+            <div className='box'>
+              <h4>Hi! {this.state.firstname}</h4>
+              <Row className='mb-1'>
+                <Selector
+                  purchases={this.state.purchases}
+                  ChangeCurrentPurchase={this.ChangeCurrentPurchase}
+                />
+              </Row>
+
+              <Row className='mb-1'>
+                <Button onClick={this.ChangeAccountInfo} size='lg' block>
+                  Change Accont Info
+                </Button>
+              </Row>
+              {this.state.showHideMakeChange && (
+                <MakeChange
+                  ChangeAccountInfo={this.ChangeAccountInfo}
+                  currentPurchase={this.state.currentPurchase}
+                  purchases={this.state.purchases}
+                  mealPlans={this.state.mealPlans}
+                />
               )}
+
+              <AccountInfo
+                currentPurchase={this.state.currentPurchase}
+                addonCharge={this.state.addonCharge}
+              />
+            </div>
+          </Cell>{" "}
+          <Cell col={8}>
+            {/* run a loop to create 6 week's buttons */}
+
+            <div className='container'>
+              {sixWeekMenu.map(element => (
+                <MealButtons
+                  key={element[0]}
+                  maxMeals={this.state.currentPurchase.MaximumMeals}
+                  weekMenu={element[1]}
+                  currentPurchase={this.state.currentPurchase}
+                  ChangeCurrentAddonCharge={this.ChangeCurrentAddonCharge}
+                  MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL} // using for update meal selected
+                  SetError={this.SetError}
+                />
+              ))}
             </div>
           </Cell>
         </Grid>
       </div>
-      //   </section>
-      // </div>
     );
   }
-
-  create_addon_price = eachWeek => {
-    console.log("xxx");
-    let addon_price_saved = {};
-    let quantity = eachWeek.addonQuantities;
-    let price = eachWeek.addonPrice;
-    console.log("yyy", quantity, price);
-    for (var key in quantity) {
-      console.log(key);
-      let tempQuantity = quantity[key];
-      let tempPrice = price[key];
-      if (isNaN(tempQuantity * tempPrice)) {
-        console.log("naughty value");
-        addon_price_saved[key] = 0;
-        continue;
-      }
-      addon_price_saved[key] = tempQuantity * tempPrice;
-      // console.log(tempQuantity * tempPrice);
-    }
-    console.log("dict", addon_price_saved);
-    return addon_price_saved;
-  };
-
-  subscription_dropdown = () => {
-    if (this.state.purchase_all === null) {
-      return <div />;
-    }
-    let temp = [];
-    for (let i = 0; i < this.state.purchase_all.length; i++) {
-      temp.push(
-        <MenuItem value={i}>
-          {this.state.purchase_all[i].meal_plan_desc}
-        </MenuItem>
-      );
-    }
-    return (
-      <FormControl>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={this.state.selection}
-          onChange={this.handleChange}
-          // style={{ color: "white" }}
-        >
-          {temp}
-        </Select>
-      </FormControl>
-    );
-  };
 }
-
-export default Mealschedule;
