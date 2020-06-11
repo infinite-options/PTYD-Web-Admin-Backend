@@ -21,7 +21,7 @@ class Selectmealplan extends Component {
   render() {
     return (
       <section className='content-section'>
-        <div className='container font2' style={{width: "80%"}}>
+        <div className='container font2'>
           <center>
             <h2 className='font1' style={{color: "#4D4D4D"}}>
               SELECT A MEAL PLAN
