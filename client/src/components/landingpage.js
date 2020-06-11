@@ -1,12 +1,12 @@
 import React, {Component} from "react";
+import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
+import {Grid, Cell} from "react-mdl";
+
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
 // import IMG4 from "../img/img4.jpg";
 // import IMG5 from "../img/img5.jpg";
 // import IMG6 from "../img/img6.jpg";
-import HUMAN1 from "../img/human1.png";
-import HUMAN2 from "../img/human2.png";
-import HUMAN3 from "../img/human3.png";
 import LOGOBOULDIN from "../img/logo-bouldinfoodforest.jpg";
 import LOGOFOX7 from "../img/logo-fox7austin.jpg";
 import LOGOCREDO from "../img/logo-credo.jpg";
@@ -17,9 +17,10 @@ import LOGOYELLOWBIRD from "../img/logo-yellowbird.png";
 import LOGOSIETE from "../img/logo-siete.png";
 import LOGOFAVE from "../img/logo-award-fave.png"
 import LOGOAU40 from "../img/logo-award-au40.png"
-import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
-import {Grid, Cell} from "react-mdl";
-import MenuCarousel from "./menucarousel";
+
+import MenuCarousel from "./MenuCarousel";
+import CommunityCarousel from "./CommunityCarousel"
+import QuoteCarousel from "./QuoteCarousel"
 
 class Landing extends Component {
   constructor(props) {
@@ -358,92 +359,11 @@ class Landing extends Component {
         </div>
 
         <div className='container font2 container_space'>
-          <h3 className='font2'>What Our Community is Saying...</h3>
-          <CardDeck className='mb-5'>
-            <Card className='p-3'>
-              <Card.Body>
-                <Card.Title>
-                  Healthy, delicious, and delivered to your door at an
-                  affordable price. Hard to beat. As a bonus, the jars are
-                  eco-friendly. I can't wait to see PTYD expand.
-                </Card.Title>
-              </Card.Body>
-              <Card.Footer className='d-flex justify-content-center'>
-                <Cell col={3}>
-                  <img
-                    style={{
-                      borderRadius: "50%",
-                      // width: "60px",
-                      // height: "60px",
-                      marginTop: "10px"
-                    }}
-                    src={HUMAN1}
-                    alt='Avatar'
-                  ></img>
-                </Cell>
-                <Cell col={7}>
-                  <h5 className='font2' style={{marginBottom:"0"}}>Veronica</h5>
-                  <p>UX Designer</p>
-                </Cell>
-              </Card.Footer>
-            </Card>
-            <Card className='p-3'>
-              <Card.Body>
-                <Card.Title>
-                  Best meal prep service we've ever used. The food is fresh,
-                  organic, dairy and meat free. When you love food as much as my
-                  husband and I do, you appreciate having consistent meals
-                  throughout the week that are the definition of clean.
-                </Card.Title>
-              </Card.Body>
-              <Card.Footer className='d-flex justify-content-center'>
-                <Cell col={3}>
-                  <img
-                    style={{
-                      borderRadius: "50%",
-                      // width: "60px",
-                      // height: "60px",
-                      marginTop: "10px"
-                    }}
-                    src={HUMAN2}
-                    alt='Avatar'
-                  ></img>
-                </Cell>
-                <Cell col={7}>
-                  <h5 className='font2' style={{marginBottom:"0"}}>Luke</h5>
-                  <p>Tech</p>
-                </Cell>
-              </Card.Footer>
-            </Card>
-            <Card className='p-3'>
-              <Card.Body>
-                <Card.Title>
-                  These meals are delicious, healthy, and make life SO easy and
-                  enjoyable! The team is great with customer service if I ever
-                  have any questions. I don't think I've ever had a meal I
-                  didn't like!
-                </Card.Title>
-              </Card.Body>
-              <Card.Footer className='d-flex justify-content-center'>
-                <Cell col={3}>
-                  <img
-                    style={{
-                      borderRadius: "50%",
-                      // width: "60px",
-                      // height: "60px",
-                      marginTop: "10px"
-                    }}
-                    src={HUMAN3}
-                    alt='Avatar'
-                  ></img>
-                </Cell>
-                <Cell col={7}>
-                  <h5 className='font2' style={{marginBottom:"0"}}>Courtney</h5>
-                  <p>Fitness Designer</p>
-                </Cell>
-              </Card.Footer>
-            </Card>
-          </CardDeck>
+
+          <h3 className='font1' style={{marginLeft:"12px"}}>What Our Community is Saying...</h3>
+
+          <CommunityCarousel/>
+          <div style={{marginTop: "30px"}}></div>
           <a
             // type='button'
             href='/signup'
@@ -452,17 +372,12 @@ class Landing extends Component {
             TRY US TODAY
           </a>
 
+          <div className='container_space' style={{textAlign:"center"}}>
+            <QuoteCarousel/>
+          </div>
+
           <Grid>
             <center>
-              <div className='container_space'>
-                <Cell col={8}>
-                  <h3 className='font2' style={{lineHeight: "50px"}}>
-                    "PTYD is so good and we love it so much, it feels like part of
-                    our family! It's so thrilling to fill our fridge every week
-                    with tasty surprises!"
-                  </h3>
-                </Cell>
-              </div>
 
               <div className='container_space bottom_header'>
                 <Grid className='sponsors'>
