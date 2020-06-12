@@ -20,6 +20,13 @@
   font-style:normal;
 }
 
+:root {
+  --green: #469B47;
+  --black: #494949;
+  --off-white: #F8F9FA;
+  --orange: #FF8C42;
+}
+
 .content-container {
   padding-top: 140px;
 }
@@ -100,11 +107,11 @@
 }
 
 #green {
-  color:#469B47;
+  color: var(--green);
 }
 
 .black-grey {
-  color: #494949;
+  color: var(--black);
 }
 .black-grey:hover {
   color: black;
@@ -119,7 +126,7 @@
   transition: .1s;
 }
 #social-icon:hover {
-  color: #494949;
+  color: var(--black);
 }
 
 .mailing-list-spacing {
@@ -139,7 +146,17 @@
 /* ----- landing page ----- */
 .container {
   position: relative;
-  color: black;
+  color: var(--black);
+}
+
+.title-image-container {
+  color: white;
+  margin-top: -40px;
+}
+.title-image {
+  width: 100%;
+  height: 800px;
+  object-fit: cover;
 }
 
 .top-left {
@@ -194,7 +211,8 @@
   text-decoration: none;
 }
 #already-a-member:hover {
-  color: #607122;
+  /* color: #607122; */
+  color: var(--black)
 }
 
 .zero-waste-container {
@@ -214,7 +232,7 @@
 }
 .zero-waste-subtitle {
   /* color: #617221; */
-  color: #469B47;
+  color: var(--gren);
   font-weight: bold;
   letter-spacing: .05em;
   font-size: 25px;
@@ -244,12 +262,25 @@
 .four-items-grid {
   font-size: 14px;
   color: #4D4D4D;
+  margin: 50px 0 0 20px;
 }
 .four-items-grid h4 {
   font-size: 27px;
-  /* font-weight: bold; */
+}
+.eat-better-now-button-container {
+  margin-left: 30px;
 }
 
+.img-2-carrot {
+  width: 100%;
+  height: 80%;
+  margin: 80px 0 0 -30px;
+  object-fit: cover;
+}
+
+.delivered-padding {
+  padding: 80px 80px;
+}
 .delivered-weekly-image {
   width: 700px;
   background-size: 100%;
@@ -302,13 +333,16 @@
   letter-spacing: .2em;
   font-weight: bold;
 }
+.pause-anytime {
+  padding-bottom: 20px;
+}
 
 .fresh-menu-title {
   text-align: center; 
   font-weight: bold;
   font-size: 37px; 
   /* color: #617221; */
-  color: #469B47;
+  color: var(--green);
 }
 .fresh-menu-subtitle-container {
   margin: 30px 0 40px 0;
@@ -317,6 +351,10 @@
   font-size: 22px;
   margin: 5px;
   padding: 0;
+}
+.menu-next-week-button-container {
+  background-size: 100% 100%;
+  margin-top: 50px;
 }
 
 .menu-carousel-img {
@@ -384,7 +422,7 @@
   z-index: 1;
 }
 .arrow-btn img {
-  fill: #469B47;
+  fill: var(--green);
 }
 .prev {
   float: left;
@@ -397,6 +435,11 @@
 
 .arrow-btn2 {
   margin-top:160px
+}
+
+.try-us-today-button-container {
+  text-align: left;
+  margin: 50px 0 0 0;
 }
 
 .awards {
@@ -503,7 +546,7 @@ br {
 }
 
 .top-btn1-primary {
-  background-color:#469B47;
+  background-color:var(--green);
   opacity: 1;
   -webkit-transition: .2s;
   -moz-transition: .2s;
@@ -512,7 +555,7 @@ br {
   color: white;
 }
 .top-btn1-primary:hover {
-  background-color: #cd790a;
+  background-color: var(--orange);
   color: white;
   text-decoration:none;
 }
@@ -527,7 +570,7 @@ br {
 }
 
 .btn1-primary {
-  background-color: #cd790a;
+  background-color: var(--orange);
   opacity: 1;
   -webkit-transition: .2s;
   -moz-transition: .2s;
@@ -537,13 +580,13 @@ br {
 }
 
 .btn1-primary:hover {
-  background-color: #469B47;
+  background-color: var(--green);
   color: white;
   text-decoration: none;
 }
 
 .subscribe-btn {
-  background-color: #469B47;
+  background-color: var(--green);
   color: white !important;
   padding: 6px .5rem;
   text-transform: uppercase;
@@ -586,6 +629,7 @@ hr.one-half {
 
 .background {
   background-image: url(./img/img3.jpg);
+  background-size: 100% 100%;
 }
 
 /* select meal page */
@@ -646,21 +690,21 @@ hr.four {
 
 .btn2-primary {
   /* background-color: #427c42; */
-  background-color: #469B47;
+  background-color: var(--green);
   opacity: 1;
 }
 
 .btn2-primary:hover {
-  background-color: #cd790c;
+  background-color: var(--orange);
 }
 
 .btn2-primary:focus {
-  background-color: #cd790c;
+  background-color: var(--orange);
   color: white;
 }
 
 .btn2-primary:active {
-  background-color: #cd790c !important;
+  background-color: var(--orange) !important;
 }
 
 .meals-button {
@@ -701,6 +745,10 @@ hr.four {
 
 .font5 {
   font-family: "Montserrat", sans-serif;
+}
+
+.font6 {
+  font-family: "Oswald", sans-serif;
 }
 
 .font9 {
@@ -759,7 +807,7 @@ hr.four {
 }
 
 .bottom_header {
-  margin-bottom: 50px;
+  margin: 30px 0 50px 0;
 }
 
 .start_button {

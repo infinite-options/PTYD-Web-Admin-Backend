@@ -2,11 +2,12 @@ import React, {Component} from "react";
 import {Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 
+import MenuCarousel from "./MenuCarousel";
+import CommunityCarousel from "./CommunityCarousel"
+import QuoteCarousel from "./QuoteCarousel"
+
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
-// import IMG4 from "../img/img4.jpg";
-// import IMG5 from "../img/img5.jpg";
-// import IMG6 from "../img/img6.jpg";
 import LOGOBOULDIN from "../img/logo-bouldinfoodforest.jpg";
 import LOGOFOX7 from "../img/logo-fox7austin.jpg";
 import LOGOCREDO from "../img/logo-credo.jpg";
@@ -18,10 +19,6 @@ import LOGOSIETE from "../img/logo-siete.png";
 import LOGOFAVE from "../img/logo-award-fave.png"
 import LOGOAU40 from "../img/logo-award-au40.png"
 
-import MenuCarousel from "./MenuCarousel";
-import CommunityCarousel from "./CommunityCarousel"
-import QuoteCarousel from "./QuoteCarousel"
-
 class Landing extends Component {
   constructor(props) {
     super();
@@ -32,19 +29,18 @@ class Landing extends Component {
   render() {
     return (
       <section className='content-section'>
-        <div className='container' style={{color: "white", marginTop: '-40px'}}>
+        <div className='container title-image-container'>
           <img
-            className='img-fluid'
-            style={{width: "100%", height: "800px", objectFit:"cover"}}
+            className='img-fluid title-image'
             src={IMG1}
-            alt=''
+            alt='img1'
           />
           <div className='top-left font1'>
             <p className='home_title'>LOCAL</p>
             <p className='home_title'>ORGANIC</p>
             <p className='home_title'>RESPONSIBLE</p>
           </div>
-          <div className='bottom-left font1 home_subtitle' style={{}}>
+          <div className='bottom-left font1 home_subtitle'>
             <div className='plant-based-text'>
               <p>Plant-based, ready to eat meals</p>
               <p>delivered to your doorstep.</p>
@@ -102,10 +98,10 @@ class Landing extends Component {
           <div className='font2'>
             <Grid>
               <Cell col={9}>
-                <Container className='four-items-grid' style={{marginTop: "50px", marginLeft: "20px"}}>
+                <Container className='four-items-grid'>
                   <Row>
                     <Col>
-                      <Cell col={9}>
+                      <Cell col={10}>
                         <h4 className='font2'>LOCAL FARMS</h4>
                         <p>Our organic produce comes directly from small Texas
                         farms to the PTYD kitchen. No middle men or long transit
@@ -114,7 +110,7 @@ class Landing extends Component {
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={11} style={{marginLeft:"-50px"}}>
+                      <Cell col={11} style={{marginLeft:"-35px"}}>
                         <h4 className='font2'>REUSABLE PACKAGING</h4>
                         <p>Did you know that every piece of plastic ever produced,
                         still exists today? Enjoy a plastic-free experience with
@@ -122,12 +118,12 @@ class Landing extends Component {
                       </Cell>
                     </Col>
                   </Row>
-                  <Row style={{fontSize: "28px"}} className='mt-5'/>
+                  <Row className='mt-5'/>
                   <Row
                     style={{marginTop: "-40px"}}
                   >
                     <Col>
-                      <Cell col={9}>
+                      <Cell col={10}>
                         <h4 className='font2'>ZERO WASTE</h4><p>
                         Nearly 40% of all food grown in the United States is
                         thrown away. In our kitchen, all food scraps are
@@ -135,7 +131,7 @@ class Landing extends Component {
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={11} style={{marginLeft:"-50px"}}>
+                      <Cell col={11} style={{marginLeft:"-35px"}}>
                         <h4 className='font2'>ORGANIC PRODUCE</h4>
                         <p>
                         Once upon a time, all food was organic. Healthy soil
@@ -149,23 +145,15 @@ class Landing extends Component {
               </Cell>
               <Cell col={3}>
                 <img
-                  className='img-fluid'
-                  style={{width: "100%", height: "75%", margin: "80px 0 0 -30px", objectFit:"cover"}}
+                  className='img-fluid img-2-carrot'
                   src={IMG2}
-                  alt=''
+                  alt='img2'
                 />
               </Cell>
               <a
                 // type='button'
                 href='/selectmealplan'
-                className='btn1 btn1-primary start_button'
-                style={{
-                //   marginTop: "10px",
-                //   color: "white",
-                //   size: "10px",
-                //   fontSize: "17px"
-                  marginLeft: "45px"
-                }}
+                className='btn1 btn1-primary start_button eat-better-now-button-container'
               >
                 EAT BETTER NOW
               </a>
@@ -174,12 +162,8 @@ class Landing extends Component {
         </div>
 
         <div
-          className='container background container_space'
-          style={{
-            backgroundSize: "100% 100%"
-          }}
-        >
-          <div className='d-flex justify-content-center' style={{padding: "80px 0 80px 0"}}>
+          className='container background container_space'>
+          <div className='d-flex justify-content-center delivered-padding'>
             <div className='delivered-weekly-container'>
               <div className='delivered-weekly-container2'>
                 <div className='delivered-titles-container'>
@@ -194,7 +178,7 @@ class Landing extends Component {
                   <h5 className='font1 delivered-bullets-text'>&bull; NO PRESERVATIVES, EVER</h5>
                 </div>
                 <hr className='three' />
-                <h6 className='font1' style={{fontWeight: "bold", paddingBottom: "20px"}}>
+                <h6 className='font2 pause-anytime'>
                   <i>Pause anytime, no commitment.</i>
                 </h6>
                 <h5 className='font1 delivered-plans-start'>PLANS STARTING AT</h5>
@@ -206,25 +190,18 @@ class Landing extends Component {
             </div>
           </div>
         </div>
-        <div className='container container_space' style={{textAlign:"center"}}>
+        <div className='container container_space center-content'>
           <h3 className='font1 fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
           <div className='fresh-menu-subtitle-container'>
-            <h5 className='font1 fresh-menu-subtitle'>With over 100 seasonal recipes on rotation, every week you'll try something new. </h5>
-            <h5 className='font1 fresh-menu-subtitle'>Here's a taste of our rotating menu:</h5>
+            <h5 className='font2 fresh-menu-subtitle'>With over 100 seasonal recipes on rotation, every week you'll try something new. </h5>
+            <h5 className='font2 fresh-menu-subtitle'>Here's a taste of our rotating menu:</h5>
           </div>
 
           <MenuCarousel className='carousel-space'/>
 
         </div>
 
-        <div
-          className='container'
-          style={{
-            backgroundSize: "100% 100%",
-            textAlign: "center",
-            marginTop: "50px"
-          }}
-        >
+        <div className='container center-content menu-next-week-button-container'>
           <a
             // type='button'
             href='/selectmealplan'
@@ -236,14 +213,14 @@ class Landing extends Component {
 
         <div className='container font2 container_space'>
 
-          <h3 className='font1' style={{marginLeft:"12px"}}>What Our Community is Saying...</h3>
+          <h3 className='font1'>What Our Community is Saying...</h3>
 
           <CommunityCarousel/>
           
         </div>
 
         <div className='container'>
-          <div style={{textAlign:"left", margin:"50px 0 0 0"}}>
+          <div className='try-us-today-button-container'>
               <a
                   // type='button'
                   href='/selectmealplan'
@@ -255,7 +232,7 @@ class Landing extends Component {
         </div>
 
         <div className='container container_space'>
-          <div className='container_space' style={{textAlign:"center"}}>
+          <div className='container_space center-content'>
             <QuoteCarousel/>
           </div>
         </div>
@@ -263,7 +240,7 @@ class Landing extends Component {
         <div className='container'>
           <Grid>
             <center>
-              <div className='bottom_header' style={{marginTop: "50px"}}>
+              <div className='bottom_header'>
                 <Grid className='sponsors'>
                   <Cell col={3} align='middle'>
                     <img src={LOGOJBG} alt='jbg' />

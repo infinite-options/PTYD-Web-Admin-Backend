@@ -361,7 +361,7 @@ const App = props => {
               </Nav>
             </div>
 
-            <div className='col'>
+            <div className='col-2'>
               <Nav defaultActiveKey='/' className='flex-column'>
                 <Nav.Link id='green' disabled>
                   Company

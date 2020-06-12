@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import Slider from "react-slick";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../App.css"
