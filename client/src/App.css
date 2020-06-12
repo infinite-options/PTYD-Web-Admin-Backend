@@ -442,6 +442,21 @@
   margin: 50px 0 0 0;
 }
 
+.quote-carousel-padding {
+  padding: 0 200px;
+}
+.quote-carousel-padding2 {
+  padding: 0 140px;
+}
+.quote2{
+  line-height: 50px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.quote-line-height {
+  line-height: 50px;
+}
+
 .awards {
   padding-bottom: 100px;
 }
@@ -727,7 +742,7 @@ hr.four {
 
 /* font */
 
-.font1 {
+.font1, .font5 {
   font-family: brandongrotw01-lightregular, sans-serif;
 }
 /* text font */
@@ -742,11 +757,6 @@ hr.four {
 .font4 {
   font-family: "Heebo", sans-serif;
 }
-
-.font5 {
-  font-family: "Montserrat", sans-serif;
-}
-
 .font6 {
   font-family: "Oswald", sans-serif;
 }
