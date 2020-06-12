@@ -505,35 +505,6 @@ export default class MealButton extends Component {
       }
     }));
   };
-  closeAddonModal = () => {
-    let addonSelected = this.state.currentAddonSelected.meal_selected;
-    let choose = false;
-    if (addonSelected !== undefined && Object.keys(addonSelected).length > 0) {
-      choose = true;
-    }
-    this.setAddon();
-    this.setState(prevState => ({
-      addonButton: {
-        ...prevState.addonButton,
-        red: false,
-        showModal: false,
-        chosen: choose
-      },
-      currentAddonSelected: {
-        ...prevState.currentAddonSelected,
-        meal_selection: {},
-        meals_selected: {}
-      }
-    }));
-  };
-
-  incrementMaxMeal = () => {
-    // this.setState({ mealLeft: this.state.mealLeft + 1 });
-  };
-
-  decrementMaxMeal = () => {
-    // this.setState({ mealLeft: this.state.mealLeft - 1 });
-  };
 
   //helper function to create a new string for meal selection
   concatMealSelection = mealSelected => {

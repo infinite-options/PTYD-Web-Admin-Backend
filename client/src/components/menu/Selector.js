@@ -21,12 +21,19 @@ export default class Selector extends Component {
   render() {
     return (
       <Fragment>
-        <select onChange={this.ChangePurchase} className='select'>
-          {this.state.purchases.map((purchase, key) => (
-            <option key={key} value={key}>
-              {purchase.meal_plan_desc}
-            </option>
-          ))}
+        <select
+          onChange={this.ChangePurchase}
+          className='select select_center is-info'
+        >
+          {this.state.purchases.length === 1 ? (
+            <option>{this.state.purchases[0].meal_plan_desc}</option>
+          ) : (
+            this.state.purchases.map((purchase, key) => (
+              <option key={key} value={key}>
+                {key + 1} --- {purchase.meal_plan_desc}
+              </option>
+            ))
+          )}
         </select>
       </Fragment>
     );
