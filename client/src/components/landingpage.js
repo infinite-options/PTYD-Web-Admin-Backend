@@ -32,7 +32,7 @@ class Landing extends Component {
   render() {
     return (
       <section className='content-section'>
-        <div className='container' style={{color: "white", marginTop: "-45px"}}>
+        <div className='container' style={{color: "white"}}>
           <img
             className='img-fluid'
             style={{width: "100%", height: "800px", objectFit:"cover"}}
@@ -85,55 +85,6 @@ class Landing extends Component {
               </Cell>
             </Grid>
             <div className='box-shadow-bottom'>&#x200b;</div>
-
-            {/* <Container className='shadow-lg bg-white p-2 mb-2'>
-              <Row
-                style={{
-                  fontSize: "30px",
-                  color: "#617221",
-                  // paddingTop: "0",
-                  // marginLeft: "5%"
-                }}
-              >
-
-                <Col>
-                  <Cell col={10}>
-                  <h4 className='font1 text-wrap'>CHOOSE YOUR MEALS</h4></Cell>
-                </Col>
-                <Col>
-                  <h4 className='font1 text-wrap'>WEEKLY DELIVERY</h4>
-                </Col>
-                <Col>
-                  <h4 className='font1 text-wrap'>RETURN YOUR JARS</h4>
-                </Col>
-              </Row>
-              <Row
-                style={{
-                  fontSize: "15px",
-                  color: "#4D4D4D",
-                  lineHeight: "25px",
-                  // marginLeft: "5%"
-                }}
-              >
-                <Col>
-                  <Cell col={10}>
-                    Every Monday, we'll release a new menu. Order 5 to 20 meals
-                    for delivery.
-                  </Cell>
-                </Col>
-                <Col>
-                  <Cell col={10}>
-                    Seamless non-contact delivery in Austin & Houston.
-                  </Cell>
-                </Col>
-                <Col>
-                  <Cell col={10}>
-                    Don't throw anything away! We will pick up your old bag and
-                    reusable mason jars with your next delivery.
-                  </Cell>
-                </Col>
-              </Row>
-            </Container> */}
 
             <center>
               <a
@@ -282,63 +233,6 @@ class Landing extends Component {
 
           <MenuCarousel className='carousel-space'/>
 
-          {/* <h5 className='font1'>
-            Organic. Seasonal. Local. Every week try something new. Your taste
-            buds will thank you.{" "}
-          </h5>
-          <Grid>
-            <Cell col={4}>
-              <img
-                className='img-fluid'
-                style={{width: "80%", height: "60%"}}
-                src={IMG4}
-                alt=''
-              />
-              <h4 className='font2'>RAINBOW SALAD</h4>
-              <Cell col={10}>
-                <p className='font2'>
-                  All the colors for all the nutrients! This salad is perfect
-                  for a lunch on the go. With delicious, freshly made cilantro
-                  lime hummus, pickled onions, quinoa, and a fresh serving of
-                  greens, this salad has all the essential nutrients to keep you
-                  firing all day.
-                </p>
-              </Cell>
-            </Cell>
-            <Cell col={4}>
-              <img
-                className='img-fluid'
-                style={{width: "80%", height: "60%"}}
-                src={IMG5}
-                alt=''
-              />
-              <h4 className='font2'>BBQ CHICKPEA SALAD</h4>
-              <Cell col={10}>
-                <p className='font2'>
-                  Southern, smoky, spiced chickpeas smothered in the worlds best
-                  BBQ Sauce. You'll want to order this when it comes on the
-                  menu, trust me.
-                </p>
-              </Cell>
-            </Cell>
-            <Cell col={4}>
-              <img
-                className='img-fluid'
-                style={{width: "80%", height: "60%"}}
-                src={IMG6}
-                alt=''
-              />
-              <h4 className='font2'>BLUEBERRY COCONUT OATS</h4>
-              <Cell col={10}>
-                <p className='font2'>
-                  Say hello to your new favorite breakfast. Eat in the car or
-                  steal bites between emails. Fresh blueberries, coconut cream,
-                  chia seeds and rolled oats. This meal has the antioxidants,
-                  healthy fats and fiber to kickstart your day.
-                </p>
-              </Cell>
-            </Cell>
-          </Grid> */}
         </div>
 
         <div
@@ -363,19 +257,28 @@ class Landing extends Component {
           <h3 className='font1' style={{marginLeft:"12px"}}>What Our Community is Saying...</h3>
 
           <CommunityCarousel/>
-          <div style={{marginTop: "30px"}}></div>
-          <a
-            // type='button'
-            href='/selectmealplan'
-            className='btn1 btn1-primary font2 start_button'
-          >
-            TRY US TODAY
-          </a>
+          
+        </div>
 
+        <div className='container'>
+          <div style={{textAlign:"left", margin:"50px 0 0 0"}}>
+              <a
+                  // type='button'
+                  href='/selectmealplan'
+                  className='btn1 btn1-primary start_button font2'
+              >
+                  TRY US TODAY
+              </a>
+          </div>
+        </div>
+
+        <div className='container container_space'>
           <div className='container_space' style={{textAlign:"center"}}>
             <QuoteCarousel/>
           </div>
+        </div>
 
+        <div className='container'>
           <Grid>
             <center>
               <div className='bottom_header' style={{marginTop: "50px"}}>
@@ -433,6 +336,7 @@ class Landing extends Component {
             </center>
           </Grid>
         </div>
+
       </section>
     );
   }
