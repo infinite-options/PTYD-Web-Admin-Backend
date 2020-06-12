@@ -143,6 +143,7 @@ export default class MealButton extends Component {
         if (this.state.currentMealSelected.meal_selection === "SURPRISE") {
           this.setSurprise();
         } else if (
+          this.state.currentMealSelected.meal_selection !== undefined &&
           this.state.currentMealSelected.meal_selection.length > 0 &&
           this.state.currentMealSelected.delivery_day !== "SKIP"
         ) {
@@ -158,7 +159,9 @@ export default class MealButton extends Component {
         }
       })
       .catch(err => {
-        this.props.SetError(err);
+        if (typeof err === "string") this.props.SetError(err);
+        else this.props.SetError(err.response);
+        console.log(err);
       });
   };
 
@@ -266,20 +269,21 @@ export default class MealButton extends Component {
         delivery_day: day === "sunday" ? "Sunday" : "Monday",
         meal_selection:
           prevState.currentMealSelected.meal_selection === "SKIP"
-            ? ""
+            ? "SURPRISE"
             : prevState.currentMealSelected.meal_selection
       }
     }));
     //Check for "Select" or "Surprise" button
     // which ones is gonna be shown up
-    let mealSelected = this.state.currentMealSelected.meals_selected;
     let mealSelection = this.state.currentMealSelected.meal_selection;
-    if (mealSelected !== undefined && Object.keys(mealSelected).length > 0) {
-      // there are selected meals
+    let mealSelected = this.state.currentMealSelected.meals_selected;
+    if (mealSelection === "SURPRISE") this.setSurprise();
+    else if (
+      mealSelected !== undefined &&
+      Object.values(mealSelected).reduce((a, b) => a + b) ===
+        this.state.maxMeals
+    )
       this.setSelect();
-    } else if (mealSelection === "" || mealSelection === "SKIP") {
-      this.clickSurprise();
-    }
     // check for "Add Local Treats"
     // Should it be shown up or not
     let addonSelected = this.state.currentAddonSelected.meal_selected;
@@ -532,15 +536,17 @@ export default class MealButton extends Component {
   };
 
   //helper function to create a new string for meal selection
-  concatMealSelection = (mealSelection, mealSelected) => {
+  concatMealSelection = mealSelected => {
     let newValue = ""; // create a new value for meal_selection
-    for (let key of Object.keys(mealSelected)) {
-      let loop_times = parseInt(mealSelected[key]);
-      for (let i = 0; i < loop_times; i++) {
-        if (newValue === "") {
-          newValue = newValue + key;
-        } else {
-          newValue = newValue + ";" + key;
+    if (mealSelected !== undefined) {
+      for (let key of Object.keys(mealSelected)) {
+        let loop_times = parseInt(mealSelected[key]);
+        for (let i = 0; i < loop_times; i++) {
+          if (newValue === "") {
+            newValue = newValue + key;
+          } else {
+            newValue = newValue + ";" + key;
+          }
         }
       }
     }
@@ -579,15 +585,18 @@ export default class MealButton extends Component {
       }
     }));
     // update local variable
-
-    let mealSelection = this.state.currentMealSelected.meal_selection;
-    let mealSelected = this.state.currentMealSelected.meals_selected;
-    await this.setState(prevState => ({
-      currentMealSelected: {
-        ...prevState.currentMealSelected,
-        meal_selection: this.concatMealSelection(mealSelection, mealSelected)
-      }
-    }));
+    let mealSelected = this.state.currentAddonSelected.meals_selected;
+    let mealSelection = this.concatMealSelection(mealSelected);
+    if (mealSelection !== "") {
+      await this.setState(prevState => ({
+        currentAddonSelected: {
+          ...prevState.currentAddonSelected,
+          meal_selection: mealSelection
+        }
+      }));
+    } else {
+      await delete this.state.currentAddonSelected.meal_selection;
+    }
     // send request to save to serve
     this.saveSelectMealAPI();
   };
@@ -640,15 +649,20 @@ export default class MealButton extends Component {
       this.props.ChangeCurrentAddonCharge(totalAddonPrice);
     }
 
-    //Update local variables
-    let mealSelection = this.state.currentAddonSelected.meal_selection;
+    //Update local variable;
     let mealSelected = this.state.currentAddonSelected.meals_selected;
-    await this.setState(prevState => ({
-      currentAddonSelected: {
-        ...prevState.currentAddonSelected,
-        meal_selection: this.concatMealSelection(mealSelection, mealSelected)
-      }
-    }));
+    let mealSelection = this.concatMealSelection(mealSelected);
+    if (mealSelection !== "") {
+      await this.setState(prevState => ({
+        currentAddonSelected: {
+          ...prevState.currentAddonSelected,
+          meal_selection: mealSelection
+        }
+      }));
+    } else {
+      await delete this.state.currentAddonSelected.meal_selection;
+    }
+
     //update database
     this.saveAddonAPI();
   };
@@ -662,7 +676,9 @@ export default class MealButton extends Component {
     } = this.state.currentMealSelected;
 
     // set parameters for sending form
+    console.log("delivery-day: ", delivery_day);
     console.log("meal_selection: ", meal_selection);
+    console.log("meal_selected: ", meals_selected);
     let defaultSelected = meal_selection === "SURPRISE" ? true : false;
     console.log("defaultSelected: ", defaultSelected);
     let purchaseID =
@@ -709,6 +725,7 @@ export default class MealButton extends Component {
         ? week_affected
         : this.state.weekMenu.SaturdayDate;
     let addonQuantities = meals_selected === undefined ? null : meals_selected;
+    console.log("add selected: ", addonQuantities);
     fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseID}`, {
       method: "POST",
       headers: {
@@ -974,7 +991,9 @@ export default class MealButton extends Component {
           <Button
             disabled={surpriseButton.isDisabled}
             variant='outline-dark'
-            onClick={this.clickSurprise}
+            onClick={() => {
+              this.clickSurprise(false);
+            }}
             style={this.state.surpriseButton.chosen ? green : clear}
           >
             Surprise Me!
@@ -998,7 +1017,9 @@ export default class MealButton extends Component {
               incrementMaxMeal={this.incrementMaxMeal}
               decrementMaxMeal={this.decrementMaxMeal}
               clickSkip={this.clickSkip}
-              clickSurprise={this.clickSurprise}
+              clickSurprise={() => {
+                this.clickSurprise(false);
+              }}
               currentMealSelected={this.state.currentMealSelected}
               saveSelectMeal={this.saveSelectMeal}
             />
