@@ -95,8 +95,10 @@ export default class MealButton extends Component {
       .get(`${this.props.MEAL_SELECT_API_URL}/${new_purchaseID}`)
       .then(res => {
         let data;
+        console.log("res: ", res);
         if (res.data.result !== undefined) {
           data = res.data.result;
+          console.log(data);
           if (data.Meals.length > 0) {
             for (let meal of data.Meals) {
               if (meal.week_affected === this.props.weekMenu.SaturdayDate) {
@@ -126,6 +128,7 @@ export default class MealButton extends Component {
         }
       })
       .then(() => {
+        console.log("currentMealselected: ", this.state.currentMealSelected);
         if (Object.keys(this.state.currentMealSelected).length === 0) {
           // this.setState(prevState => ({
           //   sundayButton: {...prevState.sundayButton, chosen: true},
@@ -269,20 +272,21 @@ export default class MealButton extends Component {
         delivery_day: day === "sunday" ? "Sunday" : "Monday",
         meal_selection:
           prevState.currentMealSelected.meal_selection === "SKIP"
-            ? ""
+            ? "SURPRISE"
             : prevState.currentMealSelected.meal_selection
       }
     }));
     //Check for "Select" or "Surprise" button
     // which ones is gonna be shown up
-    let mealSelected = this.state.currentMealSelected.meals_selected;
     let mealSelection = this.state.currentMealSelected.meal_selection;
-    if (mealSelected !== undefined && Object.keys(mealSelected).length > 0) {
-      // there are selected meals
+    let mealSelected = this.state.currentMealSelected.meals_selected;
+    if (mealSelection === "SURPRISE") this.setSurprise();
+    else if (
+      mealSelected !== undefined &&
+      Object.values(mealSelected).reduce((a, b) => a + b) ===
+        this.state.maxMeals
+    )
       this.setSelect();
-    } else if (mealSelection === "" || mealSelection === "SKIP") {
-      this.clickSurprise();
-    }
     // check for "Add Local Treats"
     // Should it be shown up or not
     let addonSelected = this.state.currentAddonSelected.meal_selected;
@@ -665,7 +669,9 @@ export default class MealButton extends Component {
     } = this.state.currentMealSelected;
 
     // set parameters for sending form
+    console.log("delivery-day: ", delivery_day);
     console.log("meal_selection: ", meal_selection);
+    console.log("meal_selected: ", meals_selected);
     let defaultSelected = meal_selection === "SURPRISE" ? true : false;
     console.log("defaultSelected: ", defaultSelected);
     let purchaseID =
@@ -712,6 +718,7 @@ export default class MealButton extends Component {
         ? week_affected
         : this.state.weekMenu.SaturdayDate;
     let addonQuantities = meals_selected === undefined ? null : meals_selected;
+    console.log("add selected: ", addonQuantities);
     fetch(`${this.props.MEAL_SELECT_API_URL}/${purchaseID}`, {
       method: "POST",
       headers: {
@@ -977,7 +984,9 @@ export default class MealButton extends Component {
           <Button
             disabled={surpriseButton.isDisabled}
             variant='outline-dark'
-            onClick={this.clickSurprise}
+            onClick={() => {
+              this.clickSurprise(false);
+            }}
             style={this.state.surpriseButton.chosen ? green : clear}
           >
             Surprise Me!
@@ -1001,7 +1010,9 @@ export default class MealButton extends Component {
               incrementMaxMeal={this.incrementMaxMeal}
               decrementMaxMeal={this.decrementMaxMeal}
               clickSkip={this.clickSkip}
-              clickSurprise={this.clickSurprise}
+              clickSurprise={() => {
+                this.clickSurprise(false);
+              }}
               currentMealSelected={this.state.currentMealSelected}
               saveSelectMeal={this.saveSelectMeal}
             />

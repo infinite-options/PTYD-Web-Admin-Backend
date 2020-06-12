@@ -34,14 +34,15 @@ export default function AddonModal(props) {
               Total Price: ${props.totalAddonPrice}
             </h4>
             &nbsp;&nbsp;
-            {parseInt(props.totalAddonPrice) === 0 && (
-              <Button variant='danger' onClick={props.closeAddonModal}>
+            {parseInt(props.totalAddonPrice) === 0 ? (
+              <Button variant='danger' onClick={props.saveButtonAddOn}>
                 Close
               </Button>
+            ) : (
+              <Button variant='success' onClick={props.saveButtonAddOn}>
+                Agree To Pay
+              </Button>
             )}
-            <Button variant='success' onClick={props.saveButtonAddOn}>
-              Agree To Pay
-            </Button>
           </div>
         </Modal.Title>
       </Card.Header>
