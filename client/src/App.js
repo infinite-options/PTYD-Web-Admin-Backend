@@ -199,7 +199,7 @@ const App = props => {
                 <div>
                   <div>
                     <a href='/selectmealplan'
-                      className='top-btn1 top-btn1-primary'
+                      className='top-btn1 top-btn1-primary font5'
                       >
                         Get Started
                     </a>

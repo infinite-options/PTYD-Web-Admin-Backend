@@ -32,7 +32,7 @@ class Landing extends Component {
   render() {
     return (
       <section className='content-section'>
-        <div className='container' style={{color: "white"}}>
+        <div className='container' style={{color: "white", marginTop: '-40px'}}>
           <img
             className='img-fluid'
             style={{width: "100%", height: "800px", objectFit:"cover"}}
@@ -44,17 +44,17 @@ class Landing extends Component {
             <p className='home_title'>ORGANIC</p>
             <p className='home_title'>RESPONSIBLE</p>
           </div>
-          <div className='bottom-left font2 home_subtitle' style={{}}>
+          <div className='bottom-left font1 home_subtitle' style={{}}>
             <div className='plant-based-text'>
               <p>Plant-based, ready to eat meals</p>
               <p>delivered to your doorstep.</p>
             </div>
-            <a className='btn1 btn1-primary start_button' href='/selectmealplan'>
+            <a className='btn1 btn1-primary start_button font5' href='/selectmealplan'>
               Get Started
             </a>
           </div>
 
-          <div className='bottom-left font2'>
+          <div className='bottom-left font1'>
             {/* {this.state.isLoggedIn === false && ( */}
             <a id='already-a-member' href='/login'><u>Already a Member? Sign In</u></a>
             {/* )} */}
@@ -103,20 +103,10 @@ class Landing extends Component {
             <Grid>
               <Cell col={9}>
                 <Container className='four-items-grid' style={{marginTop: "50px", marginLeft: "20px"}}>
-                  {/* <Row style={{fontSize: "28px"}}> */}
-                    {/* <Col>LOCAL FARMS</Col>
-                    <Col>REUSABLE PACKAGING</Col> */}
-                  {/* </Row> */}
-                  <Row
-                    // style={{
-                    //   fontSize: "13px",
-                    //   color: "#4D4D4D",
-                    //   lineHeight: "20px"
-                    // }}
-                  >
+                  <Row>
                     <Col>
                       <Cell col={9}>
-                        <h4 className='font1'>LOCAL FARMS</h4>
+                        <h4 className='font2'>LOCAL FARMS</h4>
                         <p>Our organic produce comes directly from small Texas
                         farms to the PTYD kitchen. No middle men or long transit
                         times. We provide the most nutrient rich ingredients
@@ -125,28 +115,20 @@ class Landing extends Component {
                     </Col>
                     <Col>
                       <Cell col={11} style={{marginLeft:"-50px"}}>
-                        <h4 className='font1'>REUSABLE PACKAGING</h4>
+                        <h4 className='font2'>REUSABLE PACKAGING</h4>
                         <p>Did you know that every piece of plastic ever produced,
                         still exists today? Enjoy a plastic-free experience with
                         your PTYD deliveries.</p>
                       </Cell>
                     </Col>
                   </Row>
-                  <Row style={{fontSize: "28px"}} className='mt-5'>
-                    {/* <Col>ZERO WASTE</Col>
-                    <Col>ORGANIC PRODUCE</Col> */}
-                  </Row>
+                  <Row style={{fontSize: "28px"}} className='mt-5'/>
                   <Row
-                    // style={{
-                    //   fontSize: "13px",
-                    //   color: "#4D4D4D",
-                    //   lineHeight: "20px"
-                    // }}
                     style={{marginTop: "-40px"}}
                   >
                     <Col>
                       <Cell col={9}>
-                        <h4 className='font1'>ZERO WASTE</h4><p>
+                        <h4 className='font2'>ZERO WASTE</h4><p>
                         Nearly 40% of all food grown in the United States is
                         thrown away. In our kitchen, all food scraps are
                         composted to make healthy organic soil.{" "}</p>
@@ -154,7 +136,7 @@ class Landing extends Component {
                     </Col>
                     <Col>
                       <Cell col={11} style={{marginLeft:"-50px"}}>
-                        <h4 className='font1'>ORGANIC PRODUCE</h4>
+                        <h4 className='font2'>ORGANIC PRODUCE</h4>
                         <p>
                         Once upon a time, all food was organic. Healthy soil
                         means healthy nutrients and healthy bodies. We source
@@ -320,14 +302,14 @@ class Landing extends Component {
                   <Cell col={3} align='middle'></Cell>
                   <Cell col={3} align='middle'>
                     <div className='award-text'>
-                      <p className='font1'>Austin Under 40 2020 Finalist</p>
-                      <p className='font1'>Culinary Arts, Events, and Hospitality</p>
+                      <p className='font2'>Austin Under 40 2020 Finalist</p>
+                      <p className='font2'>Culinary Arts, Events, and Hospitality</p>
                     </div>
                   </Cell>
                   <Cell col={3} align='middle'>
                     <div className='award-text'>
-                      <p className='font1'>FAVE 2019 Winner</p>
-                      <p className='font1'>FAVE Sustainable Business</p>
+                      <p className='font2'>FAVE 2019 Winner</p>
+                      <p className='font2'>FAVE Sustainable Business</p>
                     </div>
                   </Cell>                
                   <Cell col={3} align='middle'></Cell>

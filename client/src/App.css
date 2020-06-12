@@ -1,9 +1,23 @@
 @font-face {
   font-family: "brandongrotw01-lightregular";
-  src: url("font/brandon_grot_w01_light-webfont.woff2") format("woff2"),
-    url("font/brandon_grot_w01_light-webfont.woff") format("woff");
+  src: url("fonts/brandon_grot_w01_light-webfont.woff2") format("woff2"),
+    url("fonts/brandon_grot_w01_light-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal;
+}
+@font-face {
+  font-family: "montserrat";
+  src: url("fonts/montserrat-regular-webfont.woff2") format("woff2"),
+    url("fonts/montserrat-regular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "oswald";
+  src: url("fonts/Oswald-Medium.woff2") format("woff2"),
+    url("fonts/Oswald-Medium.woff") format("woff");
+  font-weight:normal;
+  font-style:normal;
 }
 
 .content-container {
@@ -36,7 +50,12 @@
 }
 
 .navigation-start {
-  margin: 32px 0 0 25px;
+  margin: 28px 0 0 25px;
+}
+
+.navigation-start #loginStatus {
+  font-size: 18px;
+  font-family: "montserrat";
 }
 
 #loginButton {
@@ -48,15 +67,19 @@
 
 .login-hello {
   font-size: 20px;
-  text-align: right;
+  /* text-align: left; */
   color: black;
-  margin-bottom:5px;
+  /* margin-bottom:5px; */
+  position: absolute;
+  z-index: 1;
+  /* padding: -100px 0 0 0; */
 }
 
 #logoutButton {
   text-decoration:none;
   color:black;
   float:right;
+  margin: 30px 0 0 22px;
 }
 
 /* ----- footer ----- */
@@ -106,7 +129,7 @@
 .never-miss-update-text {
   font-size: 12px;
   padding-top: 25px;
-  margin: 0 0 0 -140px;
+  margin: 0 0 0 -156px;
 }
 
 .email-section {
@@ -146,12 +169,17 @@
 .plant-based-text {
   margin-bottom: 50px;
 }
+.plant-based-text p {
+  font-size: 22px;
+  /* font-weight: bold; */
+}
 
 .bottom-left {
   position: absolute;
   bottom: 8px;
   margin-left: 1.8em;
   padding-bottom: 12px;
+  font-size: 18px;
 }
 
 .bottom-left a {
@@ -218,8 +246,8 @@
   color: #4D4D4D;
 }
 .four-items-grid h4 {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 27px;
+  /* font-weight: bold; */
 }
 
 .delivered-weekly-image {
@@ -377,8 +405,7 @@
 .award-text * {
   margin: 0;
   padding: 0;
-  font-weight: bold;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: .05em;
 }
 .award-text {
@@ -466,12 +493,13 @@ br {
 /* button */
 
 .top-btn1 {
-  padding: 0.1rem .5rem;
+  padding: 0.2rem .5rem;
   text-transform: uppercase;
   letter-spacing: 0;
   border: 0;
   line-height: 1.5;
   border-radius: 4px;
+  font-weight: bold;
 }
 
 .top-btn1-primary {
@@ -660,7 +688,8 @@ hr.four {
 }
 /* text font */
 .font2 {
-  font-family: "Nunito", sans-serif;
+  /* font-family: "Nunito", sans-serif; */
+  font-family: "montserrat", sans-serif;
 }
 .font3 {
   font-family: "Cousine", monospace;
