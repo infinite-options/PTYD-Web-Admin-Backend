@@ -87,7 +87,7 @@ const App = props => {
           //     <strong>The Title</strong>
           //   </span>
           // }
-          // style={{background: "white"}}
+          style={{background: "white"}}
           scroll
         >
           <Nav
