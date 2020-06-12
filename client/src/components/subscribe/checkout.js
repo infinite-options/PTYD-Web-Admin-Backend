@@ -456,7 +456,7 @@ class Checkout extends Component {
 
                     <Form.Group as={Col} controlId='formGridAptNum'>
                       <Form.Label>
-                        Apartment/Unit <b>(optional)</b>
+                        Apartment/Unit (if applicable)
                       </Form.Label>
                       <Form.Control
                         placeholder='Apartment, studio, or floor'
