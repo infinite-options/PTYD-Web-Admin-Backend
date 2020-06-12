@@ -859,16 +859,21 @@ class AccountPurchases(Resource):
             sat = now + timedelta(days=(12 - dayOfWeek) % 7)
             thur = now + timedelta(days=(10 - dayOfWeek) % 7)
 
+            print ("thur before calculate: ", thur)
+            print("sat before calculate: ", sat)
             # If today is Thursday after 4PM
             # if sat == now and now.hour >= 16:
             #     sat += timedelta(days=7)
 
+            #if thursday is passed, calculate for the next week
             if now + timedelta(days=7) > thur:
                 thur += timedelta(days=7)
+                sat += timedelta(days=7)
             # change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
-
+            print("thur is: ", thur)
+            print("sat is: ", sat)
             queries = ["""
                 SELECT 
                     snap.payment_id

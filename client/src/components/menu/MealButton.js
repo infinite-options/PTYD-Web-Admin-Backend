@@ -95,10 +95,8 @@ export default class MealButton extends Component {
       .get(`${this.props.MEAL_SELECT_API_URL}/${new_purchaseID}`)
       .then(res => {
         let data;
-        console.log("res: ", res);
         if (res.data.result !== undefined) {
           data = res.data.result;
-          console.log(data);
           if (data.Meals.length > 0) {
             for (let meal of data.Meals) {
               if (meal.week_affected === this.props.weekMenu.SaturdayDate) {
@@ -128,7 +126,6 @@ export default class MealButton extends Component {
         }
       })
       .then(() => {
-        console.log("currentMealselected: ", this.state.currentMealSelected);
         if (Object.keys(this.state.currentMealSelected).length === 0) {
           // this.setState(prevState => ({
           //   sundayButton: {...prevState.sundayButton, chosen: true},
@@ -539,15 +536,17 @@ export default class MealButton extends Component {
   };
 
   //helper function to create a new string for meal selection
-  concatMealSelection = (mealSelection, mealSelected) => {
+  concatMealSelection = mealSelected => {
     let newValue = ""; // create a new value for meal_selection
-    for (let key of Object.keys(mealSelected)) {
-      let loop_times = parseInt(mealSelected[key]);
-      for (let i = 0; i < loop_times; i++) {
-        if (newValue === "") {
-          newValue = newValue + key;
-        } else {
-          newValue = newValue + ";" + key;
+    if (mealSelected !== undefined) {
+      for (let key of Object.keys(mealSelected)) {
+        let loop_times = parseInt(mealSelected[key]);
+        for (let i = 0; i < loop_times; i++) {
+          if (newValue === "") {
+            newValue = newValue + key;
+          } else {
+            newValue = newValue + ";" + key;
+          }
         }
       }
     }
@@ -586,15 +585,18 @@ export default class MealButton extends Component {
       }
     }));
     // update local variable
-
-    let mealSelection = this.state.currentMealSelected.meal_selection;
-    let mealSelected = this.state.currentMealSelected.meals_selected;
-    await this.setState(prevState => ({
-      currentMealSelected: {
-        ...prevState.currentMealSelected,
-        meal_selection: this.concatMealSelection(mealSelection, mealSelected)
-      }
-    }));
+    let mealSelected = this.state.currentAddonSelected.meals_selected;
+    let mealSelection = this.concatMealSelection(mealSelected);
+    if (mealSelection !== "") {
+      await this.setState(prevState => ({
+        currentAddonSelected: {
+          ...prevState.currentAddonSelected,
+          meal_selection: mealSelection
+        }
+      }));
+    } else {
+      await delete this.state.currentAddonSelected.meal_selection;
+    }
     // send request to save to serve
     this.saveSelectMealAPI();
   };
@@ -647,15 +649,20 @@ export default class MealButton extends Component {
       this.props.ChangeCurrentAddonCharge(totalAddonPrice);
     }
 
-    //Update local variables
-    let mealSelection = this.state.currentAddonSelected.meal_selection;
+    //Update local variable;
     let mealSelected = this.state.currentAddonSelected.meals_selected;
-    await this.setState(prevState => ({
-      currentAddonSelected: {
-        ...prevState.currentAddonSelected,
-        meal_selection: this.concatMealSelection(mealSelection, mealSelected)
-      }
-    }));
+    let mealSelection = this.concatMealSelection(mealSelected);
+    if (mealSelection !== "") {
+      await this.setState(prevState => ({
+        currentAddonSelected: {
+          ...prevState.currentAddonSelected,
+          meal_selection: mealSelection
+        }
+      }));
+    } else {
+      await delete this.state.currentAddonSelected.meal_selection;
+    }
+
     //update database
     this.saveAddonAPI();
   };
