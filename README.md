@@ -1,6 +1,6 @@
 # Prep-To-Your-Door
 
-This repository contains the entire codebase for the revamped Prep To Your Door, a vegan meal ordering app. You can access the live website [here.](https://www.preptoyourdoor.netlify.com/)
+This repository contains the entire codebase for the revamped Prep To Your Door, a vegan meal ordering app. You can access the live website [here.](https://preptoyourdoor.netlify.app)
 
 ### `client/`
 This is where the frontend lies. It is done in React, and can be run within the directory with the command `npm run`. Be sure to `npm install` all Node dependencies.
