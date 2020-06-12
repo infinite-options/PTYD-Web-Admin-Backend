@@ -11,3 +11,4 @@ env
 venv
 .vscode
 sample.py
+.DS_Store

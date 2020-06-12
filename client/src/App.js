@@ -1,16 +1,17 @@
 import React, {useEffect, useState, Fragment} from "react";
 import {Layout, Header, Navigation, Drawer, Content} from "react-mdl";
-import {Link} from "react-router-dom";
+// import {Link} from "react-router-dom";
 
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import Main from "./components/main";
 
 import Nav from "react-bootstrap/Nav";
-import Button from "react-bootstrap/Button";
+// import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Cookies from "js-cookie";
 
 import logo from "./img/LOGO-homepage.png";
@@ -76,51 +77,43 @@ const App = props => {
   }
 
   let stuff = !isAuthenticating && (
-    <div className='demo-big-content'>
+    <div>
       <Layout>
         <Header
-          className='header-color'
-          title={
-            <span>
-              <span style={{color: "#ddd"}}>Area / </span>
-              <strong>The Title</strong>
-            </span>
-          }
+          // className='header-color'
+          // title={
+          //   <span>
+          //     <span style={{color: "white"}}>Area / </span>
+          //     <strong>The Title</strong>
+          //   </span>
+          // }
+          // style={{background: "white"}}
           scroll
         >
           <Nav
-            className='navbar fixed-top justify-content-center font2'
-            style={{minHeight: "140px", backgroundColor: "white"}}
+            className='navbar fixed-top justify-content-center font2 navigation-container'
             activeKey='/home'
           >
-            <div style={{marginTop: "-25px"}}>
+            <div className='navigation-logo-container'>
               <a className='navbar-brand' href='/'>
                 <img src={logo} alt='Logo' className='logo'></img>
               </a>
-              <p
-                className='font_9'
-                style={{
-                  fontSize: "11px",
-                  lineHeight: "0.8em",
-                  textAlign: "center",
-                  letterSpacing: "0.25em",
-                  color: "#E38B19",
-                  fontWeight: "bold"
-                }}
-              >
-                AUSTIN, TX
-              </p>
+              <div class='logo-austin-houston'>
+                <p className='font9'>AUSTIN &</p>
+                <p className='font9'>HOUSTON</p>  
+              </div>
             </div>
 
-            <Nav.Item style={{marginTop: "30px"}}>
-              <Nav.Link style={{color: "black"}} href='/selectmealplan'>
+            <Nav.Item className='navigation-link'>
+              <Nav.Link className='black-link' href='/selectmealplan'>
                 SUBSCRIBE
               </Nav.Link>
             </Nav.Item>
+
             <NavDropdown
+              className='navigation-link black-link' 
               title='MENU'
               id='nav-dropdown'
-              style={{marginTop: "30px", color: "black"}}
             >
               {isAuthenticated && (
                 <Fragment>
@@ -139,20 +132,22 @@ const App = props => {
               )}
             </NavDropdown>
 
-            <Nav.Item style={{marginTop: "30px"}}>
-              <Nav.Link style={{color: "black"}} href='/findus'>
+            <Nav.Item className='navigation-link'>
+              <Nav.Link className='black-link' href='/findus'>
                 FIND US
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item style={{marginTop: "30px"}}>
-              <Nav.Link style={{color: "black"}} href='/giftcards'>
+            
+            <Nav.Item className='navigation-link'>
+              <Nav.Link className='black-link' href='/giftcards'>
                 GIFT CARDS
               </Nav.Link>
             </Nav.Item>
+            
             <NavDropdown
+              className='navigation-link black-link' 
               title='ABOUT'
               id='nav-dropdown'
-              style={{marginTop: "30px", color: "black"}}
             >
               <NavDropdown.Item href='/howitworks'>
                 HOW IT WORKS
@@ -167,54 +162,57 @@ const App = props => {
               </NavDropdown.Item>
               <NavDropdown.Item href='/jobs'>JOBS</NavDropdown.Item>
             </NavDropdown>
+{/*             
             <Nav.Item style={{marginTop: "30px"}}>
               <Nav.Link style={{color: "black"}} href='/get100'>
                 GET $100
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
 
-            <div className='' style={{paddingTop: "66px"}}>
+            <div 
+              className='navigation-start'
+            >
               {searchCookie4Login("loginStatus") !== null ? (
                 <div>
+                  <p
+                    id='loginStatus'
+                    className='login-hello'
+                  >
+                    <span>Hello, </span>
+                    <span>{searchCookie4Login("loginStatus")}</span>
+                    <span>!</span>
+                  </p>
                   <a href='/logout'>
-                    <Button
+                    <a
                       id='logoutButton'
-                      variant='success'
-                      size='sm'
                       onClick={() => {
                         document.cookie = "loginStatus=; path=/";
                         window.location.reload(false);
                       }}
                     >
-                      Log Out
-                    </Button>
+                      <u>Log Out</u>
+                    </a>
                   </a>
-                  <p
-                    id='loginStatus'
-                    style={{
-                      fontSize: "20px",
-                      textAlign: "right",
-                      color: "black"
-                    }}
-                  >
-                    <span className='font-weight-bold'>Hello </span>
-                    <span>{searchCookie4Login("loginStatus")}</span>
-                    <span className='font-weight-bold'>!</span>
-                  </p>
+                  
                 </div>
               ) : (
-                <>
+                <div>
+                  <div>
+                    <a href='/selectmealplan'
+                      className='top-btn1 top-btn1-primary font5'
+                      >
+                        Get Started
+                    </a>
+                  </div>
                   <a href='/login'>
-                    <Button
+                    <a
                       id='loginButton'
-                      variant='success'
-                      size='sm'
                       onClick={() => window.location.reload(false)}
                     >
-                      Login
-                    </Button>
+                      <u>Login</u>
+                    </a>
                   </a>
-                  <p
+                  {/* <p
                     id='loginStatus'
                     style={{
                       fontSize: "12px",
@@ -223,14 +221,14 @@ const App = props => {
                     }}
                   >
                     {searchCookie4Login("loginStatus")}
-                  </p>
-                </>
+                  </p> */}
+                </div>
               )}
             </div>
           </Nav>
         </Header>
 
-        <Drawer
+        {/* <Drawer
           style={{backgroundColor: "#493f3f"}}
           className='header-color-background'
           title={
@@ -312,9 +310,10 @@ const App = props => {
               )}
             </div>
           </Navigation>
-        </Drawer>
+        </Drawer> */}
 
-        <Content style={{paddingTop: "140px"}}>
+        <Content className='content-container'
+        >
           <div className='page-content' />
           <Main
             appProps={{
@@ -326,70 +325,60 @@ const App = props => {
           />
         </Content>
 
-        <hr></hr>
+        <hr/>
 
-        <footer className='container text-center font2'>
-          <div className='row'>
+        <footer className='container font2'>
+          <div className='row footer-container'>
             <div className='col'>
-              <div style={{marginTop: "-10px"}}>
+              <div className='center-content'>
                 <a className='navbar-brand' href='/'>
                   <img src={logo} alt='Logo' className='logo'></img>
                 </a>
-                <p
-                  className='font_9'
-                  style={{
-                    fontSize: "11px",
-                    lineHeight: "0.8em",
-                    textAlign: "center",
-                    letterSpacing: "0.25em",
-                    fontSize: "11px",
-                    color: "#E38B19",
-                    fontWeight: "bold"
-                  }}
-                >
-                  AUSTIN, TX
-                </p>
+                <div className='logo-austin-houston'>
+                  <p className='font9'>AUSTIN &</p>
+                  <p className='font9'>HOUSTON</p>
+                </div>
               </div>
             </div>
 
             <div className='col'>
               <Nav defaultActiveKey='/' className='flex-column'>
-                <Nav.Link style={{color: "green"}} disabled>
+                <Nav.Link id='green' disabled>
                   Order
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Menu
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Plans
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   How it Works
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Delivery Area
                 </Nav.Link>
               </Nav>
             </div>
 
-            <div className='col'>
+            <div className='col-2'>
               <Nav defaultActiveKey='/' className='flex-column'>
-                <Nav.Link style={{color: "green"}} disabled>
+                <Nav.Link id='green' disabled>
                   Company
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Blog
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Our Service
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Our Team
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Jobs
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   Employee Portal
                 </Nav.Link>
               </Nav>
@@ -397,37 +386,40 @@ const App = props => {
 
             <div className='col'>
               <Nav defaultActiveKey='/' className='flex-column'>
-                <Nav.Link style={{color: "green"}} disabled>
+                <Nav.Link id='green' disabled>
                   Questions & Contact
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   FAQs
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   512-522-9294
                 </Nav.Link>
-                <Nav.Link style={{color: "black"}} href='/'>
+                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
                   info@preptoyourdoor.com
                 </Nav.Link>
+                <Nav.Link id='footer-margin-padding' disabled>&#8203;</Nav.Link>
+                <Nav.Link disabled id='footer-margin-padding' className='font1'  href='/'>Made with 🧡 in Austin, TX</Nav.Link>
+                <Nav.Link disabled id='footer-margin-padding' className='font1' href='/'>© Prep To Your Door</Nav.Link>
               </Nav>
             </div>
 
             <div className='col-md-4 flex-column'>
               <Nav defaultActiveKey='/'>
-                <Nav.Link style={{color: "green"}} disabled>
+                <Nav.Link id='green' disabled>
                   Follow Us:
                 </Nav.Link>
               </Nav>
-              <Nav defaultActiveKey='/'>
+              <Nav className='footer-socials-container' defaultActiveKey='/'>
                 <a
                   href='https://www.facebook.com/preptoyourdoor'
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <i
+                  <i 
+                    id='social-icon'
                     className='fa fa-facebook-f fa-2x socialBranchLogo'
-                    style={{color: "grey"}}
-                  ></i>
+                  />
                 </a>
                 <a
                   href='https://twitter.com/preptoyourdoor'
@@ -435,9 +427,9 @@ const App = props => {
                   rel='noopener noreferrer'
                 >
                   <i
+                    id='social-icon'
                     className='fa fa-twitter fa-2x socialBranchLogo'
-                    style={{color: "grey"}}
-                  ></i>
+                  />
                 </a>
 
                 <a
@@ -446,39 +438,36 @@ const App = props => {
                   rel='noopener noreferrer'
                 >
                   <i
+                    id='social-icon'
                     className='fa fa-instagram fa-2x socialBranchLogo'
-                    style={{color: "grey"}}
-                  ></i>
+                  />
                 </a>
               </Nav>
-              <Nav defaultActiveKey='/'>
-                <Nav.Link style={{color: "green"}} disabled>
+              <Nav className='mailing-list-spacing' defaultActiveKey='/'>
+                <Nav.Link id='green' disabled>
                   Join Our Mailing List
                 </Nav.Link>
-                <p> </p>
                 <p
-                  style={{
-                    fontSize: "12px",
-                    paddingTop: "25px",
-                    marginLeft: "-25px"
-                  }}
+                  id='black-grey'
+                  className='never-miss-update-text'
                 >
-                  & Never Miss an Update
+                  & Never miss an update
                 </p>
-                <p> </p>
-                <p style={{fontSize: "12px", paddingLeft: "15px"}}>
-                  Email Address:
-                </p>
-                <Form style={{paddingLeft: "10px"}}>
+                {/* <p style={{fontSize: "12px", paddingLeft: "15px"}}>
+                  Email Address
+                </p> */}
+                <Form className='email-section'>
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridEmail'>
                       <Form.Control type='email' placeholder='Enter Email' />
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
-                      <Button variant='primary' type='submit'>
-                        Submit
-                      </Button>
+                      <a 
+                      // type='submit' 
+                      className='subscribe-btn font2'>
+                        Subscribe
+                      </a>
                     </Form.Group>
                   </Form.Row>
                 </Form>

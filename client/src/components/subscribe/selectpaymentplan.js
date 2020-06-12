@@ -24,7 +24,7 @@ class SelectPaymentPlan extends Component {
 
   render() {
     return (
-      <section class='content-section' style={{marginTop: "-70px"}}>
+      <section class='content-section'>
         <div class='container font2'>
           <center>
             <h2 class='font1'>{this.state.meals} MEALS PAYMENT OPTIONS</h2>
