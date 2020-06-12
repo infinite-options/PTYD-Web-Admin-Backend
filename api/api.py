@@ -791,7 +791,7 @@ class ResetPassword (Resource):
 
 class ChangePassword(Resource):
     def post(self):
-        response = {};
+        response = {}
         try:
             conn = connect()
             data = request.get_json(force=True)
@@ -3565,7 +3565,7 @@ class All_Meals(Resource):
             items = execute("""SELECT 
                                     allmeals.*,
                                     meals_ordered.*
-                                FROM (# QUERY 8
+                                    FROM (# QUERY 8
                                     SELECT 
                                         menu_date,
                                         menu_category,
@@ -3589,226 +3589,7 @@ class All_Meals(Resource):
                                         COUNT(num) AS total
                                     FROM (
                                         SELECT *
-                                            , substring_index(substring_index(meal_selection,';',n),';',-1) AS meal_selected
-                                            , n AS num
-                                        FROM ( # QUERY 6
-                                            SELECT *
-                                            FROM (# QUERY 5
-                                                SELECT act_pur.purchase_id
-                                                    , act_pur.Saturday AS week_affected
-                                                    , act_pur.delivery_first_name
-                                                    , act_pur.delivery_last_name
-                                                    , plans.num_meals
-                                                    , act_meal.delivery_day
-                                                    -- , act_meal.meal_selection AS org_meal_selection
-                                                    , CASE
-                                                        WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND plans.num_meals = 5  THEN  def_meals.def_5_meal
-                                                        WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND plans.num_meals = 10 THEN def_meals.def_10_meal
-                                                        WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND plans.num_meals = 15 THEN def_meals.def_15_meal
-                                                        WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND plans.num_meals = 20 THEN def_meals.def_20_meal
-                                                        ELSE act_meal.meal_selection
-                                                    END AS meal_selection 
-                                                FROM (
-                                                    SELECT * 
-                                                    FROM ptyd.ptyd_purchases pur
-                                                    JOIN ptyd.ptyd_saturdays sat
-                                                    WHERE pur.purchase_status = "ACTIVE"
-                                                        AND sat.Saturday < "2020-08-01")
-                                                    AS act_pur
-                                                LEFT JOIN ptyd.ptyd_meal_plans AS plans ON act_pur.meal_plan_id = plans.meal_plan_id
-                                                LEFT JOIN ( # QUERY 2:
-                                                    SELECT
-                                                        ms1.purchase_id
-                                                        , ms1.week_affected
-                                                        , ms1.meal_selection
-                                                        , ms1.delivery_day
-                                                    FROM ptyd.ptyd_meals_selected AS ms1
-                                                    INNER JOIN (
-                                                        SELECT
-                                                            purchase_id
-                                                            , week_affected
-                                                            , meal_selection
-                                                            , MAX(selection_time) AS latest_selection
-                                                            , delivery_day
-                                                        FROM ptyd.ptyd_meals_selected
-                                                        GROUP BY purchase_id
-                                                            , week_affected) 
-                                                        AS ms2 
-                                                    ON ms1.purchase_id = ms2.purchase_id 
-                                                        AND ms1.week_affected = ms2.week_affected 
-                                                        AND ms1.selection_time = ms2.latest_selection
-                                                )
-                                                    AS act_meal
-                                                ON act_pur.Saturday = act_meal.week_affected
-                                                    AND act_pur.purchase_id = act_meal.purchase_id
-                                                LEFT JOIN ( # QUERY 4
-                                                    SELECT dm.*
-                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 59,10)) 
-                                                                as def_5_meal
-                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10)) 
-                                                                as def_10_meal
-                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10)) 
-                                                                as def_15_meal
-                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals,  3,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 17,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 31,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10)) 
-                                                                as def_20_meal
-                                                    FROM (
-                                                        SELECT defaultmeal.menu_date
-                                                            , defaultmeal.menu_category
-                                                            , defaultmeal.menu_type
-                                                            , defaultmeal.meal_cat
-                                                            , JSON_ARRAYAGG(menu_meal_id) as "default_meals" 
-                                                            
-                                                        FROM (
-                                                            SELECT * FROM ptyd.ptyd_menu menu
-                                                            WHERE default_meal = "TRUE")
-                                                            AS defaultmeal
-                                                        GROUP BY defaultmeal.menu_date)
-                                                        AS dm)
-                                                    AS def_meals
-                                                ON act_pur.Saturday = def_meals.menu_date)
-                                                AS meals
-                                            UNION
-                                            SELECT *
-                                            FROM ( # QUERY 1
-                                                SELECT
-                                                    ms1.purchase_id
-                                                    -- ,ms2.purchase_id
-                                                    , ms1.week_affected
-                                                    -- , ms2.week_affected
-                                                    , "0" AS delivery_first_name
-                                                    , "0" AS delivery_last_name
-                                                    , "0" AS num_meals
-                                                    , "0" AS delivery_day
-                                                    , ms1.meal_selection
-                                                    -- , ms1.selection_time
-                                                    -- , ms2.latest_selection
-                                                    -- , ms1.delivery_day
-                                                FROM ptyd.ptyd_addons_selected AS ms1
-                                                INNER JOIN (
-                                                    SELECT
-                                                        purchase_id
-                                                        , week_affected
-                                                        , meal_selection
-                                                        , MAX(selection_time) AS latest_selection
-                                                        -- , delivery_day
-                                                    FROM ptyd.ptyd_addons_selected
-                                                    GROUP BY purchase_id
-                                                        , week_affected
-                                                ) as ms2 
-                                                ON ms1.purchase_id = ms2.purchase_id 
-                                                    AND ms1.week_affected = ms2.week_affected 
-                                                    AND ms1.selection_time = ms2.latest_selection
-                                                ORDER BY purchase_id
-                                                    , week_affected)
-                                                AS addons)
-                                            AS combined
-                                    JOIN numbers ON char_length(meal_selection) - char_length(replace(meal_selection, ';', '')) >= n - 1)
-                                        AS sub
-                                    LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
-                                    GROUP BY 
-                                        week_affected,
-                                        meal_selected
-                                    ORDER BY 
-                                        week_affected,
-                                        meal_selected)
-                                    AS meals_ordered
-                                    ON allmeals.menu_date = meals_ordered.week_affected
-                                        AND allmeals.meal_id = meals_ordered.meal_selected
-                                where week_affected = \'""" + date + """\'
-                                ORDER BY 
-                                    menu_date,
-                                    menu_category
-                                    ;""", 'get', conn)
-
-            response['message'] = 'successful'
-            response['result'] = items
-        
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-class All_Ingredients(Resource):
-    global RDS_PW
-    def get(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            # data = request.get_json(force=True)
-            date = request.args.get("date")
-            # date_affected = data['date_affected']
-
-            items = execute("""SELECT
-                                    meals_ordered.week_affected,
-                                    meals_ordered.total,
-                                    SUM(rec.recipe_ingredient_qty),
-                                    meals_ordered.total * SUM(rec.recipe_ingredient_qty) AS total_needed,
-                                    unit.measure_name,
-                                    ing.ingredient_desc,
-                                    ing.package_size,
-                                    ing.ingredient_measure,
-                                    mc.conversion_ratio,
-                                    ROUND(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size,2) AS need_qty,
-                                    inv.inventory_qty,
-                                    CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty) AS buy_qty       
-                                FROM (# QUERY 11
-                                    SELECT 
-                                        week_affected,
-                                        meal_selected,
-                                        meal_name,
-                                        COUNT(num) AS total
-                                    FROM (
-                                        SELECT *
-                                            , substring_index(substring_index(meal_selection,';',n),';',-1) AS meal_selected
+                                            , substring_index(substring_index(combined_selection,';',n),';',-1) AS meal_selected
                                             , n AS num
                                         FROM (# QUERY 8
                                             SELECT meals.*,
@@ -3997,28 +3778,411 @@ class All_Ingredients(Resource):
                                             GROUP BY meals.purchase_id,
                                                 meals.week_affected)
                                             AS combined
-                                    JOIN numbers ON char_length(meal_selection) - char_length(replace(meal_selection, ';', '')) >= n - 1)
+                                    JOIN numbers ON char_length(combined_selection) - char_length(replace(combined_selection, ';', '')) >= n - 1)
                                         AS sub
                                     LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
                                     GROUP BY week_affected
                                         , meal_selected
                                     ORDER BY week_affected
                                         , meal_selected)
-                                        AS meals_ordered
-                                LEFT JOIN ptyd.ptyd_recipes rec ON meals_ordered.meal_selected = rec.recipe_meal_id
-                                JOIN ptyd.ptyd_measure_unit unit ON rec.recipe_measure_id = unit.measure_unit_id
-                                LEFT JOIN ptyd.ptyd_ingredients ing ON rec.recipe_ingredient_id = ing.ingredient_id
-                                LEFT JOIN ptyd.ptyd_measure_conversion mc ON rec.recipe_measure_id = mc.from_measure_unit_id AND ing.ingredient_measure_id = mc.to_measure_unit_id
-                                LEFT JOIN ptyd.ptyd_inventory inv ON rec.recipe_ingredient_id = inv.inventory_ingredient_id
-                                where meals_ordered.week_affected = \'""" + date + """\'
-                                GROUP BY rec.recipe_ingredient_id,
-                                    meals_ordered.week_affected;""", 'get', conn)
+                                                                        AS meals_ordered
+                                        ON allmeals.menu_date = meals_ordered.week_affected
+                                                                            AND allmeals.meal_id = meals_ordered.meal_selected
+                                                                    where week_affected = \'""" + date + """\'
+                                                                    ORDER BY 
+                                                                        menu_date,
+                                                                        menu_category
+                                    ;""", 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+        
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class All_Ingredients(Resource):
+    global RDS_PW
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            # data = request.get_json(force=True)
+            date = request.args.get("date")
+            # date_affected = data['date_affected']
+
+            items = execute("""SELECT
+                                meals_ordered.week_affected,
+                                -- meals_ordered.total,
+                                -- SUM(rec.recipe_ingredient_qty),
+                                SUM(meals_ordered.total * rec.recipe_ingredient_qty) AS total_needed,
+                                unit.measure_name,
+                                ing.ingredient_desc,
+                                ing.package_size,
+                                ing.ingredient_measure,
+                                mc.conversion_ratio,
+                                ROUND(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size,2) AS need_qty,
+                                inv.inventory_qty,
+                                if(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty < 0,0,
+                                CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty)) AS buy_qty       
+                            FROM (# QUERY 11
+                                SELECT 
+                                    week_affected,
+                                    meal_selected,
+                                    meal_name,
+                                    COUNT(num) AS total
+                                FROM (
+                                    SELECT *
+                                        , substring_index(substring_index(combined_selection,';',n),';',-1) AS meal_selected
+                                        , n AS num
+                                    FROM (# QUERY 8
+                                        SELECT meals.*,
+                                            addons.meal_selection AS addon_selection,
+                                            if(addons.meal_selection IS NOT NULL,CONCAT(meals.meal_selection,';',addons.addons.meal_selection),meals.meal_selection) AS combined_selection
+                                        FROM (# QUERY 7
+                                            SELECT
+                                                act_meal.purchase_id,
+                                                act_meal.Saturday AS week_affected,
+                                                act_meal.delivery_first_name,
+                                                act_meal.delivery_last_name,
+                                                act_meal.num_meals,
+                                                act_meal.deliver AS delivery_day,
+                                                -- act_meal.meal_selection AS org_meal_selection,
+                                                CASE
+                                                    WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND act_meal.num_meals = 5  THEN  act_meal.def_5_meal
+                                                    WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND act_meal.num_meals = 10 THEN act_meal.def_10_meal
+                                                    WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND act_meal.num_meals = 15 THEN act_meal.def_15_meal
+                                                    WHEN (act_meal.meal_selection IS NULL OR act_meal.meal_selection = "SURPRISE") AND act_meal.num_meals = 20 THEN act_meal.def_20_meal
+                                                    ELSE act_meal.meal_selection
+                                                END AS meal_selection
+                                            FROM (# QUERY 6
+                                                SELECT 
+                                                    sel_meals.*,
+                                                    CASE
+                                                        WHEN (sel_meals.delivery_day IS NULL AND sel_meals.delivery_default_day IS NULL ) THEN  "Sunday"
+                                                        WHEN (sel_meals.delivery_day IS NULL AND sel_meals.delivery_default_day IS NOT NULL ) THEN sel_meals.delivery_default_day
+                                                        ELSE sel_meals.delivery_day
+                                                    END AS deliver,
+                                                    plans.num_meals,
+                                                    plans.meal_weekly_price,
+                                                    plans.meal_plan_price,
+                                                    def_meals.*
+                                                FROM (# QUERY 4
+                                                    SELECT 
+                                                        act_pur.*,
+                                                        act_meal.selection_time,
+                                                        act_meal.meal_selection,
+                                                        act_meal.delivery_day
+                                                    FROM (
+                                                        SELECT * 
+                                                        FROM ptyd.ptyd_purchases pur
+                                                        JOIN ptyd.ptyd_saturdays sat
+                                                        WHERE pur.purchase_status = "ACTIVE"
+                                                            -- AND sat.Saturday < "2020-09-01"
+                                                            AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
+                                                            AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
+                                                            AND sat.Saturday > pur.start_date)
+                                                        AS act_pur
+                                                    LEFT JOIN (# QUERY 1 
+                                                        SELECT
+                                                            ms1.purchase_id
+                                                            , ms1.selection_time
+                                                            , ms1.week_affected
+                                                            , ms1.meal_selection
+                                                            , ms1.delivery_day
+                                                        FROM ptyd.ptyd_meals_selected AS ms1
+                                                        INNER JOIN (
+                                                            SELECT
+                                                                purchase_id
+                                                                , week_affected
+                                                                , meal_selection
+                                                                , MAX(selection_time) AS latest_selection
+                                                                , delivery_day
+                                                            FROM ptyd.ptyd_meals_selected
+                                                            GROUP BY purchase_id
+                                                                , week_affected)
+                                                            AS ms2 
+                                                        ON ms1.purchase_id = ms2.purchase_id 
+                                                            AND ms1.week_affected = ms2.week_affected 
+                                                            AND ms1.selection_time = ms2.latest_selection
+                                                        ORDER BY purchase_id
+                                                            , week_affected)
+                                                        AS act_meal
+                                                    ON act_pur.Saturday = act_meal.week_affected
+                                                        AND act_pur.purchase_id = act_meal.purchase_id
+                                                    ORDER BY act_pur.purchase_id
+                                                        , act_pur.Saturday
+                                                        , act_meal.selection_time)
+                                                    AS sel_meals
+                                                LEFT JOIN ptyd.ptyd_meal_plans AS plans ON sel_meals.meal_plan_id = plans.meal_plan_id    
+                                                LEFT JOIN (# QUERY 5
+                                                    SELECT dm.*
+                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 59,10)) 
+                                                                as def_5_meal
+                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 59,10),";"
+                                                                ,MID(dm.default_meals, 59,10)) 
+                                                                as def_10_meal
+                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 59,10),";"
+                                                                ,MID(dm.default_meals, 59,10),";"
+                                                                ,MID(dm.default_meals, 59,10)) 
+                                                                as def_15_meal
+                                                        , CONCAT(MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals,  3,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 17,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 31,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 45,10),";"
+                                                                ,MID(dm.default_meals, 59,10),";"
+                                                                ,MID(dm.default_meals, 59,10),";"
+                                                                ,MID(dm.default_meals, 59,10),";"
+                                                                ,MID(dm.default_meals, 59,10)) 
+                                                                as def_20_meal
+                                                    FROM (
+
+                                                        SELECT defaultmeal.menu_date
+                                                            , defaultmeal.menu_category
+                                                            , defaultmeal.menu_type
+                                                            , defaultmeal.meal_cat
+                                                            , JSON_ARRAYAGG(menu_meal_id) as "default_meals" 
+                                                            
+                                                        FROM (
+                                                            SELECT * FROM ptyd.ptyd_menu menu
+                                                            WHERE default_meal = "TRUE")
+                                                            AS defaultmeal
+
+                                                        GROUP BY defaultmeal.menu_date)
+                                                        AS dm)
+                                                    AS def_meals
+                                                ON sel_meals.Saturday = def_meals.menu_date)
+                                                AS act_meal)
+                                            AS meals
+                                        LEFT JOIN (# QUERY 2
+                                            SELECT
+                                                ms1.purchase_id,
+                                                -- , ms1.selection_time
+                                                ms1.week_affected,
+                                                "Add-on" AS delivery_first_name,
+                                                "Add-on" AS delivery_last_name,
+                                                "0" AS num_meals,
+                                                "Add-on" AS delivery_day,
+                                                ms1.meal_selection
+                                            FROM ptyd.ptyd_addons_selected AS ms1
+                                            INNER JOIN (
+                                                SELECT
+                                                    purchase_id
+                                                    , week_affected
+                                                    , meal_selection
+                                                    , MAX(selection_time) AS latest_selection
+                                                FROM ptyd.ptyd_addons_selected
+                                                GROUP BY purchase_id
+                                                    , week_affected
+                                            ) as ms2 
+                                            ON ms1.purchase_id = ms2.purchase_id 
+                                                AND ms1.week_affected = ms2.week_affected 
+                                                AND ms1.selection_time = ms2.latest_selection
+                                            ORDER BY purchase_id
+                                                , week_affected)
+                                            AS addons
+                                            ON meals.purchase_id = addons.purchase_id
+                                            AND meals.week_affected = addons.week_affected
+                                        GROUP BY meals.purchase_id,
+                                            meals.week_affected)
+                                        AS combined
+                                JOIN numbers ON char_length(combined_selection) - char_length(replace(combined_selection, ';', '')) >= n - 1)
+                                    AS sub
+                                LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
+                                GROUP BY week_affected
+                                    , meal_selected
+                                ORDER BY week_affected
+                                    , meal_selected)
+                                AS meals_ordered
+                            LEFT JOIN ptyd.ptyd_recipes rec ON meals_ordered.meal_selected = rec.recipe_meal_id
+                            JOIN ptyd.ptyd_measure_unit unit ON rec.recipe_measure_id = unit.measure_unit_id
+                            LEFT JOIN ptyd.ptyd_ingredients ing ON rec.recipe_ingredient_id = ing.ingredient_id
+                            LEFT JOIN ptyd.ptyd_measure_conversion mc ON rec.recipe_measure_id = mc.from_measure_unit_id AND ing.ingredient_measure_id = mc.to_measure_unit_id
+                            LEFT JOIN ptyd.ptyd_inventory inv ON rec.recipe_ingredient_id = inv.inventory_ingredient_id
+                            where meals_ordered.week_affected = \'""" + date + """\'
+                            GROUP BY rec.recipe_ingredient_id,
+                                meals_ordered.week_affected
+                            ORDER BY meals_ordered.week_affected,
+                                ingredient_desc;""", 'get', conn)
 
             response['message'] = 'successful'
             response['result'] = items
         
 
             return response
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class Add_New_Ingredient(Resource):       
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            
+            meal_id = data['meal_id']
+            meal_name = data['meal_name']
+            ingredients = data['ingredients']
+
+            items['delete_ingredients'] = execute("""delete from ptyd_recipes 
+                                                        where recipe_meal_id = \'""" + str(meal_id) + """\';
+                                                            """, 'post', conn)
+        
+            i=0
+            for eachIngredient in data['ingredients']:
+                name = ingredients[i]['name']
+                qty = ingredients[i]['qty']
+                units = ingredients[i]['units']
+                ingredient_id = ingredients[i]['ingredient_id']
+                measure_id = ingredients[i]['measure_id']
+                print(name)
+                print(qty)
+                print(units)
+                print(ingredient_id)
+                print(measure_id)
+                print(meal_id)
+                print(meal_name)
+                print("************************")
+                
+                
+                items['new_ingredients_insert'] = execute(""" INSERT INTO ptyd_recipes (
+                                                            recipe_meal_id, recipe_ingredient_id, recipe_ingredient_qty, 
+                                                            recipe_measure_id
+                                                            ) 
+                                                            VALUES (
+                                                            \'""" + str(meal_id) + """\',\'""" + str(ingredient_id) + """\',\'""" + str(qty) + """\',\'""" + str(measure_id) + """\'
+                                                            );
+                                                            """, 'post', conn)
+                i+=1
+
+            
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class EditMeals(Resource):
+    def patch(self):
+        response = {}
+        items = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+            print("pre",data)
+
+            #checking to see if it's a new meal or editing an existing one 
+            if data['meal_id'] == "NewMealId":
+                
+                #generating new meal id
+                mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
+                mealId = mealIdQuery['result'][0]['new_id']
+
+                #inserting partial entry into meals table
+                items['new_meal_insert'] = execute(""" INSERT INTO 
+                                                            ptyd_meals(meal_id,meal_category,meal_name,meal_desc,extra_meal_price) 
+                                                        VALUES 
+                                                            (\'""" + str(mealId) + """\','NEEDS CATEGORY'
+                                                            ,\'""" + data['meal_name'] + """\','NEEDS DESCRIPTION ','100000');
+                                                            """, 'post', conn)
+
+            else:
+                #defaulting to entered meal id if user is editing an existing one 
+                mealId= data['meal_id']
+
+            numRecipeInserts = 0
+            
+            #iterating through the dictionary of ingredients
+            for ingredient in data['ingredients']:
+                print("******************") 
+                print(ingredient['ingredient_id'])     
+                #checking to see if the ingredient is a new ingredient or an existing one -- if the ingredient is new generate an id and post to ingredient
+                if ingredient['ingredient_id'] == "NewIngrId":
+
+                                  
+                    ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
+                    ingredientId = ingredientIdQuery ['result'][0]['new_id']
+
+                    items['new_ingredient_insert'] = execute(""" INSERT INTO 
+                                                                    ptyd_ingredients(ingredient_id,ingredient_desc,package_size,ingredient_measure_id,ingredient_cost) 
+                                                                VALUES 
+                                                                    (\'""" + str(ingredientId) + """\',\'""" + ingredient['name'] + """\','NEEDS STANDARD PACKAGE SIZE ',
+                                                                    ,\'""" + ingredient['measure_id'] + """\','NEEDS INGREDIENT COST');
+                                                            """, 'post', conn)
+                else:
+                    ingredientId = ingredient['ingredient_id']
+                print("*********************")
+                print("mealID")
+                print(mealId)
+                print("ingredientId")
+                print(ingredientId)
+                print("getNow()")
+                print(getNow())
+                print("ingredient qty")
+                print(ingredient['qty'])
+                print("ingredient measure")
+                print(ingredient['measure_id'])
+                #insert ingredient into recipe table attached to the meal
+                items['recipe_insert'] = execute(""" INSERT INTO
+                                                        ptyd_recipes(recipe_meal_id,recipe_ingredient_id,recipe_ingredient_qty,recipe_measure_id,recipe_last_update)
+                                                    VALUES
+                                                        ( \'""" + str(mealID) + """\', 
+                                                        \'""" + str(ingredientId) + """\', 
+                                                        \'""" + str(ingredient['qty']) + """\', 
+                                                        \'""" + str(ingredient['measure_id']) + """\', 
+                                                        \'""" + str(getNow()) + """\');
+                                                """, 'post', conn)
+                print("AFTER EXECUTE")
+                numRecipeInserts += 1
+
+            response['message'] = 'Post Request Succesful'
+            
+            return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -4179,6 +4343,7 @@ api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
 '''
 api.add_resource(All_Meals, '/api/v2/All_Meals')
 api.add_resource(All_Ingredients, '/api/v2/All_Ingredients')
+api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
