@@ -2290,8 +2290,9 @@ class MealSelection(Resource):
         if mealSelection is not None:
             mealSelectionString = ""
             for mealId in mealSelection:
-                for mealCount in range(mealSelection[mealId]):
-                    mealSelectionString += mealId + ";"
+                if mealId != "":
+                    for mealCount in range(mealSelection[mealId]):
+                        mealSelectionString += mealId + ";"
             # Remove last semicolon
             return mealSelectionString[:-1]
         else:
