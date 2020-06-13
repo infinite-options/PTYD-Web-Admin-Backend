@@ -203,6 +203,7 @@ export default class MealSchedule extends Component {
                 {sixWeekMenu.map(element => (
                   <MealButtons
                     key={element[0]}
+                    week={element[0]}
                     maxMeals={this.state.currentPurchase.MaximumMeals}
                     weekMenu={element[1]}
                     currentPurchase={this.state.currentPurchase}

@@ -604,9 +604,8 @@ export default class MealButton extends Component {
     }));
     //check if we change the addon of the current week
 
-    if (
-      this.state.currentPurchase.start_date === this.state.weekMenu.SaturdayDate
-    ) {
+    if (this.props.week === "MenuForWeek1") {
+      //this is a first week
       //update currentPurchase
       await this.setState(prevState => ({
         currentPurchase: {
