@@ -182,6 +182,8 @@ export default class MealSchedule extends Component {
                   currentPurchase={this.state.currentPurchase}
                   purchases={this.state.purchases}
                   mealPlans={this.state.mealPlans}
+                  history={this.props.history}
+                  DELETE_URL={this.props.DELETE_URL}
                 />
               )}
 
@@ -191,7 +193,6 @@ export default class MealSchedule extends Component {
                 searchCookie4LoggedInBy={() =>
                   this.searchCookie4LoggedInBy("loginStatus")
                 }
-                history={this.props.history}
               />
             </div>
           </Cell>{" "}
