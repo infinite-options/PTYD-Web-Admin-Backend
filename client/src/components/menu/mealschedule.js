@@ -99,8 +99,8 @@ export default class MealSchedule extends Component {
             // this is done in componentDidMount to load currentPurchase for the
             // frist time the page is loaded
             this.setState({
-              currentPurchase: res.data.result[0],
-              addonCharge: res.data.result[0].total_charge
+              currentPurchase: res.data.result[0]
+              // addonCharge: res.data.result[0].total_charge
             });
           } else {
             throw "There is no subcribed purchases.";
@@ -184,6 +184,8 @@ export default class MealSchedule extends Component {
                   mealPlans={this.state.mealPlans}
                   history={this.props.history}
                   DELETE_URL={this.props.DELETE_URL}
+                  UPDATE_URL={this.props.UPDATE_URL}
+                  UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}
                 />
               )}
 

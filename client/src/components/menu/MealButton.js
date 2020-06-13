@@ -97,6 +97,7 @@ export default class MealButton extends Component {
         let data;
         if (res.data.result !== undefined) {
           data = res.data.result;
+          console.log("data when calling getSelected function: ", data);
           if (data.Meals.length > 0) {
             for (let meal of data.Meals) {
               if (meal.week_affected === this.props.weekMenu.SaturdayDate) {
@@ -107,6 +108,8 @@ export default class MealButton extends Component {
           if (data.Addons.length > 0) {
             for (let addon of data.Addons) {
               if (addon.week_affected === this.props.weekMenu.SaturdayDate) {
+                console.log("yes, It's matched");
+                console.log("addon: ", addon);
                 this.setState({currentAddonSelected: addon});
                 //calculate the total add on price for first week
                 let priceList = this.props.weekMenu.AddonPrice;
@@ -119,6 +122,7 @@ export default class MealButton extends Component {
                   }
                 }
                 this.setState({totalAddonPrice: total.toFixed(2)});
+                this.props.ChangeCurrentAddonCharge(total); // update total addon charge for accountInfo component
                 total = 0;
               }
             }
@@ -621,7 +625,9 @@ export default class MealButton extends Component {
     //Update local variable;
     let mealSelected = this.state.currentAddonSelected.meals_selected;
     let mealSelection = this.concatMealSelection(mealSelected);
+    console.log("mealSelection inside saveBUtton Addon: ", mealSelection);
     if (mealSelection !== "") {
+      console.log("voila");
       await this.setState(prevState => ({
         currentAddonSelected: {
           ...prevState.currentAddonSelected,

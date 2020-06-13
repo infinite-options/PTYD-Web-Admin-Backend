@@ -3493,7 +3493,7 @@ class UpdateSubscription(Resource):
             delivery_address = data['delivery_address']
 
             print("1")
-            delivery_address_unit = data['delivery_address_unit']
+            delivery_address_unit = data.get('delivery_address_unit') #sometimes there is not address_unit
             # delivery_address_unit = None
             print("2")
 
