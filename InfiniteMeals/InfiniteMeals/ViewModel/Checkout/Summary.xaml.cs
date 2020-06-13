@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using InfiniteMeals.Model.Checkout;
+
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Summary : ContentPage {
         public Summary() {
+            
             InitializeComponent();
         }
     }

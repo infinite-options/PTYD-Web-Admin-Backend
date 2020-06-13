@@ -24,6 +24,21 @@ namespace InfiniteMeals.ViewModel.Checkout {
                 || String.IsNullOrEmpty(this.expirationMonthEntry.Text) || 
                 String.IsNullOrEmpty(this.expirationYearEntry.Text) || String.IsNullOrEmpty(this.cvvEntry.Text)) {
                 await DisplayAlert("Error: Empty Field(s)", "Please fill all fields", "OK");
+            } else {
+                OrderInformation orderInfo = new OrderInformation {
+                shippingInformation = (ShippingInformation)this.BindingContext,
+                paymentInformation = new PaymentInformation(this.deliveryInstructionsEditor.Text, this.cardNumberEntry.Text,
+                    this.cardholderNameEntry.Text, this.expirationMonthEntry.Text, this.expirationYearEntry.Text, this.cvvEntry.Text)
+                };
+                var summaryPage = new Summary();
+                summaryPage.BindingContext = orderInfo;
+                System.Diagnostics.Debug.WriteLine("test");
+                System.Diagnostics.Debug.WriteLine(summaryPage.BindingContext.GetType());
+                System.Diagnostics.Debug.WriteLine(orderInfo.shippingInformation.GetType());
+                System.Diagnostics.Debug.WriteLine(orderInfo.paymentInformation.GetType());
+                System.Diagnostics.Debug.WriteLine(orderInfo.shippingInformation);
+                System.Diagnostics.Debug.WriteLine(orderInfo.paymentInformation);
+                await Navigation.PushAsync(summaryPage);
             }
         }
         private void cardNumberEntryUnfocused(object sender, FocusEventArgs e) {
@@ -81,7 +96,6 @@ namespace InfiniteMeals.ViewModel.Checkout {
         private void expirationMonthEntryTextChanged(object sender, TextChangedEventArgs e) {
             Entry expirationMonthEntry = (Entry)sender;
             if(!String.IsNullOrEmpty(expirationMonthEntry.Text) && expirationMonthEntry.Text.Length == 2) {
-                expirationMonthEntry.Unfocus();
                 this.expirationYearEntry.Focus();
             }
         }
