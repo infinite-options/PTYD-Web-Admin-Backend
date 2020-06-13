@@ -1,7 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="InfiniteMeals.MealSelect.AddOnChoices">
+             x:Class="InfiniteMeals.MealSelect.AddOnChoices"
+             NavigationPage.HasBackButton="False">
+    
+<ContentPage.ToolbarItems >
+    <ToolbarItem Text="{Binding total}"/>
+</ContentPage.ToolbarItems>
 <ContentPage.Content>
 		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
             VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True">
