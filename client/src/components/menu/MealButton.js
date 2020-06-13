@@ -603,9 +603,9 @@ export default class MealButton extends Component {
       }
     }));
     //check if we change the addon of the current week
+
     if (
-      this.state.currentPurchase.week_affected ===
-      this.state.weekMenu.SaturdayDate
+      this.state.currentPurchase.start_date === this.state.weekMenu.SaturdayDate
     ) {
       //update currentPurchase
       await this.setState(prevState => ({
