@@ -556,18 +556,17 @@ export default class MealButton extends Component {
       }
     }));
     // update local variable
-    let mealSelected = this.state.currentAddonSelected.meals_selected;
+    let mealSelected = this.state.currentMealSelected.meals_selected;
+    console.log(mealSelected);
     let mealSelection = this.concatMealSelection(mealSelected);
-    if (mealSelection !== "") {
-      await this.setState(prevState => ({
-        currentAddonSelected: {
-          ...prevState.currentAddonSelected,
-          meal_selection: mealSelection
-        }
-      }));
-    } else {
-      await delete this.state.currentAddonSelected.meal_selection;
-    }
+    console.log(mealSelected);
+    await this.setState(prevState => ({
+      currentMealSelected: {
+        ...prevState.currentMealSelected,
+        meal_selection: mealSelection
+      }
+    }));
+
     // send request to save to serve
     this.saveSelectMealAPI();
   };

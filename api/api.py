@@ -859,9 +859,9 @@ class AccountPurchases(Resource):
             #     sat += timedelta(days=7)
 
             #if thursday is passed, the affected week is the next week
-            if now + timedelta(days=7) > thur:
-            #     thur += timedelta(days=7)
-                sat += timedelta(days=7)
+            # if now + timedelta(days=7) > thur:
+            # #     thur += timedelta(days=7)
+            #     sat += timedelta(days=7)
             # change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
