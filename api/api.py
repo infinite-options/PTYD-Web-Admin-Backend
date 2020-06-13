@@ -851,6 +851,8 @@ class AccountPurchases(Resource):
             sat = now + timedelta(days=(12 - dayOfWeek) % 7)
             thur = now + timedelta(days=(10 - dayOfWeek) % 7)
 
+            print ("sat before: ", sat)
+            print("thur before: ", thur)
 
             # If today is Thursday after 4PM
             # if sat == now and now.hour >= 16:
@@ -863,7 +865,8 @@ class AccountPurchases(Resource):
             # change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
-
+            print("sat after: ", sat)
+            print("thur after: ", thur)
             queries = ["""
                 SELECT 
                     snap.payment_id
