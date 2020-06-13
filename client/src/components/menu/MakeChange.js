@@ -137,7 +137,7 @@ export default class MakeChange extends Component {
       .then(() => {
         //success => reload the current page
         this.props.history.push("/mealschedule");
-        window.XMLHttpRequestUpload(false);
+        window.location.reload(false);
       })
       .catch(err => {
         console.log(err);
