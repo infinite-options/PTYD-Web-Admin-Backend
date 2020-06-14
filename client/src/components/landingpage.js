@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 
-import MenuCarousel from "./menucarousel.js";
+import MenuCarousel from "./MenuCarousel.js";
 import CommunityCarousel from "./CommunityCarousel"
 import QuoteCarousel from "./QuoteCarousel"
 
