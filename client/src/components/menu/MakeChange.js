@@ -147,48 +147,55 @@ export default class MakeChange extends Component {
       });
   };
 
-  UpdateChangingSubcription = () => {
+  UpdateChangingSubcription = async () => {
     // update changing subcription
-    fetch(this.props.UPDATE_URL, {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        meal_plan_id: this.state.updateMealPlanID,
-        purchase_id: this.state.currentPurchase.purchase_id,
-        delivery_address: this.state.deliveryAddress.address,
-        delivery_address_unit: this.state.deliveryAddress.apt,
-        delivery_city: this.state.deliveryAddress.city,
-        delivery_state: this.state.deliveryAddress.state,
-        delivery_zip: this.state.deliveryAddress.zipcode,
-        delivery_instructions: this.state.deliveryAddress.instruction
-      })
-    })
-      .then(() => {
-        //update changing payment for subcription
-        let creditCard = this.state.creditCard;
-        let date = moment(
-          `${creditCard.yearExpire}-${creditCard.monthExpire}-01`
-        );
-        console.log("date created is: ", date);
-        fetch(this.props.UPDATE_URL_PAYMENT, {
+    try {
+      if (
+        this.state.currentPurchase.purchase_id !== this.state.updateMealPlanID
+      ) {
+        // mealplan ID is changed
+        await fetch(this.props.UPDATE_URL, {
           method: "PATCH",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
+            meal_plan_id: this.state.updateMealPlanID,
             purchase_id: this.state.currentPurchase.purchase_id,
-            cc_num: this.state.creditCard.number,
-            cc_cvv: this.state.creditCard.CVV,
-            cc_exp_date: date.format("YYYY-MM-DD")
+            delivery_address: this.state.deliveryAddress.address,
+            delivery_address_unit: this.state.deliveryAddress.apt,
+            delivery_city: this.state.deliveryAddress.city,
+            delivery_state: this.state.deliveryAddress.state,
+            delivery_zip: this.state.deliveryAddress.zipcode,
+            delivery_instructions: this.state.deliveryAddress.instruction
           })
         });
-      })
-      .then(() => {})
-      .catch(err => console.log(err));
+      }
+      //update changing payment for subcription
+      let creditCard = this.state.creditCard;
+      let date = moment(
+        `${creditCard.yearExpire}-${creditCard.monthExpire}-01`
+      );
+      console.log("date created is: ", date);
+      await fetch(this.props.UPDATE_URL_PAYMENT, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          purchase_id: this.state.currentPurchase.purchase_id,
+          cc_num: this.state.creditCard.number,
+          cc_cvv: this.state.creditCard.CVV,
+          cc_exp_date: date.format("YYYY-MM-DD")
+        })
+      });
+      this.props.history.push("/mealschedule");
+      window.location.reload("false");
+    } catch (err) {
+      console.log(err);
+    }
   };
   render() {
     return (
