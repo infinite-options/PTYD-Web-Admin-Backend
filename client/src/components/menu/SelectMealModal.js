@@ -93,6 +93,7 @@ export default function SelectMealModal(props) {
                     decrementMealLeft={props.decrementMealLeft}
                     currentMealSelected={props.currentMealSelected}
                     quantity={quantity}
+                    mealLeft={props.mealLeft}
                   />
                 </Cell>
               );

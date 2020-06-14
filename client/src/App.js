@@ -98,9 +98,9 @@ const App = props => {
               <a className='navbar-brand' href='/'>
                 <img src={logo} alt='Logo' className='logo'></img>
               </a>
-              <div class='logo-austin-houston'>
+              <div className='logo-austin-houston'>
                 <p className='font9'>AUSTIN &</p>
-                <p className='font9'>HOUSTON</p>  
+                <p className='font9'>HOUSTON</p>
               </div>
             </div>
 
@@ -111,7 +111,7 @@ const App = props => {
             </Nav.Item>
 
             <NavDropdown
-              className='navigation-link black-link' 
+              className='navigation-link black-link'
               title='MENU'
               id='nav-dropdown'
             >
@@ -137,15 +137,15 @@ const App = props => {
                 FIND US
               </Nav.Link>
             </Nav.Item>
-            
+
             <Nav.Item className='navigation-link'>
               <Nav.Link className='black-link' href='/giftcards'>
                 GIFT CARDS
               </Nav.Link>
             </Nav.Item>
-            
+
             <NavDropdown
-              className='navigation-link black-link' 
+              className='navigation-link black-link'
               title='ABOUT'
               id='nav-dropdown'
             >
@@ -162,46 +162,40 @@ const App = props => {
               </NavDropdown.Item>
               <NavDropdown.Item href='/jobs'>JOBS</NavDropdown.Item>
             </NavDropdown>
-{/*             
+            {/*             
             <Nav.Item style={{marginTop: "30px"}}>
               <Nav.Link style={{color: "black"}} href='/get100'>
                 GET $100
               </Nav.Link>
             </Nav.Item> */}
 
-            <div 
-              className='navigation-start'
-            >
+            <div className='navigation-start'>
               {searchCookie4Login("loginStatus") !== null ? (
                 <div>
-                  <p
-                    id='loginStatus'
-                    className='login-hello'
-                  >
+                  <p id='loginStatus' className='login-hello'>
                     <span>Hello, </span>
                     <span>{searchCookie4Login("loginStatus")}</span>
                     <span>!</span>
                   </p>
-                  <a href='/logout'>
-                    <a
-                      id='logoutButton'
-                      onClick={() => {
-                        document.cookie = "loginStatus=; path=/";
-                        window.location.reload(false);
-                      }}
-                    >
-                      <u>Log Out</u>
-                    </a>
+                  <a
+                    href='/logout'
+                    id='logoutButton'
+                    onClick={() => {
+                      document.cookie = "loginStatus=; path=/";
+                      window.location.reload(false);
+                    }}
+                  >
+                    <u>Log Out</u>
                   </a>
-                  
                 </div>
               ) : (
                 <div>
                   <div>
-                    <a href='/selectmealplan'
+                    <a
+                      href='/selectmealplan'
                       className='top-btn1 top-btn1-primary font5'
-                      >
-                        Get Started
+                    >
+                      Get Started
                     </a>
                   </div>
                   <a href='/login'>
@@ -312,8 +306,7 @@ const App = props => {
           </Navigation>
         </Drawer> */}
 
-        <Content className='content-container'
-        >
+        <Content className='content-container'>
           <div className='page-content' />
           <Main
             appProps={{
@@ -325,7 +318,7 @@ const App = props => {
           />
         </Content>
 
-        <hr/>
+        <hr />
 
         <footer className='container font2'>
           <div className='row footer-container'>
@@ -346,16 +339,32 @@ const App = props => {
                 <Nav.Link id='green' disabled>
                   Order
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Menu
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Plans
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   How it Works
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Delivery Area
                 </Nav.Link>
               </Nav>
@@ -366,19 +375,39 @@ const App = props => {
                 <Nav.Link id='green' disabled>
                   Company
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Blog
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Our Service
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Our Team
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Jobs
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   Employee Portal
                 </Nav.Link>
               </Nav>
@@ -389,18 +418,46 @@ const App = props => {
                 <Nav.Link id='green' disabled>
                   Questions & Contact
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   FAQs
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   512-522-9294
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' className='black-grey' href='/'>
+                <Nav.Link
+                  id='footer-margin-padding'
+                  className='black-grey'
+                  href='/'
+                >
                   info@preptoyourdoor.com
                 </Nav.Link>
-                <Nav.Link id='footer-margin-padding' disabled>&#8203;</Nav.Link>
-                <Nav.Link disabled id='footer-margin-padding' className='font1'  href='/'>Made with 🧡 in Austin, TX</Nav.Link>
-                <Nav.Link disabled id='footer-margin-padding' className='font1' href='/'>© Prep To Your Door</Nav.Link>
+                <Nav.Link id='footer-margin-padding' disabled>
+                  &#8203;
+                </Nav.Link>
+                <Nav.Link
+                  disabled
+                  id='footer-margin-padding'
+                  className='font1'
+                  href='/'
+                >
+                  Made with 🧡 in Austin, TX
+                </Nav.Link>
+                <Nav.Link
+                  disabled
+                  id='footer-margin-padding'
+                  className='font1'
+                  href='/'
+                >
+                  © Prep To Your Door
+                </Nav.Link>
               </Nav>
             </div>
 
@@ -416,7 +473,7 @@ const App = props => {
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <i 
+                  <i
                     id='social-icon'
                     className='fa fa-facebook-f fa-2x socialBranchLogo'
                   />
@@ -447,10 +504,7 @@ const App = props => {
                 <Nav.Link id='green' disabled>
                   Join Our Mailing List
                 </Nav.Link>
-                <p
-                  id='black-grey'
-                  className='never-miss-update-text'
-                >
+                <p id='black-grey' className='never-miss-update-text'>
                   & Never miss an update
                 </p>
                 {/* <p style={{fontSize: "12px", paddingLeft: "15px"}}>
@@ -463,9 +517,10 @@ const App = props => {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
-                      <a 
-                      // type='submit' 
-                      className='subscribe-btn font2'>
+                      <a
+                        // type='submit'
+                        className='subscribe-btn font2'
+                      >
                         Subscribe
                       </a>
                     </Form.Group>

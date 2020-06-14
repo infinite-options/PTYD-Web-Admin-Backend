@@ -17,7 +17,7 @@ export default class MealSchedule extends Component {
       purchases: [], // use for loading all purchases that user have, key for this object is purchases_id
       currentPurchase: {}, // get from purchases_id
       menu: {}, // menu for 6 week,
-      mealPlans: [], // we're gonna need this for changing meal plan in change account info
+      mealPlans: {}, // we're gonna need this for changing meal plan in change account info
       userID: this.props.appProps.user_uid, // user ID
       firstname: this.searchCookie4Name("loginStatus"),
       showHideMakeChange: false,
@@ -69,7 +69,6 @@ export default class MealSchedule extends Component {
     // example: this.props.match.params.startdate ? this.props.API_URL + "/" + this.props.match.params.startdate : this.props.API_URL
 
     //setting menu for 6 weeks
-    console.log(this.props.match.params.startdate);
     axios
       .get(
         this.props.match.params.startdate
@@ -100,8 +99,8 @@ export default class MealSchedule extends Component {
             // this is done in componentDidMount to load currentPurchase for the
             // frist time the page is loaded
             this.setState({
-              currentPurchase: res.data.result[0],
-              addonCharge: res.data.result[0].total_charge
+              currentPurchase: res.data.result[0]
+              // addonCharge: res.data.result[0].total_charge
             });
           } else {
             throw "There is no subcribed purchases.";
@@ -116,6 +115,20 @@ export default class MealSchedule extends Component {
           this.setState({error: err.response});
           console.log(err.response);
         }
+      });
+    // calling Plans_url to get all meal plans
+    axios
+      .get(`${this.props.PLANS_URL}`)
+      .then(res => {
+        let data = res.data;
+        console.log(data.result);
+        if (data !== undefined && data.result !== undefined) {
+          console.log("here");
+          this.setState({mealPlans: data.result});
+        }
+      })
+      .catch(err => {
+        console.log("error happened when calling plans_url: ", err);
       });
   };
 
@@ -169,12 +182,19 @@ export default class MealSchedule extends Component {
                   currentPurchase={this.state.currentPurchase}
                   purchases={this.state.purchases}
                   mealPlans={this.state.mealPlans}
+                  history={this.props.history}
+                  DELETE_URL={this.props.DELETE_URL}
+                  UPDATE_URL={this.props.UPDATE_URL}
+                  UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}
                 />
               )}
 
               <AccountInfo
                 currentPurchase={this.state.currentPurchase}
                 addonCharge={this.state.addonCharge}
+                searchCookie4LoggedInBy={() =>
+                  this.searchCookie4LoggedInBy("loginStatus")
+                }
               />
             </div>
           </Cell>{" "}
@@ -185,6 +205,7 @@ export default class MealSchedule extends Component {
                 {sixWeekMenu.map(element => (
                   <MealButtons
                     key={element[0]}
+                    week={element[0]}
                     maxMeals={this.state.currentPurchase.MaximumMeals}
                     weekMenu={element[1]}
                     currentPurchase={this.state.currentPurchase}

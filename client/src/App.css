@@ -16,15 +16,15 @@
   font-family: "oswald";
   src: url("fonts/Oswald-Medium.woff2") format("woff2"),
     url("fonts/Oswald-Medium.woff") format("woff");
-  font-weight:normal;
-  font-style:normal;
+  font-weight: normal;
+  font-style: normal;
 }
 
 :root {
-  --green: #469B47;
+  --green: #469b47;
   --black: #494949;
-  --off-white: #F8F9FA;
-  --orange: #FF8C42;
+  --off-white: #f8f9fa;
+  --orange: #ff8c42;
 }
 
 .content-container {
@@ -39,7 +39,7 @@
 }
 
 .navigation-logo-container {
-  text-align:center;
+  text-align: center;
   margin: 10px 30px 0 0;
 }
 
@@ -48,8 +48,9 @@
   object-fit: cover;
 }
 
-.black-link, .black-link a {
-  color:black;
+.black-link,
+.black-link a {
+  color: black;
 }
 
 .navigation-link {
@@ -66,10 +67,10 @@
 }
 
 #loginButton {
-  text-decoration:none;
-  color:black;
-  float:right;
-  margin-top: 10px; 
+  text-decoration: none;
+  color: black;
+  float: right;
+  margin-top: 10px;
 }
 
 .login-hello {
@@ -83,9 +84,9 @@
 }
 
 #logoutButton {
-  text-decoration:none;
-  color:black;
-  float:right;
+  text-decoration: none;
+  color: black;
+  float: right;
   margin: 30px 0 0 22px;
 }
 
@@ -118,12 +119,12 @@
 }
 
 .footer-socials-container {
-  margin-left:12px;
+  margin-left: 12px;
 }
 
 #social-icon {
   color: grey;
-  transition: .1s;
+  transition: 0.1s;
 }
 #social-icon:hover {
   color: var(--black);
@@ -201,10 +202,10 @@
 
 .bottom-left a {
   color: white;
-  -webkit-transition: .2s;
-  -moz-transition: .2s;
-  -o-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
 }
 .bottom-left a:hover {
   color: white;
@@ -212,7 +213,7 @@
 }
 #already-a-member:hover {
   /* color: #607122; */
-  color: var(--black)
+  color: var(--black);
 }
 
 .zero-waste-container {
@@ -223,7 +224,7 @@
   font-weight: bold;
   line-height: 1.4em;
   font-size: 41px;
-  letter-spacing: .25em;
+  letter-spacing: 0.25em;
   margin: 0;
   padding: 0;
 }
@@ -234,7 +235,7 @@
   /* color: #617221; */
   color: var(--green);
   font-weight: bold;
-  letter-spacing: .05em;
+  letter-spacing: 0.05em;
   font-size: 24px;
 }
 .zero-waste-subtext p {
@@ -248,12 +249,12 @@
 }
 
 .box-shadow-top {
-  box-shadow:inset 0 -15px 10px -16px grey;
+  box-shadow: inset 0 -15px 10px -16px grey;
   margin: auto;
   width: 960px;
 }
 .box-shadow-bottom {
-  box-shadow:inset 0 15px 10px -16px grey;
+  box-shadow: inset 0 15px 10px -16px grey;
   margin: auto;
   width: 960px;
   padding-bottom: 25px;
@@ -261,7 +262,7 @@
 
 .four-items-grid {
   font-size: 14px;
-  color: #4D4D4D;
+  color: #4d4d4d;
   margin: 50px 0 0 20px;
 }
 .four-items-grid h4 {
@@ -300,11 +301,11 @@
   padding: 40px 0 25px;
 }
 .delivered-title {
-  letter-spacing: .25em;
+  letter-spacing: 0.25em;
   font-size: 42px;
 }
 .delivered-title2 {
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
   font-size: 33px;
   margin-top: -12px;
 }
@@ -325,12 +326,12 @@
 }
 .delivered-price {
   font-size: 37px;
-  line-height: .7em;
+  line-height: 0.7em;
   margin-left: 50px;
 }
 .delivered-week {
   font-size: 18px;
-  letter-spacing: .2em;
+  letter-spacing: 0.2em;
   font-weight: bold;
 }
 .pause-anytime {
@@ -338,9 +339,9 @@
 }
 
 .fresh-menu-title {
-  text-align: center; 
+  text-align: center;
   font-weight: bold;
-  font-size: 37px; 
+  font-size: 37px;
   /* color: #617221; */
   color: var(--green);
 }
@@ -360,15 +361,15 @@
 .menu-carousel-img {
   width: 270px;
   height: 270px;
-  -webkit-transition: .2s;
-  -moz-transition: .2s;
-  -o-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
 }
 .menu-carousel-img-container {
   position: relative;
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
   width: 270px;
   display: block;
   cursor: pointer;
@@ -407,7 +408,7 @@
   opacity: 1;
 }
 .menu-carousel-img:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 .slider-arrow {
   position: absolute;
@@ -434,7 +435,7 @@
 }
 
 .arrow-btn2 {
-  margin-top:160px
+  margin-top: 160px;
 }
 
 .try-us-today-button-container {
@@ -448,7 +449,7 @@
 .quote-carousel-padding2 {
   padding: 0 140px;
 }
-.quote2{
+.quote2 {
   line-height: 50px;
   margin-bottom: 0;
   padding-bottom: 0;
@@ -464,7 +465,7 @@
   margin: 0;
   padding: 0;
   font-size: 12px;
-  letter-spacing: .05em;
+  letter-spacing: 0.05em;
 }
 .award-text {
   margin-top: -25px;
@@ -551,7 +552,7 @@ br {
 /* button */
 
 .top-btn1 {
-  padding: 0.2rem .5rem;
+  padding: 0.2rem 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0;
   border: 0;
@@ -561,18 +562,18 @@ br {
 }
 
 .top-btn1-primary {
-  background-color:var(--green);
+  background-color: var(--green);
   opacity: 1;
-  -webkit-transition: .2s;
-  -moz-transition: .2s;
-  -o-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
   color: white;
 }
 .top-btn1-primary:hover {
   background-color: var(--orange);
   color: white;
-  text-decoration:none;
+  text-decoration: none;
 }
 
 .btn1 {
@@ -587,10 +588,10 @@ br {
 .btn1-primary {
   background-color: var(--orange);
   opacity: 1;
-  -webkit-transition: .2s;
-  -moz-transition: .2s;
-  -o-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
   color: white;
 }
 
@@ -603,16 +604,16 @@ br {
 .subscribe-btn {
   background-color: var(--green);
   color: white !important;
-  padding: 6px .5rem;
+  padding: 6px 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0;
   border: 0;
   line-height: 2.5;
   border-radius: 4px;
-  -webkit-transition: .2s;
-  -moz-transition: .2s;
-  -o-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .subscribe-btn:hover {
@@ -655,7 +656,7 @@ hr.two {
 
 hr.three {
   width: 470px;
-  margin:auto;
+  margin: auto;
   border: none;
 }
 
@@ -742,7 +743,8 @@ hr.four {
 
 /* font */
 
-.font1, .font5 {
+.font1,
+.font5 {
   font-family: brandongrotw01-lightregular, sans-serif;
 }
 /* text font */
@@ -766,7 +768,7 @@ hr.four {
   line-height: 0.8em;
   text-align: center;
   letter-spacing: 0.25em;
-  color: #E38B19;
+  color: #e38b19;
   font-weight: bold;
   margin-top: -8px;
 }
@@ -864,4 +866,11 @@ hr.four {
 .sub_title {
   font-weight: 500;
   font-size: 25px;
+}
+
+.select_center {
+  width: 100%;
+  display: inline-block;
+  text-align-last: center;
+  font-weight: bold;
 }

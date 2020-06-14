@@ -355,7 +355,6 @@ class Meals(Resource):
                 # convert string to datetime
                 stamp = datetime.strptime(date['menu_date'], '%Y-%m-%d')
 
-                print("Stamp before change: ", stamp)
                 # Roll calendar at 4PM Monday
                 if now - timedelta(days=1, hours=16) < stamp:
                     weekly_special = execute(
@@ -453,15 +452,10 @@ class Meals(Resource):
                         LEFT JOIN ptyd_meals ON ptyd_menu.menu_meal_id = ptyd_meals.meal_id
                         WHERE menu_category LIKE 'ADD_ON_%'
                         AND menu_date = '""" + date['menu_date'] + "';", 'get', conn)
-                    print("here")
-
-                    print("stamp: ", stamp)
 
                     thursday = stamp - timedelta(days=2)
 
                     today = datetime.now()
-                    print("Thurday: ", thursday)
-                    print("today: ", today)
 
                     if today < thursday:
                         # stamp = stamp + timedelta(days=7)
@@ -500,7 +494,6 @@ class Meals(Resource):
                                 }
                             }
                         }
-                        print("broke")
 
                         week['MealQuantities'] = self.getMealQuantities(week)
                         week['AddonPrice'] = self.getAddonPrice(week)
@@ -513,7 +506,6 @@ class Meals(Resource):
             # Finish Line
             response['message'] = 'Request successful.'
             response['result'] = items
-            print("broke .here")
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -859,21 +851,22 @@ class AccountPurchases(Resource):
             sat = now + timedelta(days=(12 - dayOfWeek) % 7)
             thur = now + timedelta(days=(10 - dayOfWeek) % 7)
 
-            print ("thur before calculate: ", thur)
-            print("sat before calculate: ", sat)
+            print ("sat before: ", sat)
+            print("thur before: ", thur)
+
             # If today is Thursday after 4PM
             # if sat == now and now.hour >= 16:
             #     sat += timedelta(days=7)
 
-            #if thursday is passed, calculate for the next week
-            if now + timedelta(days=7) > thur:
-                thur += timedelta(days=7)
-                sat += timedelta(days=7)
+            #if thursday is passed, the affected week is the next week
+            # if now + timedelta(days=7) > thur:
+            # #     thur += timedelta(days=7)
+            #     sat += timedelta(days=7)
             # change sat into string
             sat = sat.strftime("%Y-%m-%d")
             thur = thur.strftime("%Y-%m-%d")
-            print("thur is: ", thur)
-            print("sat is: ", sat)
+            print("sat after: ", sat)
+            print("thur after: ", thur)
             queries = ["""
                 SELECT 
                     snap.payment_id
@@ -2123,7 +2116,6 @@ class ChargeSubscribers(Resource):
 class MealSelection(Resource):
 
     def readQuery(self, items):
-        print(items)
         for item in items:
             item['meals_selected'] = {}
             if item['meal_selection'] == 'SKIP':
@@ -2143,8 +2135,6 @@ class MealSelection(Resource):
     def get(self, purchaseId):
         response = {}
         items = {}
-
-        print('I made change onn this')
         try:
             conn = connect()
 
@@ -2349,7 +2339,7 @@ class MealSelection(Resource):
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + """\',
                     \'""" + data['delivery_day'] + "\');"
-            print("inside postquery")
+
         return query
 
     # HTTP method POST
@@ -2386,9 +2376,9 @@ class MealSelection(Resource):
                 # 500: Internal server error
                 return response, 500
             #               print("purchase_id:", purchaseId)
-            print("here")
+
             queries.append(self.postQuery(purchaseId, data))
-            print("there")
+
             execute(queries[1], 'post', conn)
 
             response['message'] = 'Request successful.'
@@ -3503,7 +3493,7 @@ class UpdateSubscription(Resource):
             delivery_address = data['delivery_address']
 
             print("1")
-            delivery_address_unit = data['delivery_address_unit']
+            delivery_address_unit = data.get('delivery_address_unit') #sometimes there is not address_unit
             # delivery_address_unit = None
             print("2")
 
