@@ -116,7 +116,10 @@ export default class MealButton extends Component {
                   }
                 }
                 this.setState({totalAddonPrice: total.toFixed(2)});
-                if (this.props.week === "MenuForWeek1")
+                if (
+                  this.props.week === "MenuForWeek1" &&
+                  this.state.currentMealSelected.delivery_day !== "SKIP"
+                )
                   this.props.ChangeCurrentAddonCharge(total);
                 total = 0;
               }
@@ -149,7 +152,11 @@ export default class MealButton extends Component {
           this.setSelect();
         }
         let mealSelection = this.state.currentAddonSelected.meal_selection;
-        if (mealSelection !== undefined && mealSelection.length > 0) {
+        if (
+          mealSelection !== undefined &&
+          mealSelection.length > 0 &&
+          this.state.currentMealSelected.delivery_day !== "SKIP"
+        ) {
           this.setAddon();
         } else {
           this.setState(prevState => ({
