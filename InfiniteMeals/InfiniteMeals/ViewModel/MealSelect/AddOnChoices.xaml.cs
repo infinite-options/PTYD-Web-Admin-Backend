@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms.Internals;
+using InfiniteMeals.Meals;
 
 namespace InfiniteMeals.MealSelect
 {
@@ -22,7 +23,6 @@ namespace InfiniteMeals.MealSelect
         private ObservableCollection<MealGroup> grouped { get; set; }
 
         String infoImg = "info.jpg";
-        Label subtotalLabel;
         double subTotal = 0.00;
         public AddOnChoices()
         {
@@ -162,26 +162,22 @@ namespace InfiniteMeals.MealSelect
             grouped.Add(addMealGroup);
             grouped.Add(addSmoothieGroup);
 
+            ToolbarItem totalBar= new ToolbarItem
+            {
+                Text = "Agree to pay: $0.00 ",
+                IconImageSource = ImageSource.FromFile("example_icon.png"),
+                Order = ToolbarItemOrder.Primary,
+                Priority = 0,
+            };
+            totalBar.Clicked += BackToSchedule;
+            totalBar.SetBinding(Label.TextProperty, "total");
+            this.ToolbarItems.Add(totalBar);
+
 
             lstView.ItemsSource = grouped;
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
             lstView.GroupShortNameBinding = new Binding("ShortName");
-            subtotalLabel = new Label
-            {
-                TextColor = Color.White,
-                Text = "Agree to Pay: $0.00",
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.CenterAndExpand
-            };
-
-            StackLayout sl = new StackLayout
-            {
-                BackgroundColor = Color.Black,
-                HeightRequest = 50,
-            };
-            sl.Children.Add(subtotalLabel);
-            lstView.Footer = sl;
 
             lstView.ItemTemplate = new DataTemplate(() =>
             {
@@ -222,8 +218,6 @@ namespace InfiniteMeals.MealSelect
                 {
                     ImageButton stepper = sender as ImageButton;
                     var model = stepper.BindingContext as Meal;
-                    //Button infoB = sender as Button;
-                   // var model = infoB.BindingContext as Meal;
                     DisplayAlert("Ingredients", model.description.ToString(), "OK");
                 };
 
@@ -246,20 +240,22 @@ namespace InfiniteMeals.MealSelect
                     {
                         model.qty = (int)steppers.Value;
                         subTotal += model.price;
+                        model.total = subTotal;
                     }
                     else if (stepperVal < model.qty)
                     {
 
                         model.qty = (int)steppers.Value;
                         subTotal -= model.price;
+                        model.total = subTotal;
                         if (subTotal < 0)
                         {
                             subTotal = 0.00;
+                            model.total = subTotal;
                         }
                     }
 
-                    subtotalLabel.Text = string.Format("Agree to Pay: ${0}", subTotal);
-                    System.Diagnostics.Debug.WriteLine(model.price + " " + model.name + " " + model.qty + " " + model.total + " " + subTotal);
+                    totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
                 };
 
                 Label quantity = new Label
@@ -284,23 +280,11 @@ namespace InfiniteMeals.MealSelect
                 grid.Children.Add(infoButton, 2, 0);
                 grid.Children.Add(steppers, 2, 1);
                 steppers.SetValue(Grid.ColumnSpanProperty, 2);
-
                 return new ViewCell { View = grid, Height = 100 };
             });
+
             Content = lstView;
             BindingContext = this;
-        }
-
-        public Command onInfoCommand
-        {
-            get
-            {
-                return new Command((e) =>
-                {
-                    Meal item = e as Meal;
-                    System.Diagnostics.Debug.WriteLine(item.description.ToString() + " hello");
-                });
-            }
         }
 
         void OnInfoClicked(Object sender, EventArgs args)
@@ -321,5 +305,11 @@ namespace InfiniteMeals.MealSelect
             Meal tappedItem = e.Item as Meal;
             DisplayAlert("Ingredients", tappedItem.description.ToString(), "OK");
         }
+
+        private async void BackToSchedule(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MealSchedule());
+        }
+
     }
 }

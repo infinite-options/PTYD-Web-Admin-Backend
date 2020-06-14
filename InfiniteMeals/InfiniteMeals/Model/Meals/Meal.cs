@@ -11,10 +11,11 @@ namespace InfiniteMeals.Meals.Model
         public string ShortName { get; set; }
     }
 
+
     public class Meal : INotifyPropertyChanged
     {
         int qty1;
-        double _totalCost, _subtotal;
+        double _totalCost;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public enum Category { Meals, SeasonalMeals, Smoothies };
@@ -64,21 +65,7 @@ namespace InfiniteMeals.Meals.Model
             }
         }
 
-        public double Subtotal
-        {
-            set
-            {
-                if (_subtotal != value)
-                {
-                    _subtotal = value;
-                    OnPropertyChanged("Subtotal");
-                }
-            }
-            get
-            {
-                return _subtotal;
-            }
-        }
+        
 
         protected void OnPropertyChanged(string propertyName)
         {

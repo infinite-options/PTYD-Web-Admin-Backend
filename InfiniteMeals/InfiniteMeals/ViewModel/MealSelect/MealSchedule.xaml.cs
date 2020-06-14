@@ -27,6 +27,23 @@ namespace InfiniteMeals.Meals {
 
         public MealSchedule() {
             InitializeComponent();
+
+            ToolbarItem totalBar = new ToolbarItem
+            {
+                Text = "Profile",
+                IconImageSource = ImageSource.FromFile("oats.jpg"),
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 0,
+            };
+            ToolbarItem totalBar2 = new ToolbarItem
+            {
+                Text = "Log Out",
+                IconImageSource = ImageSource.FromFile("oats.jpg"),
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 0,
+            };
+            this.ToolbarItems.Add(totalBar);
+            this.ToolbarItems.Add(totalBar2);
             getData();
         }
 
@@ -53,6 +70,12 @@ namespace InfiniteMeals.Meals {
             {
                 mondayDate = mondaySched[0].ToString(),
             });
+
+
+
+                    // Here
+
+
 
             BindingContext = this;
         }
@@ -176,18 +199,8 @@ namespace InfiniteMeals.Meals {
         private async void ClickedSelectMeal(object sender, EventArgs e)
         {
             ClickedColor(sender, e);
-            if(SkipButton.BackgroundColor.Equals(Color.FromHex(green)) |
-               SurpriseButton.BackgroundColor.Equals(Color.FromHex(green)))
-            {
-                // Toast must not skip delivery
-            }
-            else if (SundayButton.BackgroundColor.Equals(Color.FromHex(green))
-                | MondayButton.BackgroundColor.Equals(Color.FromHex(green)))
+            if (SundayButton.BackgroundColor.Equals(Color.FromHex(green)) | MondayButton.BackgroundColor.Equals(Color.FromHex(green)))
                 await Navigation.PushAsync(new MealSelect.MealChoices());
-            else
-            {
-                // Toast to user, must pick day
-            }
         }
 
 
