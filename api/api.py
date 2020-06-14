@@ -2338,8 +2338,7 @@ class MealSelection(Resource):
                     \'""" + selectionTime + """\',
                     \'""" + data['week_affected'] + """\',
                     \'""" + mealSelection + """\',
-                    \'""" + data['delivery_day'] + "\');"
-
+                    \'""" + data['delivery_day'] + "\');\n"
         return query
 
     # HTTP method POST
@@ -2608,113 +2607,6 @@ class CheckEmail(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
-    def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
-
-    def postQuery(self, purchaseId, data):
-        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        if data['is_addons'] == True:
-            mealSelection = self.formatMealSelection(data['addon_quantities'])
-            query = """
-                INSERT INTO ptyd_addons_selected
-                (
-                    purchase_id,
-                    selection_time,
-                    week_affected,
-                    meal_selection
-                )
-                VALUES
-                (
-                    \'""" + purchaseId + """\',
-                    \'""" + selectionTime + """\',
-                    \'""" + data['week_affected'] + """\',
-                    \'""" + mealSelection + "\');"
-        else:
-            # Handle SKIP request
-            if data['delivery_day'] == 'SKIP':
-                mealSelection = 'SKIP'
-            # Handle default meal selection
-            elif data['default_selected'] is True:
-                mealSelection = 'SURPRISE'
-            # Handle custom meal selection
-            else:
-                mealSelection = self.formatMealSelection(
-                    data['meal_quantities'])
-
-            query = """
-                INSERT INTO ptyd_meals_selected
-                (
-                    purchase_id,
-                    selection_time,
-                    week_affected,
-                    meal_selection,
-                    delivery_day
-                )
-                VALUES
-                (
-                    \'""" + purchaseId + """\',
-                    \'""" + selectionTime + """\',
-                    \'""" + data['week_affected'] + """\',
-                    \'""" + mealSelection + """\',
-                    \'""" + data['delivery_day'] + "\');"
-
-        return query
-
-    # HTTP method POST
-    def post(self, purchaseId):
-        response = {}
-        items = []
-        try:
-            conn = connect()
-
-            data = request.get_json(force=True)
-            print("Received:", data)
-
-            queries = [
-                """ SELECT purchase_id
-                    FROM ptyd_purchases
-                    WHERE purchase_id = \'""" + purchaseId + "\';"]
-
-            # Retrieve purchase ID
-            getPurchaseId = execute(queries[0], 'get', conn)
-
-            # Handle successful purchase ID query
-            if getPurchaseId['code'] == 280:
-                if not len(getPurchaseId['result']) > 0:
-                    response['message'] = 'Recipient has no active purchase_id.'
-                    response['error'] = getPurchaseId
-                    print("Error:", response['message'])
-                    # 400: Client side bad request
-                    return response, 400
-            # Handle unsuccessful purchase ID query
-            else:
-                response['message'] = 'Could not retrieve purchase_id.'
-                response['error'] = getPurchaseId
-                print("Error:", response['message'])
-                # 500: Internal server error
-                return response, 500
-#               print("purchase_id:", purchaseId)
-
-            queries.append(self.postQuery(purchaseId, data))
-
-            execute(queries[1], 'post', conn)
-
-            response['message'] = 'Request successful.'
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-
 '''
 class MealSelection(Resource):
     def readQuery(self, items):

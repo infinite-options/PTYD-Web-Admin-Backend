@@ -344,16 +344,20 @@ export default class MealButton extends Component {
   clickSkip = async () => {
     // Disable all other buttons except Sunday and Monday buttons
     await this.setSkip();
-    // Set delivery day and meals selection to SKIP
+    // Set delivery day and meals selection to SKIP and delete all addon
     await this.setState(prevState => ({
       currentMealSelected: {
         ...prevState.currentMealSelected,
         delivery_day: "SKIP",
         meal_selection: "SKIP"
-      }
+      },
+      currentAddonSelected: {} //creat a new Object. leave all elements for garbage collection
     }));
     // send a form to database to write a
     this.saveSelectMealAPI();
+    // erase all addon and write a new line into addon_selected table
+    // send a blank line for addon to the database;
+    this.saveAddonAPI();
   };
   setSelect = () => {
     this.setState(prevState => ({
