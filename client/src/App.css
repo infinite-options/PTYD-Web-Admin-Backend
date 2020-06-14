@@ -74,12 +74,12 @@
 
 .login-hello {
   font-size: 20px;
-  /* text-align: left; */
   color: black;
-  /* margin-bottom:5px; */
   position: absolute;
   z-index: 1;
-  /* padding: -100px 0 0 0; */
+  text-align: right;
+  width: 300px;
+  margin-left: -218px;
 }
 
 #logoutButton {
