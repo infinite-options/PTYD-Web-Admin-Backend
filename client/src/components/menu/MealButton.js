@@ -31,7 +31,6 @@ export default class MealButton extends Component {
       },
       selectButton: {
         chosen: false,
-        red: false,
         showModal: false,
         isDisabled: false
       },
@@ -41,7 +40,6 @@ export default class MealButton extends Component {
       },
       addonButton: {
         chosen: false,
-        red: false,
         showModal: false,
         isDisabled: false
       }
@@ -69,7 +67,6 @@ export default class MealButton extends Component {
       selectButton: {
         ...prevState.selectButton,
         chosen: false,
-        red: false,
         showModal: false,
         isDisabled: false
       },
@@ -81,7 +78,6 @@ export default class MealButton extends Component {
       addonButton: {
         ...prevState.addonButton,
         chosen: false,
-        red: false,
         showModal: false,
         isDisabled: false
       }
@@ -324,7 +320,6 @@ export default class MealButton extends Component {
       },
       selectButton: {
         chosen: false,
-        red: false,
         showModal: false,
         isDisabled: true
       },
@@ -334,7 +329,6 @@ export default class MealButton extends Component {
       },
       addonButton: {
         chosen: false,
-        red: false,
         showModal: false,
         isDisabled: true
       }
@@ -392,8 +386,7 @@ export default class MealButton extends Component {
     this.setState(prevState => ({
       selectButton: {
         ...prevState.selectButton,
-        showModal: true,
-        red: true
+        showModal: true
       }
     }));
   };
@@ -417,7 +410,6 @@ export default class MealButton extends Component {
         ...prevState.selectButton,
         showModal: false,
         chosen: false,
-        red: false,
         isDisabled: false
       },
       surpriseButton: {
@@ -483,7 +475,6 @@ export default class MealButton extends Component {
     this.setState(prevState => ({
       addonButton: {
         ...prevState.addonButton,
-        red: true,
         showModal: true
       },
       sundayButton: {
@@ -545,7 +536,6 @@ export default class MealButton extends Component {
       selectButton: {
         ...prevState.selectButton,
         chosen: true,
-        red: false,
         showModal: false,
         isDisabled: false
       },
@@ -599,7 +589,6 @@ export default class MealButton extends Component {
       addonButton: {
         ...prevState.addonButton,
         chosen: parseInt(this.state.totalAddonPrice) !== 0 ? true : false,
-        red: false,
         showModal: false,
         isDisabled: false
       }
@@ -860,12 +849,12 @@ export default class MealButton extends Component {
       backgroundColor: "#427c42",
       color: "white"
     };
-    const red = {
-      width: "95px",
-      height: "95px",
-      backgroundColor: "#d9534f",
-      color: "white"
-    };
+    // const red = {
+    //   width: "95px",
+    //   height: "95px",
+    //   backgroundColor: "#d9534f",
+    //   color: "white"
+    // };
 
     // defined color for buttons
     var sundayColor, mondayColor, selectColor, addonColor;
@@ -878,17 +867,13 @@ export default class MealButton extends Component {
 
     //select button
 
-    if (selectButton.chosen && selectButton.red) {
-      selectColor = red;
-    } else if (selectButton.chosen && !selectButton.red) {
+    if (selectButton.chosen) {
       selectColor = green;
     } else {
       selectColor = clear;
     }
     //addon button
-    if (addonButton.chosen && addonButton.red) {
-      addonColor = red;
-    } else if (addonButton.chosen && !addonButton.red) {
+    if (addonButton.chosen) {
       addonColor = orange;
     } else {
       addonColor = clear;
