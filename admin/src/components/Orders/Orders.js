@@ -25,7 +25,7 @@ const centerStyle = {
 };
 
 export default function Orders(props) {
-  const [date, setDate] = useState("2020-07-11");
+  const [date, setDate] = useState("2020-06-20");
 
   const order = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
   // const ingredient = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
@@ -51,7 +51,6 @@ export default function Orders(props) {
       ) : (
         <OrderTable data={order.data} />
       )}
-
       {/* {ingredient.loading ? (
         <BeatLoader css={override} color={"#36D7B7"} loading={ingredient.loading} />
       ) : ingredient.error ? (

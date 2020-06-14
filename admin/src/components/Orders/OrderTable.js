@@ -270,6 +270,7 @@ export default function OrderTable(props) {
     } else if (props.data.length === 0) {
       setRows([]);
     }
+    console.log(props.data);
   }, [props.data]);
 
   const classes = useStyles();
