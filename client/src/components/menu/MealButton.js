@@ -23,7 +23,7 @@ export default class MealButton extends Component {
       },
       mondayButton: {
         chosen: false,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         chosen: false,
@@ -57,7 +57,7 @@ export default class MealButton extends Component {
       mondayButton: {
         ...prevState.mondayButton,
         chosen: false,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         ...prevState.skipButton,
@@ -318,7 +318,7 @@ export default class MealButton extends Component {
       mondayButton: {
         ...prevState.mondayButton,
         chosen: false,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         ...prevState.skipButton,
@@ -351,8 +351,13 @@ export default class MealButton extends Component {
         delivery_day: "SKIP",
         meal_selection: "SKIP"
       },
-      currentAddonSelected: {} //creat a new Object. leave all elements for garbage collection
+      currentAddonSelected: {}, //creat a new Object. leave all elements for garbage collection
+      totalAddonPrice: 0
     }));
+    //update total addon charge for accountInFo
+    if (this.props.week === "MenuForWeek1") {
+      this.props.ChangeCurrentAddonCharge(0);
+    }
     // send a form to database to write a
     this.saveSelectMealAPI();
     // erase all addon and write a new line into addon_selected table
@@ -369,7 +374,7 @@ export default class MealButton extends Component {
       mondayButton: {
         ...prevState.mondayButton,
         // chosen: false,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         ...prevState.skipButton,
@@ -410,7 +415,7 @@ export default class MealButton extends Component {
       },
       mondayButton: {
         ...prevState.mondayButton,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         ...prevState.skipButton,
@@ -458,7 +463,7 @@ export default class MealButton extends Component {
       },
       mondayButton: {
         ...prevState.mondayButton,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         ...prevState.skipButton,
@@ -538,7 +543,7 @@ export default class MealButton extends Component {
       },
       mondayButton: {
         ...prevState.mondayButton,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         ...prevState.skipButton,
@@ -582,7 +587,7 @@ export default class MealButton extends Component {
       },
       mondayButton: {
         ...prevState.mondayButton,
-        isDisabled: false
+        isDisabled: !this.props.currentPurchase.monday_available
       },
       skipButton: {
         ...prevState.skipButton,

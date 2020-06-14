@@ -3411,7 +3411,18 @@ class UpdateSubscription(Resource):
                                                             """, 'post', conn)
 
             # curl -X PATCH -H "Content-Type: application/json" http://127.0.0.1:2000/api/v2/update-subscription --data '{"purchase_id":"300-00004","meal_plan_id":"800-000007","delivery_address":"121","delivery_address_unit":"121","delivery_city":"3243","delivery_state":"Texas","delivery_zip”:"95130","delivery_instructions":"N/A"}'
-
+            #delete query
+            queries =[]
+            queries.append("""DELETE FROM ptyd_meals_selected WHERE purchase_id = '""" + str(purchase_id) + """';""")
+            queries.append("""DELETE FROM ptyd_addons_selected WHERE purchase_id = '""" + str(purchase_id) + """';""")
+            #update snapshots table set these:
+                #calculate the week remaining based on current time
+                #change the subcription weeks based on new subcription
+                # change the timestamp  for current snapshot
+            #where purchaseID == requested purchaseID
+            for query in queries:
+                execute(query, 'post', conn)
+            # update.
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
