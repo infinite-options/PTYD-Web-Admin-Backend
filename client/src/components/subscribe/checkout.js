@@ -523,7 +523,7 @@ class Checkout extends Component {
                     </Form.Group>
                   </Form.Row>
 
-                  <Form.Group
+                  {/* <Form.Group
                     as={Col}
                     md={6}
                     Style='margin-left:-15px;'
@@ -546,7 +546,7 @@ class Checkout extends Component {
                       <option>US</option>
                     </Form.Control>
                     {this.state.purchase.delivery_region !== 'US' ? (<span className='required-red'>Country is required</span>) : ''}
-                  </Form.Group>
+                  </Form.Group> */}
 
                   <Form.Group id='formGridCheckbox'>
                     <Form.Check
@@ -676,7 +676,7 @@ class Checkout extends Component {
                       {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.state.purchase.billing_zip) ? '' : (<span className='required-red'>Invalid Zip Code</span>) }
                     </Form.Group>
 
-                    <Form.Group as={Col} controlId='formGridBillingCountry'>
+                    {/* <Form.Group as={Col} controlId='formGridBillingCountry'>
                       <Form.Label>
                         Country
                         <span className='required-red'>
@@ -688,7 +688,7 @@ class Checkout extends Component {
                         <option>Choose...</option>
                         <option>US</option>
                       </Form.Control>
-                    </Form.Group>
+                    </Form.Group> */}
                   </Form.Row>
 
                   <Form.Row>
