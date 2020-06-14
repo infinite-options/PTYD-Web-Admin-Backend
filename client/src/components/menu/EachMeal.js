@@ -115,7 +115,7 @@ export default class EachMeal extends Component {
               marginRight: "30px"
             }}
             onClick={() => {
-              if (this.props.maxMeals === 0) {
+              if (this.props.mealLeft === 0) {
                 alert(
                   "You have selected more meals than your subscription plan allows.  Please select additional meals in the Add Local Treats menu or upgrade your Subscription Plan.  Thanks PTYD"
                 );
