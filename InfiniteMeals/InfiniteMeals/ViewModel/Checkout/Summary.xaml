@@ -6,14 +6,16 @@
              mc:Ignorable="d"
              x:Class="InfiniteMeals.ViewModel.Checkout.Summary">
     <ContentPage.Content>
-    
+        <ScrollView>
 
-    <Grid>
+
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.5*"/>    <!-- status bar -->
+                    <RowDefinition Height="0.5*"/>    <!-- subscription plan -->
                     <RowDefinition Height="1.5*"/>    <!-- shipping info -->
                     <RowDefinition Height="0.75*"/>    <!-- delivery info -->
-                    <RowDefinition/>    <!-- payment info -->
+                    <RowDefinition/>                    <!-- payment info -->
                     <RowDefinition Height="75"/>
             </Grid.RowDefinitions>
 
@@ -23,10 +25,44 @@
                 </Grid.ColumnDefinitions>
 
             <BoxView Grid.Row="0"/>
-            <Image Grid.Row="0" Grid.ColumnSpan="2" Source="summaryStatus" VerticalOptions="Start"  />
+            <Image Grid.Row="0" Grid.ColumnSpan="2" Source="summaryStatus" />
 
             <BoxView Grid.Row="1"/>
-            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+
+                
+                <StackLayout Grid.Row="1" Grid.ColumnSpan="2" Orientation="Vertical" Spacing="20">
+                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="Order Summary" TextColor="Black" FontSize="Large" FontAttributes="Bold" VerticalOptions="Start"/>
+                    <StackLayout Grid.Row="1" Orientation="Horizontal" VerticalOptions="Center">
+                        <StackLayout Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="8">
+                            <Label x:Name="mealPlan" Grid.Row="1" Grid.ColumnSpan="2" TextColor="Black"/>
+                            <Label Grid.Row="1" Grid.ColumnSpan="2" Text="-" TextColor="Black"/>
+                            <Label x:Name="paymentOption" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="End" TextColor="Black"/>
+                            <Label Grid.Row="1" Grid.ColumnSpan="2" Text="- $100" TextColor="Black"/>
+                        </StackLayout>
+                        </StackLayout>
+                        
+                        <StackLayout Grid.Row="1" Orientation="Horizontal">
+                            <Label Grid.Row="1" Text="Estimated Shipping" TextColor="Black"/>
+                            <Label Grid.Row="1" Text="- $15" TextColor="Black"/>
+
+                        </StackLayout>
+                        
+                        <StackLayout Grid.Row="1" Orientation="Horizontal">
+                            <Label Grid.Row="1" Text="Estimated Tax" TextColor="Black"/>
+                            <Label Grid.Row="1" Text="- $10" TextColor="Black"/>
+                        </StackLayout>
+
+                    <StackLayout Grid.Row="1" Orientation="Horizontal"> 
+                        <Label Grid.Row="1" Text="Total: " FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
+                        <Label Grid.Row="1" Text="$125" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
+                    </StackLayout>
+                </StackLayout>
+
+
+
+
+                <BoxView Grid.Row="2"/>
+            <Grid Grid.Row="2" Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -42,65 +78,74 @@
                 <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Shipping Details" TextColor="Black" FontSize="Large" FontAttributes="Bold"/>
 
                 <BoxView Grid.Row="1"/>
-                    <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-                        <Label Grid.Column="0" Grid.Row="1"  Text="First Name: "/>
-                        <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.firstName}"/>
-                    </StackLayout>
-                
-                <StackLayout Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Label Grid.Column="2" Grid.Row="1"  Text="Last Name: "/>
-                    <Label Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.lastName}"/>
-                </StackLayout>
-                
-                
+
+
+
                 <BoxView Grid.Row="2"/>
-                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Label Grid.Column="0" Grid.Row="2"  Text="Address Line 1: "/>
-                    <Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressOne}"/>
+                    <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Label Grid.Column="0" Grid.Row="1"  Text="Full Name: " TextColor="Black"/>
+                        <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.firstName}" TextColor="Black"/>
+                        <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.lastName}" TextColor="Black"/>
+                    </StackLayout>
+
+
+                    <BoxView Grid.Row="2"/>
+                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="2"  Text="Address Line 1: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressOne}" TextColor="Black"/>
                 </StackLayout>
 
-                <StackLayout Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Label Grid.Column="2" Grid.Row="2"  Text="Address Line 2: "/>
-                    <Label Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressTwo}"/>
-                </StackLayout>
+  
 
                 <BoxView Grid.Row="3"/>
-                    <StackLayout Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
-                        <Label Grid.Column="0" Grid.Row="3"  Text="Phone Number: "/>
-                        <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding shippingInformation.phoneNumber}"/>
+
+                <StackLayout Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="3"  Text="Address Line 2: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressTwo}" TextColor="Black"/>
+                </StackLayout>
+
+                <BoxView Grid.Row="4"/>
+
+
+                <StackLayout Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="4"  Text="City: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding shippingInformation.city}" TextColor="Black"/>
+                </StackLayout>
+                
+                <StackLayout Grid.Column="0" Grid.Row="5" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="5"  Text="State: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding shippingInformation.state}" TextColor="Black"/>
+                </StackLayout>
+
+
+                <StackLayout Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="6"  Text="Zipcode: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Text="{Binding shippingInformation.zipCode}" TextColor="Black"/>
                     </StackLayout>
 
-                    <StackLayout Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
-                        <Label Grid.Column="2" Grid.Row="3"  Text="Zip Code: "/>
-                        <Label Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding shippingInformation.zipCode}"/>
-                    </StackLayout>
-
-
-                    <StackLayout Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
-                        <Label Grid.Column="0" Grid.Row="4"  Text="City: "/>
-                        <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding shippingInformation.city}"/>
-                    </StackLayout>
-
-
-                    <StackLayout Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
-                        <Label Grid.Column="2" Grid.Row="4"  Text="State: "/>
-                        <Label Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding shippingInformation.state}"/>
+                    <StackLayout Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Label Grid.Column="0" Grid.Row="7"  Text="Phone Number: " TextColor="Black"/>
+                        <Label Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Text="{Binding shippingInformation.phoneNumber}" TextColor="Black"/>
                     </StackLayout>
                 </Grid> 
 
-                <BoxView Grid.Row="2"/>
-                    <Grid Grid.ColumnSpan="2" Grid.Row="2" >
+                <BoxView Grid.Row="3"/>
+                    <Grid Grid.ColumnSpan="2" Grid.Row="3" >
                 <Label Grid.Row="0" Text="Delivery Details" TextColor="Black" FontSize="Large" FontAttributes="Bold"/>
-                <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding paymentInformation.deliveryInstructions}"/>
-            </Grid>
+                <Label Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Text="{Binding paymentInformation.deliveryInstructions}" VerticalOptions="Start" TextColor="Black"/>
+            
+                    </Grid>
                
             
-            <BoxView Grid.Row="3"/>
-                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+            <BoxView Grid.Row="4"/>
+            <Grid Grid.Row="4" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
-                </Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -109,41 +154,41 @@
 
 
                 <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Payment Details" TextColor="Black"  FontSize="Large" FontAttributes="Bold"/>
-                    
-                <StackLayout Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
-                    <Label Grid.Column="0" Grid.Row="1"  Text="Card Number: "/>
-                    <Label Grid.Column="0" Grid.Row="1" Text="{Binding paymentInformation.cardNumber}"/>
+
+                <StackLayout Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
+                    <Label Grid.Column="0" Grid.Row="1"  Text="Card Number: " TextColor="Black"/>
+                    <Label x:Name="lastFourDigits" Grid.Column="0" Grid.Row="1" TextColor="Black"/>
                 </StackLayout>
 
-                <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
-                    <Label Grid.Column="1" Grid.Row="1"  Text="Cardholder Name: "/>
-                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding paymentInformation.cardHolderName}"/>
+                    <StackLayout Grid.Column="0" Grid.Row="2"  Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="2" Text="Cardholder Name: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="2" Text="{Binding paymentInformation.cardHolderName}" TextColor="Black"/>
                 </StackLayout>
 
-                <StackLayout Grid.Column="0" Grid.Row="2" Orientation="Horizontal">
-                    <Label Grid.Column="0" Grid.Row="2"  Text="Expiration Date: "/>
-                    <Label Grid.Column="0" Grid.Row="2" Text="{Binding paymentInformation.expirationMonth}"/>
-                    <Label Grid.Column="0" Grid.Row="2" Text="/" />
-                    <Label Grid.Column="0" Grid.Row="2" Text="{Binding paymentInformation.expirationYear}"/>
+                <StackLayout Grid.Column="0" Grid.Row="3" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="3"  Text="Expiration Date: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="3" Text="{Binding paymentInformation.expirationMonth}" TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="3" Text="/" TextColor="Black" />
+                    <Label Grid.Column="0" Grid.Row="3" Text="{Binding paymentInformation.expirationYear}" TextColor="Black"/>
                 </StackLayout>
 
-                <StackLayout Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
-                    <Label Grid.Column="1" Grid.Row="2"  Text="CVV: "/>
-                    <Label Grid.Column="1" Grid.Row="2" Text="{Binding paymentInformation.cvv}"/>
-                </StackLayout>
+                    <StackLayout Grid.Column="0" Grid.Row="4" Orientation="Horizontal">
+                        <Label Grid.Column="0" Grid.Row="4"  Text="CVV: " TextColor="Black"/>
+                        <Label Grid.Column="0" Grid.Row="4" Text="{Binding paymentInformation.cvv}" TextColor="Black"/>
+                    </StackLayout>
 
-            </Grid>
+                </Grid>
 
 
-            <BoxView Grid.Row="4" Grid.ColumnSpan="2" />
-            <Button Grid.Row="4" Grid.ColumnSpan="2" Text="Confirm" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#28a745" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill"></Button>
+            <BoxView Grid.Row="5" Grid.ColumnSpan="2" />
+            <Button Grid.Row="5" Grid.ColumnSpan="2" Text="Confirm" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#28a745" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="ConfirmClicked"/>
 
 
 
         </Grid>
-        
-        
-            
+
+
+        </ScrollView>
 
     </ContentPage.Content>
 </ContentPage>

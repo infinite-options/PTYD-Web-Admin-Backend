@@ -29,7 +29,7 @@
     <EmbeddedResource Update="ViewModel\Checkout\Payment.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\Shipping.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\Delivery.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Checkout\Summary.xaml">
@@ -47,11 +47,25 @@
     <EmbeddedResource Update="ViewModel\MealSelect\SelectMealOptions.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Subscribe\PaymentOptionPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModel\Steppers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ViewModel\Subscribe\AddOnChoices.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ViewModel\Checkout\Payment.xaml.cs">
+      <DependentUpon>Payment.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Checkout\Delivery.xaml.cs">
+      <DependentUpon>Delivery.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Subscribe\PaymentOptionPage.xaml.cs">
+      <DependentUpon>PaymentOptionPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

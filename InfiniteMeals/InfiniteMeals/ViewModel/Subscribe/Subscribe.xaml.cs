@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InfiniteMeals.Model.Subscribe;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,9 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
+using InfiniteMeals.ViewModel.Subscribe;
+
 
 namespace InfiniteMeals.Subscribe
 {
@@ -38,17 +42,29 @@ namespace InfiniteMeals.Subscribe
 
         private async void Clicked5mealssubscription(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new FiveMeals());
+            PaymentOptionPage fiveMealPlan = new PaymentOptionPage();
+            fiveMealPlan.BindingContext = MealPlan.FiveMeals;
+            Label mealPlanLabel = (Label)fiveMealPlan.FindByName("mealPlan");
+            mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.FiveMeals);            
+            await Navigation.PushAsync(fiveMealPlan);
         }
 
         private async void Clicked10mealssubscription(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new TenMeals());
+            PaymentOptionPage tenMealPlan = new PaymentOptionPage();
+            tenMealPlan.BindingContext = MealPlan.TenMeals;
+            Label mealPlanLabel = (Label)tenMealPlan.FindByName("mealPlan");
+            mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.TenMeals);
+            await Navigation.PushAsync(tenMealPlan);
         }
 
         private async void Clicked15mealssubscription(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new FifteenMeals());
+            PaymentOptionPage fifteenMealPlan = new PaymentOptionPage();
+            fifteenMealPlan.BindingContext = MealPlan.FifteenMeals;
+            Label mealPlanLabel = (Label)fifteenMealPlan.FindByName("mealPlan");
+            mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.FifteenMeals);
+            await Navigation.PushAsync(fifteenMealPlan);
         }
 
 

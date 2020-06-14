@@ -12,6 +12,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition Height="2*"/>
+                <RowDefinition Height="0.5*"/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -26,48 +27,49 @@
             </Grid.ColumnDefinitions>
 
             <BoxView Grid.Row="0"/>
-            <Image Grid.Row="0" Source="paymentStatus.png" HorizontalOptions="Start" VerticalOptions="Start" Grid.ColumnSpan="2"/>
+            <Image Grid.Row="0" Source="paymentStatus.png" VerticalOptions="Start" Grid.ColumnSpan="2"/>
 
             <BoxView Grid.Row="1"/>
             <Label Grid.Row="1" Grid.ColumnSpan="2" Text="Delivery Instructions" TextColor="Black" FontSize="Large" FontAttributes="Bold" VerticalOptions="End"/>
-            <Editor x:Name="deliveryInstructionsEditor" Grid.Row="2" Grid.ColumnSpan="2" Placeholder="Delivery Instructions"/>
-
-            <BoxView Grid.Row="3"/>
-            <Label Grid.Row="3" Text="Payment" TextColor="Black" FontSize="Large" FontAttributes="Bold"/>
+            <Editor x:Name="deliveryInstructionsEditor" Grid.Row="2" Grid.ColumnSpan="2" Placeholder="Delivery Instructions (N/A for no instructions)" Keyboard="Chat" Unfocused="deliveryInstructionsEditorUnfocused"/>
+            <Label x:Name="deliveryInstructionsWarning" Grid.Row="3" Grid.ColumnSpan="2" Text="Delivery Instructions are required!" TextColor="Red" IsVisible="false"/>
 
             <BoxView Grid.Row="4"/>
-            <Label Grid.Row="4" Text="Card Number" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
-            <Entry x:Name="cardNumberEntry" Grid.Column="1" Grid.Row="4"  Placeholder="################"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" MaxLength="16" Keyboard="Numeric" Unfocused="cardNumberEntryUnfocused"/>
-            <Label x:Name="cardNumberMessage" Grid.Column="1" Grid.Row="4" Text="Card Number is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
+            <Label Grid.Row="4" Text="Payment" TextColor="Black" FontSize="Large" FontAttributes="Bold"/>
 
             <BoxView Grid.Row="5"/>
-            <Label Grid.Row="5" Text="Cardholder Name" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
-            <Entry x:Name="cardholderNameEntry" Grid.Column="1" Grid.Row="5" Placeholder="Cardholder Name"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" Unfocused="cardholderNameEntryUnfocused"/>
-            <Label x:Name="cardholderNameWarning" Grid.Column="1" Grid.Row="5" Text="Cardholder Name is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
-            
-            <BoxView Grid.Row="6"/>
-            <Label Grid.Row="6" Text="Expiration Date" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
+            <Label Grid.Row="5" Text="Card Number" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
+            <Entry x:Name="cardNumberEntry" Grid.Column="1" Grid.Row="5"  Placeholder="################"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" MaxLength="16" Keyboard="Numeric" Unfocused="cardNumberEntryUnfocused"/>
+            <Label x:Name="cardNumberMessage" Grid.Column="1" Grid.Row="5" Text="Card Number is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
 
-            <StackLayout Grid.Column="1" Grid.Row="6" Orientation="Horizontal">
-                <Entry x:Name="expirationMonthEntry" Grid.Column="1" Grid.Row="6" Placeholder="MM"  HorizontalOptions="Start" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" TextChanged="expirationMonthEntryTextChanged" Unfocused="expirationDateEntryUnfocused"/>
-                <Label Grid.Column="1" Grid.Row="6" HorizontalOptions="Start" VerticalOptions="Center" Text="/" FontSize="Large"/>
-                <Entry x:Name="expirationYearEntry" Grid.Column="1" Grid.Row="6" Placeholder="YY"  HorizontalOptions="Center" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" Unfocused="expirationDateEntryUnfocused"/>
-            </StackLayout>
-            <Label x:Name="expirationDateWarning" Grid.Column="1" Grid.Row="6" Text="Expiration Date is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
-            
-            
-            
-            
+            <BoxView Grid.Row="6"/>
+            <Label Grid.Row="6" Text="Cardholder Name" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
+            <Entry x:Name="cardholderNameEntry" Grid.Column="1" Grid.Row="6" Placeholder="Cardholder Name"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" Keyboard="Chat" Unfocused="cardholderNameEntryUnfocused"/>
+            <Label x:Name="cardholderNameWarning" Grid.Column="1" Grid.Row="6" Text="Cardholder Name is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
             
             <BoxView Grid.Row="7"/>
-            <Label Grid.Row="7" Text="CVV" TextColor="Black" VerticalOptions="Center" FontSize="Medium"/>
-            <Entry x:Name="cvvEntry" Grid.Column="1" Grid.Row="7" Placeholder="###"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" MaxLength="3" Keyboard="Numeric" Unfocused="cvvEntryUnfocused"/>
-            <Label x:Name="cvvWarning" Grid.Column="1" Grid.Row="7" Text="CVV is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
+            <Label Grid.Row="7" Text="Expiration Date" TextColor="Black" FontSize="Medium" VerticalOptions="Center"/>
+
+            <StackLayout Grid.Column="1" Grid.Row="7" Orientation="Horizontal">
+                <Entry x:Name="expirationMonthEntry" Grid.Column="1" Grid.Row="7" Placeholder="MM"  HorizontalOptions="Start" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" TextChanged="expirationMonthEntryTextChanged" Unfocused="expirationDateEntryUnfocused"/>
+                <Label Grid.Column="1" Grid.Row="7" HorizontalOptions="Start" VerticalOptions="Center" Text="/" FontSize="Large"/>
+                <Entry x:Name="expirationYearEntry" Grid.Column="1" Grid.Row="7" Placeholder="YY"  HorizontalOptions="Center" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" Unfocused="expirationDateEntryUnfocused"/>
+            </StackLayout>
+            <Label x:Name="expirationDateWarning" Grid.Column="1" Grid.Row="7" Text="Expiration Date is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
+            
+            
+            
+            
+            
+            <BoxView Grid.Row="8"/>
+            <Label Grid.Row="8" Text="CVV" TextColor="Black" VerticalOptions="Center" FontSize="Medium"/>
+            <Entry x:Name="cvvEntry" Grid.Column="1" Grid.Row="8" Placeholder="###"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" MaxLength="3" Keyboard="Numeric" Unfocused="cvvEntryUnfocused"/>
+            <Label x:Name="cvvWarning" Grid.Column="1" Grid.Row="8" Text="CVV is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
             
 
 
-            <BoxView Grid.Row="8" Grid.ColumnSpan="2" />
-            <Button Grid.Row="8" Grid.ColumnSpan="2" Text="Continue" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#28a745" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="ContinueToSummaryClicked"/>
+            <BoxView Grid.Row="9" Grid.ColumnSpan="2" />
+            <Button Grid.Row="9" Grid.ColumnSpan="2" Text="Continue" FontSize="Medium" FontAttributes="Bold" BackgroundColor="#28a745" TextColor="White" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="ContinueToSummaryClicked"/>
 
 
 
