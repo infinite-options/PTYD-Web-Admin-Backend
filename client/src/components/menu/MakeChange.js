@@ -198,6 +198,7 @@ export default class MakeChange extends Component {
         let date = moment(
           `${creditCard.cc_exp_year}-${creditCard.cc_exp_month}-01`
         );
+        console.log("date convert: ", date.format("YYYY-MM-DD"));
         await axios.patch(this.props.UPDATE_PAYMENT_URL, {
           purchase_id: this.state.currentPurchase.purchase_id,
           ...this.state.creditCard,
