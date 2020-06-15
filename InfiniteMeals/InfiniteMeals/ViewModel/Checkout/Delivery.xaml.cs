@@ -55,7 +55,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
                         {
                             // Get longitude and latitide because we can make a deliver here. Move on to next page.
                             // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
-                            getAddressLatitudeLongitude(GetXMLElement(element, "Address2").ToString());
+                            //getAddressLatitudeLongitude(GetXMLElement(element, "Address2").ToString());
                             ShippingInformation shipInfo = new ShippingInformation {
                                 firstName = this.firstNameEntry.Text,
                                 lastName = this.lastNameEntry.Text,

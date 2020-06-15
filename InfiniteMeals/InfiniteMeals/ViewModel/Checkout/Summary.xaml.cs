@@ -16,13 +16,16 @@ namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Summary : ContentPage {
         public Summary() {
-            
+
             InitializeComponent();
 
- 
+
+
         }
 
+
         private async void ConfirmClicked(object sender, EventArgs e) {
+            // TODO send json file to aws with cost info
             MainPage mainPage = new MainPage();
             NavigationPage.SetHasBackButton(mainPage, false);
             await Navigation.PushAsync(mainPage);
