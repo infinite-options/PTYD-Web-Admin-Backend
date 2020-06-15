@@ -3850,7 +3850,138 @@ class MealCreation(Resource):
         finally:
             disconnect(conn)
 
+class Add_New_Ingredient(Resource):       
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
 
+            
+            meal_id = data['meal_id']
+            meal_name = data['meal_name']
+            ingredients = data['ingredients']
+
+            items['delete_ingredients'] = execute("""delete from ptyd_recipes 
+                                                        where recipe_meal_id = \'""" + str(meal_id) + """\';
+                                                            """, 'post', conn)
+        
+            i=0
+            for eachIngredient in data['ingredients']:
+                name = ingredients[i]['name']
+                qty = ingredients[i]['qty']
+                units = ingredients[i]['units']
+                ingredient_id = ingredients[i]['ingredient_id']
+                measure_id = ingredients[i]['measure_id']
+                print(name)
+                print(qty)
+                print(units)
+                print(ingredient_id)
+                print(measure_id)
+                print(meal_id)
+                print(meal_name)
+                print("************************")
+                
+                
+                items['new_ingredients_insert'] = execute(""" INSERT INTO ptyd_recipes (
+                                                            recipe_meal_id, recipe_ingredient_id, recipe_ingredient_qty, 
+                                                            recipe_measure_id
+                                                            ) 
+                                                            VALUES (
+                                                            \'""" + str(meal_id) + """\',\'""" + str(ingredient_id) + """\',\'""" + str(qty) + """\',\'""" + str(measure_id) + """\'
+                                                            );
+                                                            """, 'post', conn)
+                i+=1
+
+            
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class EditMeals(Resource):
+    def patch(self):
+        response = {}
+        items = {}
+        
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            
+            print("pre",data)
+
+            #checking to see if it's a new meal or editing an existing one 
+            if data['meal_id'] == "NewMealId":
+                
+                #generating new meal id
+                mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
+                mealId = mealIdQuery['result'][0]['new_id']
+
+                #inserting partial entry into meals table
+                items['new_meal_insert'] = execute(""" INSERT INTO 
+                                                            ptyd_meals(meal_id,meal_category,meal_name,meal_desc,extra_meal_price) 
+                                                        VALUES 
+                                                            (\'""" + str(mealId) + """\','NEEDS CATEGORY'
+                                                            ,\'""" + data['meal_name'] + """\','NEEDS DESCRIPTION ','100000');
+                                                            """, 'post', conn)
+
+            else:
+                #defaulting to entered meal id if user is editing an existing one 
+                mealId= data['meal_id']
+
+            numRecipeInserts = 0
+            
+            #iterating through the dictionary of ingredients
+            for ingredient in data['ingredients']:
+                print("******************") 
+                print(ingredient['ingredient_id'])     
+                #checking to see if the ingredient is a new ingredient or an existing one -- if the ingredient is new generate an id and post to ingredient
+                if ingredient['ingredient_id'] == "NewIngrId":
+
+                                  
+                    ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
+                    ingredientId = ingredientIdQuery ['result'][0]['new_id']
+
+                    items['new_ingredient_insert'] = execute(""" INSERT INTO 
+                                                                    ptyd_ingredients(ingredient_id,ingredient_desc,package_size,ingredient_measure_id,ingredient_cost) 
+                                                                VALUES 
+                                                                    (\'""" + str(ingredientId) + """\',\'""" + ingredient['name'] + """\','NEEDS STANDARD PACKAGE SIZE ',
+                                                                    ,\'""" + ingredient['measure_id'] + """\','NEEDS INGREDIENT COST');
+                                                            """, 'post', conn)
+                else:
+                    ingredientId = ingredient['ingredient_id']
+                print("*********************")
+                print("mealID")
+                print(mealId)
+                print("ingredientId")
+                print(ingredientId)
+                print("getNow()")
+                print(getNow())
+                print("ingredient qty")
+                print(ingredient['qty'])
+                print("ingredient measure")
+                print(ingredient['measure_id'])
+                #insert ingredient into recipe table attached to the meal
+                items['recipe_insert'] = execute(""" INSERT INTO
+                                                        ptyd_recipes(recipe_meal_id,recipe_ingredient_id,recipe_ingredient_qty,recipe_measure_id,recipe_last_update)
+                                                    VALUES
+                                                        ( \'""" + str(mealID) + """\', 
+                                                        \'""" + str(ingredientId) + """\', 
+                                                        \'""" + str(ingredient['qty']) + """\', 
+                                                        \'""" + str(ingredient['measure_id']) + """\', 
+                                                        \'""" + str(getNow()) + """\');
+                                                """, 'post', conn)
+                print("AFTER EXECUTE")
+                numRecipeInserts += 1
+
+            response['message'] = 'Post Request Succesful'
+            
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class TemplateApi(Resource):
     def get(self):
@@ -3876,6 +4007,8 @@ class TemplateApi(Resource):
 
 # Define API routes
 # Customer page
+api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
+api.add_resource(EditMeals, '/api/v2/EditMeals')
 api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')

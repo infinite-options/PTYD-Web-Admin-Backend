@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -11,13 +11,18 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import { SingleSelect } from "react-select-material-ui";
 import ReactSelectMaterialUi from "react-select-material-ui";
- 
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import Alert from '@material-ui/lab/Alert';
-import Divider from '@material-ui/core/Divider';
-import Input from '@material-ui/core/Input';
+import axios from "axios";
+
+import Autocomplete, {
+  createFilterOptions,
+} from "@material-ui/lab/Autocomplete";
+import Alert from "@material-ui/lab/Alert";
+import Divider from "@material-ui/core/Divider";
+import Input from "@material-ui/core/Input";
 //const [value, setValue] = React.useState(null);
 const filter = createFilterOptions();
+//const [erro, setErro] = useState(null);
+//const [loading, setLoading] = useState(false);
 
 class EditCreateMeal extends Component {
   constructor(props) {
@@ -29,15 +34,15 @@ class EditCreateMeal extends Component {
       allIngr: [],
       selection: 1,
       showAdd: false,
-      allUnits : [],
-      currIngr : [],
-      golu : 10,
-      newIngrName : "New Ingredient",
-      newQty : 1,
-      newUnit : "Cup",
-      mapIngrNameToIngrId : new Map(),
-      mapIngrUnitMeasureId : new Map(),
-      newMealName : "New Meal"
+      allUnits: [],
+      currIngr: [],
+      golu: 10,
+      newIngrName: "New Ingredient",
+      newQty: 1,
+      newUnit: "Cup",
+      mapIngrNameToIngrId: new Map(),
+      mapIngrUnitMeasureId: new Map(),
+      newMealName: "New Meal",
     };
   }
   async componentWillMount() {
@@ -52,19 +57,20 @@ class EditCreateMeal extends Component {
     let mapIngrNameToIngrIdLocal = new Map();
     let mapIngrUnitMeasureIdLocal = new Map();
 
-    let dummyEntry = {"NewMealId": {
-            "meal_name": "Create New Meal",
-            "ingredients": [
-                {
-                    "name": "New Ingredient",
-                    "qty": 1,
-                    "units": "Cup",
-                    "ingredient_id": "NewIngrId",
-                    "measure_id": "130-000005"
-                }
-                ]
-              }
-            };
+    let dummyEntry = {
+      NewMealId: {
+        meal_name: "Create New Meal",
+        ingredients: [
+          {
+            name: "New Ingredient",
+            qty: 1,
+            units: "Cup",
+            ingredient_id: "NewIngrId",
+            measure_id: "130-000005",
+          },
+        ],
+      },
+    };
 
     const createMeal = {
       ...dummyEntry,
@@ -76,25 +82,40 @@ class EditCreateMeal extends Component {
       mealid.push(key);
 
       for (let i = 0; i < createMeal[key]["ingredients"].length; i++) {
-          if(!ingrs.includes(createMeal[key]["ingredients"][i].name)) {
-            ingrs.push(createMeal[key]["ingredients"][i].name);
-          }
-          if(!unit.includes(createMeal[key]["ingredients"][i].units)){
-            unit.push(createMeal[key]["ingredients"][i].units)
-          }
-          mapIngrNameToIngrIdLocal.set(createMeal[key]["ingredients"][i].name, createMeal[key]["ingredients"][i].ingredient_id);
-          mapIngrUnitMeasureIdLocal.set(createMeal[key]["ingredients"][i].units, createMeal[key]["ingredients"][i].measure_id);
+        if (!ingrs.includes(createMeal[key]["ingredients"][i].name)) {
+          ingrs.push(createMeal[key]["ingredients"][i].name);
+        }
+        if (!unit.includes(createMeal[key]["ingredients"][i].units)) {
+          unit.push(createMeal[key]["ingredients"][i].units);
+        }
+        mapIngrNameToIngrIdLocal.set(
+          createMeal[key]["ingredients"][i].name,
+          createMeal[key]["ingredients"][i].ingredient_id
+        );
+        mapIngrUnitMeasureIdLocal.set(
+          createMeal[key]["ingredients"][i].units,
+          createMeal[key]["ingredients"][i].measure_id
+        );
       }
     }
     let enterMeal = mealid[this.state.selection];
 
     console.log(mapIngrUnitMeasureIdLocal);
 
-    for(let j = 0; j < createMeal[enterMeal]["ingredients"].length; j++) {
-           ingrArr.push(Object.assign({}, createMeal[enterMeal]["ingredients"][j]));
+    for (let j = 0; j < createMeal[enterMeal]["ingredients"].length; j++) {
+      ingrArr.push(Object.assign({}, createMeal[enterMeal]["ingredients"][j]));
     }
 
-    this.setState({ mealkeys: tempkeys, createMeal, mealidkey: mealid, allIngr : ingrs, allUnits : unit, currIngr : ingrArr, mapIngrNameToIngrId : mapIngrNameToIngrIdLocal, mapIngrUnitMeasureId : mapIngrUnitMeasureIdLocal});
+    this.setState({
+      mealkeys: tempkeys,
+      createMeal,
+      mealidkey: mealid,
+      allIngr: ingrs,
+      allUnits: unit,
+      currIngr: ingrArr,
+      mapIngrNameToIngrId: mapIngrNameToIngrIdLocal,
+      mapIngrUnitMeasureId: mapIngrUnitMeasureIdLocal,
+    });
   }
   handleChange = (event) => {
     console.log(event.target.value);
@@ -111,72 +132,73 @@ class EditCreateMeal extends Component {
       );
     }
     //console.log(JSON.stringify(this.state.createMeal));
-    this.setState({ currIngr : ingrArr, addShow : false});
-
+    this.setState({ currIngr: ingrArr, addShow: false });
   };
 
   onChange = (event) => {
     //console.log(event.target.value);
-    this.setState({ newQty : event.target.value });
-
+    this.setState({ newQty: event.target.value });
   };
 
   handleChange2 = (newValue, index) => {
     let currIngrNew = this.state.currIngr;
     if (newValue) {
-    console.log("Changing State")  
-    console.log(newValue);  
-    console.log("Before")
-    console.log(currIngrNew[index].name);
-    if(newValue.inputValue) {
-      currIngrNew[index].name = newValue.inputValue;
-    } else {
-      currIngrNew[index].name = newValue.title;
-    }
-    console.log("After")
-    console.log(currIngrNew[index].name);
-        //Add
+      console.log("Changing State");
+      console.log(newValue);
+      console.log("Before");
+      console.log(currIngrNew[index].name);
+      if (newValue.inputValue) {
+        currIngrNew[index].name = newValue.inputValue;
+      } else {
+        currIngrNew[index].name = newValue.title;
+      }
+      console.log("After");
+      console.log(currIngrNew[index].name);
+      //Add
 
-    if(this.state.mapIngrNameToIngrId.has(currIngrNew[index].name)) {   
-       currIngrNew[index].ingredient_id = this.state.mapIngrNameToIngrId.get(currIngrNew[index].name);
-    }else{
-       currIngrNew[index].ingredient_id = "NewIngrId";
-    }
-    this.setState({
-      currIngr : currIngrNew
-    });
+      if (this.state.mapIngrNameToIngrId.has(currIngrNew[index].name)) {
+        currIngrNew[index].ingredient_id = this.state.mapIngrNameToIngrId.get(
+          currIngrNew[index].name
+        );
+      } else {
+        currIngrNew[index].ingredient_id = "NewIngrId";
+      }
+      this.setState({
+        currIngr: currIngrNew,
+      });
     }
   };
 
   handleChange2new = (newValue) => {
     let updatedNewIngrVal = this.state.newIngrName;
     if (newValue) {
-    console.log("Changing newIngrNam State")  
-    console.log(newValue);  
-    console.log("Before newIngrNam")
-    console.log(this.state.newIngrName);
-    if(newValue.inputValue) {
-      updatedNewIngrVal = newValue.inputValue;
-    } else {
-      updatedNewIngrVal = newValue.title;
+      console.log("Changing newIngrNam State");
+      console.log(newValue);
+      console.log("Before newIngrNam");
+      console.log(this.state.newIngrName);
+      if (newValue.inputValue) {
+        updatedNewIngrVal = newValue.inputValue;
+      } else {
+        updatedNewIngrVal = newValue.title;
+      }
+      console.log("After newIngrNam");
+      console.log(updatedNewIngrVal);
+      //Add
+      //currIngrNew[index].ingredient_id = this.state.mapIngrNameToIngrId[index];
+      this.setState({
+        newIngrName: updatedNewIngrVal,
+      });
     }
-    console.log("After newIngrNam")
-    console.log(updatedNewIngrVal);
-        //Add
-    //currIngrNew[index].ingredient_id = this.state.mapIngrNameToIngrId[index];
-    this.setState({
-      newIngrName : updatedNewIngrVal
-    });
-    }
-
   };
 
   handleChange3 = (newValue, index) => {
     let currIngrNew = this.state.currIngr;
     currIngrNew[index].units = newValue;
     //Add
-    if(this.state.mapIngrUnitMeasureId.has(newValue)) {
-        currIngrNew[index].measure_id = this.state.mapIngrUnitMeasureId.get(newValue);
+    if (this.state.mapIngrUnitMeasureId.has(newValue)) {
+      currIngrNew[index].measure_id = this.state.mapIngrUnitMeasureId.get(
+        newValue
+      );
     } else {
       console.log("ERROR NEVER");
       currIngrNew[index].measure_id = "NewMeasureId";
@@ -190,11 +212,9 @@ class EditCreateMeal extends Component {
     //Add
     //currIngrNew[index].measure_id = this.state.mapIngrUnitMeasureId[index];
     this.setState({
-      newUnit : newValue
+      newUnit: newValue,
     });
   };
-
-
 
   handleChange4 = (newValue, index) => {
     let currIngrNew = this.state.currIngr;
@@ -205,79 +225,107 @@ class EditCreateMeal extends Component {
   };
 
   makeNewIngrEntry = () => {
-      if(this.state.addShow) {
-      } else {
-          this.setState({
-              addShow : !this.state.addShow
-          });
-
-      }
+    if (this.state.addShow) {
+    } else {
+      this.setState({
+        addShow: !this.state.addShow,
+      });
+    }
   };
 
   setNewMealName = (e) => {
-          console.log(e.target.value)
-          this.setState({
-              newMealName : e.target.value
-          }); 
-  }
-
-  saveNewEntry = () => {
-
-    if(!this.state.addShow) {
-          this.setState({
-              addShow : true
-          });
-    } else {
-
-      let currIngrNew = this.state.currIngr;
-      let ingrId = this.state.mapIngrNameToIngrId.has(this.state.newIngrName) ? this.state.mapIngrNameToIngrId.get(this.state.newIngrName) : "NewIngrId";
-      let measureId = this.state.mapIngrUnitMeasureId.has(this.state.newUnit) ? this.state.mapIngrUnitMeasureId.get(this.state.newUnit) : "NewMeasureId";
-      let newEntry = {
-         "name" : this.state.newIngrName,
-         "qty"  : this.state.newQty,
-         "units" : this.state.newUnit,
-         "ingredient_id" : ingrId,
-         "measure_id" : measureId
-       };
-       console.log("MAKE NEW ENTRY");
-       console.log(newEntry);
-       currIngrNew.push(newEntry);
-       console.log(currIngrNew);
-        this.setState({
-          currIngr : currIngrNew,
-          newIngrName : "New Ingredient",
-          newQty : 1,
-          newUnit : "Cup",
-          addShow : false
-        });
-
-
-    }
-
-
+    console.log(e.target.value);
+    this.setState({
+      newMealName: e.target.value,
+    });
   };
 
-  postMealChanges = () => {
+  saveNewEntry = () => {
+    if (!this.state.addShow) {
+      this.setState({
+        addShow: true,
+      });
+    } else {
+      let currIngrNew = this.state.currIngr;
+      let ingrId = this.state.mapIngrNameToIngrId.has(this.state.newIngrName)
+        ? this.state.mapIngrNameToIngrId.get(this.state.newIngrName)
+        : "NewIngrId";
+      let measureId = this.state.mapIngrUnitMeasureId.has(this.state.newUnit)
+        ? this.state.mapIngrUnitMeasureId.get(this.state.newUnit)
+        : "NewMeasureId";
+      let newEntry = {
+        name: this.state.newIngrName,
+        qty: this.state.newQty,
+        units: this.state.newUnit,
+        ingredient_id: ingrId,
+        measure_id: measureId,
+      };
+      console.log("MAKE NEW ENTRY");
+      console.log(newEntry);
+      currIngrNew.push(newEntry);
+      console.log(currIngrNew);
+      this.setState({
+        currIngr: currIngrNew,
+        newIngrName: "New Ingredient",
+        newQty: 1,
+        newUnit: "Cup",
+        addShow: false,
+      });
+    }
+  };
 
+  postMealChanges = (e) => {
+    e.preventDefault();
     let ingredients_list = this.state.currIngr;
     let key = "NewMealId";
     let mealName = this.state.newMealName;
-    if(this.state.selection == 0) {
+    if (this.state.selection == 0) {
       key = "NewMealId";
       mealName = this.state.newMealName;
     } else {
       key = this.state.mealidkey[this.state.selection];
       mealName = this.state.mealkeys[this.state.selection];
     }
+    //setLoading(true);
+    var mealData = {
+      meal_id: key,
+      meal_name: mealName,
+      ingredients: ingredients_list,
+    };
 
-    let mealData = {         "meal_id" : key,
-                             "meal_name" : mealName,
-                             "ingredients" : ingredients_list
-                    };
     console.log("Sending Out:");
     console.log(mealData);
-    
+    console.log(JSON.stringify(mealData));
+    axios
+      .post(this.props.API_URL_SAVERECIPE, mealData)
+      .then((res) => {
+        if (res.status === 200) {
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
 
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+          // window.location.reload(false);
+          //props.history.push("/signupwaiting");
+          //setLoading(false);
+          console.log("API ADD_NEW_INGREDIENT WORKED");
+          window.location.reload(true);
+        }
+      })
+      .catch((err) => {
+        if (err.response !== undefined) {
+          //setErro(err.response.data.result);
+          //window.location.reload(false);
+          console.log("API ADD_NEW_INGREDIENT Failed");
+        } else if (typeof err === "string") {
+          //setErro(err);
+          console.log(err);
+        }
+        //setLoading(false);
+      });
   };
 
   unitDropdown = (defaultUnit, index) => {
@@ -303,18 +351,11 @@ class EditCreateMeal extends Component {
     );
   };
 
-
   unitDropdownNew = () => {
     let tempUnit = [];
     let unit = this.state.allUnits;
-    for(let j = 0; j < unit.length; j++){
-      tempUnit.push(
-        <MenuItem
-          value={unit[j]}
-        >
-        {unit[j]}
-        </MenuItem>
-        );
+    for (let j = 0; j < unit.length; j++) {
+      tempUnit.push(<MenuItem value={unit[j]}>{unit[j]}</MenuItem>);
     }
     return (
       <FormControl>
@@ -322,7 +363,7 @@ class EditCreateMeal extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.newUnit}
-          onChange={e => {
+          onChange={(e) => {
             this.handleChange3new(e.target.value);
           }}
           // style={{ color: "white" }}
@@ -332,7 +373,6 @@ class EditCreateMeal extends Component {
       </FormControl>
     );
   };
-
 
   ingrDropdown2 = (defaultIngr, index) => {
     let tempmeal = [];
@@ -498,66 +538,62 @@ class EditCreateMeal extends Component {
     let tempmeal = [];
     let ingrs = this.state.allIngr;
     for (let i = 0; i < ingrs.length; i++) {
-         tempmeal.push( {title : ingrs[i]});
-    
-    }    
+      tempmeal.push({ title: ingrs[i] });
+    }
 
     return (
-
-    <Autocomplete
-      defaultValue={this.state.newIngrName}
-      value={this.state.newIngrName}
-      onChange={(e,v) => {
-            console.log(v);
-            this.handleChange2new(v);
-          }}
-      filterOptions={(options, params) => {
-        console.log("filterOptions");
-        console.log(options);
-        console.log(params);
-        const filtered = filter(options, params);
-        console.log(filtered);
-
-        // Suggest the creation of a new value
-        if (params.inputValue !== '') {
-          filtered.push({
-            inputValue: params.inputValue,
-            title: `Add "${params.inputValue}"`,
-          });
-        }
-
-        return filtered;
+      <Autocomplete
+        defaultValue={this.state.newIngrName}
+        value={this.state.newIngrName}
+        onChange={(e, v) => {
+          console.log(v);
+          this.handleChange2new(v);
         }}
-      selectOnFocus
-      clearOnBlur
-      handleHomeEndKeys
-      id="Add New or Select"
-      options={tempmeal}
-      getOptionLabel={(option) => {
-        // Value selected with enter, right from the input
-        //console.log("getOptionLabel");
-        //console.log(option);
-        if (typeof option === 'string') {
-          return option;
-        }
-        // Add "xxx" option created dynamically
-        if (option.inputValue) {
-          return option.inputValue;
-        }
-        // Regular option
-        return option.title;
-      }}
-      renderOption={(option) => option.title}
-      style={{ width: 300 }}
-      freeSolo
-      renderInput={(params) => (
-        <TextField {...params} label="Add New Or Select" variant="outlined" />
-      )}
-    />
- 
+        filterOptions={(options, params) => {
+          console.log("filterOptions");
+          console.log(options);
+          console.log(params);
+          const filtered = filter(options, params);
+          console.log(filtered);
 
+          // Suggest the creation of a new value
+          if (params.inputValue !== "") {
+            filtered.push({
+              inputValue: params.inputValue,
+              title: `Add "${params.inputValue}"`,
+            });
+          }
+
+          return filtered;
+        }}
+        selectOnFocus
+        clearOnBlur
+        handleHomeEndKeys
+        id="Add New or Select"
+        options={tempmeal}
+        getOptionLabel={(option) => {
+          // Value selected with enter, right from the input
+          //console.log("getOptionLabel");
+          //console.log(option);
+          if (typeof option === "string") {
+            return option;
+          }
+          // Add "xxx" option created dynamically
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          // Regular option
+          return option.title;
+        }}
+        renderOption={(option) => option.title}
+        style={{ width: 300 }}
+        freeSolo
+        renderInput={(params) => (
+          <TextField {...params} label="Add New Or Select" variant="outlined" />
+        )}
+      />
     );
-  }; 
+  };
 
   render() {
     let displayrows = [];
@@ -583,9 +619,10 @@ class EditCreateMeal extends Component {
         </tr>
       );
       displayrows.push(tempelement);
-      
     }
-    if(this.state.addShow) {displayrows.push(this.addRowTemplate());}
+    if (this.state.addShow) {
+      displayrows.push(this.addRowTemplate());
+    }
     return (
       <div style={{ margin: "1%" }}>
         <Breadcrumbs aria-label="breadcrumb">
@@ -601,8 +638,7 @@ class EditCreateMeal extends Component {
               <thead>
                 <tr>
                   <th>Menu For</th>
-                  <th colSpan="3">{this.dateDropdown()}
-                  </th>
+                  <th colSpan="3">{this.dateDropdown()}</th>
                 </tr>
               </thead>
               <thead>
@@ -615,10 +651,7 @@ class EditCreateMeal extends Component {
               </thead>
               <tbody>{displayrows}</tbody>
             </Table>
-            <Button
-              variant="success"
-              onClick={this.makeNewIngrEntry}
-            >
+            <Button variant="success" onClick={this.makeNewIngrEntry}>
               Add Ingredient
             </Button>
             <Button
@@ -685,32 +718,39 @@ class EditCreateMeal extends Component {
         <td>Ingredient {this.state.currIngr.length + 1}</td>
         <td>{this.ingrDropdownNew()}</td>
         <td>
-            <input
-                type='number'
-                step="0.1"
-                min='0'
-                max='1000000'
-                className='form-control'
-                value={this.state.newQty}
-                onChange={this.onChange}
-              />
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            max="1000000"
+            className="form-control"
+            value={this.state.newQty}
+            onChange={this.onChange}
+          />
         </td>
-      <td>{this.unitDropdownNew()}</td>
-      <td>
-          <Button
-            variant="primary"
-            onClick={this.saveNewEntry}
-          >
+        <td>{this.unitDropdownNew()}</td>
+        <td>
+          <Button variant="primary" onClick={this.saveNewEntry}>
             Save
           </Button>
-      </td>
+        </td>
       </tr>
     );
   };
   dateDropdown = () => {
     let tempdate = [];
-    let newMealInput = (this.state.selection == 0) ?         <div> 
-        <Input placeholder="New Meal Name" inputProps={{ 'aria-label': 'description' }} onChange={this.setNewMealName}/></div>: <div></div>;
+    let newMealInput =
+      this.state.selection == 0 ? (
+        <div>
+          <Input
+            placeholder="New Meal Name"
+            inputProps={{ "aria-label": "description" }}
+            onChange={this.setNewMealName}
+          />
+        </div>
+      ) : (
+        <div></div>
+      );
 
     for (let i = 0; i < this.state.mealkeys.length; i++) {
       tempdate.push(<MenuItem value={i}>{this.state.mealkeys[i]}</MenuItem>);

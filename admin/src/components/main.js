@@ -44,6 +44,7 @@ const Main = ({ appProps }) => (
         appProps,
         API_URL_CREATEMEAL: `${DEV_URL}mealcreation`,
         API_URL_TEMP: `${DEV_URL}templateapi`,
+        API_URL_SAVERECIPE: `${DEV_URL}Add_New_Ingredient`,
       }}
     />
     <AppliedRoute
