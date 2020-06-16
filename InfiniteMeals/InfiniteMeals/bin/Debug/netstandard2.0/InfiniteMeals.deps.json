@@ -9,9 +9,9 @@
     ".NETStandard,Version=v2.0/": {
       "InfiniteMeals/1.0.0": {
         "dependencies": {
-          "AWSSDK.CognitoIdentity": "3.3.101.96",
-          "AWSSDK.Core": "3.3.107.10",
-          "AWSSDK.DynamoDBv2": "3.3.106.18",
+          "AWSSDK.CognitoIdentity": "3.3.101.94",
+          "AWSSDK.Core": "3.3.107.8",
+          "AWSSDK.DynamoDBv2": "3.3.106.16",
           "Microsoft.Net.Http": "2.2.29",
           "MvvmLightLibs": "5.4.1.1",
           "NETStandard.Library": "2.0.3",
@@ -24,45 +24,45 @@
           "InfiniteMeals.dll": {}
         }
       },
-      "AWSSDK.CognitoIdentity/3.3.101.96": {
+      "AWSSDK.CognitoIdentity/3.3.101.94": {
         "dependencies": {
-          "AWSSDK.Core": "3.3.107.10",
-          "AWSSDK.SecurityToken": "3.3.105.14"
+          "AWSSDK.Core": "3.3.107.8",
+          "AWSSDK.SecurityToken": "3.3.105.12"
         },
         "runtime": {
           "lib/netstandard2.0/AWSSDK.CognitoIdentity.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.3.101.96"
+            "fileVersion": "3.3.101.94"
           }
         }
       },
-      "AWSSDK.Core/3.3.107.10": {
+      "AWSSDK.Core/3.3.107.8": {
         "runtime": {
           "lib/netstandard2.0/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.3.107.10"
+            "fileVersion": "3.3.107.8"
           }
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.106.18": {
+      "AWSSDK.DynamoDBv2/3.3.106.16": {
         "dependencies": {
-          "AWSSDK.Core": "3.3.107.10"
+          "AWSSDK.Core": "3.3.107.8"
         },
         "runtime": {
           "lib/netstandard2.0/AWSSDK.DynamoDBv2.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.3.106.18"
+            "fileVersion": "3.3.106.16"
           }
         }
       },
-      "AWSSDK.SecurityToken/3.3.105.14": {
+      "AWSSDK.SecurityToken/3.3.105.12": {
         "dependencies": {
-          "AWSSDK.Core": "3.3.107.10"
+          "AWSSDK.Core": "3.3.107.8"
         },
         "runtime": {
           "lib/netstandard2.0/AWSSDK.SecurityToken.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.3.105.14"
+            "fileVersion": "3.3.105.12"
           }
         }
       },
@@ -176,33 +176,33 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AWSSDK.CognitoIdentity/3.3.101.96": {
+    "AWSSDK.CognitoIdentity/3.3.101.94": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Vhq1I9c5yMVKEi4UR6D/HaRcZo+8StybPlovG29xVt0z9/jqqgaxd5EnnMEG6ayb/yFdOCgibRAPggmt4X1aRw==",
-      "path": "awssdk.cognitoidentity/3.3.101.96",
-      "hashPath": "awssdk.cognitoidentity.3.3.101.96.nupkg.sha512"
+      "sha512": "sha512-DWR2G4OEngRRSygHqdy9sft4B2zwstxzrGWrZjiAG7k9wgW8egiNqhK4Tuix8S0GWKioSOPUx+Tbp4lRCBkNew==",
+      "path": "awssdk.cognitoidentity/3.3.101.94",
+      "hashPath": "awssdk.cognitoidentity.3.3.101.94.nupkg.sha512"
     },
-    "AWSSDK.Core/3.3.107.10": {
+    "AWSSDK.Core/3.3.107.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-BlIzfCiPF0PKzcW/7oDU8E5vQ3aYlini5bijSKc4w3nqkdhqmM0iVYCAV6IZtu1nJyf2OQsF6pII5dOxXnaLyQ==",
-      "path": "awssdk.core/3.3.107.10",
-      "hashPath": "awssdk.core.3.3.107.10.nupkg.sha512"
+      "sha512": "sha512-DyQ/q6TNvQGdsq4wUBbYdUzCh7bjPEiLsqck1AKL6djvZMLsJalHjnbAhTcuAfaoACFYqk2AqiLVo9dmC7poLg==",
+      "path": "awssdk.core/3.3.107.8",
+      "hashPath": "awssdk.core.3.3.107.8.nupkg.sha512"
     },
-    "AWSSDK.DynamoDBv2/3.3.106.18": {
+    "AWSSDK.DynamoDBv2/3.3.106.16": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-bS+yd12+oL9zXntQ5x6ptNq7Rw0zIZ2LRZ6/M/IwPNi8fWxF2JnXjRwtQVlF2his15fwpd3r3Mxc8kOJiDtdDA==",
-      "path": "awssdk.dynamodbv2/3.3.106.18",
-      "hashPath": "awssdk.dynamodbv2.3.3.106.18.nupkg.sha512"
+      "sha512": "sha512-ezsxIzXXPYFHJ6MuF7Fs0Eizt4dwMgVOBN3ReIovL2CIOF80ipmD1BeeP8T8chTiUe51iAsOo2+GQTZt4pFXEA==",
+      "path": "awssdk.dynamodbv2/3.3.106.16",
+      "hashPath": "awssdk.dynamodbv2.3.3.106.16.nupkg.sha512"
     },
-    "AWSSDK.SecurityToken/3.3.105.14": {
+    "AWSSDK.SecurityToken/3.3.105.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-jfdyKjEZgyNNoHIVq9qaCYyKACas0TY2CuNbOF5wkRx5/pm5DSZvKvr4YP0oQw2L1kTKliEgtHozNmM/A/ATaA==",
-      "path": "awssdk.securitytoken/3.3.105.14",
-      "hashPath": "awssdk.securitytoken.3.3.105.14.nupkg.sha512"
+      "sha512": "sha512-FiCgIvQ4A6DrtlV+BXXAmKo/wZFc6+cR6xSdV78mgYOnyRs9HdgZCxyc7FSX7EvL8+s+74RzCUCQ5PVNzqazZg==",
+      "path": "awssdk.securitytoken/3.3.105.12",
+      "hashPath": "awssdk.securitytoken.3.3.105.12.nupkg.sha512"
     },
     "Microsoft.Bcl/1.1.10": {
       "type": "package",

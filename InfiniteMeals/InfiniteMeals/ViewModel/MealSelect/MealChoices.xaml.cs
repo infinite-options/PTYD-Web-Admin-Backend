@@ -280,29 +280,6 @@ namespace InfiniteMeals.MealSelect
             //DisplayAlert("Ingredients", obj.description.ToString(), "OK");
         });
 
-        /*
-        private void onInfoClick(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            var item = button?.BindingContext as Meal;
-            var vm = BindingContext as MealGroup;
-            vm?.selectCommand.Execute(item);
-
-        }
-
-        public Command<MealGroup> selectCommand
-        {
-            get
-            {
-                return new Command<MealGroup>((e) =>
-                {
-                    var item = e as MealGroup;
-                    DisplayAlert("Ingredients", item.ToString(), "OK");
-                });
-            }
-        }
-                */
-
     }
 
 }

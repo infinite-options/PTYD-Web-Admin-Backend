@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ViewModel\Subscribe\AddOnChoices.xaml.cs" />
+    <Compile Remove="ViewModel\SignIn\Shipping.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="ViewModel\Checkout\Payment.xaml.cs">
