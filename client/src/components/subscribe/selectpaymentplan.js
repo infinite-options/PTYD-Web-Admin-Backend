@@ -105,7 +105,7 @@ class SelectPaymentPlan extends Component {
                       >
                         <button
                           type='button'
-                          class='btn2 btn2-primary font4'
+                          class='btn2 btn2-primary font2'
                           style={{
                             marginTop: "10px",
                             paddingLeft: "30px",
