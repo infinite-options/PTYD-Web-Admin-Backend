@@ -160,7 +160,7 @@ class Checkout extends Component {
       "delivery_city",
       "delivery_state",
       "delivery_zip",
-      "delivery_region",
+      // "delivery_region",
       "delivery_phone",
       "cc_num",
       "cc_cvv",

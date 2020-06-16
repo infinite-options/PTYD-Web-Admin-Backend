@@ -3,7 +3,7 @@ import {Layout, Header, Navigation, Drawer, Content} from "react-mdl";
 // import {Link} from "react-router-dom";
 
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 import Main from "./components/main";
 
@@ -115,14 +115,20 @@ const App = props => {
               title='MENU'
               id='nav-dropdown'
             >
+              <NavDropdown.Item href='/menuthisweek'>
+                THIS WEEK
+              </NavDropdown.Item>
+              <NavDropdown.Item href='/menunextweek'>
+                NEXT WEEK
+              </NavDropdown.Item>
               {isAuthenticated && (
                 <Fragment>
-                  <NavDropdown.Item href='/menuthisweek'>
+                  {/* <NavDropdown.Item href='/menuthisweek'>
                     THIS WEEK
                   </NavDropdown.Item>
                   <NavDropdown.Item href='/menunextweek'>
                     NEXT WEEK
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                   {searchCookie4UserID(document.cookie) != "null" && (
                     <NavDropdown.Item href='/mealschedule'>
                       MEAL SCHEDULE
