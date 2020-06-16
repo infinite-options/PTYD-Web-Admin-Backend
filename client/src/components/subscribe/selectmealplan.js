@@ -39,13 +39,13 @@ class Selectmealplan extends Component {
               {this.state.mealPlans.map((mealPlan, key) => (
                 <Card key={key} className='p-0 border-0 w-auto shadow-none'>
                   {mealPlan.num_meals === 10 ? (
-                    <div className='rcorners font3 d-flex rcorner_color'>
-                      <h6 className='align-self-center mx-auto'>
+                    <div className='rcorners font2 d-flex rcorner_color'>
+                      <h6 className='align-self-center mx-auto font2'>
                         MOST POPULAR
                       </h6>
                     </div>
                   ) : (
-                    <div className='rcorners font3 d-flex'>
+                    <div className='rcorners font2 d-flex'>
                       <h6 className='align-self-center mx-auto'></h6>
                     </div>
                   )}
@@ -96,7 +96,7 @@ class Selectmealplan extends Component {
                       >
                         <button
                           type='button'
-                          className='btn2 btn2-primary font4'
+                          className='btn2 btn2-primary font2'
                           style={{
                             marginTop: "10px",
                             paddingLeft: "10px",
@@ -119,7 +119,8 @@ class Selectmealplan extends Component {
                         }}
                       />
                     </Card.Body>
-                    <Card.Footer className='text-muted align-self-center mx-auto'>
+
+                    <Card.Footer className='text-muted justify-content-center'>
                       {mealPlan.plan_footer}
                     </Card.Footer>
                     {/* </div> */}

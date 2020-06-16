@@ -28,7 +28,7 @@ class Landing extends Component {
   }
   render() {
     return (
-      <section className='content-section'>
+      <section className='content-section landing'>
         <div className='container title-image-container'>
           <img className='img-fluid title-image' src={IMG1} alt='img1' />
           <div className='top-left font1'>
@@ -57,16 +57,18 @@ class Landing extends Component {
             {/* )} */}
           </div>
         </div>
+        
         <div className='container'>
           <div className='container font2'>
             <center>
               <div className='zero-waste-container'>
-                <h3 className='font1 zero-waste'>THE ONLY ZERO WASTE</h3>
-                <h3 className='font1 zero-waste'>MEAL DELIVERY SERVICE</h3>
+                <h3 className='font6 zero-waste'>THE ONLY ZERO WASTE</h3>
+                <h3 className='font6 zero-waste'>MEAL DELIVERY SERVICE</h3>
               </div>
             </center>
 
             <div className='box-shadow-top'>&#x200b;</div>
+
             <Grid className='zero-waste-subtext'>
               <Cell col={4} className='zero-waste-cell'>
                 <h4 className='font1 zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
@@ -81,6 +83,7 @@ class Landing extends Component {
                 <p style={{marginLeft:"24px"}}>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
               </Cell>
             </Grid>
+            
             <div className='box-shadow-bottom'>&#x200b;</div>
 
             <center>
@@ -168,8 +171,8 @@ class Landing extends Component {
             <div className='delivered-weekly-container'>
               <div className='delivered-weekly-container2'>
                 <div className='delivered-titles-container'>
-                  <h2 className='font1 delivered-title'>DELIVERED WEEKLY</h2>
-                  <h3 className='font1 delivered-title2'>
+                  <h2 className='font6 delivered-title'>DELIVERED WEEKLY</h2>
+                  <h3 className='font6 delivered-title2'>
                     STRAIGHT TO YOUR DOOR
                   </h3>
                 </div>
@@ -204,7 +207,7 @@ class Landing extends Component {
           </div>
         </div>
         <div className='container container_space center-content'>
-          <h3 className='font1 fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
+          <h3 className='font6 fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
           <div className='fresh-menu-subtitle-container'>
             <h5 className='font2 fresh-menu-subtitle'>
               With over 100 seasonal recipes on rotation, every week you'll try
@@ -229,7 +232,7 @@ class Landing extends Component {
         </div>
 
         <div className='container font2 container_space'>
-          <h3 className='font1'>What Our Community is Saying...</h3>
+          <h3 className='font6'>What Our Community is Saying...</h3>
 
           <CommunityCarousel />
         </div>

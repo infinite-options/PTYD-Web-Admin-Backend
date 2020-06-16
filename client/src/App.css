@@ -749,16 +749,15 @@ hr.four {
 }
 /* text font */
 .font2 {
-  /* font-family: "Nunito", sans-serif; */
   font-family: "montserrat", sans-serif;
 }
-.font3 {
+/* .font3 {
   font-family: "Cousine", monospace;
-}
+} */
 /* button */
-.font4 {
+/* .font4 {
   font-family: "Heebo", sans-serif;
-}
+} */
 .font6 {
   font-family: "Oswald", sans-serif;
 }
@@ -772,7 +771,6 @@ hr.four {
   font-weight: bold;
   margin-top: -8px;
 }
-
 .logo-austin-houston {
   margin-top: 10px;
 }

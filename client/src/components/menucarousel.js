@@ -4,11 +4,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../App.css"
 
+import defaultMeal from "../img/default-meal.png";
 import SLIDE1 from "../img/slide1-cobb-salad.png"
 import NEXT from "../img/right_arrow-512.svg"
 import PREV from "../img/left_arrow-512.svg"
 
 export default class MenuCarousel extends Component {
+  constructor(props) {
+    super(props);
+    
+  }
 
   renderArrows = () => {
     return (

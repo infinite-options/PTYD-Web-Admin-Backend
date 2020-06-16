@@ -318,7 +318,7 @@ const App = props => {
           />
         </Content>
 
-        <hr />
+        {/* <hr /> */}
 
         <footer className='container font2'>
           <div className='row footer-container'>
@@ -507,9 +507,6 @@ const App = props => {
                 <p id='black-grey' className='never-miss-update-text'>
                   & Never miss an update
                 </p>
-                {/* <p style={{fontSize: "12px", paddingLeft: "15px"}}>
-                  Email Address
-                </p> */}
                 <Form className='email-section'>
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridEmail'>
@@ -518,7 +515,6 @@ const App = props => {
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
                       <a
-                        // type='submit'
                         className='subscribe-btn font2'
                       >
                         Subscribe
@@ -530,6 +526,7 @@ const App = props => {
             </div>
           </div>
         </footer>
+
       </Layout>
     </div>
   );
