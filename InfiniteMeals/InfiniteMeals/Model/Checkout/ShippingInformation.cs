@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using System.ComponentModel;
+using InfiniteMeals.Model.Subscribe;
 
 namespace InfiniteMeals.Model.Checkout {
     class ShippingInformation: INotifyPropertyChanged {
@@ -18,6 +19,8 @@ namespace InfiniteMeals.Model.Checkout {
         public string city { get; set; }
         public string state { get; set; }
 
+        public SubscriptionPlan subscriptionPlan { get; set; }
+
         public ShippingInformation() {
             this.firstName = "";
             this.lastName = "";
@@ -27,10 +30,12 @@ namespace InfiniteMeals.Model.Checkout {
             this.zipCode = "";
             this.city = "";
             this.state = "";
+            this.subscriptionPlan = new SubscriptionPlan();
         }
 
         public ShippingInformation(string firstName, string lastName, 
-            string phoneNumber, string addressOne, string addressTwo, string zipCode, string city, string state) {
+            string phoneNumber, string addressOne, string addressTwo, 
+            string zipCode, string city, string state, SubscriptionPlan subscriptionPlan) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.phoneNumber = phoneNumber;
@@ -39,6 +44,7 @@ namespace InfiniteMeals.Model.Checkout {
             this.zipCode = zipCode;
             this.city = city;
             this.state = state;
+            this.subscriptionPlan = subscriptionPlan;
         }
 
         public override string ToString() {

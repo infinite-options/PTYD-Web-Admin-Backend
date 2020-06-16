@@ -9,6 +9,7 @@ using Xamarin.Forms.Xaml;
 
 using InfiniteMeals.Model.Checkout;
 using InfiniteMeals.Utilities.Converters;
+using InfiniteMeals.Model.Subscribe;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -20,7 +21,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
         }
 
         private async void ContinueToSummaryClicked(object sender, EventArgs e) {
-            if(String.IsNullOrEmpty(this.cardNumberEntry.Text) || String.IsNullOrEmpty(this.cardholderNameEntry.Text)
+            if(String.IsNullOrEmpty(this.deliveryInstructionsEditor.Text) || String.IsNullOrEmpty(this.cardNumberEntry.Text) || String.IsNullOrEmpty(this.cardholderNameEntry.Text)
                 || String.IsNullOrEmpty(this.expirationMonthEntry.Text) || 
                 String.IsNullOrEmpty(this.expirationYearEntry.Text) || String.IsNullOrEmpty(this.cvvEntry.Text)) {
                 await DisplayAlert("Error: Empty Field(s)", "Please fill all fields", "OK");
@@ -30,28 +31,41 @@ namespace InfiniteMeals.ViewModel.Checkout {
                 paymentInformation = new PaymentInformation(this.deliveryInstructionsEditor.Text, this.cardNumberEntry.Text,
                     this.cardholderNameEntry.Text, this.expirationMonthEntry.Text, this.expirationYearEntry.Text, this.cvvEntry.Text)
                 };
-                var summaryPage = new Summary();
+                Summary summaryPage = new Summary();
                 summaryPage.BindingContext = orderInfo;
-                System.Diagnostics.Debug.WriteLine("test");
-                System.Diagnostics.Debug.WriteLine(summaryPage.BindingContext.GetType());
-                System.Diagnostics.Debug.WriteLine(orderInfo.shippingInformation.GetType());
-                System.Diagnostics.Debug.WriteLine(orderInfo.paymentInformation.GetType());
-                System.Diagnostics.Debug.WriteLine(orderInfo.shippingInformation);
-                System.Diagnostics.Debug.WriteLine(orderInfo.paymentInformation);
+                ShippingInformation shippingInfo = (ShippingInformation)this.BindingContext;
+                Label mealPlan = (Label)summaryPage.FindByName("mealPlan");
+                Label paymentOption = (Label)summaryPage.FindByName("paymentOption");
+                Label lastFourDigits = (Label)summaryPage.FindByName("lastFourDigits");
+                mealPlan.Text = MealPlanExtension.mealPlanToString(shippingInfo.subscriptionPlan.mealPlan);
+                paymentOption.Text = PaymentOptionExtension.paymentOptionToString(shippingInfo.subscriptionPlan.paymentOption);
+                lastFourDigits.Text = "XXXXXXXXXXXX" + this.cardNumberEntry.Text.Substring(cardNumberEntry.Text.Length - 4);
                 await Navigation.PushAsync(summaryPage);
+            }
+        }
+
+        private void deliveryInstructionsEditorUnfocused(object sender, FocusEventArgs e) {
+            Editor deliveryInstructionsEditor = (Editor)sender; // case sender as editor
+            if (String.IsNullOrEmpty(deliveryInstructionsEditor.Text)) {
+                this.deliveryInstructionsWarning.IsVisible = true; // show warning if delivery instructions is empty
+            } else if(!String.IsNullOrEmpty(deliveryInstructionsEditor.Text) && this.deliveryInstructionsWarning.IsVisible) {
+                this.deliveryInstructionsWarning.IsVisible = false; //
             }
         }
         private void cardNumberEntryUnfocused(object sender, FocusEventArgs e) {
             Entry cardNumberEntry = (Entry)sender; // cast sender as entry
             if (String.IsNullOrEmpty(cardNumberEntry.Text)) {
                 this.cardNumberMessage.IsVisible = true; // show warning if card number entry is empty
-            } else if (!String.IsNullOrEmpty(cardNumberEntry.Text) && CardParser.validateCard(long.Parse(cardNumberEntry.Text)) == CardType.Unknown) {
-                this.cardNumberMessage.Text = "Invalid Card Warning";
-                this.cardNumberMessage.IsVisible = true; // show a warning if card number is invalid
-            } else if (!String.IsNullOrEmpty(cardNumberEntry.Text) && CardParser.validateCard(long.Parse(cardNumberEntry.Text)) != CardType.Unknown
-                && this.cardNumberMessage.IsVisible == true) {
-                this.cardNumberMessage.Text = CardParser.validateCard(long.Parse(cardNumberEntry.Text)).ToString(); // show bank if card is valid
-                this.cardNumberMessage.IsVisible = true;
+            } else if (!String.IsNullOrEmpty(cardNumberEntry.Text)) {
+                if(CardParser.validateCard(long.Parse(cardNumberEntry.Text)) == CardType.Unknown) {
+                    if(!this.cardNumberMessage.IsVisible) {
+                        this.cardNumberMessage.Text = "Invalid card";
+                        this.cardNumberMessage.IsVisible = true;
+                    }
+                } else {
+                    this.cardNumberMessage.Text = CardParser.validateCard(long.Parse(cardNumberEntry.Text)).ToString();
+                    this.cardNumberMessage.IsVisible = true;
+                }
             }
         }
 

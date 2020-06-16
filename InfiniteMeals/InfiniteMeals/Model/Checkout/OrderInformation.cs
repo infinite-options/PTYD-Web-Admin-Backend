@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using InfiniteMeals.Model.Subscribe;
 
 namespace InfiniteMeals.Model.Checkout {
     class OrderInformation: INotifyPropertyChanged {
@@ -12,12 +13,14 @@ namespace InfiniteMeals.Model.Checkout {
 
         public PaymentInformation paymentInformation { get; set; }
 
+
         public OrderInformation() {
             this.shippingInformation = new ShippingInformation();
             this.paymentInformation = new PaymentInformation();
         }
 
-        public OrderInformation(ShippingInformation shippingInformation, PaymentInformation paymentInformation) {
+        public OrderInformation(ShippingInformation shippingInformation, 
+            PaymentInformation paymentInformation, SubscriptionPlan subscriptionPlan) {
             this.shippingInformation = shippingInformation;
             this.paymentInformation = paymentInformation;
         }

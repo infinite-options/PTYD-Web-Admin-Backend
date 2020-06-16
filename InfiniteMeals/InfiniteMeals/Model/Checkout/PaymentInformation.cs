@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using InfiniteMeals.Model.Subscribe;
+
 
 namespace InfiniteMeals.Model.Checkout {
     class PaymentInformation : INotifyPropertyChanged {
