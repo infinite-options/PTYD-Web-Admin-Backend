@@ -13,7 +13,7 @@
 namespace InfiniteMeals.Tests {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Tests\\CardTestCase.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("Tests/CardTestCase.xaml")]
     public partial class CardTestCase : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

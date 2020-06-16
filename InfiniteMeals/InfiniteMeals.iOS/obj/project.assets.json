@@ -2266,39 +2266,32 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Sean\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
+    "/Users/Kristina/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\InfiniteMeals.iOS.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
       "projectName": "InfiniteMeals.iOS",
-      "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\InfiniteMeals.iOS.csproj",
-      "packagesPath": "C:\\Users\\Sean\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\obj\\",
+      "projectPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+      "packagesPath": "/Users/Kristina/.nuget/packages/",
+      "outputPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
-      "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Sean\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "/Users/Kristina/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "xamarinios10"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "xamarinios10": {
           "projectReferences": {
-            "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj": {
-              "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj"
+            "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+              "projectPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
             }
           }
         }
@@ -2364,20 +2357,7 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.DynamoDBv2 from 3.3.106.16 to 3.3.106.10. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.DynamoDBv2 (>= 3.3.106.16) \r\n InfiniteMeals.iOS -> AWSSDK.DynamoDBv2 (>= 3.3.106.10)",
-      "libraryId": "AWSSDK.DynamoDBv2",
-      "targetGraphs": [
-        "Xamarin.iOS,Version=v1.0",
-        "Xamarin.iOS,Version=v1.0/win",
-        "Xamarin.iOS,Version=v1.0/win-x64",
-        "Xamarin.iOS,Version=v1.0/win-x86"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.CognitoIdentity from 3.3.101.94 to 3.3.101.88. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.CognitoIdentity (>= 3.3.101.94) \r\n InfiniteMeals.iOS -> AWSSDK.CognitoIdentity (>= 3.3.101.88)",
+      "message": "Detected package downgrade: AWSSDK.CognitoIdentity from 3.3.101.94 to 3.3.101.88. Reference the package directly from the project to select a different version. \n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.CognitoIdentity (>= 3.3.101.94) \n InfiniteMeals.iOS -> AWSSDK.CognitoIdentity (>= 3.3.101.88)",
       "libraryId": "AWSSDK.CognitoIdentity",
       "targetGraphs": [
         "Xamarin.iOS,Version=v1.0",
@@ -2390,7 +2370,7 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.Core from 3.3.107.8 to 3.3.107.2. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.Core (>= 3.3.107.8) \r\n InfiniteMeals.iOS -> AWSSDK.Core (>= 3.3.107.2)",
+      "message": "Detected package downgrade: AWSSDK.Core from 3.3.107.8 to 3.3.107.2. Reference the package directly from the project to select a different version. \n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.Core (>= 3.3.107.8) \n InfiniteMeals.iOS -> AWSSDK.Core (>= 3.3.107.2)",
       "libraryId": "AWSSDK.Core",
       "targetGraphs": [
         "Xamarin.iOS,Version=v1.0",
@@ -2403,7 +2383,20 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: Xamarin.Forms from 4.6.0.847 to 4.5.0.495. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> Xamarin.Forms (>= 4.6.0.847) \r\n InfiniteMeals.iOS -> Xamarin.Forms (>= 4.5.0.495)",
+      "message": "Detected package downgrade: AWSSDK.DynamoDBv2 from 3.3.106.16 to 3.3.106.10. Reference the package directly from the project to select a different version. \n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.DynamoDBv2 (>= 3.3.106.16) \n InfiniteMeals.iOS -> AWSSDK.DynamoDBv2 (>= 3.3.106.10)",
+      "libraryId": "AWSSDK.DynamoDBv2",
+      "targetGraphs": [
+        "Xamarin.iOS,Version=v1.0",
+        "Xamarin.iOS,Version=v1.0/win",
+        "Xamarin.iOS,Version=v1.0/win-x64",
+        "Xamarin.iOS,Version=v1.0/win-x86"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package downgrade: Xamarin.Forms from 4.6.0.847 to 4.5.0.495. Reference the package directly from the project to select a different version. \n InfiniteMeals.iOS -> InfiniteMeals -> Xamarin.Forms (>= 4.6.0.847) \n InfiniteMeals.iOS -> Xamarin.Forms (>= 4.5.0.495)",
       "libraryId": "Xamarin.Forms",
       "targetGraphs": [
         "Xamarin.iOS,Version=v1.0",

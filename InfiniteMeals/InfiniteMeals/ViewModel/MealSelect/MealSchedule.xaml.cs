@@ -18,15 +18,17 @@ namespace InfiniteMeals.Meals {
         int ctr = 2;
         bool disabled = false;
         List<String> order = new List<String>();
-
+        public ListView lstView = new ListView { HasUnevenRows = true };
+        public Button sundayButton = new Button();
         public IList<Dates> SundayDates { get; private set; }
         public IList<Dates> MondayDates { get; private set; }
-
         String green = "#8FBC8F";
         String def = "#F5F5F5";
 
+
         public MealSchedule() {
             InitializeComponent();
+
 
             ToolbarItem totalBar = new ToolbarItem
             {
@@ -44,43 +46,47 @@ namespace InfiniteMeals.Meals {
             };
             this.ToolbarItems.Add(totalBar);
             this.ToolbarItems.Add(totalBar2);
+            getDates();
             getData();
+            BindingContext = this;
         }
 
         private async void getData()
         {
-            List<String> sundaySched = new List<String>();
-            List<String> mondaySched = new List<String>();
-            SundayDates = new List<Dates>();
-            MondayDates = new List<Dates>();
-
             HttpClient client = new HttpClient();
-            var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
+            var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/monday-zip-codes");
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
-            sundaySched.Add(obj.Result.MenuForWeek1.Sunday);
-            mondaySched.Add(obj.Result.MenuForWeek1.Monday);
-
-            SundayDates.Add(new Dates
+            // Get all available zipcodes
+            for(int i = 0; i < obj.Result.Res.Length; i++)
             {
-               sundayDate = sundaySched[0].ToString(),
-            });
+                System.Diagnostics.Debug.WriteLine(" monday zip " + obj.Result.Res[i].Zipcode.ToString());
+            }
 
-            MondayDates.Add(new Dates
+            // Get user zipcodes
+            var userZipCodes = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000001");
+            var userZipObj = JsonConvert.DeserializeObject<UserInfo>(userZipCodes);
+            Boolean zipBool = true;
+            for (int i = 0; i < userZipObj.Result.Length; i++)
             {
-                mondayDate = mondaySched[0].ToString(),
-            });
+                System.Diagnostics.Debug.WriteLine(" user zip " + userZipObj.Result[i].MondayAvailable);
+                zipBool = userZipObj.Result[i].MondayAvailable;
+            }
+            if (zipBool == false)
+            {
+                System.Diagnostics.Debug.WriteLine(" user zip false ");
+                MondayButton.IsVisible = false;
+                MondayButton2.IsVisible = false;
+                MondayButton3.IsVisible = false;
+                MondayButton4.IsVisible = false;
+                MondayButton5.IsVisible = false;
+                MondayButton6.IsVisible = false;
+            }
 
+        BindingContext = this;
+    }
 
-
-                    // Here
-
-
-
-            BindingContext = this;
-        }
-
-        private void ClickedColor(object sender, EventArgs e) {
+            public void ClickedColor(object sender, EventArgs e) {
             Button btn = (Button)sender;
             System.Diagnostics.Debug.WriteLine("Class ID" + btn.ClassId + "Disabled? " + disabled + " Ctr " + ctr);
 
@@ -203,6 +209,178 @@ namespace InfiniteMeals.Meals {
                 await Navigation.PushAsync(new MealSelect.MealChoices());
         }
 
+        public void getDates()
+        {
+            // If today is sunday, monday, tuesday, wednesday -> this week
+            // If today is thursday, friday, saturday -> next week
+            // Today's Date
+            DateTime dateValue = DateTime.Now;
+            DateTime firstSun, firstMon;
+            String dateText = dateValue.ToString("dddd");
+            List<String> AllSundays = new List<String>();
+            List<String> AllMondays = new List<String>();
+            switch (dateText)
+            {
+                case "Sunday":
+                    for(int i = 0; i < 6; i++)
+                    {
+                        AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays((7 * (i + 1)) + 1)));
+                        System.Diagnostics.Debug.WriteLine("Dates: " + AllSundays[i] + " " + AllMondays[i]);
+                    }
+                    SundayButton.Text = AllSundays[0];
+                    SundayButton2.Text = AllSundays[1];
+                    SundayButton3.Text = AllSundays[2];
+                    SundayButton4.Text = AllSundays[3];
+                    SundayButton5.Text = AllSundays[4];
+                    SundayButton6.Text = AllSundays[5];
+                    MondayButton.Text = AllMondays[0];
+                    MondayButton2.Text = AllMondays[1];
+                    MondayButton3.Text = AllMondays[2];
+                    MondayButton4.Text = AllMondays[3];
+                    MondayButton5.Text = AllMondays[4];
+                    MondayButton6.Text = AllMondays[5];
+                    break;
+                case "Monday":
+                    AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(6)));
+                    firstSun = dateValue.AddDays(6);
+                    firstMon = firstSun.AddDays(1);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        System.Diagnostics.Debug.WriteLine("Dates: " + AllSundays[i] + AllMondays[i]);
+                    }
 
+                    SundayButton.Text = AllSundays[0];
+                    SundayButton2.Text = AllSundays[1];
+                    SundayButton3.Text = AllSundays[2];
+                    SundayButton4.Text = AllSundays[3];
+                    SundayButton5.Text = AllSundays[4];
+                    SundayButton6.Text = AllSundays[5];
+                    MondayButton.Text = AllMondays[0];
+                    MondayButton2.Text = AllMondays[1];
+                    MondayButton3.Text = AllMondays[2];
+                    MondayButton4.Text = AllMondays[3];
+                    MondayButton5.Text = AllMondays[4];
+                    MondayButton6.Text = AllMondays[5];
+                    break;
+                case "Tuesday":
+                    AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(5)));
+                    firstSun = dateValue.AddDays(5);
+                    firstMon = firstSun.AddDays(1);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
+                    }
+                    SundayButton.Text = AllSundays[0];
+                    SundayButton2.Text = AllSundays[1];
+                    SundayButton3.Text = AllSundays[2];
+                    SundayButton4.Text = AllSundays[3];
+                    SundayButton5.Text = AllSundays[4];
+                    SundayButton6.Text = AllSundays[5];
+                    MondayButton.Text = AllMondays[0];
+                    MondayButton2.Text = AllMondays[1];
+                    MondayButton3.Text = AllMondays[2];
+                    MondayButton4.Text = AllMondays[3];
+                    MondayButton5.Text = AllMondays[4];
+                    MondayButton6.Text = AllMondays[5];
+                    break;
+                case "Wednesday":
+                    AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(4)));
+                    firstSun = dateValue.AddDays(4);
+                    firstMon = firstSun.AddDays(1);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
+                    }
+                    SundayButton.Text = AllSundays[0];
+                    SundayButton2.Text = AllSundays[1];
+                    SundayButton3.Text = AllSundays[2];
+                    SundayButton4.Text = AllSundays[3];
+                    SundayButton5.Text = AllSundays[4];
+                    SundayButton6.Text = AllSundays[5];
+                    MondayButton.Text = AllMondays[0];
+                    MondayButton2.Text = AllMondays[1];
+                    MondayButton3.Text = AllMondays[2];
+                    MondayButton4.Text = AllMondays[3];
+                    MondayButton5.Text = AllMondays[4];
+                    MondayButton6.Text = AllMondays[5];
+                    break;
+                case "Thursday":
+                    AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(10)));
+                    firstSun = dateValue.AddDays(10);
+                    firstMon = firstSun.AddDays(1);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
+                    }
+                    SundayButton.Text = AllSundays[0];
+                    SundayButton2.Text = AllSundays[1];
+                    SundayButton3.Text = AllSundays[2];
+                    SundayButton4.Text = AllSundays[3];
+                    SundayButton5.Text = AllSundays[4];
+                    SundayButton6.Text = AllSundays[5];
+                    MondayButton.Text = AllMondays[0];
+                    MondayButton2.Text = AllMondays[1];
+                    MondayButton3.Text = AllMondays[2];
+                    MondayButton4.Text = AllMondays[3];
+                    MondayButton5.Text = AllMondays[4];
+                    MondayButton6.Text = AllMondays[5];
+                    break;
+                case "Friday":
+                    AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(9)));
+                    firstSun = dateValue.AddDays(9);
+                    firstMon = firstSun.AddDays(1);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
+                    }
+                    SundayButton.Text = AllSundays[0];
+                    SundayButton2.Text = AllSundays[1];
+                    SundayButton3.Text = AllSundays[2];
+                    SundayButton4.Text = AllSundays[3];
+                    SundayButton5.Text = AllSundays[4];
+                    SundayButton6.Text = AllSundays[5];
+                    MondayButton.Text = AllMondays[0];
+                    MondayButton2.Text = AllMondays[1];
+                    MondayButton3.Text = AllMondays[2];
+                    MondayButton4.Text = AllMondays[3];
+                    MondayButton5.Text = AllMondays[4];
+                    MondayButton6.Text = AllMondays[5];
+                    break;
+                case "Saturday":
+                    AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(8)));
+                    firstSun = dateValue.AddDays(8);
+                    firstMon = firstSun.AddDays(1);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
+                    }
+                    SundayButton.Text = AllSundays[0];
+                    SundayButton2.Text = AllSundays[1];
+                    SundayButton3.Text = AllSundays[2];
+                    SundayButton4.Text = AllSundays[3];
+                    SundayButton5.Text = AllSundays[4];
+                    SundayButton6.Text = AllSundays[5];
+                    MondayButton.Text = AllMondays[0];
+                    MondayButton2.Text = AllMondays[1];
+                    MondayButton3.Text = AllMondays[2];
+                    MondayButton4.Text = AllMondays[3];
+                    MondayButton5.Text = AllMondays[4];
+                    MondayButton6.Text = AllMondays[5];
+                    break;
+            }
+        }
     }
 }

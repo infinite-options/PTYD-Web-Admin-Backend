@@ -162,9 +162,9 @@ namespace InfiniteMeals.MealSelect
             grouped.Add(addMealGroup);
             grouped.Add(addSmoothieGroup);
 
-            ToolbarItem totalBar= new ToolbarItem
+            ToolbarItem totalBar = new ToolbarItem
             {
-                Text = "Agree to pay: $0.00 ",
+                Text = "Close",
                 IconImageSource = ImageSource.FromFile("example_icon.png"),
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0,
@@ -181,82 +181,89 @@ namespace InfiniteMeals.MealSelect
 
             lstView.ItemTemplate = new DataTemplate(() =>
             {
-                var grid = new Grid
-                {
-                    HeightRequest = 100,
-                    VerticalOptions = LayoutOptions.FillAndExpand
-                };
-                var nameLabel = new Label
-                {
-                    FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center
-                };
-                var costLabel= new Label
-                {
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center
-                };
-                var imgLabel = new Image
-                {
-                    WidthRequest = 200,
-                    HeightRequest = 100,
-                    Aspect = Aspect.AspectFill,
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
-                };
-                var infoButton = new ImageButton
-                {
-                    WidthRequest = 20,
-                    HeightRequest = 20,
-                    Aspect = Aspect.AspectFit,
-                    HorizontalOptions = LayoutOptions.Start,
-                    VerticalOptions = LayoutOptions.Center
-                };
-                infoButton.Margin = new Thickness(50, 0, 0, 0);
-                infoButton.Clicked += (sender, e) =>
-                {
-                    ImageButton stepper = sender as ImageButton;
-                    var model = stepper.BindingContext as Meal;
-                    DisplayAlert("Ingredients", model.description.ToString(), "OK");
-                };
+            var grid = new Grid
+            {
+                HeightRequest = 100,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+            var nameLabel = new Label
+            {
+                FontAttributes = FontAttributes.Bold,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+            var costLabel = new Label
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+            var imgLabel = new Image
+            {
+                WidthRequest = 200,
+                HeightRequest = 100,
+                Aspect = Aspect.AspectFill,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+            var infoButton = new ImageButton
+            {
+                WidthRequest = 20,
+                HeightRequest = 20,
+                Aspect = Aspect.AspectFit,
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Center
+            };
+            infoButton.Margin = new Thickness(50, 0, 0, 0);
+            infoButton.Clicked += (sender, e) =>
+            {
+                ImageButton stepper = sender as ImageButton;
+                var model = stepper.BindingContext as Meal;
+                DisplayAlert("Ingredients", model.description.ToString(), "OK");
+            };
 
-                var steppers = new Stepper
+            var steppers = new Stepper
+            {
+                Value = 0,
+                Maximum = 10,
+                Increment = 1,
+                HeightRequest = 50
+            };
+
+            steppers.ValueChanged += (sender, e) =>
+            {
+            Stepper stepper = sender as Stepper;
+            var model = stepper.BindingContext as Meal;
+            var stepperVal = stepper.Value;
+
+
+            if (stepperVal > model.qty)
+            {
+                model.qty = (int)steppers.Value;
+                subTotal += model.price;
+                model.total = subTotal;
+            }
+            else if (stepperVal < model.qty)
+            {
+
+                model.qty = (int)steppers.Value;
+                subTotal -= model.price;
+                model.total = subTotal;
+                if (subTotal < 0)
                 {
-                    Value = 0,
-                    Maximum = 10,
-                    Increment = 1,
-                    HeightRequest = 50
-                };
+                    subTotal = 0.00;
+                    model.total = subTotal;
+                }
+            }
 
-                steppers.ValueChanged += (sender, e) =>
-                {
-                    Stepper stepper = sender as Stepper;
-                    var model = stepper.BindingContext as Meal;
-                    var stepperVal = stepper.Value;
-
-
-                    if (stepperVal > model.qty)
-                    {
-                        model.qty = (int)steppers.Value;
-                        subTotal += model.price;
-                        model.total = subTotal;
-                    }
-                    else if (stepperVal < model.qty)
-                    {
-
-                        model.qty = (int)steppers.Value;
-                        subTotal -= model.price;
-                        model.total = subTotal;
-                        if (subTotal < 0)
-                        {
-                            subTotal = 0.00;
-                            model.total = subTotal;
-                        }
-                    }
-
-                    totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
-                };
+            if (subTotal == 0)
+            {
+                totalBar.Text = "Close";
+            }
+            else
+            {
+                totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
+            }
+        };
 
                 Label quantity = new Label
                 {

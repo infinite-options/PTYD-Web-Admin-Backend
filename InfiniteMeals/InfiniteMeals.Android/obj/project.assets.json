@@ -2879,39 +2879,32 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Sean\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
+    "/Users/Kristina/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\InfiniteMeals.Android.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
       "projectName": "InfiniteMeals.Android",
-      "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\InfiniteMeals.Android.csproj",
-      "packagesPath": "C:\\Users\\Sean\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\obj\\",
+      "projectPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
+      "packagesPath": "/Users/Kristina/.nuget/packages/",
+      "outputPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
-      "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Sean\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "/Users/Kristina/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "monoandroid90"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "monoandroid90": {
           "projectReferences": {
-            "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj": {
-              "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj"
+            "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+              "projectPath": "/Users/Kristina/Desktop/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
             }
           }
         }
@@ -2963,17 +2956,7 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.DynamoDBv2 from 3.3.106.16 to 3.3.106.10. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.DynamoDBv2 (>= 3.3.106.16) \r\n InfiniteMeals.Android -> AWSSDK.DynamoDBv2 (>= 3.3.106.10)",
-      "libraryId": "AWSSDK.DynamoDBv2",
-      "targetGraphs": [
-        "MonoAndroid,Version=v9.0"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.CognitoIdentity from 3.3.101.94 to 3.3.101.88. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.CognitoIdentity (>= 3.3.101.94) \r\n InfiniteMeals.Android -> AWSSDK.CognitoIdentity (>= 3.3.101.88)",
+      "message": "Detected package downgrade: AWSSDK.CognitoIdentity from 3.3.101.94 to 3.3.101.88. Reference the package directly from the project to select a different version. \n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.CognitoIdentity (>= 3.3.101.94) \n InfiniteMeals.Android -> AWSSDK.CognitoIdentity (>= 3.3.101.88)",
       "libraryId": "AWSSDK.CognitoIdentity",
       "targetGraphs": [
         "MonoAndroid,Version=v9.0"
@@ -2983,7 +2966,7 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.Core from 3.3.107.8 to 3.3.107.2. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.Core (>= 3.3.107.8) \r\n InfiniteMeals.Android -> AWSSDK.Core (>= 3.3.107.2)",
+      "message": "Detected package downgrade: AWSSDK.Core from 3.3.107.8 to 3.3.107.2. Reference the package directly from the project to select a different version. \n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.Core (>= 3.3.107.8) \n InfiniteMeals.Android -> AWSSDK.Core (>= 3.3.107.2)",
       "libraryId": "AWSSDK.Core",
       "targetGraphs": [
         "MonoAndroid,Version=v9.0"
@@ -2993,7 +2976,17 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: Xamarin.Forms from 4.6.0.847 to 4.5.0.495. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.Android -> InfiniteMeals -> Xamarin.Forms (>= 4.6.0.847) \r\n InfiniteMeals.Android -> Xamarin.Forms (>= 4.5.0.495)",
+      "message": "Detected package downgrade: AWSSDK.DynamoDBv2 from 3.3.106.16 to 3.3.106.10. Reference the package directly from the project to select a different version. \n InfiniteMeals.Android -> InfiniteMeals -> AWSSDK.DynamoDBv2 (>= 3.3.106.16) \n InfiniteMeals.Android -> AWSSDK.DynamoDBv2 (>= 3.3.106.10)",
+      "libraryId": "AWSSDK.DynamoDBv2",
+      "targetGraphs": [
+        "MonoAndroid,Version=v9.0"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package downgrade: Xamarin.Forms from 4.6.0.847 to 4.5.0.495. Reference the package directly from the project to select a different version. \n InfiniteMeals.Android -> InfiniteMeals -> Xamarin.Forms (>= 4.6.0.847) \n InfiniteMeals.Android -> Xamarin.Forms (>= 4.5.0.495)",
       "libraryId": "Xamarin.Forms",
       "targetGraphs": [
         "MonoAndroid,Version=v9.0"
