@@ -44,15 +44,15 @@
           "dependencies": {
             "AWSSDK.CognitoIdentity": {
               "target": "Package",
-              "version": "[3.3.101.88, )"
+              "version": "[3.3.101.96, )"
             },
             "AWSSDK.Core": {
               "target": "Package",
-              "version": "[3.3.107.2, )"
+              "version": "[3.3.107.10, )"
             },
             "AWSSDK.DynamoDBv2": {
               "target": "Package",
-              "version": "[3.3.106.10, )"
+              "version": "[3.3.106.18, )"
             },
             "Microsoft.Net.Http": {
               "target": "Package",
@@ -64,7 +64,7 @@
             },
             "Xamarin.Forms": {
               "target": "Package",
-              "version": "[4.5.0.495, )"
+              "version": "[4.6.0.847, )"
             }
           }
         }
@@ -122,15 +122,15 @@
           "dependencies": {
             "AWSSDK.CognitoIdentity": {
               "target": "Package",
-              "version": "[3.3.101.94, )"
+              "version": "[3.3.101.96, )"
             },
             "AWSSDK.Core": {
               "target": "Package",
-              "version": "[3.3.107.8, )"
+              "version": "[3.3.107.10, )"
             },
             "AWSSDK.DynamoDBv2": {
               "target": "Package",
-              "version": "[3.3.106.16, )"
+              "version": "[3.3.106.18, )"
             },
             "Microsoft.Net.Http": {
               "target": "Package",

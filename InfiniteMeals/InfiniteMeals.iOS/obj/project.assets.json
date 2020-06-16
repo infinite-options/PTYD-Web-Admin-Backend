@@ -2,11 +2,11 @@
   "version": 3,
   "targets": {
     "Xamarin.iOS,Version=v1.0": {
-      "AWSSDK.CognitoIdentity/3.3.101.88": {
+      "AWSSDK.CognitoIdentity/3.3.101.96": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)",
-          "AWSSDK.SecurityToken": "[3.3.105.6, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)",
+          "AWSSDK.SecurityToken": "[3.3.105.14, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
@@ -15,7 +15,7 @@
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
         }
       },
-      "AWSSDK.Core/3.3.107.2": {
+      "AWSSDK.Core/3.3.107.10": {
         "type": "package",
         "dependencies": {
           "PCLCrypto": "1.0.2.15130",
@@ -28,10 +28,10 @@
           "lib/Xamarin.iOS10/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.106.10": {
+      "AWSSDK.DynamoDBv2/3.3.106.18": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
@@ -40,10 +40,10 @@
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
         }
       },
-      "AWSSDK.SecurityToken/3.3.105.6": {
+      "AWSSDK.SecurityToken/3.3.105.14": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.SecurityToken.dll": {}
@@ -161,7 +161,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.5.0.495": {
+      "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -278,8 +278,8 @@
           }
         },
         "build": {
-          "build/Xamarin.Forms.props": {},
-          "build/Xamarin.Forms.targets": {}
+          "buildTransitive/Xamarin.Forms.props": {},
+          "buildTransitive/Xamarin.Forms.targets": {}
         }
       },
       "Xamarin.Forms.Maps/4.6.0.847": {
@@ -300,9 +300,9 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "AWSSDK.CognitoIdentity": "3.3.101.94",
-          "AWSSDK.Core": "3.3.107.8",
-          "AWSSDK.DynamoDBv2": "3.3.106.16",
+          "AWSSDK.CognitoIdentity": "3.3.101.96",
+          "AWSSDK.Core": "3.3.107.10",
+          "AWSSDK.DynamoDBv2": "3.3.106.18",
           "Microsoft.Net.Http": "2.2.29",
           "MvvmLightLibs": "5.4.1.1",
           "Newtonsoft.Json": "12.0.3",
@@ -319,11 +319,11 @@
       }
     },
     "Xamarin.iOS,Version=v1.0/win": {
-      "AWSSDK.CognitoIdentity/3.3.101.88": {
+      "AWSSDK.CognitoIdentity/3.3.101.96": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)",
-          "AWSSDK.SecurityToken": "[3.3.105.6, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)",
+          "AWSSDK.SecurityToken": "[3.3.105.14, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
@@ -332,7 +332,7 @@
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
         }
       },
-      "AWSSDK.Core/3.3.107.2": {
+      "AWSSDK.Core/3.3.107.10": {
         "type": "package",
         "dependencies": {
           "PCLCrypto": "1.0.2.15130",
@@ -345,10 +345,10 @@
           "lib/Xamarin.iOS10/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.106.10": {
+      "AWSSDK.DynamoDBv2/3.3.106.18": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
@@ -357,10 +357,10 @@
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
         }
       },
-      "AWSSDK.SecurityToken/3.3.105.6": {
+      "AWSSDK.SecurityToken/3.3.105.14": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.SecurityToken.dll": {}
@@ -478,7 +478,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.5.0.495": {
+      "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -595,8 +595,8 @@
           }
         },
         "build": {
-          "build/Xamarin.Forms.props": {},
-          "build/Xamarin.Forms.targets": {}
+          "buildTransitive/Xamarin.Forms.props": {},
+          "buildTransitive/Xamarin.Forms.targets": {}
         }
       },
       "Xamarin.Forms.Maps/4.6.0.847": {
@@ -617,9 +617,9 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "AWSSDK.CognitoIdentity": "3.3.101.94",
-          "AWSSDK.Core": "3.3.107.8",
-          "AWSSDK.DynamoDBv2": "3.3.106.16",
+          "AWSSDK.CognitoIdentity": "3.3.101.96",
+          "AWSSDK.Core": "3.3.107.10",
+          "AWSSDK.DynamoDBv2": "3.3.106.18",
           "Microsoft.Net.Http": "2.2.29",
           "MvvmLightLibs": "5.4.1.1",
           "Newtonsoft.Json": "12.0.3",
@@ -636,11 +636,11 @@
       }
     },
     "Xamarin.iOS,Version=v1.0/win-x64": {
-      "AWSSDK.CognitoIdentity/3.3.101.88": {
+      "AWSSDK.CognitoIdentity/3.3.101.96": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)",
-          "AWSSDK.SecurityToken": "[3.3.105.6, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)",
+          "AWSSDK.SecurityToken": "[3.3.105.14, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
@@ -649,7 +649,7 @@
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
         }
       },
-      "AWSSDK.Core/3.3.107.2": {
+      "AWSSDK.Core/3.3.107.10": {
         "type": "package",
         "dependencies": {
           "PCLCrypto": "1.0.2.15130",
@@ -662,10 +662,10 @@
           "lib/Xamarin.iOS10/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.106.10": {
+      "AWSSDK.DynamoDBv2/3.3.106.18": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
@@ -674,10 +674,10 @@
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
         }
       },
-      "AWSSDK.SecurityToken/3.3.105.6": {
+      "AWSSDK.SecurityToken/3.3.105.14": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.SecurityToken.dll": {}
@@ -795,7 +795,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.5.0.495": {
+      "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -912,8 +912,8 @@
           }
         },
         "build": {
-          "build/Xamarin.Forms.props": {},
-          "build/Xamarin.Forms.targets": {}
+          "buildTransitive/Xamarin.Forms.props": {},
+          "buildTransitive/Xamarin.Forms.targets": {}
         }
       },
       "Xamarin.Forms.Maps/4.6.0.847": {
@@ -934,9 +934,9 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "AWSSDK.CognitoIdentity": "3.3.101.94",
-          "AWSSDK.Core": "3.3.107.8",
-          "AWSSDK.DynamoDBv2": "3.3.106.16",
+          "AWSSDK.CognitoIdentity": "3.3.101.96",
+          "AWSSDK.Core": "3.3.107.10",
+          "AWSSDK.DynamoDBv2": "3.3.106.18",
           "Microsoft.Net.Http": "2.2.29",
           "MvvmLightLibs": "5.4.1.1",
           "Newtonsoft.Json": "12.0.3",
@@ -953,11 +953,11 @@
       }
     },
     "Xamarin.iOS,Version=v1.0/win-x86": {
-      "AWSSDK.CognitoIdentity/3.3.101.88": {
+      "AWSSDK.CognitoIdentity/3.3.101.96": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)",
-          "AWSSDK.SecurityToken": "[3.3.105.6, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)",
+          "AWSSDK.SecurityToken": "[3.3.105.14, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
@@ -966,7 +966,7 @@
           "lib/Xamarin.iOS10/AWSSDK.CognitoIdentity.dll": {}
         }
       },
-      "AWSSDK.Core/3.3.107.2": {
+      "AWSSDK.Core/3.3.107.10": {
         "type": "package",
         "dependencies": {
           "PCLCrypto": "1.0.2.15130",
@@ -979,10 +979,10 @@
           "lib/Xamarin.iOS10/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.106.10": {
+      "AWSSDK.DynamoDBv2/3.3.106.18": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
@@ -991,10 +991,10 @@
           "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll": {}
         }
       },
-      "AWSSDK.SecurityToken/3.3.105.6": {
+      "AWSSDK.SecurityToken/3.3.105.14": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.2, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/Xamarin.iOS10/AWSSDK.SecurityToken.dll": {}
@@ -1112,7 +1112,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.5.0.495": {
+      "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -1229,8 +1229,8 @@
           }
         },
         "build": {
-          "build/Xamarin.Forms.props": {},
-          "build/Xamarin.Forms.targets": {}
+          "buildTransitive/Xamarin.Forms.props": {},
+          "buildTransitive/Xamarin.Forms.targets": {}
         }
       },
       "Xamarin.Forms.Maps/4.6.0.847": {
@@ -1251,9 +1251,9 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "AWSSDK.CognitoIdentity": "3.3.101.94",
-          "AWSSDK.Core": "3.3.107.8",
-          "AWSSDK.DynamoDBv2": "3.3.106.16",
+          "AWSSDK.CognitoIdentity": "3.3.101.96",
+          "AWSSDK.Core": "3.3.107.10",
+          "AWSSDK.DynamoDBv2": "3.3.106.18",
           "Microsoft.Net.Http": "2.2.29",
           "MvvmLightLibs": "5.4.1.1",
           "Newtonsoft.Json": "12.0.3",
@@ -1271,16 +1271,16 @@
     }
   },
   "libraries": {
-    "AWSSDK.CognitoIdentity/3.3.101.88": {
-      "sha512": "Wchl6SX/fW1iFnPFnpjdXONr687DPJQBIPO/lz9h4N9Mvk5i4heFK2mkIr0qyDeKh2Zzax+Hv9/azeiBf2ZshQ==",
+    "AWSSDK.CognitoIdentity/3.3.101.96": {
+      "sha512": "Vhq1I9c5yMVKEi4UR6D/HaRcZo+8StybPlovG29xVt0z9/jqqgaxd5EnnMEG6ayb/yFdOCgibRAPggmt4X1aRw==",
       "type": "package",
-      "path": "awssdk.cognitoidentity/3.3.101.88",
+      "path": "awssdk.cognitoidentity/3.3.101.96",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.CognitoIdentity.CodeAnalysis.dll",
-        "awssdk.cognitoidentity.3.3.101.88.nupkg.sha512",
+        "awssdk.cognitoidentity.3.3.101.96.nupkg.sha512",
         "awssdk.cognitoidentity.nuspec",
         "lib/MonoAndroid10/AWSSDK.CognitoIdentity.XML",
         "lib/MonoAndroid10/AWSSDK.CognitoIdentity.dll",
@@ -1311,15 +1311,15 @@
         "tools/uninstall.ps1"
       ]
     },
-    "AWSSDK.Core/3.3.107.2": {
-      "sha512": "V8WPPqmLAY/B9A0ojA6OfKzOs0dYkm2675sYbAey5VSLfq9vZ6lDN9kuF12ERwj0LLQMjDP6LxYC5RNS+0/iwA==",
+    "AWSSDK.Core/3.3.107.10": {
+      "sha512": "BlIzfCiPF0PKzcW/7oDU8E5vQ3aYlini5bijSKc4w3nqkdhqmM0iVYCAV6IZtu1nJyf2OQsF6pII5dOxXnaLyQ==",
       "type": "package",
-      "path": "awssdk.core/3.3.107.2",
+      "path": "awssdk.core/3.3.107.10",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "awssdk.core.3.3.107.2.nupkg.sha512",
+        "awssdk.core.3.3.107.10.nupkg.sha512",
         "awssdk.core.nuspec",
         "lib/MonoAndroid10/AWSSDK.Core.XML",
         "lib/MonoAndroid10/AWSSDK.Core.dll",
@@ -1360,16 +1360,16 @@
         "tools/account-management.ps1"
       ]
     },
-    "AWSSDK.DynamoDBv2/3.3.106.10": {
-      "sha512": "YMpUjXZdGdswTmEiEn6K8AC1Ge4bGYT1opel2xO24A/GU8SlW3fDS54KeYdRpLGEAl8eQxSOm/SP5AVIT4Dz0g==",
+    "AWSSDK.DynamoDBv2/3.3.106.18": {
+      "sha512": "bS+yd12+oL9zXntQ5x6ptNq7Rw0zIZ2LRZ6/M/IwPNi8fWxF2JnXjRwtQVlF2his15fwpd3r3Mxc8kOJiDtdDA==",
       "type": "package",
-      "path": "awssdk.dynamodbv2/3.3.106.10",
+      "path": "awssdk.dynamodbv2/3.3.106.18",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.DynamoDBv2.CodeAnalysis.dll",
-        "awssdk.dynamodbv2.3.3.106.10.nupkg.sha512",
+        "awssdk.dynamodbv2.3.3.106.18.nupkg.sha512",
         "awssdk.dynamodbv2.nuspec",
         "lib/MonoAndroid10/AWSSDK.DynamoDBv2.XML",
         "lib/MonoAndroid10/AWSSDK.DynamoDBv2.dll",
@@ -1400,16 +1400,16 @@
         "tools/uninstall.ps1"
       ]
     },
-    "AWSSDK.SecurityToken/3.3.105.6": {
-      "sha512": "SI0txqKjqi+fgO+QtaopOLWqwHMUTBRnAvb2VOPLZqzpc+Vf1cAzeMoBwhW7hPw9HqhOGhRT+Hsv4R99t7kdRA==",
+    "AWSSDK.SecurityToken/3.3.105.14": {
+      "sha512": "jfdyKjEZgyNNoHIVq9qaCYyKACas0TY2CuNbOF5wkRx5/pm5DSZvKvr4YP0oQw2L1kTKliEgtHozNmM/A/ATaA==",
       "type": "package",
-      "path": "awssdk.securitytoken/3.3.105.6",
+      "path": "awssdk.securitytoken/3.3.105.14",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.SecurityToken.CodeAnalysis.dll",
-        "awssdk.securitytoken.3.3.105.6.nupkg.sha512",
+        "awssdk.securitytoken.3.3.105.14.nupkg.sha512",
         "awssdk.securitytoken.nuspec",
         "lib/MonoAndroid10/AWSSDK.SecurityToken.XML",
         "lib/MonoAndroid10/AWSSDK.SecurityToken.dll",
@@ -1927,10 +1927,10 @@
         "xamarin.essentials.nuspec"
       ]
     },
-    "Xamarin.Forms/4.5.0.495": {
-      "sha512": "ipufpdjFh+YHHw1E3I+8FIQWk1KmlB77PSHg32YRnuBSCUNEHjoMnvEmY9YCK4DTWfOenV0HHZVvGjB9qDtI9w==",
+    "Xamarin.Forms/4.6.0.847": {
+      "sha512": "xUUgs1/xDdS9I/oN2UkdRwd/YToqg0qhwIK8yvyJJ2Xbhsc1ssV4/DUICdjuwCttzeiAcrhILqD+0BQhifUfxw==",
       "type": "package",
-      "path": "xamarin.forms/4.5.0.495",
+      "path": "xamarin.forms/4.6.0.847",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1961,6 +1961,33 @@
         "build/netstandard2.0/Xamarin.Forms.Build.Tasks.dll",
         "build/netstandard2.0/Xamarin.Forms.Core.dll",
         "build/netstandard2.0/Xamarin.Forms.Xaml.dll",
+        "buildTransitive/MonoAndroid10/proguard.cfg",
+        "buildTransitive/XCODE10/Xamarin.Forms.Platform.iOS.dll",
+        "buildTransitive/XCODE10/Xamarin.Forms.Platform.iOS.pdb",
+        "buildTransitive/XCODE10/Xamarin.Forms.Platform.macOS.dll",
+        "buildTransitive/XCODE11/Xamarin.Forms.Platform.iOS.dll",
+        "buildTransitive/XCODE11/Xamarin.Forms.Platform.iOS.pdb",
+        "buildTransitive/XCODE11/Xamarin.Forms.Platform.macOS.dll",
+        "buildTransitive/Xamarin.Forms.DefaultItems.props",
+        "buildTransitive/Xamarin.Forms.DefaultItems.targets",
+        "buildTransitive/Xamarin.Forms.props",
+        "buildTransitive/Xamarin.Forms.targets",
+        "buildTransitive/net46/Mono.Cecil.Mdb.dll",
+        "buildTransitive/net46/Mono.Cecil.Pdb.dll",
+        "buildTransitive/net46/Mono.Cecil.Rocks.dll",
+        "buildTransitive/net46/Mono.Cecil.dll",
+        "buildTransitive/net46/System.ValueTuple.dll",
+        "buildTransitive/net46/Xamarin.Forms.Build.Tasks.dll",
+        "buildTransitive/net46/Xamarin.Forms.Core.dll",
+        "buildTransitive/net46/Xamarin.Forms.Xaml.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.Mdb.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.Pdb.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.Rocks.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.dll",
+        "buildTransitive/netstandard2.0/System.CodeDom.dll",
+        "buildTransitive/netstandard2.0/Xamarin.Forms.Build.Tasks.dll",
+        "buildTransitive/netstandard2.0/Xamarin.Forms.Core.dll",
+        "buildTransitive/netstandard2.0/Xamarin.Forms.Xaml.dll",
         "lib/MonoAndroid10.0/Design/Xamarin.Forms.Core.Design.dll",
         "lib/MonoAndroid10.0/Design/Xamarin.Forms.Xaml.Design.dll",
         "lib/MonoAndroid10.0/FormsViewGroup.dll",
@@ -2166,8 +2193,8 @@
         "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Microsoft.UI.Xaml/Themes/generic.xaml",
         "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/PageControlStyle.xaml",
         "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/PickerStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/PromptDialog.xaml",
         "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Resources.xaml",
-        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Shell/ShellStyles.xaml",
         "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/SliderStyle.xaml",
         "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/StepperControl.xaml",
         "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/TabbedPageStyle.xaml",
@@ -2198,6 +2225,7 @@
         "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Microsoft.UI.Xaml/Themes/generic.xaml",
         "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/PageControlStyle.xaml",
         "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/PickerStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/PromptDialog.xaml",
         "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Resources.xaml",
         "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Shell/ShellStyles.xaml",
         "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/SliderStyle.xaml",
@@ -2208,7 +2236,7 @@
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.dll",
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.pdb",
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.xml",
-        "xamarin.forms.4.5.0.495.nupkg.sha512",
+        "xamarin.forms.4.6.0.847.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
     },
@@ -2256,13 +2284,13 @@
   },
   "projectFileDependencyGroups": {
     "Xamarin.iOS,Version=v1.0": [
-      "AWSSDK.CognitoIdentity >= 3.3.101.88",
-      "AWSSDK.Core >= 3.3.107.2",
-      "AWSSDK.DynamoDBv2 >= 3.3.106.10",
+      "AWSSDK.CognitoIdentity >= 3.3.101.96",
+      "AWSSDK.Core >= 3.3.107.10",
+      "AWSSDK.DynamoDBv2 >= 3.3.106.18",
       "InfiniteMeals >= 1.0.0",
       "Microsoft.Net.Http >= 2.2.29",
       "Xamarin.Essentials >= 1.5.3.2",
-      "Xamarin.Forms >= 4.5.0.495"
+      "Xamarin.Forms >= 4.6.0.847"
     ]
   },
   "packageFolders": {
@@ -2309,15 +2337,15 @@
         "dependencies": {
           "AWSSDK.CognitoIdentity": {
             "target": "Package",
-            "version": "[3.3.101.88, )"
+            "version": "[3.3.101.96, )"
           },
           "AWSSDK.Core": {
             "target": "Package",
-            "version": "[3.3.107.2, )"
+            "version": "[3.3.107.10, )"
           },
           "AWSSDK.DynamoDBv2": {
             "target": "Package",
-            "version": "[3.3.106.10, )"
+            "version": "[3.3.106.18, )"
           },
           "Microsoft.Net.Http": {
             "target": "Package",
@@ -2329,7 +2357,7 @@
           },
           "Xamarin.Forms": {
             "target": "Package",
-            "version": "[4.5.0.495, )"
+            "version": "[4.6.0.847, )"
           }
         }
       }
@@ -2353,58 +2381,6 @@
       "warningLevel": 1,
       "message": "PCLCrypto 1.0.2.15130 depends on Validation (>= 2.0.6 && < 3.0.0) but Validation 2.0.6 was not found. An approximate best match of Validation 2.0.6.15003 was resolved.",
       "libraryId": "Validation",
-      "targetGraphs": [
-        "Xamarin.iOS,Version=v1.0",
-        "Xamarin.iOS,Version=v1.0/win",
-        "Xamarin.iOS,Version=v1.0/win-x64",
-        "Xamarin.iOS,Version=v1.0/win-x86"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.DynamoDBv2 from 3.3.106.16 to 3.3.106.10. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.DynamoDBv2 (>= 3.3.106.16) \r\n InfiniteMeals.iOS -> AWSSDK.DynamoDBv2 (>= 3.3.106.10)",
-      "libraryId": "AWSSDK.DynamoDBv2",
-      "targetGraphs": [
-        "Xamarin.iOS,Version=v1.0",
-        "Xamarin.iOS,Version=v1.0/win",
-        "Xamarin.iOS,Version=v1.0/win-x64",
-        "Xamarin.iOS,Version=v1.0/win-x86"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.CognitoIdentity from 3.3.101.94 to 3.3.101.88. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.CognitoIdentity (>= 3.3.101.94) \r\n InfiniteMeals.iOS -> AWSSDK.CognitoIdentity (>= 3.3.101.88)",
-      "libraryId": "AWSSDK.CognitoIdentity",
-      "targetGraphs": [
-        "Xamarin.iOS,Version=v1.0",
-        "Xamarin.iOS,Version=v1.0/win",
-        "Xamarin.iOS,Version=v1.0/win-x64",
-        "Xamarin.iOS,Version=v1.0/win-x86"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package downgrade: AWSSDK.Core from 3.3.107.8 to 3.3.107.2. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> AWSSDK.Core (>= 3.3.107.8) \r\n InfiniteMeals.iOS -> AWSSDK.Core (>= 3.3.107.2)",
-      "libraryId": "AWSSDK.Core",
-      "targetGraphs": [
-        "Xamarin.iOS,Version=v1.0",
-        "Xamarin.iOS,Version=v1.0/win",
-        "Xamarin.iOS,Version=v1.0/win-x64",
-        "Xamarin.iOS,Version=v1.0/win-x86"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package downgrade: Xamarin.Forms from 4.6.0.847 to 4.5.0.495. Reference the package directly from the project to select a different version. \r\n InfiniteMeals.iOS -> InfiniteMeals -> Xamarin.Forms (>= 4.6.0.847) \r\n InfiniteMeals.iOS -> Xamarin.Forms (>= 4.5.0.495)",
-      "libraryId": "Xamarin.Forms",
       "targetGraphs": [
         "Xamarin.iOS,Version=v1.0",
         "Xamarin.iOS,Version=v1.0/win",

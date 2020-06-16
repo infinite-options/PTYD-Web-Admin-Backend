@@ -2,11 +2,11 @@
   "version": 3,
   "targets": {
     ".NETStandard,Version=v2.0": {
-      "AWSSDK.CognitoIdentity/3.3.101.94": {
+      "AWSSDK.CognitoIdentity/3.3.101.96": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.8, 3.4.0)",
-          "AWSSDK.SecurityToken": "[3.3.105.12, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)",
+          "AWSSDK.SecurityToken": "[3.3.105.14, 3.4.0)"
         },
         "compile": {
           "lib/netstandard2.0/AWSSDK.CognitoIdentity.dll": {}
@@ -15,7 +15,7 @@
           "lib/netstandard2.0/AWSSDK.CognitoIdentity.dll": {}
         }
       },
-      "AWSSDK.Core/3.3.107.8": {
+      "AWSSDK.Core/3.3.107.10": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/AWSSDK.Core.dll": {}
@@ -24,10 +24,10 @@
           "lib/netstandard2.0/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.106.16": {
+      "AWSSDK.DynamoDBv2/3.3.106.18": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.8, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/netstandard2.0/AWSSDK.DynamoDBv2.dll": {}
@@ -36,10 +36,10 @@
           "lib/netstandard2.0/AWSSDK.DynamoDBv2.dll": {}
         }
       },
-      "AWSSDK.SecurityToken/3.3.105.12": {
+      "AWSSDK.SecurityToken/3.3.105.14": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.3.107.8, 3.4.0)"
+          "AWSSDK.Core": "[3.3.107.10, 3.4.0)"
         },
         "compile": {
           "lib/netstandard2.0/AWSSDK.SecurityToken.dll": {}
@@ -179,16 +179,16 @@
     }
   },
   "libraries": {
-    "AWSSDK.CognitoIdentity/3.3.101.94": {
-      "sha512": "DWR2G4OEngRRSygHqdy9sft4B2zwstxzrGWrZjiAG7k9wgW8egiNqhK4Tuix8S0GWKioSOPUx+Tbp4lRCBkNew==",
+    "AWSSDK.CognitoIdentity/3.3.101.96": {
+      "sha512": "Vhq1I9c5yMVKEi4UR6D/HaRcZo+8StybPlovG29xVt0z9/jqqgaxd5EnnMEG6ayb/yFdOCgibRAPggmt4X1aRw==",
       "type": "package",
-      "path": "awssdk.cognitoidentity/3.3.101.94",
+      "path": "awssdk.cognitoidentity/3.3.101.96",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.CognitoIdentity.CodeAnalysis.dll",
-        "awssdk.cognitoidentity.3.3.101.94.nupkg.sha512",
+        "awssdk.cognitoidentity.3.3.101.96.nupkg.sha512",
         "awssdk.cognitoidentity.nuspec",
         "lib/MonoAndroid10/AWSSDK.CognitoIdentity.XML",
         "lib/MonoAndroid10/AWSSDK.CognitoIdentity.dll",
@@ -219,15 +219,15 @@
         "tools/uninstall.ps1"
       ]
     },
-    "AWSSDK.Core/3.3.107.8": {
-      "sha512": "DyQ/q6TNvQGdsq4wUBbYdUzCh7bjPEiLsqck1AKL6djvZMLsJalHjnbAhTcuAfaoACFYqk2AqiLVo9dmC7poLg==",
+    "AWSSDK.Core/3.3.107.10": {
+      "sha512": "BlIzfCiPF0PKzcW/7oDU8E5vQ3aYlini5bijSKc4w3nqkdhqmM0iVYCAV6IZtu1nJyf2OQsF6pII5dOxXnaLyQ==",
       "type": "package",
-      "path": "awssdk.core/3.3.107.8",
+      "path": "awssdk.core/3.3.107.10",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "awssdk.core.3.3.107.8.nupkg.sha512",
+        "awssdk.core.3.3.107.10.nupkg.sha512",
         "awssdk.core.nuspec",
         "lib/MonoAndroid10/AWSSDK.Core.XML",
         "lib/MonoAndroid10/AWSSDK.Core.dll",
@@ -268,16 +268,16 @@
         "tools/account-management.ps1"
       ]
     },
-    "AWSSDK.DynamoDBv2/3.3.106.16": {
-      "sha512": "ezsxIzXXPYFHJ6MuF7Fs0Eizt4dwMgVOBN3ReIovL2CIOF80ipmD1BeeP8T8chTiUe51iAsOo2+GQTZt4pFXEA==",
+    "AWSSDK.DynamoDBv2/3.3.106.18": {
+      "sha512": "bS+yd12+oL9zXntQ5x6ptNq7Rw0zIZ2LRZ6/M/IwPNi8fWxF2JnXjRwtQVlF2his15fwpd3r3Mxc8kOJiDtdDA==",
       "type": "package",
-      "path": "awssdk.dynamodbv2/3.3.106.16",
+      "path": "awssdk.dynamodbv2/3.3.106.18",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.DynamoDBv2.CodeAnalysis.dll",
-        "awssdk.dynamodbv2.3.3.106.16.nupkg.sha512",
+        "awssdk.dynamodbv2.3.3.106.18.nupkg.sha512",
         "awssdk.dynamodbv2.nuspec",
         "lib/MonoAndroid10/AWSSDK.DynamoDBv2.XML",
         "lib/MonoAndroid10/AWSSDK.DynamoDBv2.dll",
@@ -308,16 +308,16 @@
         "tools/uninstall.ps1"
       ]
     },
-    "AWSSDK.SecurityToken/3.3.105.12": {
-      "sha512": "FiCgIvQ4A6DrtlV+BXXAmKo/wZFc6+cR6xSdV78mgYOnyRs9HdgZCxyc7FSX7EvL8+s+74RzCUCQ5PVNzqazZg==",
+    "AWSSDK.SecurityToken/3.3.105.14": {
+      "sha512": "jfdyKjEZgyNNoHIVq9qaCYyKACas0TY2CuNbOF5wkRx5/pm5DSZvKvr4YP0oQw2L1kTKliEgtHozNmM/A/ATaA==",
       "type": "package",
-      "path": "awssdk.securitytoken/3.3.105.12",
+      "path": "awssdk.securitytoken/3.3.105.14",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.SecurityToken.CodeAnalysis.dll",
-        "awssdk.securitytoken.3.3.105.12.nupkg.sha512",
+        "awssdk.securitytoken.3.3.105.14.nupkg.sha512",
         "awssdk.securitytoken.nuspec",
         "lib/MonoAndroid10/AWSSDK.SecurityToken.XML",
         "lib/MonoAndroid10/AWSSDK.SecurityToken.dll",
@@ -1275,9 +1275,9 @@
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
-      "AWSSDK.CognitoIdentity >= 3.3.101.94",
-      "AWSSDK.Core >= 3.3.107.8",
-      "AWSSDK.DynamoDBv2 >= 3.3.106.16",
+      "AWSSDK.CognitoIdentity >= 3.3.101.96",
+      "AWSSDK.Core >= 3.3.107.10",
+      "AWSSDK.DynamoDBv2 >= 3.3.106.18",
       "Microsoft.Net.Http >= 2.2.29",
       "MvvmLightLibs >= 5.4.1.1",
       "NETStandard.Library >= 2.0.3",
@@ -1333,15 +1333,15 @@
         "dependencies": {
           "AWSSDK.CognitoIdentity": {
             "target": "Package",
-            "version": "[3.3.101.94, )"
+            "version": "[3.3.101.96, )"
           },
           "AWSSDK.Core": {
             "target": "Package",
-            "version": "[3.3.107.8, )"
+            "version": "[3.3.107.10, )"
           },
           "AWSSDK.DynamoDBv2": {
             "target": "Package",
-            "version": "[3.3.106.16, )"
+            "version": "[3.3.106.18, )"
           },
           "Microsoft.Net.Http": {
             "target": "Package",

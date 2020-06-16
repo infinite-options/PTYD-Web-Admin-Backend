@@ -7,14 +7,14 @@
              x:Class="InfiniteMeals.ViewModel.Checkout.Summary">
     <ContentPage.Content>
         <!-- grid for the entire page -->
-        <Grid Grid.RowSpacing="3" BackgroundColor="White">
+        <Grid Grid.RowSpacing="3" BackgroundColor="White" Padding="15,15,15,15">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>    <!-- summary status bar -->
-                <RowDefinition />   <!-- order summary -->
-                <RowDefinition />   <!-- shipping details -->
-                <RowDefinition />   <!-- delivery instructions -->
-                <RowDefinition />    <!-- payment details  -->
+                <RowDefinition />               <!-- order summary -->
+                <RowDefinition />               <!-- shipping details -->
+                <RowDefinition Height="0.60*"/> <!-- delivery instructions -->
+                <RowDefinition />               <!-- payment details  -->
                 <RowDefinition Height="75" />   <!-- confirm button-->
             </Grid.RowDefinitions>
 
@@ -42,26 +42,26 @@
                 <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Order Summary" TextColor="Black" FontSize="Medium"  FontAttributes="Bold" VerticalOptions="Start"/>
 
                 <!-- meal plan + payment option + cost -->
-                <StackLayout Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" >
+                <StackLayout Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" Padding="10,0,0,0">
                     <Label x:Name="mealPlan" Grid.Row="1" TextColor="Black"/>
                     <Label Grid.Row="1" Grid.ColumnSpan="2" Text="-" TextColor="Black"/>
                     <Label x:Name="paymentOption" Grid.Row="1" HorizontalOptions="End" TextColor="Black"/>
                 </StackLayout>
-                <Label Grid.Column="1" Grid.Row="1" Text="$100.00" TextColor="Black"/>
+                <Label Grid.Column="1" Grid.Row="1" Text="$100.00" TextColor="Black" HorizontalOptions="End"/>
 
                 <!-- estimated shipping + estimated shipping cost -->
-                <Label Grid.Row="2" Text="Estimated Shipping" TextColor="Black"/>
-                <Label Grid.Column="1" Grid.Row="2" Text="$15.00" TextColor="Black"/>
+                <Label Grid.Row="2" Text="Estimated Shipping" TextColor="Black" Padding="10,0,0,0"/>
+                <Label Grid.Column="1" Grid.Row="2" Text="$15.00" TextColor="Black" HorizontalOptions="End"/>
 
                 <!-- estimated tax + estimated tax cost -->
 
-                    <Label Grid.Row="3" Text="Estimated Tax" TextColor="Black"/>
-                    <Label Grid.Column="1" Grid.Row="3" Text="$10.00" TextColor="Black"/>
+                <Label Grid.Row="3" Text="Estimated Tax" TextColor="Black" Padding="10,0,0,0"/>
+                <Label Grid.Column="1" Grid.Row="3" Text="$10.00" TextColor="Black" HorizontalOptions="End"/>
 
 
                 <!-- total cost -->
-                    <Label Grid.Row="4" Text="Total: " FontAttributes="Bold" TextColor="Black"/>
-                    <Label Grid.Column="1" Grid.Row="4" Text="$125.00" FontAttributes="Bold" TextColor="Black"/>
+                <Label Grid.Row="4" Text="Total: " FontAttributes="Bold" TextColor="Black" Padding="10,0,0,0"/>
+                <Label Grid.Column="1" Grid.Row="4" Text="$125.00" FontAttributes="Bold" TextColor="Black" HorizontalOptions="End"/>
 
             </Grid>
 
@@ -87,20 +87,20 @@
 
                 <!-- first name + last name + phone number -->
                 <BoxView Grid.Row="1"/>
-                <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <StackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Padding="10,0,0,0">
                     <Label Grid.Column="0" Grid.Row="1"  Text="Full Name: " TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.firstName}" TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding shippingInformation.lastName}" TextColor="Black"/>
                 </StackLayout>
 
-                <StackLayout Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Label Grid.ColumnSpan="2" Text="Phone #: " TextColor="Black" />
+                <StackLayout Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="End">
+                    <Label Grid.ColumnSpan="2" Text="Phone: " TextColor="Black" />
                     <Label Grid.ColumnSpan="2" Text="{Binding shippingInformation.phoneNumber}" TextColor="Black"/>
                 </StackLayout>
 
                 <!-- address line 1 + address line 2 -->
                 <BoxView Grid.Row="1"/>
-                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Orientation="Horizontal">
+                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Orientation="Horizontal" Padding="10,0,0,0">
                     <Label Grid.ColumnSpan="2" Text="Address: " TextColor="Black"/>
                     <Label  Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressOne}" TextColor="Black"/>
                     <Label Grid.ColumnSpan="2" Text="{Binding shippingInformation.addressTwo}" TextColor="Black"/>
@@ -108,7 +108,7 @@
 
                 <!-- city + state + zip code-->
                 <StackLayout Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Orientation="Horizontal">
-                    <Label Grid.ColumnSpan="2" Text="                 " TextColor="Black"/>
+                    <Label Grid.ColumnSpan="2" Text="                " TextColor="Black" Padding="10,0,0,0"/>
                     <Label Grid.ColumnSpan="2" Text="{Binding shippingInformation.city}" TextColor="Black"/>
                     <Label Grid.ColumnSpan="2" Text="," TextColor="Black"/>
                     <Label Grid.ColumnSpan="2" Text="{Binding shippingInformation.state}" TextColor="Black"/>
@@ -121,7 +121,7 @@
             <BoxView Grid.Row="3" Grid.ColumnSpan="2"/>
             <Grid Grid.ColumnSpan="2" Grid.Row="3">
                 <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Delivery Instructions" TextColor="Black" FontSize="Medium" FontAttributes="Bold"/>
-                <Label Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Text="{Binding paymentInformation.deliveryInstructions}" VerticalOptions="Start" TextColor="Black"/>
+                <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding paymentInformation.deliveryInstructions}" VerticalOptions="Start" TextColor="Black" Padding="10,0,0,0"/>
             </Grid>
 
             <!-- payment details-->
@@ -144,19 +144,19 @@
                 <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Payment Details" TextColor="Black"  FontSize="Medium" FontAttributes="Bold"/>
 
                 <!-- card number -->
-                <StackLayout Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
+                <StackLayout Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" Padding="10,0,0,0">
                     <Label Grid.Column="0" Grid.Row="1"  Text="Card Number: " TextColor="Black"/>
                     <Label x:Name="lastFourDigits" Grid.Column="0" Grid.Row="1" TextColor="Black"/>
                 </StackLayout>
 
                 <!-- cardholder name -->
-                <StackLayout Grid.Column="0" Grid.Row="2"  Orientation="Horizontal">
+                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"  Orientation="Horizontal" Padding="10,0,0,0">
                     <Label Grid.Column="0" Grid.Row="2" Text="Cardholder Name: " TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="2" Text="{Binding paymentInformation.cardHolderName}" TextColor="Black"/>
                 </StackLayout>
 
                 <!-- expiration date -->
-                <StackLayout Grid.Column="0" Grid.Row="3" Orientation="Horizontal">
+                <StackLayout Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Padding="10,0,0,0">
                     <Label Grid.Column="0" Grid.Row="3"  Text="Expiration Date: " TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="3" Text="{Binding paymentInformation.expirationMonth}" TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="3" Text="/" TextColor="Black" />
@@ -164,7 +164,7 @@
                 </StackLayout>
 
                 <!-- cvv -->
-                <StackLayout Grid.Column="0" Grid.Row="4" Orientation="Horizontal">
+                <StackLayout Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Padding="10,0,0,0">
                     <Label Grid.Column="0" Grid.Row="4"  Text="CVV: " TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="4" Text="{Binding paymentInformation.cvv}" TextColor="Black"/>
                 </StackLayout>

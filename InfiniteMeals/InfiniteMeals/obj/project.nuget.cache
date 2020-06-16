@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "yPUez6LyHrV/fh+u5Qs9RTs8I/5oWzhk5GXvSbc+EtrIaiCwztjnafo5SVi1mUxpKZ9HBafbQd/b9cLV1Sr8Dw==",
+  "dgSpecHash": "qR+qjxYif8kk2BXQv6SrlFIb2DcZ0vEojwwRos5CnSrfe3GGC8ga6twTKy8zUX/IqreX3yxXghcteL7P2Oaecw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.cognitoidentity\\3.3.101.94\\awssdk.cognitoidentity.3.3.101.94.nupkg.sha512",
-    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.core\\3.3.107.8\\awssdk.core.3.3.107.8.nupkg.sha512",
-    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.dynamodbv2\\3.3.106.16\\awssdk.dynamodbv2.3.3.106.16.nupkg.sha512",
-    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.securitytoken\\3.3.105.12\\awssdk.securitytoken.3.3.105.12.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.cognitoidentity\\3.3.101.96\\awssdk.cognitoidentity.3.3.101.96.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.core\\3.3.107.10\\awssdk.core.3.3.107.10.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.dynamodbv2\\3.3.106.18\\awssdk.dynamodbv2.3.3.106.18.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\awssdk.securitytoken\\3.3.105.14\\awssdk.securitytoken.3.3.105.14.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\microsoft.bcl\\1.1.10\\microsoft.bcl.1.1.10.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\microsoft.bcl.build\\1.0.14\\microsoft.bcl.build.1.0.14.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\microsoft.net.http\\2.2.29\\microsoft.net.http.2.2.29.nupkg.sha512",

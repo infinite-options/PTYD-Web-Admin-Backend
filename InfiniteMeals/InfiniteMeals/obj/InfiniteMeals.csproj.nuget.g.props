@@ -17,9 +17,9 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_Bcl_Build Condition=" '$(PkgMicrosoft_Bcl_Build)' == '' ">C:\Users\Sean\.nuget\packages\microsoft.bcl.build\1.0.14</PkgMicrosoft_Bcl_Build>
-    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.core\3.3.107.8</PkgAWSSDK_Core>
-    <PkgAWSSDK_SecurityToken Condition=" '$(PkgAWSSDK_SecurityToken)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.securitytoken\3.3.105.12</PkgAWSSDK_SecurityToken>
-    <PkgAWSSDK_DynamoDBv2 Condition=" '$(PkgAWSSDK_DynamoDBv2)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.dynamodbv2\3.3.106.16</PkgAWSSDK_DynamoDBv2>
-    <PkgAWSSDK_CognitoIdentity Condition=" '$(PkgAWSSDK_CognitoIdentity)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.cognitoidentity\3.3.101.94</PkgAWSSDK_CognitoIdentity>
+    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.core\3.3.107.10</PkgAWSSDK_Core>
+    <PkgAWSSDK_SecurityToken Condition=" '$(PkgAWSSDK_SecurityToken)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.securitytoken\3.3.105.14</PkgAWSSDK_SecurityToken>
+    <PkgAWSSDK_DynamoDBv2 Condition=" '$(PkgAWSSDK_DynamoDBv2)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.dynamodbv2\3.3.106.18</PkgAWSSDK_DynamoDBv2>
+    <PkgAWSSDK_CognitoIdentity Condition=" '$(PkgAWSSDK_CognitoIdentity)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.cognitoidentity\3.3.101.96</PkgAWSSDK_CognitoIdentity>
   </PropertyGroup>
 </Project>
