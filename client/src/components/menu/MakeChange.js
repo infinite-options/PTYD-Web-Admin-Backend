@@ -50,7 +50,8 @@ export default class MakeChange extends Component {
         delivery_phone: this.props.currentPurchase.delivery_phone,
         delivery_address: this.props.currentPurchase.delivery_address,
         delivery_address_unit:
-          this.props.currentPurchase.delivery_address_unit !== undefined
+          this.props.currentPurchase.delivery_address_unit !== undefined &&
+          this.props.currentPurchase.delivery_address_unit !== null
             ? this.props.currentPurchase.delivery_address_unit
             : "",
         delivery_city: this.props.currentPurchase.delivery_city,
@@ -117,7 +118,8 @@ export default class MakeChange extends Component {
           delivery_phone: this.props.currentPurchase.delivery_phone,
           delivery_address: this.props.currentPurchase.delivery_address,
           delivery_address_unit:
-            this.props.currentPurchase.delivery_address_unit !== undefined
+            this.props.currentPurchase.delivery_address_unit !== undefined &&
+            this.props.currentPurchase.delivery_address_unit !== null
               ? this.props.currentPurchase.delivery_address_unit
               : "",
           delivery_city: this.props.currentPurchase.delivery_city,
@@ -176,17 +178,15 @@ export default class MakeChange extends Component {
         let data = {
           user_uid: this.props.userID,
           is_gift: this.state.currentPurchase.gift,
-          item: this.state.updateMealPlan.name,
-          item_price: this.state.updateMealPlan.price,
+          item: this.state.updateMealPlan.name, // target meal plan
+          item_price: this.state.updateMealPlan.price, //target meal plan's price
           ...this.state.creditCard,
           billing_zip: this.state.currentPurchase.billing_zip,
-          ...this.state.deliveryAddress
+          ...this.state.deliveryAddress,
+          purchase_id: this.state.currentPurchase.purchase_id
         };
 
-        await axios.post(`${this.props.BUYNEW_URL}`, data); //buy new one
-        await axios.patch(`${this.props.DELETE_URL}`, {
-          purchase_id: this.state.currentPurchase.purchase_id
-        }); // delete old one
+        await axios.post(`${this.props.BUYNEW_URL}`, data); //update
       } else {
         //update changing delivery address
         await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
