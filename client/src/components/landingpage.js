@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 
-import MenuCarousel from "./MenuCarousel.js";
+import MenuCarousel from "./menucarousel.js";
 import CommunityCarousel from "./CommunityCarousel"
 import QuoteCarousel from "./QuoteCarousel"
 
@@ -62,8 +62,8 @@ class Landing extends Component {
           <div className='container'>
             <center>
               <div className='zero-waste-container'>
-                <h3 className='font6 zero-waste'>THE ONLY ZERO WASTE</h3>
-                <h3 className='font6 zero-waste'>MEAL DELIVERY SERVICE</h3>
+                <h3 className='zero-waste'>THE ONLY ZERO WASTE</h3>
+                <h3 className='zero-waste'>MEAL DELIVERY SERVICE</h3>
               </div>
             </center>
 
@@ -234,7 +234,7 @@ class Landing extends Component {
         </div>
 
         <div className='container font2 container_space'>
-          <h3 className='font6'>What Our Community is Saying...</h3>
+          <h3 className='font6 community-title'>What Our Community is Saying...</h3>
 
           <CommunityCarousel />
         </div>

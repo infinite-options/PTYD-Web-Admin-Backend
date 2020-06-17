@@ -361,12 +361,13 @@ a {
   font-size: 37px;
   /* color: #617221; */
   color: var(--green);
+  letter-spacing: 0.25em;
 }
 .fresh-menu-subtitle-container {
   margin: 30px 0 40px 0;
 }
 .fresh-menu-subtitle {
-  font-size: 22px;
+  font-size: 20px;
   margin: 5px;
   padding: 0;
 }
@@ -458,6 +459,10 @@ a {
 .try-us-today-button-container {
   text-align: left;
   margin: 50px 0 0 0;
+}
+
+.community-title {
+  letter-spacing: 0.05em;
 }
 
 .quote-carousel-padding {
