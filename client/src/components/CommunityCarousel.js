@@ -75,7 +75,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Veronica</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Veronica</p>
                     <p>UX Designer</p>
                     </Cell>
                 </Card.Footer>
@@ -104,7 +104,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Luke</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Luke</p>
                     <p>Tech</p>
                     </Cell>
                 </Card.Footer>
@@ -133,7 +133,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Courtney</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Courtney</p>
                     <p>Fitness Designer</p>
                     </Cell>
                 </Card.Footer>
@@ -161,7 +161,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Veronica</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Veronica</p>
                     <p>UX Designer</p>
                     </Cell>
                 </Card.Footer>
@@ -190,7 +190,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Luke</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Luke</p>
                     <p>Tech</p>
                     </Cell>
                 </Card.Footer>
@@ -219,7 +219,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Courtney</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Courtney</p>
                     <p>Fitness Designer</p>
                     </Cell>
                 </Card.Footer>
@@ -247,7 +247,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Veronica</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Veronica</p>
                     <p>UX Designer</p>
                     </Cell>
                 </Card.Footer>
@@ -276,7 +276,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Luke</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Luke</p>
                     <p>Tech</p>
                     </Cell>
                 </Card.Footer>
@@ -305,7 +305,7 @@ export default class CommunityCarousel extends Component {
                     ></img>
                     </Cell>
                     <Cell col={7}>
-                    <h5 className='font2' style={{marginBottom:"0"}}>Courtney</h5>
+                    <p style={{margin:"15px 0 0 0"}}>Courtney</p>
                     <p>Fitness Designer</p>
                     </Cell>
                 </Card.Footer>

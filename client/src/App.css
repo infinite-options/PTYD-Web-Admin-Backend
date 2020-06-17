@@ -31,6 +31,22 @@
   padding-top: 140px;
 }
 
+p {
+  font-family: "montserrat"
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: "oswald" !important;
+}
+
+h1 {
+  font-family: brandongrotw01-lightregular !important;
+}
+
+a {
+  font-family: montserrat;
+}
+
 /* ----- navigation header ----- */
 
 .navigation-container {
@@ -187,9 +203,9 @@
 .plant-based-text {
   margin-bottom: 50px;
 }
-.plant-based-text p {
+.plant-based-text h1 {
   font-size: 22px;
-  /* font-weight: bold; */
+  margin: 10px 0;
 }
 
 .bottom-left {
@@ -229,10 +245,15 @@
   padding: 0;
 }
 .zero-waste-subtext {
-  text-align: center;
+  /* text-align: center; */
+  margin-left: 65px;
+}
+.zero-waste-cell {
+  padding: 0 20px 0 20px;
+  display: inline-block;
+  /* text-align: center; */
 }
 .zero-waste-subtitle {
-  /* color: #617221; */
   color: var(--green);
   font-weight: bold;
   letter-spacing: 0.05em;
@@ -241,11 +262,6 @@
 .zero-waste-subtext p {
   text-align: left;
   font-size: 16px;
-}
-.zero-waste-cell {
-  padding: 0 20px 0 20px;
-  display: inline-block;
-  text-align: center;
 }
 
 .box-shadow-top {
@@ -265,8 +281,9 @@
   color: #4d4d4d;
   margin: 50px 0 0 20px;
 }
-.four-items-grid h4 {
+.four-items-subtitle {
   font-size: 27px;
+  /* font-family: oswald; */
 }
 .eat-better-now-button-container {
   margin-left: 30px;
@@ -456,6 +473,9 @@
 }
 .quote-line-height {
   line-height: 50px;
+}
+.quote-size {
+  font-size: 24px;
 }
 
 .awards {
