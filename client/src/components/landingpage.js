@@ -299,16 +299,14 @@ class Landing extends Component {
                   <Cell col={3} align='middle'></Cell>
                   <Cell col={3} align='middle'>
                     <div className='award-text'>
-                      <p className='font2'>Austin Under 40 2020 Finalist</p>
-                      <p className='font2'>
-                        Culinary Arts, Events, and Hospitality
-                      </p>
+                      <p>Austin Under 40 2020 Finalist</p>
+                      <p>Culinary Arts, Events, and Hospitality</p>
                     </div>
                   </Cell>
                   <Cell col={3} align='middle'>
                     <div className='award-text'>
-                      <p className='font2'>FAVE 2019 Winner</p>
-                      <p className='font2'>FAVE Sustainable Business</p>
+                      <p>FAVE 2019 Winner</p>
+                      <p>FAVE Sustainable Business</p>
                     </div>
                   </Cell>
                   <Cell col={3} align='middle'></Cell>
