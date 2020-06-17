@@ -3728,7 +3728,6 @@ class All_Meals(Resource):
                                                                     ,MID(dm.default_meals, 59,10)) 
                                                                     as def_20_meal
                                                         FROM (
-
                                                             SELECT defaultmeal.menu_date
                                                                 , defaultmeal.menu_category
                                                                 , defaultmeal.menu_type
@@ -3739,7 +3738,6 @@ class All_Meals(Resource):
                                                                 SELECT * FROM ptyd.ptyd_menu menu
                                                                 WHERE default_meal = "TRUE")
                                                                 AS defaultmeal
-
                                                             GROUP BY defaultmeal.menu_date)
                                                             AS dm)
                                                         AS def_meals
@@ -3976,7 +3974,6 @@ class All_Ingredients(Resource):
                                                                 ,MID(dm.default_meals, 59,10)) 
                                                                 as def_20_meal
                                                     FROM (
-
                                                         SELECT defaultmeal.menu_date
                                                             , defaultmeal.menu_category
                                                             , defaultmeal.menu_type
@@ -3987,7 +3984,6 @@ class All_Ingredients(Resource):
                                                             SELECT * FROM ptyd.ptyd_menu menu
                                                             WHERE default_meal = "TRUE")
                                                             AS defaultmeal
-
                                                         GROUP BY defaultmeal.menu_date)
                                                         AS dm)
                                                     AS def_meals
@@ -4055,7 +4051,7 @@ class All_Ingredients(Resource):
         finally:
             disconnect(conn)
 
-class Add_New_Ingredient(Resource):       
+class Edit_Recipe(Resource):       
     def post(self):
         response = {}
         items = {}
@@ -4104,6 +4100,38 @@ class Add_New_Ingredient(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
+class Add_New_Ingredient(Resource):       
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            ingredient_desc = data['ingredient_desc']
+            package_size = data['package_size']
+            ingredient_measure_id = data['ingredient_measure_id']
+            ingredient_cost = data['ingredient_cost']
+
+            ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
+            ingredientId = ingredientIdQuery ['result'][0]['new_id']
+            items['new_ingredient_insert'] = execute(""" INSERT INTO ptyd_ingredients (
+                                                                ingredient_id, ingredient_desc, package_size,ingredient_measure_id,ingredient_cost, ingredient_measure
+                                                                ) 
+                                                                SELECT \'""" + str(ingredientId) + """\', \'""" + str(ingredient_desc) + """\',
+                                                                \'""" + str(package_size) + """\',\'""" + str(ingredient_measure_id) + """\',
+                                                                \'""" + str(ingredient_cost) + """\', mu.measure_name 
+                                                                FROM ptyd_measure_unit mu
+                                                                WHERE measure_unit_id=\'""" + str(ingredient_measure_id) + """\';
+                                                                """, 'post', conn)
+            
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 
 class EditMeals(Resource):
     def patch(self):
@@ -4344,6 +4372,7 @@ api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
 api.add_resource(All_Meals, '/api/v2/All_Meals')
 api.add_resource(All_Ingredients, '/api/v2/All_Ingredients')
 api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
+api.add_resource(Edit_Recipe, '/api/v2/Edit_Recipe')
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
