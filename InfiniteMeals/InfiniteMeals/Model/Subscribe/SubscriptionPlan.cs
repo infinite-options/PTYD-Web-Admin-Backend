@@ -11,9 +11,11 @@ namespace InfiniteMeals.Model.Subscribe {
         public MealPlan mealPlan { get; set; }
         public PaymentOption paymentOption { get; set; }
 
+
         public SubscriptionPlan() {
             this.mealPlan = MealPlan.Unknown;
             this.paymentOption = PaymentOption.Unknown;
+            
         }
 
         public SubscriptionPlan(MealPlan mealPlan, PaymentOption paymentOption) {

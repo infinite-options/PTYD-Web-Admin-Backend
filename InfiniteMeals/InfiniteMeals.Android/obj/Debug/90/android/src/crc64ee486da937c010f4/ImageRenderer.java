@@ -10,6 +10,7 @@ public class ImageRenderer
 	public static final String __md_methods;
 	static {
 		__md_methods = 
+			"n_onLayout:(ZIIII)V:GetOnLayout_ZIIIIHandler\n" +
 			"n_invalidate:()V:GetInvalidateHandler\n" +
 			"n_onTouchEvent:(Landroid/view/MotionEvent;)Z:GetOnTouchEvent_Landroid_view_MotionEvent_Handler\n" +
 			"";
@@ -47,6 +48,14 @@ public class ImageRenderer
 		if (getClass () == ImageRenderer.class)
 			mono.android.TypeManager.Activate ("Xamarin.Forms.Platform.Android.FastRenderers.ImageRenderer, Xamarin.Forms.Platform.Android", "Android.Content.Context, Mono.Android:Android.Util.IAttributeSet, Mono.Android:System.Int32, mscorlib:System.Int32, mscorlib", this, new java.lang.Object[] { p0, p1, p2, p3 });
 	}
+
+
+	public void onLayout (boolean p0, int p1, int p2, int p3, int p4)
+	{
+		n_onLayout (p0, p1, p2, p3, p4);
+	}
+
+	private native void n_onLayout (boolean p0, int p1, int p2, int p3, int p4);
 
 
 	public void invalidate ()

@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              x:Class="InfiniteMeals.ViewModel.Checkout.Payment">
     <ContentPage.Content>
-        <Grid>
+        <Grid Padding="15,15,15,15">
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>

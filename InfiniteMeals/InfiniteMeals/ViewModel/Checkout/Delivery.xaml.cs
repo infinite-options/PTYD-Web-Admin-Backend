@@ -39,64 +39,72 @@ namespace InfiniteMeals.ViewModel.Checkout {
             }
             else { // go to payment page if all fields are valid 
 
-                XDocument requestDoc = new XDocument(new XElement("AddressValidateRequest", new XAttribute("USERID", "400INFIN1745"), new XElement("Revision", "1"), new XElement("Address", new XAttribute("ID", "0"), new XElement("Address1", addressOneEntry.Text + " " + addressTwoEntry.Text), new XElement("Address2", ""), new XElement("City", cityEntry.Text),
-                    new XElement("State", stateEntry.Text), new XElement("Zip5", zipCodeEntry.Text), new XElement("Zip4", ""))));
+                try {
 
-                var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
-                Console.WriteLine(url);
-                var client = new WebClient();
-                var response = client.DownloadString(url);
+                    XDocument requestDoc = new XDocument(new XElement("AddressValidateRequest", new XAttribute("USERID", "400INFIN1745"), new XElement("Revision", "1"), new XElement("Address", new XAttribute("ID", "0"), new XElement("Address1", addressOneEntry.Text + " " + addressTwoEntry.Text), new XElement("Address2", ""), new XElement("City", cityEntry.Text),
+                        new XElement("State", stateEntry.Text), new XElement("Zip5", zipCodeEntry.Text), new XElement("Zip4", ""))));
 
-                var xdoc = XDocument.Parse(response.ToString());
-                System.Diagnostics.Debug.WriteLine(xdoc.ToString());
-                foreach (XElement element in xdoc.Descendants("Address")) {
-                    if (GetXMLElement(element, "Error").Equals("")) {
-                        if (GetXMLElement(element, "DPVConfirmation").Equals("Y")) // Best case
-                        {
-                            // Get longitude and latitide because we can make a deliver here. Move on to next page.
-                            // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
-                            //getAddressLatitudeLongitude(GetXMLElement(element, "Address2").ToString());
-                            ShippingInformation shipInfo = new ShippingInformation {
-                                firstName = this.firstNameEntry.Text,
-                                lastName = this.lastNameEntry.Text,
-                                phoneNumber = this.firstPhoneNumberEntry.Text + this.middlePhoneNumberEntry.Text + this.lastPhoneNumberEntry.Text,
-                                addressOne = GetXMLElement(element, "Address2").ToString(),
-                                addressTwo = this.addressTwoEntry.Text,
-                                zipCode = GetXMLElement(element, "Zip5").ToString(),
-                                city = GetXMLElement(element, "City").ToString(),
-                                state = GetXMLElement(element, "State").ToString(),
-                                subscriptionPlan = (SubscriptionPlan)this.BindingContext
+                    var url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" + requestDoc;
+                    Console.WriteLine(url);
+                    var client = new WebClient();
+                    var response = client.DownloadString(url);
 
-                            };
-                            System.Diagnostics.Debug.WriteLine(shipInfo.firstName);
-                            System.Diagnostics.Debug.WriteLine(shipInfo.lastName);
-                            System.Diagnostics.Debug.WriteLine(shipInfo.phoneNumber);
-                            System.Diagnostics.Debug.WriteLine(shipInfo.addressOne);
-                            System.Diagnostics.Debug.WriteLine(shipInfo.addressTwo);
-                            System.Diagnostics.Debug.WriteLine(shipInfo.zipCode);
-                            System.Diagnostics.Debug.WriteLine(shipInfo.city);
-                            System.Diagnostics.Debug.WriteLine(shipInfo.state);
-                            var paymentPage = new Payment();
-                            paymentPage.BindingContext = shipInfo;
+                    var xdoc = XDocument.Parse(response.ToString());
+                    System.Diagnostics.Debug.WriteLine(xdoc.ToString());
+                    foreach (XElement element in xdoc.Descendants("Address")) {
+                        if (GetXMLElement(element, "Error").Equals("")) {
+                            if (GetXMLElement(element, "DPVConfirmation").Equals("Y")) // Best case
+                            {
+                                // Get longitude and latitide because we can make a deliver here. Move on to next page.
+                                // Console.WriteLine("The address you entered is valid and deliverable by USPS. We are going to get its latitude & longitude");
+                                //getAddressLatitudeLongitude(GetXMLElement(element, "Address2").ToString());
+                                ShippingInformation shipInfo = new ShippingInformation {
+                                    firstName = this.firstNameEntry.Text,
+                                    lastName = this.lastNameEntry.Text,
+                                    phoneNumber = this.firstPhoneNumberEntry.Text + this.middlePhoneNumberEntry.Text + this.lastPhoneNumberEntry.Text,
+                                    addressOne = GetXMLElement(element, "Address2").ToString(),
+                                    addressTwo = this.addressTwoEntry.Text,
+                                    zipCode = GetXMLElement(element, "Zip5").ToString(),
+                                    city = GetXMLElement(element, "City").ToString(),
+                                    state = GetXMLElement(element, "State").ToString(),
+                                    subscriptionPlan = (SubscriptionPlan)this.BindingContext
 
-                            await Navigation.PushAsync(paymentPage);
+                                };
+                                System.Diagnostics.Debug.WriteLine(shipInfo.firstName);
+                                System.Diagnostics.Debug.WriteLine(shipInfo.lastName);
+                                System.Diagnostics.Debug.WriteLine(shipInfo.phoneNumber);
+                                System.Diagnostics.Debug.WriteLine(shipInfo.addressOne);
+                                System.Diagnostics.Debug.WriteLine(shipInfo.addressTwo);
+                                System.Diagnostics.Debug.WriteLine(shipInfo.zipCode);
+                                System.Diagnostics.Debug.WriteLine(shipInfo.city);
+                                System.Diagnostics.Debug.WriteLine(shipInfo.state);
+
+                                var paymentPage = new Payment(); 
+                                paymentPage.BindingContext = shipInfo; // bind the payment page with shipping info
+
+                                await Navigation.PushAsync(paymentPage);
+                            }
+                            else if (GetXMLElement(element, "DPVConfirmation").Equals("D")) {
+                                addressIsMissingInformation();
+                            }
+                            else {
+                                addressNotValid();
+                            }
+
+
                         }
-                        else if (GetXMLElement(element, "DPVConfirmation").Equals("D")) {
-                            addressIsMissingInformation();
+                        else {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
+                            Console.WriteLine("Error from USPS. The address you entered was not found");
+                            addressNotFound();
                         }
-                        else {
-                            addressNotValid();
-                        }
-
 
                     }
-                    else {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
-                        Console.WriteLine("Error from USPS. The address you entered was not found");
-                        addressNotFound();
-                    }
 
+                } catch (WebException exception) { // handles webexception 
+                    await DisplayAlert("Error", exception.Message, "OK");
                 }
-            }
+
+            } 
         }
 
         // function to show warning if first name entry is empty
