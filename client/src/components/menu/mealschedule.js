@@ -184,7 +184,7 @@ export default class MealSchedule extends Component {
                   mealPlans={this.state.mealPlans}
                   history={this.props.history}
                   DELETE_URL={this.props.DELETE_URL}
-                  BUYNEW_URL={this.props.BUYNEW_URL}
+                  UPDATE_SUBCRIPTION_URL={this.props.UPDATE_SUBCRIPTION_URL}
                   UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
                   UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
                   userID={this.state.userID}

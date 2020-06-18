@@ -3499,7 +3499,7 @@ class StripeTestPayment(Resource):
                 metadata={'integration_check': 'accept_a_payment'},
             )
 '''
-class BuyNewSubscription(Resource): #this code was copy from "Checkout" class without cheking for password.
+class Update_Subscription(Resource): #this code was copy from "Checkout" class without cheking for password.
     def getPaymentQuery(self, data, newpaymentId, purchaseId, refund_info, choice):
         refund = refund_info.get('refund_amount')
         exp_date = datetime(int(data['cc_exp_year']), int(data['cc_exp_month']), 1).strftime("%Y-%m-%d")
@@ -3564,43 +3564,6 @@ class BuyNewSubscription(Resource): #this code was copy from "Checkout" class wi
                          '""" + str(data['billing_zip']) + "');"
         return query1 if choice == 1 else query2
 
-    def getDates(self, frequency):
-        dates = {}
-        dayOfWeek = date.today().weekday()
-
-        # Get the soonest Thursday, same day if today is Thursday
-        thurs = date.today() + timedelta(days=(3 - dayOfWeek) % 7)
-
-        # If today is Thursday after 4PM
-        if thurs == date.today() and datetime.now().hour >= 16:
-            thurs += timedelta(days=7)
-
-        # Set start date to Saturday after thurs
-        #       dates['startDate'] = thurs + timedelta(days=2)
-        dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
-
-        # Set end date to 1st/2nd/4th Monday after thurs
-        # Set next billing date to Friday after the end date
-        if frequency == 'Weekly':
-            dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
-            dates['billingDate'] = (
-                thurs + timedelta(days=7)).strftime("%Y-%m-%d")
-            dates['weeksRemaining'] = '1'
-        elif frequency == '2 Week Pre-Pay':
-            dates['endDate'] = (thurs + timedelta(days=11)
-                                ).strftime("%Y-%m-%d")
-            dates['billingDate'] = (
-                thurs + timedelta(days=14)).strftime("%Y-%m-%d")
-            dates['weeksRemaining'] = '2'
-        elif frequency == '4 Week Pre-Pay':
-            dates['endDate'] = (thurs + timedelta(days=25)
-                                ).strftime("%Y-%m-%d")
-            dates['billingDate'] = (
-                thurs + timedelta(days=28)).strftime("%Y-%m-%d")
-            dates['weeksRemaining'] = '4'
-
-        return dates
-
     def post(self):
         response = {}
         reply = {}
@@ -3663,8 +3626,7 @@ class BuyNewSubscription(Resource): #this code was copy from "Checkout" class wi
             if mealPlanQuery['code'] == 280:
                 print("Getting meal plan ID...")
                 mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
-                dates = self.getDates(
-                    mealPlanQuery['result'][0]['payment_frequency'])
+                dates = Checkout().getDates(mealPlanQuery['result'][0]['payment_frequency'])
                 print("Meal Plan ID:", mealPlanId)
             else:
                 response['message'] = 'Could not retrieve meal ID of requested plan.'
@@ -3682,11 +3644,10 @@ class BuyNewSubscription(Resource): #this code was copy from "Checkout" class wi
 
             reply = [execute(query, 'post', conn) for query in payment_query]
             #execute the second payment_query with a new paymentID
-            paymentIDresponse = execute(
-                "CALL get_new_payment_id;", 'get', conn)
+            paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
             paymentId = paymentIDresponse['result'][0]['new_id']
             payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info, 2)
-            reply = reply + [execute(payment_query, 'post', conn)]
+            reply += [execute(payment_query, 'post', conn)]
 
             # replace with real longitute and latitude
             addressObj = Coordinates([data['delivery_address']])
@@ -3751,11 +3712,13 @@ class BuyNewSubscription(Resource): #this code was copy from "Checkout" class wi
 
             # update snapshot
             snapshot_query = []
-            snapshot_query.append("""UPDATE ptyd_snapshots 
-                                    SET delivery_end_date = 'NULL',
-                                        next_billing_date = NULL,
-                                        weeks_remaining='0'
-                                    WHERE purchase_id = '""" + refund_info.get('purchase_id') + "';")
+            #update the snapshots
+            reply += [execute(""" CALL `ptyd`.`user_cancel_now_update_snapshot`( \'""" + snapshotId + """\' , 
+                        \'""" + getNow() + """\', \'""" + refund_info.get('purchase_id') + """\');""", 'post', conn)]
+            print("here")
+            #create a new ID for snapshots
+            snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
+            snapshotId = snapshotIDresponse['result'][0]['new_id']
 
             # Initial snapshot
             snapshot_query.append("""INSERT INTO ptyd_snapshots
@@ -4321,7 +4284,7 @@ api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
-api.add_resource(BuyNewSubscription, '/api/v2/buy-new-subscription') #using this instead of Update Subcription
+api.add_resource(Update_Subscription, '/api/v2/update-subscription') #using this instead of Update Subcription
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Admin page

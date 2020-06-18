@@ -186,7 +186,7 @@ export default class MakeChange extends Component {
           purchase_id: this.state.currentPurchase.purchase_id
         };
 
-        await axios.post(`${this.props.BUYNEW_URL}`, data); //update
+        await axios.post(`${this.props.UPDATE_SUBCRIPTION_URL}`, data); //update
       } else {
         //update changing delivery address
         await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
