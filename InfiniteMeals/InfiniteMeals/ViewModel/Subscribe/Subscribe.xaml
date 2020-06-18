@@ -36,8 +36,8 @@
                 <Label Text="10 meals" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <ImageButton x:Name="mealimage2" HorizontalOptions="CenterAndExpand" Grid.Row="2" Clicked="Clicked15mealssubscription"/>
                 <Label Text="15 meals" Grid.Row="2" HorizontalOptions="Start" VerticalOptions="Center"/>
-                <ImageButton x:Name="mealimage3" HorizontalOptions="CenterAndExpand" Grid.Row="3"/>
-                <Label Text="20 meals" Grid.Row="3" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <ImageButton x:Name="mealimage3" HorizontalOptions="CenterAndExpand" Grid.Row="3" Clicked="Clicked20mealssubscription"/>
+                    <Label Text="20 meals" Grid.Row="3" HorizontalOptions="Start" VerticalOptions="Center"/>
 
                 </Grid>
 

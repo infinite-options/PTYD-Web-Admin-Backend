@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace InfiniteMeals.Model.Subscribe {
-    enum PaymentOption {
+    public enum PaymentOption {
         Week,
         TwoWeek,
         FourWeek,
@@ -14,7 +14,7 @@ namespace InfiniteMeals.Model.Subscribe {
         public static string paymentOptionToString(PaymentOption paymentOption) {
             switch (paymentOption) {
                 case PaymentOption.Week:
-                    return "Weekly payment";
+                    return "Weekly";
                 case PaymentOption.TwoWeek:
                     return "2 week pre-pay";
                 case PaymentOption.FourWeek:

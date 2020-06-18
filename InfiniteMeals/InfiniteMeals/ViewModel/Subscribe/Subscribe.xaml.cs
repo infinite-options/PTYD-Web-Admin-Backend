@@ -67,6 +67,15 @@ namespace InfiniteMeals.Subscribe
             await Navigation.PushAsync(fifteenMealPlan);
         }
 
+        private async void Clicked20mealssubscription(object sender, EventArgs e) {
+
+            PaymentOptionPage twentyMealPlan = new PaymentOptionPage();
+            twentyMealPlan.BindingContext = MealPlan.TwentyMeals;
+            Label mealPlanLabel = (Label)twentyMealPlan.FindByName("mealPlan");
+            mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.TwentyMeals);
+            await Navigation.PushAsync(twentyMealPlan);
+        }
+
 
     }
 }

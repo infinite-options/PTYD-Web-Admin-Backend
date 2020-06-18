@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace InfiniteMeals.Model.Subscribe {
-    enum MealPlan {
+    public enum MealPlan {
         FiveMeals,
         TenMeals,
         FifteenMeals,

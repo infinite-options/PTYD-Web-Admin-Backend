@@ -47,7 +47,7 @@
                     <Label Grid.Row="1" Grid.ColumnSpan="2" Text="-" TextColor="Black"/>
                     <Label x:Name="paymentOption" Grid.Row="1" HorizontalOptions="End" TextColor="Black"/>
                 </StackLayout>
-                <Label Grid.Column="1" Grid.Row="1" Text="$100.00" TextColor="Black" HorizontalOptions="End"/>
+                <Label Grid.Column="1" Grid.Row="1" Text="{Binding shippingInformation.subscriptionPlan.cost, StringFormat='${0:F2}'}" TextColor="Black" HorizontalOptions="End"/>
 
                 <!-- estimated shipping + estimated shipping cost -->
                 <Label Grid.Row="2" Text="Estimated Shipping" TextColor="Black" Padding="10,0,0,0"/>
