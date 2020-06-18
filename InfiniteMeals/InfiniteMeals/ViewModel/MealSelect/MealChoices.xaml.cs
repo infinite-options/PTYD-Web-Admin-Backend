@@ -19,6 +19,7 @@ namespace InfiniteMeals.MealSelect
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MealChoices : ContentPage
     {
+        int totalMealsSelected;
         private ObservableCollection<MealGroup> grouped { get; set; }
 
         public IList<Meal> Meals { get; private set; }
@@ -62,7 +63,10 @@ namespace InfiniteMeals.MealSelect
             List<String> SmoothiesImage = new List<String>();
             List<int> SmoothieQty = new List<int>();
 
-            var lstView = new ListView { HasUnevenRows = true};
+            var lstView = new ListView {
+                HasUnevenRows = true,
+                SelectionMode = ListViewSelectionMode.None,
+            };
 
             // Grouping
             grouped = new ObservableCollection<MealGroup>();
@@ -161,6 +165,32 @@ namespace InfiniteMeals.MealSelect
             grouped.Add(mealGroup);
             grouped.Add(seasonalMealGroup);
             grouped.Add(smoothieGroup);
+
+            var surpriseNav = new Button
+            {
+                Text = "Surprise"
+            };
+            surpriseNav.Clicked += ClickedSurprise;
+
+            var skipNav = new Button
+            {
+                Text = "Skip"
+            };
+            skipNav.Clicked += ClickedSkip;
+
+            var saveNav = new Button
+            {
+                Text = "Save"
+            };
+            saveNav.Clicked += ClickedSave;
+
+            Grid sl = new Grid();
+            sl.Children.Add(surpriseNav, 0, 0);
+            sl.Children.Add(skipNav, 1, 0);
+            sl.Children.Add(saveNav, 2, 0);
+            lstView.Header = sl;
+
+
             lstView.ItemsSource = grouped;
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
@@ -177,12 +207,13 @@ namespace InfiniteMeals.MealSelect
                     VerticalOptions = LayoutOptions.Center };
                 var imgLabel = new Image
                 {
-                    WidthRequest = 200,
-                    HeightRequest = 100,
+                    WidthRequest = 150,
+                    HeightRequest = 75,
                     Aspect = Aspect.AspectFill,
                     HorizontalOptions = LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
+                imgLabel.Margin = new Thickness(10, 0, 0, 10);
                 Label quantity = new Label
                 {
                     WidthRequest = 20,
@@ -216,9 +247,29 @@ namespace InfiniteMeals.MealSelect
                 {
                     Stepper stepper = sender as Stepper;
                     var model = stepper.BindingContext as Meal;
-                    var stepperVal = stepper.Value;
-                    model.qty = (int) stepperVal;
-                    System.Diagnostics.Debug.WriteLine(model.price + " " + model.name + " " + model.qty + " " + model.total);
+                    int stepperVal = (int) stepper.Value;
+
+                    if (stepperVal > model.qty)
+                    {
+                        model.qty = (int)steppers.Value;
+                        totalMealsSelected += 1;
+                        model.order_qty += 1;
+
+                    }
+                    else if (stepperVal < model.qty)
+                    {
+
+                        model.qty = (int)steppers.Value;
+                        totalMealsSelected -= 1;
+                        model.order_qty -= 1;
+                        if (model.qty < 0)
+                        {
+                            model.order_qty = 0;
+                            totalMealsSelected = 0;
+                        }
+                    }
+
+                    System.Diagnostics.Debug.WriteLine("Total Selections: " + model.qty + " " + model.name + " " + model.order_qty + " " + totalMealsSelected);
                 };
 
                 quantity = new Label {
@@ -250,15 +301,23 @@ namespace InfiniteMeals.MealSelect
         {
             quantity.Text = String.Format("Stepper value is {0:F1}", e.NewValue);
         }
-        private async void ClickedSelectMeal(object sender, EventArgs e)
+
+        private async void ClickedSurprise(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MealSelect.MealChoices());
+            await Navigation.PushAsync(new Meals.MealSchedule());
         }
 
-        private async void ClickedSelect(object sender, EventArgs e)
+        private async void ClickedSkip(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MealSelect.MealChoices());
+            await Navigation.PushAsync(new Meals.MealSchedule());
         }
+
+        private async void ClickedSave(object sender, EventArgs e)
+        {
+            //await Navigation.PushAsync(new Meals.MealSchedule());
+            await Navigation.PopAsync();
+        }
+
 
         void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
        {

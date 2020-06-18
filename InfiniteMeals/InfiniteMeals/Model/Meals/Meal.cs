@@ -14,7 +14,7 @@ namespace InfiniteMeals.Meals.Model
 
     public class Meal : INotifyPropertyChanged
     {
-        int qty1;
+        int qty1, _orderQuantity;
         double _totalCost;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -26,12 +26,30 @@ namespace InfiniteMeals.Meals.Model
         public string id { get; set; }
         public string kitchenId { get; set; }
         public string kitchenName { get; set; }
-        public int order_qty { get; set; }
         public string infoUrl { get; set; }
         public Category category { get; set; }
         public int meal_qty;
-        //public int  qty { get; set; }
-        //public int qty;
+
+        public int order_qty
+        {
+            set
+            {
+                if (_orderQuantity != value)
+                {
+                    _orderQuantity = value;
+                    OnPropertyChanged("order_qty");
+                }
+            }
+            get
+            {
+                return _orderQuantity;
+            }
+
+        }
+
+
+
+
 
         public double total
         {

@@ -21,13 +21,13 @@ namespace InfiniteMeals.MealSelect
     public partial class AddOnChoices : ContentPage
     {
         private ObservableCollection<MealGroup> grouped { get; set; }
-
         String infoImg = "info.jpg";
         double subTotal = 0.00;
         public AddOnChoices()
         {
             InitializeComponent();
             getData();
+      
         }
 
         public async void getData()
@@ -169,12 +169,24 @@ namespace InfiniteMeals.MealSelect
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0,
             };
-            totalBar.Clicked += BackToSchedule;
+
+            if (totalBar.Text.Equals("Close"))
+            {
+                System.Diagnostics.Debug.WriteLine(" made it here");
+                totalBar.Clicked += BackToSchedule;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine( " or made it here");
+
+                totalBar.Clicked += BackToSchedule;
+            }
+
             totalBar.SetBinding(Label.TextProperty, "total");
             this.ToolbarItems.Add(totalBar);
 
-
             lstView.ItemsSource = grouped;
+            lstView.SelectionMode = ListViewSelectionMode.None;
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
             lstView.GroupShortNameBinding = new Binding("ShortName");
@@ -199,12 +211,13 @@ namespace InfiniteMeals.MealSelect
             };
             var imgLabel = new Image
             {
-                WidthRequest = 200,
-                HeightRequest = 100,
+                WidthRequest = 150,
+                HeightRequest = 75,
                 Aspect = Aspect.AspectFill,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
+            imgLabel.Margin = new Thickness(10, 0, 0, 10);
             var infoButton = new ImageButton
             {
                 WidthRequest = 20,
@@ -257,11 +270,13 @@ namespace InfiniteMeals.MealSelect
 
             if (subTotal == 0)
             {
-                totalBar.Text = "Close";
+                    System.Diagnostics.Debug.WriteLine("its closed");
+
+                    totalBar.Text = "Close";
             }
             else
             {
-                totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
+                    totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
             }
         };
 
@@ -292,6 +307,7 @@ namespace InfiniteMeals.MealSelect
 
             Content = lstView;
             BindingContext = this;
+
         }
 
         void OnInfoClicked(Object sender, EventArgs args)
@@ -315,8 +331,12 @@ namespace InfiniteMeals.MealSelect
 
         private async void BackToSchedule(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MealSchedule());
+            await Navigation.PopAsync();
         }
 
+        private async void RefreshToSchedule(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MealSchedule());
+        }
     }
 }
