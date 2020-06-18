@@ -72,15 +72,18 @@ namespace InfiniteMeals.Meals {
                 System.Diagnostics.Debug.WriteLine(" user zip " + userZipObj.Result[i].MondayAvailable);
                 zipBool = userZipObj.Result[i].MondayAvailable;
             }
-            if (zipBool == false)
+
+            zipBool = true;
+
+            if (zipBool == true)
             {
-                System.Diagnostics.Debug.WriteLine(" user zip false ");
-                MondayButton.IsVisible = false;
-                MondayButton2.IsVisible = false;
-                MondayButton3.IsVisible = false;
-                MondayButton4.IsVisible = false;
-                MondayButton5.IsVisible = false;
-                MondayButton6.IsVisible = false;
+                System.Diagnostics.Debug.WriteLine(" user zip true ");
+                MondayButton.IsVisible = true;
+                MondayButton2.IsVisible = true;
+                MondayButton3.IsVisible = true;
+                MondayButton4.IsVisible = true;
+                MondayButton5.IsVisible = true;
+                MondayButton6.IsVisible = true;
             }
 
         BindingContext = this;
@@ -225,7 +228,7 @@ namespace InfiniteMeals.Meals {
                     for(int i = 0; i < 6; i++)
                     {
                         AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
-                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays((7 * (i + 1)) + 1)));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays((7 * (i + 1)))));
                         System.Diagnostics.Debug.WriteLine("Dates: " + AllSundays[i] + " " + AllMondays[i]);
                     }
                     SundayButton.Text = AllSundays[0];
@@ -248,7 +251,7 @@ namespace InfiniteMeals.Meals {
                     for (int i = 0; i < 6; i++)
                     {
                         AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
-                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", firstMon.AddDays(7 * i)));
                         System.Diagnostics.Debug.WriteLine("Dates: " + AllSundays[i] + AllMondays[i]);
                     }
 
@@ -272,7 +275,7 @@ namespace InfiniteMeals.Meals {
                     for (int i = 0; i < 6; i++)
                     {
                         AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
-                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", firstMon.AddDays(7 * i)));
                         System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
                     }
                     SundayButton.Text = AllSundays[0];
@@ -295,7 +298,7 @@ namespace InfiniteMeals.Meals {
                     for (int i = 0; i < 6; i++)
                     {
                         AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
-                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", firstMon.AddDays(7 * i)));
                         System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
                     }
                     SundayButton.Text = AllSundays[0];
@@ -318,7 +321,7 @@ namespace InfiniteMeals.Meals {
                     for (int i = 0; i < 6; i++)
                     {
                         AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
-                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", firstMon.AddDays(7 * i)));
                         System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
                     }
                     SundayButton.Text = AllSundays[0];
@@ -341,7 +344,7 @@ namespace InfiniteMeals.Meals {
                     for (int i = 0; i < 6; i++)
                     {
                         AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
-                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", firstMon.AddDays(7 * i)));
                         System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
                     }
                     SundayButton.Text = AllSundays[0];
@@ -364,7 +367,7 @@ namespace InfiniteMeals.Meals {
                     for (int i = 0; i < 6; i++)
                     {
                         AllSundays.Add(String.Format("{0:dddd MMMM d}", firstSun.AddDays(7 * (i + 1))));
-                        AllMondays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(7 * (i + 1))));
+                        AllMondays.Add(String.Format("{0:dddd MMMM d}", firstMon.AddDays(7 * i)));
                         System.Diagnostics.Debug.WriteLine("Sunday: " + AllSundays[i] + " Monday: " + AllMondays[i]);
                     }
                     SundayButton.Text = AllSundays[0];
