@@ -28,11 +28,13 @@ export default class MakeChange extends Component {
       paymentPlans: [], // use for reconstruct mealPlans
       showPasswordChange: false,
       showDeleteModal: false,
+      showSaveModal: false,
       //some variables need for submit forms
       updateMealPlan: {
         meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
         name: this.props.currentPurchase.meal_plan_desc,
-        price: this.props.currentPurchase.meal_plan_price
+        price: this.props.currentPurchase.meal_plan_price,
+        amount_paid: 0
       },
       creditCard: {
         cc_num: this.props.currentPurchase.cc_num,
@@ -102,6 +104,12 @@ export default class MakeChange extends Component {
     ) {
       this.setState({
         currentPurchase: this.props.currentPurchase,
+        updateMealPlan: {
+          meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
+          name: this.props.currentPurchase.meal_plan_desc,
+          price: this.props.currentPurchase.meal_plan_price,
+          amount_paid: 0
+        },
         creditCard: {
           cc_num: this.props.currentPurchase.cc_num,
           cc_cvv: this.props.currentPurchase.cc_cvv,
@@ -145,6 +153,11 @@ export default class MakeChange extends Component {
       : this.setState({showDeleteModal: true});
   };
 
+  ShowHideSaveModal = () => {
+    this.state.showSaveModal
+      ? this.setState({showSaveModal: false})
+      : this.setState({showSaveModal: true});
+  };
   DeleteCurrentPurchase = () => {
     fetch(this.props.DELETE_URL, {
       method: "PATCH",
@@ -215,7 +228,8 @@ export default class MakeChange extends Component {
       <Fragment>
         {this.state.show &&
           !this.state.showPasswordChange &&
-          !this.state.showDeleteModal && (
+          !this.state.showDeleteModal &&
+          !this.state.showSaveModal && (
             <Modal
               show={this.state.show}
               onHide={this.props.ChangeAccountInfo}
@@ -273,6 +287,11 @@ export default class MakeChange extends Component {
                           onChange={e => {
                             e.persist();
                             let paymentPlans = this.state.paymentPlans;
+                            let paid =
+                              this.state.currentPurchase.amount_paid > 0
+                                ? this.state.currentPurchase.amount_paid
+                                : this.state.currentPurchase.amount_due;
+
                             this.setState(prevState => ({
                               updateMealPlan: {
                                 ...prevState.updateMealPlan,
@@ -281,7 +300,11 @@ export default class MakeChange extends Component {
                                 name:
                                   paymentPlans[e.target.value].meal_plan_desc,
                                 price:
-                                  paymentPlans[e.target.value].meal_plan_price
+                                  paymentPlans[e.target.value].meal_plan_price,
+                                amount_paid: (
+                                  paymentPlans[e.target.value].meal_plan_price -
+                                  paid
+                                ).toFixed(2)
                               }
                             }));
                           }}
@@ -545,7 +568,7 @@ export default class MakeChange extends Component {
                 <Button
                   variant='success'
                   type='submit'
-                  onClick={this.UpdateChangingSubcription}
+                  onClick={this.ShowHideSaveModal}
                 >
                   Save Changes
                 </Button>
@@ -583,6 +606,35 @@ export default class MakeChange extends Component {
                   autoFocus
                 >
                   Yes,Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
+        {this.state.showSaveModal && (
+          <div>
+            <Dialog
+              open={this.state.showSaveModal}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  You will be charged {this.state.updateMealPlan.amount_paid}.
+                  Do you want to continue this transaction.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.ShowHideSaveModal} color='primary'>
+                  No,Thanks
+                </Button>
+                <Button
+                  onClick={this.UpdateChangingSubcription}
+                  variant='danger'
+                  autoFocus
+                >
+                  Yes,Please
                 </Button>
               </DialogActions>
             </Dialog>
