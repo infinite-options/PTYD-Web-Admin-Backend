@@ -210,9 +210,8 @@ a {
 
 .bottom-left {
   position: absolute;
-  bottom: 8px;
+  bottom: 5px;
   margin-left: 1.8em;
-  padding-bottom: 12px;
   font-size: 18px;
 }
 
@@ -227,8 +226,10 @@ a {
   color: white;
   text-decoration: none;
 }
+#already-a-member h1 {
+  font-size: 18px;
+}
 #already-a-member:hover {
-  /* color: #607122; */
   color: var(--black);
 }
 

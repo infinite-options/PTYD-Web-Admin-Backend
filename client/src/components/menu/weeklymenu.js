@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Card } from "react-bootstrap";
 
 import defaultMeal from "../../img/default-meal.png";
 
@@ -39,25 +38,25 @@ class WeeklyMenu extends Component {
           <h5 class="font3" Style="margin-top:-10px;">
             {this.state.dates}
           </h5>
-          <hr></hr>
+          <hr/>
           <div
             class="row justify-content-md-center"
             Style="margin-top:-10px; margin-bottom:-10px;"
           >
             <ul class="navbar-nav">
               <li class="nav-item font3">
-                <a class="nav-link" href={this.props.header_link_url}>
+                <a class="nav-link" style={{color: "black", fontSize:"15px"}} href={this.props.header_link_url}>
                   {this.props.header_link_label}
                 </a>
               </li>
             </ul>
           </div>
-          <hr></hr>
-          <h5 class="font3">LOCAL. ORGANIC. RESPONSIBLE.</h5>
-          <h6 class="font3" Style="margin-top:-10px;">
+          <hr/>
+          <p style={{fontSize: "18px"}}>LOCAL. ORGANIC. RESPONSIBLE.</p>
+          <p Style="margin-top:-10px;font-size:16px">
             STRAIGHT TO YOUR DOOR
-          </h6>
-          <hr></hr>
+          </p>
+          <hr/>
         </div>
 
         <div 

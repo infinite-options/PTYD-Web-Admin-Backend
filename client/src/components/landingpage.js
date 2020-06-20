@@ -51,8 +51,8 @@ class Landing extends Component {
 
           <div className='bottom-left'>
             {/* {this.state.isLoggedIn === false && ( */}
-            <a className='font1' id='already-a-member' href='/login'>
-              <u>Already a Member? Sign In</u>
+            <a id='already-a-member' href='/login'>
+              <h1><u>Already a Member? Sign In</u></h1>
             </a>
             {/* )} */}
           </div>
@@ -209,13 +209,13 @@ class Landing extends Component {
           </div>
         </div>
         <div className='container container_space center-content'>
-          <h3 className='font6 fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
+          <h3 className='fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
           <div className='fresh-menu-subtitle-container'>
             <p className='fresh-menu-subtitle'>
               With over 100 seasonal recipes on rotation, every week you'll try
               something new.{" "}
             </p>
-            <p className=' fresh-menu-subtitle'>
+            <p className='fresh-menu-subtitle'>
               Here's a taste of our rotating menu:
             </p>
           </div>
@@ -227,14 +227,14 @@ class Landing extends Component {
           <a
             // type='button'
             href='/selectmealplan'
-            className='btn1 btn1-primary start_button font2'
+            className='btn1 btn1-primary start_button'
           >
             SEE WHAT'S ON THE MENU NEXT WEEK
           </a>
         </div>
 
         <div className='container font2 container_space'>
-          <h3 className='font6 community-title'>What Our Community is Saying...</h3>
+          <h3 className='community-title'>What Our Community is Saying...</h3>
 
           <CommunityCarousel />
         </div>
@@ -244,7 +244,7 @@ class Landing extends Component {
             <a
               // type='button'
               href='/selectmealplan'
-              className='btn1 btn1-primary start_button font2'
+              className='btn1 btn1-primary start_button'
             >
               TRY US TODAY
             </a>

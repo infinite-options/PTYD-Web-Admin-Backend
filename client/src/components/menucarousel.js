@@ -12,8 +12,14 @@ import PREV from "../img/left_arrow-512.svg"
 export default class MenuCarousel extends Component {
   constructor(props) {
     super(props);
-    
+    this.state = {
+      description: this.props.description
+    };
   }
+
+  componentDidMount = () => {
+    console.log("description in Each Meal: ", this.state.description);
+  };
 
   renderArrows = () => {
     return (
@@ -37,6 +43,7 @@ export default class MenuCarousel extends Component {
   };
 
   render() {
+    let desc = this.state.description;
     var settings = {
       dots: true,
       infinite: true,
@@ -57,7 +64,7 @@ export default class MenuCarousel extends Component {
             <div>
               <div className='menu-carousel-img-container'>
                 <img
-                  className='menu-carousel-img'
+                  className='menu-carousel-img img-fluid'
                   src={SLIDE1}
                   alt='slide1'
                 />
