@@ -48,8 +48,8 @@ a {
 }
 
 .btn.focus, .btn:focus {
-    outline: 0;
-    box-shadow: none!important;
+  outline: 0;
+  box-shadow: none!important;
 }
 
 /* ----- navigation header ----- */

@@ -1,5 +1,5 @@
-import React, {useState, useEffect, Fragment} from "react";
-import {useHistory} from "react-router-dom";
+import React, { useState, useEffect, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -14,7 +14,7 @@ import crypto from "crypto";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
-import {getIp, getBrowser} from "../functions/getClientInfo";
+import { getIp, getBrowser } from "../functions/getClientInfo";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
@@ -364,12 +364,12 @@ export default function Login(props) {
           <div className='text-center'>
             <p >To continue, please log in to Prep to Your Door.</p>
           </div>
-          
+
           <div class='row'>
             <Col></Col>
-            <Container className='justify-content-center bg-white font2' style={{border:"0",boxShadow:"0",borderColor:"white", padding: "5px 30px", cursor:"default", width:"400px"}}>
-            {/* <Row> */}
-                <Col>
+            <Container className='justify-content-center bg-white font2' style={{ border: "0", boxShadow: "0", borderColor: "white", padding: "5px 30px", cursor: "default", width: "400px" }}>
+              <Row className="justify-content-center">
+                <div style={{ display: "flex", padding: '10px' }}>
                   <FacebookLogin
                     appId='508721976476931'
                     autoLoad={false}
@@ -377,14 +377,14 @@ export default function Login(props) {
                     onClick='return false'
                     callback={responseFacebook}
                     size='small'
-                    textButton='Login with Facebook'
+                    textButton='Continue with FB'
                   />
-                </Col>
+                </div>
                 &nbsp;
-                <Col>
+                <div style={{ display: "flex", }}>
                   <GoogleLogin
                     clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
-                    buttonText='Login with Google'
+                    buttonText='Continue with Google'
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
                     isSignedIn={false}
@@ -392,80 +392,80 @@ export default function Login(props) {
                     cookiePolicy={"single_host_origin"}
                   />
                   {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
-                </Col>
-              {/* </Row> */}
+                </div>
+              </Row>
 
-              <div style={{borderTop:"1px solid #d9dadc", margin:"30px 0", display:"block",lineHeight:"1px", textAlign:"center", color:"#494949"}}>
-                <strong style={{background:"#fff", letterSpacing:"1px"}}>&nbsp; OR &nbsp;</strong>
+              <div style={{ borderTop: "1px solid #d9dadc", margin: "30px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}>
+                <strong style={{ background: "#fff", letterSpacing: "1px" }}>&nbsp; OR &nbsp;</strong>
               </div>
 
               {/* <Row> */}
-                {/* <Col> */}
-                  <Form onSubmit={handleSubmit} autoComplete='off'>
-                    {/* <Form.Label>Email</Form.Label> */}
-                    <InputGroup className='mb-3'>
-                      <FormControl
-                        type='email'
-                        value={email}
-                        onChange={e => {
-                          setEmail(e.target.value);
-                          RaiseError(null);
-                        }}
-                        id='userForm'
-                        placeholder='Email'
-                        aria-label='Email'
-                        aria-describedby='basic-addon1'
-                      />
-                    </InputGroup>
+              {/* <Col> */}
+              <Form onSubmit={handleSubmit} autoComplete='off'>
+                {/* <Form.Label>Email</Form.Label> */}
+                <InputGroup className='mb-3'>
+                  <FormControl
+                    type='email'
+                    value={email}
+                    onChange={e => {
+                      setEmail(e.target.value);
+                      RaiseError(null);
+                    }}
+                    id='userForm'
+                    placeholder='Email'
+                    aria-label='Email'
+                    aria-describedby='basic-addon1'
+                  />
+                </InputGroup>
 
-                    {/* <Form.Label>Password</Form.Label> */}
-                    <InputGroup className='mb-3'>
-                      <FormControl
-                        value={password}
-                        onChange={e => {
-                          setPassword(e.target.value);
-                          RaiseError(null);
-                        }}
-                        id='passForm'
-                        placeholder='Password'
-                        aria-label='Password'
-                        aria-describedby='basic-addon2'
-                        type='password'
-                      />
-                    </InputGroup>
+                {/* <Form.Label>Password</Form.Label> */}
+                <InputGroup className='mb-3'>
+                  <FormControl
+                    value={password}
+                    onChange={e => {
+                      setPassword(e.target.value);
+                      RaiseError(null);
+                    }}
+                    id='passForm'
+                    placeholder='Password'
+                    aria-label='Password'
+                    aria-describedby='basic-addon2'
+                    type='password'
+                  />
+                </InputGroup>
 
-                    <Button
-                      variant='success'
-                      onClick={checkLogin}
-                      disabled={!validateForm()}
-                      type='submit'
-                      style={{width: "100%"}}
-                    >
-                      <strong style={{color:"white"}}>Sign In</strong>
-                    </Button>
-                    <div className='text-center' style={{padding:"10px"}}>
-                      <a href='/resetpassword' style={{color: "#494949"}}>Forgot password?</a>
-                    </div>
+                <Button
+                  variant='success'
+                  onClick={checkLogin}
+                  disabled={!validateForm()}
+                  type='submit'
+                  style={{ width: "100%" }}
+                >
+                  <strong style={{ color: "white" }}>Sign In</strong>
+                </Button>
+                <div className='text-center' style={{ padding: "10px" }}>
+                  <a href='/resetpassword' style={{ color: "#494949" }}>Forgot password?</a>
+                </div>
 
-                  </Form>
-                {/* </Col> */}
+              </Form>
+              {/* </Col> */}
               {/* </Row> */}
 
               {/* <p>&nbsp;</p> */}
               {/* <p style={{color: "#494949", paddingTop: "10px"}}>Or Login With Social Media</p> */}
-              
-              <div style={{borderTop:"1px solid #d9dadc", margin:"20px 0", display:"block",lineHeight:"1px", textAlign:"center", color:"#494949"}}></div>
+
+              <div style={{ borderTop: "1px solid #d9dadc", margin: "20px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}></div>
               {/* <hr/> */}
 
               <div className='text-center'>
-            <p style={{fontWeight:"bold", color: "#494949"}}>Don't have an account?</p>
-            <a
-                href='/signup'
-                style={{border:"2px solid #469b47", color:"#469b47", padding: "8px 120px", borderRadius:"4px", width: "100%"}}
-              >
-                <strong style={{color:"#469b47"}}>Sign Up Here</strong>
-            </a>
-          </div>
+                <p style={{ fontWeight: "bold", color: "#494949" }}>Don't have an account?</p>
+                <a
+                  href='/signup'
+                  style={{ border: "2px solid #469b47", color: "#469b47", padding: "8px 120px", borderRadius: "4px", width: "100%" }}
+                >
+                  <strong style={{ color: "#469b47" }}>Sign Up Here</strong>
+                </a>
+              </div>
             </Container>
             <Col></Col>
           </div>
