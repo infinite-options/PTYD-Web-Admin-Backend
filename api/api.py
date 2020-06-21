@@ -3850,7 +3850,7 @@ class MealCreation(Resource):
         finally:
             disconnect(conn)
 
-class Add_New_Ingredient(Resource):       
+class Edit_Recipe(Resource):       
     def post(self):
         response = {}
         items = {}
@@ -3983,6 +3983,79 @@ class EditMeals(Resource):
         finally:
             disconnect(conn)
 
+class Add_New_Ingredient(Resource):       
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            ingredient_desc = data['ingredient_desc']
+            package_size = data['package_size']
+            ingredient_measure_id = data['ingredient_measure_id']
+            ingredient_cost = data['ingredient_cost']
+
+            ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
+            ingredientId = ingredientIdQuery ['result'][0]['new_id']
+            items['new_ingredient_insert'] = execute(""" INSERT INTO ptyd_ingredients (
+                                                            ingredient_id, ingredient_desc, package_size,ingredient_measure_id,ingredient_cost, ingredient_measure
+                                                            ) 
+                                                            SELECT \'""" + str(ingredientId) + """\', \'""" + str(ingredient_desc) + """\',
+                                                            \'""" + str(package_size) + """\',\'""" + str(ingredient_measure_id) + """\',
+                                                            \'""" + str(ingredient_cost) + """\', mu.measure_name 
+                                                            FROM ptyd_measure_unit mu
+                                                            WHERE measure_unit_id=\'""" + str(ingredient_measure_id) + """\';
+                                                            """, 'post', conn)
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_ingredients;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+class Get_All_Units(Resource):       
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_measure_unit;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -4008,6 +4081,8 @@ class TemplateApi(Resource):
 # Define API routes
 # Customer page
 api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
+api.add_resource(Get_All_Units, '/api/v2/GetUnits')
+api.add_resource(Edit_Recipe, '/api/v2/Edit_Recipe')
 api.add_resource(EditMeals, '/api/v2/EditMeals')
 api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
 api.add_resource(Plans, '/api/v2/plans')

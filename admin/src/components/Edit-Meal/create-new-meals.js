@@ -23,15 +23,15 @@ import Input from "@material-ui/core/Input";
 import Grid from "@material-ui/core/Grid";
 //const [value, setValue] = React.useState(null);
 const filter = createFilterOptions();
-//const [erro, setErro] = useState(null);
-//const [loading, setLoading] = useState(false);
 const WhiteTextTypography = withStyles({
   root: {
     color: "Green",
   },
 })(Typography);
+//const [erro, setErro] = useState(null);
+//const [loading, setLoading] = useState(false);
 
-class EditCreateMeal extends Component {
+class CreateNewMeal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +39,7 @@ class EditCreateMeal extends Component {
       details: [],
       mealidkey: [],
       allIngr: [],
-      selection: 1,
+      selection: 0,
       showAdd: false,
       allUnits: [],
       currIngr: [],
@@ -54,12 +54,12 @@ class EditCreateMeal extends Component {
       brandNewQty: 1,
       brandNewIngrPrice: 5,
       brandNewUnit: "Cup",
-      supportNewRecipe: false,
+      supportNewRecipe: true,
     };
   }
   async componentWillMount() {
-    const res = await fetch(this.props.API_URL_CREATEMEAL);
-    const api = await res.json();
+    //const res = await fetch(this.props.API_URL_CREATEMEAL);
+    //const api = await res.json();
     const res1 = await fetch(this.props.API_URL_ADDINGREDIENT);
     const api1 = await res1.json();
     const res2 = await fetch(this.props.API_URL_GETUNITS);
@@ -90,7 +90,7 @@ class EditCreateMeal extends Component {
 
     const createMeal = {
       ...dummyEntry,
-      ...api.result,
+      //...api.result,
     };
 
     if (api1.result.result != null) {
@@ -831,7 +831,7 @@ class EditCreateMeal extends Component {
           <Grid item xs={12}>
             <div style={{ margin: "1%" }}>
               <WhiteTextTypography color="blue" variant="h5" gutterBottom>
-                Edit Meal
+                Create Meal
               </WhiteTextTypography>
               <Row>
                 <Col>
@@ -839,7 +839,7 @@ class EditCreateMeal extends Component {
                     {/* variant="dark" */}
                     <thead>
                       <tr>
-                        <th>Menu For</th>
+                        <th>New Recipe</th>
                         <th colSpan="3">{this.dateDropdown()}</th>
                       </tr>
                     </thead>
@@ -1030,20 +1030,7 @@ class EditCreateMeal extends Component {
       else if (this.state.supportNewRecipe && i != 0) continue;
       tempdate.push(<MenuItem value={i}>{this.state.mealkeys[i]}</MenuItem>);
     }
-    return (
-      <FormControl>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={this.state.selection}
-          onChange={this.handleChange}
-          // style={{ color: "white" }}
-        >
-          {tempdate}
-        </Select>
-        {newMealInput}
-      </FormControl>
-    );
+    return <FormControl>{newMealInput}</FormControl>;
   };
 }
-export default EditCreateMeal;
+export default CreateNewMeal;

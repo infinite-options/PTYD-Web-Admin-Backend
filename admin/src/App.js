@@ -135,9 +135,12 @@ function App() {
               ></Badge>
             </Nav.Link>
             &nbsp;&nbsp;&nbsp;
-            <NavDropdown title="Statistics" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/editCreateMeal">
-                Edit/Create Meals
+            <NavDropdown title="Do It Yourself" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="/editMeal">
+                Edit Meals
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/createMeal">
+                Create Meals
               </NavDropdown.Item>
               <NavDropdown.Item href="/createMenu">
                 Create Menus
