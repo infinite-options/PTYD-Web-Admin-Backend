@@ -288,9 +288,13 @@ export default class MakeChange extends Component {
                             e.persist();
                             let paymentPlans = this.state.paymentPlans;
                             let paid =
-                              this.state.currentPurchase.amount_paid > 0
-                                ? this.state.currentPurchase.amount_paid
-                                : this.state.currentPurchase.amount_due;
+                              paymentPlans[e.target.value].meal_plan_price;
+                            if (
+                              this.state.currentPurchase.meal_plan_id !==
+                              paymentPlans[e.target.value].meal_plan_id
+                            ) {
+                              paid = this.state.currentPurchase.amount_due;
+                            }
 
                             this.setState(prevState => ({
                               updateMealPlan: {
