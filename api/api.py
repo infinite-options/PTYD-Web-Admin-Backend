@@ -168,6 +168,8 @@ class Plans(Resource):
                         meal_weekly_price,
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
+                        meal_shipping,
+                        meal_tax,
                         CONCAT('/', num_meals, '-meals-subscription') AS RouteOnclick
                     FROM ptyd_meal_plans
                     WHERE payment_frequency = \'4 Week Pre-Pay\';""",
@@ -179,7 +181,9 @@ class Plans(Resource):
                         num_meals,
                         meal_weekly_price,
                         meal_plan_price,
-                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal,
+                        meal_shipping,
+                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 5;""",
                 """SELECT
@@ -190,7 +194,9 @@ class Plans(Resource):
                         num_meals,
                         meal_weekly_price,
                         meal_plan_price,
-                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal,
+                        meal_shipping,
+                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 10;""",
                 """SELECT
@@ -201,7 +207,9 @@ class Plans(Resource):
                         num_meals,
                         meal_weekly_price,
                         meal_plan_price,
-                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal,
+                        meal_shipping,
+                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 15;""",
                 """SELECT
@@ -212,7 +220,9 @@ class Plans(Resource):
                         num_meals,
                         meal_weekly_price,
                         meal_plan_price,
-                        meal_weekly_price/num_meals AS meal_plan_price_per_meal
+                        meal_weekly_price/num_meals AS meal_plan_price_per_meal,
+                        meal_shipping,
+                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 20;"""]
 
@@ -3786,7 +3796,7 @@ class All_Meals(Resource):
                                                                         AS meals_ordered
                                         ON allmeals.menu_date = meals_ordered.week_affected
                                                                             AND allmeals.meal_id = meals_ordered.meal_selected
-                                                                    where week_affected = \'""" + date + """\'
+                                                                    where menu_date = \'""" + date + """\'
                                                                     ORDER BY 
                                                                         menu_date,
                                                                         menu_category
@@ -4132,6 +4142,83 @@ class Add_New_Ingredient(Resource):
         finally:
             disconnect(conn)
 
+class Add_Meal(Resource):       
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            print("connection done...")
+            MealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
+            MealId = MealIdQuery ['result'][0]['new_id']
+            print("new_meal_id created...")
+            meal_category = data['meal_category']
+            meal_name = data['meal_name']
+            meal_desc = data['meal_desc']
+            meal_hint = data['meal_hint']
+            meal_photo_URL = data['meal_photo_URL']
+            extra_meal_price = data['extra_meal_price']
+            meal_calories = data['meal_calories']
+            meal_protein = data['meal_protein']
+            meal_carbs = data['meal_carbs']
+            meal_fiber = data['meal_fiber']
+            meal_sugar = data['meal_sugar']
+            meal_fat = data['meal_fat']
+            meal_sat = data['meal_sat']
+
+            ingredients = data['ingredients']
+            print("Items read...")
+            items['new_meal_insert'] = execute("""INSERT INTO ptyd_meals ( 	
+                                                meal_id,meal_category,meal_name,meal_desc,
+                                                meal_hint,meal_photo_URL,extra_meal_price, 	
+                                                meal_calories,meal_protein,meal_carbs,
+                                                meal_fiber,meal_sugar,meal_fat,meal_sat 
+                                                ) 
+                                                VALUES ( 	
+                                                \'""" + str(MealId) + """\',\'""" + str(meal_category) + """\',
+                                                \'""" + str(meal_name) + """\',\'""" + str(meal_desc) + """\',
+                                                \'""" + str(meal_hint) + """\',\'""" + str(meal_photo_URL) + """\',
+                                                \'""" + str(extra_meal_price) + """\',\'""" + str(meal_calories) + """\',
+                                                \'""" + str(meal_protein) + """\',\'""" + str(meal_carbs) + """\',
+                                                \'""" + str(meal_fiber) + """\',\'""" + str(meal_sugar) + """\',
+                                                \'""" + str(meal_fat) + """\',\'""" + str(meal_sat) + """\'
+                                                );""", 'post', conn)
+                                            
+            print("meal_inserted...")
+        
+            i=0
+            for eachIngredient in data['ingredients']:
+                name = ingredients[i]['name']
+                qty = ingredients[i]['qty']
+                units = ingredients[i]['units']
+                ingredient_id = ingredients[i]['ingredient_id']
+                measure_id = ingredients[i]['measure_id']
+                print(name)
+                print(qty)
+                print(units)
+                print(ingredient_id)
+                print(measure_id)
+                print(meal_id)
+                print(meal_name)
+                print("************************")
+                
+                
+                items['new_recipe_insert'] = execute(""" INSERT INTO ptyd_recipes (
+                                                            recipe_meal_id, recipe_ingredient_id, recipe_ingredient_qty, 
+                                                            recipe_measure_id
+                                                            ) 
+                                                            VALUES (
+                                                            \'""" + str(MealId) + """\',\'""" + str(ingredient_id) + """\',\'""" + str(qty) + """\',\'""" + str(measure_id) + """\'
+                                                            );
+                                                            """, 'post', conn)
+                i+=1
+
+            
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class EditMeals(Resource):
     def patch(self):
@@ -4373,6 +4460,7 @@ api.add_resource(All_Meals, '/api/v2/All_Meals')
 api.add_resource(All_Ingredients, '/api/v2/All_Ingredients')
 api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
 api.add_resource(Edit_Recipe, '/api/v2/Edit_Recipe')
+api.add_resource(Add_Meal, '/api/v2/Add_Meal')
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
 
