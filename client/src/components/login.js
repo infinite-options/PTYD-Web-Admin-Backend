@@ -361,13 +361,48 @@ export default function Login(props) {
               </h6>
             </Fragment>
           )}
+          <div className='text-center'>
+            <p >To continue, please log in to Prep to Your Door.</p>
+          </div>
+          
           <div class='row'>
             <Col></Col>
-            <Container className='justify-content-center bg-success'>
-              <Row>
+            <Container className='justify-content-center bg-white font2' style={{border:"0",boxShadow:"0",borderColor:"white", padding: "5px 30px", cursor:"default", width:"400px"}}>
+            {/* <Row> */}
                 <Col>
+                  <FacebookLogin
+                    appId='508721976476931'
+                    autoLoad={false}
+                    fields='name,email,picture'
+                    onClick='return false'
+                    callback={responseFacebook}
+                    size='small'
+                    textButton='Login with Facebook'
+                  />
+                </Col>
+                &nbsp;
+                <Col>
+                  <GoogleLogin
+                    clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
+                    buttonText='Login with Google'
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    isSignedIn={false}
+                    disable={false}
+                    cookiePolicy={"single_host_origin"}
+                  />
+                  {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
+                </Col>
+              {/* </Row> */}
+
+              <div style={{borderTop:"1px solid #d9dadc", margin:"30px 0", display:"block",lineHeight:"1px", textAlign:"center", color:"#494949"}}>
+                <strong style={{background:"#fff", letterSpacing:"1px"}}>&nbsp; OR &nbsp;</strong>
+              </div>
+
+              {/* <Row> */}
+                {/* <Col> */}
                   <Form onSubmit={handleSubmit} autoComplete='off'>
-                    <Form.Label>Email</Form.Label>
+                    {/* <Form.Label>Email</Form.Label> */}
                     <InputGroup className='mb-3'>
                       <FormControl
                         type='email'
@@ -377,13 +412,13 @@ export default function Login(props) {
                           RaiseError(null);
                         }}
                         id='userForm'
-                        placeholder='Enter Email'
+                        placeholder='Email'
                         aria-label='Email'
                         aria-describedby='basic-addon1'
                       />
                     </InputGroup>
 
-                    <Form.Label>Password</Form.Label>
+                    {/* <Form.Label>Password</Form.Label> */}
                     <InputGroup className='mb-3'>
                       <FormControl
                         value={password}
@@ -392,7 +427,7 @@ export default function Login(props) {
                           RaiseError(null);
                         }}
                         id='passForm'
-                        placeholder='Enter Password'
+                        placeholder='Password'
                         aria-label='Password'
                         aria-describedby='basic-addon2'
                         type='password'
@@ -400,60 +435,43 @@ export default function Login(props) {
                     </InputGroup>
 
                     <Button
-                      variant='dark'
+                      variant='success'
                       onClick={checkLogin}
                       disabled={!validateForm()}
                       type='submit'
+                      style={{width: "100%"}}
                     >
-                      Sign In
+                      <strong style={{color:"white"}}>Sign In</strong>
                     </Button>
+                    <div className='text-center' style={{padding:"10px"}}>
+                      <a href='/resetpassword' style={{color: "#494949"}}>Forgot password?</a>
+                    </div>
+
                   </Form>
-                </Col>
-              </Row>
+                {/* </Col> */}
+              {/* </Row> */}
 
-              <h4>Or Login With Social Media!</h4>
+              {/* <p>&nbsp;</p> */}
+              {/* <p style={{color: "#494949", paddingTop: "10px"}}>Or Login With Social Media</p> */}
+              
+              <div style={{borderTop:"1px solid #d9dadc", margin:"20px 0", display:"block",lineHeight:"1px", textAlign:"center", color:"#494949"}}></div>
+              {/* <hr/> */}
 
-              <Row>
-                <Col>
-                  <div
-                    Style={{
-                      width: "200px"
-                    }}
-                  >
-                    <FacebookLogin
-                      appId='508721976476931'
-                      autoLoad={false}
-                      fields='name,email,picture'
-                      onClick='return false'
-                      callback={responseFacebook}
-                      size='small'
-                      textButton='FB Login'
-                    />
-                  </div>
-                </Col>
-
-                <Col>
-                  <GoogleLogin
-                    clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
-                    buttonText='Login'
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    isSignedIn={false}
-                    disable={false}
-                    cookiePolicy={"single_host_origin"}
-                  />
-                  {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
-                </Col>
-              </Row>
+              <div className='text-center'>
+            <p style={{fontWeight:"bold", color: "#494949"}}>Don't have an account?</p>
+            <a
+                href='/signup'
+                style={{border:"2px solid #469b47", color:"#469b47", padding: "8px 120px", borderRadius:"4px", width: "100%"}}
+              >
+                <strong style={{color:"#469b47"}}>Sign Up Here</strong>
+            </a>
+          </div>
             </Container>
             <Col></Col>
           </div>
-          <div className='text-center'>
-            <a href='/signup'>New User? Sign Up Here</a>
-          </div>
-          <div className='text-center'>
-            <a href='/resetpassword'>Forgot password?</a>
-          </div>
+
+          &nbsp;
+          <hr></hr>
         </div>
       </main>
     </Fragment>

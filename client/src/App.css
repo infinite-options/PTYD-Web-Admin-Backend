@@ -47,6 +47,11 @@ a {
   font-family: montserrat;
 }
 
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: none!important;
+}
+
 /* ----- navigation header ----- */
 
 .navigation-container {

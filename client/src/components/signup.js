@@ -137,7 +137,7 @@ function SignUp(props) {
           <Col></Col>
           <Col sm={8}>
             <Row className='justify-content-md-center'>
-              <h3>Sign Up</h3>
+              <h1 style={{color:"#6e6565"}}>Sign Up</h1>
             </Row>
             {erro != null && (
               <Row className='justify-content-md-center'>
@@ -153,7 +153,7 @@ function SignUp(props) {
                 <Col></Col>
               </Row>
             )}
-            <Row className='justify-content-md-center'>
+            <Row className='justify-content-md-center font2'>
               <Container className='container fluid justify-content-center bg-success'>
                 <Form>
                   <Form.Row>
@@ -265,13 +265,16 @@ function SignUp(props) {
                       gravida sollicitudin rutrum.
                     </Form.Control>
                   </Form.Group>
-                  <Form.Group id='formGridServiceTerms'>
+
+
+                  <Form.Group id='formGridServiceTerms' style={{paddingLeft:"300px"}}>
                     <Form.Check
                       type='checkbox'
                       label='Agree To Prep To Your Door Terms Of Service.'
+                      style={{textAlign:"left"}}
                     />
                   </Form.Group>
-                  <Form.Group id='formGridCheckbox'>
+                  <Form.Group id='formGridCheckbox' style={{paddingLeft:"300px"}}>
                     <Form.Check
                       id='weeklyUpdateCheck'
                       value={weeklyUpdates}
@@ -287,6 +290,7 @@ function SignUp(props) {
                       }}
                       type='checkbox'
                       label='Sign Me Up For Weekly Prep To Your Door Updates!'
+                      style={{textAlign:"left"}}
                     />
                     {/*
                                       <Form.Control
@@ -305,11 +309,14 @@ function SignUp(props) {
                     Submit
                   </Button>
                 </Form>
+                &nbsp;
               </Container>
+              &nbsp;
             </Row>
           </Col>
           <Col></Col>
         </Row>
+        <hr/>
       </main>
     </Fragment>
   );

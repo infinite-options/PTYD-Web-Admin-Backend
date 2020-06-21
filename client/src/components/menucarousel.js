@@ -13,14 +13,17 @@ export default class MenuCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      description: this.props.description
+      currentWeek: null,
+      dates: null,
+      meals: {
+        Seasonal: { Category: null, Menu: [] },
+        Weekly: { Category: null, Menu: [] },
+        Smoothies: { Category: null, Menu: [] },
+        Addons: { Category: null, Menu: [] },
+        Misc: { Category: null, Menu: [] }
+      }
     };
   }
-
-  componentDidMount = () => {
-    console.log("description in Each Meal: ", this.state.description);
-  };
-
   renderArrows = () => {
     return (
       <div className="slider-arrow">
@@ -41,9 +44,21 @@ export default class MenuCarousel extends Component {
       </div>
     );
   };
+  
+  async componentDidMount() {
+    this.setState({ currentWeek: this.props.objectIndex });
+    const res = await fetch(this.props.API_URL);
+    const api = await res.json();
+    console.log(api)
+    const sundayDate = api.result[this.state.currentWeek].Sunday;
+    const mondayDate = api.result[this.state.currentWeek].Monday;
+    const deliveryDates = sundayDate + " & " + mondayDate;
+    this.setState({ dates: deliveryDates });
+    const mealsData = api.result[this.state.currentWeek].Meals;
+    this.setState({ meals: mealsData });
+  }
 
   render() {
-    let desc = this.state.description;
     var settings = {
       dots: true,
       infinite: true,
