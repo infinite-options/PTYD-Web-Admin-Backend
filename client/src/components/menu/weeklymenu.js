@@ -111,9 +111,8 @@ class WeeklyMenu extends Component {
                         {meal.meal_fat}, Sat {meal.meal_sat}
                       </p>
 
-                      <p>
-                        
-                      </p>
+                      <p>Ingredients:</p>
+                      <p>{meal.meal_desc}</p>
 
                     </div>
                   </div>
@@ -122,39 +121,6 @@ class WeeklyMenu extends Component {
               )}
           </div>
         </div>
-
-        {/* <div class="album py-5 bg-white">
-          <div class="container" Style="margin-top:-40px;">
-            <div class="row justify-content-center">
-              {Object.keys(this.state.meals).map(key =>
-                this.state.meals[key].Menu.map(meal => (
-                  <div class="col-md-4">
-                    <div
-                      class="card mb-4 shadow-sm"
-                      Style="height:300px; width:300px;"
-                    >
-                      <img
-                        class="card-img-top"
-                        width="100%"
-                        height="200px"
-                        src={meal.meal_photo_url === null ? defaultMeal : meal.meal_photo_url}
-                        alt="meal pic"
-                      />
-                      <Card.Body class="font2">
-                        <Card.Title>{meal.meal_name}</Card.Title>
-                        <Card.Text>
-                          Cal {meal.meal_calories}, Prot {meal.protein}, Carb{" "}
-                          {meal.meal_carbs}, Sug {meal.meal_sugar}, Fat{" "}
-                          {meal.meal_fat}, Sat {meal.meal_sat}
-                        </Card.Text>
-                      </Card.Body>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div> */}
 
       </main>
     );
