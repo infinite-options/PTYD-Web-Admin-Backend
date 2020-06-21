@@ -350,7 +350,7 @@ export default function Login(props) {
       )}
       <main Style={"margin-top:-80px;" + (loading ? "opacity: 0.5" : "")}>
         <div class='container text-center' Style='margin-top:-40px;'>
-          <h1>Login</h1>
+          <h1>LOGIN</h1>
           {error !== null && error !== undefined && (
             <Fragment>
               <h6>
@@ -364,36 +364,39 @@ export default function Login(props) {
           <div className='text-center'>
             <p >To continue, please log in to Prep to Your Door.</p>
           </div>
+          
+          <Row className="justify-content-center" style={{padding:"5px 0"}}>
+            <div style={{padding:"5px"}}>
+              <FacebookLogin
+                appId='508721976476931'
+                autoLoad={false}
+                fields='name,email,picture'
+                onClick='return false'
+                callback={responseFacebook}
+                size='small'
+                textButton='Continue with FB'
+              />
+            </div>
+            {/* </div> */}
+            &nbsp;
+            <div style={{padding:"3px 0 0 0"}}>
+              <GoogleLogin
+                clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
+                buttonText='Continue with Google'
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                isSignedIn={false}
+                disable={false}
+                cookiePolicy={"single_host_origin"}
+              />
+              {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
+            </div>
+          </Row>
 
           <div class='row'>
             <Col></Col>
             <Container className='justify-content-center bg-white font2' style={{ border: "0", boxShadow: "0", borderColor: "white", padding: "5px 30px", cursor: "default", width: "400px" }}>
-              <Row className="justify-content-center">
-                <div style={{ display: "flex", padding: '10px' }}>
-                  <FacebookLogin
-                    appId='508721976476931'
-                    autoLoad={false}
-                    fields='name,email,picture'
-                    onClick='return false'
-                    callback={responseFacebook}
-                    size='small'
-                    textButton='Continue with FB'
-                  />
-                </div>
-                &nbsp;
-                <div style={{ display: "flex", }}>
-                  <GoogleLogin
-                    clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
-                    buttonText='Continue with Google'
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    isSignedIn={false}
-                    disable={false}
-                    cookiePolicy={"single_host_origin"}
-                  />
-                  {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
-                </div>
-              </Row>
+              
 
               <div style={{ borderTop: "1px solid #d9dadc", margin: "30px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}>
                 <strong style={{ background: "#fff", letterSpacing: "1px" }}>&nbsp; OR &nbsp;</strong>
@@ -457,11 +460,11 @@ export default function Login(props) {
               <div style={{ borderTop: "1px solid #d9dadc", margin: "20px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}></div>
               {/* <hr/> */}
 
-              <div className='text-center'>
+              <div className='text-center' style={{padding:"10px 0 50px 0px"}}>
                 <p style={{ fontWeight: "bold", color: "#494949" }}>Don't have an account?</p>
                 <a
                   href='/signup'
-                  style={{ border: "2px solid #469b47", color: "#469b47", padding: "8px 120px", borderRadius: "4px", width: "100%" }}
+                  style={{ border: "2px solid #469b47", color: "#469b47", padding: "8px 90px", borderRadius: "4px"}}
                 >
                   <strong style={{ color: "#469b47" }}>Sign Up Here</strong>
                 </a>
@@ -470,7 +473,7 @@ export default function Login(props) {
             <Col></Col>
           </div>
 
-          &nbsp;
+          {/* &nbsp; */}
           <hr></hr>
         </div>
       </main>

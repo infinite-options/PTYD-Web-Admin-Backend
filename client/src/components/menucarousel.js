@@ -46,16 +46,16 @@ export default class MenuCarousel extends Component {
   };
   
   async componentDidMount() {
-    this.setState({ currentWeek: this.props.objectIndex });
-    const res = await fetch(this.props.API_URL);
-    const api = await res.json();
-    console.log(api)
-    const sundayDate = api.result[this.state.currentWeek].Sunday;
-    const mondayDate = api.result[this.state.currentWeek].Monday;
-    const deliveryDates = sundayDate + " & " + mondayDate;
-    this.setState({ dates: deliveryDates });
-    const mealsData = api.result[this.state.currentWeek].Meals;
-    this.setState({ meals: mealsData });
+    // this.setState({ currentWeek: this.props.objectIndex });
+    // const res = await fetch(this.props.API_URL);
+    // const api = await res.json();
+    // console.log(api)
+    // const sundayDate = api.result[this.state.currentWeek].Sunday;
+    // const mondayDate = api.result[this.state.currentWeek].Monday;
+    // const deliveryDates = sundayDate + " & " + mondayDate;
+    // this.setState({ dates: deliveryDates });
+    // const mealsData = api.result[this.state.currentWeek].Meals;
+    // this.setState({ meals: mealsData });
   }
 
   render() {
@@ -76,6 +76,58 @@ export default class MenuCarousel extends Component {
           <Slider {...settings}
             ref= {c => (this.slider = c)}
           >
+
+
+
+            {/* <div>
+              {Object.keys(this.state.meals).map(key =>
+                this.state.meals[key].Menu.map(meal => (
+                <div 
+                  //each item plus padding
+                  style={{
+                    margin: "30px",
+                  }}
+                >
+                  <img
+                    src={meal.meal_photo_url === null ? defaultMeal : meal.meal_photo_url}
+                    alt="meal pic"
+                    style={{
+                      height:"300px",
+                      width:"100%",
+                      objectFit:"cover",
+                      boxShadow:"1px 2px 5px 1px grey"
+                    }}
+                  />
+                  <div
+                    style={{
+                      
+                    }}
+                  >
+                    <div
+                      //meal titles (to show)
+                      style={{
+                        wordWrap:"break-word",
+                        color: "grey",
+                        textAlign:"right",
+                      }}
+                    >
+                      <h4>{meal.meal_name}</h4>
+                      <p>
+                        Cal {meal.meal_calories}, Prot {meal.protein}, Carb{" "}
+                        {meal.meal_carbs}, Sug {meal.meal_sugar}, Fat{" "}
+                        {meal.meal_fat}, Sat {meal.meal_sat}
+                      </p>
+
+                      <p>Ingredients:</p>
+                      <p>{meal.meal_desc}</p>
+
+                    </div>
+                  </div>
+                </div>
+                ))
+              )}
+            </div> */}
+
             <div>
               <div className='menu-carousel-img-container'>
                 <img

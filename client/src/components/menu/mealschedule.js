@@ -163,7 +163,7 @@ export default class MealSchedule extends Component {
         <Grid>
           <Cell col={4}>
             <div className='box'>
-              <h4>Hi! {this.state.firstname}</h4>
+              <h4>Hi, {this.state.firstname}!</h4>
               <Row className='mb-1'>
                 <Selector
                   purchases={this.state.purchases}
@@ -173,7 +173,7 @@ export default class MealSchedule extends Component {
 
               <Row className='mb-1'>
                 <Button onClick={this.ChangeAccountInfo} size='lg' block>
-                  Change Accont Info
+                  Change Account Info
                 </Button>
               </Row>
               {this.state.showHideMakeChange && (
@@ -224,7 +224,7 @@ export default class MealSchedule extends Component {
                       className='button is-info is-large'
                       href='/selectmealplan'
                     >
-                      Subcribe Now
+                      Subscribe Now
                     </a>
                   </div>
                 ) : (

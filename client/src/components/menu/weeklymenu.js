@@ -75,7 +75,7 @@ class WeeklyMenu extends Component {
           >
             {Object.keys(this.state.meals).map(key =>
                 this.state.meals[key].Menu.map(meal => (
-                <div 
+                <div key={meal.meal_plan_id}
                   //each item plus padding
                   style={{
                     margin: "30px",
