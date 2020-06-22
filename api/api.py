@@ -1733,7 +1733,10 @@ class UpdatePurchases(Resource):
                     , orders.meal_selection
                 FROM (
                     SELECT * FROM ptyd.ptyd_snapshots snap
-                    WHERE weeks_remaining > 0 AND week_affected = \'""" + thisSat + """\')
+                    WHERE snap.snapshot_timestamp = (SELECT MAX(snapshot_timestamp) FROM ptyd_snapshots snap2
+					                                    WHERE snap.purchase_id = snap2.purchase_id
+							                            GROUP BY purchase_id) 
+					AND weeks_remaining > 0 AND week_affected = \'""" + thisSat + """\')
                     AS active
                     LEFT JOIN (
                         SELECT ms1.*
