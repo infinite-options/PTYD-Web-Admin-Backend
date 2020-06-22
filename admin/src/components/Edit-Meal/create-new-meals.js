@@ -883,7 +883,7 @@ class CreateNewMeal extends Component {
                         <th>Ingredient</th>
                         <th>Quantity</th>
                         <th>Units</th>
-                        <th>Price Per Unit</th>
+                        <th>Price</th>
                       </tr>
                     </thead>
                     <tbody>{displayrowsingr}</tbody>
