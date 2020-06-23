@@ -1049,7 +1049,7 @@ class CreateNewMeal extends Component {
                     className="float-right"
                     onClick={this.postMealChanges}
                   >
-                    Save Meal
+                    Save Meal and Edit Recipe
                   </Button>
                 </Col>
                 <Col></Col>
