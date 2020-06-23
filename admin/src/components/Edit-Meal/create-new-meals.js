@@ -518,7 +518,10 @@ class CreateNewMeal extends Component {
           //props.history.push("/signupwaiting");
           //setLoading(false);
           console.log("API ADD_MEAL WORKED");
-          window.location.reload(true);
+          this.props.history.push("/editMeal", {
+            mealName: mealData.meal_name,
+          });
+          //window.location.reload(true);
         }
       })
       .catch((err) => {
@@ -1054,30 +1057,6 @@ class CreateNewMeal extends Component {
             </div>
           </Grid>
           <Divider />
-          <Grid item xs={12}>
-            <div style={{ margin: "1%" }}>
-              <WhiteTextTypography color="blue" variant="h5" gutterBottom>
-                Create New Ingredient
-              </WhiteTextTypography>
-              <Row>
-                <Col>
-                  <Table striped bordered hover>
-                    {/* variant="dark" */}
-                    <thead>
-                      <tr>
-                        <th>Ingredient</th>
-                        <th>Quantity</th>
-                        <th>Units</th>
-                        <th>Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>{displayrowsingr}</tbody>
-                  </Table>
-                </Col>
-                <Col></Col>
-              </Row>
-            </div>
-          </Grid>
         </Grid>
       </div>
     );

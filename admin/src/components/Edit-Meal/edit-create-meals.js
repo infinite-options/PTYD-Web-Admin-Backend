@@ -55,6 +55,7 @@ class EditCreateMeal extends Component {
       brandNewIngrPrice: 5,
       brandNewUnit: "Cup",
       supportNewRecipe: false,
+      mealNameRedirected: "",
     };
   }
   async componentWillMount() {
@@ -64,6 +65,21 @@ class EditCreateMeal extends Component {
     const api1 = await res1.json();
     const res2 = await fetch(this.props.API_URL_GETUNITS);
     const api2 = await res2.json();
+    const mealNameRedirected = this.props.location.state;
+    let redirectedSel = -1;
+    let redirectedName = "NONE";
+
+    console.log(mealNameRedirected);
+    if (mealNameRedirected != null) {
+      if (
+        mealNameRedirected.mealName != null ||
+        mealNameRedirected.mealName != ""
+      ) {
+        this.setState({ mealNameRedirected: mealNameRedirected.mealName });
+        redirectedName = mealNameRedirected.mealName;
+      }
+    }
+
     //const createMeal = api.result;
     let tempkeys = [];
     let mealid = [];
@@ -136,7 +152,15 @@ class EditCreateMeal extends Component {
     for (var key in createMeal) {
       tempkeys.push(createMeal[key]["meal_name"]);
       mealid.push(key);
+      if (
+        redirectedName != "NONE" &&
+        redirectedName == createMeal[key]["meal_name"]
+      ) {
+        redirectedSel = mealid.indexOf(key);
+        this.setState({ selection: redirectedSel });
+      }
     }
+
     let enterMeal = mealid[this.state.selection];
 
     console.log(mapIngrUnitMeasureIdLocal);
