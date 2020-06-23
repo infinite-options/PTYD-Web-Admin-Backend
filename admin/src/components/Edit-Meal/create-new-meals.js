@@ -55,6 +55,18 @@ class CreateNewMeal extends Component {
       brandNewIngrPrice: 5,
       brandNewUnit: "Cup",
       supportNewRecipe: true,
+      MealDesc: "",
+      MealCategory: "",
+      MealHint: "",
+      MealPhotoURL: "",
+      ExtraMealPrice: "",
+      MealCalories: "",
+      MealProtein: "",
+      MealCarbs: "",
+      MealFiber: "",
+      MealSugar: "",
+      MealFat: "",
+      MealSat: "",
     };
   }
   async componentWillMount() {
@@ -156,6 +168,37 @@ class CreateNewMeal extends Component {
       mapIngrUnitMeasureId: mapIngrUnitMeasureIdLocal,
     });
   }
+
+  handleMealDesc = (e) => {
+    this.setState({ MealDesc: e.target.value });
+  };
+  handleMealCategory = (e) => {
+    this.setState({ MealCategory: e.target.value });
+  };
+  handleMealPhotoURL = (e) => {
+    this.setState({ MealPhotoURL: e.target.value });
+  };
+  handleExtraMealPrice = (e) => {
+    this.setState({ ExtraMealPrice: e.target.value });
+  };
+  handleMealCalories = (e) => {
+    this.setState({ MealCalories: e.target.value });
+  };
+  handleMealProtein = (e) => {
+    this.setState({ MealProtein: e.target.value });
+  };
+  handleMealCarbs = (e) => {
+    this.setState({ MealCarbs: e.target.value });
+  };
+  handleMealFiber = (e) => {
+    this.setState({ MealFiber: e.target.value });
+  };
+  handleMealFat = (e) => {
+    this.setState({ MealFat: e.target.value });
+  };
+  handleMealSat = (e) => {
+    this.setState({ MealSat: e.target.value });
+  };
 
   handleBNewIngrName = (event) => {
     this.setState({ brandNewIngr: event.target.value });
@@ -443,14 +486,24 @@ class CreateNewMeal extends Component {
     var mealData = {
       meal_id: key,
       meal_name: mealName,
-      ingredients: ingredients_list,
+      meal_category: this.state.MealCategory,
+      meal_desc: this.state.MealDesc,
+      meal_hint: this.state.MealHint,
+      meal_photo_URL: this.state.MealPhotoURL,
+      extra_meal_price: this.state.ExtraMealPrice,
+      meal_calories: this.state.MealCalories,
+      meal_protein: this.state.MealProtein,
+      meal_carbs: this.state.MealCarbs,
+      meal_fiber: this.state.MealFiber,
+      meal_sugar: this.state.MealSugar,
+      meal_fat: this.state.MealFat,
+      meal_sat: this.state.MealSat,
     };
-
     console.log("Sending Out:");
     console.log(mealData);
     console.log(JSON.stringify(mealData));
     axios
-      .post(this.props.API_URL_SAVERECIPE, mealData)
+      .post(this.props.API_URL_ADDMEAL, mealData)
       .then((res) => {
         if (res.status === 200) {
           // if success
@@ -464,7 +517,7 @@ class CreateNewMeal extends Component {
           // window.location.reload(false);
           //props.history.push("/signupwaiting");
           //setLoading(false);
-          console.log("API ADD_NEW_INGREDIENT WORKED");
+          console.log("API ADD_MEAL WORKED");
           window.location.reload(true);
         }
       })
@@ -472,7 +525,7 @@ class CreateNewMeal extends Component {
         if (err.response !== undefined) {
           //setErro(err.response.data.result);
           //window.location.reload(false);
-          console.log("API ADD_NEW_INGREDIENT Failed");
+          console.log("API ADD_MEAL Failed");
         } else if (typeof err === "string") {
           //setErro(err);
           console.log(err);
@@ -839,29 +892,161 @@ class CreateNewMeal extends Component {
                     {/* variant="dark" */}
                     <thead>
                       <tr>
-                        <th>New Recipe</th>
+                        <th colSpan="2">New Meal</th>
                         <th colSpan="3">{this.dateDropdown()}</th>
                       </tr>
                     </thead>
                     <thead>
                       <tr>
-                        <th>Number</th>
-                        <th>Ingredient</th>
-                        <th>Quantity</th>
-                        <th>Units</th>
+                        <th colSpan="2">Meal Desc</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Desc"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealDesc}
+                          />
+                        </th>
                       </tr>
                     </thead>
-                    <tbody>{displayrows}</tbody>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Category</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Category"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealCategory}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Hint</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Hint"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealhHit}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Photo URL</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Photo URL"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealPhotoURL}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Extra Meal Price</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Extra Meal Price"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleExtraMealPrice}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Calories</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Calories"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealCalories}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Protein</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Protein"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealProtein}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Carbs</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Carbs"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealCarbs}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Fiber</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Fiber"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealFiber}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Sugar</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Sugar"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealSugar}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Fat</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Fat"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealFat}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Meal Sat</th>
+                        <th colSpan="3">
+                          <Input
+                            placeholder={"Meal Sat"}
+                            inputProps={{ "aria-label": "description" }}
+                            onChange={this.handleMealSat}
+                          />
+                        </th>
+                      </tr>
+                    </thead>
                   </Table>
-                  <Button variant="success" onClick={this.makeNewIngrEntry}>
-                    Add Ingredient
-                  </Button>
                   <Button
                     variant="success"
                     className="float-right"
                     onClick={this.postMealChanges}
                   >
-                    Save Recipe
+                    Save Meal
                   </Button>
                 </Col>
                 <Col></Col>
@@ -1030,6 +1215,19 @@ class CreateNewMeal extends Component {
       else if (this.state.supportNewRecipe && i != 0) continue;
       tempdate.push(<MenuItem value={i}>{this.state.mealkeys[i]}</MenuItem>);
     }
+    return <FormControl>{newMealInput}</FormControl>;
+  };
+
+  formentry = (label, foo) => {
+    let newMealInput = (
+      <div>
+        <Input
+          placeholder={label}
+          inputProps={{ "aria-label": "description" }}
+          onChange={foo()}
+        />
+      </div>
+    );
     return <FormControl>{newMealInput}</FormControl>;
   };
 }

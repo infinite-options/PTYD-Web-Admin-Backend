@@ -831,7 +831,7 @@ class EditCreateMeal extends Component {
           <Grid item xs={12}>
             <div style={{ margin: "1%" }}>
               <WhiteTextTypography color="blue" variant="h5" gutterBottom>
-                Edit Meal
+                Edit Meal Recipe Here
               </WhiteTextTypography>
               <Row>
                 <Col>

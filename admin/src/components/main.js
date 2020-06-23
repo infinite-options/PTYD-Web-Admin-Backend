@@ -61,6 +61,7 @@ const Main = ({ appProps }) => (
         API_URL_SAVERECIPE: `${DEV_URL}Edit_Recipe`,
         API_URL_ADDINGREDIENT: `${DEV_URL}Add_New_Ingredient`,
         API_URL_GETUNITS: `${DEV_URL}GetUnits`,
+        API_URL_ADDMEAL: `${DEV_URL}Add_Meal`,
       }}
     />
     <AppliedRoute

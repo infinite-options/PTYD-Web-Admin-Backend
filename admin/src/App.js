@@ -136,11 +136,12 @@ function App() {
             </Nav.Link>
             &nbsp;&nbsp;&nbsp;
             <NavDropdown title="Do It Yourself" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/editMeal">
-                Edit Meals
-              </NavDropdown.Item>
               <NavDropdown.Item href="/createMeal">
                 Create Meals
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/createMeal">Edit Meals</NavDropdown.Item>
+              <NavDropdown.Item href="/editMeal">
+                Edit Meal Recipes
               </NavDropdown.Item>
               <NavDropdown.Item href="/createMenu">
                 Create Menus
