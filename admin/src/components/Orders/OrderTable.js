@@ -29,7 +29,10 @@ function createData(obj) {
     meal_id,
     meal_name,
     default_meal,
-    extra_meal_price,
+    meal_phot_URL,
+    week_affected,
+    meal_selected,
+    meals_ordered_meal_name,
     total,
   } = obj;
   return {
@@ -41,7 +44,10 @@ function createData(obj) {
     meal_id,
     meal_name,
     default_meal,
-    extra_meal_price,
+    meal_phot_URL,
+    week_affected,
+    meal_selected,
+    meals_ordered_meal_name,
     total,
   };
 }
@@ -387,9 +393,10 @@ export default function OrderTable(props) {
                       <TableCell align="right">{row.meal_id}</TableCell>
                       <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.default_meal}</TableCell>
-                      <TableCell align="right">
-                        {row.extra_meal_price}
-                      </TableCell>
+                      <TableCell align="right">{row.meal_phot_URL}</TableCell>
+                      <TableCell align="right">{row.week_affected}</TableCell>
+                      <TableCell align="right">{row.meal_selected}</TableCell>
+                      <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.total}</TableCell>
                     </TableRow>
                   );

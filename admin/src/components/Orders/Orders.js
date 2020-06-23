@@ -25,10 +25,13 @@ const centerStyle = {
 };
 
 export default function Orders(props) {
-  const [date, setDate] = useState("2020-06-20");
+  const [date, setDate] = useState("2020-07-11");
 
   const order = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
-  // const ingredient = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
+  const ingredient = useFetch(
+    props.API_URL + `All_Ingredients?date=${date}`,
+    date
+  );
 
   const handleChange = (event) => {
     setDate(event.target.value);
@@ -41,26 +44,31 @@ export default function Orders(props) {
         <Typography color="textPrimary">Create Menu</Typography>
       </Breadcrumbs>
       <DropDownMenu date={date} handleChange={handleChange} />
-      {order.loading ? (
+      {order.loading && (
         <BeatLoader css={override} color={"#36D7B7"} loading={order.loading} />
-      ) : order.error ? (
+      )}
+      {order.error && (
         <h3 style={centerStyle}>
           <MdError style={{ color: "#F40057" }} />
           &nbsp;Failed to fetch data for Order's table
         </h3>
-      ) : (
-        <OrderTable data={order.data} />
       )}
-      {/* {ingredient.loading ? (
-        <BeatLoader css={override} color={"#36D7B7"} loading={ingredient.loading} />
-      ) : ingredient.error ? (
+      {order.data && <OrderTable data={order.data} />}
+
+      {ingredient.loading && (
+        <BeatLoader
+          css={override}
+          color={"#36D7B7"}
+          loading={ingredient.loading}
+        />
+      )}
+      {ingredient.error && (
         <h3 style={centerStyle}>
           <MdError style={{ color: "#F40057" }} />
           &nbsp;Failed to fetch data for Ingredient's table
         </h3>
-      ) : (
-        <OrderTable data={ingredient.data} />
-      )} */}
+      )}
+      {ingredient.data && <IngredientTable data={ingredient.data} />}
     </div>
   );
 }
