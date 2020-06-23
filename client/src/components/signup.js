@@ -164,6 +164,7 @@ function SignUp(props) {
                         onChange={e => setFirstName(e.target.value)}
                         placeholder='First'
                       />
+                      {!firstname ? (<span className='required-red'>First Name is required</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridLastName'>
@@ -173,6 +174,7 @@ function SignUp(props) {
                         onChange={e => setLastName(e.target.value)}
                         placeholder='Last'
                       />
+                      {!lastname ? (<span className='required-red'>Last Name is required</span>) : ''}
                     </Form.Group>
                   </Form.Row>
                   <Form.Row>
@@ -187,6 +189,7 @@ function SignUp(props) {
                         }}
                         placeholder='Enter Email'
                       />
+                      {!email ? (<span className='required-red'>Email is required</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridEmailConfirm'>
@@ -197,8 +200,10 @@ function SignUp(props) {
                         onChange={e => setConfirmEmail(e.target.value)}
                         placeholder='Confirm Email'
                       />
+                      {!confirmEmail ? (<span className='required-red'>Please confirm your email</span>) : ''}
                     </Form.Group>
                   </Form.Row>
+
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridPassword'>
                       <Form.Label>Password</Form.Label>
@@ -208,6 +213,7 @@ function SignUp(props) {
                         onChange={e => setPassword(e.target.value)}
                         placeholder='Enter Password'
                       />
+                      {!password ? (<span className='required-red'>Password is required</span>) : ''}
                     </Form.Group>
                     <Form.Group as={Col} controlId='formGridPasswordConfirm'>
                       <Form.Label>Confirm Password</Form.Label>
@@ -217,6 +223,7 @@ function SignUp(props) {
                         onChange={e => setConfirmPassword(e.target.value)}
                         placeholder='Confirm Password'
                       />
+                      {!confirmPassword ? (<span className='required-red'>Please confirm your password</span>) : ''}
                     </Form.Group>
                   </Form.Row>
 
@@ -228,6 +235,7 @@ function SignUp(props) {
                         onChange={e => setPhoneNumber(e.target.value)}
                         placeholder='Enter Phone Number'
                       />
+                      {phoneNumber.length !== 10 ? (<span className='required-red'>Phone Number must be 10 digits</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridReferral'>

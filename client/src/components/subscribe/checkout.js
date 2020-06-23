@@ -160,7 +160,9 @@ class Checkout extends Component {
       "delivery_city",
       "delivery_state",
       "delivery_zip",
+
       // "delivery_region",
+      
       "delivery_phone",
       "cc_num",
       "cc_cvv",
@@ -523,6 +525,9 @@ class Checkout extends Component {
                     </Form.Group>
                   </Form.Row>
 
+
+
+
                   {/* <Form.Group
                     as={Col}
                     md={6}
@@ -557,6 +562,9 @@ class Checkout extends Component {
                       onChange={this.handleGiftChange}
                     />
                   </Form.Group>
+
+
+
 
                   <h5>Billing Information</h5>
 
@@ -727,6 +735,7 @@ class Checkout extends Component {
                 </Form>
               </Col>
             </Row>
+            &nbsp;
           </Container>
         </Fragment>
       );
