@@ -1316,8 +1316,6 @@ class Coordinates:
 
 
 # confirmation page
-
-
 @app.route('/api/v2/confirm/<token>/<hashed>', methods=['GET'])
 def confirm(token, hashed):
     try:
@@ -4780,7 +4778,7 @@ api.add_resource(SessionVerification,
                  '/api/v2/sessionverification/<string:userUid>/<string:sessionId>')
 api.add_resource(AccountPurchases, '/api/v2/accountpurchases/<string:buyerId>')
 api.add_resource(Checkout, '/api/v2/checkout')
-api.add_resource(MealSelection, '/api/v2/mealseection/<string:purchaseId>')
+api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
