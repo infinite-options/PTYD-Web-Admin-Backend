@@ -1,30 +1,24 @@
 import React, {Component} from "react";
-//import { Grid, Cell } from "react-mdl";
-import {Alert, Tooltip, OverlayTrigger, Button} from "react-bootstrap";
+import {OverlayTrigger, Tooltip, Button} from "react-bootstrap";
 import defaultMeal from "../../img/default-meal.png";
 
-//  Replace FINDUS1 below with this.props.imgurl
-
-class EachMeal extends Component {
+export default class EachMeal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      description: this.props.description
+    };
+  }
+  componentDidMount = () => {
+    console.log("description in Each Meal: ", this.state.description);
+  };
   render() {
+    let desc = this.state.description;
     return (
       <div>
-        <center>
-          <h6>
-            {/* {this.props.mealTitle.length > 22 ? (
-              this.props.mealTitle
-            ) : (
-              <div>
-                {this.props.mealTitle} <br />
-                <br />
-              </div>
-            )} */}
-          </h6>
-          {/* <h4>{this.props.maxmeals}</h4> */}
-        </center>
-        <div class='container-select-meal' style={{color: "white"}}>
+        <div className='container-select-meal' style={{color: "white"}}>
           <div
-            class='meal-img-wrapper'
+            className='meal-img-wrapper'
             style={{
               overflow: "hidden",
               width: "100%",
@@ -33,52 +27,15 @@ class EachMeal extends Component {
               maxHeight: "200px"
             }}
           >
-            {/* <div
-            class="meal-img-wrapper"
-            style={{
-              overflow: "hidden",
-              width: "100%",
-              minWidth: "100%",
-              height: "200px",
-              maxHeight: "200px"
-            }}
-          >
-            <OverlayTrigger
-              placement="bottom"
-              delay={{ show: 100, hide: 100 }}
-              popperConfig={{
-                modifiers: {
-                  preventOverflow: {
-                    boundariesElement: "offsetParent"
-                  }
-                }
-              }}
-              overlay={
-                <Tooltip id="button-tooltip">
-                  <p>{this.props.detail}</p>
-                  <p>
-                    <strong>Ingredients:</strong> {this.props.ingridents}
-                  </p>
-                </Tooltip>
-              }
-            > */}
             <img
-              class='img-fluid'
-              src={this.props.imgurl == null ? defaultMeal : this.props.imgurl}
+              className='img-fluid'
+              src={
+                desc.meal_photo_url === null ? defaultMeal : desc.meal_photo_url
+              }
               alt='no_meal_img'
-              resizeMode
+              resizemode='true'
             />
-            {/* <div
-              class="bottom-right-meal-selection font2"
-              style={{
-                fontSize: "20px",
-                backgroundColor: "black",
-                height: "30px"
-              }}
-            >
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            </div> */}
+
             <OverlayTrigger
               placement='bottom'
               delay={{show: 100, hide: 100}}
@@ -93,13 +50,13 @@ class EachMeal extends Component {
                 <Tooltip id='button-tooltip'>
                   <p>{this.props.detail}</p>
                   <p>
-                    <strong>Ingredients:</strong> {this.props.ingridents}
+                    <strong>Ingredients:</strong> {desc.meal_desc}
                   </p>
                 </Tooltip>
               }
             >
               <div
-                class='bottom-right-meal-selection font2'
+                className='bottom-right-meal-selection font2'
                 style={{
                   fontSize: "15px",
                   float: "right",
@@ -107,7 +64,7 @@ class EachMeal extends Component {
                   lineHeight: "25px"
                 }}
               >
-                <center>{this.props.mealTitle}</center>
+                <center>{desc.meal_name}</center>
               </div>
             </OverlayTrigger>
           </div>
@@ -129,24 +86,23 @@ class EachMeal extends Component {
               marginLeft: "30px"
             }}
             onClick={() => {
-              if (this.props.mealQuantities > 0) {
-                this.props.incrementMaxMeal();
-              }
+              this.props.decrementMealLeft(this.props.id);
             }}
           >
+            {/* reduce the meal selected means increase number of meals left */}
             <b>-</b>
           </Button>
           <input
             type='text'
             size='1'
-            value={this.props.mealQuantities}
-            id='count'
+            value={this.props.quantity}
             style={{
               textAlign: "center",
               width: "40px",
               height: "40px",
               borderRadius: "50%"
             }}
+            readOnly
           />
           <Button
             variant='outline-success'
@@ -159,13 +115,13 @@ class EachMeal extends Component {
               marginRight: "30px"
             }}
             onClick={() => {
-              if (this.props.maxmeals == 0) {
+              if (this.props.mealLeft === 0) {
                 alert(
                   "You have selected more meals than your subscription plan allows.  Please select additional meals in the Add Local Treats menu or upgrade your Subscription Plan.  Thanks PTYD"
                 );
                 return;
               }
-              this.props.decrementMaxMeal();
+              this.props.incrementMealLeft(this.props.id);
             }}
           >
             <b>+</b>
@@ -175,5 +131,3 @@ class EachMeal extends Component {
     );
   }
 }
-
-export default EachMeal;
