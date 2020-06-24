@@ -2025,6 +2025,7 @@ class ChargeSubscribers(Resource):
                 INNER JOIN ptyd_meal_plans p5
 				ON 
 				    p4.meal_plan_id = p5.meal_plan_id
+				WHERE p4.purchase_status = 'ACTIVE'
                 ORDER BY
                     p1.purchase_id
                 ASC
@@ -3397,18 +3398,28 @@ class CancelSubscriptionNow(Resource):
         current_purchase_query = """SELECT purchase.purchase_id, purchase.meal_plan_id, plans.meal_plan_desc, 
                                                       plans.meal_plan_price, payment.payment_id, payment.buyer_id, 
                                                       payment.gift, payment.amount_due, payment.amount_paid, 
-                                                      snapshot.weeks_remaining, snapshot.week_affected
+                                                      snapshot1.weeks_remaining, snapshot1.week_affected
                                            FROM ptyd_purchases purchase, ptyd_payments payment, 
-                                                  ptyd_snapshots snapshot, ptyd_meal_plans plans
+                                                  ptyd_snapshots snapshot1, ptyd_meal_plans plans
                                            WHERE  purchase.purchase_id = '""" + purchaseID + """' AND
+                                                   snapshot1.snapshot_timestamp = (SELECT MAX(snapshot2.snapshot_timestamp)
+																				FROM ptyd_snapshots snapshot2
+                                                                                WHERE snapshot2.purchase_id = snapshot1.purchase_id
+                                                                                ) AND
+													payment.payment_time_stamp = (SELECT MAX(payment2.payment_time_stamp)
+																				FROM ptyd_payments payment2
+                                                                                WHERE payment.purchase_id = payment2.purchase_id
+                                                                                ) AND
                                                    purchase.purchase_id = payment.purchase_id AND
-                                                   purchase.purchase_id = snapshot.purchase_id AND
+                                                   purchase.purchase_id = snapshot1.purchase_id AND
                                                    purchase.meal_plan_id = plans.meal_plan_id AND
-                                                   snapshot.next_billing_date <> 'NULL' AND
+                                                   snapshot1.next_billing_date <> 'NULL' AND
                                                    purchase.purchase_status = 'ACTIVE';"""
-
+        print("here inside calculator")
         current_purchase_info = execute(current_purchase_query, "get", conn).get('result')[0]
+        print("current_purchase_info: ", current_purchase_info)
         name_matching = current_purchase_info.get('meal_plan_desc')
+        print("name_matching: ", name_matching)
         if name_matching != None:
             name_matching = name_matching.split(" - ")
         else:
@@ -3420,10 +3431,15 @@ class CancelSubscriptionNow(Resource):
         mealplan_info = execute(mealplan_query, "get", conn).get("result")
 
         week_remaining = int(current_purchase_info.get('weeks_remaining'))
-        amount_paid = float(current_purchase_info.get('amount_paid'))
-        amount_due = float(current_purchase_info.get('amount_due'))
-        amount_calculating = amount_paid if amount_paid >= 0 else amount_due
+        # calculate amount paid
+        if (float(current_purchase_info.get('amount_paid')) > float(current_purchase_info.get('meal_plan_price'))):
+            amount_paid = float(current_purchase_info.get('amount_paid'))
+        else:
+            amount_paid = float(current_purchase_info.get('meal_plan_price'))
 
+        amount_due = float(current_purchase_info.get('meal_plan_price'))
+        amount_calculating = amount_paid if amount_paid >= 0 else amount_due
+        print("amount_paid: ", amount_paid)
         refund = 0
         # create a temp dictionary to keep the meal plan price
         price = {}
