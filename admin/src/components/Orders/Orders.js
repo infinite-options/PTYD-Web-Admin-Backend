@@ -41,7 +41,7 @@ export default function Orders(props) {
     <div style={{ padding: "10px 20px" }}>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "10px" }}>
         <Link color="inherit">Admin Site</Link>
-        <Typography color="textPrimary">Create Menu</Typography>
+        <Typography color="textPrimary">Orders</Typography>
       </Breadcrumbs>
       <DropDownMenu date={date} handleChange={handleChange} />
       {order.loading && (
