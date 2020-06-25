@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import { Table } from "react-bootstrap";
 import Button from "muicss/lib/react/button";
 import MaterialTable from "material-table";
@@ -24,9 +23,9 @@ class CustomerProfile extends Component {
     // customer info
     const res = await fetch(this.props.API_URL_CUSTPROF);
     const api = await res.json();
-    const custInfo = api.result.CustomerInfo.result;
-    console.log("custinfo", custInfo);
-    this.setState({ custInfo });
+    //const custInfo = api.result.CustomerInfo.result;
+   // console.log("custinfo", custInfo);
+    //this.setState({ custInfo });
   }
   render() {
     return (
