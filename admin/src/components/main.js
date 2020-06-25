@@ -9,6 +9,7 @@ import EditCreateMeal from "./Edit-Meal/edit-create-meals";
 import CreateNewMeal from "./Edit-Meal/create-new-meals";
 import CreateMenu from "./Create-Menu/create-menu";
 import Orders from "./Orders/Orders";
+import Customers from "./Customers/Customers";
 
 const DEV_URL =
   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
@@ -79,8 +80,17 @@ const Main = ({ appProps }) => (
       path="/orders"
       component={Orders}
       appProps={{
-        appProps,
-        API_URL_Meal_Info1: `${DEV_URL}All_Meals`,
+        API_URL: `${DEV_URL}`,
+        DISPLAY_SAT_API_URL: `${DEV_URL}saturdays`,
+      }}
+    />
+    <AppliedRoute
+      exact
+      path="/customers"
+      component={Customers}
+      appProps={{
+        API_URL: `${DEV_URL}`,
+        PURCHASE_API_URL: `${DEV_URL}accountpurchases`,
       }}
     />
   </Switch>
