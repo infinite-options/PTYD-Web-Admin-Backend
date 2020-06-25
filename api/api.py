@@ -4511,13 +4511,6 @@ class All_Ingredients(Resource):
         finally:
             disconnect(conn)
 
-
-<< << << < HEAD
-
-== == == =
->>>>>> > faa4866f6d0e8043a2043794b16f343c8322e03b
-
-
 class DisplaySaturdays(Resource):
     def get(self):
         response = {}
@@ -4534,12 +4527,6 @@ class DisplaySaturdays(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
-
-<< << << < HEAD
-
-== == == =
->>>>>> > faa4866f6d0e8043a2043794b16f343c8322e03b
 
 
 class MealCreation(Resource):
@@ -4716,6 +4703,122 @@ class Add_New_Ingredient(Resource):
                                                                 FROM ptyd_measure_unit mu
                                                                 WHERE measure_unit_id=\'""" + str(ingredient_measure_id) + """\';
                                                                 """, 'post', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_ingredients;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+class Get_All_Units(Resource):       
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_measure_unit;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+
+class Add_Meal(Resource):
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            print("connection done...")
+            data = request.get_json(force=True)
+            print("data collected...")
+            print(data)
+            mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
+            print("meal_id called..")
+            mealId = mealIdQuery['result'][0]['new_id']
+            print("new_meal_id created...")
+            meal_category = data['meal_category']
+            meal_name = data['meal_name']
+            meal_desc = data['meal_desc']
+            meal_hint = data['meal_hint']
+            meal_photo_URL = data['meal_photo_URL']
+            extra_meal_price = data['extra_meal_price']
+            meal_calories = data['meal_calories']
+            meal_protein = data['meal_protein']
+            meal_carbs = data['meal_carbs']
+            meal_fiber = data['meal_fiber']
+            meal_sugar = data['meal_sugar']
+            meal_fat = data['meal_fat']
+            meal_sat = data['meal_sat']
+
+            print("Items read...")
+            items['new_meal_insert'] = execute("""INSERT INTO ptyd_meals ( 	
+                                                meal_id,meal_category,meal_name,meal_desc,
+                                                meal_hint,meal_photo_URL,extra_meal_price, 	
+                                                meal_calories,meal_protein,meal_carbs,
+                                                meal_fiber,meal_sugar,meal_fat,meal_sat 
+                                                ) 
+                                                VALUES ( 	
+                                                \'""" + str(mealId) + """\',\'""" + str(meal_category) + """\',
+                                                \'""" + str(meal_name) + """\',\'""" + str(meal_desc) + """\',
+                                                \'""" + str(meal_hint) + """\',\'""" + str(meal_photo_URL) + """\',
+                                                \'""" + str(extra_meal_price) + """\',\'""" + str(meal_calories) + """\',
+                                                \'""" + str(meal_protein) + """\',\'""" + str(meal_carbs) + """\',
+                                                \'""" + str(meal_fiber) + """\',\'""" + str(meal_sugar) + """\',
+                                                \'""" + str(meal_fat) + """\',\'""" + str(meal_sat) + """\'
+                                                );""", 'post', conn)
+
+            print("meal_inserted...")
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+class TemplateApi(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_meal_plans;""", 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -4923,445 +5026,10 @@ class MenuCreation(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-class MealCreation(Resource):
-    def listIngredients(self, result):
-        response = {}
-        for meal in result:
-            key = meal['meal_id']
-            if key not in response:
-                response[key] = {}
-                response[key]['meal_name'] = meal['meal_name']
-                response[key]['ingredients'] = []
-            ingredient = {}
-            ingredient['name'] = meal['ingredient_desc']
-            ingredient['qty'] = meal['recipe_ingredient_qty']
-            ingredient['units'] = meal['measure_name']
-            ingredient['ingredient_id'] = meal['ingredient_id']
-            ingredient['measure_id'] = meal['recipe_measure_id']
-            response[key]['ingredients'].append(ingredient)
-
-        return response
-
-    def get(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-
-            query = """
-                SELECT  
-                    m.meal_id,
-                    m.meal_name,
-                    ingredient_id,
-                    ingredient_desc,
-                    recipe_ingredient_qty,
-                    measure_name,
-                    recipe_measure_id
-                    FROM
-                    ptyd_meals m
-                    left JOIN
-                    ptyd_recipes r
-                    ON
-                    recipe_meal_id = meal_id
-                    left JOIN
-                    ptyd_ingredients
-                    ON
-                    ingredient_id = recipe_ingredient_id
-                    left JOIN
-                    ptyd_measure_unit
-                    ON                    
-                    recipe_measure_id = measure_unit_id
-                    order by recipe_meal_id;"""
-
-            sql = execute(query, 'get', conn)
-
-            items = self.listIngredients(sql['result'])
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-    def post(self):
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-            # Post JSON needs to be in this format
-#           data = {
-#               'meal_id': '700-000001',
-#               'ingredient_id': '110-000002',
-#               'ingredient_qty': 3,
-#               'measure_id': '130-000004'
-#           }
-
-            query = """
-                INSERT INTO ptyd_recipes (
-                    recipe_meal_id,
-                    recipe_ingredient_id,
-                    recipe_ingredient_qty,
-                    recipe_measure_id )
-                VALUES (
-                    \'""" + data['meal_id'] + """\',
-                    \'""" + data['ingredient_id'] + """\',
-                    \'""" + data['ingredient_qty'] + """\',
-                    \'""" + data['measure_id'] + """\')
-                ON DUPLICATE KEY UPDATE
-                    recipe_ingredient_qty = \'""" + data['ingredient_qty'] + """\',
-                    recipe_measure_id = \'""" + data['measure_id'] + "\';"
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-class Edit_Recipe(Resource):       
-    def post(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-            
-            meal_id = data['meal_id']
-            meal_name = data['meal_name']
-            ingredients = data['ingredients']
-
-            items['delete_ingredients'] = execute("""delete from ptyd_recipes 
-                                                        where recipe_meal_id = \'""" + str(meal_id) + """\';
-                                                            """, 'post', conn)
-        
-            i=0
-            for eachIngredient in data['ingredients']:
-                name = ingredients[i]['name']
-                qty = ingredients[i]['qty']
-                units = ingredients[i]['units']
-                ingredient_id = ingredients[i]['ingredient_id']
-                measure_id = ingredients[i]['measure_id']
-                print(name)
-                print(qty)
-                print(units)
-                print(ingredient_id)
-                print(measure_id)
-                print(meal_id)
-                print(meal_name)
-                print("************************")
-                
-                
-                items['new_ingredients_insert'] = execute(""" INSERT INTO ptyd_recipes (
-                                                            recipe_meal_id, recipe_ingredient_id, recipe_ingredient_qty, 
-                                                            recipe_measure_id
-                                                            ) 
-                                                            VALUES (
-                                                            \'""" + str(meal_id) + """\',\'""" + str(ingredient_id) + """\',\'""" + str(qty) + """\',\'""" + str(measure_id) + """\'
-                                                            );
-                                                            """, 'post', conn)
-                i+=1
-
-            
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-class EditMeals(Resource):
-    def patch(self):
-        response = {}
-        items = {}
-        
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-            
-            print("pre",data)
-
-            #checking to see if it's a new meal or editing an existing one 
-            if data['meal_id'] == "NewMealId":
-                
-                #generating new meal id
-                mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
-                mealId = mealIdQuery['result'][0]['new_id']
-
-                #inserting partial entry into meals table
-                items['new_meal_insert'] = execute(""" INSERT INTO 
-                                                            ptyd_meals(meal_id,meal_category,meal_name,meal_desc,extra_meal_price) 
-                                                        VALUES 
-                                                            (\'""" + str(mealId) + """\','NEEDS CATEGORY'
-                                                            ,\'""" + data['meal_name'] + """\','NEEDS DESCRIPTION ','100000');
-                                                            """, 'post', conn)
-
-            else:
-                #defaulting to entered meal id if user is editing an existing one 
-                mealId= data['meal_id']
-
-            numRecipeInserts = 0
-            
-            #iterating through the dictionary of ingredients
-            for ingredient in data['ingredients']:
-                print("******************") 
-                print(ingredient['ingredient_id'])     
-                #checking to see if the ingredient is a new ingredient or an existing one -- if the ingredient is new generate an id and post to ingredient
-                if ingredient['ingredient_id'] == "NewIngrId":
-
-                                  
-                    ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
-                    ingredientId = ingredientIdQuery ['result'][0]['new_id']
-
-                    items['new_ingredient_insert'] = execute(""" INSERT INTO 
-                                                                    ptyd_ingredients(ingredient_id,ingredient_desc,package_size,ingredient_measure_id,ingredient_cost) 
-                                                                VALUES 
-                                                                    (\'""" + str(ingredientId) + """\',\'""" + ingredient['name'] + """\','NEEDS STANDARD PACKAGE SIZE ',
-                                                                    ,\'""" + ingredient['measure_id'] + """\','NEEDS INGREDIENT COST');
-                                                            """, 'post', conn)
-                else:
-                    ingredientId = ingredient['ingredient_id']
-                print("*********************")
-                print("mealID")
-                print(mealId)
-                print("ingredientId")
-                print(ingredientId)
-                print("getNow()")
-                print(getNow())
-                print("ingredient qty")
-                print(ingredient['qty'])
-                print("ingredient measure")
-                print(ingredient['measure_id'])
-                #insert ingredient into recipe table attached to the meal
-                items['recipe_insert'] = execute(""" INSERT INTO
-                                                        ptyd_recipes(recipe_meal_id,recipe_ingredient_id,recipe_ingredient_qty,recipe_measure_id,recipe_last_update)
-                                                    VALUES
-                                                        ( \'""" + str(mealID) + """\', 
-                                                        \'""" + str(ingredientId) + """\', 
-                                                        \'""" + str(ingredient['qty']) + """\', 
-                                                        \'""" + str(ingredient['measure_id']) + """\', 
-                                                        \'""" + str(getNow()) + """\');
-                                                """, 'post', conn)
-                print("AFTER EXECUTE")
-                numRecipeInserts += 1
-
-            response['message'] = 'Post Request Succesful'
-            
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-class Add_New_Ingredient(Resource):       
-    def post(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-            ingredient_desc = data['ingredient_desc']
-            package_size = data['package_size']
-            ingredient_measure_id = data['ingredient_measure_id']
-            ingredient_cost = data['ingredient_cost']
-
-            ingredientIdQuery = execute("""CALL get_new_ingredient_id();""", 'get', conn)
-            ingredientId = ingredientIdQuery ['result'][0]['new_id']
-            items['new_ingredient_insert'] = execute(""" INSERT INTO ptyd_ingredients (
-                                                            ingredient_id, ingredient_desc, package_size,ingredient_measure_id,ingredient_cost, ingredient_measure
-                                                            ) 
-                                                            SELECT \'""" + str(ingredientId) + """\', \'""" + str(ingredient_desc) + """\',
-                                                            \'""" + str(package_size) + """\',\'""" + str(ingredient_measure_id) + """\',
-                                                            \'""" + str(ingredient_cost) + """\', mu.measure_name 
-                                                            FROM ptyd_measure_unit mu
-                                                            WHERE measure_unit_id=\'""" + str(ingredient_measure_id) + """\';
-                                                            """, 'post', conn)
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-    def get(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_ingredients;""", 'get', conn)
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-
-class Get_All_Units(Resource):       
-
-    def get(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_measure_unit;""", 'get', conn)
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-class Add_Meal(Resource):       
-    def post(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            print("connection done...")
-            data = request.get_json(force=True)
-            print("data collected...")
-            print(data)
-            mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
-            print("meal_id called..")
-            mealId = mealIdQuery['result'][0]['new_id']
-            print("new_meal_id created...")
-            meal_category = data['meal_category']
-            meal_name = data['meal_name']
-            meal_desc = data['meal_desc']
-            meal_hint = data['meal_hint']
-            meal_photo_URL = data['meal_photo_URL']
-            extra_meal_price = data['extra_meal_price']
-            meal_calories = data['meal_calories']
-            meal_protein = data['meal_protein']
-            meal_carbs = data['meal_carbs']
-            meal_fiber = data['meal_fiber']
-            meal_sugar = data['meal_sugar']
-            meal_fat = data['meal_fat']
-            meal_sat = data['meal_sat']
-
-            print("Items read...")
-            items['new_meal_insert'] = execute("""INSERT INTO ptyd_meals ( 	
-                                                meal_id,meal_category,meal_name,meal_desc,
-                                                meal_hint,meal_photo_URL,extra_meal_price, 	
-                                                meal_calories,meal_protein,meal_carbs,
-                                                meal_fiber,meal_sugar,meal_fat,meal_sat 
-                                                ) 
-                                                VALUES ( 	
-                                                \'""" + str(mealId) + """\',\'""" + str(meal_category) + """\',
-                                                \'""" + str(meal_name) + """\',\'""" + str(meal_desc) + """\',
-                                                \'""" + str(meal_hint) + """\',\'""" + str(meal_photo_URL) + """\',
-                                                \'""" + str(extra_meal_price) + """\',\'""" + str(meal_calories) + """\',
-                                                \'""" + str(meal_protein) + """\',\'""" + str(meal_carbs) + """\',
-                                                \'""" + str(meal_fiber) + """\',\'""" + str(meal_sugar) + """\',
-                                                \'""" + str(meal_fat) + """\',\'""" + str(meal_sat) + """\'
-                                                );""", 'post', conn)
-                                            
-            print("meal_inserted...")
-        
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-
-class Add_Meal(Resource):
-    def post(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            print("connection done...")
-            data = request.get_json(force=True)
-            print("data collected...")
-            print(data)
-            mealIdQuery = execute("""CALL get_new_meal_id();""", 'get', conn)
-            print("meal_id called..")
-            mealId = mealIdQuery['result'][0]['new_id']
-            print("new_meal_id created...")
-            meal_category = data['meal_category']
-            meal_name = data['meal_name']
-            meal_desc = data['meal_desc']
-            meal_hint = data['meal_hint']
-            meal_photo_URL = data['meal_photo_URL']
-            extra_meal_price = data['extra_meal_price']
-            meal_calories = data['meal_calories']
-            meal_protein = data['meal_protein']
-            meal_carbs = data['meal_carbs']
-            meal_fiber = data['meal_fiber']
-            meal_sugar = data['meal_sugar']
-            meal_fat = data['meal_fat']
-            meal_sat = data['meal_sat']
-
-            print("Items read...")
-            items['new_meal_insert'] = execute("""INSERT INTO ptyd_meals ( 	
-                                                meal_id,meal_category,meal_name,meal_desc,
-                                                meal_hint,meal_photo_URL,extra_meal_price, 	
-                                                meal_calories,meal_protein,meal_carbs,
-                                                meal_fiber,meal_sugar,meal_fat,meal_sat 
-                                                ) 
-                                                VALUES ( 	
-                                                \'""" + str(mealId) + """\',\'""" + str(meal_category) + """\',
-                                                \'""" + str(meal_name) + """\',\'""" + str(meal_desc) + """\',
-                                                \'""" + str(meal_hint) + """\',\'""" + str(meal_photo_URL) + """\',
-                                                \'""" + str(extra_meal_price) + """\',\'""" + str(meal_calories) + """\',
-                                                \'""" + str(meal_protein) + """\',\'""" + str(meal_carbs) + """\',
-                                                \'""" + str(meal_fiber) + """\',\'""" + str(meal_sugar) + """\',
-                                                \'""" + str(meal_fat) + """\',\'""" + str(meal_sat) + """\'
-                                                );""", 'post', conn)
-
-            print("meal_inserted...")
-
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-
-
-class TemplateApi(Resource):
-    def get(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_meal_plans;""", 'get', conn)
-
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
 
 
 # Define API routes
 # Customer page
-api.add_resource(Add_Meal, '/api/v2/Add_Meal')
-api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
-api.add_resource(Get_All_Units, '/api/v2/GetUnits')
-api.add_resource(Edit_Recipe, '/api/v2/Edit_Recipe')
-api.add_resource(EditMeals, '/api/v2/EditMeals')
 api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
 api.add_resource(Plans, '/api/v2/plans')
 api.add_resource(SignUp, '/api/v2/signup')
@@ -5387,10 +5055,9 @@ api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 # ---------- Admin page -----------------------------
 api.add_resource(CustomerInfo, '/api/v2/customerinfo')
 api.add_resource(CustomerProfile, '/api/v2/customerprofile')
-
-api.add_resource(MealInfo, '/api/v2/meal_info')
-api.add_resource(MealCreation, '/api/v2/mealcreation')
 api.add_resource(MenuCreation, '/api/v2/create-menu')
+api.add_resource(Get_All_Units, '/api/v2/GetUnits')
+api.add_resource(MealInfo, '/api/v2/meal_info')
 api.add_resource(AdminDBv2, '/api/v2/admindb')
 api.add_resource(MealCustomerLifeReport, '/api/v2/mealCustomerReport')
 api.add_resource(AdminMenu, '/api/v2/menu_display')
