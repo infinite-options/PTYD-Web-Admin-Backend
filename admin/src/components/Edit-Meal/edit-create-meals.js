@@ -21,6 +21,9 @@ import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
 import Input from "@material-ui/core/Input";
 import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
 //const [value, setValue] = React.useState(null);
 const filter = createFilterOptions();
 //const [erro, setErro] = useState(null);
@@ -189,6 +192,28 @@ class EditCreateMeal extends Component {
   };
   handleBNewIngrPrice = (event) => {
     this.setState({ brandNewIngrPrice: event.target.value });
+  };
+
+  deleteChanges = (index) => {
+    console.log("DELETE CALLED");
+    console.log(index);
+    console.log(this.state.currIngr);
+    let newCurrIngr = [];
+    if (index > -1) {
+      if (
+        !(
+          this.state.currIngr.length == 1 && this.state.currIngr[0].name == null
+        )
+      ) {
+        for (let i = 0; i < this.state.currIngr.length; i++) {
+          if (i == index) continue;
+          newCurrIngr.push(Object.assign({}, this.state.currIngr[i]));
+        }
+        this.setState({ currIngr: newCurrIngr });
+      } else {
+        console.log("DELETE Skipped the null ingredient element");
+      }
+    }
   };
 
   handleChange = (event) => {
@@ -757,6 +782,22 @@ class EditCreateMeal extends Component {
     );
   };
 
+  deleteColumn = (index) => {
+    return (
+      <IconButton
+        aria-label="delete"
+        variant="primary"
+        color="secondary"
+        className="float-right"
+        onClick={(e) => {
+          this.deleteChanges(index);
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
+    );
+  };
+
   ingrDropdownNew = () => {
     let tempmeal = [];
     let ingrs = this.state.allIngr;
@@ -840,6 +881,7 @@ class EditCreateMeal extends Component {
           <td>{this.ingrDropdown2(arr[i].name, i)}</td>
           <td>{this.qtyDropdown(arr[i].qty, i)}</td>
           <td>{this.unitDropdown(arr[i].units, i)}</td>
+          <td>{this.deleteColumn(i)}</td>
         </tr>
       );
       displayrows.push(tempelement);

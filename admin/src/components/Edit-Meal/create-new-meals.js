@@ -43,6 +43,7 @@ class CreateNewMeal extends Component {
       showAdd: false,
       allUnits: [],
       currIngr: [],
+      allCats: ["Entree", "Soup", "Salad", "Breakfast"],
       golu: 10,
       newIngrName: "New Ingredient",
       newQty: 1,
@@ -56,7 +57,7 @@ class CreateNewMeal extends Component {
       brandNewUnit: "Cup",
       supportNewRecipe: true,
       MealDesc: "",
-      MealCategory: "",
+      MealCategory: "Entree",
       MealHint: "",
       MealPhotoURL: "",
       ExtraMealPrice: "",
@@ -173,6 +174,7 @@ class CreateNewMeal extends Component {
     this.setState({ MealDesc: e.target.value });
   };
   handleMealCategory = (e) => {
+    console.log(e.target.value);
     this.setState({ MealCategory: e.target.value });
   };
   handleMealPhotoURL = (e) => {
@@ -208,6 +210,27 @@ class CreateNewMeal extends Component {
   };
   handleBNewIngrPrice = (event) => {
     this.setState({ brandNewIngrPrice: event.target.value });
+  };
+
+  catDropdown = () => {
+    let tempCat = [];
+    let cat = this.state.allCats;
+    for (let j = 0; j < cat.length; j++) {
+      tempCat.push(<MenuItem value={cat[j]}>{cat[j]}</MenuItem>);
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.MealCategory}
+          onChange={this.handleMealCategory}
+          // style={{ color: "white" }}
+        >
+          {tempCat}
+        </Select>
+      </FormControl>
+    );
   };
 
   handleChange = (event) => {
@@ -462,6 +485,73 @@ class CreateNewMeal extends Component {
           //setErro(err.response.data.result);
           //window.location.reload(false);
           console.log("API ADD_NEW_INGREDIENT POST Failed");
+        } else if (typeof err === "string") {
+          //setErro(err);
+          console.log(err);
+        }
+        //setLoading(false);
+      });
+  };
+
+  postMealChangesAndRefresh = (e) => {
+    e.preventDefault();
+    let ingredients_list = this.state.currIngr;
+    let key = "NewMealId";
+    let mealName = this.state.newMealName;
+    if (this.state.selection == 0) {
+      key = "NewMealId";
+      mealName = this.state.newMealName;
+    } else {
+      key = this.state.mealidkey[this.state.selection];
+      mealName = this.state.mealkeys[this.state.selection];
+    }
+    //setLoading(true);
+    var mealData = {
+      meal_id: key,
+      meal_name: mealName,
+      meal_category: this.state.MealCategory,
+      meal_desc: this.state.MealDesc,
+      meal_hint: this.state.MealHint,
+      meal_photo_URL: this.state.MealPhotoURL,
+      extra_meal_price: this.state.ExtraMealPrice,
+      meal_calories: this.state.MealCalories,
+      meal_protein: this.state.MealProtein,
+      meal_carbs: this.state.MealCarbs,
+      meal_fiber: this.state.MealFiber,
+      meal_sugar: this.state.MealSugar,
+      meal_fat: this.state.MealFat,
+      meal_sat: this.state.MealSat,
+    };
+    console.log("Sending Out:");
+    console.log(mealData);
+    console.log(JSON.stringify(mealData));
+    axios
+      .post(this.props.API_URL_ADDMEAL, mealData)
+      .then((res) => {
+        if (res.status === 200) {
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
+
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+          // window.location.reload(false);
+          //props.history.push("/signupwaiting");
+          //setLoading(false);
+          console.log("API ADD_MEAL WORKED");
+          //this.props.history.push("/editMeal", {
+          //mealName: mealData.meal_name,
+          //});
+          window.location.reload(true);
+        }
+      })
+      .catch((err) => {
+        if (err.response !== undefined) {
+          //setErro(err.response.data.result);
+          //window.location.reload(false);
+          console.log("API ADD_MEAL Failed");
         } else if (typeof err === "string") {
           //setErro(err);
           console.log(err);
@@ -914,13 +1004,7 @@ class CreateNewMeal extends Component {
                     <thead>
                       <tr>
                         <th colSpan="2">Meal Category</th>
-                        <th colSpan="3">
-                          <Input
-                            placeholder={"Meal Category"}
-                            inputProps={{ "aria-label": "description" }}
-                            onChange={this.handleMealCategory}
-                          />
-                        </th>
+                        <th colSpan="3">{this.catDropdown()}</th>
                       </tr>
                     </thead>
                     <thead>
@@ -1044,6 +1128,12 @@ class CreateNewMeal extends Component {
                       </tr>
                     </thead>
                   </Table>
+                  <Button
+                    variant="success"
+                    onClick={this.postMealChangesAndRefresh}
+                  >
+                    Save Meal and Create Another
+                  </Button>
                   <Button
                     variant="success"
                     className="float-right"
