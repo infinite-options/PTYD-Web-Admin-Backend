@@ -21,7 +21,7 @@ class Selectmealplan extends Component {
   render() {
     return (
       <section className='content-section'>
-        <div className='container font2' style={{width: "80%"}}>
+        <div className='container font2'>
           <center>
             <h2 className='font1' style={{color: "#4D4D4D"}}>
               SELECT A MEAL PLAN
@@ -36,8 +36,8 @@ class Selectmealplan extends Component {
               </h4>
             </article>
             <CardDeck>
-              {this.state.mealPlans.map(mealPlan => (
-                <Card className='p-0 border-0 w-auto shadow-none'>
+              {this.state.mealPlans.map((mealPlan, key) => (
+                <Card key={key} className='p-0 border-0 w-auto shadow-none'>
                   {mealPlan.num_meals === 10 ? (
                     <div className='rcorners font3 d-flex rcorner_color'>
                       <h6 className='align-self-center mx-auto'>
@@ -96,7 +96,7 @@ class Selectmealplan extends Component {
                       >
                         <button
                           type='button'
-                          class='btn2 btn2-primary font4'
+                          className='btn2 btn2-primary font4'
                           style={{
                             marginTop: "10px",
                             paddingLeft: "10px",
@@ -111,7 +111,7 @@ class Selectmealplan extends Component {
                         </button>
                       </Link>
                       <img
-                        class='img-fluid'
+                        className='img-fluid'
                         src={IMG9}
                         alt=''
                         style={{
@@ -119,10 +119,8 @@ class Selectmealplan extends Component {
                         }}
                       />
                     </Card.Body>
-                    <Card.Footer>
-                      <large className='text-muted align-self-center mx-auto'>
-                        {mealPlan.plan_footer}
-                      </large>
+                    <Card.Footer className='text-muted align-self-center mx-auto'>
+                      {mealPlan.plan_footer}
                     </Card.Footer>
                     {/* </div> */}
                   </Card.Body>
@@ -130,20 +128,20 @@ class Selectmealplan extends Component {
               ))}
             </CardDeck>
             <hr className='feedback_marginTop' />
-            <h3 class='font1 mt-5 mb-5' style={{color: "#196F3D"}}>
+            <h3 className='font1 mt-5 mb-5' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
-            <div class='font2'>
+            <div className='font2'>
               <Container>
                 <Row style={{fontSize: "20px"}}>
                   <Col>
                     <div className='shadow w-75 pt-3 pb-1'>
                       <div className='mb-2'>
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
                       </div>
                       <p>Convenience and goodness</p>
                     </div>
@@ -151,11 +149,11 @@ class Selectmealplan extends Component {
                   <Col>
                     <div className='shadow w-75 pt-3 pb-1'>
                       <div className='mb-2'>
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
                       </div>
                       <p>PTYD feels like family!</p>
                     </div>
@@ -163,11 +161,11 @@ class Selectmealplan extends Component {
                   <Col>
                     <div className='shadow w-75 pt-3 pb-1'>
                       <div className='mb-2'>
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
-                        <span class='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
+                        <span className='fa fa-star checked' />
                       </div>
                       <p>They make life SO easy!</p>
                     </div>

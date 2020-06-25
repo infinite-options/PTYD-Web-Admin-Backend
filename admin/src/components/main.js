@@ -10,8 +10,9 @@ import CreateNewMeal from "./Edit-Meal/create-new-meals";
 import CreateMenu from "./Create-Menu/create-menu";
 import Orders from "./Orders/Orders";
 
-//const DEV_URL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
-const DEV_URL = "http://localhost:2000/api/v2/";
+const DEV_URL =
+  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
+//const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
   <Switch>
@@ -79,7 +80,7 @@ const Main = ({ appProps }) => (
       component={Orders}
       appProps={{
         appProps,
-        API_URL_Meal_Info1: `${DEV_URL}mealInfo1`,
+        API_URL_Meal_Info1: `${DEV_URL}All_Meals`,
       }}
     />
   </Switch>

@@ -114,8 +114,9 @@ export default function Main({appProps}) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_URL: `${DEV_URL}v2/update-subscription`,
-          UPDATE_URL_PAYMENT: `${DEV_URL}v2/update-payments`
+          UPDATE_SUBCRIPTION_URL: `${DEV_URL}v2/update-subscription`,
+          UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
+          UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
         }}
       />
 
@@ -127,14 +128,16 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? MealSchedule : Login}
         appProps={{
           appProps,
+          DEV_URL: DEV_URL,
           ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_URL: `${DEV_URL}v2/update-subscription`,
-          UPDATE_URL_PAYMENT: `${DEV_URL}v2/update-payments`
+          UPDATE_SUBCRIPTION_URL: `${DEV_URL}v2/update-subscription`,
+          UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
+          UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
         }}
       />
 
