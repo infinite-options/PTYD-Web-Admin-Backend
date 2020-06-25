@@ -8,6 +8,7 @@ import DropDownMenu from "./DropDownMenu";
 import { css } from "@emotion/core";
 import BeatLoader from "react-spinners/BeatLoader";
 import { MdError } from "react-icons/md";
+import axios from "axios";
 import useFetch from "../hooks/useFetch";
 
 const override = css`
@@ -25,7 +26,29 @@ const centerStyle = {
 };
 
 export default function Orders(props) {
-  const [date, setDate] = useState("2020-07-11");
+  const [date, setDate] = useState();
+  const [dates, setDates] = useState([]);
+
+  useEffect(() => {
+    fetchSaturdays();
+  }, []);
+
+  const fetchSaturdays = async () => {
+    const res = await axios.get(props.DISPLAY_SAT_API_URL);
+    const valueArr = [];
+
+    for (let ele of res.data.result.result) {
+      const v = ele["Saturday"];
+      valueArr.push(v);
+    }
+
+    valueArr.sort((a, b) => {
+      return new Date(a) - new Date(b);
+    });
+
+    setDates(valueArr);
+    setDate(res.data.result.result[4]["Saturday"]);
+  };
 
   const order = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
   const ingredient = useFetch(
@@ -43,7 +66,7 @@ export default function Orders(props) {
         <Link color="inherit">Admin Site</Link>
         <Typography color="textPrimary">Orders</Typography>
       </Breadcrumbs>
-      <DropDownMenu date={date} handleChange={handleChange} />
+      <DropDownMenu dates={dates} date={date} handleChange={handleChange} />
       {order.loading && (
         <BeatLoader css={override} color={"#36D7B7"} loading={order.loading} />
       )}

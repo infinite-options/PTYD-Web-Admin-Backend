@@ -63,6 +63,7 @@ const Main = ({ appProps }) => (
       component={Orders}
       appProps={{
         API_URL: `${DEV_URL}`,
+        DISPLAY_SAT_API_URL: `${DEV_URL}saturdays`,
       }}
     />
     <AppliedRoute
