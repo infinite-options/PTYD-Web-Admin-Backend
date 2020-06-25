@@ -585,6 +585,8 @@ export default class MakeChange extends Component {
         {this.state.showPasswordChange && (
           <ChangePassword
             ShowHideChangePasswordModal={this.ShowHideChangePasswordModal}
+            DEV_URL={this.props.DEV_URL}
+            user_uid={this.props.user_uid}
           />
         )}
         {this.state.showDeleteModal && (
