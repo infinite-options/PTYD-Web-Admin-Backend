@@ -4512,6 +4512,12 @@ class All_Ingredients(Resource):
             disconnect(conn)
 
 
+<< << << < HEAD
+
+== == == =
+>>>>>> > faa4866f6d0e8043a2043794b16f343c8322e03b
+
+
 class DisplaySaturdays(Resource):
     def get(self):
         response = {}
@@ -4528,6 +4534,12 @@ class DisplaySaturdays(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
+
+<< << << < HEAD
+
+== == == =
+>>>>>> > faa4866f6d0e8043a2043794b16f343c8322e03b
 
 
 class MealCreation(Resource):
