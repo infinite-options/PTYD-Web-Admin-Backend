@@ -294,8 +294,11 @@ export default class MakeChange extends Component {
                           onChange={e => {
                             e.persist();
                             let paymentPlans = this.state.paymentPlans;
-                            let paid =
-                              paymentPlans[e.target.value].meal_plan_price;
+                            let paid = 0;
+                            if (paymentPlans[e.target.value] !== undefined) {
+                              paid =
+                                paymentPlans[e.target.value].meal_plan_price;
+                            }
                             if (
                               this.state.currentPurchase.meal_plan_id !==
                               paymentPlans[e.target.value].meal_plan_id
