@@ -28,11 +28,13 @@ export default class MakeChange extends Component {
       paymentPlans: [], // use for reconstruct mealPlans
       showPasswordChange: false,
       showDeleteModal: false,
+      showSaveModal: false,
       //some variables need for submit forms
       updateMealPlan: {
         meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
         name: this.props.currentPurchase.meal_plan_desc,
-        price: this.props.currentPurchase.meal_plan_price
+        price: this.props.currentPurchase.meal_plan_price,
+        amount_paid: 0
       },
       creditCard: {
         cc_num: this.props.currentPurchase.cc_num,
@@ -50,7 +52,8 @@ export default class MakeChange extends Component {
         delivery_phone: this.props.currentPurchase.delivery_phone,
         delivery_address: this.props.currentPurchase.delivery_address,
         delivery_address_unit:
-          this.props.currentPurchase.delivery_address_unit !== undefined
+          this.props.currentPurchase.delivery_address_unit !== undefined &&
+          this.props.currentPurchase.delivery_address_unit !== null
             ? this.props.currentPurchase.delivery_address_unit
             : "",
         delivery_city: this.props.currentPurchase.delivery_city,
@@ -101,6 +104,12 @@ export default class MakeChange extends Component {
     ) {
       this.setState({
         currentPurchase: this.props.currentPurchase,
+        updateMealPlan: {
+          meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
+          name: this.props.currentPurchase.meal_plan_desc,
+          price: this.props.currentPurchase.meal_plan_price,
+          amount_paid: 0
+        },
         creditCard: {
           cc_num: this.props.currentPurchase.cc_num,
           cc_cvv: this.props.currentPurchase.cc_cvv,
@@ -117,7 +126,8 @@ export default class MakeChange extends Component {
           delivery_phone: this.props.currentPurchase.delivery_phone,
           delivery_address: this.props.currentPurchase.delivery_address,
           delivery_address_unit:
-            this.props.currentPurchase.delivery_address_unit !== undefined
+            this.props.currentPurchase.delivery_address_unit !== undefined &&
+            this.props.currentPurchase.delivery_address_unit !== null
               ? this.props.currentPurchase.delivery_address_unit
               : "",
           delivery_city: this.props.currentPurchase.delivery_city,
@@ -143,6 +153,18 @@ export default class MakeChange extends Component {
       : this.setState({showDeleteModal: true});
   };
 
+  ShowHideSaveModal = () => {
+    if (
+      this.state.currentPurchase.meal_plan_id !==
+      this.state.updateMealPlan.meal_plan_id
+    ) {
+      this.state.showSaveModal
+        ? this.setState({showSaveModal: false})
+        : this.setState({showSaveModal: true});
+    } else {
+      this.UpdateChangingSubcription();
+    }
+  };
   DeleteCurrentPurchase = () => {
     fetch(this.props.DELETE_URL, {
       method: "PATCH",
@@ -176,17 +198,15 @@ export default class MakeChange extends Component {
         let data = {
           user_uid: this.props.userID,
           is_gift: this.state.currentPurchase.gift,
-          item: this.state.updateMealPlan.name,
-          item_price: this.state.updateMealPlan.price,
+          item: this.state.updateMealPlan.name, // target meal plan
+          item_price: this.state.updateMealPlan.price, //target meal plan's price
           ...this.state.creditCard,
           billing_zip: this.state.currentPurchase.billing_zip,
-          ...this.state.deliveryAddress
+          ...this.state.deliveryAddress,
+          purchase_id: this.state.currentPurchase.purchase_id
         };
 
-        await axios.post(`${this.props.BUYNEW_URL}`, data); //buy new one
-        await axios.patch(`${this.props.DELETE_URL}`, {
-          purchase_id: this.state.currentPurchase.purchase_id
-        }); // delete old one
+        await axios.post(`${this.props.UPDATE_SUBCRIPTION_URL}`, data); //update
       } else {
         //update changing delivery address
         await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
@@ -215,7 +235,8 @@ export default class MakeChange extends Component {
       <Fragment>
         {this.state.show &&
           !this.state.showPasswordChange &&
-          !this.state.showDeleteModal && (
+          !this.state.showDeleteModal &&
+          !this.state.showSaveModal && (
             <Modal
               show={this.state.show}
               onHide={this.props.ChangeAccountInfo}
@@ -273,6 +294,18 @@ export default class MakeChange extends Component {
                           onChange={e => {
                             e.persist();
                             let paymentPlans = this.state.paymentPlans;
+                            let paid = 0;
+                            if (paymentPlans[e.target.value] !== undefined) {
+                              paid =
+                                paymentPlans[e.target.value].meal_plan_price;
+                            }
+                            if (
+                              this.state.currentPurchase.meal_plan_id !==
+                              paymentPlans[e.target.value].meal_plan_id
+                            ) {
+                              paid = this.state.currentPurchase.meal_plan_price;
+                            }
+
                             this.setState(prevState => ({
                               updateMealPlan: {
                                 ...prevState.updateMealPlan,
@@ -281,7 +314,11 @@ export default class MakeChange extends Component {
                                 name:
                                   paymentPlans[e.target.value].meal_plan_desc,
                                 price:
-                                  paymentPlans[e.target.value].meal_plan_price
+                                  paymentPlans[e.target.value].meal_plan_price,
+                                amount_paid: (
+                                  paymentPlans[e.target.value].meal_plan_price -
+                                  paid
+                                ).toFixed(2)
                               }
                             }));
                           }}
@@ -545,7 +582,7 @@ export default class MakeChange extends Component {
                 <Button
                   variant='success'
                   type='submit'
-                  onClick={this.UpdateChangingSubcription}
+                  onClick={this.ShowHideSaveModal}
                 >
                   Save Changes
                 </Button>
@@ -558,6 +595,8 @@ export default class MakeChange extends Component {
         {this.state.showPasswordChange && (
           <ChangePassword
             ShowHideChangePasswordModal={this.ShowHideChangePasswordModal}
+            DEV_URL={this.props.DEV_URL}
+            user_uid={this.props.user_uid}
           />
         )}
         {this.state.showDeleteModal && (
@@ -583,6 +622,35 @@ export default class MakeChange extends Component {
                   autoFocus
                 >
                   Yes,Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
+        {this.state.showSaveModal && (
+          <div>
+            <Dialog
+              open={this.state.showSaveModal}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  You will be charged {this.state.updateMealPlan.amount_paid}.
+                  Do you want to continue this transaction.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.ShowHideSaveModal} color='primary'>
+                  No,Thanks
+                </Button>
+                <Button
+                  onClick={this.UpdateChangingSubcription}
+                  variant='danger'
+                  autoFocus
+                >
+                  Yes,Please
                 </Button>
               </DialogActions>
             </Dialog>
