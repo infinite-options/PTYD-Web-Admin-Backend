@@ -20,33 +20,33 @@ class Selectmealplan extends Component {
   }
   render() {
     return (
-      <section className='content-section'>
-        <div className='container font2'>
+      <section className='content-section font2'>
+        <div className='container'>
           <center>
             <h2 className='font1' style={{color: "#4D4D4D"}}>
               SELECT A MEAL PLAN
             </h2>
             <hr className='two' />
             <article className='bottom_header'>
-              <h4 className='font-weight-normal font1'>
+              <p>
                 LOCAL. ORGANIC. RESPONSIBLE.
-              </h4>
-              <h4 className='font-weight-normal font1'>
+              </p>
+              <p>
                 STRAIGHT TO YOUR DOOR
-              </h4>
+              </p>
             </article>
             <CardDeck>
               {this.state.mealPlans.map((mealPlan, key) => (
                 <Card key={key} className='p-0 border-0 w-auto shadow-none'>
                   {mealPlan.num_meals === 10 ? (
-                    <div className='rcorners font3 d-flex rcorner_color'>
-                      <h6 className='align-self-center mx-auto'>
+                    <div className='rcorners d-flex rcorner_color'>
+                      <h5 className='align-self-center mx-auto'>
                         MOST POPULAR
-                      </h6>
+                      </h5>
                     </div>
                   ) : (
-                    <div className='rcorners font3 d-flex'>
-                      <h6 className='align-self-center mx-auto'></h6>
+                    <div className='rcorners d-flex'>
+                      <p className='align-self-center mx-auto'></p>
                     </div>
                   )}
 
@@ -61,10 +61,6 @@ class Selectmealplan extends Component {
                         className='blackM background_black '
                         variant='top'
                         src={mealPlan.photo_URL}
-                        // style={{
-                        //   "border-top-left-radius": "0px",
-                        //   "border-top-right-radius": "0px",
-                        // }}
                       />
                       <Card.ImgOverlay className='d-flex'>
                         <span className='px-0 align-self-center mx-auto selectmeal-center'>
@@ -96,7 +92,7 @@ class Selectmealplan extends Component {
                       >
                         <button
                           type='button'
-                          className='btn2 btn2-primary font4'
+                          className='btn2 btn2-primary font2'
                           style={{
                             marginTop: "10px",
                             paddingLeft: "10px",
@@ -104,7 +100,8 @@ class Selectmealplan extends Component {
                             paddingTop: "5px",
                             paddingBottom: "5px",
                             color: "white",
-                            fontSize: "12px"
+                            fontSize: "12px",
+                            fontWeight:"bold"
                           }}
                         >
                           CHOOSE {mealPlan.num_meals} MEALS
@@ -119,7 +116,8 @@ class Selectmealplan extends Component {
                         }}
                       />
                     </Card.Body>
-                    <Card.Footer className='text-muted align-self-center mx-auto'>
+
+                    <Card.Footer className='text-muted justify-content-center'>
                       {mealPlan.plan_footer}
                     </Card.Footer>
                     {/* </div> */}
@@ -131,9 +129,9 @@ class Selectmealplan extends Component {
             <h3 className='font1 mt-5 mb-5' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
-            <div className='font2'>
+            <div>
               <Container>
-                <Row style={{fontSize: "20px"}}>
+                <Row>
                   <Col>
                     <div className='shadow w-75 pt-3 pb-1'>
                       <div className='mb-2'>
@@ -173,8 +171,6 @@ class Selectmealplan extends Component {
                 </Row>
                 <Row
                   style={{
-                    fontSize: "15px",
-                    color: "black",
                     lineHeight: "25px"
                   }}
                 >
@@ -215,6 +211,7 @@ class Selectmealplan extends Component {
               </Container>
             </div>
           </center>
+          <div className='feedback_marginTop'>&nbsp;</div>
         </div>
       </section>
     );

@@ -3,7 +3,7 @@ import {Layout, Header, Navigation, Drawer, Content} from "react-mdl";
 // import {Link} from "react-router-dom";
 
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 import Main from "./components/main";
 
@@ -115,14 +115,20 @@ const App = props => {
               title='MENU'
               id='nav-dropdown'
             >
+              <NavDropdown.Item href='/menuthisweek'>
+                THIS WEEK
+              </NavDropdown.Item>
+              <NavDropdown.Item href='/menunextweek'>
+                NEXT WEEK
+              </NavDropdown.Item>
               {isAuthenticated && (
                 <Fragment>
-                  <NavDropdown.Item href='/menuthisweek'>
+                  {/* <NavDropdown.Item href='/menuthisweek'>
                     THIS WEEK
                   </NavDropdown.Item>
                   <NavDropdown.Item href='/menunextweek'>
                     NEXT WEEK
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                   {searchCookie4UserID(document.cookie) != "null" && (
                     <NavDropdown.Item href='/mealschedule'>
                       MEAL SCHEDULE
@@ -318,7 +324,7 @@ const App = props => {
           />
         </Content>
 
-        <hr />
+        {/* <hr /> */}
 
         <footer className='container font2'>
           <div className='row footer-container'>
@@ -507,9 +513,6 @@ const App = props => {
                 <p id='black-grey' className='never-miss-update-text'>
                   & Never miss an update
                 </p>
-                {/* <p style={{fontSize: "12px", paddingLeft: "15px"}}>
-                  Email Address
-                </p> */}
                 <Form className='email-section'>
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridEmail'>
@@ -518,7 +521,6 @@ const App = props => {
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
                       <a
-                        // type='submit'
                         className='subscribe-btn font2'
                       >
                         Subscribe
@@ -530,6 +532,7 @@ const App = props => {
             </div>
           </div>
         </footer>
+
       </Layout>
     </div>
   );

@@ -31,6 +31,27 @@
   padding-top: 140px;
 }
 
+p {
+  font-family: "montserrat"
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: "oswald" !important;
+}
+
+h1 {
+  font-family: brandongrotw01-lightregular !important;
+}
+
+a {
+  font-family: montserrat;
+}
+
+.btn.focus, .btn:focus {
+  outline: 0;
+  box-shadow: none!important;
+}
+
 /* ----- navigation header ----- */
 
 .navigation-container {
@@ -187,16 +208,15 @@
 .plant-based-text {
   margin-bottom: 50px;
 }
-.plant-based-text p {
+.plant-based-text h1 {
   font-size: 22px;
-  /* font-weight: bold; */
+  margin: 10px 0;
 }
 
 .bottom-left {
   position: absolute;
-  bottom: 8px;
+  bottom: 5px;
   margin-left: 1.8em;
-  padding-bottom: 12px;
   font-size: 18px;
 }
 
@@ -211,8 +231,10 @@
   color: white;
   text-decoration: none;
 }
+#already-a-member h1 {
+  font-size: 18px;
+}
 #already-a-member:hover {
-  /* color: #607122; */
   color: var(--black);
 }
 
@@ -229,10 +251,15 @@
   padding: 0;
 }
 .zero-waste-subtext {
-  text-align: center;
+  /* text-align: center; */
+  margin-left: 65px;
+}
+.zero-waste-cell {
+  padding: 0 20px 0 20px;
+  display: inline-block;
+  /* text-align: center; */
 }
 .zero-waste-subtitle {
-  /* color: #617221; */
   color: var(--green);
   font-weight: bold;
   letter-spacing: 0.05em;
@@ -241,11 +268,6 @@
 .zero-waste-subtext p {
   text-align: left;
   font-size: 16px;
-}
-.zero-waste-cell {
-  padding: 0 20px 0 20px;
-  display: inline-block;
-  text-align: center;
 }
 
 .box-shadow-top {
@@ -265,8 +287,9 @@
   color: #4d4d4d;
   margin: 50px 0 0 20px;
 }
-.four-items-grid h4 {
+.four-items-subtitle {
   font-size: 27px;
+  /* font-family: oswald; */
 }
 .eat-better-now-button-container {
   margin-left: 30px;
@@ -344,12 +367,13 @@
   font-size: 37px;
   /* color: #617221; */
   color: var(--green);
+  letter-spacing: 0.25em;
 }
 .fresh-menu-subtitle-container {
   margin: 30px 0 40px 0;
 }
 .fresh-menu-subtitle {
-  font-size: 22px;
+  font-size: 20px;
   margin: 5px;
   padding: 0;
 }
@@ -443,6 +467,10 @@
   margin: 50px 0 0 0;
 }
 
+.community-title {
+  letter-spacing: 0.05em;
+}
+
 .quote-carousel-padding {
   padding: 0 200px;
 }
@@ -457,6 +485,9 @@
 .quote-line-height {
   line-height: 50px;
 }
+.quote-size {
+  font-size: 24px;
+}
 
 .awards {
   padding-bottom: 100px;
@@ -464,7 +495,7 @@
 .award-text * {
   margin: 0;
   padding: 0;
-  font-size: 12px;
+  font-size: 12px !important;
   letter-spacing: 0.05em;
 }
 .award-text {
@@ -539,11 +570,11 @@
   color: #181818;
 }
 
-br {
+/* br {
   display: block;
   margin: 100px 100px;
   line-height: 22px;
-}
+} */
 
 .required-red {
   color: red;
@@ -656,7 +687,7 @@ hr.two {
 
 hr.three {
   width: 470px;
-  margin: auto;
+  margin: 10px auto;
   border: none;
 }
 
@@ -741,6 +772,17 @@ hr.four {
   height: 550px;
 }
 
+.number-of-meals {
+  color: black;
+}
+.number-of-meals-margin {
+  margin: 10px;
+}
+
+.feedback_marginTop {
+  margin-top: 40px;
+}
+
 /* font */
 
 .font1,
@@ -749,16 +791,15 @@ hr.four {
 }
 /* text font */
 .font2 {
-  /* font-family: "Nunito", sans-serif; */
   font-family: "montserrat", sans-serif;
 }
-.font3 {
+/* .font3 {
   font-family: "Cousine", monospace;
-}
+} */
 /* button */
-.font4 {
+/* .font4 {
   font-family: "Heebo", sans-serif;
-}
+} */
 .font6 {
   font-family: "Oswald", sans-serif;
 }
@@ -772,7 +813,6 @@ hr.four {
   font-weight: bold;
   margin-top: -8px;
 }
-
 .logo-austin-houston {
   margin-top: 10px;
 }
@@ -819,7 +859,10 @@ hr.four {
 }
 
 .bottom_header {
-  margin: 30px 0 50px 0;
+  margin: 30px 0 20px 0;
+}
+.bottom_header p {
+  font-size: 20px;
 }
 
 .start_button {

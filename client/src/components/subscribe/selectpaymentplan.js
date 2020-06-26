@@ -31,29 +31,27 @@ class SelectPaymentPlan extends Component {
             <h2 class='font1'>{this.state.meals} MEALS PAYMENT OPTIONS</h2>
             <hr class='two' />
             <article className='bottom_header'>
-              <h4 className='font-weight-normal font1'>
-                LOCAL. ORGANIC. RESPONSIBLE.
-              </h4>
-              <h4 className='font-weight-normal font1'>
-                STRAIGHT TO YOUR DOOR
-              </h4>
+              <p>LOCAL. ORGANIC. RESPONSIBLE.</p>
+              <p>STRAIGHT TO YOUR DOOR</p>
             </article>
             <hr class='three' />
-            <a href='/5-meals-subscription' style={{color: "black"}}>
-              5 MEALS
-            </a>
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href='/10-meals-subscription' style={{color: "black"}}>
-              10 MEALS{" "}
-            </a>{" "}
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href='/15-meals-subscription' style={{color: "black"}}>
-              15 MEALS{" "}
-            </a>{" "}
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href='/20-meals-subscription' style={{color: "black"}}>
-              20 MEALS{" "}
-            </a>
+            <div className='number-of-meals-margin'>
+              <a className='number-of-meals' href='/5-meals-subscription'>
+                5 MEALS
+              </a>
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              <a className='number-of-meals' href='/10-meals-subscription'>
+                10 MEALS{" "}
+              </a>{" "}
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              <a className='number-of-meals' href='/15-meals-subscription'>
+                15 MEALS{" "}
+              </a>{" "}
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              <a className='number-of-meals' href='/20-meals-subscription'>
+                20 MEALS{" "}
+              </a>
+            </div>
             <hr class='three' />
             <div class='justify-content-center'>
               <CardDeck className='d-flex justify-content-center'>
@@ -105,7 +103,7 @@ class SelectPaymentPlan extends Component {
                       >
                         <button
                           type='button'
-                          class='btn2 btn2-primary font4'
+                          class='btn2 btn2-primary font2'
                           style={{
                             marginTop: "10px",
                             paddingLeft: "30px",
@@ -136,8 +134,8 @@ class SelectPaymentPlan extends Component {
             <h3 class='font1 feedback_marginTop' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
-            <Container>
-              <Row style={{fontSize: "20px"}}>
+            <Container style={{fontSize: "20px"}}>
+              <Row>
                 <Col>
                   <div className='shadow w-75'>
                     <div className='mb-2'>
@@ -217,6 +215,7 @@ class SelectPaymentPlan extends Component {
               </Row>
             </Container>
           </center>
+          <div className='feedback_marginTop'>&nbsp;</div>
         </div>
       </section>
     );
