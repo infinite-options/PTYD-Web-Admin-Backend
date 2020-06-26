@@ -1575,7 +1575,7 @@ class Checkout(Resource):
                         \'""" + data['delivery_city'] + """\',
                         \'""" + data['delivery_state'] + """\',
                         \'""" + data['delivery_zip'] + """\',
-                        \'""" + data['delivery_region'] + """\',
+                        'US',
                         """ + str(delivery_coord['longitude']) + """,
                         """ + str(delivery_coord['latitude']) + """
                     );"""
@@ -3881,7 +3881,7 @@ class Update_Subscription(Resource):
                         \'""" + data['delivery_city'] + """\',
                         \'""" + data['delivery_state'] + """\',
                         \'""" + data['delivery_zip'] + """\',
-                        \'""" + data['delivery_region'] + """\',
+                       'US',
                         """ + str(delivery_coord['longitude']) + """,
                         """ + str(delivery_coord['latitude']) + """
                     );""")
