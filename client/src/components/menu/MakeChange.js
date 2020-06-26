@@ -196,7 +196,7 @@ export default class MakeChange extends Component {
         // mealplan ID is changed
         // buy a new purchase
         let data = {
-          user_uid: this.props.userID,
+          user_uid: this.props.user_uid,
           is_gift: this.state.currentPurchase.gift,
           item: this.state.updateMealPlan.name, // target meal plan
           item_price: this.state.updateMealPlan.price, //target meal plan's price
