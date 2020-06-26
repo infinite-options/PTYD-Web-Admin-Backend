@@ -15,6 +15,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import axios from "axios";
 
 export default class MakeChange extends Component {
   constructor(props) {
@@ -27,28 +28,39 @@ export default class MakeChange extends Component {
       paymentPlans: [], // use for reconstruct mealPlans
       showPasswordChange: false,
       showDeleteModal: false,
+      showSaveModal: false,
       //some variables need for submit forms
-      updateMealPlanID: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
-
+      updateMealPlan: {
+        meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
+        name: this.props.currentPurchase.meal_plan_desc,
+        price: this.props.currentPurchase.meal_plan_price,
+        amount_paid: 0
+      },
       creditCard: {
-        number: this.props.currentPurchase.cc_num,
-        CVV: this.props.currentPurchase.cc_cvv,
-        monthExpire:
+        cc_num: this.props.currentPurchase.cc_num,
+        cc_cvv: this.props.currentPurchase.cc_cvv,
+        cc_exp_month:
           moment(this.props.currentPurchase.cc_exp_date)._d.getMonth() + 1, // 0 for January
-        yearExpire: moment(
+        cc_exp_year: moment(
           this.props.currentPurchase.cc_exp_date
         )._d.getFullYear()
       },
       deliveryAddress: {
-        address: this.props.currentPurchase.delivery_address,
-        apt:
-          this.props.currentPurchase.delivery_unit !== undefined
-            ? this.props.currentPurchase.delivery_unit
+        delivery_first_name: this.props.currentPurchase.delivery_first_name,
+        delivery_last_name: this.props.currentPurchase.delivery_last_name,
+        delivery_email: this.props.currentPurchase.delivery_email,
+        delivery_phone: this.props.currentPurchase.delivery_phone,
+        delivery_address: this.props.currentPurchase.delivery_address,
+        delivery_address_unit:
+          this.props.currentPurchase.delivery_address_unit !== undefined &&
+          this.props.currentPurchase.delivery_address_unit !== null
+            ? this.props.currentPurchase.delivery_address_unit
             : "",
-        city: this.props.currentPurchase.delivery_city,
-        state: this.props.currentPurchase.delivery_state,
-        zipcode: this.props.currentPurchase.delivery_zip,
-        instruction: this.props.currentPurchase.delivery_instructions
+        delivery_city: this.props.currentPurchase.delivery_city,
+        delivery_state: this.props.currentPurchase.delivery_state,
+        delivery_zip: this.props.currentPurchase.delivery_zip,
+        delivery_region: this.props.currentPurchase.delivery_region,
+        delivery_instructions: this.props.currentPurchase.delivery_instructions
       }
     };
   }
@@ -76,7 +88,6 @@ export default class MakeChange extends Component {
       for (let plan of twentyMealPaymentPlans) {
         temp_array.push(plan);
       }
-      console.log("temp_array: ", temp_array);
       this.setState({paymentPlans: temp_array});
     }
   };
@@ -93,22 +104,38 @@ export default class MakeChange extends Component {
     ) {
       this.setState({
         currentPurchase: this.props.currentPurchase,
+        updateMealPlan: {
+          meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
+          name: this.props.currentPurchase.meal_plan_desc,
+          price: this.props.currentPurchase.meal_plan_price,
+          amount_paid: 0
+        },
         creditCard: {
-          number: this.props.currentPurchase.cc_num,
-          CVV: this.props.currentPurchase.cc_cvv,
-          monthExpire:
+          cc_num: this.props.currentPurchase.cc_num,
+          cc_cvv: this.props.currentPurchase.cc_cvv,
+          cc_exp_month:
             moment(this.props.currentPurchase.cc_exp_date)._d.getMonth() + 1, // 0 for January
-          yearExpire: moment(
+          cc_exp_year: moment(
             this.props.currentPurchase.cc_exp_date
           )._d.getFullYear()
         },
         deliveryAddress: {
-          address: this.props.currentPurchase.delivery_address,
-          apt: this.props.currentPurchase.delivery_unit,
-          city: this.props.currentPurchase.delivery_city,
-          state: this.props.currentPurchase.delivery_state,
-          zipcode: this.props.currentPurchase.delivery_zip,
-          instruction: this.props.currentPurchase.delivery_instructions
+          delivery_first_name: this.props.currentPurchase.delivery_first_name,
+          delivery_last_name: this.props.currentPurchase.delivery_last_name,
+          delivery_email: this.props.currentPurchase.delivery_email,
+          delivery_phone: this.props.currentPurchase.delivery_phone,
+          delivery_address: this.props.currentPurchase.delivery_address,
+          delivery_address_unit:
+            this.props.currentPurchase.delivery_address_unit !== undefined &&
+            this.props.currentPurchase.delivery_address_unit !== null
+              ? this.props.currentPurchase.delivery_address_unit
+              : "",
+          delivery_city: this.props.currentPurchase.delivery_city,
+          delivery_state: this.props.currentPurchase.delivery_state,
+          delivery_zip: this.props.currentPurchase.delivery_zip,
+          delivery_region: this.props.currentPurchase.delivery_region,
+          delivery_instructions: this.props.currentPurchase
+            .delivery_instructions
         }
       });
     }
@@ -126,6 +153,18 @@ export default class MakeChange extends Component {
       : this.setState({showDeleteModal: true});
   };
 
+  ShowHideSaveModal = () => {
+    if (
+      this.state.currentPurchase.meal_plan_id !==
+      this.state.updateMealPlan.meal_plan_id
+    ) {
+      this.state.showSaveModal
+        ? this.setState({showSaveModal: false})
+        : this.setState({showSaveModal: true});
+    } else {
+      this.UpdateChangingSubcription();
+    }
+  };
   DeleteCurrentPurchase = () => {
     fetch(this.props.DELETE_URL, {
       method: "PATCH",
@@ -151,46 +190,40 @@ export default class MakeChange extends Component {
     // update changing subcription
     try {
       if (
-        this.state.currentPurchase.purchase_id !== this.state.updateMealPlanID
+        this.state.currentPurchase.meal_plan_id !==
+        this.state.updateMealPlan.meal_plan_id
       ) {
         // mealplan ID is changed
-        await fetch(this.props.UPDATE_URL, {
-          method: "PATCH",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            meal_plan_id: this.state.updateMealPlanID,
-            purchase_id: this.state.currentPurchase.purchase_id,
-            delivery_address: this.state.deliveryAddress.address,
-            delivery_address_unit: this.state.deliveryAddress.apt,
-            delivery_city: this.state.deliveryAddress.city,
-            delivery_state: this.state.deliveryAddress.state,
-            delivery_zip: this.state.deliveryAddress.zipcode,
-            delivery_instructions: this.state.deliveryAddress.instruction
-          })
+        // buy a new purchase
+        let data = {
+          user_uid: this.props.userID,
+          is_gift: this.state.currentPurchase.gift,
+          item: this.state.updateMealPlan.name, // target meal plan
+          item_price: this.state.updateMealPlan.price, //target meal plan's price
+          ...this.state.creditCard,
+          billing_zip: this.state.currentPurchase.billing_zip,
+          ...this.state.deliveryAddress,
+          purchase_id: this.state.currentPurchase.purchase_id
+        };
+
+        await axios.post(`${this.props.UPDATE_SUBCRIPTION_URL}`, data); //update
+      } else {
+        //update changing delivery address
+        await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
+          ...this.state.deliveryAddress,
+          purchase_id: this.state.currentPurchase.purchase_id
+        });
+        //update changing payment for subcription
+        let creditCard = this.state.creditCard;
+        let date = moment(
+          `${creditCard.cc_exp_year}-${creditCard.cc_exp_month}-01 00:00:00`
+        ).format("YYYY-MM-DD");
+        await axios.patch(this.props.UPDATE_PAYMENT_URL, {
+          purchase_id: this.state.currentPurchase.purchase_id,
+          ...this.state.creditCard,
+          cc_exp_date: date.toString()
         });
       }
-      //update changing payment for subcription
-      let creditCard = this.state.creditCard;
-      let date = moment(
-        `${creditCard.yearExpire}-${creditCard.monthExpire}-01`
-      );
-      console.log("date created is: ", date);
-      await fetch(this.props.UPDATE_URL_PAYMENT, {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          purchase_id: this.state.currentPurchase.purchase_id,
-          cc_num: this.state.creditCard.number,
-          cc_cvv: this.state.creditCard.CVV,
-          cc_exp_date: date.format("YYYY-MM-DD")
-        })
-      });
       this.props.history.push("/mealschedule");
       window.location.reload("false");
     } catch (err) {
@@ -202,7 +235,8 @@ export default class MakeChange extends Component {
       <Fragment>
         {this.state.show &&
           !this.state.showPasswordChange &&
-          !this.state.showDeleteModal && (
+          !this.state.showDeleteModal &&
+          !this.state.showSaveModal && (
             <Modal
               show={this.state.show}
               onHide={this.props.ChangeAccountInfo}
@@ -259,13 +293,40 @@ export default class MakeChange extends Component {
                           name='subscription'
                           onChange={e => {
                             e.persist();
-                            this.setState({updateMealPlanID: e.target.value});
+                            let paymentPlans = this.state.paymentPlans;
+                            let paid = 0;
+                            if (paymentPlans[e.target.value] !== undefined) {
+                              paid =
+                                paymentPlans[e.target.value].meal_plan_price;
+                            }
+                            if (
+                              this.state.currentPurchase.meal_plan_id !==
+                              paymentPlans[e.target.value].meal_plan_id
+                            ) {
+                              paid = this.state.currentPurchase.meal_plan_price;
+                            }
+
+                            this.setState(prevState => ({
+                              updateMealPlan: {
+                                ...prevState.updateMealPlan,
+                                meal_plan_id:
+                                  paymentPlans[e.target.value].meal_plan_id,
+                                name:
+                                  paymentPlans[e.target.value].meal_plan_desc,
+                                price:
+                                  paymentPlans[e.target.value].meal_plan_price,
+                                amount_paid: (
+                                  paymentPlans[e.target.value].meal_plan_price -
+                                  paid
+                                ).toFixed(2)
+                              }
+                            }));
                           }}
                         >
                           <option>Choose...</option>
-                          {/* drop down meal plans to change goes here */}
+                          {/* drop down meal plans goes here */}
                           {this.state.paymentPlans.map((plan, key) => (
-                            <option key={key} value={plan.meal_plan_id}>
+                            <option key={key} value={key}>
                               {plan.meal_plan_desc} --- ${plan.meal_plan_price}
                             </option>
                           ))}
@@ -283,13 +344,13 @@ export default class MakeChange extends Component {
                         <Form.Control
                           placeholder='Enter Card Number'
                           name='cc_num'
-                          value={this.state.creditCard.number}
+                          value={this.state.creditCard.cc_num}
                           onChange={e => {
                             e.persist();
                             this.setState(prevState => ({
                               creditCard: {
                                 ...prevState.creditCard,
-                                number: e.target.value
+                                cc_num: e.target.value
                               }
                             }));
                           }}
@@ -303,13 +364,13 @@ export default class MakeChange extends Component {
                         <Form.Control
                           placeholder='123'
                           name='cc_cvv'
-                          value={this.state.creditCard.CVV}
+                          value={this.state.creditCard.cc_cvv}
                           onChange={e => {
                             e.persist();
                             this.setState(prevState => ({
                               creditCard: {
                                 ...prevState.creditCard,
-                                CVV: e.target.value
+                                cc_cvv: e.target.value
                               }
                             }));
                           }}
@@ -328,11 +389,11 @@ export default class MakeChange extends Component {
                             this.setState(prevState => ({
                               creditCard: {
                                 ...prevState.creditCard,
-                                monthExpire: e.target.value
+                                cc_exp_month: e.target.value
                               }
                             }));
                           }}
-                          value={this.state.creditCard.monthExpire}
+                          value={this.state.creditCard.cc_exp_month}
                         >
                           <option>{1}</option>
                           <option>{2}</option>
@@ -355,13 +416,13 @@ export default class MakeChange extends Component {
                         <Form.Control
                           as='select'
                           name='cc_exp_year'
-                          value={this.state.creditCard.yearExpire}
+                          value={this.state.creditCard.cc_exp_year}
                           onChange={e => {
                             e.persist();
                             this.setState(prevState => ({
                               creditCard: {
                                 ...prevState.creditCard,
-                                yearExpire: e.target.value
+                                cc_exp_year: e.target.value
                               }
                             }));
                           }}
@@ -385,13 +446,13 @@ export default class MakeChange extends Component {
                       <Form.Control
                         placeholder='1234 Main St'
                         name='delivery_address'
-                        value={this.state.deliveryAddress.address}
+                        value={this.state.deliveryAddress.delivery_address}
                         onChange={e => {
                           e.persist();
                           this.setState(prevState => ({
                             deliveryAddress: {
                               ...prevState.deliveryAddress,
-                              address: e.target.value
+                              delivery_address: e.target.value
                             }
                           }));
                         }}
@@ -410,13 +471,13 @@ export default class MakeChange extends Component {
                       <Form.Control
                         placeholder='Apartment, studio, or floor'
                         name='delivery_address_unit'
-                        value={this.state.deliveryAddress.apt}
+                        value={this.state.deliveryAddress.delivery_address_unit}
                         onChange={e => {
                           e.persist();
                           this.setState(prevState => ({
                             deliveryAddress: {
                               ...prevState.deliveryAddress,
-                              apt: e.target.value
+                              delivery_address_unit: e.target.value
                             }
                           }));
                         }}
@@ -429,13 +490,13 @@ export default class MakeChange extends Component {
                         <Form.Control
                           placeholder='Prep City'
                           name='delivery_city'
-                          value={this.state.deliveryAddress.city}
+                          value={this.state.deliveryAddress.delivery_city}
                           onChange={e => {
                             e.persist();
                             this.setState(prevState => ({
                               deliveryAddress: {
                                 ...prevState.deliveryAddress,
-                                city: e.target.value
+                                delivery_city: e.target.value
                               }
                             }));
                           }}
@@ -451,11 +512,11 @@ export default class MakeChange extends Component {
                             this.setState(prevState => ({
                               deliveryAddress: {
                                 ...prevState.deliveryAddress,
-                                state: e.target.value
+                                delivery_state: e.target.value
                               }
                             }));
                           }}
-                          value={this.state.deliveryAddress.state}
+                          value={this.state.deliveryAddress.delivery_state}
                         >
                           <option>Choose...</option>
                           <option>TX</option>
@@ -466,13 +527,13 @@ export default class MakeChange extends Component {
                         <Form.Control
                           placeholder='12345'
                           name='delivery_zip'
-                          value={this.state.deliveryAddress.zipcode}
+                          value={this.state.deliveryAddress.delivery_zip}
                           onChange={e => {
                             e.persist();
                             this.setState(prevState => ({
                               deliveryAddress: {
                                 ...prevState.deliveryAddress,
-                                zipcode: e.target.value
+                                delivery_zip: e.target.value
                               }
                             }));
                           }}
@@ -484,10 +545,15 @@ export default class MakeChange extends Component {
                       <Form.Control
                         placeholder='Instruction notes'
                         name='delivery_instructions'
-                        value={this.state.deliveryAddress.instruction}
+                        value={this.state.deliveryAddress.delivery_instructions}
                         onChange={e => {
                           e.persist();
-                          this.setState({instruction: e.target.value});
+                          this.setState(prevState => ({
+                            deliveryAddress: {
+                              ...prevState.deliveryAddress,
+                              delivery_instructions: e.target.value
+                            }
+                          }));
                         }}
                       />
                     </Form.Group>
@@ -513,11 +579,10 @@ export default class MakeChange extends Component {
                     Delete My Subscription
                   </Button>
                 </OverlayTrigger>{" "}
-                {/* {this.state.modalShowDelete ? this.DeleteModal() : <div />} */}
                 <Button
                   variant='success'
                   type='submit'
-                  onClick={this.UpdateChangingSubcription}
+                  onClick={this.ShowHideSaveModal}
                 >
                   Save Changes
                 </Button>
@@ -530,6 +595,8 @@ export default class MakeChange extends Component {
         {this.state.showPasswordChange && (
           <ChangePassword
             ShowHideChangePasswordModal={this.ShowHideChangePasswordModal}
+            DEV_URL={this.props.DEV_URL}
+            user_uid={this.props.user_uid}
           />
         )}
         {this.state.showDeleteModal && (
@@ -555,6 +622,35 @@ export default class MakeChange extends Component {
                   autoFocus
                 >
                   Yes,Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
+        {this.state.showSaveModal && (
+          <div>
+            <Dialog
+              open={this.state.showSaveModal}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  You will be charged {this.state.updateMealPlan.amount_paid}.
+                  Do you want to continue this transaction.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.ShowHideSaveModal} color='primary'>
+                  No,Thanks
+                </Button>
+                <Button
+                  onClick={this.UpdateChangingSubcription}
+                  variant='danger'
+                  autoFocus
+                >
+                  Yes,Please
                 </Button>
               </DialogActions>
             </Dialog>

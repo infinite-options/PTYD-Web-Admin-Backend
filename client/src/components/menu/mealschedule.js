@@ -178,23 +178,26 @@ export default class MealSchedule extends Component {
               </Row>
               {this.state.showHideMakeChange && (
                 <MakeChange
+                  searchCookie4LoggedInBy={this.searchCookie4LoggedInBy(
+                    "loginStatus"
+                  )}
                   ChangeAccountInfo={this.ChangeAccountInfo}
                   currentPurchase={this.state.currentPurchase}
                   purchases={this.state.purchases}
                   mealPlans={this.state.mealPlans}
                   history={this.props.history}
+                  DEV_URL={this.props.DEV_URL}
                   DELETE_URL={this.props.DELETE_URL}
-                  UPDATE_URL={this.props.UPDATE_URL}
-                  UPDATE_URL_PAYMENT={this.props.UPDATE_URL_PAYMENT}
+                  UPDATE_SUBCRIPTION_URL={this.props.UPDATE_SUBCRIPTION_URL}
+                  UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
+                  UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
+                  user_uid={this.state.userID}
                 />
               )}
 
               <AccountInfo
                 currentPurchase={this.state.currentPurchase}
                 addonCharge={this.state.addonCharge}
-                searchCookie4LoggedInBy={() =>
-                  this.searchCookie4LoggedInBy("loginStatus")
-                }
               />
             </div>
           </Cell>{" "}

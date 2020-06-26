@@ -21,23 +21,33 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 
 function createData(obj) {
   const {
+    menu_date,
     menu_category,
-    meal_name,
-    menu_type,
     meal_category,
-    meal_selected,
-    extra_meal_price,
+    menu_type,
+    meal_cat,
+    meal_id,
+    meal_name,
     default_meal,
+    meal_phot_URL,
+    week_affected,
+    meal_selected,
+    meals_ordered_meal_name,
     total,
   } = obj;
   return {
+    menu_date,
     menu_category,
-    meal_name,
-    menu_type,
     meal_category,
-    meal_selected,
-    extra_meal_price,
+    menu_type,
+    meal_cat,
+    meal_id,
+    meal_name,
     default_meal,
+    meal_phot_URL,
+    week_affected,
+    meal_selected,
+    meals_ordered_meal_name,
     total,
   };
 }
@@ -121,7 +131,7 @@ function OrderTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.id === "menu_category" ? "left" : "right"}
+            align={headCell.id === "menu_date" ? "left" : "right"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
             style={{ textTransform: "capitalize" }}
@@ -202,7 +212,7 @@ const OrderTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          Order
         </Typography>
       )}
 
@@ -266,6 +276,7 @@ export default function OrderTable(props) {
     } else if (props.data.length === 0) {
       setRows([]);
     }
+    console.log(props.data);
   }, [props.data]);
 
   const classes = useStyles();
@@ -349,13 +360,12 @@ export default function OrderTable(props) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.menu_category);
+                  const isItemSelected = isSelected(row.menu_date);
                   const labelId = `order-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.menu_category)}
+                      onClick={(event) => handleClick(event, row.menu_date)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -374,16 +384,19 @@ export default function OrderTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        {row.menu_category}
+                        {row.menu_date}
                       </TableCell>
-                      <TableCell align="right">{row.meal_name}</TableCell>
-                      <TableCell align="right">{row.menu_type}</TableCell>
+                      <TableCell align="right">{row.menu_category}</TableCell>
                       <TableCell align="right">{row.meal_category}</TableCell>
-                      <TableCell align="right">{row.meal_selected}</TableCell>
-                      <TableCell align="right">
-                        {row.extra_meal_price}
-                      </TableCell>
+                      <TableCell align="right">{row.menu_type}</TableCell>
+                      <TableCell align="right">{row.meal_cat}</TableCell>
+                      <TableCell align="right">{row.meal_id}</TableCell>
+                      <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.default_meal}</TableCell>
+                      <TableCell align="right">{row.meal_phot_URL}</TableCell>
+                      <TableCell align="right">{row.week_affected}</TableCell>
+                      <TableCell align="right">{row.meal_selected}</TableCell>
+                      <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.total}</TableCell>
                     </TableRow>
                   );
