@@ -4101,7 +4101,8 @@ class All_Meals(Resource):
                                                                 -- AND sat.Saturday < "2020-09-01"
                                                                 AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
                                                                 AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
-                                                                AND sat.Saturday > pur.start_date)
+                                                               -- AND sat.Saturday > pur.start_date)
+                                                                AND DATE_ADD(sat.Saturday, INTERVAL 0 DAY) > DATE_ADD(pur.start_date, INTERVAL 2 DAY))
                                                             AS act_pur
                                                         LEFT JOIN (# QUERY 1 
                                                             SELECT
@@ -4348,7 +4349,8 @@ class All_Ingredients(Resource):
                                                             -- AND sat.Saturday < "2020-09-01"
                                                             AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
                                                             AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
-                                                            AND sat.Saturday > pur.start_date)
+                                                           -- AND sat.Saturday > pur.start_date)
+                                                            AND DATE_ADD(sat.Saturday, INTERVAL 0 DAY) > DATE_ADD(pur.start_date, INTERVAL 2 DAY))
                                                         AS act_pur
                                                     LEFT JOIN (# QUERY 1 
                                                         SELECT
