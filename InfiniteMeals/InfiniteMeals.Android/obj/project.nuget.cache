@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IVMrf+R4XBsrUBh9XKBRnrSCMvY8ku4PV7uEjALwgCH5KjuzbJ6jKSfe4b2dbea2RDXnKOv2fZk4m/sPY2OsFA==",
+  "dgSpecHash": "bXPQ0au87kBDVTKjcIdblF2261e4ywPV6wCwv7pzSaabynt8IvhPnDCP7PWdhVcGF2SlYxFVZbdRkE3z+rs2kg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\InfiniteMeals.Android.csproj",
   "expectedPackageFiles": [
@@ -13,9 +13,12 @@
     "C:\\Users\\Sean\\.nuget\\packages\\microsoft.bcl.build\\1.0.14\\microsoft.bcl.build.1.0.14.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\microsoft.net.http\\2.2.29\\microsoft.net.http.2.2.29.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\mvvmlightlibs\\5.4.1.1\\mvvmlightlibs.5.4.1.1.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\mysqlconnector\\0.69.3\\mysqlconnector.0.69.3.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\nuproj\\0.11.30\\nuproj.0.11.30.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\pclcrypto\\1.0.2.15130\\pclcrypto.1.0.2.15130.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\pclstorage\\1.0.2\\pclstorage.1.0.2.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\rg.plugins.popup\\2.0.0.3\\rg.plugins.popup.2.0.0.3.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\validation\\2.0.6.15003\\validation.2.0.6.15003.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.android.arch.core.common\\1.1.1.3\\xamarin.android.arch.core.common.1.1.1.3.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.android.arch.core.runtime\\1.1.1.3\\xamarin.android.arch.core.runtime.1.1.1.3.nupkg.sha512",

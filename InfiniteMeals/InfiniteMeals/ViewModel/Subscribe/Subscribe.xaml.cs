@@ -42,7 +42,7 @@ namespace InfiniteMeals.Subscribe
 
         private async void Clicked5mealssubscription(object sender, EventArgs e)
         {
-            PaymentOptionPage fiveMealPlan = new PaymentOptionPage();
+            FiveMealPaymentOptionPage fiveMealPlan = new FiveMealPaymentOptionPage();
             fiveMealPlan.BindingContext = MealPlan.FiveMeals;
             Label mealPlanLabel = (Label)fiveMealPlan.FindByName("mealPlan");
             mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.FiveMeals);            

@@ -3,6 +3,7 @@ FormsViewGroup
 GalaSoft.MvvmLight.Platform
 PCLCrypto
 PCLStorage
+Rg.Plugins.Popup
 Xamarin.Android.Arch.Core.Common
 Xamarin.Android.Arch.Core.Runtime
 Xamarin.Android.Arch.Lifecycle.Common

@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 using InfiniteMeals.Model.Checkout;
 using InfiniteMeals.Utilities.Converters;
 using InfiniteMeals.Model.Subscribe;
+using System.Net.Http;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -28,18 +29,22 @@ namespace InfiniteMeals.ViewModel.Checkout {
             } else {
                 OrderInformation orderInfo = new OrderInformation {
                 shippingInformation = (ShippingInformation)this.BindingContext,
-                paymentInformation = new PaymentInformation(this.deliveryInstructionsEditor.Text, this.cardNumberEntry.Text,
+                paymentInformation = new PaymentInformation(this.deliveryInstructionsEditor.Text, "XXXXXXXXXXXX" + this.cardNumberEntry.Text.Substring(cardNumberEntry.Text.Length - 4),
                     this.cardholderNameEntry.Text, this.expirationMonthEntry.Text, this.expirationYearEntry.Text, this.cvvEntry.Text)
                 };
+
                 Summary summaryPage = new Summary();
                 summaryPage.BindingContext = orderInfo;
                 ShippingInformation shippingInfo = (ShippingInformation)this.BindingContext;
                 Label mealPlan = (Label)summaryPage.FindByName("mealPlan");
                 Label paymentOption = (Label)summaryPage.FindByName("paymentOption");
                 Label lastFourDigits = (Label)summaryPage.FindByName("lastFourDigits");
+                Label totalCost = (Label)summaryPage.FindByName("totalCost");
                 mealPlan.Text = MealPlanExtension.mealPlanToString(shippingInfo.subscriptionPlan.mealPlan);
                 paymentOption.Text = PaymentOptionExtension.paymentOptionToString(shippingInfo.subscriptionPlan.paymentOption);
                 lastFourDigits.Text = "XXXXXXXXXXXX" + this.cardNumberEntry.Text.Substring(cardNumberEntry.Text.Length - 4);
+                totalCost.Text = "$" + (shippingInfo.subscriptionPlan.cost + 25.00).ToString();
+
                 await Navigation.PushAsync(summaryPage);
             }
         }

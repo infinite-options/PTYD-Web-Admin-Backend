@@ -14,11 +14,11 @@ namespace InfiniteMeals.Model.Subscribe {
         public static string paymentOptionToString(PaymentOption paymentOption) {
             switch (paymentOption) {
                 case PaymentOption.Week:
-                    return "Weekly";
+                    return "Weekly Subscription";
                 case PaymentOption.TwoWeek:
-                    return "2 week pre-pay";
+                    return "2 week Pre-Pay Subscription";
                 case PaymentOption.FourWeek:
-                    return "4 week pre-pay";
+                    return "4 week Pre-Pay Subscription";
                 default:
                     return "No payment option";
             }

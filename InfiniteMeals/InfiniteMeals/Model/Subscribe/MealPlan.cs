@@ -16,13 +16,13 @@ namespace InfiniteMeals.Model.Subscribe {
         public static string mealPlanToString(MealPlan mealPlan) {
             switch(mealPlan) {
                 case MealPlan.FiveMeals:
-                    return "Five Meal Plan";
+                    return "5 Meal Plan";
                 case MealPlan.TenMeals:
-                    return "Ten Meal Plan";
+                    return "10 Meal Plan";
                 case MealPlan.FifteenMeals:
-                    return "Fifteen Meal Plan";
+                    return "15 Meal Plan";
                 case MealPlan.TwentyMeals:
-                    return "Twenty Meal Plan";
+                    return "20 Meal Plan";
                 default:
                     return "No meal plan";
             }

@@ -9,9 +9,9 @@ namespace InfiniteMeals.Model.Checkout {
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public ShippingInformation shippingInformation { get; set; }
+        public ShippingInformation shippingInformation { get; set; } // contains first name, last name, phone number, address, zip code, city, and state
 
-        public PaymentInformation paymentInformation { get; set; }
+        public PaymentInformation paymentInformation { get; set; } // contains delivery instructions, card number, cardholder name, exp month, exp year, and cvv
 
 
         public OrderInformation() {

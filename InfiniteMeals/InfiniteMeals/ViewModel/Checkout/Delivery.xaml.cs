@@ -94,7 +94,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
                         }
                         else {   // USPS sents an error saying address not found in there records. In other words, this address is not valid because it does not exits.
-                            Console.WriteLine("Error from USPS. The address you entered was not found");
+                            Console.WriteLine("Error: The address you entered was not found");
                             addressNotFound();
                         }
 
@@ -235,15 +235,15 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
         }
         private async void addressNotValid() {
-            await DisplayAlert("Alert!", "Addres not valid.", "Ok");
+            await DisplayAlert("Alert!", "Error: Address is not valid.", "Ok");
         }
 
         private async void addressIsMissingInformation() {
-            await DisplayAlert("Alert!", "Address is missing information like 'Apartment number'.", "Ok");
+            await DisplayAlert("Alert!", "Error: Address is missing information like 'Apartment number'.", "Ok");
         }
 
         private async void addressNotFound() {
-            await DisplayAlert("Alert!", "Error from USPS. The address you entered was not found.", "Ok");
+            await DisplayAlert("Alert!", "Error:  The address you entered was not found.", "Ok");
         }
 
     }

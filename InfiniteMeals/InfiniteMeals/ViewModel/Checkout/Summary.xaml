@@ -61,7 +61,7 @@
 
                 <!-- total cost -->
                 <Label Grid.Row="4" Text="Total: " FontAttributes="Bold" TextColor="Black" Padding="10,0,0,0"/>
-                <Label Grid.Column="1" Grid.Row="4" Text="$125.00" FontAttributes="Bold" TextColor="Black" HorizontalOptions="End"/>
+                <Label x:Name="totalCost" Grid.Column="1" Grid.Row="4" FontAttributes="Bold" TextColor="Black" HorizontalOptions="End"/>
 
             </Grid>
 

@@ -110,6 +110,15 @@
           "lib/monoandroid1/GalaSoft.MvvmLight.dll": {}
         }
       },
+      "MySqlConnector/0.69.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/MySqlConnector.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/MySqlConnector.dll": {}
+        }
+      },
       "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
@@ -117,6 +126,12 @@
         },
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "NuProj/0.11.30": {
+        "type": "package",
+        "build": {
+          "build/NuProj.props": {}
         }
       },
       "PCLCrypto/1.0.2.15130": {
@@ -140,6 +155,18 @@
         "runtime": {
           "lib/monoandroid/PCLStorage.Abstractions.dll": {},
           "lib/monoandroid/PCLStorage.dll": {}
+        }
+      },
+      "Rg.Plugins.Popup/2.0.0.3": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Forms": "4.5.0.530"
+        },
+        "compile": {
+          "lib/monoandroid90/Rg.Plugins.Popup.dll": {}
+        },
+        "runtime": {
+          "lib/monoandroid90/Rg.Plugins.Popup.dll": {}
         }
       },
       "Validation/2.0.6.15003": {
@@ -1042,7 +1069,9 @@
           "AWSSDK.DynamoDBv2": "3.3.106.18",
           "Microsoft.Net.Http": "2.2.29",
           "MvvmLightLibs": "5.4.1.1",
+          "MySqlConnector": "0.69.3",
           "Newtonsoft.Json": "12.0.3",
+          "Rg.Plugins.Popup": "2.0.0.3",
           "Xamarin.Essentials": "1.5.3.2",
           "Xamarin.Forms": "4.6.0.847",
           "Xamarin.Forms.Maps": "4.6.0.847"
@@ -1544,6 +1573,34 @@
         "mvvmlightlibs.nuspec"
       ]
     },
+    "MySqlConnector/0.69.3": {
+      "sha512": "9TIGfvHrPj54fTuIACVT0vfFlGlgaYmW9m5IrSjzGKtJ4+qHKfffpUuG28l/+syTsprmf08HRPayqBP5MYKqHw==",
+      "type": "package",
+      "path": "mysqlconnector/0.69.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/MySqlConnector.dll",
+        "lib/net45/MySqlConnector.xml",
+        "lib/net461/MySqlConnector.dll",
+        "lib/net461/MySqlConnector.xml",
+        "lib/net471/MySqlConnector.dll",
+        "lib/net471/MySqlConnector.xml",
+        "lib/netcoreapp2.1/MySqlConnector.dll",
+        "lib/netcoreapp2.1/MySqlConnector.xml",
+        "lib/netcoreapp3.0/MySqlConnector.dll",
+        "lib/netcoreapp3.0/MySqlConnector.xml",
+        "lib/netstandard1.3/MySqlConnector.dll",
+        "lib/netstandard1.3/MySqlConnector.xml",
+        "lib/netstandard2.0/MySqlConnector.dll",
+        "lib/netstandard2.0/MySqlConnector.xml",
+        "lib/netstandard2.1/MySqlConnector.dll",
+        "lib/netstandard2.1/MySqlConnector.xml",
+        "logo.png",
+        "mysqlconnector.0.69.3.nupkg.sha512",
+        "mysqlconnector.nuspec"
+      ]
+    },
     "Newtonsoft.Json/12.0.3": {
       "sha512": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "type": "package",
@@ -1573,6 +1630,39 @@
         "newtonsoft.json.12.0.3.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
+      ]
+    },
+    "NuProj/0.11.30": {
+      "sha512": "k0rjyTfe2rOrL1+d9b7t6ik2DLM7Gfw5DahvgbpAhcKNFavt5FWdfjwChm3IzaZMEsQbklCo2Tw55+5GWPWFkw==",
+      "type": "package",
+      "path": "nuproj/0.11.30",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/NuProj.props",
+        "nuproj.0.11.30.nupkg.sha512",
+        "nuproj.nuspec",
+        "tools/Microsoft.Build.Framework.dll",
+        "tools/Microsoft.Build.Utilities.v12.0.dll",
+        "tools/Microsoft.Common.NuProj.targets",
+        "tools/Microsoft.Web.XmlTransform.dll",
+        "tools/NuGet.Core.dll",
+        "tools/NuGet.exe",
+        "tools/NuProj.Tasks.dll",
+        "tools/NuProj.Tasks.pdb",
+        "tools/NuProj.props",
+        "tools/NuProj.targets",
+        "tools/Rules/ContentFile.xaml",
+        "tools/Rules/ProjectItemsSchema.xaml",
+        "tools/Rules/ProjectReference.xaml",
+        "tools/Rules/ResolvedProjectReference.xaml",
+        "tools/Rules/content.xaml",
+        "tools/Rules/folder.xaml",
+        "tools/Rules/general.browseobject.xaml",
+        "tools/Rules/general.xaml",
+        "tools/Rules/none.xaml",
+        "tools/Rules/scc.xaml"
       ]
     },
     "PCLCrypto/1.0.2.15130": {
@@ -1651,6 +1741,54 @@
         "lib/wp8/PCLStorage.xml",
         "pclstorage.1.0.2.nupkg.sha512",
         "pclstorage.nuspec"
+      ]
+    },
+    "Rg.Plugins.Popup/2.0.0.3": {
+      "sha512": "/lrKxxsdaF9T+YEnVDaUMj0angdRyvpngSmX8veY/QYhSjT4x3guJTsL8O8D4egDf7MI5McnmMAsst0tkN1LOA==",
+      "type": "package",
+      "path": "rg.plugins.popup/2.0.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "icon.png",
+        "lib/monoandroid10.0/Rg.Plugins.Popup.dll",
+        "lib/monoandroid10.0/Rg.Plugins.Popup.pdb",
+        "lib/monoandroid10.0/Rg.Plugins.Popup.xml",
+        "lib/monoandroid90/Rg.Plugins.Popup.dll",
+        "lib/monoandroid90/Rg.Plugins.Popup.pdb",
+        "lib/monoandroid90/Rg.Plugins.Popup.xml",
+        "lib/net472/Rg.Plugins.Popup.dll",
+        "lib/net472/Rg.Plugins.Popup.pdb",
+        "lib/net472/Rg.Plugins.Popup.xml",
+        "lib/netcoreapp3.1/Rg.Plugins.Popup.dll",
+        "lib/netcoreapp3.1/Rg.Plugins.Popup.pdb",
+        "lib/netcoreapp3.1/Rg.Plugins.Popup.xml",
+        "lib/netstandard2.0/Rg.Plugins.Popup.dll",
+        "lib/netstandard2.0/Rg.Plugins.Popup.pdb",
+        "lib/netstandard2.0/Rg.Plugins.Popup.xml",
+        "lib/tizen40/Rg.Plugins.Popup.dll",
+        "lib/tizen40/Rg.Plugins.Popup.pdb",
+        "lib/tizen40/Rg.Plugins.Popup.xml",
+        "lib/uap10.0.17763/Rg.Plugins.Popup.dll",
+        "lib/uap10.0.17763/Rg.Plugins.Popup.pdb",
+        "lib/uap10.0.17763/Rg.Plugins.Popup.pri",
+        "lib/uap10.0.17763/Rg.Plugins.Popup.xml",
+        "lib/xamarinios10/Rg.Plugins.Popup.dll",
+        "lib/xamarinios10/Rg.Plugins.Popup.pdb",
+        "lib/xamarinios10/Rg.Plugins.Popup.xml",
+        "lib/xamarinmac20/Rg.Plugins.Popup.dll",
+        "lib/xamarinmac20/Rg.Plugins.Popup.pdb",
+        "lib/xamarinmac20/Rg.Plugins.Popup.xml",
+        "lib/xamarintvos10/Rg.Plugins.Popup.dll",
+        "lib/xamarintvos10/Rg.Plugins.Popup.pdb",
+        "lib/xamarintvos10/Rg.Plugins.Popup.xml",
+        "lib/xamarinwatchos10/Rg.Plugins.Popup.dll",
+        "lib/xamarinwatchos10/Rg.Plugins.Popup.pdb",
+        "lib/xamarinwatchos10/Rg.Plugins.Popup.xml",
+        "readme.txt",
+        "rg.plugins.popup.2.0.0.3.nupkg.sha512",
+        "rg.plugins.popup.nuspec"
       ]
     },
     "Validation/2.0.6.15003": {
@@ -2903,6 +3041,9 @@
       "AWSSDK.DynamoDBv2 >= 3.3.106.18",
       "InfiniteMeals >= 1.0.0",
       "Microsoft.Net.Http >= 2.2.29",
+      "MySqlConnector >= 0.69.3",
+      "NuProj >= 0.11.30",
+      "Rg.Plugins.Popup >= 2.0.0.3",
       "Xamarin.Essentials >= 1.5.3.2",
       "Xamarin.Forms >= 4.6.0.847"
     ]
@@ -2964,6 +3105,20 @@
           "Microsoft.Net.Http": {
             "target": "Package",
             "version": "[2.2.29, )"
+          },
+          "MySqlConnector": {
+            "target": "Package",
+            "version": "[0.69.3, )"
+          },
+          "NuProj": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[0.11.30, )"
+          },
+          "Rg.Plugins.Popup": {
+            "target": "Package",
+            "version": "[2.0.0.3, )"
           },
           "Xamarin.Essentials": {
             "target": "Package",
