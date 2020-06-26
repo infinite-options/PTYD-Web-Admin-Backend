@@ -223,7 +223,7 @@ function SignUp(props) {
                         onChange={e => setConfirmPassword(e.target.value)}
                         placeholder='Confirm Password'
                       />
-                      {!confirmPassword ? (<span className='required-red'>Please confirm your password</span>) : ''}
+                      {confirmPassword != password ? (<span className='required-red'>Confirm password does not match</span>) : ''}
                     </Form.Group>
                   </Form.Row>
 

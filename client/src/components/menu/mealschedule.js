@@ -103,7 +103,7 @@ export default class MealSchedule extends Component {
               // addonCharge: res.data.result[0].total_charge
             });
           } else {
-            throw "There is no subcribed purchases.";
+            throw "There are no subscribed purchases.";
           }
         }
       })

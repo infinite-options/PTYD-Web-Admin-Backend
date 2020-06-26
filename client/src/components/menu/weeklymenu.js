@@ -91,11 +91,7 @@ class WeeklyMenu extends Component {
                       boxShadow:"1px 2px 5px 1px grey"
                     }}
                   />
-                  <div
-                    style={{
-                      
-                    }}
-                  >
+                  <div>
                     <div
                       //meal titles (to show)
                       style={{

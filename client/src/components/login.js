@@ -366,7 +366,7 @@ export default function Login(props) {
           </div>
           
           <Row className="justify-content-center" style={{padding:"5px 0"}}>
-            <div style={{padding:"5px"}}>
+            <div style={{boxShadow: "0px 2px 2px 0px rgba(117,117,117,1)", borderRadius:"1px", background:"#4c69ba"}}>
               <FacebookLogin
                 appId='508721976476931'
                 autoLoad={false}
@@ -379,7 +379,7 @@ export default function Login(props) {
             </div>
             {/* </div> */}
             &nbsp;
-            <div style={{padding:"3px 0 0 0"}}>
+            <div style={{padding:"0 4px"}}>
               <GoogleLogin
                 clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
                 buttonText='Continue with Google'
@@ -446,6 +446,7 @@ export default function Login(props) {
                 >
                   <strong style={{ color: "white" }}>Sign In</strong>
                 </Button>
+
                 <div className='text-center' style={{ padding: "10px" }}>
                   <a href='/resetpassword' style={{ color: "#494949" }}>Forgot password?</a>
                 </div>
