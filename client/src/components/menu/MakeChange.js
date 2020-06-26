@@ -154,9 +154,16 @@ export default class MakeChange extends Component {
   };
 
   ShowHideSaveModal = () => {
-    this.state.showSaveModal
-      ? this.setState({showSaveModal: false})
-      : this.setState({showSaveModal: true});
+    if (
+      this.state.currentPurchase.meal_plan_id !==
+      this.state.updateMealPlan.meal_plan_id
+    ) {
+      this.state.showSaveModal
+        ? this.setState({showSaveModal: false})
+        : this.setState({showSaveModal: true});
+    } else {
+      this.UpdateChangingSubcription();
+    }
   };
   DeleteCurrentPurchase = () => {
     fetch(this.props.DELETE_URL, {
@@ -293,7 +300,7 @@ export default class MakeChange extends Component {
                               this.state.currentPurchase.meal_plan_id !==
                               paymentPlans[e.target.value].meal_plan_id
                             ) {
-                              paid = this.state.currentPurchase.amount_due;
+                              paid = this.state.currentPurchase.meal_plan_price;
                             }
 
                             this.setState(prevState => ({
