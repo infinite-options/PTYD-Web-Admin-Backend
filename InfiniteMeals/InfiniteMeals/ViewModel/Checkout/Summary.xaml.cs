@@ -17,7 +17,6 @@ using MySql.Data.MySqlClient;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
-using Rg.Plugins.Popup.Services;
 using System.Net;
 using InfiniteMeals.Model.Login;
 
@@ -41,10 +40,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
 
         private async void ConfirmClicked(object sender, EventArgs e) {
-            
-     
-        
-
+ 
             checkout();
             // login(tempEmail, tempPass);
             MainPage mainPage = new MainPage();
@@ -94,7 +90,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
                     ccExpYear = orderInformation.paymentInformation.expirationYear,
                     salt = hashedPassword,
                     isGift = "false",
-                    userUId = "100-000019",
+                    userUId = "100-000007",
                     item = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + " - " + // meal plan
                            PaymentOptionExtension.paymentOptionToString(orderInformation.shippingInformation.subscriptionPlan.paymentOption) + " - " + // payment option
                            orderInformation.shippingInformation.subscriptionPlan.cost.ToString(), // cost

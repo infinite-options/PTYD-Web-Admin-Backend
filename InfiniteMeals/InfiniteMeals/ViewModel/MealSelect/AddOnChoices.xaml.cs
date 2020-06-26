@@ -27,14 +27,13 @@ namespace InfiniteMeals.MealSelect
         {
             InitializeComponent();
             getData();
-      
         }
 
         public async void getData()
         {
-
-            // Normal Meals
-            List<String> AddNames = new List<String>();
+            Boolean flag = false;
+        // Normal Meals
+        List<String> AddNames = new List<String>();
             List<String> AddDesc = new List<String>();
             List<double> AddPrice = new List<double>();
             List<int> AddQty = new List<int>();
@@ -169,19 +168,7 @@ namespace InfiniteMeals.MealSelect
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0,
             };
-
-            if (totalBar.Text.Equals("Close"))
-            {
-                System.Diagnostics.Debug.WriteLine(" made it here");
-                totalBar.Clicked += BackToSchedule;
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine( " or made it here");
-
-                totalBar.Clicked += BackToSchedule;
-            }
-
+            totalBar.Clicked += GetText;
             totalBar.SetBinding(Label.TextProperty, "total");
             this.ToolbarItems.Add(totalBar);
 
@@ -223,10 +210,9 @@ namespace InfiniteMeals.MealSelect
                 WidthRequest = 20,
                 HeightRequest = 20,
                 Aspect = Aspect.AspectFit,
-                HorizontalOptions = LayoutOptions.Start,
-                VerticalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
             };
-            infoButton.Margin = new Thickness(50, 0, 0, 0);
             infoButton.Clicked += (sender, e) =>
             {
                 ImageButton stepper = sender as ImageButton;
@@ -239,52 +225,63 @@ namespace InfiniteMeals.MealSelect
                 Value = 0,
                 Maximum = 10,
                 Increment = 1,
-                HeightRequest = 50
+                HeightRequest = 50,
+                Scale = 0.5,
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.Center,
+
             };
+            steppers.Margin = new Thickness(40, 0, 0, 0); ;
 
             steppers.ValueChanged += (sender, e) =>
             {
-            Stepper stepper = sender as Stepper;
-            var model = stepper.BindingContext as Meal;
-            var stepperVal = stepper.Value;
+                Stepper stepper = sender as Stepper;
+                var model = stepper.BindingContext as Meal;
+                var stepperVal = stepper.Value;
 
 
-            if (stepperVal > model.qty)
-            {
-                model.qty = (int)steppers.Value;
-                subTotal += model.price;
-                model.total = subTotal;
-            }
-            else if (stepperVal < model.qty)
-            {
-
-                model.qty = (int)steppers.Value;
-                subTotal -= model.price;
-                model.total = subTotal;
-                if (subTotal < 0)
+                if (stepperVal > model.qty)
                 {
-                    subTotal = 0.00;
+                    model.qty = (int)steppers.Value;
+                    subTotal += model.price;
                     model.total = subTotal;
                 }
-            }
+                else if (stepperVal < model.qty)
+                {
 
-            if (subTotal == 0)
-            {
-                    System.Diagnostics.Debug.WriteLine("its closed");
+                    model.qty = (int)steppers.Value;
+                    subTotal -= model.price;
+                    model.total = subTotal;
+                    if (subTotal < 0)
+                    {
+                        subTotal = 0.00;
+                        model.total = subTotal;
+                    }
+                }
 
+                if (subTotal == 0)
+                {
                     totalBar.Text = "Close";
-            }
-            else
-            {
+                    System.Diagnostics.Debug.WriteLine(" made it here flag" + flag);
+                }
+                else
+                {
                     totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
-            }
-        };
+                    System.Diagnostics.Debug.WriteLine(" made it here flag 2" + flag);
+                }
+
+
+            };
 
                 Label quantity = new Label
                 {
                     FontSize = 15,
                     FontAttributes = FontAttributes.Bold,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Center,
                     VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Center,
+
                 };
 
                 nameLabel.SetBinding(Label.TextProperty, "name");
@@ -296,18 +293,38 @@ namespace InfiniteMeals.MealSelect
 
                 grid.Children.Add(imgLabel, 0, 0);
                 imgLabel.SetValue(Grid.RowSpanProperty, 2);
-                grid.Children.Add(nameLabel, 1, 0);
-                grid.Children.Add(quantity, 3, 0);
-                grid.Children.Add(costLabel, 1, 1);
-                grid.Children.Add(infoButton, 2, 0);
-                grid.Children.Add(steppers, 2, 1);
-                steppers.SetValue(Grid.ColumnSpanProperty, 2);
+                imgLabel.SetValue(Grid.ColumnSpanProperty, 2);
+                grid.Children.Add(nameLabel, 2, 0);
+                nameLabel.SetValue(Grid.RowSpanProperty, 2);
+                nameLabel.SetValue(Grid.ColumnSpanProperty, 2);
+                grid.Children.Add(infoButton, 4, 0);
+                grid.Children.Add(steppers, 3, 1);
+                steppers.SetValue(Grid.ColumnSpanProperty, 3);
+                grid.Children.Add(quantity, 5, 0);
+
                 return new ViewCell { View = grid, Height = 100 };
             });
 
             Content = lstView;
             BindingContext = this;
 
+        }
+
+
+        void GetText(object sender, EventArgs e)
+        {
+            ToolbarItem tb = sender as ToolbarItem;
+            String val = tb.Text.ToString();
+            System.Diagnostics.Debug.WriteLine(val);
+
+            if(val.Equals("Close"))
+            {
+                RefreshToSchedule();
+            }
+            else
+            {
+                BackToSchedule();
+            }
         }
 
         void OnInfoClicked(Object sender, EventArgs args)
@@ -317,24 +334,12 @@ namespace InfiniteMeals.MealSelect
             DisplayAlert("Ingredients", model.description.ToString(), "OK");
         }
 
-        void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            Meal selectedItem = e.SelectedItem as Meal;
-            DisplayAlert("Ingredients", selectedItem.description.ToString(), "OK");
-        }
-
-        void OnListViewItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            Meal tappedItem = e.Item as Meal;
-            DisplayAlert("Ingredients", tappedItem.description.ToString(), "OK");
-        }
-
-        private async void BackToSchedule(object sender, EventArgs e)
+        private async void BackToSchedule()
         {
             await Navigation.PopAsync();
         }
 
-        private async void RefreshToSchedule(object sender, EventArgs e)
+        private async void RefreshToSchedule()
         {
             await Navigation.PushAsync(new MealSchedule());
         }

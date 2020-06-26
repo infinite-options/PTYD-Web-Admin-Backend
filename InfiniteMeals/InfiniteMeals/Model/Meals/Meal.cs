@@ -24,6 +24,7 @@ namespace InfiniteMeals.Meals.Model
         public string description { get; set; }
         public double price { get; set; }
         public string id { get; set; }
+        public string is_addon { get; set; }
         public string kitchenId { get; set; }
         public string kitchenName { get; set; }
         public string infoUrl { get; set; }
