@@ -3775,8 +3775,10 @@ class Update_Subscription(Resource):
 
             if paymentId == None:
                 paymentId = '200-000001'
-
+            print("before mealPlan")
             mealPlan = data['item'].split(' Subscription')[0]
+            print(data['user_uid'])
+            print("after mealPlan: ", mealPlan)
 
             queries = ["""
                 SELECT
@@ -3785,16 +3787,18 @@ class Update_Subscription(Resource):
                 FROM
                     ptyd_meal_plans
                 WHERE
-                    meal_plan_desc = \'""" + mealPlan + "\'", """
+                    meal_plan_desc = \'""" + mealPlan + "\'", # first query
+                """
                 SELECT
                     cc_num
                 FROM
                     ptyd_payments
                 WHERE
-                    buyer_id = \'""" + data['user_uid'] + "\';"]
+                    buyer_id = \'""" + data['user_uid'] + "\';"] # second query
 
             mealPlanQuery = execute(queries[0], 'get', conn)
 
+            print("Passed mealPlanQuery")
             if mealPlanQuery['code'] == 280:
                 print("Getting meal plan ID...")
                 mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
@@ -4097,7 +4101,8 @@ class All_Meals(Resource):
                                                                 -- AND sat.Saturday < "2020-09-01"
                                                                 AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
                                                                 AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
-                                                                AND sat.Saturday > pur.start_date)
+                                                               -- AND sat.Saturday > pur.start_date)
+                                                                AND DATE_ADD(sat.Saturday, INTERVAL 0 DAY) > DATE_ADD(pur.start_date, INTERVAL 2 DAY))
                                                             AS act_pur
                                                         LEFT JOIN (# QUERY 1 
                                                             SELECT
@@ -4344,7 +4349,8 @@ class All_Ingredients(Resource):
                                                             -- AND sat.Saturday < "2020-09-01"
                                                             AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
                                                             AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
-                                                            AND sat.Saturday > pur.start_date)
+                                                           -- AND sat.Saturday > pur.start_date)
+                                                            AND DATE_ADD(sat.Saturday, INTERVAL 0 DAY) > DATE_ADD(pur.start_date, INTERVAL 2 DAY))
                                                         AS act_pur
                                                     LEFT JOIN (# QUERY 1 
                                                         SELECT
