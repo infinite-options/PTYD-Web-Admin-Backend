@@ -34,7 +34,9 @@ export default class AccountInfo extends Component {
         <p>Credit Card: {current.cc_num} </p>
         <p>Expiration Date: {current.cc_exp_date}</p>
         <p>CVV: {current.cc_cvv}</p>
-        <h4>Delivery Details</h4> <p>Address: {current.delivery_address} </p>
+        <h4>Delivery Details</h4> 
+        <p>Name: {current.delivery_first_name} {current.delivery_last_name}</p>
+        <p>Address: {current.delivery_address} </p>
         <p>Unit: {current.delivery_address_unit}</p>
         <p>
           City, State ZIP: {current.delivery_city}, {current.delivery_zip}{" "}
