@@ -12,4 +12,4 @@ venv
 .vscode
 .DS_Store
 sample.py
-.DS_Store
+*.DS_Store

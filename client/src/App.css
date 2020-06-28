@@ -406,7 +406,7 @@ a {
   top: 0;
   left: 0;
   color: #fff;
-  background-color: rgba(200, 200, 200, 0.5);
+  background-color: rgba(145, 122, 122, 0.5);
   width: 270px;
   height: 270px;
   -webkit-transition: all 400ms ease-out;
@@ -424,9 +424,11 @@ a {
   opacity: 1;
   transition-delay: 0s;
   transition-duration: 0.05s;
-  padding-top: 120px;
+  padding-top: 80px;
+  margin: 0 10px;
   text-transform: uppercase;
   font-weight: bold;
+  line-height: 1.6;
 }
 .menu-carousel-img-container .content:hover .text {
   opacity: 1;
