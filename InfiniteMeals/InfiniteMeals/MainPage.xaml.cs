@@ -6,22 +6,23 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
-using InfiniteMeals.Kitchens.Model;
+
 using System.Collections.ObjectModel;
 using System.Globalization;
 using InfiniteMeals.Meals;
 using InfiniteMeals.SignUp;
+using PrepToYourDoor.Model.Database;
 
 namespace InfiniteMeals
 {
     public partial class MainPage : ContentPage
     {
 
-        ObservableCollection<Kitchen> Kitchens = new ObservableCollection<Kitchen>();
 
 
         private async void ClickedSignUp(object sender, EventArgs e)
         {
+        
             await Navigation.PushAsync(new SignUp.SignUp());
         }
 
@@ -41,111 +42,19 @@ namespace InfiniteMeals
         }
 
 
-        protected async void GetKitchens()
-        {
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://phaqvwjbw6.execute-api.us-west-1.amazonaws.com/dev/api/v1/kitchens");
-            request.Method = HttpMethod.Get;
-            var client = new HttpClient();
-            HttpResponseMessage response = await client.SendAsync(request);
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                HttpContent content = response.Content;
-                var kitchensString = await content.ReadAsStringAsync();
-                JObject kitchens = JObject.Parse(kitchensString);
-                this.Kitchens.Clear();
-
-                foreach (var k in kitchens["result"])
-                {
-                    Boolean businessIsOpen;
-                    string accepting_hours;
-                    int dayOfWeekIndex = getDayOfWeekIndex(DateTime.Today);
-                    if ((Boolean)k["isOpen"]["BOOL"] == false)
-                    {
-                        accepting_hours = "Not accepting orders, no meals";
-                        businessIsOpen = false;
-                    }
-                    else if ((Boolean)k["is_accepting_24hr"]["BOOL"] == true)
-                    {
-                        accepting_hours = "24 hours";
-                        businessIsOpen = true;
-                    }
-                    else
-                    {
-                        string start_time_12 = ConvertFromToTime((string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"], "HH:mm", "h:mm tt");
-                        string end_time_12 = ConvertFromToTime((string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"], "HH:mm", "h:mm tt");
-                        string start_time_24 = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"];
-                        string end_time_24 = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
-                        Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["BOOL"];
-                        businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time_24), TimeSpan.Parse(end_time_24), isAccepting);
-                        accepting_hours = whenAccepting(businessIsOpen, k, dayOfWeekIndex);
-                    }
-                    string delivery_hours = whenDelivering(dayOfWeekIndex, k);
-                  
-                    this.Kitchens.Add(new Kitchen()
-                    {
-                        kitchenId = k["kitchen_id"]["S"].ToString(),
-                        zipcode = formatZipcode(k["zipcode"]["S"].ToString()),
-                        title = k["kitchen_name"]["S"].ToString(),
-                        openHours = accepting_hours,
-                        deliveryPeriod = delivery_hours,
-                        description = k["description"]["S"].ToString(),
-                        isOpen = businessIsOpen,
-                        status = (businessIsOpen == true) ? "Open now" : "Closed",
-                        statusColor = (businessIsOpen == true) ? "Green" : "Red",
-                        opacity = (businessIsOpen == true) ? "1.0" : "0.6"
-                    }
-                    ) ;
-                }
-
-              //  kitchensListView.ItemsSource = Kitchens;
-            }
-
-        }
-
+       
         public MainPage()
         {
             InitializeComponent();
 
-            GetKitchens();
+
 
             homepage.Source = ImageSource.FromFile("homepage.jpg");
 
-            //Kitchens.Clear();
-            /*
-            kitchensListView.RefreshCommand = new Command(() =>
-            {
-               GetKitchens();
-               kitchensListView.IsRefreshing = false;
-            });
-
-            kitchensListView.ItemSelected += Handle_ItemTapped();
-            */
+            
         }
 
-        private EventHandler<SelectedItemChangedEventArgs> Handle_ItemTapped()
-        {
-            return OnItemSelected;
-        }
-
-        async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            // disable selected item highlighting;
-            if (e.SelectedItem == null) return;
-            ((ListView)sender).SelectedItem = null;
-
-
-            // do something with the selection
-            var kitchen = e.SelectedItem as Kitchen;
-
-            // disable selection if the kitchen is closed
-            if (kitchen.isOpen == false)
-            {
-                return;
-            }
-
-            await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchenId, kitchen.title, kitchen.zipcode));
-        }
+        
 
         //  Get integer index of day of the week, with 0 as Sunday
         private int getDayOfWeekIndex(DateTime day)

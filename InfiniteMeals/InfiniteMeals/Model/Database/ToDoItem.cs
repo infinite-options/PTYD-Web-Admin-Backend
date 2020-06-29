@@ -12,7 +12,7 @@ namespace PrepToYourDoor.Model.Database {
 
 
         public override string ToString() {
-            return "this works omg " + this.ID;
+            return this.ID.ToString();
         }
     }
 }
