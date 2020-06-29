@@ -1,0 +1,42 @@
+﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs">
+    <Files>
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="339" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="30" Column="7" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="InfiniteMeals" expanded="True">
+            <Node name="InfiniteMeals" expanded="True">
+              <Node name="Model" expanded="True">
+                <Node name="Meals" expanded="True" />
+              </Node>
+              <Node name="ViewModel" expanded="True">
+                <Node name="Checkout" expanded="True">
+                  <Node name="CheckOutPage.xaml" expanded="True" />
+                </Node>
+                <Node name="MealSelect" expanded="True">
+                  <Node name="AddOnChoices.xaml" expanded="True">
+                    <Node name="AddOnChoices.xaml.cs" selected="True" />
+                  </Node>
+                  <Node name="MealChoices.xaml" expanded="True" />
+                  <Node name="MealSchedule.xaml" expanded="True" />
+                  <Node name="SelectMealOptions.xaml" expanded="True" />
+                </Node>
+              </Node>
+              <Node name="MainPage.xaml" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

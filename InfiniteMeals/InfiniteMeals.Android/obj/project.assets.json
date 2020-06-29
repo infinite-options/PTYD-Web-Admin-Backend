@@ -128,12 +128,6 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
-      "NuProj/0.11.30": {
-        "type": "package",
-        "build": {
-          "build/NuProj.props": {}
-        }
-      },
       "PCLCrypto/1.0.2.15130": {
         "type": "package",
         "dependencies": {
@@ -157,16 +151,97 @@
           "lib/monoandroid/PCLStorage.dll": {}
         }
       },
-      "Rg.Plugins.Popup/2.0.0.3": {
+      "sqlite-net-pcl/1.7.335": {
         "type": "package",
         "dependencies": {
-          "Xamarin.Forms": "4.5.0.530"
+          "SQLitePCLRaw.bundle_green": "2.0.3"
         },
         "compile": {
-          "lib/monoandroid90/Rg.Plugins.Popup.dll": {}
+          "lib/netstandard2.0/SQLite-net.dll": {}
         },
         "runtime": {
-          "lib/monoandroid90/Rg.Plugins.Popup.dll": {}
+          "lib/netstandard2.0/SQLite-net.dll": {}
+        }
+      },
+      "SQLitePCLRaw.bundle_green/2.0.3": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.0.3",
+          "SQLitePCLRaw.lib.e_sqlite3.android": "2.0.3",
+          "SQLitePCLRaw.provider.e_sqlite3": "2.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        }
+      },
+      "SQLitePCLRaw.core/2.0.3": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3.android/2.0.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Java.Interop"
+        ],
+        "compile": {
+          "lib/monoandroid80/SQLitePCLRaw.lib.e_sqlite3.android.dll": {}
+        },
+        "runtime": {
+          "lib/monoandroid80/SQLitePCLRaw.lib.e_sqlite3.android.dll": {}
+        }
+      },
+      "SQLitePCLRaw.provider.e_sqlite3/2.0.3": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "System.Buffers/4.4.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Buffers.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Buffers.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.5.2": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "Validation/2.0.6.15003": {
@@ -1060,7 +1135,7 @@
           "build/MonoAndroid90/_._": {}
         }
       },
-      "InfiniteMeals/1.0.0": {
+      "PrepToYourDoor/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -1071,16 +1146,16 @@
           "MvvmLightLibs": "5.4.1.1",
           "MySqlConnector": "0.69.3",
           "Newtonsoft.Json": "12.0.3",
-          "Rg.Plugins.Popup": "2.0.0.3",
           "Xamarin.Essentials": "1.5.3.2",
           "Xamarin.Forms": "4.6.0.847",
-          "Xamarin.Forms.Maps": "4.6.0.847"
+          "Xamarin.Forms.Maps": "4.6.0.847",
+          "sqlite-net-pcl": "1.7.335"
         },
         "compile": {
-          "bin/placeholder/InfiniteMeals.dll": {}
+          "bin/placeholder/PrepToYourDoor.dll": {}
         },
         "runtime": {
-          "bin/placeholder/InfiniteMeals.dll": {}
+          "bin/placeholder/PrepToYourDoor.dll": {}
         }
       }
     }
@@ -1632,39 +1707,6 @@
         "packageIcon.png"
       ]
     },
-    "NuProj/0.11.30": {
-      "sha512": "k0rjyTfe2rOrL1+d9b7t6ik2DLM7Gfw5DahvgbpAhcKNFavt5FWdfjwChm3IzaZMEsQbklCo2Tw55+5GWPWFkw==",
-      "type": "package",
-      "path": "nuproj/0.11.30",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "build/NuProj.props",
-        "nuproj.0.11.30.nupkg.sha512",
-        "nuproj.nuspec",
-        "tools/Microsoft.Build.Framework.dll",
-        "tools/Microsoft.Build.Utilities.v12.0.dll",
-        "tools/Microsoft.Common.NuProj.targets",
-        "tools/Microsoft.Web.XmlTransform.dll",
-        "tools/NuGet.Core.dll",
-        "tools/NuGet.exe",
-        "tools/NuProj.Tasks.dll",
-        "tools/NuProj.Tasks.pdb",
-        "tools/NuProj.props",
-        "tools/NuProj.targets",
-        "tools/Rules/ContentFile.xaml",
-        "tools/Rules/ProjectItemsSchema.xaml",
-        "tools/Rules/ProjectReference.xaml",
-        "tools/Rules/ResolvedProjectReference.xaml",
-        "tools/Rules/content.xaml",
-        "tools/Rules/folder.xaml",
-        "tools/Rules/general.browseobject.xaml",
-        "tools/Rules/general.xaml",
-        "tools/Rules/none.xaml",
-        "tools/Rules/scc.xaml"
-      ]
-    },
     "PCLCrypto/1.0.2.15130": {
       "sha512": "FbqU/mbtemApQTSLHTlLHmzR55oB9O8FJ6cEiQdJr2PMpzGM6k4yroHpJKBcl+bZ6SplTClK3SS6xxlskyLgHg==",
       "type": "package",
@@ -1743,52 +1785,144 @@
         "pclstorage.nuspec"
       ]
     },
-    "Rg.Plugins.Popup/2.0.0.3": {
-      "sha512": "/lrKxxsdaF9T+YEnVDaUMj0angdRyvpngSmX8veY/QYhSjT4x3guJTsL8O8D4egDf7MI5McnmMAsst0tkN1LOA==",
+    "sqlite-net-pcl/1.7.335": {
+      "sha512": "0A9YNPbp66aB+Sitxmh9lq1KDtD4+EBPfdtnYN8WenvQqh5dNgMxUV7kaEG6EXYTi4zBxcsDKpyYJzbViWJXtw==",
       "type": "package",
-      "path": "rg.plugins.popup/2.0.0.3",
+      "path": "sqlite-net-pcl/1.7.335",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "LICENSE.md",
-        "icon.png",
-        "lib/monoandroid10.0/Rg.Plugins.Popup.dll",
-        "lib/monoandroid10.0/Rg.Plugins.Popup.pdb",
-        "lib/monoandroid10.0/Rg.Plugins.Popup.xml",
-        "lib/monoandroid90/Rg.Plugins.Popup.dll",
-        "lib/monoandroid90/Rg.Plugins.Popup.pdb",
-        "lib/monoandroid90/Rg.Plugins.Popup.xml",
-        "lib/net472/Rg.Plugins.Popup.dll",
-        "lib/net472/Rg.Plugins.Popup.pdb",
-        "lib/net472/Rg.Plugins.Popup.xml",
-        "lib/netcoreapp3.1/Rg.Plugins.Popup.dll",
-        "lib/netcoreapp3.1/Rg.Plugins.Popup.pdb",
-        "lib/netcoreapp3.1/Rg.Plugins.Popup.xml",
-        "lib/netstandard2.0/Rg.Plugins.Popup.dll",
-        "lib/netstandard2.0/Rg.Plugins.Popup.pdb",
-        "lib/netstandard2.0/Rg.Plugins.Popup.xml",
-        "lib/tizen40/Rg.Plugins.Popup.dll",
-        "lib/tizen40/Rg.Plugins.Popup.pdb",
-        "lib/tizen40/Rg.Plugins.Popup.xml",
-        "lib/uap10.0.17763/Rg.Plugins.Popup.dll",
-        "lib/uap10.0.17763/Rg.Plugins.Popup.pdb",
-        "lib/uap10.0.17763/Rg.Plugins.Popup.pri",
-        "lib/uap10.0.17763/Rg.Plugins.Popup.xml",
-        "lib/xamarinios10/Rg.Plugins.Popup.dll",
-        "lib/xamarinios10/Rg.Plugins.Popup.pdb",
-        "lib/xamarinios10/Rg.Plugins.Popup.xml",
-        "lib/xamarinmac20/Rg.Plugins.Popup.dll",
-        "lib/xamarinmac20/Rg.Plugins.Popup.pdb",
-        "lib/xamarinmac20/Rg.Plugins.Popup.xml",
-        "lib/xamarintvos10/Rg.Plugins.Popup.dll",
-        "lib/xamarintvos10/Rg.Plugins.Popup.pdb",
-        "lib/xamarintvos10/Rg.Plugins.Popup.xml",
-        "lib/xamarinwatchos10/Rg.Plugins.Popup.dll",
-        "lib/xamarinwatchos10/Rg.Plugins.Popup.pdb",
-        "lib/xamarinwatchos10/Rg.Plugins.Popup.xml",
-        "readme.txt",
-        "rg.plugins.popup.2.0.0.3.nupkg.sha512",
-        "rg.plugins.popup.nuspec"
+        "LICENSE.txt",
+        "lib/netstandard2.0/SQLite-net.dll",
+        "lib/netstandard2.0/SQLite-net.xml",
+        "sqlite-net-pcl.1.7.335.nupkg.sha512",
+        "sqlite-net-pcl.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.bundle_green/2.0.3": {
+      "sha512": "QgevRdYSy/MtL1TDdWuhoCH5cpBPZYUZd8h/WqgiLGXDa8e93Fv4/SE812SDCdjTb2+6s8SIwSLRq0z2bUeieg==",
+      "type": "package",
+      "path": "sqlitepclraw.bundle_green/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/Xamarin.iOS10/SQLitePCLRaw.batteries_v2.dll",
+        "lib/Xamarin.iOS10/SQLitePCLRaw.nativelibrary.dll",
+        "lib/net461/SQLitePCLRaw.batteries_v2.dll",
+        "lib/net461/SQLitePCLRaw.nativelibrary.dll",
+        "lib/netcoreapp3.0/SQLitePCLRaw.batteries_v2.dll",
+        "lib/netcoreapp3.0/SQLitePCLRaw.nativelibrary.dll",
+        "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll",
+        "sqlitepclraw.bundle_green.2.0.3.nupkg.sha512",
+        "sqlitepclraw.bundle_green.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.core/2.0.3": {
+      "sha512": "9LO3qT7tP+0qBAQxg/PGLHPcsKri4H2zIiiMEg+7EGrnBbuUnJg1tcfKiiqFtRp74kZSAV6N0ZeSGYiodqYnoQ==",
+      "type": "package",
+      "path": "sqlitepclraw.core/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/SQLitePCLRaw.core.dll",
+        "sqlitepclraw.core.2.0.3.nupkg.sha512",
+        "sqlitepclraw.core.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.lib.e_sqlite3.android/2.0.3": {
+      "sha512": "0iszXZdyZpWPpubbjg8SlJnsSOknVGbWjI3jM90eBgx2kx/1ygIFOe/1TTsUS1SezRD83Ayvx6Q31ISSk6z1lA==",
+      "type": "package",
+      "path": "sqlitepclraw.lib.e_sqlite3.android/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/monoandroid80/SQLitePCLRaw.lib.e_sqlite3.android.dll",
+        "sqlitepclraw.lib.e_sqlite3.android.2.0.3.nupkg.sha512",
+        "sqlitepclraw.lib.e_sqlite3.android.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.provider.e_sqlite3/2.0.3": {
+      "sha512": "f2bwfPhD91dJ6KnjOw01KDT68zl7qpeX4+lC0mmKa+eA91Huya8hdNan73B3q7jEDLMFU/dkv7l5wqrqGB4QoQ==",
+      "type": "package",
+      "path": "sqlitepclraw.provider.e_sqlite3/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+        "lib/uap10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+        "sqlitepclraw.provider.e_sqlite3.2.0.3.nupkg.sha512",
+        "sqlitepclraw.provider.e_sqlite3.nuspec"
+      ]
+    },
+    "System.Buffers/4.4.0": {
+      "sha512": "AwarXzzoDwX6BgrhjoJsk6tUezZEozOT5Y9QKF94Gl4JK91I4PIIBkBco9068Y9/Dra8Dkbie99kXB8+1BaYKw==",
+      "type": "package",
+      "path": "system.buffers/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.1/System.Buffers.dll",
+        "lib/netstandard1.1/System.Buffers.xml",
+        "lib/netstandard2.0/System.Buffers.dll",
+        "lib/netstandard2.0/System.Buffers.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.1/System.Buffers.dll",
+        "ref/netstandard1.1/System.Buffers.xml",
+        "ref/netstandard2.0/System.Buffers.dll",
+        "ref/netstandard2.0/System.Buffers.xml",
+        "system.buffers.4.4.0.nupkg.sha512",
+        "system.buffers.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Memory/4.5.3": {
+      "sha512": "3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "type": "package",
+      "path": "system.memory/4.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard1.1/System.Memory.dll",
+        "lib/netstandard1.1/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netcoreapp2.1/_._",
+        "system.memory.4.5.3.nupkg.sha512",
+        "system.memory.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.5.2": {
+      "sha512": "wprSFgext8cwqymChhrBLu62LMg/1u92bU+VOwyfBimSPVFXtsNqEWC92Pf9ofzJFlk4IHmJA75EDJn1b2goAQ==",
+      "type": "package",
+      "path": "system.runtime.compilerservices.unsafe/4.5.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512",
+        "system.runtime.compilerservices.unsafe.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "Validation/2.0.6.15003": {
@@ -3028,10 +3162,10 @@
         "xamarin.googleplayservices.tasks.nuspec"
       ]
     },
-    "InfiniteMeals/1.0.0": {
+    "PrepToYourDoor/1.0.0": {
       "type": "project",
-      "path": "../InfiniteMeals/InfiniteMeals.csproj",
-      "msbuildProject": "../InfiniteMeals/InfiniteMeals.csproj"
+      "path": "../InfiniteMeals/PrepToYourDoor.csproj",
+      "msbuildProject": "../InfiniteMeals/PrepToYourDoor.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3039,13 +3173,12 @@
       "AWSSDK.CognitoIdentity >= 3.3.101.96",
       "AWSSDK.Core >= 3.3.107.10",
       "AWSSDK.DynamoDBv2 >= 3.3.106.18",
-      "InfiniteMeals >= 1.0.0",
       "Microsoft.Net.Http >= 2.2.29",
       "MySqlConnector >= 0.69.3",
-      "NuProj >= 0.11.30",
-      "Rg.Plugins.Popup >= 2.0.0.3",
+      "PrepToYourDoor >= 1.0.0",
       "Xamarin.Essentials >= 1.5.3.2",
-      "Xamarin.Forms >= 4.6.0.847"
+      "Xamarin.Forms >= 4.6.0.847",
+      "sqlite-net-pcl >= 1.7.335"
     ]
   },
   "packageFolders": {
@@ -3055,9 +3188,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\InfiniteMeals.Android.csproj",
-      "projectName": "InfiniteMeals.Android",
-      "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\InfiniteMeals.Android.csproj",
+      "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\PrepToYourDoor.Android.csproj",
+      "projectName": "PrepToYourDoor.Android",
+      "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\PrepToYourDoor.Android.csproj",
       "packagesPath": "C:\\Users\\Sean\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.Android\\obj\\",
       "projectStyle": "PackageReference",
@@ -3080,8 +3213,8 @@
       "frameworks": {
         "monoandroid90": {
           "projectReferences": {
-            "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj": {
-              "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj"
+            "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj": {
+              "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj"
             }
           }
         }
@@ -3110,16 +3243,6 @@
             "target": "Package",
             "version": "[0.69.3, )"
           },
-          "NuProj": {
-            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-            "suppressParent": "All",
-            "target": "Package",
-            "version": "[0.11.30, )"
-          },
-          "Rg.Plugins.Popup": {
-            "target": "Package",
-            "version": "[2.0.0.3, )"
-          },
           "Xamarin.Essentials": {
             "target": "Package",
             "version": "[1.5.3.2, )"
@@ -3127,6 +3250,10 @@
           "Xamarin.Forms": {
             "target": "Package",
             "version": "[4.6.0.847, )"
+          },
+          "sqlite-net-pcl": {
+            "target": "Package",
+            "version": "[1.7.335, )"
           }
         }
       }
