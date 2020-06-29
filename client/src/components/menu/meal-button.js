@@ -178,7 +178,7 @@ export default class MealButton extends Component {
       is_addons: false
     });
     */
-
+    console.log("send skip: ", this.props.MEAL_SELECT_API_URL);
     fetch(`${this.props.MEAL_SELECT_API_URL}/${this.state.purchase_id}`, {
       method: "POST",
       headers: {
@@ -312,6 +312,7 @@ export default class MealButton extends Component {
       dayToDeliver: "SKIP",
       disableSunMon: false
     });
+    this.props.nextAddonChargeChange(0);
     this.sendForm();
   }
 
