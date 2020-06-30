@@ -17,6 +17,7 @@ class Checkout extends Component {
       gift: "FALSE",
       password: null,
       salt: null,
+      coupon: {id: null, amount_discount: 0},
       loading: false,
       error: null
     };
@@ -162,7 +163,7 @@ class Checkout extends Component {
       "delivery_zip",
 
       // "delivery_region",
-      
+
       "delivery_phone",
       "cc_num",
       "cc_cvv",
@@ -224,8 +225,11 @@ class Checkout extends Component {
         return true;
       }
     }
-    
-    if ((this.searchCookie4loginMethod("loginStatus") !== "social") && (!this.state.password))
+
+    if (
+      this.searchCookie4loginMethod("loginStatus") !== "social" &&
+      !this.state.password
+    )
       return true;
 
     return false;
@@ -276,6 +280,11 @@ class Checkout extends Component {
       });
     }
   }
+
+  applyCoupon = event => {
+    event.preventDefault();
+    console.log("this.state. coupon: ", this.state.coupon);
+  };
 
   render() {
     try {
@@ -331,7 +340,18 @@ class Checkout extends Component {
                   <Form.Row>
                     <Form.Group as={Col} md={8} controlId='formGridCouponCode'>
                       <Form.Label>Coupon/Gift Code</Form.Label>
-                      <Form.Control placeholder='Secret Passcode' />
+                      <Form.Control
+                        placeholder='Secret Passcode'
+                        onChange={e => {
+                          e.persist();
+                          this.setState(prevState => ({
+                            coupon: {
+                              ...prevState.coupon,
+                              id: e.target.value
+                            }
+                          }));
+                        }}
+                      />
                     </Form.Group>
 
                     <Button
@@ -339,6 +359,7 @@ class Checkout extends Component {
                       size='sm'
                       Style='height:30px; margin-top:30px;'
                       type='submit'
+                      onClick={this.applyCoupon}
                     >
                       Apply
                     </Button>
@@ -363,7 +384,13 @@ class Checkout extends Component {
                         name='delivery_first_name'
                         onChange={this.handleChange}
                       />
-                      {!this.state.purchase.delivery_first_name ? (<span className='required-red'>First Name field is required</span>) : ''}
+                      {!this.state.purchase.delivery_first_name ? (
+                        <span className='required-red'>
+                          First Name field is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridLastName'>
@@ -380,7 +407,13 @@ class Checkout extends Component {
                         name='delivery_last_name'
                         onChange={this.handleChange}
                       />
-                      {!this.state.purchase.delivery_last_name ? (<span className='required-red'>Last Name field is required</span>) : ''}
+                      {!this.state.purchase.delivery_last_name ? (
+                        <span className='required-red'>
+                          Last Name field is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
                   </Form.Row>
 
@@ -398,7 +431,13 @@ class Checkout extends Component {
                       name='delivery_instructions'
                       onChange={this.handleChange}
                     />
-                    {!this.state.purchase.delivery_instructions ? (<span className='required-red'>Delivery Notes field is required</span>) : ''}
+                    {!this.state.purchase.delivery_instructions ? (
+                      <span className='required-red'>
+                        Delivery Notes field is required
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </Form.Group>
 
                   <Form.Row>
@@ -417,7 +456,13 @@ class Checkout extends Component {
                         name='delivery_email'
                         onChange={this.handleChange}
                       />
-                      {!this.state.purchase.delivery_email ? (<span className='required-red'>Valid email is required</span>) : ''}
+                      {!this.state.purchase.delivery_email ? (
+                        <span className='required-red'>
+                          Valid email is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridPhoneNumber'>
@@ -434,7 +479,13 @@ class Checkout extends Component {
                         name='delivery_phone'
                         onChange={this.handleChange}
                       />
-                      {this.state.purchase.delivery_phone.length !== 10 ? (<span className='required-red'>Phone Number must be 10 digits</span>) : ''}
+                      {this.state.purchase.delivery_phone.length !== 10 ? (
+                        <span className='required-red'>
+                          Phone Number must be 10 digits
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
                   </Form.Row>
                   <Form.Row>
@@ -452,13 +503,17 @@ class Checkout extends Component {
                         name='delivery_address'
                         onChange={this.handleChange}
                       />
-                      {!this.state.purchase.delivery_address ? (<span className='required-red'>Delivery Address is required</span>) : ''}
+                      {!this.state.purchase.delivery_address ? (
+                        <span className='required-red'>
+                          Delivery Address is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridAptNum'>
-                      <Form.Label>
-                        Apartment/Unit (if applicable)
-                      </Form.Label>
+                      <Form.Label>Apartment/Unit (if applicable)</Form.Label>
                       <Form.Control
                         placeholder='Apartment, studio, or floor'
                         value={this.state.purchase.delivery_address_unit}
@@ -483,7 +538,11 @@ class Checkout extends Component {
                         name='delivery_city'
                         onChange={this.handleChange}
                       />
-                      {!this.state.purchase.delivery_city ? (<span className='required-red'>City is required</span>) : ''}
+                      {!this.state.purchase.delivery_city ? (
+                        <span className='required-red'>City is required</span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridState'>
@@ -503,7 +562,11 @@ class Checkout extends Component {
                         <option>Choose...</option>
                         <option>TX</option>
                       </Form.Control>
-                      {this.state.purchase.delivery_state !== 'TX' ? (<span className='required-red'>State is required</span>) : ''}
+                      {this.state.purchase.delivery_state !== "TX" ? (
+                        <span className='required-red'>State is required</span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridZip'>
@@ -520,12 +583,15 @@ class Checkout extends Component {
                         name='delivery_zip'
                         onChange={this.handleChange}
                       />
-                      {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.state.purchase.delivery_zip) ? '' : (<span className='required-red'>Invalid Zip Code</span>) }
+                      {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(
+                        this.state.purchase.delivery_zip
+                      ) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>Invalid Zip Code</span>
+                      )}
                     </Form.Group>
                   </Form.Row>
-
-
-
 
                   {/* <Form.Group
                     as={Col}
@@ -562,9 +628,6 @@ class Checkout extends Component {
                     />
                   </Form.Group>
 
-
-
-
                   <h5>Billing Information</h5>
 
                   <Form.Row>
@@ -582,7 +645,13 @@ class Checkout extends Component {
                         name='cc_num'
                         onChange={this.handleChange}
                       />
-                      {/^.{16}$/.test(this.state.purchase.cc_num) ? '' : (<span className='required-red'>Invalid Credit Card Number</span>)}
+                      {/^.{16}$/.test(this.state.purchase.cc_num) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>
+                          Invalid Credit Card Number
+                        </span>
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} md={3} controlId='formGridCardCvc'>
@@ -599,7 +668,11 @@ class Checkout extends Component {
                         name='cc_cvv'
                         onChange={this.handleChange}
                       />
-                      {/^[0-9]{3,4}$/.test(this.state.purchase.cc_cvv) ? '' : (<span className='required-red'>Invalid CVC/CVV</span>)}
+                      {/^[0-9]{3,4}$/.test(this.state.purchase.cc_cvv) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>Invalid CVC/CVV</span>
+                      )}
                     </Form.Group>
                   </Form.Row>
 
@@ -649,7 +722,13 @@ class Checkout extends Component {
                         <option>11</option>
                         <option>12</option>
                       </Form.Control>
-                      {isNaN(this.state.purchase.cc_exp_month) ? (<span className='required-red'>Expiration month is required</span>) : ''}
+                      {isNaN(this.state.purchase.cc_exp_month) ? (
+                        <span className='required-red'>
+                          Expiration month is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} md={4} controlId='formGridCardYear'>
@@ -678,7 +757,13 @@ class Checkout extends Component {
                         <option>2028</option>
                         <option>2029</option>
                       </Form.Control>
-                      {isNaN(this.state.purchase.cc_exp_year) ? (<span className='required-red'>Expiration year is required</span>) : ''}
+                      {isNaN(this.state.purchase.cc_exp_year) ? (
+                        <span className='required-red'>
+                          Expiration year is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
                     <Form.Group as={Col} md={4} controlId='formGridBillingZip'>
@@ -695,7 +780,15 @@ class Checkout extends Component {
                         name='billing_zip'
                         onChange={this.handleChange}
                       />
-                      {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.state.purchase.billing_zip) ? '' : (<span className='required-red'>Invalid Billing Zip Code</span>) }
+                      {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(
+                        this.state.purchase.billing_zip
+                      ) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>
+                          Invalid Billing Zip Code
+                        </span>
+                      )}
                     </Form.Group>
                   </Form.Row>
 
@@ -753,7 +846,14 @@ class Checkout extends Component {
                         onChange={this.handlePwChange}
                         disabled={!this.state.password_salt ? true : false}
                       />
-                      {(this.searchCookie4loginMethod("loginStatus") !== "social") && (!this.state.password) ? <span className='required-red'>Password is required</span> : '' }
+                      {this.searchCookie4loginMethod("loginStatus") !==
+                        "social" && !this.state.password ? (
+                        <span className='required-red'>
+                          Password is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
                   </Form.Row>
 

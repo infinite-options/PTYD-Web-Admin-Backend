@@ -45,7 +45,7 @@ app.config['DEBUG'] = True
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'ptydtesting@gmail.com'
-app.config['MAIL_PASSWORD'] = 'infiniteoptions0422'
+app.config['MAIL_PASSWORD'] = 'ptydtesting06282020'
 app.config['MAIL_DEFAULT_SENDER'] = 'ptydtesting@gmail.com'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
@@ -1143,7 +1143,7 @@ class SignUp(Resource):
             Referral = data['Referral']
 
             queries = ["CALL get_new_user_id;"]
-
+            print("Received: ", data)
             NewUserIDresponse = execute(queries[0], 'get', conn)
             NewUserID = NewUserIDresponse['result'][0]['new_id']
 

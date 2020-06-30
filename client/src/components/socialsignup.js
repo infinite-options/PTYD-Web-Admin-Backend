@@ -82,8 +82,9 @@ export default function SocialSignUp(props) {
       }
     } catch (err) {
       setLoading(false);
+      console.log(err.response);
       if (err.response !== undefined) {
-        RaiseError(err.response.message);
+        RaiseError(err.response.data.result);
       } else if (typeof err === "string") {
         RaiseError(err);
       }
@@ -145,17 +146,17 @@ export default function SocialSignUp(props) {
 
             <Container className='justify-content-center bg-success'>
               <Row>
-                {error !== null && error !== undefined && (
-                  <Fragment>
-                    <h6>
-                      <span className='icon has-text-danger'>
-                        <i className='fa fa-info-circle'></i>
-                      </span>
-                      <span className='has-text-danger'>{error}</span>
-                    </h6>
-                  </Fragment>
-                )}
                 <Col size={6}>
+                  {error !== null && error !== undefined && (
+                    <Fragment>
+                      <h6>
+                        <span className='icon has-text-danger'>
+                          <i className='fa fa-info-circle'></i>
+                        </span>
+                        <span className='has-text-danger'>{error}</span>
+                      </h6>
+                    </Fragment>
+                  )}
                   <Form>
                     <Form.Row>
                       <Form.Group as={Col} controlId='formGridFirstName'>
