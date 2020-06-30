@@ -1,5 +1,5 @@
-import React, {useState, useEffect, Fragment} from "react";
-import {useHistory} from "react-router-dom";
+import React, { useState, useEffect, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -14,7 +14,7 @@ import crypto from "crypto";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
-import {getIp, getBrowser} from "../functions/getClientInfo";
+import { getIp, getBrowser } from "../functions/getClientInfo";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
@@ -350,7 +350,7 @@ export default function Login(props) {
       )}
       <main Style={"margin-top:-80px;" + (loading ? "opacity: 0.5" : "")}>
         <div class='container text-center' Style='margin-top:-40px;'>
-          <h1>Login</h1>
+          <h1>LOGIN</h1>
           {error !== null && error !== undefined && (
             <Fragment>
               <h6>
@@ -361,99 +361,121 @@ export default function Login(props) {
               </h6>
             </Fragment>
           )}
+          <div className='text-center'>
+            <p >To continue, please log in to Prep to Your Door.</p>
+          </div>
+          
+          <Row className="justify-content-center" style={{padding:"5px 0"}}>
+            <div style={{boxShadow: "0px 2px 2px 0px rgba(117,117,117,1)", borderRadius:"1px", background:"#4c69ba"}}>
+              <FacebookLogin
+                appId='508721976476931'
+                autoLoad={false}
+                fields='name,email,picture'
+                onClick='return false'
+                callback={responseFacebook}
+                size='small'
+                textButton='Continue with FB'
+              />
+            </div>
+            {/* </div> */}
+            &nbsp;
+            <div style={{padding:"0 4px"}}>
+              <GoogleLogin
+                clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
+                buttonText='Continue with Google'
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                isSignedIn={false}
+                disable={false}
+                cookiePolicy={"single_host_origin"}
+              />
+              {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
+            </div>
+          </Row>
+
           <div class='row'>
             <Col></Col>
-            <Container className='justify-content-center bg-success'>
-              <Row>
-                <Col>
-                  <Form onSubmit={handleSubmit} autoComplete='off'>
-                    <Form.Label>Email</Form.Label>
-                    <InputGroup className='mb-3'>
-                      <FormControl
-                        type='email'
-                        value={email}
-                        onChange={e => {
-                          setEmail(e.target.value);
-                          RaiseError(null);
-                        }}
-                        id='userForm'
-                        placeholder='Enter Email'
-                        aria-label='Email'
-                        aria-describedby='basic-addon1'
-                      />
-                    </InputGroup>
+            <Container className='justify-content-center bg-white font2' style={{ border: "0", boxShadow: "0", borderColor: "white", padding: "5px 30px", cursor: "default", width: "400px" }}>
+              
 
-                    <Form.Label>Password</Form.Label>
-                    <InputGroup className='mb-3'>
-                      <FormControl
-                        value={password}
-                        onChange={e => {
-                          setPassword(e.target.value);
-                          RaiseError(null);
-                        }}
-                        id='passForm'
-                        placeholder='Enter Password'
-                        aria-label='Password'
-                        aria-describedby='basic-addon2'
-                        type='password'
-                      />
-                    </InputGroup>
+              <div style={{ borderTop: "1px solid #d9dadc", margin: "30px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}>
+                <strong style={{ background: "#fff", letterSpacing: "1px" }}>&nbsp; OR &nbsp;</strong>
+              </div>
 
-                    <Button
-                      variant='dark'
-                      onClick={checkLogin}
-                      disabled={!validateForm()}
-                      type='submit'
-                    >
-                      Sign In
-                    </Button>
-                  </Form>
-                </Col>
-              </Row>
-
-              <h4>Or Login With Social Media!</h4>
-
-              <Row>
-                <Col>
-                  <div
-                    Style={{
-                      width: "200px"
+              {/* <Row> */}
+              {/* <Col> */}
+              <Form onSubmit={handleSubmit} autoComplete='off'>
+                {/* <Form.Label>Email</Form.Label> */}
+                <InputGroup className='mb-3'>
+                  <FormControl
+                    type='email'
+                    value={email}
+                    onChange={e => {
+                      setEmail(e.target.value);
+                      RaiseError(null);
                     }}
-                  >
-                    <FacebookLogin
-                      appId='508721976476931'
-                      autoLoad={false}
-                      fields='name,email,picture'
-                      onClick='return false'
-                      callback={responseFacebook}
-                      size='small'
-                      textButton='FB Login'
-                    />
-                  </div>
-                </Col>
-
-                <Col>
-                  <GoogleLogin
-                    clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
-                    buttonText='Login'
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    isSignedIn={false}
-                    disable={false}
-                    cookiePolicy={"single_host_origin"}
+                    id='userForm'
+                    placeholder='Email'
+                    aria-label='Email'
+                    aria-describedby='basic-addon1'
                   />
-                  {/* <div class='g-signin2 btn' data-onsuccess='onSignIn'></div> */}
-                </Col>
-              </Row>
+                </InputGroup>
+
+                {/* <Form.Label>Password</Form.Label> */}
+                <InputGroup className='mb-3'>
+                  <FormControl
+                    value={password}
+                    onChange={e => {
+                      setPassword(e.target.value);
+                      RaiseError(null);
+                    }}
+                    id='passForm'
+                    placeholder='Password'
+                    aria-label='Password'
+                    aria-describedby='basic-addon2'
+                    type='password'
+                  />
+                </InputGroup>
+
+                <Button
+                  variant='success'
+                  onClick={checkLogin}
+                  disabled={!validateForm()}
+                  type='submit'
+                  style={{ width: "100%" }}
+                >
+                  <strong style={{ color: "white" }}>Sign In</strong>
+                </Button>
+
+                <div className='text-center' style={{ padding: "10px" }}>
+                  <a href='/resetpassword' style={{ color: "#494949" }}>Forgot password?</a>
+                </div>
+
+              </Form>
+              {/* </Col> */}
+              {/* </Row> */}
+
+              {/* <p>&nbsp;</p> */}
+              {/* <p style={{color: "#494949", paddingTop: "10px"}}>Or Login With Social Media</p> */}
+
+              <div style={{ borderTop: "1px solid #d9dadc", margin: "20px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}></div>
+              {/* <hr/> */}
+
+              <div className='text-center' style={{padding:"10px 0 50px 0px"}}>
+                <p style={{ fontWeight: "bold", color: "#494949" }}>Don't have an account?</p>
+                <a
+                  href='/signup'
+                  style={{ border: "2px solid #469b47", color: "#469b47", padding: "8px 90px", borderRadius: "4px"}}
+                >
+                  <strong style={{ color: "#469b47" }}>Sign Up Here</strong>
+                </a>
+              </div>
             </Container>
             <Col></Col>
           </div>
-          <div className='text-center'>
-            <a href='/signup'>New User? Sign Up Here</a>
-          </div>
-          <div className='text-center'>
-            <a href='/resetpassword'>Forgot password?</a>
-          </div>
+
+          {/* &nbsp; */}
+          <hr></hr>
         </div>
       </main>
     </Fragment>

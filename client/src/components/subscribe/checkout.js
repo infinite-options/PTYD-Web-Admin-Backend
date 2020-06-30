@@ -160,7 +160,9 @@ class Checkout extends Component {
       "delivery_city",
       "delivery_state",
       "delivery_zip",
-      "delivery_region",
+
+      // "delivery_region",
+      
       "delivery_phone",
       "cc_num",
       "cc_cvv",
@@ -435,7 +437,6 @@ class Checkout extends Component {
                       {this.state.purchase.delivery_phone.length !== 10 ? (<span className='required-red'>Phone Number must be 10 digits</span>) : ''}
                     </Form.Group>
                   </Form.Row>
-
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridAddress'>
                       <Form.Label>
@@ -523,7 +524,10 @@ class Checkout extends Component {
                     </Form.Group>
                   </Form.Row>
 
-                  <Form.Group
+
+
+
+                  {/* <Form.Group
                     as={Col}
                     md={6}
                     Style='margin-left:-15px;'
@@ -546,7 +550,7 @@ class Checkout extends Component {
                       <option>US</option>
                     </Form.Control>
                     {this.state.purchase.delivery_region !== 'US' ? (<span className='required-red'>Country is required</span>) : ''}
-                  </Form.Group>
+                  </Form.Group> */}
 
                   <Form.Group id='formGridCheckbox'>
                     <Form.Check
@@ -557,6 +561,9 @@ class Checkout extends Component {
                       onChange={this.handleGiftChange}
                     />
                   </Form.Group>
+
+
+
 
                   <h5>Billing Information</h5>
 
@@ -577,9 +584,7 @@ class Checkout extends Component {
                       />
                       {/^.{16}$/.test(this.state.purchase.cc_num) ? '' : (<span className='required-red'>Invalid Credit Card Number</span>)}
                     </Form.Group>
-                  </Form.Row>
 
-                  <Form.Row>
                     <Form.Group as={Col} md={3} controlId='formGridCardCvc'>
                       <Form.Label>
                         CVC/CVV
@@ -596,8 +601,27 @@ class Checkout extends Component {
                       />
                       {/^[0-9]{3,4}$/.test(this.state.purchase.cc_cvv) ? '' : (<span className='required-red'>Invalid CVC/CVV</span>)}
                     </Form.Group>
+                  </Form.Row>
 
-                    <Form.Group as={Col} md={3} controlId='formGridCardMonth'>
+                  <Form.Row>
+                    {/* <Form.Group as={Col} md={3} controlId='formGridCardCvc'>
+                      <Form.Label>
+                        CVC/CVV
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='123'
+                        value={this.state.purchase.cc_cvv}
+                        name='cc_cvv'
+                        onChange={this.handleChange}
+                      />
+                      {/^[0-9]{3,4}$/.test(this.state.purchase.cc_cvv) ? '' : (<span className='required-red'>Invalid CVC/CVV</span>)}
+                    </Form.Group> */}
+
+                    <Form.Group as={Col} md={4} controlId='formGridCardMonth'>
                       <Form.Label>
                         Month
                         <span className='required-red'>
@@ -628,7 +652,7 @@ class Checkout extends Component {
                       {isNaN(this.state.purchase.cc_exp_month) ? (<span className='required-red'>Expiration month is required</span>) : ''}
                     </Form.Group>
 
-                    <Form.Group as={Col} md={3} controlId='formGridCardYear'>
+                    <Form.Group as={Col} md={4} controlId='formGridCardYear'>
                       <Form.Label>
                         Year
                         <span className='required-red'>
@@ -656,10 +680,27 @@ class Checkout extends Component {
                       </Form.Control>
                       {isNaN(this.state.purchase.cc_exp_year) ? (<span className='required-red'>Expiration year is required</span>) : ''}
                     </Form.Group>
+
+                    <Form.Group as={Col} md={4} controlId='formGridBillingZip'>
+                      <Form.Label>
+                        Billing Zip Code
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='12345'
+                        value={this.state.purchase.billing_zip}
+                        name='billing_zip'
+                        onChange={this.handleChange}
+                      />
+                      {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.state.purchase.billing_zip) ? '' : (<span className='required-red'>Invalid Billing Zip Code</span>) }
+                    </Form.Group>
                   </Form.Row>
 
                   <Form.Row>
-                    <Form.Group as={Col} md={4} controlId='formGridBillingZip'>
+                    {/* <Form.Group as={Col} md={4} controlId='formGridBillingZip'>
                       <Form.Label>
                         Postal Code
                         <span className='required-red'>
@@ -674,9 +715,9 @@ class Checkout extends Component {
                         onChange={this.handleChange}
                       />
                       {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.state.purchase.billing_zip) ? '' : (<span className='required-red'>Invalid Zip Code</span>) }
-                    </Form.Group>
+                    </Form.Group> */}
 
-                    <Form.Group as={Col} controlId='formGridBillingCountry'>
+                    {/* <Form.Group as={Col} controlId='formGridBillingCountry'>
                       <Form.Label>
                         Country
                         <span className='required-red'>
@@ -688,7 +729,7 @@ class Checkout extends Component {
                         <option>Choose...</option>
                         <option>US</option>
                       </Form.Control>
-                    </Form.Group>
+                    </Form.Group> */}
                   </Form.Row>
 
                   <Form.Row>
@@ -727,6 +768,7 @@ class Checkout extends Component {
                 </Form>
               </Col>
             </Row>
+            &nbsp;
           </Container>
         </Fragment>
       );

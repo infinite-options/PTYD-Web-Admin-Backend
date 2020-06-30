@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from "react";
+import React, { useState, Fragment } from "react";
 
 import Container from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -137,7 +137,7 @@ function SignUp(props) {
           <Col></Col>
           <Col sm={8}>
             <Row className='justify-content-md-center'>
-              <h3>Sign Up</h3>
+              <h1 style={{ color: "#6e6565" }}>SIGN UP</h1>
             </Row>
             {erro != null && (
               <Row className='justify-content-md-center'>
@@ -153,8 +153,8 @@ function SignUp(props) {
                 <Col></Col>
               </Row>
             )}
-            <Row className='justify-content-md-center'>
-              <Container className='container fluid justify-content-center bg-success'>
+            <Row className='justify-content-md-center font2'>
+              <Container className='container fluid justify-content-center bg-white' style={{ textAlign: "left", fontWeight: "bold", color: "#494949", cursor: "default", border: "none", padding: "10px" }}>
                 <Form>
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridFirstName'>
@@ -164,6 +164,7 @@ function SignUp(props) {
                         onChange={e => setFirstName(e.target.value)}
                         placeholder='First'
                       />
+                      {!firstname ? (<span className='required-red'>First Name is required</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridLastName'>
@@ -173,6 +174,7 @@ function SignUp(props) {
                         onChange={e => setLastName(e.target.value)}
                         placeholder='Last'
                       />
+                      {!lastname ? (<span className='required-red'>Last Name is required</span>) : ''}
                     </Form.Group>
                   </Form.Row>
                   <Form.Row>
@@ -187,6 +189,7 @@ function SignUp(props) {
                         }}
                         placeholder='Enter Email'
                       />
+                      {!email ? (<span className='required-red'>Email is required</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridEmailConfirm'>
@@ -197,8 +200,10 @@ function SignUp(props) {
                         onChange={e => setConfirmEmail(e.target.value)}
                         placeholder='Confirm Email'
                       />
+                      {!confirmEmail ? (<span className='required-red'>Please confirm your email</span>) : ''}
                     </Form.Group>
                   </Form.Row>
+
                   <Form.Row>
                     <Form.Group as={Col} controlId='formGridPassword'>
                       <Form.Label>Password</Form.Label>
@@ -208,6 +213,7 @@ function SignUp(props) {
                         onChange={e => setPassword(e.target.value)}
                         placeholder='Enter Password'
                       />
+                      {!password ? (<span className='required-red'>Password is required</span>) : ''}
                     </Form.Group>
                     <Form.Group as={Col} controlId='formGridPasswordConfirm'>
                       <Form.Label>Confirm Password</Form.Label>
@@ -217,6 +223,7 @@ function SignUp(props) {
                         onChange={e => setConfirmPassword(e.target.value)}
                         placeholder='Confirm Password'
                       />
+                      {confirmPassword != password ? (<span className='required-red'>Confirm password does not match</span>) : ''}
                     </Form.Group>
                   </Form.Row>
 
@@ -228,6 +235,7 @@ function SignUp(props) {
                         onChange={e => setPhoneNumber(e.target.value)}
                         placeholder='Enter Phone Number'
                       />
+                      {phoneNumber.length !== 10 ? (<span className='required-red'>Phone Number must be 10 digits</span>) : ''}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formGridReferral'>
@@ -244,7 +252,7 @@ function SignUp(props) {
                       </Form.Control>
                     </Form.Group>
                   </Form.Row>
-                  <Form.Group>
+                  <Form.Group style={{textAlign:"center"}}>
                     <Form.Label>Terms of Service</Form.Label>
                     <Form.Control as='textarea' size='sm' rows='4' disabled>
                       Add Terms of Service to signup.js - Lorem ipsum dolor sit
@@ -265,13 +273,16 @@ function SignUp(props) {
                       gravida sollicitudin rutrum.
                     </Form.Control>
                   </Form.Group>
-                  <Form.Group id='formGridServiceTerms'>
+
+
+                  <Form.Group id='formGridServiceTerms' style={{ paddingLeft: "300px", fontWeight:"normal"}}>
                     <Form.Check
                       type='checkbox'
-                      label='Agree To Prep To Your Door Terms Of Service.'
-                    />
+                      label='&nbsp;Agree to Prep To Your Door Terms of Service'
+                      style={{ textAlign: "left"}}
+                    ></Form.Check>
                   </Form.Group>
-                  <Form.Group id='formGridCheckbox'>
+                  <Form.Group id='formGridCheckbox' style={{ paddingLeft: "300px", fontWeight:"normal" }}>
                     <Form.Check
                       id='weeklyUpdateCheck'
                       value={weeklyUpdates}
@@ -286,7 +297,8 @@ function SignUp(props) {
                         }
                       }}
                       type='checkbox'
-                      label='Sign Me Up For Weekly Prep To Your Door Updates!'
+                      label='&nbsp;Sign me up for weekly Prep To Your Door updates!'
+                      style={{ textAlign: "left" }}
                     />
                     {/*
                                       <Form.Control
@@ -295,21 +307,37 @@ function SignUp(props) {
                                       />
                                       */}
                   </Form.Group>
+                  <div style={{ textAlign: "center" }}>
+                    <Button
+                      onClick={sendForm}
+                      variant='success'
+                      type='submit'
+                      size='lg'
+                      style={{width:"33%"}}
+                    >
+                      Sign Up
+                    </Button>
+                  </div>
+                  
+                  <hr />
+                  &nbsp;
+                  <div className='text-center'>
+                    <p style={{ fontWeight: "bold", color: "#494949" }}>Already have an account?</p>
+                    <a
+                      href='/login'
+                    >
+                      <strong style={{ color: "#469b47" }}>Login Here</strong>
+                    </a>
+                  </div>
 
-                  <Button
-                    onClick={sendForm}
-                    variant='dark'
-                    type='submit'
-                    size='lg'
-                  >
-                    Submit
-                  </Button>
                 </Form>
               </Container>
+              &nbsp;
             </Row>
           </Col>
           <Col></Col>
         </Row>
+        <hr />
       </main>
     </Fragment>
   );

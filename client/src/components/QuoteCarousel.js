@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
-import {Grid, Cell} from "react-mdl";
+// import {Row, Col, Container, Card, CardDeck} from "react-bootstrap";
+// import {Grid, Cell} from "react-mdl";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -28,29 +28,30 @@ export default class QuoteCarousel extends Component {
           >
             <div>
                 <div className='quote-carousel-padding'>
-                    <h3 className='font1 quote-line-height'>
+                    <p className='quote-line-height quote-size'>
                     "PTYD is so good and we love it so much, it feels like part of
                     our family! It's so thrilling to fill our fridge every week
                     with tasty surprises!"
-                    </h3>
+                    </p>
                 </div>
             </div>
 
             <div>
                 <div className='quote-carousel-padding2'>
-                    <h3 id='quote2' className='font1'>
-                        "As someone who loves to relax on the weekend...</h3>
-                    <h3 id='quote2' className='font1'>
+                    <p className='quote-size' id='quote2'>
+                        "As someone who loves to relax on the weekend...
+                    </p>
+                    <p className='quote-size' id='quote2'>
                         I am so thankful that I found Prep."
-                    </h3>
+                    </p>
                 </div>
             </div>
 
             <div>
                 <div className='quote-carousel-padding'>
-                    <h3 className='font1 quote-line-height'>
+                    <p className='quote-line-height quote-size'>
                         "A passionate company that offers healthy, nutritionist-designed meals that are as convenient as they are delicious."
-                    </h3>
+                    </p>
                 </div>
             </div>
             

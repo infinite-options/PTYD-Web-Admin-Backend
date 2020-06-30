@@ -154,9 +154,16 @@ export default class MakeChange extends Component {
   };
 
   ShowHideSaveModal = () => {
-    this.state.showSaveModal
-      ? this.setState({showSaveModal: false})
-      : this.setState({showSaveModal: true});
+    if (
+      this.state.currentPurchase.meal_plan_id !==
+      this.state.updateMealPlan.meal_plan_id
+    ) {
+      this.state.showSaveModal
+        ? this.setState({showSaveModal: false})
+        : this.setState({showSaveModal: true});
+    } else {
+      this.UpdateChangingSubcription();
+    }
   };
   DeleteCurrentPurchase = () => {
     fetch(this.props.DELETE_URL, {
@@ -189,7 +196,7 @@ export default class MakeChange extends Component {
         // mealplan ID is changed
         // buy a new purchase
         let data = {
-          user_uid: this.props.userID,
+          user_uid: this.props.user_uid,
           is_gift: this.state.currentPurchase.gift,
           item: this.state.updateMealPlan.name, // target meal plan
           item_price: this.state.updateMealPlan.price, //target meal plan's price
@@ -287,13 +294,16 @@ export default class MakeChange extends Component {
                           onChange={e => {
                             e.persist();
                             let paymentPlans = this.state.paymentPlans;
-                            let paid =
-                              paymentPlans[e.target.value].meal_plan_price;
+                            let paid = 0;
+                            if (paymentPlans[e.target.value] !== undefined) {
+                              paid =
+                                paymentPlans[e.target.value].meal_plan_price;
+                            }
                             if (
                               this.state.currentPurchase.meal_plan_id !==
                               paymentPlans[e.target.value].meal_plan_id
                             ) {
-                              paid = this.state.currentPurchase.amount_due;
+                              paid = this.state.currentPurchase.meal_plan_price;
                             }
 
                             this.setState(prevState => ({
@@ -585,6 +595,8 @@ export default class MakeChange extends Component {
         {this.state.showPasswordChange && (
           <ChangePassword
             ShowHideChangePasswordModal={this.ShowHideChangePasswordModal}
+            DEV_URL={this.props.DEV_URL}
+            user_uid={this.props.user_uid}
           />
         )}
         {this.state.showDeleteModal && (
