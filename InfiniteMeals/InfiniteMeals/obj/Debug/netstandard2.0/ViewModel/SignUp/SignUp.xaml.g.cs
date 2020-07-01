@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.SignUp.SignUp.xaml", "ViewModel/SignUp/SignUp.xaml", typeof(global::InfiniteMeals.SignUp.SignUp))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.SignUp.SignUp.xaml", "ViewModel/SignUp/SignUp.xaml", typeof(global::InfiniteMeals.SignUp.SignUp))]
 
 namespace InfiniteMeals.SignUp {
     

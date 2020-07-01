@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
 
-using System.Collections.ObjectModel;
+using Xamarin.Forms;
+
+using Newtonsoft.Json.Linq;
 using System.Globalization;
-using InfiniteMeals.Meals;
-using InfiniteMeals.SignUp;
-using PrepToYourDoor.Model.Database;
+
 
 namespace InfiniteMeals
 {
@@ -22,7 +15,6 @@ namespace InfiniteMeals
 
         private async void ClickedSignUp(object sender, EventArgs e)
         {
-        
             await Navigation.PushAsync(new SignUp.SignUp());
         }
 

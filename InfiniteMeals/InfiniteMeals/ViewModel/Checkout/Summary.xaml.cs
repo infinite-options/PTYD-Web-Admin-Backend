@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using InfiniteMeals.Model.Checkout;
 using InfiniteMeals.Model.Subscribe;
-using InfiniteMeals.Meals;
-using Amazon.Runtime.Internal.Util;
-using System.IO;
-using System.Reflection;
-using MySql.Data.MySqlClient;
+
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
-using Rg.Plugins.Popup.Services;
 using System.Net;
 using InfiniteMeals.Model.Login;
+using InfiniteMeals.Model.User;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -123,7 +118,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
         }
 
         public async void login(string userEmail, string userPassword) {
-            const string deviceBrowserType = "mobile";
+            const string deviceBrowserType = "Mobile";
             var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
             if(deviceIpAddress != null) {
                 try {

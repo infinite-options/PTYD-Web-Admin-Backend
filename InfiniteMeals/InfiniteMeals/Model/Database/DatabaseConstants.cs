@@ -6,7 +6,7 @@ using SQLite;
 
 namespace PrepToYourDoor.Model.Database {
     public static class DatabaseConstants {
-        public const string DatabaseFilename = "PTYD_DB";
+        public const string DatabaseFilename = "PTYD_DB.db3";
 
         public const SQLite.SQLiteOpenFlags flags =
             SQLite.SQLiteOpenFlags.ReadWrite | // open database in read/write

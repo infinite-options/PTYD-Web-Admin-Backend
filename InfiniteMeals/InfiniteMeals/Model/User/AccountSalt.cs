@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace InfiniteMeals.ViewModel.Checkout {
+namespace InfiniteMeals.Model.User {
 
     // class that contains information about an account's salt (password)
     public class AccountSaltResult {
@@ -15,6 +15,6 @@ namespace InfiniteMeals.ViewModel.Checkout {
         [JsonProperty("message")]
         public string message { get; set; }
         [JsonProperty("result")]
-        public IList<AccountSaltResult> result { get; set; }
+        public IList<AccountSaltResult> result { get; set; } // use result[0] to get the password salt
     }
 }

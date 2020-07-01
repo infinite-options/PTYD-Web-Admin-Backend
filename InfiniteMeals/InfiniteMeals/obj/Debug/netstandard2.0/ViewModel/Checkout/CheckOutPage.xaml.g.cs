@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Checkout.CheckOutPage.xaml", "ViewModel/Checkout/CheckOutPage.xaml", typeof(global::InfiniteMeals.ViewModel.Checkout.CheckOutPage))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.Checkout.CheckOutPage.xaml", "ViewModel/Checkout/CheckOutPage.xaml", typeof(global::InfiniteMeals.ViewModel.Checkout.CheckOutPage))]
 
 namespace InfiniteMeals.ViewModel.Checkout {
     

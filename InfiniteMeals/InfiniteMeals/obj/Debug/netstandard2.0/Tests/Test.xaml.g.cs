@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.Tests.Test.xaml", "Tests/Test.xaml", typeof(global::InfiniteMeals.Tests.Test))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.Tests.Test.xaml", "Tests/Test.xaml", typeof(global::InfiniteMeals.Tests.Test))]
 
 namespace InfiniteMeals.Tests {
     

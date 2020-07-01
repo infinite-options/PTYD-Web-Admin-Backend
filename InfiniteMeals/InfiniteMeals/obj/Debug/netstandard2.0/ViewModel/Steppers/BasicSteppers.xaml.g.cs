@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Steppers.BasicSteppers.xaml", "ViewModel/Steppers/BasicSteppers.xaml", typeof(global::InfiniteMeals.Steppers.BasicSteppers))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.Steppers.BasicSteppers.xaml", "ViewModel/Steppers/BasicSteppers.xaml", typeof(global::InfiniteMeals.Steppers.BasicSteppers))]
 
 namespace InfiniteMeals.Steppers {
     

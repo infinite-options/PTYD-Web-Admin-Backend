@@ -10,7 +10,8 @@ using Xamarin.Forms.Xaml;
 namespace InfiniteMeals {
     public partial class App : Application {
 
-        static PTYDDatabase database;
+        static UserLoginDatabase database;
+        static Boolean loggedIn = false;
         
 
         
@@ -31,13 +32,20 @@ namespace InfiniteMeals {
         protected override void OnResume() {
         }
 
-        public static PTYDDatabase Database {
+        public static UserLoginDatabase Database {
             get {
                 if(database == null) {
-                    database = new PTYDDatabase();
+                    database = new UserLoginDatabase();
                 }
                 return database;
             }
         }
+
+        /*
+        public static Boolean LoggedIn {
+            get {
+                return loggedIn;
+            }
+        } */
     }
 }

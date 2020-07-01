@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Profile.UserProfile.xaml", "ViewModel/Profile/UserProfile.xaml", typeof(global::InfiniteMeals.Profile.UserProfile))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.Profile.UserProfile.xaml", "ViewModel/Profile/UserProfile.xaml", typeof(global::InfiniteMeals.Profile.UserProfile))]
 
 namespace InfiniteMeals.Profile {
     

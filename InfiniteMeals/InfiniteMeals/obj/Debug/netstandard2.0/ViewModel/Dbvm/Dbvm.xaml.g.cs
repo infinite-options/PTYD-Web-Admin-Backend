@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Dbvm.Dbvm.xaml", "ViewModel/Dbvm/Dbvm.xaml", typeof(global::InfiniteMeals.ViewModel.Dbvm.Dbvm))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.Dbvm.Dbvm.xaml", "ViewModel/Dbvm/Dbvm.xaml", typeof(global::InfiniteMeals.ViewModel.Dbvm.Dbvm))]
 
 namespace InfiniteMeals.ViewModel.Dbvm {
     
