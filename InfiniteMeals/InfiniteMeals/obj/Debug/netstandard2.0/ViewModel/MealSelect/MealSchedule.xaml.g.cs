@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.MealSelect.MealSchedule.xaml", "ViewModel/MealSelect/MealSchedule.xaml", typeof(global::InfiniteMeals.Meals.MealSchedule))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.MealSelect.MealSchedule.xaml", "ViewModel/MealSelect/MealSchedule.xaml", typeof(global::InfiniteMeals.ViewModel.MealSelect.MealSchedule))]
 
-namespace InfiniteMeals.Meals {
+namespace InfiniteMeals.ViewModel.MealSelect {
     
     
     [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\MealSelect\\MealSchedule.xaml")]

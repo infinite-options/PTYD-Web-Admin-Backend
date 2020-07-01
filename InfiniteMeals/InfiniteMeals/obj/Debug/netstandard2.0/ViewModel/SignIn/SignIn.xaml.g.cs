@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.SignIn.SignIn.xaml", "ViewModel/SignIn/SignIn.xaml", typeof(global::InfiniteMeals.SignIn.SignIn))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.SignIn.SignIn.xaml", "ViewModel/SignIn/SignIn.xaml", typeof(global::InfiniteMeals.ViewModel.SignIn.SignIn))]
 
-namespace InfiniteMeals.SignIn {
+namespace InfiniteMeals.ViewModel.SignIn {
     
     
     [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\SignIn\\SignIn.xaml")]

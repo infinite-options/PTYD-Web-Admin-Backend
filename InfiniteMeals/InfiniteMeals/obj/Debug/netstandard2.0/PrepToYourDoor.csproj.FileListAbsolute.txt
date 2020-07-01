@@ -19,11 +19,9 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\SelectMealOptions.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Profile\UserProfile.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\SignIn\SignIn.xaml.g.cs
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\SignUp\SignUp.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Steppers\BasicSteppers.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Subscribe\FiveMealPaymentOptionPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Subscribe\PaymentOptionPage.xaml.g.cs
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Subscribe\Subscribe.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.AssemblyInfoInputs.cache
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.AssemblyInfo.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.csproj.CoreCompileInputs.cache
@@ -32,3 +30,5 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ref\PrepToYourDoor.dll
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.pdb
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Checkout\CheckOutPage.xaml.g.cs
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Subscribe\SubscribePage.xaml.g.cs
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\SignUp\SignUpPage.xaml.g.cs

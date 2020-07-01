@@ -12,7 +12,7 @@ using Xamarin.Forms.Xaml;
 using InfiniteMeals.Model.Database;
 using InfiniteMeals.Meals.Model;
 
-namespace InfiniteMeals.Meals {
+namespace InfiniteMeals.ViewModel.MealSelect {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MealSchedule : ContentPage {
         int ctr = 2;

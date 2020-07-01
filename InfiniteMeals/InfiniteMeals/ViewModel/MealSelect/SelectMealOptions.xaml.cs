@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 
 
-namespace InfiniteMeals.Meals
+namespace InfiniteMeals.ViewModel.MealSelect
 {
 
     public partial class SelectMealOptions : ContentPage

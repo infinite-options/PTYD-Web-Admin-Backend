@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace InfiniteMeals.MealSelect
+namespace InfiniteMeals.ViewModel.MealSelect
 {
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -304,12 +304,12 @@ namespace InfiniteMeals.MealSelect
 
         private async void ClickedSurprise(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new Meals.MealSchedule());
+            await Navigation.PushAsync(new MealSchedule());
         }
 
         private async void ClickedSkip(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new Meals.MealSchedule());
+            await Navigation.PushAsync(new MealSchedule());
         }
 
         private async void ClickedSave(object sender, EventArgs e)

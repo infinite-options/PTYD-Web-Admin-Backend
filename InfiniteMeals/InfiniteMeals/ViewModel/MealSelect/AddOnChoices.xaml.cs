@@ -15,7 +15,7 @@ using System.Windows.Input;
 using Xamarin.Forms.Internals;
 using InfiniteMeals.Meals;
 
-namespace InfiniteMeals.MealSelect
+namespace InfiniteMeals.ViewModel.MealSelect
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddOnChoices : ContentPage

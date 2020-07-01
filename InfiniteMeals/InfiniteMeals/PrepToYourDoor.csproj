@@ -83,11 +83,20 @@
     <Compile Update="ViewModel\Checkout\Delivery.xaml.cs">
       <DependentUpon>Delivery.xaml</DependentUpon>
     </Compile>
+    <Compile Update="ViewModel\SignIn\SignInPage.xaml.cs">
+      <DependentUpon>SignInPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\SignUp\SignUpPage.xaml.cs">
+      <DependentUpon>SignUpPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="ViewModel\Subscribe\FiveMealPaymentOptionpage.xaml.cs">
       <DependentUpon>FiveMealPaymentOptionPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="ViewModel\Subscribe\PaymentOptionPage.xaml.cs">
       <DependentUpon>PaymentOptionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Subscribe\SubscribePage.xaml.cs">
+      <DependentUpon>SubscribePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

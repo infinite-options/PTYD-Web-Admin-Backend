@@ -8,37 +8,12 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
-        
 
-        <Button  HorizontalOptions="Center" Text="click to signup" Clicked="ClickedSignUp"/>
+
+        <Button x:Name="signIn"  HorizontalOptions="Center" Text="Sign In" Clicked="ClickedSignIn"/>
 
         <Image x:Name="homepage" HorizontalOptions="Center"/>
 
     </StackLayout>
 
-    <!--
-    <ListView x:Name="kitchensListView" VerticalOptions="StartAndExpand" Footer="" HasUnevenRows="true" IsPullToRefreshEnabled="true">
-        <ListView.ItemTemplate>
-            <DataTemplate> 
-                <ViewCell>
-                    <StackLayout Margin="15, 15, 15, 15" Orientation="Vertical">
-                        <Label Text="{Binding title}" HorizontalOptions="StartAndExpand" FontSize="Large" FontAttributes="Bold" Opacity="{Binding opacity}"/>
-                        <Label Text="{Binding zipcode}" HorizontalOptions="Start" FontSize="Small" FontAttributes="Italic" Opacity="{Binding opacity}"/>
-                        <Label Text="{Binding description}" HorizontalOptions="StartAndExpand" FontSize="Medium" FontAttributes="Italic" Opacity="{Binding opacity}"/>
-                        
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Accepting Orders: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding open_hours}" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding status}" FontSize="Small" FontAttributes="Bold, Italic" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="{Binding statusColor}" Opacity="{Binding opacity}"/>
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Next Delivery: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding delivery_period}" FontSize="Micro" Opacity="{Binding opacity}"/>
-                        </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>-->
-    
 </ContentPage>

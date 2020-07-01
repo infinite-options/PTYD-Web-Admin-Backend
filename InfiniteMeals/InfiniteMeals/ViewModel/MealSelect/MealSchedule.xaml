@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="InfiniteMeals.Meals.MealSchedule" Title="Select Meals"
+             x:Class="InfiniteMeals.ViewModel.MealSelect.MealSchedule" Title="Select Meals"
              NavigationPage.HasBackButton="False">
     <ContentPage.Content>
         <ScrollView>

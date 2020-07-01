@@ -3,7 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-    x:Class="InfiniteMeals.Meals.SelectMealOptions"
+    x:Class="InfiniteMeals.ViewModel.MealSelect.SelectMealOptions"
     Title="{Binding kitchen_name}"
     ios:Page.UseSafeArea="true">
 
