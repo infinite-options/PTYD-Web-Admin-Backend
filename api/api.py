@@ -1347,7 +1347,7 @@ def confirm(token, hashed):
 
 
 class Checkout(Resource):
-    def getPaymentQuery(self, data, paymentId, purchaseId):
+    def getPaymentQuery(self, data, couponID, amount_due, amount_paid, paymentId, purchaseId):
         query = """ INSERT INTO ptyd_payments
                     (
                         payment_id,
@@ -1370,9 +1370,9 @@ class Checkout(Resource):
                         \'""" + data['user_uid'] + """\',
                         \'TRUE\',
                         \'""" + data['is_gift'] + """\',
-                        NULL,
-                        """ + data['item_price'] + """,
-                        """ + data['item_price'] + """,
+                        """ + couponID + """,
+                        \'""" + str(amount_due) + """\',
+                        \'""" + str(amount_paid) + """\',
                         \'""" + purchaseId + """\',
                         \'""" + getNow() + """\',
                         \'STRIPE\',
@@ -1431,25 +1431,30 @@ class Checkout(Resource):
 
             if 'delivery_address_unit' in data:
                 if data['delivery_address_unit'] == None:
-                    DeliveryUnit = 'NULL'
+                    DeliveryUnit = 'null'
                 else:
                     DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
             else:
-                DeliveryUnit = 'NULL'
+                DeliveryUnit = 'null'
 
+            def get_new_paymentID():
+
+                newPaymentQuery = execute(
+                    "CALL get_new_payment_id", 'get', conn)
+                if newPaymentQuery['code'] != 280:
+                    response['message'] = 'Could not generate new snapshot ID.'
+                    return response, 500
+                return newPaymentQuery['result'][0]['new_id']
             purchaseIDresponse = execute(
                 "CALL get_new_purchase_id;", 'get', conn)
-            paymentIDresponse = execute(
-                "CALL get_new_payment_id;", 'get', conn)
             snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
 
             print(snapshotIDresponse)
             print(purchaseIDresponse)
-            print(paymentIDresponse)
 
             snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
-            paymentId = paymentIDresponse['result'][0]['new_id']
+            paymentId = get_new_paymentID()
 
             if snapshotId == None:
                 snapshotId = '160-000001'
@@ -1525,8 +1530,6 @@ class Checkout(Resource):
                 print("Error JSON:", response['error'])
                 return response, 501
 
-            queries.append(self.getPaymentQuery(data, paymentId, purchaseId))
-
             # replace with real longitute and latitude
             addressObj = Coordinates([data['delivery_address']])
             delivery_coord = addressObj.calculateFromLocations()[0]
@@ -1541,8 +1544,7 @@ class Checkout(Resource):
                     delivery_coord[key] = '\'' + \
                                           str(delivery_coord[key]) + '\''
 
-            queries.append(
-                """ INSERT INTO ptyd_purchases
+            purchase_query = """ INSERT INTO ptyd_purchases
                     (
                         purchase_id,
                         purchase_status,
@@ -1582,20 +1584,7 @@ class Checkout(Resource):
                         """ + str(delivery_coord['longitude']) + """,
                         """ + str(delivery_coord['latitude']) + """
                     );"""
-            )
-
-            print('perforem laste 2 queries')
-
-            #           print("pur")
-            #           print(dates)
-            #           print(snapshotId)
-            #           print(paymentId)
-            #           print(purchaseId)
-            #           print(getNow())
-
-            # Initial snapshot
-            queries.append(
-                """ INSERT INTO ptyd_snapshots
+            snapshot_query = """ INSERT INTO ptyd_snapshots
                     (
                         snapshot_id
                         , snapshot_timestamp
@@ -1619,21 +1608,84 @@ class Checkout(Resource):
                         , \'""" + dates['endDate'] + """\'
                         , \'""" + dates['billingDate'] + """\'
                         , """ + dates['weeksRemaining'] + """
-                        , \'""" + dates['startDate'] + "\');")
-
-            #           print("snap")
-
-            #           print(queries)
-
-            reply['payment'] = execute(queries[3], 'post', conn)
+                        , \'""" + dates['startDate'] + "\');"
+            coupon_id = data.get('coupon_id')
+            if coupon_id == "" or coupon_id is None:
+                payment_query = self.getPaymentQuery(data, 'NULL', data['item_price'], data['item_price'], paymentId, purchaseId)
+            else:
+                coupon_id = "'" + coupon_id + "'" #need this to solve the add NULL to sql database
+                temp_query = """ INSERT INTO ptyd_payments
+                                (
+                                    payment_id,
+                                    buyer_id,
+                                    recurring,
+                                    gift,
+                                    coupon_id,
+                                    amount_due,
+                                    amount_paid,
+                                    purchase_id,
+                                    payment_time_stamp
+                                )
+                                VALUES (
+                                    \'""" + paymentId + """\',
+                                    \'""" + data['user_uid'] + """\',
+                                    \'TRUE\',
+                                    \'""" + data['is_gift'] + """\',
+                                    \'""" + coupon_id + """\',
+                                    """ + data['item_price'] + """, 0,
+                                    \'""" + purchaseId + """\',
+                                    \'""" + getNow() + """\');"""
+                res = execute(temp_query, 'post', conn)
+                print("after execute temp query 1: ", res)
+                total_discount = data.get('total_discount')
+                paymentId = get_new_paymentID()
+                temp_query = """ INSERT INTO ptyd_payments
+                                (
+                                    payment_id,
+                                    buyer_id,
+                                    recurring,
+                                    gift,
+                                    coupon_id,
+                                    amount_due,
+                                    amount_paid,
+                                    purchase_id,
+                                    payment_time_stamp
+                                )
+                                VALUES (
+                                    \'""" + paymentId + """\',
+                                    \'""" + data['user_uid'] + """\',
+                                    \'TRUE\',
+                                    \'""" + data['is_gift'] + """\',
+                                    \'""" + coupon_id + """\',
+                                    \'""" + str(0-total_discount) + """\',0,
+                                    \'""" + purchaseId + """\',
+                                    \'""" + getNow() + """\');"""
+                print("temp2: ", temp_query)
+                res = execute(temp_query, 'post', conn)
+                print("after execute temp query 2: ", res)
+                # update coupon table
+                coupon_query = """UPDATE ptyd_coupons SET num_used = num_used + 1 
+                            WHERE coupon_id = '""" + coupon_id + "';"
+                res = execute(coupon_query, 'post', conn)
+                print("after execute coupon_query: ", res)
+                paymentId = get_new_paymentID()
+                payment_query = self.getPaymentQuery(data, str(coupon_id), data['total_charge'], data['total_charge'], paymentId, purchaseId)
+                print("payment_query: ", payment_query)
+            reply['payment'] = execute(payment_query, 'post', conn)
+            if reply['payment']['code'] != 281:
+                response['message'] = "Internal Server Error"
+                return response, 500
             # Add credit card verification code here
-            reply['purchase'] = execute(queries[4], 'post', conn)
-            reply['snapshot'] = execute(queries[5], 'post', conn)
+            reply['purchase'] = execute(purchase_query, 'post', conn)
+            if reply['purchase']['code'] != 281:
+                response['message'] = "Internal Server Error"
+                return response, 500
+            reply['snapshot'] = execute(snapshot_query, 'post', conn)
+            if reply['snapshot']['code'] != 281:
+                response['message'] = "Internal Server Error"
+                return response, 500
             response['message'] = 'Request successful.'
             response['result'] = reply
-
-            #           print(response)
-
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -2967,12 +3019,9 @@ class CancelSubscriptionNow(Resource):
                                                    purchase.meal_plan_id = plans.meal_plan_id AND
                                                    snapshot1.next_billing_date <> 'NULL' AND
                                                    purchase.purchase_status = 'ACTIVE';"""
-        print("here inside calculator")
         current_purchase_info = execute(
             current_purchase_query, "get", conn).get('result')[0]
-        print("current_purchase_info: ", current_purchase_info)
         name_matching = current_purchase_info.get('meal_plan_desc')
-        print("name_matching: ", name_matching)
         if name_matching != None:
             name_matching = name_matching.split(" - ")
         else:
@@ -3472,7 +3521,52 @@ class Update_Subscription(Resource):
         finally:
             disconnect(conn)
 
-
+class Coupon (Resource):
+    def get(self):
+        response = {}
+        try:
+            data = request.args
+            print("Received: ", data)
+            coupon_id = data['coupon_id']
+            apply_email = data['email']
+            # prepare a query to get info of coupon
+            query = """SELECT * FROM ptyd_coupons WHERE coupon_id = '""" + coupon_id + "';"
+            # connect to database to get info of this coupon
+            conn = connect();
+            res = execute(query, 'get', conn)
+            result = res['result'][0]
+            if result: # there is matching coupon_id
+                # check if coupon is inactive
+                if result.get('active') == "TRUE":
+                    # check if coupon expiration
+                    expire_date = datetime.strptime(result.get('expire_date'), "%Y-%m-%d")
+                    today = datetime.today()
+                    if (today <= expire_date):
+                        if (result.get('limits') > result.get('num_used')):
+                            if (result.get('email') is None): # this coupon can apply for everyone
+                                response['message'] = "OK"
+                                response['result'] = result
+                            else: # compare the email in result with apply_email to make sure we have a right customer
+                                if (result['email'] == apply_email): # valid email
+                                    response['message'] = "OK"
+                                    response['result'] = result
+                                else:
+                                    response['message'] = "Invalid email address for current coupon ID"
+                        else:
+                            response['message'] = "Coupon is run out of limits"
+                    else:
+                        response['message'] = "Coupon is expired"
+                    return response, 200
+                else:
+                    response['message'] = "This coupon is no longer active"
+                    return response, 200
+            else: # there is no matching coupon for requesting coupon_id
+                response['message'] = "Invalid coupon ID"
+                return response, 400
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 class UpdateDeliveryAddress(
         Resource):  # we do not need this if we consider updating subcription as deleting the old one and
     # buy the new subcription
@@ -4682,8 +4776,8 @@ api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
 api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
-# using this instead of Update Subcription
 api.add_resource(Update_Subscription, '/api/v2/update-subscription')
+api.add_resource(Coupon, '/api/v2/coupon')
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
 
 # Admin page

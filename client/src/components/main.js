@@ -88,6 +88,7 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? Checkout : Login}
         appProps={{
           appProps,
+          DEV_URL: DEV_URL,
           SESSION_URL: `${DEV_URL}v2/sessionverification`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
