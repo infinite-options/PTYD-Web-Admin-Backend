@@ -1611,7 +1611,7 @@ class Checkout(Resource):
                         , \'""" + dates['startDate'] + "\');"
             coupon_id = data.get('coupon_id')
             if coupon_id == "" or coupon_id is None:
-                payment_query = self.getPaymentQuery(data, 'NULL', data['item_price'], data['item_price'], paymentId, purchaseId)
+                payment_query = self.getPaymentQuery(data, 'NULL', data['total_charge'], data['total_charge'], paymentId, purchaseId)
             else:
                 coupon_id = "'" + coupon_id + "'" #need this to solve the add NULL to sql database
                 temp_query = """ INSERT INTO ptyd_payments
@@ -1631,7 +1631,7 @@ class Checkout(Resource):
                                     \'""" + data['user_uid'] + """\',
                                     \'TRUE\',
                                     \'""" + data['is_gift'] + """\',
-                                    \'""" + coupon_id + """\',
+                                    """ + coupon_id + """,
                                     """ + data['item_price'] + """, 0,
                                     \'""" + purchaseId + """\',
                                     \'""" + getNow() + """\');"""
@@ -1656,7 +1656,7 @@ class Checkout(Resource):
                                     \'""" + data['user_uid'] + """\',
                                     \'TRUE\',
                                     \'""" + data['is_gift'] + """\',
-                                    \'""" + coupon_id + """\',
+                                    """ + coupon_id + """,
                                     \'""" + str(0-total_discount) + """\',0,
                                     \'""" + purchaseId + """\',
                                     \'""" + getNow() + """\');"""
@@ -1665,11 +1665,12 @@ class Checkout(Resource):
                 print("after execute temp query 2: ", res)
                 # update coupon table
                 coupon_query = """UPDATE ptyd_coupons SET num_used = num_used + 1 
-                            WHERE coupon_id = '""" + coupon_id + "';"
+                            WHERE coupon_id = """ + coupon_id + ";"
                 res = execute(coupon_query, 'post', conn)
                 print("after execute coupon_query: ", res)
                 paymentId = get_new_paymentID()
-                payment_query = self.getPaymentQuery(data, str(coupon_id), data['total_charge'], data['total_charge'], paymentId, purchaseId)
+                charge = data['total_charge'] - data['total_discount']
+                payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, purchaseId)
                 print("payment_query: ", payment_query)
             reply['payment'] = execute(payment_query, 'post', conn)
             if reply['payment']['code'] != 281:
@@ -3534,8 +3535,9 @@ class Coupon (Resource):
             # connect to database to get info of this coupon
             conn = connect();
             res = execute(query, 'get', conn)
-            result = res['result'][0]
-            if result: # there is matching coupon_id
+            print("after query coupon table: ", res)
+            if res['result']: # there is matching coupon_id
+                result = res['result'][0]
                 # check if coupon is inactive
                 if result.get('active') == "TRUE":
                     # check if coupon expiration
@@ -3551,15 +3553,18 @@ class Coupon (Resource):
                                     response['message'] = "OK"
                                     response['result'] = result
                                 else:
-                                    response['message'] = "Invalid email address for current coupon ID"
+                                    response['message'] = "Invalid email address for current coupon ID."
+                                    return response, 400
                         else:
-                            response['message'] = "Coupon is run out of limits"
+                            response['message'] = " This coupon is no longer available."
+                            return response, 400
                     else:
-                        response['message'] = "Coupon is expired"
+                        response['message'] = "This coupon is expired."
+                        return response, 400
                     return response, 200
                 else:
-                    response['message'] = "This coupon is no longer active"
-                    return response, 200
+                    response['message'] = "This coupon is no longer active."
+                    return response, 400
             else: # there is no matching coupon for requesting coupon_id
                 response['message'] = "Invalid coupon ID"
                 return response, 400

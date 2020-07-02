@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect, Fragment} from "react";
+import {useHistory} from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -14,7 +14,7 @@ import crypto from "crypto";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
-import { getIp, getBrowser } from "../functions/getClientInfo";
+import {getIp, getBrowser} from "../functions/getClientInfo";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
@@ -201,7 +201,11 @@ export default function Login(props) {
     let session_id = log_attemp.session_id;
     let login_id = log_attemp.login_id;
     document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
-    checkForPurchased(uid);
+    if ((props.history.location.path = "/checkout")) {
+      window.location.reload(false);
+    } else {
+      checkForPurchased(uid);
+    }
   }
 
   // Direct Login
@@ -317,8 +321,6 @@ export default function Login(props) {
         }
         setLoading(false);
       });
-
-    // await login(t);
   }
   function login(response) {
     if (response !== undefined) {
@@ -330,7 +332,12 @@ export default function Login(props) {
         let session_id = response.login_attempt_log.session_id;
         document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
         //check for purchases
-        checkForPurchased(uid);
+        console.log("location: ", props.location);
+        if ((props.history.location.path = "/checkout")) {
+          window.location.reload(false);
+        } else {
+          checkForPurchased(uid);
+        }
       } else {
         document.cookie = `loginStatus=; path=/`;
         setLoading(false);
@@ -362,11 +369,17 @@ export default function Login(props) {
             </Fragment>
           )}
           <div className='text-center'>
-            <p >To continue, please log in to Prep to Your Door.</p>
+            <p>To continue, please log in to Prep to Your Door.</p>
           </div>
-          
-          <Row className="justify-content-center" style={{padding:"5px 0"}}>
-            <div style={{boxShadow: "0px 2px 2px 0px rgba(117,117,117,1)", borderRadius:"1px", background:"#4c69ba"}}>
+
+          <Row className='justify-content-center' style={{padding: "5px 0"}}>
+            <div
+              style={{
+                boxShadow: "0px 2px 2px 0px rgba(117,117,117,1)",
+                borderRadius: "1px",
+                background: "#4c69ba"
+              }}
+            >
               <FacebookLogin
                 appId='508721976476931'
                 autoLoad={false}
@@ -379,7 +392,7 @@ export default function Login(props) {
             </div>
             {/* </div> */}
             &nbsp;
-            <div style={{padding:"0 4px"}}>
+            <div style={{padding: "0 4px"}}>
               <GoogleLogin
                 clientId='333899878721-tc2a70pn73hjcnegh2cprvqteiuu39h9.apps.googleusercontent.com'
                 buttonText='Continue with Google'
@@ -395,11 +408,30 @@ export default function Login(props) {
 
           <div class='row'>
             <Col></Col>
-            <Container className='justify-content-center bg-white font2' style={{ border: "0", boxShadow: "0", borderColor: "white", padding: "5px 30px", cursor: "default", width: "400px" }}>
-              
-
-              <div style={{ borderTop: "1px solid #d9dadc", margin: "30px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}>
-                <strong style={{ background: "#fff", letterSpacing: "1px" }}>&nbsp; OR &nbsp;</strong>
+            <Container
+              className='justify-content-center bg-white font2'
+              style={{
+                border: "0",
+                boxShadow: "0",
+                borderColor: "white",
+                padding: "5px 30px",
+                cursor: "default",
+                width: "400px"
+              }}
+            >
+              <div
+                style={{
+                  borderTop: "1px solid #d9dadc",
+                  margin: "30px 0",
+                  display: "block",
+                  lineHeight: "1px",
+                  textAlign: "center",
+                  color: "#494949"
+                }}
+              >
+                <strong style={{background: "#fff", letterSpacing: "1px"}}>
+                  &nbsp; OR &nbsp;
+                </strong>
               </div>
 
               {/* <Row> */}
@@ -442,15 +474,16 @@ export default function Login(props) {
                   onClick={checkLogin}
                   disabled={!validateForm()}
                   type='submit'
-                  style={{ width: "100%" }}
+                  style={{width: "100%"}}
                 >
-                  <strong style={{ color: "white" }}>Sign In</strong>
+                  <strong style={{color: "white"}}>Sign In</strong>
                 </Button>
 
-                <div className='text-center' style={{ padding: "10px" }}>
-                  <a href='/resetpassword' style={{ color: "#494949" }}>Forgot password?</a>
+                <div className='text-center' style={{padding: "10px"}}>
+                  <a href='/resetpassword' style={{color: "#494949"}}>
+                    Forgot password?
+                  </a>
                 </div>
-
               </Form>
               {/* </Col> */}
               {/* </Row> */}
@@ -458,16 +491,32 @@ export default function Login(props) {
               {/* <p>&nbsp;</p> */}
               {/* <p style={{color: "#494949", paddingTop: "10px"}}>Or Login With Social Media</p> */}
 
-              <div style={{ borderTop: "1px solid #d9dadc", margin: "20px 0", display: "block", lineHeight: "1px", textAlign: "center", color: "#494949" }}></div>
+              <div
+                style={{
+                  borderTop: "1px solid #d9dadc",
+                  margin: "20px 0",
+                  display: "block",
+                  lineHeight: "1px",
+                  textAlign: "center",
+                  color: "#494949"
+                }}
+              ></div>
               {/* <hr/> */}
 
-              <div className='text-center' style={{padding:"10px 0 50px 0px"}}>
-                <p style={{ fontWeight: "bold", color: "#494949" }}>Don't have an account?</p>
+              <div className='text-center' style={{padding: "10px 0 50px 0px"}}>
+                <p style={{fontWeight: "bold", color: "#494949"}}>
+                  Don't have an account?
+                </p>
                 <a
                   href='/signup'
-                  style={{ border: "2px solid #469b47", color: "#469b47", padding: "8px 90px", borderRadius: "4px"}}
+                  style={{
+                    border: "2px solid #469b47",
+                    color: "#469b47",
+                    padding: "8px 90px",
+                    borderRadius: "4px"
+                  }}
                 >
-                  <strong style={{ color: "#469b47" }}>Sign Up Here</strong>
+                  <strong style={{color: "#469b47"}}>Sign Up Here</strong>
                 </a>
               </div>
             </Container>

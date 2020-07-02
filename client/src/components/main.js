@@ -32,7 +32,7 @@ import Logout from "./logout";
 
 //  Live API from AWS S3 Bucket
 // const DEV_URL =
-//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
+// "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
 const DEV_URL = "http://localhost:2000/api/";
@@ -93,6 +93,8 @@ export default function Main({appProps}) {
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          API_URL: `${DEV_URL}v2/accountsalt`,
+          SOCIAL_API_URL: `${DEV_URL}v2/social`,
           redirect_after_login: "/checkout",
           user_uid: appProps.user_uid
         }}

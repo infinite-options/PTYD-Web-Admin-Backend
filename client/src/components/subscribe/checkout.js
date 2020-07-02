@@ -21,6 +21,7 @@ class Checkout extends Component {
       coupon: "",
       loading: false,
       send_error: null,
+      coupon_error: null,
       original_charge: {
         shipping: 15,
         meal_price: 0,
@@ -32,6 +33,10 @@ class Checkout extends Component {
         meal_price: 0,
         tax: 0,
         total_charge: 0
+      },
+      item: {
+        name: "",
+        total: 0
       },
       discount: {percent: 0, amount: 0, shipping: 0},
       tax_rate: 0.0825,
@@ -79,72 +84,81 @@ class Checkout extends Component {
     return this.getCookieAttrHelper(cname, "session_id");
   }
   async componentDidMount() {
-    const login_session = {
-      login_id: this.searchCookie4Login("loginStatus"),
-      session_id: this.searchCookie4SessionID("loginStatus")
-    };
-    //calculate original charge
-    let mealPrice = parseFloat(this.props.location.item.total);
-    let shipping = this.state.original_charge.shipping;
-    let tax = parseFloat(
-      ((mealPrice + shipping) * this.state.tax_rate).toFixed(2)
-    );
-
-    let total_charge = parseFloat((mealPrice + shipping + tax).toFixed(2));
-    console.log("tax: ", typeof tax);
-    this.setState(prevState => ({
-      original_charge: {
-        ...prevState.original_charge,
-        meal_price: mealPrice,
-        tax: tax,
-        total_charge: total_charge
-      },
-      will_charge: {
-        ...prevState.will_charge,
-        meal_price: mealPrice,
-        total_charge: total_charge,
-        tax: tax
-      }
-    }));
-    if (this.state.user_uid) {
-      if (this.searchCookie4loginMethod("loginStatus") !== "social") {
-        const res = await fetch(
-          `${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.session_id}`
-        );
-        const api = await res.json();
-        if (api.result.length === 0) {
-          //could not verify login session
-          this.props.history.push("/invalidsession");
-          return;
-        }
-        //  Social Media accounts will have null salts
-        //  Disable password field if salt is null
-        this.setState({
-          password_salt: api.result[0].password_salt
-        });
-      }
-      const pur = await fetch(
-        `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+    if (this.props.location.item !== undefined) {
+      const login_session = {
+        login_id: this.searchCookie4Login("loginStatus"),
+        session_id: this.searchCookie4SessionID("loginStatus")
+      };
+      //calculate original charge
+      let mealPrice = parseFloat(this.props.location.item.total);
+      let shipping = this.state.original_charge.shipping;
+      let tax = parseFloat(
+        ((mealPrice + shipping) * this.state.tax_rate).toFixed(2)
       );
-      const purApi = await pur.json();
-      if (purApi.result.length !== 0) {
-        this.setState({purchase: purApi.result[0]});
-      } else {
-        const acc = await fetch(
-          `${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`
-        );
-        const accApi = await acc.json();
-        if (accApi.result.length != 0) {
+
+      let total_charge = parseFloat((mealPrice + shipping + tax).toFixed(2));
+      console.log("tax: ", typeof tax);
+      this.setState(prevState => ({
+        item: {
+          ...prevState.item,
+          name: this.props.location.item.name,
+          total: this.props.location.item.total
+        },
+        original_charge: {
+          ...prevState.original_charge,
+          meal_price: mealPrice,
+          tax: tax,
+          total_charge: total_charge
+        },
+        will_charge: {
+          ...prevState.will_charge,
+          meal_price: mealPrice,
+          total_charge: total_charge,
+          tax: tax
+        }
+      }));
+      if (this.state.user_uid) {
+        if (this.searchCookie4loginMethod("loginStatus") !== "social") {
+          const res = await fetch(
+            `${this.props.SESSION_URL}/${this.state.user_uid}/${login_session.session_id}`
+          );
+          const api = await res.json();
+          if (api.result.length === 0) {
+            //could not verify login session
+            this.props.history.push("/invalidsession");
+            return;
+          }
+          //  Social Media accounts will have null salts
+          //  Disable password field if salt is null
           this.setState({
-            purchase: {
-              delivery_first_name: accApi.result[0].first_name,
-              delivery_last_name: accApi.result[0].last_name,
-              delivery_email: accApi.result[0].user_email,
-              delivery_phone: accApi.result[0].phone_number
-            }
+            password_salt: api.result[0].password_salt
           });
         }
+        const pur = await fetch(
+          `${this.props.PURCHASE_API_URL}/${this.state.user_uid}`
+        );
+        const purApi = await pur.json();
+        if (purApi.result.length !== 0) {
+          this.setState({purchase: purApi.result[0]});
+        } else {
+          const acc = await fetch(
+            `${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`
+          );
+          const accApi = await acc.json();
+          if (accApi.result.length != 0) {
+            this.setState({
+              purchase: {
+                delivery_first_name: accApi.result[0].first_name,
+                delivery_last_name: accApi.result[0].last_name,
+                delivery_email: accApi.result[0].user_email,
+                delivery_phone: accApi.result[0].phone_number
+              }
+            });
+          }
+        }
       }
+    } else {
+      this.setState({send_error: "No meal plan selected"});
     }
   }
 
@@ -176,7 +190,7 @@ class Checkout extends Component {
         item_price: this.props.location.item.total,
         coupon_id: coupon,
         shipping: this.state.original_charge.shipping,
-        total_charge: this.state.will_charge.total_charge,
+        total_charge: this.state.original_charge.total_charge,
         total_discount: total_discount,
         tax_rate: this.state.tax_rate
       })
@@ -316,7 +330,7 @@ class Checkout extends Component {
 
   applyCoupon = event => {
     event.preventDefault();
-    console.log("this.state. coupon: ", this.state.coupon);
+    console.log("this.state.coupon: ", this.state.coupon);
     // send a form to the API
     if (this.state.coupon !== null) {
       axios
@@ -370,7 +384,9 @@ class Checkout extends Component {
           }
         })
         .catch(err => {
-          console.log("Error happened: ", err);
+          console.log("Error happened: ", err.response);
+          if (err.response.data !== undefined)
+            this.setState({coupon_error: err.response.data.message});
         });
     }
   };
@@ -414,7 +430,7 @@ class Checkout extends Component {
                   <hr />
                   <h3>Order Summary</h3>
                   <div id='cart'>
-                    <p>{this.props.location.item.name}</p>
+                    <p>{this.state.item.name}</p>
                   </div>
 
                   <hr />
@@ -459,18 +475,25 @@ class Checkout extends Component {
                   <h3>Total: ${this.state.will_charge.total_charge}</h3>
                   <Form>
                     <Form.Row>
+                      {this.state.coupon_error !== null && (
+                        <p className='text-danger'>{this.state.coupon_error}</p>
+                      )}
                       <Form.Group
                         as={Col}
                         md={8}
                         controlId='formGridCouponCode'
                       >
                         <Form.Label>Coupon/Gift Code</Form.Label>
+
                         <Form.Control
                           placeholder='Secret Passcode'
                           value={this.state.coupon}
                           type='text'
                           onChange={event =>
-                            this.setState({coupon: event.target.value})
+                            this.setState({
+                              coupon: event.target.value,
+                              coupon_error: null
+                            })
                           }
                           disabled={this.state.coupon_disable ? true : false}
                         />
@@ -940,6 +963,7 @@ class Checkout extends Component {
             <h4>{this.state.send_error}</h4>
             <a href='/selectmealplan'>
               <img src={TruckIcon} alt='Truck Icon' />
+              <p>Select a Meal Plan</p>
             </a>
           </div>
         )}
