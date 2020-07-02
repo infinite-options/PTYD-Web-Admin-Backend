@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="InfiniteMeals.ViewModel.Login.LoginPage">
+
+    <ContentPage.Content>
+
+
+            <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
+
+            <Label Text="Login" TextColor="Black" HorizontalOptions="Center" FontSize="Medium"/>
+            <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
+                <Entry x:Name="loginEmail" Placeholder="Email" TextColor="Black"></Entry>
+                <Entry x:Name="loginPassword" Placeholder="Password"  IsPassword="True"></Entry>
+                
+                <Button Text="Login" x:Name="Login" Clicked="ClickedLogin"></Button>
+            </StackLayout>
+
+            <StackLayout VerticalOptions="EndAndExpand"  HorizontalOptions="Center">
+                <Label Text="Don't have an account?" TextColor="Black" VerticalOptions="End"/>
+                <Button Text="Sign Up" Clicked="SignUpClicked"/>
+
+            </StackLayout>
+        </StackLayout>
+
+
+
+    </ContentPage.Content>
+</ContentPage>

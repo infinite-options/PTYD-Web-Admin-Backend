@@ -10,7 +10,7 @@
     <StackLayout>
 
 
-        <Button x:Name="signIn"  HorizontalOptions="Center" Text="Sign In" Clicked="ClickedSignIn"/>
+        <Button x:Name="loginButton"  HorizontalOptions="Center" Text="Log In" Clicked="ClickedLogin"/>
 
         <Image x:Name="homepage" HorizontalOptions="Center"/>
 

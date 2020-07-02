@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,7 +7,7 @@ using Xamarin.Forms.Xaml;
 using InfiniteMeals.Model.Checkout;
 using InfiniteMeals.Utilities.Converters;
 using InfiniteMeals.Model.Subscribe;
-using System.Net.Http;
+
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]

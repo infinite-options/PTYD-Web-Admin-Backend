@@ -17,8 +17,10 @@ namespace PrepToYourDoor.Model.Database {
 
         public string LoginId { get; set; }
 
+        public string Email { get; set; }
+
         public override string ToString() {
-            return this.ID.ToString() + " " + this.UserUid + " " + this.FirstName + " " + this.SessionId + " " + this.LoginId;
+            return this.ID.ToString() + " " + this.UserUid + " " + this.FirstName + " " + this.SessionId + " " + this.LoginId + " " + this.Email;
         }
     }
 }

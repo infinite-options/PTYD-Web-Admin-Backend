@@ -1,12 +1,10 @@
 ﻿using InfiniteMeals.Model.Subscribe;
 using InfiniteMeals.ViewModel.Checkout;
+using InfiniteMeals.ViewModel.Login;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using PrepToYourDoor.ViewModel.Checkout;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -28,38 +26,54 @@ namespace InfiniteMeals.ViewModel.Subscribe {
         }
 
         private async void WeekPaymentPlanClicked(object sender, EventArgs e) {
-            SubscriptionPlan weeklyPlan = new SubscriptionPlan((MealPlan)this.BindingContext, PaymentOption.Week);
-            System.Diagnostics.Debug.WriteLine("ID: " + weeklyPlan.id);
 
+            SubscriptionPlan weeklyPlan = new SubscriptionPlan((MealPlan)this.BindingContext, PaymentOption.Week);
             weeklyPlan.cost = await getMealPlanCost(weeklyPlan); // set the cost
-               
-            Delivery weeklyPlanCheckout = new Delivery();
-            weeklyPlanCheckout.BindingContext = weeklyPlan;
-            await Navigation.PushAsync(weeklyPlanCheckout);
+            if (App.LoggedIn) {
+                Delivery weeklyPlanCheckout = new Delivery();
+                weeklyPlanCheckout.BindingContext = weeklyPlan;
+                await Navigation.PushAsync(weeklyPlanCheckout);
+            } else {
+                CheckoutLogin checkoutLoginPage = new CheckoutLogin();
+                checkoutLoginPage.BindingContext = weeklyPlan;
+                await Navigation.PushAsync(checkoutLoginPage);
+            }
 
         }
 
         private async void TwoWeekPaymentPlanClicked(object sender, EventArgs e) {
+
             SubscriptionPlan twoWeekPrePayPlan = new SubscriptionPlan((MealPlan)this.BindingContext, PaymentOption.TwoWeek);
-            System.Diagnostics.Debug.WriteLine("ID: " + twoWeekPrePayPlan.id);
-
             twoWeekPrePayPlan.cost = await getMealPlanCost(twoWeekPrePayPlan); // set the cost
-
-            Delivery weeklyPlanCheckout = new Delivery();
-            weeklyPlanCheckout.BindingContext = twoWeekPrePayPlan;
-            await Navigation.PushAsync(weeklyPlanCheckout);
+            if (App.LoggedIn) { 
+                Delivery twoWeekPrePayPlanCheckout = new Delivery();
+                twoWeekPrePayPlanCheckout.BindingContext = twoWeekPrePayPlan;
+                await Navigation.PushAsync(twoWeekPrePayPlanCheckout);
+        } else {
+                CheckoutLogin checkoutLoginPage = new CheckoutLogin();
+                checkoutLoginPage.BindingContext = twoWeekPrePayPlan;
+                await Navigation.PushAsync(checkoutLoginPage);
+            }
 
         }
 
         private async void FourWeekPaymentPlanClicked(object sender, EventArgs e) {
             SubscriptionPlan fourWeekPrePayPlan = new SubscriptionPlan((MealPlan)this.BindingContext, PaymentOption.FourWeek);
-            System.Diagnostics.Debug.WriteLine("ID: " + fourWeekPrePayPlan.id);
+            fourWeekPrePayPlan.cost = await getMealPlanCost(fourWeekPrePayPlan); // get the cost from the database and set it to the subscription plan
 
-            fourWeekPrePayPlan.cost = await getMealPlanCost(fourWeekPrePayPlan); // set the cost
+            if (App.LoggedIn) {
+             
+                System.Diagnostics.Debug.WriteLine("ID: " + fourWeekPrePayPlan.id);
 
-            Delivery weeklyPlanCheckout = new Delivery();
-            weeklyPlanCheckout.BindingContext = fourWeekPrePayPlan;
-            await Navigation.PushAsync(weeklyPlanCheckout);
+                Delivery fourWeekPrePayPlanCheckout = new Delivery();
+                fourWeekPrePayPlanCheckout.BindingContext = fourWeekPrePayPlan;
+                await Navigation.PushAsync(fourWeekPrePayPlanCheckout);
+            } else {
+                CheckoutLogin checkoutLoginPage = new CheckoutLogin();
+                checkoutLoginPage.BindingContext = fourWeekPrePayPlan;
+                await Navigation.PushAsync(checkoutLoginPage);
+                
+            }
 
         }
 

@@ -21,7 +21,7 @@ namespace InfiniteMeals.ViewModel.SignUp {
         
         private async void ClickedSignIn(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SignIn.SignIn());
+            await Navigation.PopAsync();
         } 
     }
 }

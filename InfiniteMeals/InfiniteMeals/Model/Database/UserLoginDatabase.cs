@@ -56,6 +56,11 @@ namespace PrepToYourDoor.Model.Database {
             return Database.DeleteAsync(item);
         }
 
+        public UserLoginSession GetLastItem() {
+            return Database.Table<UserLoginSession>().ToListAsync().Result.Last<UserLoginSession>();
+            
+        }
+
 
 
        

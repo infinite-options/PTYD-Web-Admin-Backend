@@ -2,6 +2,7 @@
 using PrepToYourDoor.Model.Database;
 using System;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,13 +13,13 @@ namespace InfiniteMeals {
 
         static UserLoginDatabase database;
         static Boolean loggedIn = false;
-        
 
-        
+
+
         public App() {
             InitializeComponent();
- 
-            
+
+
             MainPage = new NavigationPage(new MainPage());
             //MainPage = new MainPage() { BindingContext = new MainPageViewModel() };
         }
@@ -34,18 +35,22 @@ namespace InfiniteMeals {
 
         public static UserLoginDatabase Database {
             get {
-                if(database == null) {
+                if (database == null) {
                     database = new UserLoginDatabase();
                 }
                 return database;
             }
         }
 
-        /*
+
         public static Boolean LoggedIn {
             get {
                 return loggedIn;
             }
-        } */
+        }
+        
+        public static void setLoggedIn(Boolean loggedIn) {
+            App.loggedIn = loggedIn;
+        }
     }
 }
