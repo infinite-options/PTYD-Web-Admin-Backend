@@ -1331,6 +1331,7 @@ def confirm(token, hashed):
         if update.get('code') == 281:
             # redirect to login page
             return redirect('http://preptoyourdoor.netlify.app/login/{}/{}'.format(email, hashed))
+            # return redirect('http://localhost:3000/login/{}/{}'.format(email, hashed))
         else:
             print("Error happened while confirming an email address.")
             error = "Confirm error."
@@ -1431,11 +1432,11 @@ class Checkout(Resource):
 
             if 'delivery_address_unit' in data:
                 if data['delivery_address_unit'] == None:
-                    DeliveryUnit = 'null'
+                    DeliveryUnit = 'NULL'
                 else:
                     DeliveryUnit = '\'' + data['delivery_address_unit'] + '\''
             else:
-                DeliveryUnit = 'null'
+                DeliveryUnit = 'NULL'
 
             def get_new_paymentID():
 
@@ -1669,7 +1670,7 @@ class Checkout(Resource):
                 res = execute(coupon_query, 'post', conn)
                 print("after execute coupon_query: ", res)
                 paymentId = get_new_paymentID()
-                charge = data['total_charge'] - data['total_discount']
+                charge = round(data['total_charge'] - data['total_discount'],2)
                 payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, purchaseId)
                 print("payment_query: ", payment_query)
             reply['payment'] = execute(payment_query, 'post', conn)
@@ -3153,7 +3154,7 @@ class CancelSubscriptionNow(Resource):
                                 '""" + str(refund_info.get('buyer_id')) + """',
                                 'FALSE',
                                 '""" + refund_info.get('gift') + """',
-                                'NULL',
+                                NULL,
                                 '""" + str(round(0 - refund, 2)) + """',
                                 '""" + str(round(0 - refund, 2)) + """',
                                 '""" + str(refund_info.get('purchase_id')) + """',
@@ -3279,7 +3280,7 @@ class Update_Subscription(Resource):
                             '""" + str(refund_info.get('buyer_id')) + """',
                             'FALSE',
                             '""" + data.get('is_gift') + """',
-                            'NULL',
+                            NULL,
                             '""" + str(round(0 - refund, 2)) + """',
                             '""" + str(round(0 - refund, 2)) + """',
                             '""" + str(refund_info.get('purchase_id')) + """',
@@ -3308,7 +3309,7 @@ class Update_Subscription(Resource):
                         \'""" + data['user_uid'] + """\',
                         \'TRUE\',
                         \'""" + data['is_gift'] + """\',
-                        'NULL',
+                        NULL,
                         \'""" + str(data['item_price']) + """\',
                         \'""" + str(round(float(data.get('item_price')) - refund, 2)) + """\',
                         \'""" + str(purchaseId) + """\',

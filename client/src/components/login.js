@@ -1,14 +1,14 @@
 import React, {useState, useEffect, Fragment} from "react";
-import {useHistory} from "react-router-dom";
+// import {useHistory} from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import Container from "react-bootstrap/Button";
+import {Container} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import Spinner from "react-bootstrap/Spinner";
+// import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import crypto from "crypto";
 import FacebookLogin from "react-facebook-login";
@@ -19,8 +19,8 @@ import {getIp, getBrowser} from "../functions/getClientInfo";
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState("");
-  const [salt, setSalt] = useState("");
+  // const [loginStatus, setLoginStatus] = useState("");
+  // const [salt, setSalt] = useState("");
   const [error, RaiseError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -57,7 +57,13 @@ export default function Login(props) {
             data = res.data.result.result[0];
             loginSession = res.data.login_attempt_log;
             if (data.email_verify === 0) {
-              throw "Your email need to be verified before you can log in.";
+              // throw "Your email need to be verified before you can log in.";
+              RaiseError(
+                "Your email need to be verified before you can log in."
+              );
+              setLoading(false);
+              props.history.push("/login");
+              window.location.reload(false);
             } else {
               let first = data.first_name;
               let uid = data.user_uid;
@@ -71,6 +77,7 @@ export default function Login(props) {
           .catch(err => {
             document.cookie = `loginStatus=; path=/`;
             props.history.push("/login");
+            RaiseError("Login Error. Try again later.");
             window.location.reload(false);
           });
       }
@@ -201,7 +208,7 @@ export default function Login(props) {
     let session_id = log_attemp.session_id;
     let login_id = log_attemp.login_id;
     document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
-    if ((props.history.location.path = "/checkout")) {
+    if (props.history.location.path === "/checkout") {
       window.location.reload(false);
     } else {
       checkForPurchased(uid);
@@ -284,7 +291,9 @@ export default function Login(props) {
       if (res.status === 200) {
         //success
         if (res.data.result.result[0].email_verify === 0) {
-          throw "Your email need to be verified before log in.";
+          // throw "Your email need to be verified before log in.";
+          RaiseError("Your email need to be verified before you can log in.");
+          setLoading(false);
         } else {
           return res.data;
         }
@@ -333,7 +342,7 @@ export default function Login(props) {
         document.cookie = `loginStatus=loggedInBy:direct,first_name:${first},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
         //check for purchases
         console.log("location: ", props.location);
-        if ((props.history.location.path = "/checkout")) {
+        if (props.history.location.pathname === "/checkout") {
           window.location.reload(false);
         } else {
           checkForPurchased(uid);
@@ -355,8 +364,11 @@ export default function Login(props) {
           </div>
         </div>
       )}
-      <main Style={"margin-top:-80px;" + (loading ? "opacity: 0.5" : "")}>
-        <div class='container text-center' Style='margin-top:-40px;'>
+      <main
+        style={{marginTop: "-80px"}}
+        className={loading ? "half-opacity" : ""}
+      >
+        <div className='container text-center' style={{marginTop: "-40px"}}>
           <h1>LOGIN</h1>
           {error !== null && error !== undefined && (
             <Fragment>
@@ -406,10 +418,10 @@ export default function Login(props) {
             </div>
           </Row>
 
-          <div class='row'>
+          <div className='row'>
             <Col></Col>
             <Container
-              className='justify-content-center bg-white font2'
+              className='justify-content-center bg-white font2 w-20'
               style={{
                 border: "0",
                 boxShadow: "0",

@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import Question from "./question";
-import { Card, Accordion } from "react-bootstrap";
+import React, {Component} from "react";
+// import Question from "./question";
+import {Card, Accordion} from "react-bootstrap";
 
 class Faq extends Component {
   render() {
     return (
-      <div class="container font2" style={{ color: "#196F3D" }}>
-        <h3 class="container font2" style={{ color: "black" }}>
+      <div class='container font2' style={{color: "#196F3D"}}>
+        <h3 class='container font2' style={{color: "black"}}>
           Frequently Asked Questions
         </h3>
         <br />
@@ -15,13 +15,13 @@ class Faq extends Component {
           answer="Luckily Texas is a big place with tons of organic and sustainable farms. Here’s a few of our favorites:"
         />{" "} */}
 
-        <Accordion defaultActiveKey="0">
-          <Card style={{ lineHeight: "35px", fontSize: "20px" }}>
-            <Accordion.Toggle as={Card.Header} eventKey="0">
+        <Accordion defaultActiveKey='0'>
+          <Card style={{lineHeight: "35px", fontSize: "20px"}}>
+            <Accordion.Toggle as={Card.Header} eventKey='0'>
               Which farms do you get your produce from?
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey="0">
-              <Card.Body style={{ color: "black" }}>
+            <Accordion.Collapse eventKey='0'>
+              <Card.Body style={{color: "black"}}>
                 Luckily Texas is a big place with tons of organic and
                 sustainable farms. Here’s a few of our favorites:
                 <br />
@@ -39,12 +39,12 @@ class Faq extends Component {
               </Card.Body>
             </Accordion.Collapse>
           </Card>
-          <Card style={{ lineHeight: "35px", fontSize: "20px" }}>
-            <Accordion.Toggle as={Card.Header} eventKey="1">
+          <Card style={{lineHeight: "35px", fontSize: "20px"}}>
+            <Accordion.Toggle as={Card.Header} eventKey='1'>
               How do I place an order?
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey="1">
-              <Card.Body style={{ color: "black" }}>
+            <Accordion.Collapse eventKey='1'>
+              <Card.Body style={{color: "black"}}>
                 From the Plans button in the menu, pick a membership option that
                 fits best with your lifestyle! You will automatically be placed
                 on a subscription to receive weekly orders. You can cancel or
@@ -53,12 +53,12 @@ class Faq extends Component {
               </Card.Body>
             </Accordion.Collapse>
           </Card>
-          <Card style={{ lineHeight: "35px", fontSize: "20px" }}>
-            <Accordion.Toggle as={Card.Header} eventKey="2">
+          <Card style={{lineHeight: "35px", fontSize: "20px"}}>
+            <Accordion.Toggle as={Card.Header} eventKey='2'>
               What if I'm not home during the delivery times?
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey="2">
-              <Card.Body style={{ color: "black" }}>
+            <Accordion.Collapse eventKey='2'>
+              <Card.Body style={{color: "black"}}>
                 On Sundays and Mondays (you can pick your preferred time) we
                 deliver to work, gym or home to try to ensure someone can
                 quickly place the food in the fridge. Make sure to email us at
@@ -83,12 +83,12 @@ class Faq extends Component {
               </Card.Body>
             </Accordion.Collapse>
           </Card>
-          <Card style={{ lineHeight: "35px", fontSize: "20px" }}>
-            <Accordion.Toggle as={Card.Header} eventKey="3">
+          <Card style={{lineHeight: "35px", fontSize: "20px"}}>
+            <Accordion.Toggle as={Card.Header} eventKey='3'>
               Membership Holds or Cancelations
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey="3">
-              <Card.Body style={{ color: "black" }}>
+            <Accordion.Collapse eventKey='3'>
+              <Card.Body style={{color: "black"}}>
                 ​If you're traveling or need a break, please go to "Manage
                 Existing Account" button at the top right. Go to "Edit
                 Subscription" then "Skip next renewal".
@@ -103,22 +103,23 @@ class Faq extends Component {
                 <br /> Voila! Here's a video showing you how:
                 <br />
                 <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube.com/embed/KPOaDphaiiQ"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  title='Choose Meal instruction'
+                  width='560'
+                  height='315'
+                  src='https://www.youtube.com/embed/KPOaDphaiiQ'
+                  frameborder='0'
+                  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
                   allowfullscreen
                 ></iframe>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
-          <Card style={{ lineHeight: "35px", fontSize: "20px" }}>
-            <Accordion.Toggle as={Card.Header} eventKey="4">
+          <Card style={{lineHeight: "35px", fontSize: "20px"}}>
+            <Accordion.Toggle as={Card.Header} eventKey='4'>
               What are smoothie options?
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey="4">
-              <Card.Body style={{ color: "black" }}>
+            <Accordion.Collapse eventKey='4'>
+              <Card.Body style={{color: "black"}}>
                 #1 The Original
                 <br /> Kale (lots!), Banana, Blueberries, Apple, Orange,
                 Chocolate Pea and Hemp Protein, Coconut Oil
@@ -145,12 +146,12 @@ class Faq extends Component {
               </Card.Body>
             </Accordion.Collapse>
           </Card>
-          <Card style={{ lineHeight: "35px", fontSize: "20px" }}>
-            <Accordion.Toggle as={Card.Header} eventKey="5">
+          <Card style={{lineHeight: "35px", fontSize: "20px"}}>
+            <Accordion.Toggle as={Card.Header} eventKey='5'>
               Returns & Refunds
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey="5">
-              <Card.Body style={{ color: "black" }}>
+            <Accordion.Collapse eventKey='5'>
+              <Card.Body style={{color: "black"}}>
                 We are committed to customer satisfaction and feedback. If you
                 are unhappy with the product, you will receive a refund, no
                 questions asked! Please contact us so we can refund you ASAP
@@ -158,12 +159,12 @@ class Faq extends Component {
               </Card.Body>
             </Accordion.Collapse>
           </Card>
-          <Card style={{ lineHeight: "35px", fontSize: "20px" }}>
-            <Accordion.Toggle as={Card.Header} eventKey="6">
+          <Card style={{lineHeight: "35px", fontSize: "20px"}}>
+            <Accordion.Toggle as={Card.Header} eventKey='6'>
               You don't deliver in my area :(
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey="6">
-              <Card.Body style={{ color: "black" }}>
+            <Accordion.Collapse eventKey='6'>
+              <Card.Body style={{color: "black"}}>
                 We are working as rapidly as possible to expand in the Greater
                 Austin area, including Georgetown and San Marcos. Send us an
                 message and let us know! Ask your buddies to sign up! Once we

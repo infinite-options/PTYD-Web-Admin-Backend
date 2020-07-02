@@ -1,7 +1,7 @@
 import React, {Fragment, useState, useEffect} from "react";
 import {Form, Button, Container, Card} from "react-bootstrap";
 import axios from "axios";
-import Login from "./login";
+// import Login from "./login";
 const ResetPassword = props => {
   const [error, RaiseError] = useState(null);
   const [requestChange, setRequestChange] = useState(true);

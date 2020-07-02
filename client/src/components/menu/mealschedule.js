@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 
 import {Grid, Cell} from "react-mdl";
 import {Button, Row} from "react-bootstrap";
@@ -103,7 +103,7 @@ export default class MealSchedule extends Component {
               // addonCharge: res.data.result[0].total_charge
             });
           } else {
-            throw "There are no subscribed purchases.";
+            this.setState({error: "There are no subscribed purchases."});
           }
         }
       })
@@ -112,7 +112,8 @@ export default class MealSchedule extends Component {
           this.setState({error: err});
           console.log(err);
         } else {
-          this.setState({error: err.response});
+          if (err.response.data !== undefined)
+            this.setState({error: err.response.data.message});
           console.log(err.response);
         }
       });

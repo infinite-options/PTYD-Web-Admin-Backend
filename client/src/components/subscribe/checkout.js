@@ -145,7 +145,7 @@ class Checkout extends Component {
             `${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`
           );
           const accApi = await acc.json();
-          if (accApi.result.length != 0) {
+          if (accApi.result.length !== 0) {
             this.setState({
               purchase: {
                 delivery_first_name: accApi.result[0].first_name,
@@ -246,17 +246,17 @@ class Checkout extends Component {
     //  Check if fields have correct length
     //  Disable submit if phone number isn't 10 digits
     if (
-      this.state.purchase.delivery_phone.length != 10 ||
+      this.state.purchase.delivery_phone.length !== 10 ||
       !/^\d+$/.test(this.state.purchase.delivery_phone)
     ) {
       return true;
     }
     //  Disable submit if cc_num isn't 16 characters
-    if (this.state.purchase.cc_num.length != 16) {
+    if (this.state.purchase.cc_num.length !== 16) {
       return true;
     }
     //  Disable submit if cc_cvv isn't 3 characters
-    if (this.state.purchase.cc_cvv.length != 3) {
+    if (this.state.purchase.cc_cvv.length !== 3) {
       return true;
     }
 
@@ -265,15 +265,15 @@ class Checkout extends Component {
 
     for (var zipfield of zipcode_fields) {
       if (
-        this.state.purchase[zipfield].length != 5 &&
-        this.state.purchase[zipfield].length != 10
+        this.state.purchase[zipfield].length !== 5 &&
+        this.state.purchase[zipfield].length !== 10
       ) {
         return true;
       }
 
       //  Disable submit if zipcode is 5 characters but contains nondigits
       if (
-        this.state.purchase[zipfield].length == 5 &&
+        this.state.purchase[zipfield].length === 5 &&
         !/^\d+$/.test(this.state.purchase[zipfield])
       ) {
         return true;
@@ -281,10 +281,10 @@ class Checkout extends Component {
 
       //  Disable submit if zipcode is 10 characters but contains nondigits in first 5 characters or last 4 characters or if 6th character is not a hyphen
       if (
-        this.state.purchase[zipfield].length == 10 &&
+        this.state.purchase[zipfield].length === 10 &&
         (!/^\d+$/.test(this.state.purchase[zipfield].substring(0, 5)) ||
           !/^\d+$/.test(this.state.purchase[zipfield].substring(6, 10)) ||
-          this.state.purchase[zipfield][5] != "-")
+          this.state.purchase[zipfield][5] !== "-")
       ) {
         return true;
       }
@@ -317,7 +317,7 @@ class Checkout extends Component {
   }
 
   handleGiftChange(event) {
-    if (event.target.checked == true) {
+    if (event.target.checked === true) {
       this.setState({
         gift: "TRUE"
       });

@@ -6,8 +6,8 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {getIp, getBrowser} from "../functions/getClientInfo";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
+// import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+// import Tooltip from "react-bootstrap/Tooltip";
 import axios from "axios";
 
 export default function SocialSignUp(props) {
@@ -108,7 +108,9 @@ export default function SocialSignUp(props) {
         }
       );
       if (res1.data !== undefined && res1.data.result.result.length === 0) {
-        throw "No record found.";
+        // throw "No record found.";
+        RaiseError("No record found.");
+        setLoading(false);
       } else if (res1.data !== undefined) {
         const log_attemp = res1.data.login_attempt_log;
         let session_id = log_attemp.session_id;
@@ -242,7 +244,7 @@ export default function SocialSignUp(props) {
                         onChange={e => {
                           if (
                             document.getElementById("weeklyUpdateCheck")
-                              .checked == true
+                              .checked === true
                           ) {
                             setWeeklyUpdates("TRUE");
                           } else {

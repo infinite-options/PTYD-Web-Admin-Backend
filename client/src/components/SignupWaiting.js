@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from "react";
+import React, {Fragment, useEffect} from "react";
 import Layout from "./layout";
 
 const SignupWaiting = () => {

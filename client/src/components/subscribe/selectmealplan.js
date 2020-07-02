@@ -3,7 +3,7 @@ import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/creditCard.png";
 import {Link} from "react-router-dom";
-import {timingSafeEqual} from "crypto";
+// import {timingSafeEqual} from "crypto";
 
 class Selectmealplan extends Component {
   constructor(props) {

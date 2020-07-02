@@ -1,5 +1,7 @@
 import React, {useEffect, useState, Fragment} from "react";
-import {Layout, Header, Navigation, Drawer, Content} from "react-mdl";
+import {Layout, Header, Content} from "react-mdl";
+import {Button} from "react-bootstrap";
+// import {Navigation, Drawer } from "react-mdl";
 // import {Link} from "react-router-dom";
 
 import "./App.css";
@@ -129,7 +131,7 @@ const App = props => {
                   <NavDropdown.Item href='/menunextweek'>
                     NEXT WEEK
                   </NavDropdown.Item> */}
-                  {searchCookie4UserID(document.cookie) != "null" && (
+                  {searchCookie4UserID(document.cookie) !== "null" && (
                     <NavDropdown.Item href='/mealschedule'>
                       MEAL SCHEDULE
                     </NavDropdown.Item>
@@ -204,13 +206,12 @@ const App = props => {
                       Get Started
                     </a>
                   </div>
-                  <a href='/login'>
-                    <a
-                      id='loginButton'
-                      onClick={() => window.location.reload(false)}
-                    >
-                      <u>Login</u>
-                    </a>
+                  <a
+                    href='/login'
+                    id='loginButton'
+                    onClick={() => window.location.reload(false)}
+                  >
+                    <u>Login</u>
                   </a>
                   {/* <p
                     id='loginStatus'
@@ -323,9 +324,6 @@ const App = props => {
             }}
           />
         </Content>
-
-        {/* <hr /> */}
-
         <footer className='container font2'>
           <div className='row footer-container'>
             <div className='col'>
@@ -454,7 +452,12 @@ const App = props => {
                   className='font1'
                   href='/'
                 >
-                  Made with 🧡 in Austin, TX
+                  Made with{" "}
+                  <span role='img' aria-label=''>
+                    {" "}
+                    🧡
+                  </span>{" "}
+                  in Austin, TX
                 </Nav.Link>
                 <Nav.Link
                   disabled
@@ -520,11 +523,9 @@ const App = props => {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='formEmailSubmit'>
-                      <a
-                        className='subscribe-btn font2'
-                      >
+                      <Button className='btn btn-success font2'>
                         Subscribe
-                      </a>
+                      </Button>
                     </Form.Group>
                   </Form.Row>
                 </Form>
@@ -532,7 +533,6 @@ const App = props => {
             </div>
           </div>
         </footer>
-
       </Layout>
     </div>
   );

@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {Switch} from "react-router-dom";
-import {CookiesProvider} from "react-cookie";
+// import {CookiesProvider} from "react-cookie";
 import AppliedRoute from "./AppliedRoute";
 
 import LandingPage from "./landingpage";
@@ -18,7 +18,7 @@ import FaQ from "./about/faq";
 import JobS from "./about/jobs";
 import Get100 from "./get100";
 import MealSchedule from "./menu/mealschedule";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
@@ -38,7 +38,7 @@ import Logout from "./logout";
 const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({appProps}) {
-  const [objectIndex, setObjectIndex] = useState(0);
+  // const [objectIndex, setObjectIndex] = useState(0);
   return (
     <Switch>
       <AppliedRoute
