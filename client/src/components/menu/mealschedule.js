@@ -91,7 +91,7 @@ export default class MealSchedule extends Component {
         params: {startdate: this.props.match.params.startdate}
       })
       .then(res => {
-        console.log("res: ", res);
+        // console.log("res: ", res);
         if (res.data !== undefined && res.data.result !== undefined) {
           if (res.data.result.length > 0) {
             this.setState({purchases: res.data.result});
@@ -122,9 +122,9 @@ export default class MealSchedule extends Component {
       .get(`${this.props.PLANS_URL}`)
       .then(res => {
         let data = res.data;
-        console.log(data.result);
+        // console.log(data.result);
         if (data !== undefined && data.result !== undefined) {
-          console.log("here");
+          // console.log("here");
           this.setState({mealPlans: data.result});
         }
       })

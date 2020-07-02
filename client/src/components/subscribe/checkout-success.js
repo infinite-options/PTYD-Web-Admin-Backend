@@ -6,7 +6,7 @@ import TruckIcon from "../../img/prepTruckIcon.png";
 class CheckoutSuccess extends Component {
   render() {
     return (
-      <div class='container text-center'>
+      <div className='container text-center'>
         <h1>Checkout Successful!</h1>
         <div>
           <a href='/mealschedule'>

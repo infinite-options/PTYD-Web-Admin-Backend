@@ -13,10 +13,26 @@ class Checkout extends Component {
     this.state = {
       user_uid: this.searchCookie4UserID("loginStatus"),
       password_salt: null,
-      purchase: {delivery_phone: ""},
+      purchase: {
+        delivery_phone: "",
+        delivery_first_name: "",
+        delivery_last_name: "",
+        delivery_instructions: "",
+        delivery_email: "",
+        delivery_address: "",
+        delivery_address_unit: "",
+        delivery_city: "",
+        delivery_state: "",
+        delivery_zip: "",
+        cc_num: "",
+        cc_cvv: "",
+        cc_exp_month: "",
+        cc_exp_year: "",
+        billing_zip: ""
+      },
       disabled: true,
       gift: "FALSE",
-      password: null,
+      password: "",
       salt: null,
       coupon: "",
       loading: false,
@@ -414,7 +430,7 @@ class Checkout extends Component {
               </div>
             )}
             <Container>
-              <Row Style={this.state.loading ? "opacity: 0.5" : ""}>
+              <Row className={this.state.loading ? "half-opacity" : ""}>
                 <Col md={4}>
                   <div className='justify-content-md-center'>
                     <img
@@ -502,7 +518,7 @@ class Checkout extends Component {
                         <Button
                           variant='success'
                           size='sm'
-                          Style='height:30px; margin-top:30px;'
+                          style={{height: "30px", marginTop: "30px"}}
                           type='submit'
                           onClick={this.applyCoupon}
                         >
@@ -512,7 +528,7 @@ class Checkout extends Component {
                         <Button
                           variant='success'
                           size='sm'
-                          Style='height:30px; margin-top:30px;'
+                          style={{height: "30px", marginTop: "30px"}}
                           type='submit'
                           onClick={this.cancelCoupon}
                         >
@@ -522,7 +538,7 @@ class Checkout extends Component {
                     </Form.Row>
                   </Form>
                 </Col>
-                <Col Style='margin-top:-50px;'>
+                <Col style={{marginTop: "-50px"}}>
                   <h5>Delivery Address</h5>
                   <Form>
                     <Form.Row>
@@ -597,7 +613,7 @@ class Checkout extends Component {
                     </Form.Group>
 
                     <Form.Row>
-                      <Form.Group as={Col} controlId='formGridEmail'>
+                      <Form.Group as={Col} controlId='formGridEmailAddress'>
                         <Form.Label>
                           Email
                           <span className='required-red'>
@@ -933,7 +949,7 @@ class Checkout extends Component {
                           disabled={!this.state.password_salt ? true : false}
                         />
                         {this.searchCookie4loginMethod("loginStatus") !==
-                          "social" && !this.state.password ? (
+                          "social" && this.state.password === "" ? (
                           <span className='required-red'>
                             Password is required
                           </span>
@@ -958,7 +974,7 @@ class Checkout extends Component {
             </Container>
           </Fragment>
         ) : (
-          <div class='container text-center'>
+          <div className='container text-center'>
             <h1>Cart Lost: Select Another Plan</h1>
             <h4>{this.state.send_error}</h4>
             <a href='/selectmealplan'>
