@@ -14,26 +14,34 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms.Internals;
 using InfiniteMeals.Meals;
+using System.Net;
 
 namespace InfiniteMeals.MealSelect
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddOnChoices : ContentPage
     {
+        public Dictionary<string, int> mealQtyDict = new Dictionary<string, int>();
         private ObservableCollection<MealGroup> grouped { get; set; }
         String infoImg = "info.jpg";
         double subTotal = 0.00;
+        public static string yellow = "#FFE573";
+        public static string def = "#F5F5F5";
+        public Color colorToReturn = Color.FromHex("#F5F5F5");
+
         public AddOnChoices()
         {
             InitializeComponent();
             getData();
+
         }
 
-        public async void getData()
+        public void getData()
         {
-            Boolean flag = false;
-        // Normal Meals
-        List<String> AddNames = new List<String>();
+            MealSchedule ms = new MealSchedule();
+            int weekNumber = ms.getNum();
+            // Normal Meals
+            List<String> AddNames = new List<String>();
             List<String> AddDesc = new List<String>();
             List<double> AddPrice = new List<double>();
             List<int> AddQty = new List<int>();
@@ -59,117 +67,673 @@ namespace InfiniteMeals.MealSelect
             var addMealGroup = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
             var addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
 
-            HttpClient client = new HttpClient();
-            var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
+            WebClient client = new WebClient();
+            var content =  client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
-
-            for (int placeHolder = 0; placeHolder < obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu.Length; placeHolder++)
+            if(weekNumber == 1)
             {
-                String imageMeal;
-                AddNames.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealName);
-                AddDesc.Add(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealDesc);
-                AddPrice.Add(Convert.ToDouble(obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].ExtraMealPrice));
-                AddQty.Add(0);
-                if (obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealPhotoUrl == null)
+                var jsonObjectLength = obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek1.Addons.AddonsAddons;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek1.Addons.Weekly.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek1.Addons.Weekly;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek1.Addons.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek1.Addons.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
                 {
-                    imageMeal = "defaultmeal.png";
-                    AddImage.Add(imageMeal);
+                    String imageMeal;
+                    AddNames.Add(jsonObject.Menu[placeHolder].MealName);
+                    AddDesc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    AddPrice.Add(Convert.ToDouble(jsonObject.Menu[placeHolder].ExtraMealPrice));
+                    AddQty.Add(0);
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        AddImage.Add(imageMeal);
+
+                    }
+
+                    addAddOnGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = AddNames[placeHolder],
+                        price = AddPrice[placeHolder],
+                        description = AddDesc[placeHolder],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddQty[placeHolder],
+                        total = 0.00,
+                    });
                 }
-                else
+
+                for (int j = 0; j < jsonObjectSeasonalLength; j++)
                 {
-                    imageMeal = obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu[placeHolder].MealPhotoUrl.ToString();
-                    AddImage.Add(imageMeal);
+                    String imageMeal;
+                    AddMealName.Add(jsonObjectSeasonal.Menu[j].MealName);
+                    AddMealDesc.Add(jsonObjectSeasonal.Menu[j].MealDesc);
+                    AddMealPrice.Add(Convert.ToDouble(jsonObjectSeasonal.Menu[j].ExtraMealPrice));
+                    AddMealQty.Add(0);
+                    if (jsonObjectSeasonal.Menu[j].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[j].MealPhotoUrl.ToString();
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    addMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[j].MealId,
+                        name = AddMealName[j],
+                        price = AddMealPrice[j],
+                        description = AddMealDesc[j],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddMealQty[j],
+                        total = 0.00,
+                    });
+                }
+
+                for (int k = 0; k < jsonObjectSmoothieLength; k++)
+                {
+                    String imageMeal;
+                    AddSmoothiesName.Add(jsonObjectSmoothie.Menu[k].MealName);
+                    AddSmoothiesDesc.Add(jsonObjectSmoothie.Menu[k].MealDesc);
+                    AddSmoothiesPrice.Add(Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice));
+                    AddSmoothieQty.Add(0);
+                    if (jsonObjectSmoothie.Menu[k].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddSmoothiesImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
+                        AddSmoothiesImage.Add(imageMeal);
+                    }
+                    addSmoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[k].MealId,
+                        name = jsonObjectSmoothie.Menu[k].MealName,
+                        price = Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice),
+                        description = jsonObjectSmoothie.Menu[k].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddSmoothieQty[k],
+                        total = 0.00,
+                    });
 
                 }
 
-                addAddOnGroup.Add(new Meal
-                {
-                    name = AddNames[placeHolder],
-                    price = AddPrice[placeHolder],
-                    description = AddDesc[placeHolder],
-                    imageUrl = imageMeal,
-                    infoUrl = infoImg,
-                    qty = AddQty[placeHolder],
-                    total = 0.00,
-                });
+                grouped.Add(addAddOnGroup);
+                grouped.Add(addMealGroup);
+                grouped.Add(addSmoothieGroup);
             }
-
-            for (int j = 0; j < obj.Result.MenuForWeek1.Addons.Weekly.Menu.Length; j++)
+            else if(weekNumber == 2)
             {
-                String imageMeal;
-                AddMealName.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealName);
-                AddMealDesc.Add(obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealDesc);
-                AddMealPrice.Add(Convert.ToDouble(obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].ExtraMealPrice));
-                AddMealQty.Add(0);
-                if (obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealPhotoUrl == null)
+                var jsonObjectLength = obj.Result.MenuForWeek2.Addons.AddonsAddons.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek2.Addons.AddonsAddons;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek2.Addons.Weekly.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek2.Addons.Weekly;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek2.Addons.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek2.Addons.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
                 {
-                    imageMeal = "defaultmeal.png";
-                    AddMealImage.Add(imageMeal);
+                    String imageMeal;
+                    AddNames.Add(jsonObject.Menu[placeHolder].MealName);
+                    AddDesc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    AddPrice.Add(Convert.ToDouble(jsonObject.Menu[placeHolder].ExtraMealPrice));
+                    AddQty.Add(0);
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        AddImage.Add(imageMeal);
+
+                    }
+
+                    addAddOnGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = AddNames[placeHolder],
+                        price = AddPrice[placeHolder],
+                        description = AddDesc[placeHolder],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddQty[placeHolder],
+                        total = 0.00,
+                    });
+                }
+
+                for (int j = 0; j < jsonObjectSeasonalLength; j++)
+                {
+                    String imageMeal;
+                    AddMealName.Add(jsonObjectSeasonal.Menu[j].MealName);
+                    AddMealDesc.Add(jsonObjectSeasonal.Menu[j].MealDesc);
+                    AddMealPrice.Add(Convert.ToDouble(jsonObjectSeasonal.Menu[j].ExtraMealPrice));
+                    AddMealQty.Add(0);
+                    if (jsonObjectSeasonal.Menu[j].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[j].MealPhotoUrl.ToString();
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    addMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[j].MealId,
+                        name = AddMealName[j],
+                        price = AddMealPrice[j],
+                        description = AddMealDesc[j],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddMealQty[j],
+                        total = 0.00,
+                    });
+                }
+
+                for (int k = 0; k < jsonObjectSmoothieLength; k++)
+                {
+                    String imageMeal;
+                    AddSmoothiesName.Add(jsonObjectSmoothie.Menu[k].MealName);
+                    AddSmoothiesDesc.Add(jsonObjectSmoothie.Menu[k].MealDesc);
+                    AddSmoothiesPrice.Add(Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice));
+                    AddSmoothieQty.Add(0);
+                    if (jsonObjectSmoothie.Menu[k].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddSmoothiesImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
+                        AddSmoothiesImage.Add(imageMeal);
+                    }
+                    addSmoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[k].MealId,
+                        name = jsonObjectSmoothie.Menu[k].MealName,
+                        price = Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice),
+                        description = jsonObjectSmoothie.Menu[k].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddSmoothieQty[k],
+                        total = 0.00,
+                    });
 
                 }
-                else
-                {
-                    imageMeal = obj.Result.MenuForWeek1.Addons.Weekly.Menu[j].MealPhotoUrl.ToString();
-                    AddMealImage.Add(imageMeal);
 
-                }
-                addMealGroup.Add(new Meal
-                {
-                    name = AddMealName[j],
-                    price = AddMealPrice[j],
-                    description = AddMealDesc[j],
-                    imageUrl = imageMeal,
-                    infoUrl = infoImg,
-                    qty = AddMealQty[j],
-                    total = 0.00,
-                });
+                grouped.Add(addAddOnGroup);
+                grouped.Add(addMealGroup);
+                grouped.Add(addSmoothieGroup);
             }
-
-            for (int k = 0; k < obj.Result.MenuForWeek1.Addons.Smoothies.Menu.Length; k++)
+            else if (weekNumber == 3)
             {
-                String imageMeal;
-                AddSmoothiesName.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName);
-                AddSmoothiesDesc.Add(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealDesc);
-                AddSmoothiesPrice.Add(Convert.ToDouble(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].ExtraMealPrice));
-                AddSmoothieQty.Add(0);
-                if (obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealPhotoUrl == null)
+                var jsonObjectLength = obj.Result.MenuForWeek3.Addons.AddonsAddons.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek3.Addons.AddonsAddons;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek3.Addons.Weekly.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek3.Addons.Weekly;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek3.Addons.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek3.Addons.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
                 {
-                    imageMeal = "defaultmeal.png";
-                    AddSmoothiesImage.Add(imageMeal);
+                    String imageMeal;
+                    AddNames.Add(jsonObject.Menu[placeHolder].MealName);
+                    AddDesc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    AddPrice.Add(Convert.ToDouble(jsonObject.Menu[placeHolder].ExtraMealPrice));
+                    AddQty.Add(0);
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        AddImage.Add(imageMeal);
+
+                    }
+
+                    addAddOnGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = AddNames[placeHolder],
+                        price = AddPrice[placeHolder],
+                        description = AddDesc[placeHolder],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddQty[placeHolder],
+                        total = 0.00,
+                    });
+                }
+
+                for (int j = 0; j < jsonObjectSeasonalLength; j++)
+                {
+                    String imageMeal;
+                    AddMealName.Add(jsonObjectSeasonal.Menu[j].MealName);
+                    AddMealDesc.Add(jsonObjectSeasonal.Menu[j].MealDesc);
+                    AddMealPrice.Add(Convert.ToDouble(jsonObjectSeasonal.Menu[j].ExtraMealPrice));
+                    AddMealQty.Add(0);
+                    if (jsonObjectSeasonal.Menu[j].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[j].MealPhotoUrl.ToString();
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    addMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[j].MealId,
+                        name = AddMealName[j],
+                        price = AddMealPrice[j],
+                        description = AddMealDesc[j],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddMealQty[j],
+                        total = 0.00,
+                    });
+                }
+
+                for (int k = 0; k < jsonObjectSmoothieLength; k++)
+                {
+                    String imageMeal;
+                    AddSmoothiesName.Add(jsonObjectSmoothie.Menu[k].MealName);
+                    AddSmoothiesDesc.Add(jsonObjectSmoothie.Menu[k].MealDesc);
+                    AddSmoothiesPrice.Add(Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice));
+                    AddSmoothieQty.Add(0);
+                    if (jsonObjectSmoothie.Menu[k].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddSmoothiesImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
+                        AddSmoothiesImage.Add(imageMeal);
+                    }
+                    addSmoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[k].MealId,
+                        name = jsonObjectSmoothie.Menu[k].MealName,
+                        price = Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice),
+                        description = jsonObjectSmoothie.Menu[k].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddSmoothieQty[k],
+                        total = 0.00,
+                    });
 
                 }
-                else
-                {
-                    imageMeal = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealPhotoUrl.ToString();
-                    AddSmoothiesImage.Add(imageMeal);
-                }
-                addSmoothieGroup.Add(new Meal
-                {
-                    name = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealName,
-                    price = Convert.ToDouble(obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].ExtraMealPrice),
-                    description = obj.Result.MenuForWeek1.Addons.Smoothies.Menu[k].MealDesc,
-                    imageUrl = imageMeal,
-                    infoUrl = infoImg,
-                    qty = AddSmoothieQty[k],
-                    total = 0.00,
-                });
 
+                grouped.Add(addAddOnGroup);
+                grouped.Add(addMealGroup);
+                grouped.Add(addSmoothieGroup);
             }
+            else if(weekNumber == 4)
+            {
+                var jsonObjectLength = obj.Result.MenuForWeek4.Addons.AddonsAddons.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek4.Addons.AddonsAddons;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek4.Addons.Weekly.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek4.Addons.Weekly;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek4.Addons.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek4.Addons.Smoothies;
 
-            grouped.Add(addAddOnGroup);
-            grouped.Add(addMealGroup);
-            grouped.Add(addSmoothieGroup);
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
+                {
+                    String imageMeal;
+                    AddNames.Add(jsonObject.Menu[placeHolder].MealName);
+                    AddDesc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    AddPrice.Add(Convert.ToDouble(jsonObject.Menu[placeHolder].ExtraMealPrice));
+                    AddQty.Add(0);
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        AddImage.Add(imageMeal);
+
+                    }
+
+                    addAddOnGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = AddNames[placeHolder],
+                        price = AddPrice[placeHolder],
+                        description = AddDesc[placeHolder],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddQty[placeHolder],
+                        total = 0.00,
+                    });
+                }
+
+                for (int j = 0; j < jsonObjectSeasonalLength; j++)
+                {
+                    String imageMeal;
+                    AddMealName.Add(jsonObjectSeasonal.Menu[j].MealName);
+                    AddMealDesc.Add(jsonObjectSeasonal.Menu[j].MealDesc);
+                    AddMealPrice.Add(Convert.ToDouble(jsonObjectSeasonal.Menu[j].ExtraMealPrice));
+                    AddMealQty.Add(0);
+                    if (jsonObjectSeasonal.Menu[j].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[j].MealPhotoUrl.ToString();
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    addMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[j].MealId,
+                        name = AddMealName[j],
+                        price = AddMealPrice[j],
+                        description = AddMealDesc[j],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddMealQty[j],
+                        total = 0.00,
+                    });
+                }
+
+                for (int k = 0; k < jsonObjectSmoothieLength; k++)
+                {
+                    String imageMeal;
+                    AddSmoothiesName.Add(jsonObjectSmoothie.Menu[k].MealName);
+                    AddSmoothiesDesc.Add(jsonObjectSmoothie.Menu[k].MealDesc);
+                    AddSmoothiesPrice.Add(Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice));
+                    AddSmoothieQty.Add(0);
+                    if (jsonObjectSmoothie.Menu[k].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddSmoothiesImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
+                        AddSmoothiesImage.Add(imageMeal);
+                    }
+                    addSmoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[k].MealId,
+                        name = jsonObjectSmoothie.Menu[k].MealName,
+                        price = Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice),
+                        description = jsonObjectSmoothie.Menu[k].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddSmoothieQty[k],
+                        total = 0.00,
+                    });
+
+                }
+
+                grouped.Add(addAddOnGroup);
+                grouped.Add(addMealGroup);
+                grouped.Add(addSmoothieGroup);
+            }
+            else if(weekNumber == 5)
+            {
+                var jsonObjectLength = obj.Result.MenuForWeek5.Addons.AddonsAddons.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek5.Addons.AddonsAddons;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek5.Addons.Weekly.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek5.Addons.Weekly;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek5.Addons.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek5.Addons.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
+                {
+                    String imageMeal;
+                    AddNames.Add(jsonObject.Menu[placeHolder].MealName);
+                    AddDesc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    AddPrice.Add(Convert.ToDouble(jsonObject.Menu[placeHolder].ExtraMealPrice));
+                    AddQty.Add(0);
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        AddImage.Add(imageMeal);
+
+                    }
+
+                    addAddOnGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = AddNames[placeHolder],
+                        price = AddPrice[placeHolder],
+                        description = AddDesc[placeHolder],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddQty[placeHolder],
+                        total = 0.00,
+                    });
+                }
+
+                for (int j = 0; j < jsonObjectSeasonalLength; j++)
+                {
+                    String imageMeal;
+                    AddMealName.Add(jsonObjectSeasonal.Menu[j].MealName);
+                    AddMealDesc.Add(jsonObjectSeasonal.Menu[j].MealDesc);
+                    AddMealPrice.Add(Convert.ToDouble(jsonObjectSeasonal.Menu[j].ExtraMealPrice));
+                    AddMealQty.Add(0);
+                    if (jsonObjectSeasonal.Menu[j].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[j].MealPhotoUrl.ToString();
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    addMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[j].MealId,
+                        name = AddMealName[j],
+                        price = AddMealPrice[j],
+                        description = AddMealDesc[j],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddMealQty[j],
+                        total = 0.00,
+                    });
+                }
+
+                for (int k = 0; k < jsonObjectSmoothieLength; k++)
+                {
+                    String imageMeal;
+                    AddSmoothiesName.Add(jsonObjectSmoothie.Menu[k].MealName);
+                    AddSmoothiesDesc.Add(jsonObjectSmoothie.Menu[k].MealDesc);
+                    AddSmoothiesPrice.Add(Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice));
+                    AddSmoothieQty.Add(0);
+                    if (jsonObjectSmoothie.Menu[k].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddSmoothiesImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
+                        AddSmoothiesImage.Add(imageMeal);
+                    }
+                    addSmoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[k].MealId,
+                        name = jsonObjectSmoothie.Menu[k].MealName,
+                        price = Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice),
+                        description = jsonObjectSmoothie.Menu[k].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddSmoothieQty[k],
+                        total = 0.00,
+                    });
+
+                }
+
+                grouped.Add(addAddOnGroup);
+                grouped.Add(addMealGroup);
+                grouped.Add(addSmoothieGroup);
+            }
+            else
+            {
+                var jsonObjectLength = obj.Result.MenuForWeek6.Addons.AddonsAddons.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek6.Addons.AddonsAddons;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek6.Addons.Weekly.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek6.Addons.Weekly;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek6.Addons.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek6.Addons.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
+                {
+                    String imageMeal;
+                    AddNames.Add(jsonObject.Menu[placeHolder].MealName);
+                    AddDesc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    AddPrice.Add(Convert.ToDouble(jsonObject.Menu[placeHolder].ExtraMealPrice));
+                    AddQty.Add(0);
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        AddImage.Add(imageMeal);
+
+                    }
+
+                    addAddOnGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = AddNames[placeHolder],
+                        price = AddPrice[placeHolder],
+                        description = AddDesc[placeHolder],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddQty[placeHolder],
+                        total = 0.00,
+                    });
+                }
+
+                for (int j = 0; j < jsonObjectSeasonalLength; j++)
+                {
+                    String imageMeal;
+                    AddMealName.Add(jsonObjectSeasonal.Menu[j].MealName);
+                    AddMealDesc.Add(jsonObjectSeasonal.Menu[j].MealDesc);
+                    AddMealPrice.Add(Convert.ToDouble(jsonObjectSeasonal.Menu[j].ExtraMealPrice));
+                    AddMealQty.Add(0);
+                    if (jsonObjectSeasonal.Menu[j].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[j].MealPhotoUrl.ToString();
+                        AddMealImage.Add(imageMeal);
+
+                    }
+                    addMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[j].MealId,
+                        name = AddMealName[j],
+                        price = AddMealPrice[j],
+                        description = AddMealDesc[j],
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddMealQty[j],
+                        total = 0.00,
+                    });
+                }
+
+                for (int k = 0; k < jsonObjectSmoothieLength; k++)
+                {
+                    String imageMeal;
+                    AddSmoothiesName.Add(jsonObjectSmoothie.Menu[k].MealName);
+                    AddSmoothiesDesc.Add(jsonObjectSmoothie.Menu[k].MealDesc);
+                    AddSmoothiesPrice.Add(Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice));
+                    AddSmoothieQty.Add(0);
+                    if (jsonObjectSmoothie.Menu[k].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        AddSmoothiesImage.Add(imageMeal);
+
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
+                        AddSmoothiesImage.Add(imageMeal);
+                    }
+                    addSmoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[k].MealId,
+                        name = jsonObjectSmoothie.Menu[k].MealName,
+                        price = Convert.ToDouble(jsonObjectSmoothie.Menu[k].ExtraMealPrice),
+                        description = jsonObjectSmoothie.Menu[k].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = AddSmoothieQty[k],
+                        total = 0.00,
+                    });
+
+                }
+
+                grouped.Add(addAddOnGroup);
+                grouped.Add(addMealGroup);
+                grouped.Add(addSmoothieGroup);
+            }
 
             ToolbarItem totalBar = new ToolbarItem
             {
                 Text = "Close",
-                IconImageSource = ImageSource.FromFile("example_icon.png"),
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0,
             };
-            totalBar.Clicked += GetText;
-            totalBar.SetBinding(Label.TextProperty, "total");
+            //totalBar.Clicked += GetText;
+            totalBar.Clicked += postData;
             this.ToolbarItems.Add(totalBar);
 
             lstView.ItemsSource = grouped;
@@ -259,15 +823,33 @@ namespace InfiniteMeals.MealSelect
                     }
                 }
 
+                if (model.qty <= 0)
+                {
+                    mealQtyDict.Remove(model.id);
+
+                }
+                else
+                {
+                    // Replace value in dictionary if key exists
+                    if (mealQtyDict.ContainsKey(model.id))
+                    {
+                        mealQtyDict.Remove(model.id);
+                    }
+                    mealQtyDict.Add(model.id, model.qty);
+                    foreach(var pk in mealQtyDict)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Printing: " + pk);
+
+                    }
+                }
+
                 if (subTotal == 0)
                 {
                     totalBar.Text = "Close";
-                    System.Diagnostics.Debug.WriteLine(" made it here flag" + flag);
                 }
                 else
                 {
                     totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
-                    System.Diagnostics.Debug.WriteLine(" made it here flag 2" + flag);
                 }
 
 
@@ -310,20 +892,64 @@ namespace InfiniteMeals.MealSelect
 
         }
 
-
-        void GetText(object sender, EventArgs e)
+        public async void postData(object sender, EventArgs e)
         {
-            ToolbarItem tb = sender as ToolbarItem;
-            String val = tb.Text.ToString();
-            System.Diagnostics.Debug.WriteLine(val);
+            HttpClient client = new HttpClient();
+            MealSchedule ms = new MealSchedule();
+            int weekNumber = ms.getNum();
+            // Getter Information
+            List<DateTimeOffset> weekAffectedList = ms.getWeekList();    // Week Affected Dates
+            string[] deliveryDayList = ms.getDDArray();                  // Delivery Days ( 6 of them )
 
-            if(val.Equals("Close"))
+            var mealSelectInfoToSend = new AddonInfo
             {
-                RefreshToSchedule();
+                PurchaseId = "300-000001",                  // Constant for now
+                WeekAffected = weekAffectedList[weekNumber - 1],            // Week affected - DONE
+                AddonQuantities = mealQtyDict,               // Dictionary inserted - DONE
+                IsAddons = true,                    // Always False - DONE
+
+            };
+
+            if (mealQtyDict.Count == 0)
+            {
+                colorToReturn = Color.FromHex(def);
+                BackToSchedule(sender, e);
             }
             else
             {
-                BackToSchedule();
+                foreach (var pk in mealQtyDict)
+                {
+                    System.Diagnostics.Debug.WriteLine("Dictionary Count " + pk);
+                }
+                System.Diagnostics.Debug.WriteLine("Dictionary Count " + mealQtyDict.Count);
+                string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoToSend); // convert to json
+
+                try
+                {
+                    var httpContent = new StringContent(mealSelectInfoJson, Encoding.UTF8, "application/json"); // create a http response to send
+                    var response = await client.PostAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001", httpContent); // send the json file to database
+                    if (response.Content != null)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync(); // get the success response
+
+                        System.Diagnostics.Debug.WriteLine(responseContent); // print in the logs
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+
+                colorToReturn = Color.FromHex(yellow);
+
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button test = (Button)mealSchedulePage.FindByName("AddonButton");
+                    test.BackgroundColor = Color.FromHex(yellow);
+                }
+                BackToSchedule(sender, e);
             }
         }
 
@@ -334,14 +960,14 @@ namespace InfiniteMeals.MealSelect
             DisplayAlert("Ingredients", model.description.ToString(), "OK");
         }
 
-        private async void BackToSchedule()
+        private async void BackToSchedule(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
         }
 
-        private async void RefreshToSchedule()
+        public Color refreshPageSelections()
         {
-            await Navigation.PushAsync(new MealSchedule());
+            return colorToReturn;
         }
     }
 }

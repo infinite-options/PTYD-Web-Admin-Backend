@@ -1,9 +1,11 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.EC90D2DF-EC8D-446E-8006-8D968A26312E" />
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="339" Column="1" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="30" Column="7" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="1007" Column="84" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml" Line="7" Column="77" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml" Line="6" Column="33" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -11,30 +13,24 @@
           <Node name="InfiniteMeals" expanded="True">
             <Node name="InfiniteMeals" expanded="True">
               <Node name="Model" expanded="True">
-                <Node name="Meals" expanded="True" />
+                <Node name="Database" expanded="True" />
               </Node>
               <Node name="ViewModel" expanded="True">
-                <Node name="Checkout" expanded="True">
-                  <Node name="CheckOutPage.xaml" expanded="True" />
-                </Node>
                 <Node name="MealSelect" expanded="True">
-                  <Node name="AddOnChoices.xaml" expanded="True">
-                    <Node name="AddOnChoices.xaml.cs" selected="True" />
-                  </Node>
+                  <Node name="AddOnChoices.xaml" expanded="True" />
                   <Node name="MealChoices.xaml" expanded="True" />
-                  <Node name="MealSchedule.xaml" expanded="True" />
-                  <Node name="SelectMealOptions.xaml" expanded="True" />
+                  <Node name="MealSchedule.xaml" expanded="True" selected="True" />
                 </Node>
               </Node>
-              <Node name="MainPage.xaml" expanded="True" />
             </Node>
+            <Node name="InfiniteMeals.Android" expanded="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -14,6 +14,7 @@ public class RefreshViewRenderer
 			"n_isRefreshing:()Z:GetIsRefreshingHandler\n" +
 			"n_setRefreshing:(Z)V:GetSetRefreshing_ZHandler\n" +
 			"n_canChildScrollUp:()Z:GetCanChildScrollUpHandler\n" +
+			"n_onLayout:(ZIIII)V:GetOnLayout_ZIIIIHandler\n" +
 			"n_onRefresh:()V:GetOnRefreshHandler:Android.Support.V4.Widget.SwipeRefreshLayout/IOnRefreshListenerInvoker, Xamarin.Android.Support.SwipeRefreshLayout\n" +
 			"";
 		mono.android.Runtime.register ("Xamarin.Forms.Platform.Android.RefreshViewRenderer, Xamarin.Forms.Platform.Android", RefreshViewRenderer.class, __md_methods);
@@ -58,6 +59,14 @@ public class RefreshViewRenderer
 	}
 
 	private native boolean n_canChildScrollUp ();
+
+
+	public void onLayout (boolean p0, int p1, int p2, int p3, int p4)
+	{
+		n_onLayout (p0, p1, p2, p3, p4);
+	}
+
+	private native void n_onLayout (boolean p0, int p1, int p2, int p3, int p4);
 
 
 	public void onRefresh ()

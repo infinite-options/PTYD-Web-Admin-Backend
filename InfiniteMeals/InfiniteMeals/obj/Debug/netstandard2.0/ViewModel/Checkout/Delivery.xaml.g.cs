@@ -13,7 +13,7 @@
 namespace InfiniteMeals.ViewModel.Checkout {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Checkout\\Delivery.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel/Checkout/Delivery.xaml")]
     public partial class Delivery : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

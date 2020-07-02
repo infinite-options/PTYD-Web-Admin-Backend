@@ -11,13 +11,17 @@ using Xamarin.Forms.Xaml;
 
 using InfiniteMeals.Model.Database;
 using InfiniteMeals.Meals.Model;
+using InfiniteMeals.MealSelect;
+using System.Runtime.Serialization;
 
 namespace InfiniteMeals.Meals {
+
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MealSchedule : ContentPage
     {
         int ctr = 2;
-        bool disabled = false;
+        private static int weekNumber = 0;
+        private static bool disabled = false;
         List<String> order = new List<String>();
         public ListView lstView = new ListView { HasUnevenRows = true };
         public Button sundayButton = new Button();
@@ -25,15 +29,13 @@ namespace InfiniteMeals.Meals {
         public IList<Dates> MondayDates { get; private set; }
         public List<String> purchaseIdList = new List<String>();
         public List<DateTimeOffset> weekAffectedList = new List<DateTimeOffset>();
-        public string[] deliveryDayArray = { "Sunday", "Sunday", "Sunday", "Sunday", "Sunday", "Sunday" };
-        String green = "#8FBC8F";
-        String def = "#F5F5F5";
-
+        public static string[] deliveryDayArray = { "Sunday", "Sunday", "Sunday", "Sunday", "Sunday", "Sunday" };
+        public static string green = "#8FBC8F";
+        public static string def = "#F5F5F5";
 
         public MealSchedule()
         {
             InitializeComponent();
-
             // Toolbar
             ToolbarItem totalBar = new ToolbarItem
             {
@@ -53,23 +55,23 @@ namespace InfiniteMeals.Meals {
             this.ToolbarItems.Add(totalBar2);
 
             // Function Calls
-            getDates();
             getData();
+            getDates();
             BindingContext = this;
         }
 
-        private async void getData()
+        private void getData()
         {
 
-        HttpClient client = new HttpClient();
+            WebClient client = new WebClient();
 
             // Get user zipcodes
-            var userZipCodes = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000001");
-            var userZipObj = JsonConvert.DeserializeObject<UserInfo>(userZipCodes);
+            var userZipCodes = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000001");
+            var userZipObj = JsonConvert.DeserializeObject<UserInformation>(userZipCodes);
+            
             Boolean zipBool = true;
             for (int i = 0; i < userZipObj.Result.Length; i++)
             {
-                System.Diagnostics.Debug.WriteLine(" user zip " + userZipObj.Result[i].MondayAvailable);
                 zipBool = userZipObj.Result[i].MondayAvailable;
             }
 
@@ -77,7 +79,6 @@ namespace InfiniteMeals.Meals {
 
             if (zipBool == true)
             {
-                System.Diagnostics.Debug.WriteLine(" user zip true ");
                 MondayButton.IsVisible = true;
                 MondayButton2.IsVisible = true;
                 MondayButton3.IsVisible = true;
@@ -87,7 +88,9 @@ namespace InfiniteMeals.Meals {
             }
 
             BindingContext = this;
+            
         }
+
 
         public void ClickedColor(object sender, EventArgs e)
         {
@@ -117,7 +120,6 @@ namespace InfiniteMeals.Meals {
                             SelectButton.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             deliveryDayArray[0] = "SKIP";
-                            System.Diagnostics.Debug.WriteLine("now here " + deliveryDayArray[0]);
                             ctr = 2;
                             break;
                         case "SkipButton2":
@@ -128,7 +130,6 @@ namespace InfiniteMeals.Meals {
                             SelectButton2.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             deliveryDayArray[1] = "SKIP";
-                            System.Diagnostics.Debug.WriteLine("now here " + deliveryDayArray[1]);
                             ctr = 2;
                             break;
                         case "SkipButton3":
@@ -281,8 +282,6 @@ namespace InfiniteMeals.Meals {
                                 btn.BackgroundColor = Color.FromHex(green);
                                 SundayButton.BackgroundColor = Color.FromHex(def);
                                 deliveryDayArray[0] = "Monday";
-                                System.Diagnostics.Debug.WriteLine("now here " + deliveryDayArray[0]);
-
                                 break;
                             case "MonButton2":
                                 btn.BackgroundColor = Color.FromHex(green);
@@ -341,13 +340,14 @@ namespace InfiniteMeals.Meals {
                                 deliveryDayArray[5] = "Sunday";
                                 break;
                             case "SelectButton":
-                                btn.BackgroundColor = Color.FromHex(green);
                                 SurpriseButton.BackgroundColor = Color.FromHex(def);
+                                weekNumber = 1;
                                 getWeekNum(sender, e);
                                 break;
                             case "SelectButton2":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 SurpriseButton2.BackgroundColor = Color.FromHex(def);
+                                weekNumber = 2;
                                 getWeekNum(sender, e);
                                 break;
                             case "SelectButton3":
@@ -410,63 +410,66 @@ namespace InfiniteMeals.Meals {
                 }
             }
             setDDArr();
-
-            for(int i = 0; i < deliveryDayArray.Length; i++)
-            {
-                System.Diagnostics.Debug.WriteLine("Dates: " + deliveryDayArray[i]);
-            }
-
+            getWeekNum(sender, e);
         }
 
         private async void ClickedAddOn(object sender, EventArgs e)
-        { 
-
-            Button btn = (Button) sender;
-
-            if (btn.BackgroundColor.Equals(Color.FromHex(def)) &&
-                SkipButton.BackgroundColor.Equals(Color.FromHex(def)))
-            {
-                btn.BackgroundColor = Color.FromHex("#F9E29C");
-                await Navigation.PushAsync(new MealSelect.AddOnChoices());
-            }
-            else
-            {
-                btn.BackgroundColor = (Color.FromHex(def));
-            }
-        }
-
-        private async void ClickedAddOnNav(object sender, EventArgs e)
         {
-            ClickedAddOn(sender, e);
-            await Navigation.PushAsync(new MealSelect.AddOnChoices());
+            Button b = (Button)sender;
+            AddOnChoices ac = new AddOnChoices();
+            ac.BindingContext = this;
+            getWeekNum(sender, e);
+            await Navigation.PushAsync(ac);
         }
 
         private async void ClickedSelectMeal(object sender, EventArgs e)
         {
-            ClickedColor(sender, e);
-            if (SundayButton.BackgroundColor.Equals(Color.FromHex(green)) |
-                MondayButton.BackgroundColor.Equals(Color.FromHex(green)) |
-                SundayButton2.BackgroundColor.Equals(Color.FromHex(green)) |
-                MondayButton2.BackgroundColor.Equals(Color.FromHex(green)) |
-                SundayButton3.BackgroundColor.Equals(Color.FromHex(green)) |
-                MondayButton3.BackgroundColor.Equals(Color.FromHex(green)) |
-                SundayButton4.BackgroundColor.Equals(Color.FromHex(green)) |
-                MondayButton4.BackgroundColor.Equals(Color.FromHex(green)) |
-                SundayButton5.BackgroundColor.Equals(Color.FromHex(green)) |
-                MondayButton5.BackgroundColor.Equals(Color.FromHex(green)) |
-                SundayButton6.BackgroundColor.Equals(Color.FromHex(green)) |
-                MondayButton6.BackgroundColor.Equals(Color.FromHex(green)))
 
-                setDDArr();
-            await Navigation.PushAsync(new MealSelect.MealChoices());
+            Button b = (Button)sender;
+            if (SkipButton.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals("SelectButton"))
+            {
+                SelectButton.BackgroundColor.Equals(def);
+                await Task.FromResult(0);
+
+            }
+            else if (SkipButton2.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals(SelectButton2))
+            {
+                SelectButton2.BackgroundColor.Equals(def);
+                await Task.FromResult(0);
+            }
+            else if (SkipButton3.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals(SelectButton3))
+            {
+                SelectButton3.BackgroundColor.Equals(def);
+                await Task.FromResult(0);
+            }
+            else if (SkipButton4.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals(SelectButton4))
+            {
+                SelectButton4.BackgroundColor.Equals(def);
+                await Task.FromResult(0);
+            }
+            else if (SkipButton5.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals(SelectButton5))
+            {
+                SelectButton5.BackgroundColor.Equals(def);
+                await Task.FromResult(0);
+
+            }
+            else if (SkipButton6.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals(SelectButton6))
+            {
+                SelectButton6.BackgroundColor.Equals(def);
+                await Task.FromResult(0);
+
+            }
+            else
+            {
+                MealChoices mc = new MealChoices();
+                mc.BindingContext = this;
+                getWeekNum(sender, e);
+                await Navigation.PushAsync(mc);
+            }
         }
-
 
         public void getDates()
         {
-            // If today is sunday, monday, tuesday, wednesday -> this week
-            // If today is thursday, friday, saturday -> next week
-            // Today's Date
             DateTimeOffset dateValue = DateTimeOffset.Now;
             DateTimeOffset firstSun, firstMon;
             String dateText = dateValue.ToString("dddd");
@@ -668,12 +671,12 @@ namespace InfiniteMeals.Meals {
             }
         }
 
-        public async Task<List<String>> getPurchID()
+        public List<String> getPurchID()
         {
-            HttpClient client = new HttpClient();
+            WebClient client = new WebClient();
 
             // Get user zipcodes
-            var userPurchClient = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000001");
+            var userPurchClient = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000001");
             var userPurchID = JsonConvert.DeserializeObject<UserInfo>(userPurchClient);
             for (int i = 0; i < userPurchID.Result.Length; i++)
             {
@@ -690,6 +693,7 @@ namespace InfiniteMeals.Meals {
 
         public string[] getDDArray()
         {
+            //setDDArr();
             return deliveryDayArray;
         }
 
@@ -775,11 +779,9 @@ namespace InfiniteMeals.Meals {
             }
         }
 
-        public int getWeekNum(object sender, EventArgs e)
+        public void getWeekNum(object sender, EventArgs e)
         {
-            int weekNumber = 0;
-            Button b = sender as Button;
-            System.Diagnostics.Debug.WriteLine("Dates: " + b.ClassId);
+            Button b = (Button)sender;
             switch (b.ClassId)
             {
                 case "SelectButton":
@@ -788,7 +790,7 @@ namespace InfiniteMeals.Meals {
                 case "SelectButton2":
                     weekNumber = 2;
                     break;
-                case "SelectButto3":
+                case "SelectButton3":
                     weekNumber = 3;
                     break;
                 case "SelectButton4":
@@ -800,9 +802,30 @@ namespace InfiniteMeals.Meals {
                 case "SelectButton6":
                     weekNumber = 6;
                     break;
+                case "AddButton":
+                    weekNumber = 1;
+                    break;
+                case "AddButton2":
+                    weekNumber = 2;
+                    break;
+                case "AddButton3":
+                    weekNumber = 3;
+                    break;
+                case "AddButton4":
+                    weekNumber = 4;
+                    break;
+                case "AddButton5":
+                    weekNumber = 5;
+                    break;
+                case "AddButton6":
+                    weekNumber = 6;
+                    break;
             }
-            return weekNumber;
         }
 
+        public int getNum()
+        {
+            return weekNumber;
+        }
     }
 }

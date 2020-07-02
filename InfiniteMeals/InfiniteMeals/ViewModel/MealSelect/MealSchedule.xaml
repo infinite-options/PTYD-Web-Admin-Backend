@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="InfiniteMeals.Meals.MealSchedule" Title="Select Meals"
+             x:Class="InfiniteMeals.Meals.MealSchedule" Title="Meal Schedule"
              NavigationPage.HasBackButton="False">
     <ContentPage.Content>
         <ScrollView>
@@ -99,6 +99,7 @@
                     Clicked="ClickedSelectMeal"/>
             <Button ClassId = "SurpriseButton"
                     x:Name="SurpriseButton"
+                    BackgroundColor="#8FBC8F"
                     WidthRequest="100"
                     HeightRequest="100"
                     BorderColor="Black"
@@ -106,7 +107,6 @@
                     Margin="30,0,0,0"
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    BackgroundColor="#8FBC8F"
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="2"
