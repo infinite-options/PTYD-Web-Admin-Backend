@@ -3566,7 +3566,7 @@ class Coupon (Resource):
                             response['message'] = " This coupon is no longer available."
                             return response, 400
                     else:
-                        response['message'] = "This coupon is expired."
+                        response['message'] = "This coupon has expired."
                         return response, 400
                     return response, 200
                 else:
