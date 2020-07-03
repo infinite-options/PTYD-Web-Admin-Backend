@@ -21,6 +21,7 @@ from env_keys import BING_API_KEY, RDS_PW
 import decimal
 import sys
 import json
+import pytz
 import pymysql
 import requests
 
@@ -58,11 +59,14 @@ mail = Mail(app)
 # API
 api = Api(app)
 
+# convert to UTC time zone when testing in local time zone
+utc = pytz.utc
+def getToday(): return datetime.strftime(datetime.now(utc), "%Y-%m-%d")
+def getNow(): return datetime.strftime(datetime.now(utc),"%Y-%m-%d %H:%M:%S")
 
-def getToday(): return datetime.strftime(date.today(), "%Y-%m-%d")
 
-
-def getNow(): return datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+# def getToday(): return datetime.strftime(date.today(), "%Y-%m-%d")
+# def getNow(): return datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
 
 # Connect to MySQL database (API v2)
@@ -1615,6 +1619,8 @@ class Checkout(Resource):
                 payment_query = self.getPaymentQuery(data, 'NULL', data['total_charge'], data['total_charge'], paymentId, purchaseId)
             else:
                 coupon_id = "'" + coupon_id + "'" #need this to solve the add NULL to sql database
+                print('total_charge: ', data['total_charge'])
+                print(type(data['total_charge']))
                 temp_query = """ INSERT INTO ptyd_payments
                                 (
                                     payment_id,
@@ -1631,11 +1637,11 @@ class Checkout(Resource):
                                     \'""" + paymentId + """\',
                                     \'""" + data['user_uid'] + """\',
                                     \'TRUE\',
-                                    \'""" + data['is_gift'] + """\',
-                                    """ + coupon_id + """,
-                                    """ + data['item_price'] + """, 0,
+                                    \'""" + data['is_gift'] + """\', NULL,
+                                    \'""" + str(data['total_charge']) + """\', 0,
                                     \'""" + purchaseId + """\',
                                     \'""" + getNow() + """\');"""
+                print("here")
                 res = execute(temp_query, 'post', conn)
                 print("after execute temp query 1: ", res)
                 total_discount = data.get('total_discount')

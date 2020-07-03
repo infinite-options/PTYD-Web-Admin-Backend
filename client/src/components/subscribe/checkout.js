@@ -418,7 +418,7 @@ class Checkout extends Component {
   render() {
     return (
       <Fragment>
-        {this.state.send_error === null ? (
+        {!this.state.send_error ? (
           <Fragment>
             {this.state.loading && (
               <div className='d-flex justify-content-center'>
@@ -552,7 +552,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Enter First Name'
-                          value={this.state.purchase.delivery_first_name}
+                          value={this.state.purchase.delivery_first_name || ""}
                           name='delivery_first_name'
                           onChange={this.handleChange}
                         />
@@ -575,7 +575,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Enter Last Name'
-                          value={this.state.purchase.delivery_last_name}
+                          value={this.state.purchase.delivery_last_name || ""}
                           name='delivery_last_name'
                           onChange={this.handleChange}
                         />
@@ -599,7 +599,7 @@ class Checkout extends Component {
                       </Form.Label>
                       <Form.Control
                         placeholder='Enter Notes or N/A (e.g. Gate Code, Special Instructions)'
-                        value={this.state.purchase.delivery_instructions}
+                        value={this.state.purchase.delivery_instructions || ""}
                         name='delivery_instructions'
                         onChange={this.handleChange}
                       />
@@ -624,7 +624,7 @@ class Checkout extends Component {
                         <Form.Control
                           type='email'
                           placeholder='Enter Email'
-                          value={this.state.purchase.delivery_email}
+                          value={this.state.purchase.delivery_email || ""}
                           name='delivery_email'
                           onChange={this.handleChange}
                         />
@@ -647,7 +647,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='1234567890'
-                          value={this.state.purchase.delivery_phone}
+                          value={this.state.purchase.delivery_phone || ""}
                           name='delivery_phone'
                           onChange={this.handleChange}
                         />
@@ -671,7 +671,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='1234 Main St'
-                          value={this.state.purchase.delivery_address}
+                          value={this.state.purchase.delivery_address || ""}
                           name='delivery_address'
                           onChange={this.handleChange}
                         />
@@ -688,7 +688,9 @@ class Checkout extends Component {
                         <Form.Label>Apartment/Unit (if applicable)</Form.Label>
                         <Form.Control
                           placeholder='Apartment, studio, or floor'
-                          value={this.state.purchase.delivery_address_unit}
+                          value={
+                            this.state.purchase.delivery_address_unit || ""
+                          }
                           name='delivery_address_unit'
                           onChange={this.handleChange}
                         />
@@ -706,7 +708,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Prep City'
-                          value={this.state.purchase.delivery_city}
+                          value={this.state.purchase.delivery_city || ""}
                           name='delivery_city'
                           onChange={this.handleChange}
                         />
@@ -727,7 +729,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           as='select'
-                          value={this.state.purchase.delivery_state}
+                          value={this.state.purchase.delivery_state || ""}
                           name='delivery_state'
                           onChange={this.handleChange}
                         >
@@ -753,7 +755,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='12345'
-                          value={this.state.purchase.delivery_zip}
+                          value={this.state.purchase.delivery_zip || ""}
                           name='delivery_zip'
                           onChange={this.handleChange}
                         />
@@ -793,7 +795,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Enter Card Number'
-                          value={this.state.purchase.cc_num}
+                          value={this.state.purchase.cc_num || ""}
                           name='cc_num'
                           onChange={this.handleChange}
                         />
@@ -816,7 +818,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='123'
-                          value={this.state.purchase.cc_cvv}
+                          value={this.state.purchase.cc_cvv || ""}
                           name='cc_cvv'
                           onChange={this.handleChange}
                         />
@@ -839,7 +841,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           as='select'
-                          value={this.state.purchase.cc_exp_month}
+                          value={this.state.purchase.cc_exp_month || ""}
                           name='cc_exp_month'
                           onChange={this.handleChange}
                         >
@@ -876,7 +878,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           as='select'
-                          value={this.state.purchase.cc_exp_year}
+                          value={this.state.purchase.cc_exp_year || ""}
                           name='cc_exp_year'
                           onChange={this.handleChange}
                         >
@@ -915,7 +917,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='12345'
-                          value={this.state.purchase.billing_zip}
+                          value={this.state.purchase.billing_zip || ""}
                           name='billing_zip'
                           onChange={this.handleChange}
                         />

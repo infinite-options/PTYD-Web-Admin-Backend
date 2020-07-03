@@ -208,7 +208,8 @@ export default function Login(props) {
     let session_id = log_attemp.session_id;
     let login_id = log_attemp.login_id;
     document.cookie = `loginStatus=loggedInBy:social,first_name:${name},user_uid:${uid},login_id:${login_id},session_id:${session_id}; path=/`;
-    if (props.history.location.path === "/checkout") {
+    if (props.history.location.pathname === "/checkout") {
+      props.history.push("/selectmealplan");
       window.location.reload(false);
     } else {
       checkForPurchased(uid);
@@ -343,6 +344,7 @@ export default function Login(props) {
         //check for purchases
         console.log("location: ", props.location);
         if (props.history.location.pathname === "/checkout") {
+          props.history.push("/selectmealplan");
           window.location.reload(false);
         } else {
           checkForPurchased(uid);
