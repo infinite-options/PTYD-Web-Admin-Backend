@@ -33,9 +33,11 @@ RDS_DB = 'ptyd'
 app = Flask(__name__)
 
 # --------------- Stripe Variables ------------------
-pubKey = 'pk_test_3HElAH8HDKNUmf5qCPxIyxDn00I2qUjmiM'
-secKey = 'sk_test_rcUdq1pyNtsDMCWE4ool6qK100z3zdq0Hr'
-
+# these key are using for testing. Customer should use their stripe account's keys instead
+import stripe
+stripe_public_key = 'pk_test_6RSoSd9tJgB2fN2hGkEDHCXp00MQdrK3Tw'
+stripe_secret_key = 'sk_test_fe99fW2owhFEGTACgW3qaykd006gHUwj1j'
+stripe.api_key = stripe_secret_key
 # Allow cross-origin resource sharing
 cors = CORS(app, resources={r'/api/*': {'origins': '*'}})
 
@@ -1614,14 +1616,49 @@ class Checkout(Resource):
                         , \'""" + dates['billingDate'] + """\'
                         , """ + dates['weeksRemaining'] + """
                         , \'""" + dates['startDate'] + "\');"
+
             coupon_id = data.get('coupon_id')
+            charge = 0
             if coupon_id == "" or coupon_id is None:
-                payment_query = self.getPaymentQuery(data, 'NULL', data['total_charge'], data['total_charge'], paymentId, purchaseId)
+                charge = data['total_charge']
+                payment_query = self.getPaymentQuery(data, 'NULL', charge, charge, paymentId, purchaseId)
             else:
-                coupon_id = "'" + coupon_id + "'" #need this to solve the add NULL to sql database
-                print('total_charge: ', data['total_charge'])
-                print(type(data['total_charge']))
-                temp_query = """ INSERT INTO ptyd_payments
+                charge = round(data['total_charge'] - data['total_discount'], 2)
+            # create a stripe charge and make sure that charge is successful before writting it into database
+            try:
+                customer = stripe.Customer.create(name=data['delivery_first_name'] + data['delivery_last_name'],
+                                                  description=data['item']
+                                                  )
+                print("customer: ", customer)
+                print("num: ", data['cc_num'])
+                print("exp_month: ", data['cc_exp_month'])
+                print("exp_year: ", data['cc_exp_year'])
+                print("cvv: ", data['cc_cvv'])
+                # create a card token, but remember to check if there is already a card for current
+                card_dict={"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
+                print ("card dict: ", card_dict)
+                card_token = stripe.Token.create(card=card_dict)
+                print("card_token", card_token)
+                print("customer id: ", customer.id)
+                card = stripe.Customer.create_source(
+                        customer.id,
+                        source=card_token,
+                        )
+                card_token = stripe.Token.create(card = card_dict)
+                print("card: ", card)
+
+                stripe_charge = stripe.Charge.create(
+                                            amount=int(round(charge*100, 0)),
+                                            currency="usd",
+                                            source=card_token,
+                                            description="My First Test Charge (created for API docs)",
+)
+
+                print("charge success: ", stripe_charge)
+
+                if coupon_id != "" and coupon_id is not None:
+                    coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
+                    temp_query = """ INSERT INTO ptyd_payments
                                 (
                                     payment_id,
                                     buyer_id,
@@ -1641,60 +1678,62 @@ class Checkout(Resource):
                                     \'""" + str(data['total_charge']) + """\', 0,
                                     \'""" + purchaseId + """\',
                                     \'""" + getNow() + """\');"""
-                print("here")
-                res = execute(temp_query, 'post', conn)
-                print("after execute temp query 1: ", res)
-                total_discount = data.get('total_discount')
-                paymentId = get_new_paymentID()
-                temp_query = """ INSERT INTO ptyd_payments
-                                (
-                                    payment_id,
-                                    buyer_id,
-                                    recurring,
-                                    gift,
-                                    coupon_id,
-                                    amount_due,
-                                    amount_paid,
-                                    purchase_id,
-                                    payment_time_stamp
-                                )
-                                VALUES (
-                                    \'""" + paymentId + """\',
-                                    \'""" + data['user_uid'] + """\',
-                                    \'TRUE\',
-                                    \'""" + data['is_gift'] + """\',
-                                    """ + coupon_id + """,
-                                    \'""" + str(0-total_discount) + """\',0,
-                                    \'""" + purchaseId + """\',
-                                    \'""" + getNow() + """\');"""
-                print("temp2: ", temp_query)
-                res = execute(temp_query, 'post', conn)
-                print("after execute temp query 2: ", res)
-                # update coupon table
-                coupon_query = """UPDATE ptyd_coupons SET num_used = num_used + 1 
-                            WHERE coupon_id = """ + coupon_id + ";"
-                res = execute(coupon_query, 'post', conn)
-                print("after execute coupon_query: ", res)
-                paymentId = get_new_paymentID()
-                charge = round(data['total_charge'] - data['total_discount'],2)
-                payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, purchaseId)
-                print("payment_query: ", payment_query)
-            reply['payment'] = execute(payment_query, 'post', conn)
-            if reply['payment']['code'] != 281:
-                response['message'] = "Internal Server Error"
-                return response, 500
-            # Add credit card verification code here
-            reply['purchase'] = execute(purchase_query, 'post', conn)
-            if reply['purchase']['code'] != 281:
-                response['message'] = "Internal Server Error"
-                return response, 500
-            reply['snapshot'] = execute(snapshot_query, 'post', conn)
-            if reply['snapshot']['code'] != 281:
-                response['message'] = "Internal Server Error"
-                return response, 500
-            response['message'] = 'Request successful.'
-            response['result'] = reply
-            return response, 200
+                    res = execute(temp_query, 'post', conn)
+                    print("after execute temp query 1: ", res)
+
+                    paymentId = get_new_paymentID()
+                    temp_query = """ INSERT INTO ptyd_payments
+                                    (
+                                        payment_id,
+                                        buyer_id,
+                                        recurring,
+                                        gift,
+                                        coupon_id,
+                                        amount_due,
+                                        amount_paid,
+                                        purchase_id,
+                                        payment_time_stamp
+                                    )
+                                    VALUES (
+                                        \'""" + paymentId + """\',
+                                        \'""" + data['user_uid'] + """\',
+                                        \'TRUE\',
+                                        \'""" + data['is_gift'] + """\',
+                                        """ + coupon_id + """,
+                                        \'""" + str(0-data['total_discount']) + """\',0,
+                                        \'""" + purchaseId + """\',
+                                        \'""" + getNow() + """\');"""
+                    print("temp2: ", temp_query)
+                    res = execute(temp_query, 'post', conn)
+                    print("after execute temp query 2: ", res)
+                    # update coupon table
+                    coupon_query = """UPDATE ptyd_coupons SET num_used = num_used + 1 
+                                WHERE coupon_id = """ + coupon_id + ";"
+                    res = execute(coupon_query, 'post', conn)
+                    print("after execute coupon_query: ", res)
+                    paymentId = get_new_paymentID()
+
+                    payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, purchaseId)
+                    print("payment_query: ", payment_query)
+                reply['payment'] = execute(payment_query, 'post', conn)
+                if reply['payment']['code'] != 281:
+                    response['message'] = "Internal Server Error"
+                    return response, 500
+                # Add credit card verification code here
+                reply['purchase'] = execute(purchase_query, 'post', conn)
+                if reply['purchase']['code'] != 281:
+                    response['message'] = "Internal Server Error"
+                    return response, 500
+                reply['snapshot'] = execute(snapshot_query, 'post', conn)
+                if reply['snapshot']['code'] != 281:
+                    response['message'] = "Internal Server Error"
+                    return response, 500
+                response['message'] = 'Request successful.'
+                response['result'] = reply
+                return response, 200
+            except:
+                response['message'] = "Payment process error."
+                return responsee, 500
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
