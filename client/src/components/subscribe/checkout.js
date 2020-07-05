@@ -155,7 +155,14 @@ class Checkout extends Component {
         );
         const purApi = await pur.json();
         if (purApi.result.length !== 0) {
+          console.log(purApi);
           this.setState({purchase: purApi.result[0]});
+          this.setState(prevState => ({
+            purchase: {
+              ...prevState.purchase,
+              cc_num: null
+            }
+          }));
         } else {
           const acc = await fetch(
             `${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`
@@ -191,36 +198,37 @@ class Checkout extends Component {
       coupon = this.state.coupon;
     }
     this.setState({loading: true});
-    fetch(this.props.CHECKOUT_URL, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        ...this.state.purchase,
-        salt: this.state.salt,
-        is_gift: this.state.gift,
-        user_uid: this.state.user_uid,
-        item: this.props.location.item.name,
-        item_price: this.props.location.item.total,
-        coupon_id: coupon,
-        shipping: this.state.original_charge.shipping,
-        total_charge: this.state.original_charge.total_charge,
-        total_discount: total_discount,
-        tax_rate: this.state.tax_rate
-      })
-    }).then(res => {
-      if (res.status === 200) {
+    let data_send = {
+      ...this.state.purchase,
+      salt: this.state.salt,
+      is_gift: this.state.gift,
+      user_uid: this.state.user_uid,
+      item: this.props.location.item.name,
+      item_price: this.props.location.item.total,
+      coupon_id: coupon,
+      shipping: this.state.original_charge.shipping,
+      total_charge: this.state.original_charge.total_charge,
+      total_discount: total_discount,
+      tax_rate: this.state.tax_rate
+    };
+    axios
+      .post(this.props.CHECKOUT_URL, data_send)
+      .then(res => {
         this.setState({loading: false});
         console.log("res: ", res);
         this.props.history.push("/checkoutsuccess");
-      } else {
-        this.setState({send_error: res.statusText});
-        console.log("statusText: ", this.state.send_error);
+      })
+      .catch(err => {
+        if (
+          err.response.data !== undefined &&
+          err.response.data.message !== undefined
+        ) {
+          this.setState({send_error: err.response.data.message});
+        } else {
+          this.setState({send_error: "Request failed."});
+        }
         this.props.history.push("/checkout");
-      }
-    });
+      });
   }
   async checkout(event) {
     event.preventDefault();
@@ -795,7 +803,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Enter Card Number'
-                          value={this.state.purchase.cc_num || ""}
+                          // value={this.state.purchase.cc_num || ""}
                           name='cc_num'
                           onChange={this.handleChange}
                         />

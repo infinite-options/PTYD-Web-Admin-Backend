@@ -35,8 +35,11 @@ app = Flask(__name__)
 # --------------- Stripe Variables ------------------
 # these key are using for testing. Customer should use their stripe account's keys instead
 import stripe
-stripe_public_key = 'pk_test_6RSoSd9tJgB2fN2hGkEDHCXp00MQdrK3Tw'
-stripe_secret_key = 'sk_test_fe99fW2owhFEGTACgW3qaykd006gHUwj1j'
+# stripe_public_key = 'pk_test_6RSoSd9tJgB2fN2hGkEDHCXp00MQdrK3Tw'
+# stripe_secret_key = 'sk_test_fe99fW2owhFEGTACgW3qaykd006gHUwj1j'
+stripe_public_key = "pk_test_51H0sExEDOlfePYdd9TVlnhVDOCmmnmdxAxyAmgW4x7OI0CR7tTrGE2AyrTk8VjftoigEOhv2RTUv5F8yJrfp4jWQ00Q6KGXDHV"
+stripe_secret_key = "sk_test_51H0sExEDOlfePYdd9UQDxfp8yoY7On272hCR9ti12WSNbIGTysaJI8K2W8NhCKqdBOEhiNj4vFOtQu6goliov8vF00cvqfWG6d"
+
 stripe.api_key = stripe_secret_key
 # Allow cross-origin resource sharing
 cors = CORS(app, resources={r'/api/*': {'origins': '*'}})
@@ -1626,36 +1629,29 @@ class Checkout(Resource):
                 charge = round(data['total_charge'] - data['total_discount'], 2)
             # create a stripe charge and make sure that charge is successful before writting it into database
             try:
-                customer = stripe.Customer.create(name=data['delivery_first_name'] + data['delivery_last_name'],
-                                                  description=data['item']
-                                                  )
-                print("customer: ", customer)
-                print("num: ", data['cc_num'])
-                print("exp_month: ", data['cc_exp_month'])
-                print("exp_year: ", data['cc_exp_year'])
-                print("cvv: ", data['cc_cvv'])
-                # create a card token, but remember to check if there is already a card for current
+
                 card_dict={"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
                 print ("card dict: ", card_dict)
-                card_token = stripe.Token.create(card=card_dict)
-                print("card_token", card_token)
-                print("customer id: ", customer.id)
-                card = stripe.Customer.create_source(
-                        customer.id,
-                        source=card_token,
-                        )
-                card_token = stripe.Token.create(card = card_dict)
-                print("card: ", card)
-
-                stripe_charge = stripe.Charge.create(
+                try:
+                    card_token = stripe.Token.create(card=card_dict)
+                    print("card_token", card_token)
+                    stripe_charge = stripe.Charge.create(
                                             amount=int(round(charge*100, 0)),
                                             currency="usd",
                                             source=card_token,
-                                            description="My First Test Charge (created for API docs)",
-)
+                                            description="Charge customer %s for %s" %(data['delivery_first_name'] + " " + data['delivery_last_name'], data['item'] ))
 
-                print("charge success: ", stripe_charge)
-
+                    print("charge success: ", stripe_charge)
+                except stripe.error.CardError as e:
+                    # Since it's a decline, stripe.error.CardError will be caught
+                    print('Status is: %s' % e.http_status)
+                    print('Type is: %s' % e.error.type)
+                    print('Code is: %s' % e.error.code)
+                    # param is '' in this case
+                    print('Param is: %s' % e.error.param)
+                    print('Message is: %s' % e.error.message)
+                    response['message'] = e.error.message
+                    return response, 400
                 if coupon_id != "" and coupon_id is not None:
                     coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
                     temp_query = """ INSERT INTO ptyd_payments
