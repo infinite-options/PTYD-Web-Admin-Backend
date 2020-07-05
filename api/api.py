@@ -1628,6 +1628,7 @@ class Checkout(Resource):
             else:
                 charge = round(data['total_charge'] - data['total_discount'], 2)
             # create a stripe charge and make sure that charge is successful before writting it into database
+            # we should use 
             try:
 
                 card_dict={"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
