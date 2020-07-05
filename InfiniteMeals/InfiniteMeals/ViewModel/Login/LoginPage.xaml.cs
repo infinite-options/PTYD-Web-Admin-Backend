@@ -36,11 +36,11 @@ namespace InfiniteMeals.ViewModel.Login
             } else {
 
                 var accountSalt = await retrieveAccountSalt(this.loginEmail.Text); // retrieve user's account salt
-
-                if (accountSalt != null) { // make sure the account salt exists 
+                
+                if (accountSalt != null && accountSalt.result.Count != 0) { // make sure the account salt exists 
                     var loginAttempt = await login(this.loginEmail.Text, this.loginPassword.Text, accountSalt);
                     
-                    if (loginAttempt != null) { // make sure the login attempt was successful
+                    if (loginAttempt != null && loginAttempt.Message != "Request failed, wrong password.") { // make sure the login attempt was successful
                         var userSessionInformation = new UserLoginSession { // object to send into local database
                             UserUid = loginAttempt.Result.Result[0].UserUid,
                             FirstName = loginAttempt.Result.Result[0].FirstName,
@@ -58,10 +58,11 @@ namespace InfiniteMeals.ViewModel.Login
                         await Navigation.PopAsync();
                         
                         await DisplayAlert("Note", "Successfully logged in!", "OK");
+                    } else {
+                        await DisplayAlert("Error", "Wrong password was entered", "OK");
                     }
-                }
-                else {
-                    await DisplayAlert("Error", "Check your username or password", "OK");
+                } else {
+                    await DisplayAlert("Error", "An account with that email does not exist", "OK");
                 }  
 
             }
@@ -124,6 +125,7 @@ namespace InfiniteMeals.ViewModel.Login
                 return accountSalt;
             } catch(Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+         
             }
             return null;
         }

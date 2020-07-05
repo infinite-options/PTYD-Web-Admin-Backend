@@ -6,6 +6,7 @@ using System.Text;
 namespace InfiniteMeals.Model.Checkout {
 
     // class to contain information to send to the database about the user's purchase
+    // api link: "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout" 
     class CheckoutOrder {
 
 
@@ -69,7 +70,15 @@ namespace InfiniteMeals.Model.Checkout {
         [JsonProperty("item")]
         public string item { get; set; }
 
-        [JsonProperty("item_price")]
-        public string itemPrice { get; set; }
-    }
+        [JsonProperty("coupon_id")]
+        public string couponId { get; set; }
+
+        [JsonProperty("total_charge")]
+        public double totalCharge { get; set; }
+
+        [JsonProperty("total_discount")]
+        public double totalDiscount { get; set; }
+        
+    } 
+    
 }

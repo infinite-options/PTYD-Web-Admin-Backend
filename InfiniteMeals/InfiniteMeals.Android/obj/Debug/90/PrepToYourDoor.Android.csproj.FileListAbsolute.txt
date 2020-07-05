@@ -602,3 +602,14 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Androi
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GenerateJavaStubs.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_ResolveLibraryProjectImports.stamp
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\Stripe.net.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\Stripe.net.pdb
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Configuration.ConfigurationManager.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Security.AccessControl.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Security.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Security.pdb
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Security.Permissions.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Security.Principal.Windows.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\System.Threading.Tasks.Extensions.dll

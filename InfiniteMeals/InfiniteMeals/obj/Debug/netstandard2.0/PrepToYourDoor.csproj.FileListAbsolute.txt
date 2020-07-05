@@ -27,9 +27,9 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Subscribe\SubscribePage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.AssemblyInfoInputs.cache
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.AssemblyInfo.cs
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.csproj.CoreCompileInputs.cache
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\XamlC.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.dll
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ref\PrepToYourDoor.dll
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.pdb
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Checkout\CheckoutLogin.xaml.g.cs
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\PrepToYourDoor.csproj.CoreCompileInputs.cache
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\XamlC.stamp

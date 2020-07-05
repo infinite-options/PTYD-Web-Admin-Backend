@@ -20,12 +20,14 @@ using InfiniteMeals.ViewModel.Checkout;
 
 namespace PrepToYourDoor.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+
+    // login page if the user is not logged in before checkout process
     public partial class CheckoutLogin : ContentPage {
 
 
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
-        public HttpClient client = new HttpClient();
+        public HttpClient client = new HttpClient(); // client to handle all api calls
 
         public CheckoutLogin() {
             InitializeComponent();
@@ -33,17 +35,17 @@ namespace PrepToYourDoor.ViewModel.Checkout {
         }
 
         private async void ClickedLogin(object sender, EventArgs e) {
-            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) {
+            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // check if all fields are filled out
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
             }
             else {
 
                 var accountSalt = await retrieveAccountSalt(this.loginEmail.Text); // retrieve user's account salt
 
-                if (accountSalt != null) { // make sure the account salt exists 
+                if (accountSalt != null && accountSalt.result.Count != 0) { // make sure the account salt exists 
                     var loginAttempt = await login(this.loginEmail.Text, this.loginPassword.Text, accountSalt);
 
-                    if (loginAttempt != null) { // make sure the login attempt was successful
+                    if (loginAttempt != null && loginAttempt.Message != "Request failed, wrong password.") { // make sure the login attempt was successful
                         var userSessionInformation = new UserLoginSession { // object to send into local database
                             UserUid = loginAttempt.Result.Result[0].UserUid,
                             FirstName = loginAttempt.Result.Result[0].FirstName,
@@ -52,11 +54,10 @@ namespace PrepToYourDoor.ViewModel.Checkout {
                             Email = loginAttempt.Result.Result[0].UserEmail
                         };
                         await App.Database.SaveItemAsync(userSessionInformation); // send login session to local database
-                        App.setLoggedIn(true);
-
+                        App.setLoggedIn(true); // login state is true for the app
+                        Button loginButton = (Button)Navigation.NavigationStack[0].FindByName("loginButton");
+                        loginButton.Text = "Log out"; // set the correct log out button
                         if (this.BindingContext != null) {
-                            Button loginButton = (Button)Navigation.NavigationStack[0].FindByName("loginButton");
-                            loginButton.Text = "Log out";
                             SubscriptionPlan subscriptionPlan = (SubscriptionPlan)this.BindingContext;
                             Delivery delivery = new Delivery();
                             delivery.BindingContext = subscriptionPlan;
@@ -64,9 +65,11 @@ namespace PrepToYourDoor.ViewModel.Checkout {
                             await Navigation.PopAsync();
                         }
 
+                    } else {
+                        await DisplayAlert("Error", "Wrong password was entered", "OK");
                     }
                 } else {
-                    await DisplayAlert("Error", "Check your username or password", "OK");
+                    await DisplayAlert("Error", "An account with that email does not exist", "OK");
                 }
 
             }

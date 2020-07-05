@@ -26,7 +26,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
             } else {
                 OrderInformation orderInfo = new OrderInformation {
                 shippingInformation = (ShippingInformation)this.BindingContext,
-                paymentInformation = new PaymentInformation(this.deliveryInstructionsEditor.Text, "XXXXXXXXXXXX" + this.cardNumberEntry.Text.Substring(cardNumberEntry.Text.Length - 4),
+                paymentInformation = new PaymentInformation(this.deliveryInstructionsEditor.Text, this.cardNumberEntry.Text,
                     this.cardholderNameEntry.Text, this.expirationMonthEntry.Text, this.expirationYearEntry.Text, this.cvvEntry.Text)
                 };
 
