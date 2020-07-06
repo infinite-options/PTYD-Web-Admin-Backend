@@ -4841,6 +4841,9 @@ api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
 api.add_resource(Edit_Recipe, '/api/v2/Edit_Recipe')
 api.add_resource(Add_Meal, '/api/v2/Add_Meal')
 api.add_resource(Edit_Meal, '/api/v2/Edit_Meal')
+api.add_resource(MenuCreation, '/api/v2/create-menu')
+api.add_resource(Get_All_Units, '/api/v2/GetUnits')
+
 
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
