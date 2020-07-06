@@ -12,6 +12,7 @@ class Checkout extends Component {
     super(props);
     this.state = {
       user_uid: this.searchCookie4UserID("loginStatus"),
+      cc_num: null,
       password_salt: null,
       purchase: {
         delivery_phone: "",
@@ -62,6 +63,8 @@ class Checkout extends Component {
     this.sendForm = this.sendForm.bind(this);
     this.checkout = this.checkout.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleMonthChange = this.handleMonthChange.bind(this);
+    this.handleYearChange = this.handleYearChange.bind(this);
     this.handleGiftChange = this.handleGiftChange.bind(this);
     this.handlePwChange = this.handlePwChange.bind(this);
     this.validateForm = this.validateForm.bind(this);
@@ -163,6 +166,26 @@ class Checkout extends Component {
               cc_num: null
             }
           }));
+
+          //parse purchase cc exp date into month and year
+          const parsedValues = purApi.result[0].cc_exp_date.split('-');
+          this.setState(prevState => ({
+            purchase: {
+              ...prevState.purchase,
+              cc_exp_month: parsedValues[1],
+              cc_exp_year: parsedValues[0]
+            }
+          }))
+          
+          // let len = purApi.result.length;
+          // this.setState({purchase: purApi.result[len - 1]});
+          // if (this.state.purchase.cc_num !== undefined) {
+          //   let temp = this.state.purchase.cc_num;
+          //   this.setState({
+          //     cc_num:
+          //       "XXXXXXXXXXXX" + temp.substring(temp.length - 4, temp.length)
+          //   });
+          // }
         } else {
           const acc = await fetch(
             `${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`
@@ -330,6 +353,32 @@ class Checkout extends Component {
       purchase: {
         ...prevState.purchase,
         [name]: target.value
+      }
+    }));
+    if (this.state.purchase.cc_num.length >= 0) {
+      this.setState({cc_num: null});
+    }
+  }
+
+  handleMonthChange(event) {
+    const target = event.target;
+    let date = this.state.purchase.cc_exp_year + '-' + event.target.value + '-01';
+    this.setState(prevState => ({
+      purchase: {
+        ...prevState.purchase,
+        cc_exp_date: date,
+        cc_exp_month: target.value
+      }
+    }));
+  }
+  handleYearChange(event) {
+    const target = event.target;
+    let date = target.value + '-' + this.state.purchase.cc_exp_month + '-01';
+    this.setState(prevState => ({
+      purchase: {
+        ...prevState.purchase,
+        cc_exp_date: date,
+        cc_exp_year: target.value
       }
     }));
   }
@@ -803,7 +852,9 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Enter Card Number'
-                          // value={this.state.purchase.cc_num || ""}
+                          value={
+                            this.state.cc_num || this.state.purchase.cc_num
+                          }
                           name='cc_num'
                           onChange={this.handleChange}
                         />
@@ -851,7 +902,7 @@ class Checkout extends Component {
                           as='select'
                           value={this.state.purchase.cc_exp_month || ""}
                           name='cc_exp_month'
-                          onChange={this.handleChange}
+                          onChange={this.handleMonthChange}
                         >
                           <option>Choose...</option>
                           <option>01</option>
@@ -888,7 +939,7 @@ class Checkout extends Component {
                           as='select'
                           value={this.state.purchase.cc_exp_year || ""}
                           name='cc_exp_year'
-                          onChange={this.handleChange}
+                          onChange={this.handleYearChange}
                         >
                           <option>Choose...</option>
                           <option>2020</option>

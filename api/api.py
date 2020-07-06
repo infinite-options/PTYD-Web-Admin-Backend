@@ -994,7 +994,7 @@ class AccountPurchases(Resource):
                     ,ms3.amount_paid
                     ,ms3.purchase_id
                     ,ms3.payment_type
-                    ,CONCAT('XXXXXXXXXXXX', ms3.cc_num) AS cc_num
+                    ,CONCAT('XXXXXXXXXXXX', right(ms3.cc_num,4)) AS cc_num
                     ,ms3.cc_exp_date
                     ,ms3.cc_cvv
                     ,ms3.billing_zip
@@ -1388,7 +1388,7 @@ class Checkout(Resource):
                         \'""" + purchaseId + """\',
                         \'""" + getNow() + """\',
                         \'STRIPE\',
-                        \'""" + data['cc_num'][-4:] + """\',
+                        \'""" + data['cc_num'] + """\',
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + "\');"""
