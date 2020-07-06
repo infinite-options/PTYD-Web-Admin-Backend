@@ -63,6 +63,7 @@ class Checkout extends Component {
     this.checkout = this.checkout.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleMonthChange = this.handleMonthChange.bind(this);
+    this.handleYearChange = this.handleYearChange.bind(this);
     this.handleGiftChange = this.handleGiftChange.bind(this);
     this.handlePwChange = this.handlePwChange.bind(this);
     this.validateForm = this.validateForm.bind(this);
@@ -351,10 +352,8 @@ class Checkout extends Component {
   }
 
   handleMonthChange(event) {
-    console.log(event.target.value)
     const target = event.target;
     let date = this.state.purchase.cc_exp_year + '-' + event.target.value + '-01';
-    console.log(date);
     this.setState(prevState => ({
       purchase: {
         ...prevState.purchase,
@@ -362,7 +361,17 @@ class Checkout extends Component {
         cc_exp_month: target.value
       }
     }));
-    console.log(this.state.purchase.cc_exp_date)
+  }
+  handleYearChange(event) {
+    const target = event.target;
+    let date = target.value + '-' + this.state.purchase.cc_exp_month + '-01';
+    this.setState(prevState => ({
+      purchase: {
+        ...prevState.purchase,
+        cc_exp_date: date,
+        cc_exp_year: target.value
+      }
+    }));
   }
 
   handlePwChange(event) {
@@ -919,7 +928,7 @@ class Checkout extends Component {
                           as='select'
                           value={this.state.purchase.cc_exp_year || ""}
                           name='cc_exp_year'
-                          onChange={this.handleChange}
+                          onChange={this.handleYearChange}
                         >
                           <option>Choose...</option>
                           <option>2020</option>
