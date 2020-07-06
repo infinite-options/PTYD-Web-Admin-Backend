@@ -167,11 +167,7 @@ class Checkout extends Component {
           }));
 
           //parse purchase cc exp date into month and year
-          // console.log(purApi.result[0].cc_exp_date);
           const parsedValues = purApi.result[0].cc_exp_date.split('-');
-          // console.log(parsedValues);
-          // console.log(this.state.purchase.cc_exp_year);
-          // console.log(this.state.purchase.cc_exp_month);
           this.setState(prevState => ({
             purchase: {
               ...prevState.purchase,
@@ -699,13 +695,13 @@ class Checkout extends Component {
                           name='delivery_phone'
                           onChange={this.handleChange}
                         />
-                        {/* {this.state.purchase.delivery_phone.length !== 10 ? (
+                        {this.state.purchase.delivery_phone.length !== 10 ? (
                           <span className='required-red'>
                             Phone Number must be 10 digits
                           </span>
                         ) : (
                           ""
-                        )} */}
+                        )}
                       </Form.Group>
                     </Form.Row>
                     <Form.Row>
