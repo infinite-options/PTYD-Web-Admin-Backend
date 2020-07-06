@@ -69,7 +69,7 @@ class EditMeals extends Component {
       MealSugar: "",
       MealFat: "",
       MealSat: "",
-      selIndex: 0,
+      selIndex: localStorage.getItem("selIndex") || 0,
     };
   }
   async componentWillMount() {
@@ -208,6 +208,10 @@ class EditMeals extends Component {
     console.log(e.target.value);
     this.setState({ MealCategory: e.target.value });
   };
+  handleMealHint = (e) => {
+    console.log(e.target.value);
+    this.setState({ MealHint: e.target.value });
+  };
   handleMealPhotoURL = (e) => {
     this.setState({ MealPhotoURL: e.target.value });
   };
@@ -284,8 +288,12 @@ class EditMeals extends Component {
 
   handleMealChange = (event) => {
     console.log(event.target.value);
-    this.setState({ selIndex: event.target.value });
+    this.setState({ selIndex: event.target.value }, () => {
+      localStorage.setItem("selIndex", this.state.selIndex);
+    });
     var selectedMeal = this.state.mealData[event.target.value];
+    //console.log("new hint");
+    //console.log(selectedMeal.meal_hint);
     this.setState({
       MealName: selectedMeal.meal_name,
       MealDesc: selectedMeal.meal_desc,
@@ -1000,8 +1008,9 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealHint}
+                            value={this.state.MealHint}
                             inputProps={{ "aria-label": "description" }}
-                            onChange={this.handleMealhHit}
+                            onChange={this.handleMealHint}
                           />
                         </th>
                       </tr>
@@ -1029,6 +1038,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.ExtraMealPrice}
+                            value={this.state.ExtraMealPrice}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleExtraMealPrice}
                           />
@@ -1041,6 +1051,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealCalories}
+                            value={this.state.MealCalories}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealCalories}
                           />
@@ -1053,6 +1064,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealProtein}
+                            value={this.state.MealProtein}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealProtein}
                           />
@@ -1065,6 +1077,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealCarbs}
+                            value={this.state.MealCarbs}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealCarbs}
                           />
@@ -1077,6 +1090,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealFiber}
+                            value={this.state.MealFiber}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealFiber}
                           />
@@ -1089,6 +1103,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealSugar}
+                            value={this.state.MealSugar}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealSugar}
                           />
@@ -1101,6 +1116,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealFat}
+                            value={this.state.MealFat}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealFat}
                           />
@@ -1113,6 +1129,7 @@ class EditMeals extends Component {
                         <th colSpan="3">
                           <Input
                             placeholder={this.state.MealSat}
+                            value={this.state.MealSat}
                             inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealSat}
                           />
