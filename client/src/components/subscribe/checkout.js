@@ -12,6 +12,7 @@ class Checkout extends Component {
     super(props);
     this.state = {
       user_uid: this.searchCookie4UserID("loginStatus"),
+      cc_num: null,
       password_salt: null,
       purchase: {
         delivery_phone: "",
@@ -176,6 +177,15 @@ class Checkout extends Component {
             }
           }))
           
+          // let len = purApi.result.length;
+          // this.setState({purchase: purApi.result[len - 1]});
+          // if (this.state.purchase.cc_num !== undefined) {
+          //   let temp = this.state.purchase.cc_num;
+          //   this.setState({
+          //     cc_num:
+          //       "XXXXXXXXXXXX" + temp.substring(temp.length - 4, temp.length)
+          //   });
+          // }
         } else {
           const acc = await fetch(
             `${this.props.SINGLE_ACC_API_URL}/${this.state.user_uid}`
@@ -345,6 +355,9 @@ class Checkout extends Component {
         [name]: target.value
       }
     }));
+    if (this.state.purchase.cc_num.length >= 0) {
+      this.setState({cc_num: null});
+    }
   }
 
   handleMonthChange(event) {
@@ -839,7 +852,9 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Enter Card Number'
-                          // value={this.state.purchase.cc_num || ""}
+                          value={
+                            this.state.cc_num || this.state.purchase.cc_num
+                          }
                           name='cc_num'
                           onChange={this.handleChange}
                         />

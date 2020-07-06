@@ -994,7 +994,7 @@ class AccountPurchases(Resource):
                     ,ms3.amount_paid
                     ,ms3.purchase_id
                     ,ms3.payment_type
-                    ,CONCAT('XXXXXXXXXXXX', ms3.cc_num) AS cc_num
+                    ,ms3.cc_num AS cc_num
                     ,ms3.cc_exp_date
                     ,ms3.cc_cvv
                     ,ms3.billing_zip
@@ -1388,7 +1388,7 @@ class Checkout(Resource):
                         \'""" + purchaseId + """\',
                         \'""" + getNow() + """\',
                         \'STRIPE\',
-                        \'""" + data['cc_num'][-4:] + """\',
+                        \'""" + data['cc_num'] + """\',
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + "\');"""
@@ -4841,6 +4841,9 @@ api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
 api.add_resource(Edit_Recipe, '/api/v2/Edit_Recipe')
 api.add_resource(Add_Meal, '/api/v2/Add_Meal')
 api.add_resource(Edit_Meal, '/api/v2/Edit_Meal')
+api.add_resource(MenuCreation, '/api/v2/create-menu')
+api.add_resource(Get_All_Units, '/api/v2/GetUnits')
+
 
 api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
