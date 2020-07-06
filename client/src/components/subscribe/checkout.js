@@ -335,7 +335,7 @@ class Checkout extends Component {
         [name]: target.value
       }
     }));
-    if (this.state.purchase.cc_num.length === 16) {
+    if (this.state.purchase.cc_num.length >= 0) {
       this.setState({cc_num: null});
     }
   }
