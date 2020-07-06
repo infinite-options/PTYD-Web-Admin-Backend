@@ -62,6 +62,7 @@ class Checkout extends Component {
     this.sendForm = this.sendForm.bind(this);
     this.checkout = this.checkout.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleMonthChange = this.handleMonthChange.bind(this);
     this.handleGiftChange = this.handleGiftChange.bind(this);
     this.handlePwChange = this.handlePwChange.bind(this);
     this.validateForm = this.validateForm.bind(this);
@@ -165,11 +166,11 @@ class Checkout extends Component {
           }));
 
           //parse purchase cc exp date into month and year
-          console.log(purApi.result[0].cc_exp_date);
+          // console.log(purApi.result[0].cc_exp_date);
           const parsedValues = purApi.result[0].cc_exp_date.split('-');
-          console.log(parsedValues);
-          console.log(this.state.purchase.cc_exp_year);
-          console.log(this.state.purchase.cc_exp_month);
+          // console.log(parsedValues);
+          // console.log(this.state.purchase.cc_exp_year);
+          // console.log(this.state.purchase.cc_exp_month);
           this.setState(prevState => ({
             purchase: {
               ...prevState.purchase,
@@ -349,15 +350,20 @@ class Checkout extends Component {
     }));
   }
 
-  // handleMonthChange(event) {
-  //   // cc_exp_date
-  //   this.setState(prevState => ({
-  //     purchase: {
-  //       ...prevState.purchase,
-  //       cc_exp_date: prevState.purchase.cc_exp_year + '-' + event.target.value + '-01'
-  //     }
-  //   }));
-  // }
+  handleMonthChange(event) {
+    console.log(event.target.value)
+    const target = event.target;
+    let date = this.state.purchase.cc_exp_year + '-' + event.target.value + '-01';
+    console.log(date);
+    this.setState(prevState => ({
+      purchase: {
+        ...prevState.purchase,
+        cc_exp_date: date,
+        cc_exp_month: target.value
+      }
+    }));
+    console.log(this.state.purchase.cc_exp_date)
+  }
 
   handlePwChange(event) {
     this.setState({
@@ -876,7 +882,7 @@ class Checkout extends Component {
                           as='select'
                           value={this.state.purchase.cc_exp_month || ""}
                           name='cc_exp_month'
-                          onChange={this.handleChange}
+                          onChange={this.handleMonthChange}
                         >
                           <option>Choose...</option>
                           <option>01</option>
