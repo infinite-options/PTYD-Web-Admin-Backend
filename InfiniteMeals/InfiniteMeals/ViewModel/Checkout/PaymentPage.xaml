@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="InfiniteMeals.ViewModel.Checkout.Payment">
+             x:Class="InfiniteMeals.ViewModel.Checkout.PaymentPage">
     <ContentPage.Content>
         <Grid Padding="15,15,15,15">
             
@@ -53,7 +53,7 @@
             <StackLayout Grid.Column="1" Grid.Row="7" Orientation="Horizontal">
                 <Entry x:Name="expirationMonthEntry" Grid.Column="1" Grid.Row="7" Placeholder="MM"  HorizontalOptions="Start" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" TextChanged="expirationMonthEntryTextChanged" Unfocused="expirationDateEntryUnfocused"/>
                 <Label Grid.Column="1" Grid.Row="7" HorizontalOptions="Start" VerticalOptions="Center" Text="/" FontSize="Large"/>
-                <Entry x:Name="expirationYearEntry" Grid.Column="1" Grid.Row="7" Placeholder="YY"  HorizontalOptions="Center" VerticalOptions="Center" MaxLength="2" Keyboard="Numeric" Unfocused="expirationDateEntryUnfocused"/>
+                <Entry x:Name="expirationYearEntry" Grid.Column="1" Grid.Row="7" Placeholder="YYYY"  HorizontalOptions="Center" VerticalOptions="Center" MaxLength="4" Keyboard="Numeric" Unfocused="expirationDateEntryUnfocused"/>
             </StackLayout>
             <Label x:Name="expirationDateWarning" Grid.Column="1" Grid.Row="7" Text="Expiration Date is required!" TextColor="Red" VerticalOptions="End" IsVisible="false"/>
             

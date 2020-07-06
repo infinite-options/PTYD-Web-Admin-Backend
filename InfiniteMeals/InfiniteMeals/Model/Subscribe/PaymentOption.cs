@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace InfiniteMeals.Model.Subscribe {
+
+    // enum to store values of payment options
     public enum PaymentOption {
         Week,
         TwoWeek,
@@ -10,6 +12,7 @@ namespace InfiniteMeals.Model.Subscribe {
         Unknown
     }
 
+    // contains a method to parse a payment option to a string
     static class PaymentOptionExtension {
         public static string paymentOptionToString(PaymentOption paymentOption) {
             switch (paymentOption) {

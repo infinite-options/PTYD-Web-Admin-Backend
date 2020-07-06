@@ -5,6 +5,8 @@ using System.Text;
 using SQLite;
 
 namespace PrepToYourDoor.Model.Database {
+
+    // database constants for when the database is created
     public static class DatabaseConstants {
         public const string DatabaseFilename = "PTYD_DB.db3";
 
@@ -13,6 +15,7 @@ namespace PrepToYourDoor.Model.Database {
             SQLite.SQLiteOpenFlags.Create | // create database if it doesn't exist
             SQLite.SQLiteOpenFlags.SharedCache; //multi-threaded database access
 
+        // place database in the phone's local folder
         public static string DatabasePath {
             get {
                 var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);

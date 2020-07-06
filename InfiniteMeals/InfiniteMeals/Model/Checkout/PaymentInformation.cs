@@ -7,6 +7,8 @@ using InfiniteMeals.Model.Subscribe;
 
 
 namespace InfiniteMeals.Model.Checkout {
+
+    // contains information about user's payment during checkout
     class PaymentInformation : INotifyPropertyChanged {
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -18,6 +20,7 @@ namespace InfiniteMeals.Model.Checkout {
         public string expirationYear { get; set; }
         public string cvv { get; set; }
 
+        // no args ctor
         public PaymentInformation() {
             this.deliveryInstructions = "";
             this.cardNumber = "";

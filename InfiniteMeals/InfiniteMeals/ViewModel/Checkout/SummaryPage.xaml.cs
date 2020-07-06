@@ -13,22 +13,19 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Net;
-using InfiniteMeals.Model.Login;
 using InfiniteMeals.Model.User;
-using Stripe;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Summary : ContentPage {
-        string password = "";
+    public partial class SummaryPage : ContentPage {
+        string password = ""; 
         const string checkoutURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout"; // api to post to checkout database
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end
-        public HttpClient client = new HttpClient();
+        public HttpClient client = new HttpClient(); // client to handle all api requests
 
 
-        public Summary() {
+        public SummaryPage() {
 
             InitializeComponent();
 
@@ -40,9 +37,9 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
             password = await DisplayPromptAsync("Password", "Please enter your password");
 
-            if(await checkout() == HttpStatusCode.BadRequest) {
+            if(await checkout() == HttpStatusCode.BadRequest) { // problem with api call
                 await DisplayAlert("Error", "Purchase was not able to be completed", "OK");
-            } else {
+            } else { // successful checkout, take user to home page
                 await Navigation.PopToRootAsync();
                 await DisplayAlert("Payment Confirmed", "Go to menu to select your meals!", "OK"); // display a confirmation
             }

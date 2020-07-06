@@ -4,6 +4,9 @@ using System.Text;
 using SQLite;
 
 namespace PrepToYourDoor.Model.Database {
+
+    // contains information about a user's session 
+    // information is received from sending a POST request to aws
     public class UserLoginSession {
 
         [PrimaryKey, AutoIncrement]

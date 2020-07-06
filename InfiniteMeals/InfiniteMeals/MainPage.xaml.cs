@@ -9,10 +9,10 @@ using InfiniteMeals.ViewModel.Subscribe;
 
 
 
-namespace InfiniteMeals
-{
-    public partial class MainPage : ContentPage
-    {
+namespace InfiniteMeals {
+
+    // main page or home page of the app
+    public partial class MainPage : ContentPage {
 
         public MainPage() {
             InitializeComponent();

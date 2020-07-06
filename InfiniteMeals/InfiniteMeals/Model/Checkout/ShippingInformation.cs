@@ -6,6 +6,8 @@ using System.ComponentModel;
 using InfiniteMeals.Model.Subscribe;
 
 namespace InfiniteMeals.Model.Checkout {
+
+    // contains information about user's order during shipping
     class ShippingInformation: INotifyPropertyChanged {
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -19,8 +21,9 @@ namespace InfiniteMeals.Model.Checkout {
         public string city { get; set; }
         public string state { get; set; }
 
-        public SubscriptionPlan subscriptionPlan { get; set; }
+        public SubscriptionPlan subscriptionPlan { get; set; } // subscription plan contains info about meal plan and payment option
 
+        // no args ctor
         public ShippingInformation() {
             this.firstName = "";
             this.lastName = "";

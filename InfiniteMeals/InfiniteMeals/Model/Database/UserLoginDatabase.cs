@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PrepToYourDoor.Model.Database {
+
+    // creates the database and contains methods for using database
     public class UserLoginDatabase {
         static readonly Lazy<SQLiteAsyncConnection> lazyInitializer = new Lazy<SQLiteAsyncConnection>(() => {
             return new SQLiteAsyncConnection(DatabaseConstants.DatabasePath, DatabaseConstants.flags);
@@ -32,18 +34,22 @@ namespace PrepToYourDoor.Model.Database {
             }
         }
 
+        // gets all the items in the database
         public Task<List<UserLoginSession>> GetItemsAsync() { 
             return Database.Table<UserLoginSession>().ToListAsync();
         }
 
+        // gets all the items that are not done in the database
         public Task<List<UserLoginSession>> GetItemsNotDoneAsync() {
             return Database.QueryAsync<UserLoginSession>("SELECT * FROM [UserLoginSession] WHERE [Done] = 0");
         }
 
+        // gets an item based on id
         public Task<UserLoginSession> GetItemAsync(int id) {
             return Database.Table<UserLoginSession>().Where(i => i.ID == id).FirstOrDefaultAsync();
         }
 
+        // posts an item to the database
         public Task<int> SaveItemAsync(UserLoginSession item) {
             if (item.ID != 0) {
                 return Database.UpdateAsync(item);
@@ -52,10 +58,13 @@ namespace PrepToYourDoor.Model.Database {
             }
         }
 
+        // deletes an item from the database
         public Task<int> DeleteItemAsync(UserLoginSession item) {
             return Database.DeleteAsync(item);
         }
 
+        // gets the most recent item from the database
+        // this would be the user's current session 
         public UserLoginSession GetLastItem() {
             return Database.Table<UserLoginSession>().ToListAsync().Result.Last<UserLoginSession>();
             

@@ -9,7 +9,7 @@ namespace InfiniteMeals.Utilities.Converters {
     // enum to hold the types of credit cards
     enum CardType {
 
-        Unknown, 
+        Invalid, 
         Visa, 
         MasterCard, 
         Diners, 

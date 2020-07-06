@@ -17,6 +17,7 @@ using InfiniteMeals.ViewModel.SignUp;
 namespace InfiniteMeals.ViewModel.Subscribe
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    // prompts the user to select a meal plan
     public partial class SubscribePage : ContentPage
     {
         public SubscribePage()
@@ -43,6 +44,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
             await Navigation.PushAsync(new UserProfile());
         }
 
+        // handles when the 5 meal plan button is clicked
         private async void Clicked5mealssubscription(object sender, EventArgs e)
         {
             FiveMealPaymentOptionPage fiveMealPlan = new FiveMealPaymentOptionPage();
@@ -52,6 +54,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
             await Navigation.PushAsync(fiveMealPlan);
         }
 
+        // handles when the 10 meal plan button is clicked
         private async void Clicked10mealssubscription(object sender, EventArgs e)
         {
             PaymentOptionPage tenMealPlan = new PaymentOptionPage();
@@ -61,6 +64,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
             await Navigation.PushAsync(tenMealPlan);
         }
 
+        // handles when the 15 meal plan button is clicked
         private async void Clicked15mealssubscription(object sender, EventArgs e)
         {
             PaymentOptionPage fifteenMealPlan = new PaymentOptionPage();
@@ -70,6 +74,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
             await Navigation.PushAsync(fifteenMealPlan);
         }
 
+        // handles when the 20 meal plan button is clicked
         private async void Clicked20mealssubscription(object sender, EventArgs e) {
 
             PaymentOptionPage twentyMealPlan = new PaymentOptionPage();

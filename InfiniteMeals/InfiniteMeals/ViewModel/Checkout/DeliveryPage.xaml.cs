@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 using Xamarin.Forms;
@@ -16,9 +14,12 @@ using InfiniteMeals.Model.Checkout;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Delivery : ContentPage {
 
-        public Delivery() {
+    // first step in checkout process
+    // prompts user to enter delivery information
+    public partial class DeliveryPage : ContentPage {
+
+        public DeliveryPage() {
             InitializeComponent();
         }
 
@@ -39,6 +40,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
             }
             else { // go to payment page if all fields are valid 
 
+                // send user's entered info to usps to validate
                 try {
 
                     XDocument requestDoc = new XDocument(new XElement("AddressValidateRequest", new XAttribute("USERID", "400INFIN1745"), new XElement("Revision", "1"), new XElement("Address", new XAttribute("ID", "0"), new XElement("Address1", addressOneEntry.Text + " " + addressTwoEntry.Text), new XElement("Address2", ""), new XElement("City", cityEntry.Text),
@@ -70,16 +72,8 @@ namespace InfiniteMeals.ViewModel.Checkout {
                                     subscriptionPlan = (SubscriptionPlan)this.BindingContext
 
                                 };
-                                System.Diagnostics.Debug.WriteLine(shipInfo.firstName);
-                                System.Diagnostics.Debug.WriteLine(shipInfo.lastName);
-                                System.Diagnostics.Debug.WriteLine(shipInfo.phoneNumber);
-                                System.Diagnostics.Debug.WriteLine(shipInfo.addressOne);
-                                System.Diagnostics.Debug.WriteLine(shipInfo.addressTwo);
-                                System.Diagnostics.Debug.WriteLine(shipInfo.zipCode);
-                                System.Diagnostics.Debug.WriteLine(shipInfo.city);
-                                System.Diagnostics.Debug.WriteLine(shipInfo.state);
 
-                                var paymentPage = new Payment(); 
+                                var paymentPage = new PaymentPage(); 
                                 paymentPage.BindingContext = shipInfo; // bind the payment page with shipping info
 
                                 await Navigation.PushAsync(paymentPage);

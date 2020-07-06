@@ -4,11 +4,13 @@ using System.Text;
 
 namespace InfiniteMeals.Model.Subscribe {
 
+    // stores the values received from GET request to aws
+    // api link: https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/plans
     public class MealPlanInformation {
         public string message { get; set; }
-        public MealPlanInformationResult result { get; set; }
+        public MealPlanInformationResult result { get; set; } // contains all the meal plans
     }
-    public class MealPlanInformationResult {
+    public class MealPlanInformationResult { 
         public MealPlans MealPlans { get; set; }
         public FiveMealPaymentPlans FiveMealPaymentPlans { get; set; }
         public TenMealPaymentPlans TenMealPaymentPlans { get; set; }

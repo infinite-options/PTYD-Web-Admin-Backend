@@ -23,7 +23,7 @@ namespace InfiniteMeals.ViewModel.Login
 
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
-        public HttpClient client = new HttpClient();
+        public HttpClient client = new HttpClient(); // client to handle all api calls
 
         public LoginPage() {
             InitializeComponent();
@@ -31,7 +31,7 @@ namespace InfiniteMeals.ViewModel.Login
         }
 
         private async void ClickedLogin(object sender, EventArgs e) {
-            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) {
+            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // checks that all fields are filled
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
             } else {
 

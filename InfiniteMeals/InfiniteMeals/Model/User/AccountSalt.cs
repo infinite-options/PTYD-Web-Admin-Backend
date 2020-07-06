@@ -5,7 +5,7 @@ using System.Text;
 
 namespace InfiniteMeals.Model.User {
 
-    // class that contains information about an account's salt (password)
+    // contains information about an account's salt (password)
     public class AccountSaltResult {
         [JsonProperty("password_salt")]
         public string passwordSalt { get; set; }

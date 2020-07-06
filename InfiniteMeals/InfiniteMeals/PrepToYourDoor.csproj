@@ -34,16 +34,16 @@
     <EmbeddedResource Update="Tests\CardTestCase.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\CheckoutLogin.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\CheckoutLoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\Payment.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\PaymentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\Delivery.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\DeliveryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\Summary.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\SummaryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Dbvm\Dbvm.xaml">
@@ -81,11 +81,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="ViewModel\Checkout\Payment.xaml.cs">
-      <DependentUpon>Payment.xaml</DependentUpon>
+    <Compile Update="ViewModel\Checkout\CheckoutLoginPage.xaml.cs">
+      <DependentUpon>CheckoutLoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="ViewModel\Checkout\Delivery.xaml.cs">
-      <DependentUpon>Delivery.xaml</DependentUpon>
+    <Compile Update="ViewModel\Checkout\PaymentPage.xaml.cs">
+      <DependentUpon>PaymentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Checkout\DeliveryPage.xaml.cs">
+      <DependentUpon>DeliveryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Checkout\SummaryPage.xaml.cs">
+      <DependentUpon>SummaryPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="ViewModel\Login\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>

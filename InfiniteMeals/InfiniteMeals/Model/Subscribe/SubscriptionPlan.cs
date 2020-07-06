@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Runtime.ConstrainedExecution;
 
 namespace InfiniteMeals.Model.Subscribe {
+
+    // contains information about a subscription plan (meal plan and payment option)
     public class SubscriptionPlan : INotifyPropertyChanged {
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -13,7 +15,7 @@ namespace InfiniteMeals.Model.Subscribe {
         public MealPlan mealPlan { get; set; }
         public PaymentOption paymentOption { get; set; }
 
-        public string id { get; set; }
+        public string id { get; set; } // id of the subscription plan, based on meal plan and payment option
 
         public double cost { get; set; }
 
@@ -30,11 +32,11 @@ namespace InfiniteMeals.Model.Subscribe {
             this.mealPlan = mealPlan;
             this.paymentOption = paymentOption;
             this.cost = 0;
-            instantiateID(mealPlan, paymentOption);
+            initializeID(mealPlan, paymentOption);
         }
 
         // assigns id based on meal plan and payment option
-        public void instantiateID(MealPlan mealPlan, PaymentOption paymentOption) {
+        public void initializeID(MealPlan mealPlan, PaymentOption paymentOption) {
             switch(mealPlan) {
                 case MealPlan.FiveMeals:
                     switch(paymentOption) {

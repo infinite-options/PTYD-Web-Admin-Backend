@@ -22,18 +22,19 @@ namespace PrepToYourDoor.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
 
     // login page if the user is not logged in before checkout process
-    public partial class CheckoutLogin : ContentPage {
+    public partial class CheckoutLoginPage : ContentPage {
 
 
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
         public HttpClient client = new HttpClient(); // client to handle all api calls
 
-        public CheckoutLogin() {
+        public CheckoutLoginPage() {
             InitializeComponent();
             
         }
 
+        // handles when the login button is clicked
         private async void ClickedLogin(object sender, EventArgs e) {
             if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // check if all fields are filled out
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
@@ -55,14 +56,15 @@ namespace PrepToYourDoor.ViewModel.Checkout {
                         };
                         await App.Database.SaveItemAsync(userSessionInformation); // send login session to local database
                         App.setLoggedIn(true); // login state is true for the app
-                        Button loginButton = (Button)Navigation.NavigationStack[0].FindByName("loginButton");
-                        loginButton.Text = "Log out"; // set the correct log out button
+                        MainPage homePage = (MainPage)Navigation.NavigationStack[0];
+                        homePage.updateLoginButton(); // update the login button on the homepage
+
                         if (this.BindingContext != null) {
                             SubscriptionPlan subscriptionPlan = (SubscriptionPlan)this.BindingContext;
-                            Delivery delivery = new Delivery();
+                            DeliveryPage delivery = new DeliveryPage();
                             delivery.BindingContext = subscriptionPlan;
                             Navigation.InsertPageBefore(delivery, this);
-                            await Navigation.PopAsync();
+                            await Navigation.PopAsync(); // navigate to delivery page
                         }
 
                     } else {
@@ -83,14 +85,12 @@ namespace PrepToYourDoor.ViewModel.Checkout {
             var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
             if (deviceIpAddress != null) {
                 try {
-                    System.Diagnostics.Debug.WriteLine("ip: " + deviceIpAddress);
                     LoginPost loginPostContent = new LoginPost() { // object that contains ip address and browser type; will be converted into a json object 
                         ipAddress = deviceIpAddress.ToString(),
                         browserType = deviceBrowserType
                     };
 
                     string loginPostContentJson = JsonConvert.SerializeObject(loginPostContent); // make orderContent into json
-                    System.Diagnostics.Debug.WriteLine(loginPostContentJson);
                     var httpContent = new StringContent(loginPostContentJson, Encoding.UTF8, "application/json"); // encode orderContentJson into format to send to database
 
 
@@ -100,16 +100,15 @@ namespace PrepToYourDoor.ViewModel.Checkout {
 
 
                     var response = await client.PostAsync(loginURL + userEmail + "/" + hashedPassword, httpContent); // try to post to database
-                    System.Diagnostics.Debug.WriteLine("response: " + response);
 
-                    if (response.Content != null) { // post was successful
+                    if (response.StatusCode != HttpStatusCode.OK) { // post was successful
                         var responseContent = await response.Content.ReadAsStringAsync();
 
                         var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
 
                         return loginResponse;
 
-                    }
+                    } 
                 }
                 catch (Exception e) {
                     System.Diagnostics.Debug.WriteLine(e.Message);
@@ -118,6 +117,7 @@ namespace PrepToYourDoor.ViewModel.Checkout {
 
 
             }
+            await DisplayAlert("Error", "There was a problem logging in", "OK");
             return null;
         }
 
@@ -126,22 +126,17 @@ namespace PrepToYourDoor.ViewModel.Checkout {
         public async Task<AccountSalt> retrieveAccountSalt(string userEmail) {
             try {
                 var content = await client.GetStringAsync(accountSaltURL + userEmail); // get the requested account salt
-                System.Diagnostics.Debug.WriteLine("content");
-                System.Diagnostics.Debug.WriteLine(content);
                 var accountSalt = JsonConvert.DeserializeObject<AccountSalt>(content);
                 return accountSalt;
             }
             catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
-            return null;
+            return null; // return null if the successful was unsuccessful or the account doesn't exist
         }
 
         // navigates the user to the sign up page
         private async void SignUpClicked(object sender, EventArgs e) {
-            if(this.BindingContext != null) {
-                System.Diagnostics.Debug.WriteLine("binding context: " + this.BindingContext.GetType());
-            }
             await Navigation.PushAsync(new SignUpPage());
         }
     }

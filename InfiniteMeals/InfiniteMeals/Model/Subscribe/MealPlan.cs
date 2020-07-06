@@ -4,6 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace InfiniteMeals.Model.Subscribe {
+
+    // enum to store values of meal plans
+
     public enum MealPlan {
         FiveMeals,
         TenMeals,
@@ -12,6 +15,7 @@ namespace InfiniteMeals.Model.Subscribe {
         Unknown
     }
 
+    // contains a method to parse a meal plan to a string
     static class MealPlanExtension {
         public static string mealPlanToString(MealPlan mealPlan) {
             switch(mealPlan) {

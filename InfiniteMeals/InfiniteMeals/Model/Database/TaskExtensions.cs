@@ -4,6 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PrepToYourDoor.Model.Database {
+
+    // helps initialize the database with an async method
     public static class TaskExtensions {
 
         public static async void SafeFireAndForget(this Task task, bool returnToCallingContext, Action<Exception> onException = null) {
