@@ -75,10 +75,7 @@ def getNow(): return datetime.strftime(datetime.now(utc),"%Y-%m-%d %H:%M:%S")
 # def getToday(): return datetime.strftime(date.today(), "%Y-%m-%d")
 # def getNow(): return datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
-
 # Connect to MySQL database (API v2)
-
-
 def connect():
     global RDS_PW
     global RDS_HOST
@@ -1353,10 +1350,7 @@ def confirm(token, hashed):
     finally:
         disconnect(conn)
 
-
 # NEED CODE FOR NON-RECURRING ONE TIME PLANS
-
-
 class Checkout(Resource):
     def getPaymentQuery(self, data, couponID, amount_due, amount_paid, paymentId, purchaseId):
         query = """ INSERT INTO ptyd_payments
@@ -1638,7 +1632,6 @@ class Checkout(Resource):
                 # update data['cc_num'] to write to database
                 print(card_selected['result'][0].get('cc_num'))
                 data['cc_num'] = card_selected['result'][0].get('cc_num')
-                print('data: ', data['cc_num'])
             #checking for coupon and preparing for stripe charge
             coupon_id = data.get('coupon_id')
             if coupon_id == "" or coupon_id is None:
@@ -1729,7 +1722,6 @@ class Checkout(Resource):
                 if reply['payment']['code'] != 281:
                     response['message'] = "Internal Server Error"
                     return response, 500
-                # Add credit card verification code here
                 reply['purchase'] = execute(purchase_query, 'post', conn)
                 if reply['purchase']['code'] != 281:
                     response['message'] = "Internal Server Error"
@@ -1751,8 +1743,6 @@ class Checkout(Resource):
 
 
 # Call this API from another source every Monday at midnight
-
-
 class UpdatePurchases(Resource):
     def post(self, affectedDate=None):
         response = {}
@@ -3686,13 +3676,24 @@ class UpdatePayments(Resource):
             data = request.get_json(force=True)
 
             print("pre", data)
-
             purchase_id = data['purchase_id']
-            cc_num = data['cc_num'][-4:]
-            cc_exp_date = data['cc_exp_date']
-            cc_cvv = data['cc_cvv']
+            if data['cc_num'][0:12] == "XXXXXXXXXXXX":
+                last_four_digits = data['cc_num'][12:]
+                select_card_query = """SELECT cc_num FROM ptyd_payments p1
+                                                    WHERE purchase_id = '""" + data['purchase_id'] + """'
+                                                    AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
+                                                                                WHERE p2.purchase_id = p1.purchase_id)
+                                                    AND RIGHT(cc_num, 4) = '""" + last_four_digits + "';"
+                card_selected = execute(select_card_query, 'get', conn)
+                print("card_selected when update: ", card_selected)
+                if not card_selected['result']:
+                    response['message'] = "Card's infomation is incorrect"
+                    return response, 500
+                data['cc_num'] = card_selected['result'][0].get('cc_num')
 
-            print("data", data)
+            cc_num = data['cc_num']
+            cc_exp_date = datetime(int(data['cc_exp_year']), int(data['cc_exp_month']), 1).strftime("%Y-%m-%d")
+            cc_cvv = data['cc_cvv']
             execute(""" CALL `ptyd`.`update_payments`(\'""" + str(purchase_id) + """\',
                                                         \'""" + str(cc_num) + """\', 
                                                         \'""" + str(cc_exp_date) + """\',
@@ -4809,7 +4810,6 @@ class MenuCreation(Resource):
             # response['menu_dates'] = menuDates
             response['menus'] = d
             response['result'] = d2
-            
 
             return response, 200
         except:
@@ -4836,10 +4836,26 @@ api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
-api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
-api.add_resource(Update_Subscription, '/api/v2/update-subscription')
+
 api.add_resource(Coupon, '/api/v2/coupon')
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
+
+#update and cancel subcription
+api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
+api.add_resource(UpdatePayments, '/api/v2/update-payments')
+api.add_resource(Update_Subscription, '/api/v2/update-subscription')
+api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
+
+#Not sure which page is using this endpoint?
+api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
+
+# Automated APIs
+# UpdatePurchases is called on Monday
+# ChargeSubscribers is called on Thursday
+api.add_resource(UpdatePurchases, '/api/v2/updatepurchases',
+                 '/api/v2/updatepurchases/<string:affectedDate>')
+api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers',
+                 '/api/v2/chargesubscribers/<string:affectedDate>')
 
 # Admin page
 # ---------- Admin page -----------------------------
@@ -4854,23 +4870,6 @@ api.add_resource(Add_Meal, '/api/v2/Add_Meal')
 api.add_resource(Edit_Meal, '/api/v2/Edit_Meal')
 api.add_resource(MenuCreation, '/api/v2/create-menu')
 api.add_resource(Get_All_Units, '/api/v2/GetUnits')
-
-
-api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
-api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
-
-# Automated APIs
-api.add_resource(UpdatePurchases, '/api/v2/updatepurchases',
-                 '/api/v2/updatepurchases/<string:affectedDate>')
-api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers',
-                 '/api/v2/chargesubscribers/<string:affectedDate>')
-
-'''
-# -----------Stripe Resrouces--------------------
-api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
-'''
-# in progress
-api.add_resource(UpdatePayments, '/api/v2/update-payments')
 
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
