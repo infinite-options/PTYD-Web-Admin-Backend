@@ -1003,6 +1003,8 @@ namespace InfiniteMeals.MealSelect
                     skip1.BackgroundColor = Color.FromHex(def);
                     a.BackgroundColor = Color.FromHex(def);
                     d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1018,6 +1020,8 @@ namespace InfiniteMeals.MealSelect
                     skip1.BackgroundColor = Color.FromHex(def);
                     a.BackgroundColor = Color.FromHex(def);
                     d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton2"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1033,6 +1037,8 @@ namespace InfiniteMeals.MealSelect
                     skip1.BackgroundColor = Color.FromHex(def);
                     a.BackgroundColor = Color.FromHex(def);
                     d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton3"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1048,6 +1054,8 @@ namespace InfiniteMeals.MealSelect
                     skip1.BackgroundColor = Color.FromHex(def);
                     a.BackgroundColor = Color.FromHex(def);
                     d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton4"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1063,6 +1071,8 @@ namespace InfiniteMeals.MealSelect
                     skip1.BackgroundColor = Color.FromHex(def);
                     a.BackgroundColor = Color.FromHex(def);
                     d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton5"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1079,6 +1089,8 @@ namespace InfiniteMeals.MealSelect
                     skip1.BackgroundColor = Color.FromHex(def);
                     a.BackgroundColor = Color.FromHex(def);
                     d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton6"), e);
+
                 }
                 await Navigation.PopAsync();
             }

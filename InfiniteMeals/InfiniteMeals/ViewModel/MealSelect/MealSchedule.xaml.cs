@@ -153,7 +153,7 @@ namespace InfiniteMeals.Meals {
             else
             {
                 b.BackgroundColor = Color.FromHex(green);
-                if(b.ClassId.Equals("SurpriseButton"))
+                if (b.ClassId.Equals("SurpriseButton"))
                 {
                     SelectButton.BackgroundColor = Color.FromHex(def);
                 }
@@ -182,6 +182,8 @@ namespace InfiniteMeals.Meals {
                     SelectButton6.BackgroundColor = Color.FromHex(def);
 
                 }
+                postSurpriseData(sender, e);
+
             }
         }
 
@@ -561,7 +563,7 @@ namespace InfiniteMeals.Meals {
             switch (dateText)
             {
                 case "Sunday":
-                    firstSat = dateValue.AddDays(7);
+                    firstSat = dateValue.AddDays(6);
                     weekAffectedList.Add(firstSat);
                     for (int i = 0; i < 6; i++)
                     {
@@ -615,7 +617,7 @@ namespace InfiniteMeals.Meals {
                     MondayButton6.Text = AllMondays[5];
                     break;
                 case "Tuesday":
-                    firstSat = dateValue.AddDays(6);
+                    firstSat = dateValue.AddDays(4);
                     AllSundays.Add(String.Format("{0:dddd MMMM d}", dateValue.AddDays(5)));
                     weekAffectedList.Add(firstSat);
 
@@ -959,6 +961,66 @@ namespace InfiniteMeals.Meals {
                 MealQuantities = dict,               // Dictionary inserted - DONE
                 DeliveryDay = deliveryDay,               // Day selected - DONE
                 DefaultSelected = false,             // Always False unless Surprise - DONE
+                IsAddons = false                    // Always False - DONE
+
+            };
+
+            string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoToSend); // convert to json
+
+            try
+            {
+                var httpContent = new StringContent(mealSelectInfoJson, Encoding.UTF8, "application/json"); // create a http response to send
+                var response = await client.PostAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001", httpContent); // send the json file to database
+                if (response.Content != null)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync(); // get the success response
+
+                    System.Diagnostics.Debug.WriteLine(responseContent); // print in the logs
+                }
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public async void postSurpriseData(object sender, EventArgs e)
+        {
+            int weekNumber;
+            Button b = (Button)sender;
+            if (b.ClassId.Equals("SurpriseButton"))
+                weekNumber = 1;
+            else if (b.ClassId.Equals("SurpriseButton2"))
+                weekNumber = 2;
+            else if (b.ClassId.Equals("SurpriseButton3"))
+                weekNumber = 3;
+            else if (b.ClassId.Equals("SurpriseButton4"))
+                weekNumber = 4;
+            else if (b.ClassId.Equals("SurpriseButton5"))
+                weekNumber = 5;
+            else
+                weekNumber = 6;
+
+            HttpClient client = new HttpClient();
+            List<DateTimeOffset> weekAffectedList = getWeekList();    // Week Affected Dates            
+            string deliveryDay = deliveryDayArray[weekNumber - 1];                  // Delivery Days ( 6 of them )
+            var dict = new Dictionary<string, int?>();
+            dict.Add("", null);
+
+            for (int i = 0; i < weekAffectedList.Count; i++)
+            {
+
+                System.Diagnostics.Debug.WriteLine("Week Affected: " + weekNumber + " " + weekAffectedList[i]);
+            }
+
+            var mealSelectInfoToSend = new MealSelectInformation
+            {
+                PurchaseId = "300-000001",                  // Constant for now
+                WeekAffected = weekAffectedList[weekNumber - 1],            // Week affected - DONE
+                MealQuantities = dict,               // Dictionary inserted - DONE
+                DeliveryDay = deliveryDay,               // Day selected - DONE
+                DefaultSelected = true,             // Always False unless Surprise - DONE
                 IsAddons = false                    // Always False - DONE
 
             };
