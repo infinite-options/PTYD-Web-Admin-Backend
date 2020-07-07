@@ -18,7 +18,7 @@ namespace InfiniteMeals.Model.Meals
         public DateTimeOffset WeekAffected { get; set; }
 
         [JsonProperty("meal_quantities")]
-        public Dictionary<string,int> MealQuantities { get; set; }
+        public Dictionary<string,int?> MealQuantities { get; set; }
 
         [JsonProperty("delivery_day")]
         public string DeliveryDay { get; set; }

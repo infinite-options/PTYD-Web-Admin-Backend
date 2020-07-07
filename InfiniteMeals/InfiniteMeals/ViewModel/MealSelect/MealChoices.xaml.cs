@@ -25,15 +25,15 @@ namespace InfiniteMeals.MealSelect
     public partial class MealChoices : ContentPage
     {
         public List<String> purchaseIdList = new List<String>();
-        public static int totalMealsSelected;
+        public  int totalMealsSelected;
         private static ObservableCollection<MealGroup> grouped { get; set; }
         public  IList<Meal> Meals { get; private set; }
         public  IList<Meal> SeasonalMeals { get; private set; }
         public  IList<Meal> Smoothies { get; private set; }
         public  IList<Meal> AllMeals { get; private set; }
         public  IList<Meal> MealSelectionList { get; private set; }
-        public  Dictionary<string, int> mealQtyDict = new Dictionary<string, int>();
-        public Label quantity;
+        public  Dictionary<string, int?> mealQtyDict = new Dictionary<string, int?>();
+        public  static Label quantity;
         public  MealGroup mealGroup = new MealGroup() { LongName = "Meals", ShortName = "m" };
         public  MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
         public  MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
@@ -41,6 +41,7 @@ namespace InfiniteMeals.MealSelect
         public static string green = "#8FBC8F";
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
+
 
         public MealChoices()
         {
@@ -52,7 +53,9 @@ namespace InfiniteMeals.MealSelect
         public void getData()
         {
             MealSchedule ms = new MealSchedule();
+            long mealsAllowed = ms.getMaxMeals();
             int weekNumber = ms.getNum();
+
             Meals = new List<Meal>();
             SeasonalMeals = new List<Meal>();
             Smoothies = new List<Meal>();
@@ -702,23 +705,38 @@ namespace InfiniteMeals.MealSelect
                 Text = "Surprise"
             };
             surpriseNav.Clicked += ClickedSurprise;
+            surpriseNav.BackgroundColor = Color.FromHex(def);
 
             var skipNav = new Button
             {
                 Text = "Skip"
             };
             skipNav.Clicked += ClickedSkip;
+            skipNav.BackgroundColor = Color.FromHex(def);
 
             var saveNav = new Button
             {
                 Text = "Save"
             };
-            saveNav.Clicked += postData;
+            saveNav.BackgroundColor = Color.FromHex(def);
+
+            var totalMeals = new Label
+            {
+                Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected))
+            };
 
             Grid sl = new Grid();
             sl.Children.Add(surpriseNav, 0, 0);
             sl.Children.Add(skipNav, 1, 0);
             sl.Children.Add(saveNav, 2, 0);
+            sl.Children.Add(totalMeals, 0, 1);
+            totalMeals.VerticalOptions = LayoutOptions.Center;
+            totalMeals.HorizontalOptions = LayoutOptions.Center;
+
+            totalMeals.FontSize = 16;
+            totalMeals.FontAttributes = FontAttributes.Bold;
+            totalMeals.SetValue(Grid.ColumnSpanProperty, 3);
+
             lstView.Header = sl;
 
 
@@ -769,7 +787,7 @@ namespace InfiniteMeals.MealSelect
 
                 var steppers = new Stepper {
                     Value = 0,
-                    Maximum = 10,
+                    Maximum = mealsAllowed,
                     Increment = 1,
                     HeightRequest = 50,
                     Scale = 0.5,
@@ -777,7 +795,9 @@ namespace InfiniteMeals.MealSelect
                     VerticalOptions = LayoutOptions.Center,
 
                 };
+
                 steppers.Margin = new Thickness(40, 0, 0, 0);
+                totalMealsSelected = (int)steppers.Value;
 
                 steppers.ValueChanged += (sender, e) =>
                 {
@@ -819,6 +839,19 @@ namespace InfiniteMeals.MealSelect
                         }
                         mealQtyDict.Add(model.id, model.qty);
                     }
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected));
+
+                    System.Diagnostics.Debug.WriteLine(mealsAllowed + " " + totalMealsSelected + " Hello ");
+                    if (mealsAllowed - totalMealsSelected == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += postData;
+                    }
+                    else
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(def);
+                    }
+
                 };
 
                 quantity = new Label {
@@ -852,6 +885,23 @@ namespace InfiniteMeals.MealSelect
 
             Content = lstView;
             BindingContext = this;
+        }
+
+        public void getPostedData()
+        {
+            WebClient client = new WebClient();
+
+            // Get user zipcodes
+            var userPurchClient = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001");
+            var userPurchID = JsonConvert.DeserializeObject<GetPostedMeals>(userPurchClient);
+            for (int i = 0; i < userPurchID.Result.Meals.Length; i++)
+            {
+                System.Diagnostics.Debug.WriteLine("Purchase ID: " + userPurchID.Result.Meals[i].PurchaseId);
+                System.Diagnostics.Debug.WriteLine("Week Affected: " + userPurchID.Result.Meals[i].WeekAffected );
+                System.Diagnostics.Debug.WriteLine("Meal Selection: " + userPurchID.Result.Meals[i].MealSelection);
+                System.Diagnostics.Debug.WriteLine("Delivery Day: " + userPurchID.Result.Meals[i].DeliveryDay);
+                System.Diagnostics.Debug.WriteLine("Meals Selected: " + userPurchID.Result.Meals[i].MealsSelected + "\n\n");
+            }
         }
 
         public async void postData(object sender, EventArgs e)
@@ -905,21 +955,10 @@ namespace InfiniteMeals.MealSelect
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
                 colorToReturn = Color.FromHex(green);
-                System.Diagnostics.Debug.WriteLine("Binding " + this.BindingContext);
 
-                if (this.BindingContext != null)
-                {
-                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
-                    Button test = (Button)mealSchedulePage.FindByName("SelectButton");
-                    test.BackgroundColor = Color.FromHex(green);
-                }
                 ClickedSave(sender, e);
+                getPostedData();
             }
-
-            System.Diagnostics.Debug.WriteLine("Color to return: " + colorToReturn);
-            System.Diagnostics.Debug.WriteLine("Color to return G: " + Color.FromHex(green));
-            System.Diagnostics.Debug.WriteLine("Color to return D: " + Color.FromHex(def));
-
         }
 
         public void getPurchID()
@@ -1029,6 +1068,7 @@ namespace InfiniteMeals.MealSelect
             }
             else
             {
+
                 if (this.BindingContext != null)
                 {
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
@@ -1064,6 +1104,8 @@ namespace InfiniteMeals.MealSelect
                     sun1.BackgroundColor = Color.FromHex(def);
                     mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1083,6 +1125,8 @@ namespace InfiniteMeals.MealSelect
                     sun1.BackgroundColor = Color.FromHex(def);
                     mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton2"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1102,6 +1146,8 @@ namespace InfiniteMeals.MealSelect
                     sun1.BackgroundColor = Color.FromHex(def);
                     mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton3"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1121,6 +1167,8 @@ namespace InfiniteMeals.MealSelect
                     sun1.BackgroundColor = Color.FromHex(def);
                     mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton4"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1140,6 +1188,8 @@ namespace InfiniteMeals.MealSelect
                     sun1.BackgroundColor = Color.FromHex(def);
                     mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton5"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1159,6 +1209,8 @@ namespace InfiniteMeals.MealSelect
                     sun1.BackgroundColor = Color.FromHex(def);
                     mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton6"), e);
+
                 }
                 await Navigation.PopAsync();
             }
@@ -1166,6 +1218,74 @@ namespace InfiniteMeals.MealSelect
 
         private async void ClickedSave(object sender, EventArgs e)
         {
+            MealSchedule ms = new MealSchedule();
+            int weekNumber = ms.getNum();
+            if (weekNumber == 1)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 2)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton2");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton2");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 3)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton3");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton3");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 4)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton4");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton4");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 5)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton5");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton5");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 6)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton6");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton6");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
             await Navigation.PopAsync();
         }
 
