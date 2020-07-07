@@ -176,7 +176,7 @@ export default class MakeChange extends Component {
         purchase_id: this.state.currentPurchase.purchase_id
       })
     })
-      .then(() => {
+      .then(res => {
         //success => reload the current page
         this.props.history.push("/mealschedule");
         window.location.reload(false);
@@ -189,6 +189,19 @@ export default class MakeChange extends Component {
   UpdateChangingSubcription = async () => {
     // update changing subcription
     try {
+      //update changing delivery address
+      await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
+        ...this.state.deliveryAddress,
+        purchase_id: this.state.currentPurchase.purchase_id
+      });
+      //update changing payment for subcription
+      let creditCard = this.state.creditCard;
+      await axios.patch(this.props.UPDATE_PAYMENT_URL, {
+        purchase_id: this.state.currentPurchase.purchase_id,
+        ...this.state.creditCard,
+        cc_exp_month: creditCard.cc_exp_month,
+        cc_exp_year: creditCard.cc_exp_year
+      });
       if (
         this.state.currentPurchase.meal_plan_id !==
         this.state.updateMealPlan.meal_plan_id
@@ -197,31 +210,17 @@ export default class MakeChange extends Component {
         // buy a new purchase
         let data = {
           user_uid: this.props.user_uid,
+          purchase_id: this.state.currentPurchase.purchase_id,
           is_gift: this.state.currentPurchase.gift,
           item: this.state.updateMealPlan.name, // target meal plan
           item_price: this.state.updateMealPlan.price, //target meal plan's price
           ...this.state.creditCard,
           billing_zip: this.state.currentPurchase.billing_zip,
-          ...this.state.deliveryAddress,
-          purchase_id: this.state.currentPurchase.purchase_id
+          ...this.state.deliveryAddress
         };
-
         await axios.post(`${this.props.UPDATE_SUBCRIPTION_URL}`, data); //update
-      } else {
-        //update changing delivery address
-        await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
-          ...this.state.deliveryAddress,
-          purchase_id: this.state.currentPurchase.purchase_id
-        });
-        //update changing payment for subcription
-        let creditCard = this.state.creditCard;
-        await axios.patch(this.props.UPDATE_PAYMENT_URL, {
-          purchase_id: this.state.currentPurchase.purchase_id,
-          ...this.state.creditCard,
-          cc_exp_month: creditCard.cc_exp_month,
-          cc_exp_year: creditCard.cc_exp_year
-        });
       }
+
       this.props.history.push("/mealschedule");
       window.location.reload("false");
     } catch (err) {
