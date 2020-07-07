@@ -1620,35 +1620,37 @@ class Checkout(Resource):
                         , \'""" + dates['billingDate'] + """\'
                         , """ + dates['weeksRemaining'] + """
                         , \'""" + dates['startDate'] + "\');"
-
+            # Validate credit card
+            if data['cc_num'][0:12] == "XXXXXXXXXXXX":
+                last_four_digits = data['cc_num'][12:]
+                select_card_query = """SELECT cc_num FROM ptyd_payments p1
+                                                    WHERE buyer_id = '""" + data['user_uid'] + """'
+                                                    AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
+                                                                                WHERE p2.buyer_id = p1.buyer_id)
+                                                    AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
+                                                    AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
+                                                    AND cc_cvv = '""" + data['cc_cvv'] + "';"
+                card_selected = execute(select_card_query, 'get', conn)
+                print("card_selected: ", card_selected)
+                if not card_selected['result']:
+                    response['message'] = "Credit card info is incorrect."
+                    return response, 500
+                # update data['cc_num'] to write to database
+                print(card_selected['result'][0].get('cc_num'))
+                data['cc_num'] = card_selected['result'][0].get('cc_num')
+                print('data: ', data['cc_num'])
+            #checking for coupon and preparing for stripe charge
             coupon_id = data.get('coupon_id')
-            charge = 0
             if coupon_id == "" or coupon_id is None:
                 charge = data['total_charge']
                 payment_query = self.getPaymentQuery(data, 'NULL', charge, charge, paymentId, purchaseId)
             else:
                 charge = round(data['total_charge'] - data['total_discount'], 2)
-            # create a stripe charge and make sure that charge is successful before writting it into database
+            # create a stripe charge and make sure that charge is successful before writing it into database
             # we should use Idempotent key to prevent sending multiple payment requests due to connection fail.
             try:
-                # Validate credit card
-                if data['cc_num'][0:12] != "XXXXXXXXXXXX":
-                    card_dict={"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
-                else:
-                    last_four_digits = data['cc_num'][12:]
-                    select_card_query = """SELECT cc_num FROM ptyd_payments p1
-                                        WHERE buyer_id = '""" + data['user_uid'] + """'
-                                        AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
-								                                    WHERE p2.buyer_id = p1.buyer_id)
-                                        AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
-                                        AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
-                                        AND cc_cvv = '""" + data['cc_cvv'] + "';"
-                    card_selected = execute(select_card_query, 'get', conn)
-                    print("card_selected: ", card_selected)
-                    if not card_selected['result']:
-                        response['message'] = "Credit card info is incorrect."
-                        return response, 500
-                    card_dict = {"number": card_selected['result'][0].get('cc_num'), "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
+                #create a token for stripe
+                card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
                 print ("card dict: ", card_dict)
                 try:
                     card_token = stripe.Token.create(card=card_dict)
@@ -1663,6 +1665,7 @@ class Checkout(Resource):
                     # Since it's a decline, stripe.error.CardError will be caught
                     response['message'] = e.error.message
                     return response, 400
+                # write everything into payment table
                 if coupon_id != "" and coupon_id is not None:
                     coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
                     temp_query = """ INSERT INTO ptyd_payments
@@ -1740,7 +1743,7 @@ class Checkout(Resource):
                 return response, 200
             except:
                 response['message'] = "Payment process error."
-                return responsee, 500
+                return response, 500
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
