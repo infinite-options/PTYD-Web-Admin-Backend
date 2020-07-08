@@ -2,7 +2,7 @@
 using InfiniteMeals.ViewModel.Checkout;
 using InfiniteMeals.ViewModel.Login;
 using Newtonsoft.Json;
-using PrepToYourDoor.ViewModel.Checkout;
+using InfiniteMeals.ViewModel.Checkout;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;

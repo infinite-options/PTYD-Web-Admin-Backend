@@ -15,11 +15,9 @@
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="MySqlConnector" Version="0.69.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NuProj" Version="0.11.30">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+    <PackageReference Include="Stripe.net" Version="37.15.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="AWSSDK.Core" Version="3.3.107.10" />
@@ -37,22 +35,31 @@
     <EmbeddedResource Update="Tests\CardTestCase.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\Payment.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\CheckoutLoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\Delivery.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\PaymentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\Checkout\Summary.xaml">
+    <EmbeddedResource Update="ViewModel\Checkout\DeliveryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Checkout\SummaryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Checkout\SummaryPasswordPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Dbvm\Dbvm.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ViewModel\MealSelect\MealSchedule.xaml">
+    <EmbeddedResource Update="ViewModel\MealSelect\AddOnChoices.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\MealSelect\MealChoices.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\MealSelect\MealSchedule.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\MealSelect\SelectMealOptions.xaml">
@@ -70,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ViewModel\Subscribe\AddOnChoices.xaml.cs" />
-    <Compile Remove="ViewModel\SignIn\Shipping.xaml.cs" />
+    <Compile Remove="ViewModel\Login\Shipping.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -78,17 +85,32 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="ViewModel\Checkout\Payment.xaml.cs">
-      <DependentUpon>Payment.xaml</DependentUpon>
+    <Compile Update="ViewModel\Checkout\CheckoutLoginPage.xaml.cs">
+      <DependentUpon>CheckoutLoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="ViewModel\Checkout\Delivery.xaml.cs">
-      <DependentUpon>Delivery.xaml</DependentUpon>
+    <Compile Update="ViewModel\Checkout\PaymentPage.xaml.cs">
+      <DependentUpon>PaymentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Checkout\DeliveryPage.xaml.cs">
+      <DependentUpon>DeliveryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Checkout\SummaryPage.xaml.cs">
+      <DependentUpon>SummaryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Login\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\SignUp\SignUpPage.xaml.cs">
+      <DependentUpon>SignUpPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="ViewModel\Subscribe\FiveMealPaymentOptionpage.xaml.cs">
       <DependentUpon>FiveMealPaymentOptionPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="ViewModel\Subscribe\PaymentOptionPage.xaml.cs">
       <DependentUpon>PaymentOptionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Subscribe\SubscribePage.xaml.cs">
+      <DependentUpon>SubscribePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

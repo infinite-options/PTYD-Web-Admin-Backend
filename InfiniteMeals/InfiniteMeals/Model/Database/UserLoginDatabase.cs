@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace PrepToYourDoor.Model.Database {
+namespace InfiniteMeals.Model.Database {
 
     // creates the database and contains methods for using database
     public class UserLoginDatabase {

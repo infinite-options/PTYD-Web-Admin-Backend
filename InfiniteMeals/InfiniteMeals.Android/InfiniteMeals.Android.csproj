@@ -59,13 +59,14 @@
     <PackageReference Include="MySqlConnector">
       <Version>0.69.3</Version>
     </PackageReference>
-    <PackageReference Include="NuProj">
-      <Version>0.11.30</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>2.0.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.7.335</Version>
+    </PackageReference>
+    <PackageReference Include="Stripe.net">
+      <Version>37.15.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />

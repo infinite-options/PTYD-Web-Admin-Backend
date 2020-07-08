@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\PrepToYourDoor.iOS.csproj": {}
+    "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\InfiniteMeals.iOS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\PrepToYourDoor.iOS.csproj": {
+    "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\InfiniteMeals.iOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\PrepToYourDoor.iOS.csproj",
-        "projectName": "PrepToYourDoor.iOS",
-        "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\PrepToYourDoor.iOS.csproj",
+        "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\InfiniteMeals.iOS.csproj",
+        "projectName": "InfiniteMeals.iOS",
+        "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\InfiniteMeals.iOS.csproj",
         "packagesPath": "C:\\Users\\Sean\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals.iOS\\obj\\",
         "projectStyle": "PackageReference",
@@ -32,8 +32,8 @@
         "frameworks": {
           "xamarinios10": {
             "projectReferences": {
-              "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj": {
-                "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj"
+              "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj": {
+                "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj"
               }
             }
           }
@@ -61,6 +61,10 @@
             "MySqlConnector": {
               "target": "Package",
               "version": "[0.69.3, )"
+            },
+            "Rg.Plugins.Popup": {
+              "target": "Package",
+              "version": "[2.0.0.3, )"
             },
             "Stripe.net": {
               "target": "Package",
@@ -93,12 +97,12 @@
         }
       }
     },
-    "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj": {
+    "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj",
-        "projectName": "PrepToYourDoor",
-        "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj",
+        "projectUniqueName": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj",
+        "projectName": "InfiniteMeals",
+        "projectPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj",
         "packagesPath": "C:\\Users\\Sean\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\obj\\",
         "projectStyle": "PackageReference",
@@ -165,6 +169,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[12.0.3, )"
+            },
+            "Rg.Plugins.Popup": {
+              "target": "Package",
+              "version": "[2.0.0.3, )"
             },
             "Stripe.net": {
               "target": "Package",

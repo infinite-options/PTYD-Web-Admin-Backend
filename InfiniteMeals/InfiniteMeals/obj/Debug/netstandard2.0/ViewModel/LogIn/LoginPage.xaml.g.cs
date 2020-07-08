@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.Login.LoginPage.xaml", "ViewModel/Login/LoginPage.xaml", typeof(global::InfiniteMeals.ViewModel.Login.LoginPage))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Login.LoginPage.xaml", "ViewModel/Login/LoginPage.xaml", typeof(global::InfiniteMeals.ViewModel.Login.LoginPage))]
 
 namespace InfiniteMeals.ViewModel.Login {
     

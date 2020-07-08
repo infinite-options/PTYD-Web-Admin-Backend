@@ -29,7 +29,7 @@ namespace InfiniteMeals.Utilities.Converters {
             String cardNumberAsString = cardNumber.ToString(); // convert to string to compare
 
             if (cardNumber == null) { // parameter is empty
-                return CardType.Unknown; 
+                return CardType.Invalid; 
             }
             else { // check for a match 
                 foreach (CardRegex cardRegex in cardNumberMatches) {
@@ -37,7 +37,7 @@ namespace InfiniteMeals.Utilities.Converters {
                         return cardRegex.cardType; // return card type if match is found
                     }
                 }
-                return CardType.Unknown; // no matches found
+                return CardType.Invalid; // no matches found
             }
 
         }

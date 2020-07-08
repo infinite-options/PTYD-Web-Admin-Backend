@@ -1,5 +1,5 @@
 ﻿using InfiniteMeals.Meals.Model;
-using PrepToYourDoor.Model.Database;
+using InfiniteMeals.Model.Database;
 using System;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;

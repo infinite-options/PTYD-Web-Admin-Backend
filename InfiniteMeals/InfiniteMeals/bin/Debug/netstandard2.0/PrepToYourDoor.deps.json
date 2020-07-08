@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "PrepToYourDoor/1.0.0": {
+      "InfiniteMeals/1.0.0": {
         "dependencies": {
           "AWSSDK.CognitoIdentity": "3.3.101.96",
           "AWSSDK.Core": "3.3.107.10",
@@ -17,6 +17,7 @@
           "MySqlConnector": "0.69.3",
           "NETStandard.Library": "2.0.3",
           "Newtonsoft.Json": "12.0.3",
+          "Rg.Plugins.Popup": "2.0.0.3",
           "Stripe.net": "37.15.1",
           "Xamarin.Essentials": "1.5.3.2",
           "Xamarin.Forms": "4.6.0.847",
@@ -24,7 +25,7 @@
           "sqlite-net-pcl": "1.7.335"
         },
         "runtime": {
-          "PrepToYourDoor.dll": {}
+          "InfiniteMeals.dll": {}
         }
       },
       "AWSSDK.CognitoIdentity/3.3.101.96": {
@@ -146,6 +147,17 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "12.0.0.0",
             "fileVersion": "12.0.3.23909"
+          }
+        }
+      },
+      "Rg.Plugins.Popup/2.0.0.3": {
+        "dependencies": {
+          "Xamarin.Forms": "4.6.0.847"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Rg.Plugins.Popup.dll": {
+            "assemblyVersion": "2.0.0.3",
+            "fileVersion": "2.0.0.3"
           }
         }
       },
@@ -351,7 +363,7 @@
     }
   },
   "libraries": {
-    "PrepToYourDoor/1.0.0": {
+    "InfiniteMeals/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -446,6 +458,13 @@
       "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "path": "newtonsoft.json/12.0.3",
       "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
+    },
+    "Rg.Plugins.Popup/2.0.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/lrKxxsdaF9T+YEnVDaUMj0angdRyvpngSmX8veY/QYhSjT4x3guJTsL8O8D4egDf7MI5McnmMAsst0tkN1LOA==",
+      "path": "rg.plugins.popup/2.0.0.3",
+      "hashPath": "rg.plugins.popup.2.0.0.3.nupkg.sha512"
     },
     "sqlite-net-pcl/1.7.335": {
       "type": "package",

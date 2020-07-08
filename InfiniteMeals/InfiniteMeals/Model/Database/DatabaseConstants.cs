@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using SQLite;
 
-namespace PrepToYourDoor.Model.Database {
+namespace InfiniteMeals.Model.Database {
 
     // database constants for when the database is created
     public static class DatabaseConstants {

@@ -14,10 +14,8 @@
   </PropertyGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)xamarin.forms\4.6.0.847\buildTransitive\Xamarin.Forms.props" Condition="Exists('$(NuGetPackageRoot)xamarin.forms\4.6.0.847\buildTransitive\Xamarin.Forms.props')" />
-    <Import Project="$(NuGetPackageRoot)nuproj\0.11.30\build\NuProj.props" Condition="Exists('$(NuGetPackageRoot)nuproj\0.11.30\build\NuProj.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgNuProj Condition=" '$(PkgNuProj)' == '' ">C:\Users\Sean\.nuget\packages\nuproj\0.11.30</PkgNuProj>
     <PkgMicrosoft_Bcl_Build Condition=" '$(PkgMicrosoft_Bcl_Build)' == '' ">C:\Users\Sean\.nuget\packages\microsoft.bcl.build\1.0.14</PkgMicrosoft_Bcl_Build>
     <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.core\3.3.107.10</PkgAWSSDK_Core>
     <PkgAWSSDK_SecurityToken Condition=" '$(PkgAWSSDK_SecurityToken)' == '' ">C:\Users\Sean\.nuget\packages\awssdk.securitytoken\3.3.105.14</PkgAWSSDK_SecurityToken>

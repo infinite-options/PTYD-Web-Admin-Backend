@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KEMJI6PDlTLVfcdjseXaJM00jse6eg9JoiNATzw5bok09u1SRMILB5foetbSJti1qUVhAtBHwfoi67YX47IuSw==",
+  "dgSpecHash": "vGWkPsNfwq/uTZ+wOyc8xOBdfCPW3q1vRzJuWauhyaRWFSmtBqWpw7WZXNUgJ7Nwr9ipAXdL4ByDVB2ixV2QHg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\PrepToYourDoor.csproj",
+  "projectFilePath": "C:\\Users\\Sean\\source\\repos\\Prep-To-Your-Door2\\InfiniteMeals\\InfiniteMeals\\InfiniteMeals.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sean\\.nuget\\packages\\awssdk.cognitoidentity\\3.3.101.96\\awssdk.cognitoidentity.3.3.101.96.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\awssdk.core\\3.3.107.10\\awssdk.core.3.3.107.10.nupkg.sha512",
@@ -17,6 +17,7 @@
     "C:\\Users\\Sean\\.nuget\\packages\\mysqlconnector\\0.69.3\\mysqlconnector.0.69.3.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Sean\\.nuget\\packages\\rg.plugins.popup\\2.0.0.3\\rg.plugins.popup.2.0.0.3.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\sqlite-net-pcl\\1.7.335\\sqlite-net-pcl.1.7.335.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\sqlitepclraw.bundle_green\\2.0.3\\sqlitepclraw.bundle_green.2.0.3.nupkg.sha512",
     "C:\\Users\\Sean\\.nuget\\packages\\sqlitepclraw.core\\2.0.3\\sqlitepclraw.core.2.0.3.nupkg.sha512",

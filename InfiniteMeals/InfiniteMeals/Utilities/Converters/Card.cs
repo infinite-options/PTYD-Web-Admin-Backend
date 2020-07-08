@@ -22,7 +22,7 @@ namespace InfiniteMeals.Utilities.Converters {
         public Card() {
             this.cardNumber = 0;
             this.CVV = 0;
-            this.cardType = CardType.Unknown;
+            this.cardType = CardType.Invalid;
         }
 
 

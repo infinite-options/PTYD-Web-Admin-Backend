@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfiniteMeals.Android", "In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfiniteMeals.iOS", "InfiniteMeals.iOS\InfiniteMeals.iOS.csproj", "{4A1488E6-C3E8-4112-B8D0-262553CFF68E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfiniteMeals", "InfiniteMeals\InfiniteMeals.csproj", "{94FD6313-C377-44FA-AB2C-3F97CCF9154D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfiniteMeals", "InfiniteMeals\InfiniteMeals.csproj", "{94FD6313-C377-44FA-AB2C-3F97CCF9154D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

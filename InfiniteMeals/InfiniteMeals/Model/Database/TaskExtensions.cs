@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrepToYourDoor.Model.Database {
+namespace InfiniteMeals.Model.Database {
 
     // helps initialize the database with an async method
     public static class TaskExtensions {

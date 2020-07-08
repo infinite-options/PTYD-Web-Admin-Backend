@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.Checkout.CheckoutLoginPage.xaml", "ViewModel/Checkout/CheckoutLoginPage.xaml", typeof(global::PrepToYourDoor.ViewModel.Checkout.CheckoutLoginPage))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Checkout.CheckoutLoginPage.xaml", "ViewModel/Checkout/CheckoutLoginPage.xaml", typeof(global::InfiniteMeals.ViewModel.Checkout.CheckoutLoginPage))]
 
-namespace PrepToYourDoor.ViewModel.Checkout {
+namespace InfiniteMeals.ViewModel.Checkout {
     
     
     [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Checkout\\CheckoutLoginPage.xaml")]

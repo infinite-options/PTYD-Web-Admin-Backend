@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,11 +14,14 @@ using System.Security.Cryptography;
 using System.Net;
 using InfiniteMeals.Model.User;
 using System.Threading.Tasks;
+using Rg.Plugins.Popup;
+using InfiniteMeals.ViewModel.Checkout;
+using Rg.Plugins.Popup.Services;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SummaryPage : ContentPage {
-        string password = ""; 
+        public string password = ""; 
         const string checkoutURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout"; // api to post to checkout database
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end
         public HttpClient client = new HttpClient(); // client to handle all api requests
@@ -35,21 +37,15 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
         private async void ConfirmClicked(object sender, EventArgs e) {
 
-            password = await DisplayPromptAsync("Password", "Please enter your password");
-
-            if(await checkout() == HttpStatusCode.BadRequest) { // problem with api call
-                await DisplayAlert("Error", "Purchase was not able to be completed", "OK");
-            } else { // successful checkout, take user to home page
-                await Navigation.PopToRootAsync();
-                await DisplayAlert("Payment Confirmed", "Go to menu to select your meals!", "OK"); // display a confirmation
-            }
-
-
+            SummaryPasswordPopup passwordPopup = new SummaryPasswordPopup();
+            passwordPopup.BindingContext = this;
+            await Navigation.PushAsync(passwordPopup);
+ 
         }
         
         // performs the checkout and sends to local database and stripe
         // returns HttpStatusCode.OK if successful and HttpStatusCode.BadRequest if unsuccessful
-        private async Task<HttpStatusCode> checkout() { // completes the checkout and sends the information as a json to the database
+        public async Task<HttpStatusCode> checkout() { // completes the checkout and sends the information as a json to the database
             OrderInformation orderInformation = (OrderInformation)this.BindingContext; // contains all the info about the order 
 
             try {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("PrepToYourDoor.ViewModel.Subscribe.FiveMealPaymentOptionPage.xaml", "ViewModel/Subscribe/FiveMealPaymentOptionPage.xaml", typeof(global::InfiniteMeals.ViewModel.Subscribe.FiveMealPaymentOptionPage))]
+[assembly: global::Xamarin.Forms.Xaml.XamlResourceIdAttribute("InfiniteMeals.ViewModel.Subscribe.FiveMealPaymentOptionPage.xaml", "ViewModel/Subscribe/FiveMealPaymentOptionPage.xaml", typeof(global::InfiniteMeals.ViewModel.Subscribe.FiveMealPaymentOptionPage))]
 
 namespace InfiniteMeals.ViewModel.Subscribe {
     

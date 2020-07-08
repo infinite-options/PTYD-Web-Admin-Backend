@@ -13,7 +13,7 @@ using InfiniteMeals.Model.Login;
 using InfiniteMeals.ViewModel.SignUp;
 using InfiniteMeals.Model.User;
 using System.Threading.Tasks;
-using PrepToYourDoor.Model.Database;
+using InfiniteMeals.Model.Database;
 
 
 namespace InfiniteMeals.ViewModel.Login
@@ -34,12 +34,10 @@ namespace InfiniteMeals.ViewModel.Login
             if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // checks that all fields are filled
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
             } else {
-
+               
                 var accountSalt = await retrieveAccountSalt(this.loginEmail.Text); // retrieve user's account salt
-                
                 if (accountSalt != null && accountSalt.result.Count != 0) { // make sure the account salt exists 
                     var loginAttempt = await login(this.loginEmail.Text, this.loginPassword.Text, accountSalt);
-                    
                     if (loginAttempt != null && loginAttempt.Message != "Request failed, wrong password.") { // make sure the login attempt was successful
                         var userSessionInformation = new UserLoginSession { // object to send into local database
                             UserUid = loginAttempt.Result.Result[0].UserUid,
