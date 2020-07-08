@@ -9,9 +9,14 @@ using Xamarin.Forms.Xaml;
 using InfiniteMeals.Meals.Model;
 using System.Net.Http;
 using InfiniteMeals.Model.Database;
+using InfiniteMeals.Model.Meals;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Newtonsoft.Json.Linq;
+using InfiniteMeals.Meals;
+using System.Net;
+using System.Runtime.Serialization;
 
 namespace InfiniteMeals.ViewModel.MealSelect
 {
@@ -19,23 +24,38 @@ namespace InfiniteMeals.ViewModel.MealSelect
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MealChoices : ContentPage
     {
-        int totalMealsSelected;
-        private ObservableCollection<MealGroup> grouped { get; set; }
+        public List<String> purchaseIdList = new List<String>();
+        public  int totalMealsSelected;
+        private static ObservableCollection<MealGroup> grouped { get; set; }
+        public  IList<Meal> Meals { get; private set; }
+        public  IList<Meal> SeasonalMeals { get; private set; }
+        public  IList<Meal> Smoothies { get; private set; }
+        public  IList<Meal> AllMeals { get; private set; }
+        public  IList<Meal> MealSelectionList { get; private set; }
+        public  Dictionary<string, int?> mealQtyDict = new Dictionary<string, int?>();
+        public  static Label quantity;
+        public  MealGroup mealGroup = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public  MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+        public  MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public static string infoImg = "info.jpg";
+        public static string green = "#8FBC8F";
+        public static string def = "#F5F5F5";
+        public Color colorToReturn = Color.FromHex("#F5F5F5");
 
-        public IList<Meal> Meals { get; private set; }
-        public IList<Meal> SeasonalMeals { get; private set; }
-        public IList<Meal> Smoothies { get; private set; }
-        public IList<Meal> AllMeals { get; private set; }
-        public Label quantity;
-        String infoImg = "info.jpg";
+
         public MealChoices()
         {
             InitializeComponent();
+            getPurchID();
             getData();
         }
 
-        public async void getData()
+        public void getData()
         {
+            MealSchedule ms = new MealSchedule();
+            long mealsAllowed = ms.getMaxMeals();
+            int weekNumber = ms.getNum();
+
             Meals = new List<Meal>();
             SeasonalMeals = new List<Meal>();
             Smoothies = new List<Meal>();
@@ -70,124 +90,653 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             // Grouping
             grouped = new ObservableCollection<MealGroup>();
-            var mealGroup = new MealGroup() { LongName = "Meals", ShortName= "m"};
-            var seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-            var smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
             // Data
-            HttpClient client = new HttpClient();
-            var content = await client.GetStringAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
+
+            WebClient client = new WebClient();
+            var content = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
-
-            for(int placeHolder = 0; placeHolder < obj.Result.MenuForWeek1.Meals.Weekly.Menu.Length; placeHolder++)
+            if(weekNumber == 1)
             {
-                String imageMeal;
-                MenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealName);
-                MenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealDesc);
-                MenuForWeek1Prot.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealFat);
-                MenuForWeek1Sugar.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealSugar);
-                MenuForWeek1Fat.Add(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealFat);
+                var jsonObjectLength = obj.Result.MenuForWeek1.Meals.Weekly.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek1.Meals.Weekly;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek1.Meals.Seasonal;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek1.Meals.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek1.Meals.Smoothies;
 
-                if(obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl== null)
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
                 {
-                    imageMeal = "defaultmeal.png";
-                    MenuForWeek1Image.Add(imageMeal);
-                }
-                else
-                {
-                    imageMeal = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealPhotoUrl.ToString();
-                    MenuForWeek1Image.Add(imageMeal);
+                    String imageMeal;
+                    MenuForWeek1Names.Add(jsonObject.Menu[placeHolder].MealName);
+                    MenuForWeek1Desc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    MenuForWeek1Prot.Add(jsonObject.Menu[placeHolder].MealProtein);
+                    MenuForWeek1Sugar.Add(jsonObject.Menu[placeHolder].MealSugar);
+                    MenuForWeek1Fat.Add(jsonObject.Menu[placeHolder].MealFat);
+
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    mealGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = jsonObject.Menu[placeHolder].MealName,
+                        description = jsonObject.Menu[placeHolder].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
                 }
 
-                mealGroup.Add(new Meal
+                for (int placeHolderSeas = 0; placeHolderSeas < jsonObjectSeasonalLength; placeHolderSeas++)
                 {
-                    name = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealName,
-                    description = obj.Result.MenuForWeek1.Meals.Weekly.Menu[placeHolder].MealDesc,
-                    imageUrl= imageMeal,
-                    infoUrl = infoImg,
-                    qty = 0
-                }); ;
+                    String imageMeal;
+                    SeasMenuForWeek1Names.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealName);
+                    SeasMenuForWeek1Desc.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc);
+                    if (jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    seasonalMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
+                        name = jsonObjectSeasonal.Menu[placeHolderSeas].MealName,
+                        description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int smooth = 0; smooth < jsonObjectSmoothieLength; smooth++)
+                {
+                    String imageMeal;
+                    SmoothiesNames.Add(jsonObjectSmoothie.Menu[smooth].MealName);
+                    SmoothiesDesc.Add(jsonObjectSmoothie.Menu[smooth].MealDesc);
+                    if (jsonObjectSmoothie.Menu[smooth].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[smooth].MealPhotoUrl.ToString();
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    smoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[smooth].MealId,
+                        name = jsonObjectSmoothie.Menu[smooth].MealName,
+                        description = jsonObjectSmoothie.Menu[smooth].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                grouped.Add(mealGroup);
+                grouped.Add(seasonalMealGroup);
+                grouped.Add(smoothieGroup);
+            }
+            else if (weekNumber == 2)
+            {
+                var jsonObjectLength = obj.Result.MenuForWeek2.Meals.Weekly.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek2.Meals.Weekly;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek2.Meals.Seasonal.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek2.Meals.Seasonal;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek2.Meals.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek2.Meals.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
+                {
+                    String imageMeal;
+                    MenuForWeek1Names.Add(jsonObject.Menu[placeHolder].MealName);
+                    MenuForWeek1Desc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    MenuForWeek1Prot.Add(jsonObject.Menu[placeHolder].MealProtein);
+                    MenuForWeek1Sugar.Add(jsonObject.Menu[placeHolder].MealSugar);
+                    MenuForWeek1Fat.Add(jsonObject.Menu[placeHolder].MealFat);
+
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    mealGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = jsonObject.Menu[placeHolder].MealName,
+                        description = jsonObject.Menu[placeHolder].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int placeHolderSeas = 0; placeHolderSeas < jsonObjectSeasonalLength; placeHolderSeas++)
+                {
+                    String imageMeal;
+                    SeasMenuForWeek1Names.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealName);
+                    SeasMenuForWeek1Desc.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc);
+                    if (jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    seasonalMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
+                        name = jsonObjectSeasonal.Menu[placeHolderSeas].MealName,
+                        description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int smooth = 0; smooth < jsonObjectSmoothieLength; smooth++)
+                {
+                    String imageMeal;
+                    SmoothiesNames.Add(jsonObjectSmoothie.Menu[smooth].MealName);
+                    SmoothiesDesc.Add(jsonObjectSmoothie.Menu[smooth].MealDesc);
+                    if (jsonObjectSmoothie.Menu[smooth].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[smooth].MealPhotoUrl.ToString();
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    smoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[smooth].MealId,
+                        name = jsonObjectSmoothie.Menu[smooth].MealName,
+                        description = jsonObjectSmoothie.Menu[smooth].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                grouped.Add(mealGroup);
+                grouped.Add(seasonalMealGroup);
+                grouped.Add(smoothieGroup);
 
             }
-
-           for (int placeHolderSeas = 0; placeHolderSeas < obj.Result.MenuForWeek1.Meals.Seasonal.Menu.Length; placeHolderSeas++)
+            else if (weekNumber == 3)
             {
-                String imageMeal;
-                 SeasMenuForWeek1Names.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName);
-                 SeasMenuForWeek1Desc.Add(obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc);
-                if (obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                var jsonObjectLength = obj.Result.MenuForWeek3.Meals.Weekly.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek3.Meals.Weekly;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek3.Meals.Seasonal.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek3.Meals.Seasonal;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek3.Meals.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek3.Meals.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
                 {
-                    imageMeal = "defaultmeal.png";
-                    SeasMenuForWeek1Image.Add(imageMeal);
+                    String imageMeal;
+                    MenuForWeek1Names.Add(jsonObject.Menu[placeHolder].MealName);
+                    MenuForWeek1Desc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    MenuForWeek1Prot.Add(jsonObject.Menu[placeHolder].MealProtein);
+                    MenuForWeek1Sugar.Add(jsonObject.Menu[placeHolder].MealSugar);
+                    MenuForWeek1Fat.Add(jsonObject.Menu[placeHolder].MealFat);
+
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    mealGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = jsonObject.Menu[placeHolder].MealName,
+                        description = jsonObject.Menu[placeHolder].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
                 }
-                else
+
+                for (int placeHolderSeas = 0; placeHolderSeas < jsonObjectSeasonalLength; placeHolderSeas++)
                 {
-                    imageMeal = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
-                    SeasMenuForWeek1Image.Add(imageMeal);
+                    String imageMeal;
+                    SeasMenuForWeek1Names.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealName);
+                    SeasMenuForWeek1Desc.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc);
+                    if (jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    seasonalMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
+                        name = jsonObjectSeasonal.Menu[placeHolderSeas].MealName,
+                        description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
                 }
-                seasonalMealGroup.Add(new Meal
+
+                for (int smooth = 0; smooth < jsonObjectSmoothieLength; smooth++)
                 {
-                    name = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealName,
-                    description = obj.Result.MenuForWeek1.Meals.Seasonal.Menu[placeHolderSeas].MealDesc,
-                    imageUrl = imageMeal,
-                    infoUrl = infoImg,
-                    qty = 0,
-                });
+                    String imageMeal;
+                    SmoothiesNames.Add(jsonObjectSmoothie.Menu[smooth].MealName);
+                    SmoothiesDesc.Add(jsonObjectSmoothie.Menu[smooth].MealDesc);
+                    if (jsonObjectSmoothie.Menu[smooth].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[smooth].MealPhotoUrl.ToString();
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    smoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[smooth].MealId,
+                        name = jsonObjectSmoothie.Menu[smooth].MealName,
+                        description = jsonObjectSmoothie.Menu[smooth].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                grouped.Add(mealGroup);
+                grouped.Add(seasonalMealGroup);
+                grouped.Add(smoothieGroup);
+            }
+            else if(weekNumber == 4)
+            {
+                var jsonObjectLength = obj.Result.MenuForWeek4.Meals.Weekly.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek4.Meals.Weekly;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek4.Meals.Seasonal.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek4.Meals.Seasonal;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek4.Meals.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek4.Meals.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
+                {
+                    String imageMeal;
+                    MenuForWeek1Names.Add(jsonObject.Menu[placeHolder].MealName);
+                    MenuForWeek1Desc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    MenuForWeek1Prot.Add(jsonObject.Menu[placeHolder].MealProtein);
+                    MenuForWeek1Sugar.Add(jsonObject.Menu[placeHolder].MealSugar);
+                    MenuForWeek1Fat.Add(jsonObject.Menu[placeHolder].MealFat);
+
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    mealGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = jsonObject.Menu[placeHolder].MealName,
+                        description = jsonObject.Menu[placeHolder].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int placeHolderSeas = 0; placeHolderSeas < jsonObjectSeasonalLength; placeHolderSeas++)
+                {
+                    String imageMeal;
+                    SeasMenuForWeek1Names.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealName);
+                    SeasMenuForWeek1Desc.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc);
+                    if (jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    seasonalMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
+                        name = jsonObjectSeasonal.Menu[placeHolderSeas].MealName,
+                        description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int smooth = 0; smooth < jsonObjectSmoothieLength; smooth++)
+                {
+                    String imageMeal;
+                    SmoothiesNames.Add(jsonObjectSmoothie.Menu[smooth].MealName);
+                    SmoothiesDesc.Add(jsonObjectSmoothie.Menu[smooth].MealDesc);
+                    if (jsonObjectSmoothie.Menu[smooth].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[smooth].MealPhotoUrl.ToString();
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    smoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[smooth].MealId,
+                        name = jsonObjectSmoothie.Menu[smooth].MealName,
+                        description = jsonObjectSmoothie.Menu[smooth].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                grouped.Add(mealGroup);
+                grouped.Add(seasonalMealGroup);
+                grouped.Add(smoothieGroup);
+            }
+            else if (weekNumber == 5)
+            {
+                var jsonObjectLength = obj.Result.MenuForWeek5.Meals.Weekly.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek5.Meals.Weekly;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek5.Meals.Seasonal.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek5.Meals.Seasonal;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek5.Meals.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek5.Meals.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
+                {
+                    String imageMeal;
+                    MenuForWeek1Names.Add(jsonObject.Menu[placeHolder].MealName);
+                    MenuForWeek1Desc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    MenuForWeek1Prot.Add(jsonObject.Menu[placeHolder].MealProtein);
+                    MenuForWeek1Sugar.Add(jsonObject.Menu[placeHolder].MealSugar);
+                    MenuForWeek1Fat.Add(jsonObject.Menu[placeHolder].MealFat);
+
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    mealGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = jsonObject.Menu[placeHolder].MealName,
+                        description = jsonObject.Menu[placeHolder].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int placeHolderSeas = 0; placeHolderSeas < jsonObjectSeasonalLength; placeHolderSeas++)
+                {
+                    String imageMeal;
+                    SeasMenuForWeek1Names.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealName);
+                    SeasMenuForWeek1Desc.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc);
+                    if (jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    seasonalMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
+                        name = jsonObjectSeasonal.Menu[placeHolderSeas].MealName,
+                        description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int smooth = 0; smooth < jsonObjectSmoothieLength; smooth++)
+                {
+                    String imageMeal;
+                    SmoothiesNames.Add(jsonObjectSmoothie.Menu[smooth].MealName);
+                    SmoothiesDesc.Add(jsonObjectSmoothie.Menu[smooth].MealDesc);
+                    if (jsonObjectSmoothie.Menu[smooth].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[smooth].MealPhotoUrl.ToString();
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    smoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[smooth].MealId,
+                        name = jsonObjectSmoothie.Menu[smooth].MealName,
+                        description = jsonObjectSmoothie.Menu[smooth].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                grouped.Add(mealGroup);
+                grouped.Add(seasonalMealGroup);
+                grouped.Add(smoothieGroup);
+            }
+            else
+            {
+                var jsonObjectLength = obj.Result.MenuForWeek6.Meals.Weekly.Menu.Length;
+                var jsonObject = obj.Result.MenuForWeek6.Meals.Weekly;
+                var jsonObjectSeasonalLength = obj.Result.MenuForWeek6.Meals.Seasonal.Menu.Length;
+                var jsonObjectSeasonal = obj.Result.MenuForWeek6.Meals.Seasonal;
+                var jsonObjectSmoothieLength = obj.Result.MenuForWeek6.Meals.Smoothies.Menu.Length;
+                var jsonObjectSmoothie = obj.Result.MenuForWeek6.Meals.Smoothies;
+
+                for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
+                {
+                    String imageMeal;
+                    MenuForWeek1Names.Add(jsonObject.Menu[placeHolder].MealName);
+                    MenuForWeek1Desc.Add(jsonObject.Menu[placeHolder].MealDesc);
+                    MenuForWeek1Prot.Add(jsonObject.Menu[placeHolder].MealProtein);
+                    MenuForWeek1Sugar.Add(jsonObject.Menu[placeHolder].MealSugar);
+                    MenuForWeek1Fat.Add(jsonObject.Menu[placeHolder].MealFat);
+
+                    if (jsonObject.Menu[placeHolder].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
+                        MenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    mealGroup.Add(new Meal
+                    {
+                        id = jsonObject.Menu[placeHolder].MealId,
+                        name = jsonObject.Menu[placeHolder].MealName,
+                        description = jsonObject.Menu[placeHolder].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int placeHolderSeas = 0; placeHolderSeas < jsonObjectSeasonalLength; placeHolderSeas++)
+                {
+                    String imageMeal;
+                    SeasMenuForWeek1Names.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealName);
+                    SeasMenuForWeek1Desc.Add(jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc);
+                    if (jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
+                        SeasMenuForWeek1Image.Add(imageMeal);
+                    }
+
+                    seasonalMealGroup.Add(new Meal
+                    {
+                        id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
+                        name = jsonObjectSeasonal.Menu[placeHolderSeas].MealName,
+                        description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                for (int smooth = 0; smooth < jsonObjectSmoothieLength; smooth++)
+                {
+                    String imageMeal;
+                    SmoothiesNames.Add(jsonObjectSmoothie.Menu[smooth].MealName);
+                    SmoothiesDesc.Add(jsonObjectSmoothie.Menu[smooth].MealDesc);
+                    if (jsonObjectSmoothie.Menu[smooth].MealPhotoUrl == null)
+                    {
+                        imageMeal = "defaultmeal.png";
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    else
+                    {
+                        imageMeal = jsonObjectSmoothie.Menu[smooth].MealPhotoUrl.ToString();
+                        SmoothiesImage.Add(imageMeal);
+                    }
+                    smoothieGroup.Add(new Meal
+                    {
+                        id = jsonObjectSmoothie.Menu[smooth].MealId,
+                        name = jsonObjectSmoothie.Menu[smooth].MealName,
+                        description = jsonObjectSmoothie.Menu[smooth].MealDesc,
+                        imageUrl = imageMeal,
+                        infoUrl = infoImg,
+                        qty = 0,
+                        is_addon = "false",
+                    });
+                }
+
+                grouped.Add(mealGroup);
+                grouped.Add(seasonalMealGroup);
+                grouped.Add(smoothieGroup);
 
             }
-
-            for (int smooth = 0; smooth < obj.Result.MenuForWeek1.Meals.Smoothies.Menu.Length; smooth++)
-            {
-                String imageMeal;
-                SmoothiesNames.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName);
-                SmoothiesDesc.Add(obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc);
-                if (obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl == null)
-                {
-                    imageMeal = "defaultmeal.png";
-                    SmoothiesImage.Add(imageMeal);
-                }
-                else
-                {
-                    imageMeal = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealPhotoUrl.ToString();
-                    SmoothiesImage.Add(imageMeal);
-                }
-                smoothieGroup.Add(new Meal
-                {
-                    name = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealName,
-                    description = obj.Result.MenuForWeek1.Meals.Smoothies.Menu[smooth].MealDesc,
-                    imageUrl = imageMeal,
-                    infoUrl = infoImg,
-                    qty = 0,
-                });
-            }
-    
-            grouped.Add(mealGroup);
-            grouped.Add(seasonalMealGroup);
-            grouped.Add(smoothieGroup);
 
             var surpriseNav = new Button
             {
                 Text = "Surprise"
             };
             surpriseNav.Clicked += ClickedSurprise;
+            surpriseNav.BackgroundColor = Color.FromHex(def);
 
             var skipNav = new Button
             {
                 Text = "Skip"
             };
             skipNav.Clicked += ClickedSkip;
+            skipNav.BackgroundColor = Color.FromHex(def);
 
             var saveNav = new Button
             {
                 Text = "Save"
             };
-            saveNav.Clicked += ClickedSave;
+            saveNav.BackgroundColor = Color.FromHex(def);
+
+            var totalMeals = new Label
+            {
+                Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected))
+            };
 
             Grid sl = new Grid();
             sl.Children.Add(surpriseNav, 0, 0);
             sl.Children.Add(skipNav, 1, 0);
             sl.Children.Add(saveNav, 2, 0);
+            sl.Children.Add(totalMeals, 0, 1);
+            totalMeals.VerticalOptions = LayoutOptions.Center;
+            totalMeals.HorizontalOptions = LayoutOptions.Center;
+
+            totalMeals.FontSize = 16;
+            totalMeals.FontAttributes = FontAttributes.Bold;
+            totalMeals.SetValue(Grid.ColumnSpanProperty, 3);
+
             lstView.Header = sl;
 
 
@@ -203,8 +752,9 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 };
                 var nameLabel = new Label {
                     FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center };
+                    HorizontalTextAlignment = TextAlignment.Start,
+                };
+                nameLabel.Margin = new Thickness(10, 0, 0, 0);
                 var imgLabel = new Image
                 {
                     WidthRequest = 150,
@@ -218,17 +768,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 {
                     WidthRequest = 20,
                     HeightRequest = 20,
-                    HorizontalOptions = LayoutOptions.Start,
+                    HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center
                 };
                 var infoButton = new ImageButton {
                     WidthRequest = 20,
                     HeightRequest = 20,
                     Aspect = Aspect.AspectFit,
-                    HorizontalOptions = LayoutOptions.Start,
-                    VerticalOptions= LayoutOptions.Center,
-            };
-                infoButton.Margin = new Thickness(50, 0, 0, 0);
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                };
                 infoButton.Clicked += (sender, e) =>
                 {
                     ImageButton stepper = sender as ImageButton;
@@ -238,16 +787,23 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                 var steppers = new Stepper {
                     Value = 0,
-                    Maximum = 10,
+                    Maximum = mealsAllowed,
                     Increment = 1,
-                    HeightRequest = 50
+                    HeightRequest = 50,
+                    Scale = 0.5,
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.Center,
+
                 };
+
+                steppers.Margin = new Thickness(40, 0, 0, 0);
+                totalMealsSelected = (int)steppers.Value;
 
                 steppers.ValueChanged += (sender, e) =>
                 {
                     Stepper stepper = sender as Stepper;
                     var model = stepper.BindingContext as Meal;
-                    int stepperVal = (int) stepper.Value;
+                    int stepperVal = (int)stepper.Value;
 
                     if (stepperVal > model.qty)
                     {
@@ -269,32 +825,161 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         }
                     }
 
-                    System.Diagnostics.Debug.WriteLine("Total Selections: " + model.qty + " " + model.name + " " + model.order_qty + " " + totalMealsSelected);
+                    if (model.qty <= 0)
+                    {
+                        mealQtyDict.Remove(model.id);
+
+                    }
+                    else
+                    {
+                        // Replace value in dictionary if key exists
+                        if (mealQtyDict.ContainsKey(model.id))
+                        {
+                            mealQtyDict.Remove(model.id);
+                        }
+                        mealQtyDict.Add(model.id, model.qty);
+                    }
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected));
+
+                    System.Diagnostics.Debug.WriteLine(mealsAllowed + " " + totalMealsSelected + " Hello ");
+                    if (mealsAllowed - totalMealsSelected == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += postData;
+                    }
+                    else
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(def);
+                    }
+
                 };
 
                 quantity = new Label {
                     FontSize = 15,
                     FontAttributes = FontAttributes.Bold,
-                    VerticalTextAlignment=  TextAlignment.Center,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Center,
+
                 };
 
                 nameLabel.SetBinding(Label.TextProperty, "name");
                 imgLabel.SetBinding(Image.SourceProperty, "imageUrl");
                 infoButton.SetBinding(Image.SourceProperty, "infoUrl");
                 quantity.SetBinding(Label.TextProperty, "qty");
+
                 grid.Children.Add(imgLabel, 0, 0);
                 imgLabel.SetValue(Grid.RowSpanProperty, 2);
-                grid.Children.Add(nameLabel, 1, 0);
-                grid.Children.Add(infoButton, 2, 0);
-                grid.Children.Add(steppers, 2, 1);
-                steppers.SetValue(Grid.ColumnSpanProperty, 2);
-                grid.Children.Add(quantity, 3, 0);
+                imgLabel.SetValue(Grid.ColumnSpanProperty, 2);
+                grid.Children.Add(nameLabel, 2, 0);
+                nameLabel.SetValue(Grid.RowSpanProperty, 2);
+                nameLabel.SetValue(Grid.ColumnSpanProperty, 2);
+                grid.Children.Add(infoButton, 4, 0);
+                grid.Children.Add(steppers, 3, 1);
+                steppers.SetValue(Grid.ColumnSpanProperty, 3);
+                grid.Children.Add(quantity, 5, 0);
 
-                return new ViewCell { View = grid, Height = 100};
+                return new ViewCell { View = grid, Height = 100 };
             });
 
             Content = lstView;
             BindingContext = this;
+        }
+
+        public void getPostedData()
+        {
+            WebClient client = new WebClient();
+
+            // Get user zipcodes
+            var userPurchClient = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001");
+            var userPurchID = JsonConvert.DeserializeObject<GetPostedMeals>(userPurchClient);
+            for (int i = 0; i < userPurchID.Result.Meals.Length; i++)
+            {
+                System.Diagnostics.Debug.WriteLine("Purchase ID: " + userPurchID.Result.Meals[i].PurchaseId);
+                System.Diagnostics.Debug.WriteLine("Week Affected: " + userPurchID.Result.Meals[i].WeekAffected );
+                System.Diagnostics.Debug.WriteLine("Meal Selection: " + userPurchID.Result.Meals[i].MealSelection);
+                System.Diagnostics.Debug.WriteLine("Delivery Day: " + userPurchID.Result.Meals[i].DeliveryDay);
+                System.Diagnostics.Debug.WriteLine("Meals Selected: " + userPurchID.Result.Meals[i].MealsSelected + "\n\n");
+            }
+        }
+
+        public async void postData(object sender, EventArgs e)
+        {
+            HttpClient client = new HttpClient();
+            MealSchedule ms = new MealSchedule();
+            int weekNumber = ms.getNum();            // Getter Information 
+            List<DateTimeOffset> weekAffectedList = ms.getWeekList();    // Week Affected Dates
+            string[] deliveryDayList = ms.getDDArray();                  // Delivery Days ( 6 of them )
+
+            var mealSelectInfoToSend = new MealSelectInformation
+            {
+                PurchaseId = "300-000001",                  // Constant for now
+                WeekAffected = weekAffectedList[weekNumber - 1],            // Week affected - DONE
+                MealQuantities = mealQtyDict,               // Dictionary inserted - DONE
+                DeliveryDay = deliveryDayList[0],               // Day selected - DONE
+                DefaultSelected = false,             // Always False unless Surprise - DONE
+                IsAddons = false                    // Always False - DONE
+
+            };
+
+            if(mealQtyDict.Count == 0)
+            {
+                colorToReturn = Color.FromHex(def);
+                ClickedSave(sender, e);
+            }
+            else
+            {
+
+                foreach (var pk in mealQtyDict)
+                {
+                    System.Diagnostics.Debug.WriteLine("Dictionary Count " + pk);
+                }
+                System.Diagnostics.Debug.WriteLine("Dictionary Count " + mealQtyDict.Count);
+                string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoToSend); // convert to json
+
+                try
+                {
+                    var httpContent = new StringContent(mealSelectInfoJson, Encoding.UTF8, "application/json"); // create a http response to send
+                    var response = await client.PostAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001", httpContent); // send the json file to database
+                    if (response.Content != null)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync(); // get the success response
+
+                        System.Diagnostics.Debug.WriteLine(responseContent); // print in the logs
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+                colorToReturn = Color.FromHex(green);
+
+                ClickedSave(sender, e);
+                getPostedData();
+            }
+        }
+
+        public void getPurchID()
+        {
+           WebClient client = new WebClient();
+
+            // Get user zipcodes
+            var userPurchClient = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000006");
+            var userPurchID = JsonConvert.DeserializeObject<UserInfo>(userPurchClient);
+            for (int i = 0; i < userPurchID.Result.Length; i++)
+            {
+                var purchaseID = userPurchID.Result[i].PaymentId.ToString();
+                purchaseIdList.Add(purchaseID);
+            }
+
+        }
+
+        public List<String> getPurchaseIdList()
+        {
+            getPurchID();
+            return purchaseIdList;
         }
 
         void OnValueChanged(object sender, ValueChangedEventArgs e)
@@ -304,41 +989,323 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
         private async void ClickedSurprise(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MealSchedule());
+            MealSchedule ms = new MealSchedule();
+            int weekNumber = ms.getNum();
+            if(weekNumber == 1)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton");
+                    Button a = (Button)mealSchedulePage.FindByName("SelectButton");
+                    Button d = (Button)mealSchedulePage.FindByName("SurpriseButton");
+
+                    skip1.BackgroundColor = Color.FromHex(def);
+                    a.BackgroundColor = Color.FromHex(def);
+                    d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if(weekNumber == 2)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton2");
+                    Button a = (Button)mealSchedulePage.FindByName("SelectButton2");
+                    Button d = (Button)mealSchedulePage.FindByName("SurpriseButton2");
+
+                    skip1.BackgroundColor = Color.FromHex(def);
+                    a.BackgroundColor = Color.FromHex(def);
+                    d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton2"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if (weekNumber == 3)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton3");
+                    Button a = (Button)mealSchedulePage.FindByName("SelectButton3");
+                    Button d = (Button)mealSchedulePage.FindByName("SurpriseButton3");
+
+                    skip1.BackgroundColor = Color.FromHex(def);
+                    a.BackgroundColor = Color.FromHex(def);
+                    d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton3"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if (weekNumber == 4)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton4");
+                    Button a = (Button)mealSchedulePage.FindByName("SelectButton4");
+                    Button d = (Button)mealSchedulePage.FindByName("SurpriseButton4");
+
+                    skip1.BackgroundColor = Color.FromHex(def);
+                    a.BackgroundColor = Color.FromHex(def);
+                    d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton4"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if (weekNumber == 5)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton5");
+                    Button a = (Button)mealSchedulePage.FindByName("SelectButton5");
+                    Button d = (Button)mealSchedulePage.FindByName("SurpriseButton5");
+
+                    skip1.BackgroundColor = Color.FromHex(def);
+                    a.BackgroundColor = Color.FromHex(def);
+                    d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton5"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else
+            {
+
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton6");
+                    Button a = (Button)mealSchedulePage.FindByName("SelectButton6");
+                    Button d = (Button)mealSchedulePage.FindByName("SurpriseButton6");
+
+                    skip1.BackgroundColor = Color.FromHex(def);
+                    a.BackgroundColor = Color.FromHex(def);
+                    d.BackgroundColor = Color.FromHex(green);
+                    ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton6"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
         }
 
         private async void ClickedSkip(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MealSchedule());
+            MealSchedule ms = new MealSchedule();
+            int weekNumber = ms.getNum();
+            if(weekNumber == 1)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton");
+                    Button sel1 = (Button)mealSchedulePage.FindByName("SelectButton");
+                    Button sun1 = (Button)mealSchedulePage.FindByName("SundayButton");
+                    Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton");
+                    Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton");
+
+                    skip1.BackgroundColor = Color.FromHex(green);
+                    sel1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if(weekNumber == 2)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton2");
+                    Button sel1 = (Button)mealSchedulePage.FindByName("SelectButton2");
+                    Button sun1 = (Button)mealSchedulePage.FindByName("SundayButton2");
+                    Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton2");
+                    Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton2");
+
+                    skip1.BackgroundColor = Color.FromHex(green);
+                    sel1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton2"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if(weekNumber == 3)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton3");
+                    Button sel1 = (Button)mealSchedulePage.FindByName("SelectButton3");
+                    Button sun1 = (Button)mealSchedulePage.FindByName("SundayButton3");
+                    Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton3");
+                    Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton3");
+
+                    skip1.BackgroundColor = Color.FromHex(green);
+                    sel1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton3"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if(weekNumber == 4)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton4");
+                    Button sel1 = (Button)mealSchedulePage.FindByName("SelectButton4");
+                    Button sun1 = (Button)mealSchedulePage.FindByName("SundayButton4");
+                    Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton4");
+                    Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton4");
+
+                    skip1.BackgroundColor = Color.FromHex(green);
+                    sel1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton4"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else if (weekNumber == 5)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton5");
+                    Button sel1 = (Button)mealSchedulePage.FindByName("SelectButton5");
+                    Button sun1 = (Button)mealSchedulePage.FindByName("SundayButton5");
+                    Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton5");
+                    Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton5");
+
+                    skip1.BackgroundColor = Color.FromHex(green);
+                    sel1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton5"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button skip1 = (Button)mealSchedulePage.FindByName("SkipButton");
+                    Button sel1 = (Button)mealSchedulePage.FindByName("SelectButton6");
+                    Button sun1 = (Button)mealSchedulePage.FindByName("SundayButton6");
+                    Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton6");
+                    Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton6");
+
+                    skip1.BackgroundColor = Color.FromHex(green);
+                    sel1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    surp1.BackgroundColor = Color.FromHex(def);
+                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton6"), e);
+
+                }
+                await Navigation.PopAsync();
+            }
         }
 
         private async void ClickedSave(object sender, EventArgs e)
         {
-            //await Navigation.PushAsync(new Meals.MealSchedule());
+            MealSchedule ms = new MealSchedule();
+            int weekNumber = ms.getNum();
+            if (weekNumber == 1)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 2)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton2");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton2");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 3)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton3");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton3");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 4)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton4");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton4");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 5)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton5");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton5");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
+            else if (weekNumber == 6)
+            {
+                if (this.BindingContext != null)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton6");
+                    selectMealButton.BackgroundColor = Color.FromHex(green);
+                    Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton6");
+                    surpriseButton.BackgroundColor = Color.FromHex(def);
+                }
+            }
             await Navigation.PopAsync();
         }
 
-
-        void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
-       {
-           Meal selectedItem = e.SelectedItem as Meal;
-           DisplayAlert("Ingredients", selectedItem.description.ToString(), "OK");
-        }
-
-         void OnListViewItemTapped(object sender, ItemTappedEventArgs e)
-       {
-           Meal tappedItem = e.Item as Meal;
-           DisplayAlert("Ingredients", tappedItem.description.ToString(), "OK");
-
-        }
-
-        public Command selectCommand = new Command((object item) =>
+        public Color refreshPageSelections()
         {
-            Meal obj = item as Meal;
-            System.Diagnostics.Debug.WriteLine(obj.description.ToString() + " made it here");
-            //DisplayAlert("Ingredients", obj.description.ToString(), "OK");
-        });
-
+            return colorToReturn;
+        }
+            
     }
 
 }

@@ -65,7 +65,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             //price = m["price"]["S"].ToString(),
                             description = m["description"]["S"].ToString(),
                             kitchenId = m["kitchen_id"]["S"].ToString(),
-                            id = m["meal_id"]["S"].ToString(),
+                            //id = m["meal_id"]["S"].ToString(),
                             qty = 0
                         }
                         );

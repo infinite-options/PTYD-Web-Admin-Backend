@@ -4,15 +4,21 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="InfiniteMeals.ViewModel.MealSelect.MealSchedule" Title="Select Meals"
+             x:Class="InfiniteMeals.ViewModel.MealSelect.MealSchedule" Title="Meal Schedule"
              NavigationPage.HasBackButton="False">
     <ContentPage.Content>
         <ScrollView>
         <StackLayout>
-            <Label Text="Meal Selection" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+           <Picker
+              x:Name="SubscriptionPicker"
+              Margin="30,20,30,0"
+            />
+            <Label x:Name="nullPicker" Text ="Please Select a Subscription" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"></Label>
+            <Label x:Name="HeaderLabel" Margin = "0,20,0,0" FontSize ="18" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+
             <Grid x:Name="ButtonStack"
-                  HorizontalOptions="Center"
-                  VerticalOptions="Center">
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
                
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="16.66*" />
@@ -41,7 +47,7 @@
                 <RowDefinition Height="16.66*" />
             </Grid.RowDefinitions>
 
-            <Label Text="Week 1" Grid.Row = "0" Grid.ColumnSpan="3"  FontSize ="16" Margin="20" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center"/>
+            <Label Text="Week 1" Grid.Row = "0" Grid.ColumnSpan="3"  FontSize ="16" Margin ="20,0,20,0" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center"/>
                 <Button ClassId = "SunButton"
                     x:Name="SundayButton"
                     BorderColor="Black"
@@ -99,6 +105,7 @@
                     Clicked="ClickedSelectMeal"/>
             <Button ClassId = "SurpriseButton"
                     x:Name="SurpriseButton"
+                    BackgroundColor="#8FBC8F"
                     WidthRequest="100"
                     HeightRequest="100"
                     BorderColor="Black"
@@ -106,11 +113,10 @@
                     Margin="30,0,0,0"
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    BackgroundColor="#8FBC8F"
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="2"
-                    Clicked="ClickedColor"/>
+                    Clicked="clickSurprise"/>
             <Button ClassId = "AddButton"
                     x:Name="AddonButton"
                     WidthRequest="100"
@@ -127,7 +133,7 @@
                     Clicked="ClickedAddOn"/>
 
 
-            <Label Text="Week 2" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="3" Margin="20" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="Week 2" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="3" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton2"
                     x:Name="SundayButton2"
                     WidthRequest="100"
@@ -197,7 +203,7 @@
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="5"
-                    Clicked="ClickedColor"/>
+                    Clicked="clickSurprise"/>
             <Button ClassId = "AddButton2"
                     x:Name="AddonButton2"
                     WidthRequest="100"
@@ -215,7 +221,7 @@
 
 
 
-            <Label Text="Week 3" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="6" Margin="20" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="Week 3" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="6" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton3"
                     x:Name="SundayButton3"
                     WidthRequest="100"
@@ -285,7 +291,7 @@
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="8"
-                    Clicked="ClickedColor"/>
+                    Clicked="clickSurprise"/>
             <Button ClassId = "AddButton3"
                     x:Name="AddonButton3"
                     WidthRequest="100"
@@ -301,7 +307,7 @@
                     Grid.Row="8"
                     Clicked="ClickedAddOn"/>
 
-                <Label Text="Week 4" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="9" Margin="20" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="Week 4" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="9" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton4"
                     x:Name="SundayButton4"
                     WidthRequest="100"
@@ -371,7 +377,7 @@
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="11"
-                    Clicked="ClickedColor"/>
+                    Clicked="clickSurprise"/>
             <Button ClassId = "AddButton4"
                     x:Name="AddonButton4"
                     WidthRequest="100"
@@ -390,7 +396,7 @@
 
 
 
-            <Label Text="Week 5" Grid.ColumnSpan="3"  FontSize ="16" Margin="20" Grid.Row="12" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="Week 5" Grid.ColumnSpan="3"  FontSize ="16" Margin ="20,0,20,0" Grid.Row="12" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton5"
                     x:Name="SundayButton5"
                     WidthRequest="100"
@@ -460,7 +466,7 @@
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="14"
-                    Clicked="ClickedColor"/>
+                    Clicked="clickSurprise"/>
             <Button ClassId = "AddButton5"
                     x:Name="AddonButton5"
                     WidthRequest="100"
@@ -478,7 +484,7 @@
 
 
 
-            <Label Text="Week 6" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="15" Margin="20" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Text="Week 6" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="15" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton6"
                     x:Name="SundayButton6"
                     WidthRequest="100"
@@ -548,7 +554,7 @@
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="17"
-                    Clicked="ClickedColor"/>
+                    Clicked="clickSurprise"/>
             <Button ClassId = "AddButton6"
                     x:Name="AddonButton6"
                     WidthRequest="100"

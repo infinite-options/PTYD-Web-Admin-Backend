@@ -1,8 +1,6 @@
 ﻿using InfiniteMeals.Model.Subscribe;
 using InfiniteMeals.ViewModel.Checkout;
-using InfiniteMeals.ViewModel.Login;
 using Newtonsoft.Json;
-using InfiniteMeals.ViewModel.Checkout;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
