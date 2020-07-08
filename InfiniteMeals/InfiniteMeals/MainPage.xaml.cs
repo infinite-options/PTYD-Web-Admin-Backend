@@ -6,9 +6,7 @@ using InfiniteMeals.ViewModel.Login;
 using InfiniteMeals.ViewModel.MealSelect;
 using InfiniteMeals.ViewModel.Profile;
 using InfiniteMeals.ViewModel.Subscribe;
-
-
-
+using InfiniteMeals.Model.Database;
 
 namespace InfiniteMeals {
 
@@ -29,9 +27,14 @@ namespace InfiniteMeals {
 
         private async void ClickedLogin(object sender, EventArgs e)
         {
-            var loginPage = new LoginPage();
-            loginPage.BindingContext = this;
-            await Navigation.PushAsync(loginPage);
+            if (!App.LoggedIn) {
+                LoginPage loginPage = new LoginPage();
+                loginPage.BindingContext = this;
+                await Navigation.PushAsync(loginPage);
+            } else {
+                App.setLoggedIn(false);
+                updateLoginButton();
+            }
         }
 
         private async void ClickedMealSchedule(object sender, EventArgs e)
@@ -41,7 +44,15 @@ namespace InfiniteMeals {
 
         private async void ClickedUserProfile(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new UserProfile());
+            if (!App.LoggedIn) {
+                await DisplayAlert("Error", "You are currently not logged in", "OK");
+            }
+            else {
+                UserProfile userProfile = new UserProfile();
+                UserLoginSession currentUserInfo = App.Database.GetLastItem();
+                userProfile.BindingContext = currentUserInfo;
+                await Navigation.PushAsync(userProfile);
+            }
         }
 
         private async void ClickedSubscribe(object sender, EventArgs e)

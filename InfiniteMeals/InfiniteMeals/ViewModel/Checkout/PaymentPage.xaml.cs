@@ -46,7 +46,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
                 mealPlan.Text = MealPlanExtension.mealPlanToString(shippingInfo.subscriptionPlan.mealPlan);
                 paymentOption.Text = PaymentOptionExtension.paymentOptionToString(shippingInfo.subscriptionPlan.paymentOption);
                 lastFourDigits.Text = "XXXXXXXXXXXX" + this.cardNumberEntry.Text.Substring(cardNumberEntry.Text.Length - 4);
-                totalCost.Text = "$" + (shippingInfo.subscriptionPlan.cost + 25.00).ToString(); // set total cost text
+                totalCost.Text = "$" + String.Format("{0:0.00}",(shippingInfo.subscriptionPlan.cost + 25.00).ToString()); // set total cost text
 
                 await Navigation.PushAsync(summaryPage);
             }

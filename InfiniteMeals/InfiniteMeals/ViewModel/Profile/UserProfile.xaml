@@ -6,16 +6,14 @@
              mc:Ignorable="d"
              x:Class="InfiniteMeals.ViewModel.Profile.UserProfile" Title="User Profile">
     <ContentPage.Content>
-        <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
-            <Label Text="Username"/>
-            <StackLayout Orientation="Horizontal">
-                <Label Text="First Name"></Label>
-                <Label Text="Last Name"></Label>
-            </StackLayout>
-            <Label Text="Email"></Label>
-            <Label Text="Meal Plan"></Label>
-            <Label Text="Address"></Label>
-            
+        <StackLayout HorizontalOptions="Center" VerticalOptions="Center"  Padding="5">
+
+            <Label Text="{Binding FirstName, StringFormat='First Name: {0}'}" FontSize="Large" TextColor="Black" HorizontalOptions="Center"/>
+
+            <Label Text="{Binding Email, StringFormat='Email: {0}'}" FontSize="Large" TextColor="Black" HorizontalOptions="Center"/>
+
+            <Button Text="Change Password" FontSize="Large" TextColor="Black" Clicked="ChangePasswordClicked"/>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

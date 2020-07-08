@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InfiniteMeals.Model.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
+
 
 namespace InfiniteMeals.ViewModel.Profile
 {
@@ -17,6 +20,11 @@ namespace InfiniteMeals.ViewModel.Profile
             InitializeComponent();
         }
 
-        
+        private async void ChangePasswordClicked(object sender, EventArgs e) {
+            UserLoginSession currentUserInfo = (UserLoginSession)this.BindingContext;
+            ChangePasswordPage changePasswordPage = new ChangePasswordPage();
+            changePasswordPage.BindingContext = currentUserInfo;
+            await Navigation.PushAsync(changePasswordPage);
+        }
     }
 }
