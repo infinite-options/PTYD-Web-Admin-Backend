@@ -36,6 +36,9 @@ export default class MakeChange extends Component {
         price: this.props.currentPurchase.meal_plan_price,
         amount_paid: 0
       },
+      tax_rate: 0.0825, //these info should be taken from database instead of hard coded
+      shipping: 15,
+
       creditCard: {
         cc_num: this.props.currentPurchase.cc_num,
         cc_cvv: this.props.currentPurchase.cc_cvv,
@@ -214,6 +217,8 @@ export default class MakeChange extends Component {
           is_gift: this.state.currentPurchase.gift,
           item: this.state.updateMealPlan.name, // target meal plan
           item_price: this.state.updateMealPlan.price, //target meal plan's price
+          tax_rate: this.state.tax_rate,
+          shipping: this.state.shipping,
           ...this.state.creditCard,
           billing_zip: this.state.currentPurchase.billing_zip,
           ...this.state.deliveryAddress

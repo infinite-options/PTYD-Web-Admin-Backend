@@ -1625,12 +1625,14 @@ class Checkout(Resource):
             if data['cc_num'][0:12] == "XXXXXXXXXXXX":
                 last_four_digits = data['cc_num'][12:]
                 select_card_query = """SELECT cc_num FROM ptyd_payments p1
-                                                    WHERE buyer_id = '""" + data['user_uid'] + """'
-                                                    AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
-                                                                                WHERE p2.buyer_id = p1.buyer_id)
-                                                    AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
-                                                    AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
-                                                    AND cc_cvv = '""" + data['cc_cvv'] + "';"
+                                                    WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp) FROM 
+                                                        (SELECT * FROM ptyd_payments p2
+                                                            WHERE buyer_id = '""" + data['user_uid'] + """'
+                                                            AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
+                                                            AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
+                                                            AND cc_cvv = '""" + data['cc_cvv'] + """') AS p)
+                                                    AND cc_num IS NOT NULL;"""
+                print(select_card_query)
                 card_selected = execute(select_card_query, 'get', conn)
                 print("card_selected: ", card_selected)
                 if not card_selected['result']:
@@ -3091,32 +3093,26 @@ class CancelSubscriptionNow(Resource):
         mealplan_info = execute(mealplan_query, "get", conn).get("result")
 
         week_remaining = int(current_purchase_info.get('weeks_remaining'))
-        # calculate amount paid
-        if (float(current_purchase_info.get('amount_paid')) > float(current_purchase_info.get('meal_plan_price'))):
-            amount_paid = float(current_purchase_info.get('amount_paid'))
-        else:
-            amount_paid = float(current_purchase_info.get('meal_plan_price'))
 
-        # amount_due = float(current_purchase_info.get('meal_plan_price'))
-        amount_calculating = float(current_purchase_info.get('meal_plan_price'))
+        amount_calculating = current_purchase_info.get('meal_plan_price')
+        # we need to take these info from database or it will be sent from front to make sure we have the same info
+        # from front to back
+        shipping = 15
+        tax_rate = 0.0825
         refund = 0
         # create a temp dictionary to keep the meal plan price
         price = {}
         for mealplan in mealplan_info:
-            price[mealplan.get('meal_plan_desc').split(
-                " - ")[1]] = mealplan.get('meal_plan_price')
+            price[mealplan.get('meal_plan_desc').split(" - ")[1]] = mealplan.get('meal_plan_price')
 
         if name_matching[1] == "4 Week Pre-Pay":
             print("matching 4 week pre-pay")
             if week_remaining == 0:
                 refund = 0
             elif week_remaining == 1:
-                refund = amount_calculating - \
-                    float(price.get('2 Week Pre-Pay')) - \
-                    float(price.get("Weekly"))
+                refund = amount_calculating - float(price.get('2 Week Pre-Pay')) - float(price.get("Weekly"))
             elif week_remaining == 2:
-                refund = amount_calculating - \
-                    float(price.get('2 Week Pre-Pay'))
+                refund = amount_calculating - float(price.get('2 Week Pre-Pay'))
             elif week_remaining == 3:
                 refund = amount_calculating - float(price.get('Weekly'))
             elif week_remaining == 4:
@@ -3139,7 +3135,8 @@ class CancelSubscriptionNow(Resource):
             print("Meal Plan name format error")
             response['message'] = "Internal server error"
             return response, 500
-
+        #adding tax and shipping to refund
+        refund = refund*(1 + tax_rate) + shipping
         current_purchase_info['refund_amount'] = round(refund, 2)
         return current_purchase_info
 
@@ -3152,87 +3149,132 @@ class CancelSubscriptionNow(Resource):
 
             newSnapshotQuery = execute(
                 """CALL get_snapshots_id();""", 'get', conn)
-            paymentIDresponse = execute(
-                "CALL get_new_payment_id;", 'get', conn)
 
             purchase_id = data['purchase_id']
 
             snapshotId = newSnapshotQuery['result'][0]['new_id']
-            new_paymentID = paymentIDresponse['result'][0]['new_id']
+
             timestamp = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
             # calculate the refund
             refund_info = self.refund_calculator(conn, purchase_id)
             refund = refund_info.get('refund_amount')
             stripe_charge_id = refund_info.get('stripe_charge_id')
-            print("refund in cancel subscription: ", refund)
+            print("refund in cancel subscription: ", refund_info)
             print('stripe_charge_id in cancel subscription: ', stripe_charge_id)
             # stripe refund before update database
             try:
-                stripe_refund = stripe.Refund.create(charge=str(stripe_charge_id), amount=int(round(refund,2)*100))
-                print(stripe_refund)
+                #check if refund is larger than what we charged (for the current chargeID)
+                # we have to refund MULTIPLE times
+                exact_refund = refund
+                amount_paid = float(refund_info['amount_paid'])
+                second = False
+                second_payment_id = None
+                print(type(exact_refund))
+                while exact_refund > 0:
+                    if exact_refund >= amount_paid:
+                        refund = amount_paid
+                    print("refund when cancel: ", refund)
+                    stripe_refund = stripe.Refund.create(charge=str(stripe_charge_id), amount=int(round(refund,2)*100))
+                    print(stripe_refund)
+                    #this is a second time refund, we need update the payment table where we took the charging Id for refund
+                    if second == True:
+                        temp_query = """UPDATE ptyd_payments SET stripe_refund_id = '""" + stripe_refund.get('id') + """'
+                                            WHERE payment_id = '""" + second_payment_id + "';"
+                        print("temp_query: ", temp_query)
+                        temp_res = execute(temp_query, 'post', conn)
+                        print("temp_res (at 3183): ", temp_res)
+
+                    #write to database for payment table
+                    if second == False:
+                        paymentIDresponse = execute(
+                            "CALL get_new_payment_id;", 'get', conn)
+                        new_paymentID = paymentIDresponse['result'][0]['new_id']
+                        query = """SELECT * FROM ptyd_payments 
+                                                WHERE purchase_id = '""" + purchase_id + """' AND
+                                                    recurring = 'TRUE';"""
+
+                        get_info = execute(query, 'get', conn)
+                        get_info = get_info['result'][0]
+
+                        for key in get_info:
+                            get_info[key] = "'" + get_info[key] + "'" if get_info[key] != None else "NULL"
+                        payment_query = []
+                        payment_query.append("""UPDATE ptyd_payments SET recurring = 'FALSE'
+                                                        WHERE purchase_id = '""" + purchase_id + "';")
+
+                        payment_query.append("""INSERT INTO ptyd_payments 
+                                                    (
+                                                        payment_id,
+                                                        buyer_id,
+                                                        recurring,
+                                                        gift,
+                                                        coupon_id,
+                                                        amount_due,
+                                                        amount_paid,
+                                                        purchase_id,
+                                                        payment_time_stamp,
+                                                        payment_type,
+                                                        cc_num,
+                                                        cc_exp_date,
+                                                        cc_cvv,
+                                                        billing_zip,
+                                                        stripe_charge_id,
+                                                        stripe_refund_id,
+                                                        isAddon
+                                                    ) VALUES
+                                                    (
+                                                        '""" + new_paymentID + """',
+                                                        '""" + str(refund_info.get('buyer_id')) + """',
+                                                        'FALSE',
+                                                        '""" + refund_info.get('gift') + """',
+                                                        NULL,
+                                                        '""" + str(round(0 - refund, 2)) + """',
+                                                        '""" + str(round(0 - refund, 2)) + """',
+                                                        '""" + str(refund_info.get('purchase_id')) + """',
+                                                        '""" + getNow() + """',
+                                                        """ + str(get_info.get('payment_type')) + """,
+                                                        """ + str(get_info.get('cc_num')) + """,
+                                                        """ + str(get_info.get('cc_exp_date')) + """,
+                                                        """ + str(get_info.get('cc_cvv')) + """,
+                                                        """ + str(get_info.get('billing_zip')) + """,
+                                                        '""" + str(stripe_charge_id) + """',
+                                                        '""" + str(stripe_refund.get('id')) + """',
+                                                        """ + str(get_info.get('isAddon')) + """
+                                                    );""")
+                        for query in payment_query:
+                            result = execute(query, 'post', conn)
+                            print("result: ", result)
+                    #check if there is other refund left
+                    second = False
+                    exact_refund -= refund
+
+                    print("exact left: ", exact_refund)
+                    if round(exact_refund,0) > 0:
+                        #we need to refund another charge id
+                        charge_id_lookup = """SELECT payment_id, amount_due, stripe_charge_id FROM ptyd_payments p1
+                                                WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp) FROM
+                                                    (SELECT * FROM ptyd_payments
+                                                        WHERE buyer_id = '""" + refund_info.get('buyer_id') + """'
+                                                        AND amount_paid = '0'
+                                                        AND amount_due = '""" + str(round(0-exact_refund,2)) + """'
+                                                        AND stripe_charge_id IS NOT NULL
+                                                        AND stripe_refund_id IS NULL) as p)
+                                                AND amount_due = '""" + str(round(0-exact_refund,2)) + """';"""
+                        print("charge_id_lookup: ", charge_id_lookup)
+                        res = execute(charge_id_lookup, 'get', conn);
+                        print("charge_id_lookup: ", res)
+                        stripe_charge_id = res['result'][0].get('stripe_charge_id')
+                        amount_paid = round(0 - float(res['result'][0].get('amount_due')),2)
+                        second_payment_id = res['result'][0].get('payment_id')
+                        second = True
+
             except:
                 response['message'] = 'Stripe refund failed'
                 return response, 400
             execute(""" CALL `ptyd`.`user_cancel_now_update_snapshot`( \'""" + snapshotId +
                     """\' , \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
-
-            execute(
-                """UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" +
+            execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" +
                 purchase_id + """\');""", 'post', conn)
-
-            query = """SELECT * FROM ptyd_payments 
-                        WHERE purchase_id = '""" + purchase_id + """' AND
-                            recurring = 'TRUE';"""
-
-            get_info = execute(query, 'get', conn)
-            get_info = get_info['result'][0]
-
-            for key in get_info:
-                get_info[key] = "'" + get_info[key] + "'" if get_info[key] != None else "NULL"
-            payment_query = []
-            payment_query.append("""UPDATE ptyd_payments SET recurring = 'FALSE'
-                                WHERE purchase_id = '""" + purchase_id + "';")
-
-            payment_query.append("""INSERT INTO ptyd_payments 
-                            (
-                                payment_id,
-                                buyer_id,
-                                recurring,
-                                gift,
-                                coupon_id,
-                                amount_due,
-                                amount_paid,
-                                purchase_id,
-                                payment_time_stamp,
-                                payment_type,
-                                cc_num,
-                                cc_exp_date,
-                                cc_cvv,
-                                billing_zip,
-                                stripe_charge_id,
-                                isAddon
-                            ) VALUES
-                            (
-                                '""" + new_paymentID + """',
-                                '""" + str(refund_info.get('buyer_id')) + """',
-                                'FALSE',
-                                '""" + refund_info.get('gift') + """',
-                                NULL,
-                                '""" + str(round(0 - refund, 2)) + """',
-                                '""" + str(round(0 - refund, 2)) + """',
-                                '""" + str(refund_info.get('purchase_id')) + """',
-                                '""" + getNow() + """',
-                                """ + str(get_info.get('payment_type')) + """,
-                                """ + str(get_info.get('cc_num')) + """,
-                                """ + str(get_info.get('cc_exp_date')) + """,
-                                """ + str(get_info.get('cc_cvv')) + """,
-                                """ + str(get_info.get('billing_zip')) + """,
-                                '""" + stripe_refund.get('id') + """',
-                                """ + str(get_info.get('isAddon')) + """
-                            );""")
-            for query in payment_query:
-                result = execute(query, 'post', conn)
-                print("result: ", result)
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -3293,10 +3335,12 @@ class ZipCodes(Resource):
 
 # this code was copied from "Checkout" class without checking for password.
 class Update_Subscription(Resource):
-    def getPaymentQuery(self, data, newpaymentId, purchaseId, refund_info, stripeID, choice):
+    def getPaymentQuery(self, data, newpaymentId, purchaseId, refund_info, stripe_chargeID, stripe_refundID, choice):
         refund = refund_info.get('refund_amount')
+        new_charge = data['item_price'] * (1 + data['tax_rate']) + data['shipping']
         exp_date = datetime(int(data['cc_exp_year']), int(data['cc_exp_month']), 1).strftime("%Y-%m-%d")
-        stripe_id = "'" + stripeID + "'" if stripeID is not None else 'NULL'
+        stripe_charge_id = "'" + stripe_chargeID + "'" if stripe_chargeID is not None else 'NULL'
+        stripe_refund_id = "'" + stripe_refundID + "'" if stripe_refundID is not None else 'NULL'
         query1 = ["""UPDATE ptyd_payments SET recurring = 'FALSE'
                         WHERE purchase_id = '""" + refund_info.get('purchase_id') + "';",
                   """INSERT INTO ptyd_payments
@@ -3309,7 +3353,8 @@ class Update_Subscription(Resource):
                             amount_due,
                             amount_paid,
                             purchase_id,
-                            payment_time_stamp
+                            payment_time_stamp,
+                            stripe_charge_id
                         )
                         VALUE
                         (
@@ -3321,8 +3366,10 @@ class Update_Subscription(Resource):
                             '""" + str(round(0 - refund, 2)) + """',
                             '""" + str(0) + """',
                             '""" + str(refund_info.get('purchase_id')) + """',
-                            '""" + getNow() + """'
+                            '""" + getNow() + """',
+                            """ + stripe_charge_id + """
                         );"""]
+
         query2 = """INSERT INTO ptyd_payments
                         (
                             payment_id,
@@ -3342,12 +3389,13 @@ class Update_Subscription(Resource):
                             'FALSE',
                             '""" + data.get('is_gift') + """',
                             NULL,
-                            '""" + str(data['item_price']) + """',
+                            '""" + str(round(new_charge,2)) + """',
                             '""" + str(0) + """',
                             '""" + str(refund_info.get('purchase_id')) + """',
                             '""" + getNow() + """'
                         );"""
-        query3 = """ INSERT INTO ptyd_payments
+
+        query3 = """INSERT INTO ptyd_payments
                     (
                         payment_id,
                         buyer_id,
@@ -3363,7 +3411,8 @@ class Update_Subscription(Resource):
                         cc_exp_date,
                         cc_cvv,
                         billing_zip, 
-                        stripe_charge_id
+                        stripe_charge_id,
+                        stripe_refund_id
                     )
                     VALUES (
                         \'""" + newpaymentId + """\',
@@ -3371,8 +3420,8 @@ class Update_Subscription(Resource):
                         \'TRUE\',
                         \'""" + data['is_gift'] + """\',
                         NULL,
-                        \'""" + str(round(float(data.get('item_price')) - refund, 2)) + """\',
-                        \'""" + str(round(float(data.get('item_price')) - refund, 2)) + """\',
+                        \'""" + str(round(new_charge - refund, 2)) + """\',
+                        \'""" + str(round(new_charge - refund, 2)) + """\',
                         \'""" + str(purchaseId) + """\',
                         \'""" + getNow() + """\',
                         'STRIPE',
@@ -3380,7 +3429,9 @@ class Update_Subscription(Resource):
                         \'""" + exp_date + """',
                          '""" + str(data['cc_cvv']) + """',
                          '""" + str(data['billing_zip']) + """',
-                         """ + stripe_id + ");"
+                         """ + stripe_charge_id + """,
+                         """ + stripe_refund_id + ");"
+
         if choice==1: return query1
         elif choice==2: return query2
         else: return query3
@@ -3459,24 +3510,27 @@ class Update_Subscription(Resource):
             refund_info = CancelSubscriptionNow().refund_calculator(conn,data['purchase_id'])
             print("refund_info: ", refund_info)
             current_meal_refund = refund_info.get('refund_amount')
-            refund = round(float(new_plan_price - current_meal_refund),2)
+            refund = round((float(new_plan_price) * (1 + data['tax_rate']) + data['shipping']) - current_meal_refund,2)
             print("refund: ", refund)
             # stripe refund before update database
+            stripe_refund = {}
+            stripe_charge = {}
             try:
                 if refund < 0:
-                    stripe_info = stripe.Refund.create(charge=str(refund_info.get('stripe_charge_id')), amount=int(round(0-refund,2)*100))
+                    stripe_refund = stripe.Refund.create(charge=str(refund_info.get('stripe_charge_id')), amount=int(round(0-refund,2)*100))
                 elif refund > 0: #charge need to calculate the exact refund here
                     if data['cc_num'][0:12] == "XXXXXXXXXXXX":
                         last_four_digits = data['cc_num'][12:]
                         print("purchase_id: ", data['purchase_id'])
                         #"{:02}".format is used for format integer
                         select_card_query = """SELECT cc_num FROM ptyd_payments p1
-                                                    WHERE purchase_id = '""" + data['purchase_id'] + """'
-                                                    AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
-                                                                                WHERE p2.purchase_id = p1.purchase_id)
-                                                    AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
-                                                    AND cc_exp_date = '""" + str(data['cc_exp_year']) + "-" + str("{:02}".format(data['cc_exp_month'])) + """-01'
-                                                    AND cc_cvv = '""" + data['cc_cvv'] + "';"
+                                                    WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp) FROM 
+                                                        (SELECT * FROM ptyd_payments p2
+                                                            WHERE purchase_id = '""" + data['purchase_id'] + """'
+                                                            AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
+                                                            AND cc_exp_date = '""" + str(data['cc_exp_year']) + "-" + str("{:02}".format(data['cc_exp_month'])) + """-01'
+                                                            AND cc_cvv = '""" + data['cc_cvv'] + """') AS p)
+                                                    AND cc_num is not NULL;"""
                         print("select_card_query: ", select_card_query)
                         card_selected = execute(select_card_query, 'get', conn)
                         print("card_selected: ", card_selected)
@@ -3488,24 +3542,24 @@ class Update_Subscription(Resource):
                     print("card dict: ", card_dict)
                     try:
                         card_token = stripe.Token.create(card=card_dict)
-                        stripe_info = stripe.Charge.create(
+                        stripe_charge = stripe.Charge.create(
                             amount=int(round(refund * 100, 0)),
                             currency="usd",
                             source=card_token,
                             description="Charge customer %s for %s" % (data['delivery_first_name'] + " " + data['delivery_last_name'], "For changing subscription"))
 
-                        print("charge success: ", stripe_info)
-                        print("charge_id: ", stripe_info.get('id'))
+                        print("charge success: ", stripe_charge)
+                        print("charge_id: ", stripe_charge.get('id'))
                     except stripe.error.CardError as e:
                         # Since it's a decline, stripe.error.CardError will be caught
                         response['message'] = e.error.message
                         return response, 400
             except:
                 response['message'] ="Stripe charging/refund error"
-                return response, 500
-            print("here")
-            payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info, stripe_info.get('id'), 1)
-            print("there")
+                return response, 400
+            #
+            payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info, refund_info.get('stripe_charge_id'), stripe_refund.get('id'), 1)
+            print(payment_query)
             # update payment table
             reply = [execute(query, 'post', conn) for query in payment_query]
 
@@ -3514,7 +3568,7 @@ class Update_Subscription(Resource):
                 "CALL get_new_payment_id;", 'get', conn)
             paymentId = paymentIDresponse['result'][0]['new_id']
 
-            new_plan_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info, stripe_info.get('id'), 2)
+            new_plan_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info, stripe_charge.get('id'), stripe_refund.get('id'), 2)
             reply += execute(new_plan_query, 'post', conn)
 
             # execute the third payment_query with a new paymentID
@@ -3522,7 +3576,8 @@ class Update_Subscription(Resource):
             paymentIDresponse = execute(
                 "CALL get_new_payment_id;", 'get', conn)
             paymentId = paymentIDresponse['result'][0]['new_id']
-            payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info, stripe_info.get('id'), 3)
+            payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info, stripe_charge.get('id'), stripe_refund.get('id'), 3)
+            print (payment_query)
             reply += [execute(payment_query, 'post', conn)]
 
             # replace with real longitute and latitude
@@ -3742,10 +3797,12 @@ class UpdatePayments(Resource):
             if data['cc_num'][0:12] == "XXXXXXXXXXXX":
                 last_four_digits = data['cc_num'][12:]
                 select_card_query = """SELECT cc_num FROM ptyd_payments p1
-                                                    WHERE purchase_id = '""" + data['purchase_id'] + """'
-                                                    AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
-                                                                                WHERE p2.purchase_id = p1.purchase_id)
-                                                    AND RIGHT(cc_num, 4) = '""" + last_four_digits + "';"
+                                                    WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp) FROM
+                                                        (SELECT * FROM ptyd_payments
+										                    WHERE purchase_id = '""" + data['purchase_id'] + """'
+                                                            AND RIGHT(cc_num, 4) = '""" + last_four_digits + """') AS p)
+                                                    AND cc_num IS NOT NULL;"""
+                print("select_card_query: ", select_card_query)
                 card_selected = execute(select_card_query, 'get', conn)
                 print("card_selected when update: ", card_selected)
                 if not card_selected['result']:

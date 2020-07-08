@@ -110,9 +110,7 @@ class Checkout extends Component {
       //calculate original charge
       let mealPrice = parseFloat(this.props.location.item.total);
       let shipping = this.state.original_charge.shipping;
-      let tax = parseFloat(
-        ((mealPrice + shipping) * this.state.tax_rate).toFixed(2)
-      );
+      let tax = parseFloat((mealPrice * this.state.tax_rate).toFixed(2));
 
       let total_charge = parseFloat((mealPrice + shipping + tax).toFixed(2));
       console.log("tax: ", typeof tax);
