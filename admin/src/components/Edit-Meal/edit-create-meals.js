@@ -42,7 +42,7 @@ class EditCreateMeal extends Component {
       details: [],
       mealidkey: [],
       allIngr: [],
-      selection: 1,
+      selection: localStorage.getItem("selIndex1") || 1,
       showAdd: false,
       allUnits: [],
       currIngr: [],
@@ -54,6 +54,7 @@ class EditCreateMeal extends Component {
       mapIngrUnitMeasureId: new Map(),
       newMealName: "New Meal",
       brandNewIngr: "New Ingredient Name",
+      newUnitName: "None",
       brandNewQty: 1,
       brandNewIngrPrice: 5,
       brandNewUnit: "Cup",
@@ -186,6 +187,9 @@ class EditCreateMeal extends Component {
 
   handleBNewIngrName = (event) => {
     this.setState({ brandNewIngr: event.target.value });
+  };
+  handleNewUnitName = (event) => {
+    this.setState({ newUnitName: event.target.value });
   };
   handleBNewQty = (event) => {
     this.setState({ brandNewQty: event.target.value });
@@ -476,6 +480,46 @@ class EditCreateMeal extends Component {
       });
   };
 
+  saveNewUnit = (e) => {
+    e.preventDefault();
+    var unitData = {
+      measure_id: "NewUnitId",
+      measure_name: this.state.newUnitName,
+    };
+
+    console.log(unitData);
+    axios
+      .post(this.props.API_URL_ADDUNIT, unitData)
+      .then((res) => {
+        if (res.status === 200) {
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
+
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+          // window.location.reload(false);
+          //props.history.push("/signupwaiting");
+          //setLoading(false);
+          console.log("API ADD_NEW_UNIT POST WORKED");
+          window.location.reload(true);
+        }
+      })
+      .catch((err) => {
+        if (err.response !== undefined) {
+          //setErro(err.response.data.result);
+          //window.location.reload(false);
+          console.log("API ADD_NEW_UNIT POST Failed");
+        } else if (typeof err === "string") {
+          //setErro(err);
+          console.log(err);
+        }
+        //setLoading(false);
+      });
+  };
+
   postMealChanges = (e) => {
     e.preventDefault();
     let ingredients_list = this.state.currIngr;
@@ -495,6 +539,7 @@ class EditCreateMeal extends Component {
       ingredients: ingredients_list,
     };
 
+    localStorage.setItem("selIndex1", this.state.selection);
     console.log("Sending Out:");
     console.log(mealData);
     console.log(JSON.stringify(mealData));
@@ -513,6 +558,7 @@ class EditCreateMeal extends Component {
           // window.location.reload(false);
           //props.history.push("/signupwaiting");
           //setLoading(false);
+
           console.log("API ADD_NEW_INGREDIENT WORKED");
           window.location.reload(true);
         }
@@ -862,6 +908,7 @@ class EditCreateMeal extends Component {
   render() {
     let displayrows = [];
     let displayrowsingr = [];
+    let displayrowunit = [];
     let enterMeal = this.state.mealidkey[this.state.selection];
     if (enterMeal == null) {
       return <div></div>;
@@ -890,6 +937,7 @@ class EditCreateMeal extends Component {
       displayrows.push(this.addRowTemplate());
     }
     displayrowsingr.push(this.addFirstIngrRow());
+    displayrowunit.push(this.addUnitRow());
 
     return (
       <div>
@@ -953,6 +1001,28 @@ class EditCreateMeal extends Component {
                       </tr>
                     </thead>
                     <tbody>{displayrowsingr}</tbody>
+                  </Table>
+                </Col>
+                <Col></Col>
+              </Row>
+            </div>
+          </Grid>
+          <Divider />
+          <Grid item xs={12}>
+            <div style={{ margin: "1%" }}>
+              <WhiteTextTypography color="blue" variant="h5" gutterBottom>
+                Create New Measure Unit
+              </WhiteTextTypography>
+              <Row>
+                <Col>
+                  <Table striped bordered hover>
+                    {/* variant="dark" */}
+                    <thead>
+                      <tr>
+                        <th>New Unit Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>{displayrowunit}</tbody>
                   </Table>
                 </Col>
                 <Col></Col>
@@ -1070,6 +1140,26 @@ class EditCreateMeal extends Component {
         <td>
           <Button variant="primary" onClick={this.saveBrandNewIngr}>
             Save Ingredient
+          </Button>
+        </td>
+      </tr>
+    );
+  };
+
+  addUnitRow = () => {
+    return (
+      <tr>
+        <td>
+          <input
+            type="text"
+            placeholder={"Enter Here"}
+            value={this.state.newUnitName}
+            onChange={this.handleNewUnitName}
+          />
+        </td>
+        <td>
+          <Button variant="primary" onClick={this.saveNewUnit}>
+            Save Unit
           </Button>
         </td>
       </tr>
