@@ -75,10 +75,7 @@ def getNow(): return datetime.strftime(datetime.now(utc),"%Y-%m-%d %H:%M:%S")
 # def getToday(): return datetime.strftime(date.today(), "%Y-%m-%d")
 # def getNow(): return datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
 
-
 # Connect to MySQL database (API v2)
-
-
 def connect():
     global RDS_PW
     global RDS_HOST
@@ -171,7 +168,6 @@ class Plans(Resource):
         items = {}
         try:
             conn = connect()
-
             queries = [
                 """SELECT
                         meal_plan_id,
@@ -1354,10 +1350,7 @@ def confirm(token, hashed):
     finally:
         disconnect(conn)
 
-
 # NEED CODE FOR NON-RECURRING ONE TIME PLANS
-
-
 class Checkout(Resource):
     def getPaymentQuery(self, data, couponID, amount_due, amount_paid, paymentId, purchaseId):
         query = """ INSERT INTO ptyd_payments
@@ -1621,23 +1614,39 @@ class Checkout(Resource):
                         , \'""" + dates['billingDate'] + """\'
                         , """ + dates['weeksRemaining'] + """
                         , \'""" + dates['startDate'] + "\');"
-
+            # Validate credit card
+            if data['cc_num'][0:12] == "XXXXXXXXXXXX":
+                last_four_digits = data['cc_num'][12:]
+                select_card_query = """SELECT cc_num FROM ptyd_payments p1
+                                                    WHERE buyer_id = '""" + data['user_uid'] + """'
+                                                    AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
+                                                                                WHERE p2.buyer_id = p1.buyer_id)
+                                                    AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
+                                                    AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
+                                                    AND cc_cvv = '""" + data['cc_cvv'] + "';"
+                card_selected = execute(select_card_query, 'get', conn)
+                print("card_selected: ", card_selected)
+                if not card_selected['result']:
+                    response['message'] = "Credit card info is incorrect."
+                    return response, 500
+                # update data['cc_num'] to write to database
+                print(card_selected['result'][0].get('cc_num'))
+                data['cc_num'] = card_selected['result'][0].get('cc_num')
+            #checking for coupon and preparing for stripe charge
             coupon_id = data.get('coupon_id')
-            charge = 0
             if coupon_id == "" or coupon_id is None:
                 charge = data['total_charge']
                 payment_query = self.getPaymentQuery(data, 'NULL', charge, charge, paymentId, purchaseId)
             else:
                 charge = round(data['total_charge'] - data['total_discount'], 2)
-            # create a stripe charge and make sure that charge is successful before writting it into database
+            # create a stripe charge and make sure that charge is successful before writing it into database
             # we should use Idempotent key to prevent sending multiple payment requests due to connection fail.
             try:
-
-                card_dict={"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
+                #create a token for stripe
+                card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
                 print ("card dict: ", card_dict)
                 try:
                     card_token = stripe.Token.create(card=card_dict)
-                    print("card_token", card_token)
                     stripe_charge = stripe.Charge.create(
                                             amount=int(round(charge*100, 0)),
                                             currency="usd",
@@ -1647,14 +1656,9 @@ class Checkout(Resource):
                     print("charge success: ", stripe_charge)
                 except stripe.error.CardError as e:
                     # Since it's a decline, stripe.error.CardError will be caught
-                    print('Status is: %s' % e.http_status)
-                    print('Type is: %s' % e.error.type)
-                    print('Code is: %s' % e.error.code)
-                    # param is '' in this case
-                    print('Param is: %s' % e.error.param)
-                    print('Message is: %s' % e.error.message)
                     response['message'] = e.error.message
                     return response, 400
+                # write everything into payment table
                 if coupon_id != "" and coupon_id is not None:
                     coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
                     temp_query = """ INSERT INTO ptyd_payments
@@ -1718,7 +1722,6 @@ class Checkout(Resource):
                 if reply['payment']['code'] != 281:
                     response['message'] = "Internal Server Error"
                     return response, 500
-                # Add credit card verification code here
                 reply['purchase'] = execute(purchase_query, 'post', conn)
                 if reply['purchase']['code'] != 281:
                     response['message'] = "Internal Server Error"
@@ -1732,7 +1735,7 @@ class Checkout(Resource):
                 return response, 200
             except:
                 response['message'] = "Payment process error."
-                return responsee, 500
+                return response, 500
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -1740,8 +1743,6 @@ class Checkout(Resource):
 
 
 # Call this API from another source every Monday at midnight
-
-
 class UpdatePurchases(Resource):
     def post(self, affectedDate=None):
         response = {}
@@ -3675,13 +3676,24 @@ class UpdatePayments(Resource):
             data = request.get_json(force=True)
 
             print("pre", data)
-
             purchase_id = data['purchase_id']
-            cc_num = data['cc_num'][-4:]
-            cc_exp_date = data['cc_exp_date']
-            cc_cvv = data['cc_cvv']
+            if data['cc_num'][0:12] == "XXXXXXXXXXXX":
+                last_four_digits = data['cc_num'][12:]
+                select_card_query = """SELECT cc_num FROM ptyd_payments p1
+                                                    WHERE purchase_id = '""" + data['purchase_id'] + """'
+                                                    AND payment_time_stamp = (SELECT MAX(payment_time_stamp) from ptyd_payments p2
+                                                                                WHERE p2.purchase_id = p1.purchase_id)
+                                                    AND RIGHT(cc_num, 4) = '""" + last_four_digits + "';"
+                card_selected = execute(select_card_query, 'get', conn)
+                print("card_selected when update: ", card_selected)
+                if not card_selected['result']:
+                    response['message'] = "Card's infomation is incorrect"
+                    return response, 500
+                data['cc_num'] = card_selected['result'][0].get('cc_num')
 
-            print("data", data)
+            cc_num = data['cc_num']
+            cc_exp_date = datetime(int(data['cc_exp_year']), int(data['cc_exp_month']), 1).strftime("%Y-%m-%d")
+            cc_cvv = data['cc_cvv']
             execute(""" CALL `ptyd`.`update_payments`(\'""" + str(purchase_id) + """\',
                                                         \'""" + str(cc_num) + """\', 
                                                         \'""" + str(cc_exp_date) + """\',
@@ -4798,14 +4810,12 @@ class MenuCreation(Resource):
             # response['menu_dates'] = menuDates
             response['menus'] = d
             response['result'] = d2
-            
 
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-
 
 class CouponsAPI(Resource):       
 
@@ -4874,7 +4884,6 @@ class TaxRateAPI(Resource):
         finally:
             disconnect(conn)
 
-
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
@@ -4893,10 +4902,26 @@ api.add_resource(MealSelection, '/api/v2/mealselection/<string:purchaseId>')
 api.add_resource(SocialSignUp, '/api/v2/socialSignup')
 api.add_resource(Social, '/api/v2/social/<string:email>')
 api.add_resource(SocialAccount, '/api/v2/socialacc/<string:uid>')
-api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
-api.add_resource(Update_Subscription, '/api/v2/update-subscription')
+
 api.add_resource(Coupon, '/api/v2/coupon')
 api.add_resource(ZipCodes, '/api/v2/monday-zip-codes')
+
+#update and cancel subcription
+api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
+api.add_resource(UpdatePayments, '/api/v2/update-payments')
+api.add_resource(Update_Subscription, '/api/v2/update-subscription')
+api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
+
+#Not sure which page is using this endpoint?
+api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
+
+# Automated APIs
+# UpdatePurchases is called on Monday
+# ChargeSubscribers is called on Thursday
+api.add_resource(UpdatePurchases, '/api/v2/updatepurchases',
+                 '/api/v2/updatepurchases/<string:affectedDate>')
+api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers',
+                 '/api/v2/chargesubscribers/<string:affectedDate>')
 
 # Admin page
 # ---------- Admin page -----------------------------
@@ -4914,22 +4939,6 @@ api.add_resource(Get_All_Units, '/api/v2/GetUnits')
 api.add_resource(CouponsAPI, '/api/v2/CouponsAPI')
 api.add_resource(MealPlansAPI, '/api/v2/MealPlansAPI')
 api.add_resource(TaxRateAPI, '/api/v2/TaxRateAPI')
-
-api.add_resource(CancelSubscriptionNow, '/api/v2/cancel-subscription-now')
-api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
-
-# Automated APIs
-api.add_resource(UpdatePurchases, '/api/v2/updatepurchases',
-                 '/api/v2/updatepurchases/<string:affectedDate>')
-api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers',
-                 '/api/v2/chargesubscribers/<string:affectedDate>')
-
-'''
-# -----------Stripe Resrouces--------------------
-api.add_resource(GetTestKey, '/api/v2/stripe-testkeys')
-'''
-# in progress
-api.add_resource(UpdatePayments, '/api/v2/update-payments')
 
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
