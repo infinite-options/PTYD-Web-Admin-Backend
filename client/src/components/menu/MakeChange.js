@@ -296,17 +296,27 @@ export default class MakeChange extends Component {
                           onChange={e => {
                             e.persist();
                             let paymentPlans = this.state.paymentPlans;
-                            let paid = 0;
-                            if (paymentPlans[e.target.value] !== undefined) {
-                              paid =
-                                paymentPlans[e.target.value].meal_plan_price;
-                            }
-                            if (
-                              this.state.currentPurchase.meal_plan_id !==
-                              paymentPlans[e.target.value].meal_plan_id
-                            ) {
-                              paid = this.state.currentPurchase.meal_plan_price;
-                            }
+                            let paid =
+                              parseFloat(
+                                this.state.currentPurchase.meal_plan_price
+                              ) *
+                                (1 + this.state.tax_rate) +
+                              this.state.shipping;
+                            // if (paymentPlans[e.target.value] !== undefined) { //this is prevent error when not choosing anthing from drop down menu in meal plans
+                            //   paid =
+                            //     paymentPlans[e.target.value].meal_plan_price *
+                            //       (1 + this.state.tax_rate) +
+                            //     this.state.shipping;
+                            // }
+                            // if (
+                            //   this.state.currentPurchase.meal_plan_id !==
+                            //   paymentPlans[e.target.value].meal_plan_id
+                            // ) {
+                            //   paid =
+                            //     this.state.currentPurchase.meal_plan_price *
+                            //       (1 + this.state.tax_rate) +
+                            //     this.state.shipping;
+                            // }
 
                             this.setState(prevState => ({
                               updateMealPlan: {
@@ -318,7 +328,11 @@ export default class MakeChange extends Component {
                                 price:
                                   paymentPlans[e.target.value].meal_plan_price,
                                 amount_paid: (
-                                  paymentPlans[e.target.value].meal_plan_price -
+                                  parseFloat(
+                                    paymentPlans[e.target.value].meal_plan_price
+                                  ) *
+                                    (1 + this.state.tax_rate) +
+                                  this.state.shipping -
                                   paid
                                 ).toFixed(2)
                               }
@@ -637,12 +651,24 @@ export default class MakeChange extends Component {
               aria-describedby='alert-dialog-description'
             >
               <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id='alert-dialog-description'>
-                  You will be charged {this.state.updateMealPlan.amount_paid}.
-                  Do you want to continue this transaction.
-                </DialogContentText>
-              </DialogContent>
+              {this.state.updateMealPlan.amount_paid &&
+              this.state.updateMealPlan.amount_paid >= 0 ? (
+                <DialogContent>
+                  <DialogContentText id='alert-dialog-description'>
+                    You will be charged {this.state.updateMealPlan.amount_paid}.
+                    Do you want to continue this transaction.
+                  </DialogContentText>
+                </DialogContent>
+              ) : (
+                <DialogContent>
+                  <DialogContentText id='alert-dialog-description'>
+                    You will be refunded{" "}
+                    {0 - this.state.updateMealPlan.amount_paid}. Do you want to
+                    continue this transaction.
+                  </DialogContentText>
+                </DialogContent>
+              )}
+
               <DialogActions>
                 <Button onClick={this.ShowHideSaveModal} color='primary'>
                   No,Thanks
