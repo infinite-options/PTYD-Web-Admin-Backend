@@ -12,7 +12,6 @@ class Checkout extends Component {
     super(props);
     this.state = {
       user_uid: this.searchCookie4UserID("loginStatus"),
-      cc_num: null,
       password_salt: null,
       purchase: {
         delivery_phone: "",
@@ -159,24 +158,19 @@ class Checkout extends Component {
         const purApi = await pur.json();
         if (purApi.result.length !== 0) {
           console.log(purApi);
-          this.setState({purchase: purApi.result[0]});
-          this.setState(prevState => ({
-            purchase: {
-              ...prevState.purchase,
-              cc_num: null
-            }
-          }));
+          let len = purApi.result.length;
+          this.setState({purchase: purApi.result[len - 1]});
 
           //parse purchase cc exp date into month and year
-          const parsedValues = purApi.result[0].cc_exp_date.split('-');
+          const parsedValues = purApi.result[len - 1].cc_exp_date.split("-");
           this.setState(prevState => ({
             purchase: {
               ...prevState.purchase,
               cc_exp_month: parsedValues[1],
               cc_exp_year: parsedValues[0]
             }
-          }))
-          
+          }));
+
           // let len = purApi.result.length;
           // this.setState({purchase: purApi.result[len - 1]});
           // if (this.state.purchase.cc_num !== undefined) {
@@ -355,14 +349,12 @@ class Checkout extends Component {
         [name]: target.value
       }
     }));
-    if (this.state.purchase.cc_num.length >= 0) {
-      this.setState({cc_num: null});
-    }
   }
 
   handleMonthChange(event) {
     const target = event.target;
-    let date = this.state.purchase.cc_exp_year + '-' + event.target.value + '-01';
+    let date =
+      this.state.purchase.cc_exp_year + "-" + event.target.value + "-01";
     this.setState(prevState => ({
       purchase: {
         ...prevState.purchase,
@@ -373,7 +365,7 @@ class Checkout extends Component {
   }
   handleYearChange(event) {
     const target = event.target;
-    let date = target.value + '-' + this.state.purchase.cc_exp_month + '-01';
+    let date = target.value + "-" + this.state.purchase.cc_exp_month + "-01";
     this.setState(prevState => ({
       purchase: {
         ...prevState.purchase,
@@ -852,9 +844,7 @@ class Checkout extends Component {
                         </Form.Label>
                         <Form.Control
                           placeholder='Enter Card Number'
-                          value={
-                            this.state.cc_num || this.state.purchase.cc_num
-                          }
+                          value={this.state.purchase.cc_num || ""}
                           name='cc_num'
                           onChange={this.handleChange}
                         />
