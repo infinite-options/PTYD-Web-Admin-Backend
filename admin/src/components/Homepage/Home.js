@@ -14,7 +14,7 @@ class Home extends Component {
     super(props);
     this.state = {
       mealInfo: [],
-      custInfo: []
+      custInfo: [],
     };
   }
 
@@ -148,7 +148,7 @@ class Home extends Component {
           <Card
             style={{
               width: "100%",
-              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
             }}
           >
             <Card.Body>
@@ -167,7 +167,7 @@ class Home extends Component {
                     className="vertical-menu"
                     style={{
                       height: "300px",
-                      overflow: "scroll"
+                      overflow: "scroll",
                     }}
                   >
                     {/* {this.state.mealInfo.map(meal => (
@@ -192,7 +192,7 @@ class Home extends Component {
       <Card
         style={{
           width: "100%",
-          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
         }}
       >
         <Card.Body></Card.Body>
@@ -206,7 +206,7 @@ class Home extends Component {
           <Card
             style={{
               width: "100%",
-              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
             }}
           >
             <Card.Body>
@@ -224,10 +224,10 @@ class Home extends Component {
                     className="vertical-menu"
                     style={{
                       height: "300px",
-                      overflow: "scroll"
+                      overflow: "scroll",
                     }}
                   >
-                    {this.state.custInfo.map(eachMeal => (
+                    {this.state.custInfo.map((eachMeal) => (
                       <tr>
                         <td>{eachMeal.Full_name}</td>
                         <td>{eachMeal.Current_subscription}</td>
@@ -248,7 +248,7 @@ class Home extends Component {
       <Card
         style={{
           width: "100%",
-          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
         }}
       >
         <Card.Body>
@@ -268,7 +268,7 @@ class Home extends Component {
       <Card
         style={{
           width: "100%",
-          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
         }}
       >
         <Card.Body>
@@ -288,7 +288,7 @@ class Home extends Component {
       <Card
         style={{
           width: "50%",
-          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)"
+          boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
         }}
       >
         <Card.Body>
