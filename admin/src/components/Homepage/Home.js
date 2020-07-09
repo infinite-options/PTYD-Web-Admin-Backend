@@ -33,7 +33,7 @@ class Home extends Component {
     return (
       // <div className="container" style={{ marginTop: "10%" }}>
       <div style={{ margin: "1%" }}>
-        HELLO! THIS IS PREP TO YOUR DOOR ADMIN
+        HELLO! THIS IS PREP TO YOUR DOOR ADMIN.. !
       </div>
       /*
       <div style={{ margin: "1%" }}>
