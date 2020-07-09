@@ -125,7 +125,7 @@ function App() {
               </NavDropdown.Item>
             </NavDropdown>
             &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/settings">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link href="/orders">Orders</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers">Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link>

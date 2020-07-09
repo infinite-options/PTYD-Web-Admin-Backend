@@ -4971,6 +4971,72 @@ class MenuCreation(Resource):
         finally:
             disconnect(conn)
 
+class CouponsAPI(Resource):       
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_coupons;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+class MealPlansAPI(Resource):       
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_meal_plans;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class TaxRateAPI(Resource):       
+
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" SELECT
+                                *
+                                FROM
+                                ptyd_saturdays;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 # Define API routes
 # Customer page
@@ -5024,6 +5090,9 @@ api.add_resource(Add_Meal, '/api/v2/Add_Meal')
 api.add_resource(Edit_Meal, '/api/v2/Edit_Meal')
 api.add_resource(MenuCreation, '/api/v2/create-menu')
 api.add_resource(Get_All_Units, '/api/v2/GetUnits')
+api.add_resource(CouponsAPI, '/api/v2/CouponsAPI')
+api.add_resource(MealPlansAPI, '/api/v2/MealPlansAPI')
+api.add_resource(TaxRateAPI, '/api/v2/TaxRateAPI')
 
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
