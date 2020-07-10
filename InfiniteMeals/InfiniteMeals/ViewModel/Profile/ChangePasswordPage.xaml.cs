@@ -30,7 +30,7 @@ namespace InfiniteMeals.ViewModel.Profile {
                 StringContent changePasswordHTTPContent = generateHTTPContent();
                 var statusCode = await changePassword(changePasswordHTTPContent);
                 if(statusCode == HttpStatusCode.OK) { // change password successful
-                    await Navigation.PopAsync();
+                    await Navigation.PopToRootAsync();
                     await DisplayAlert("Success", "Your password was changed", "OK");
                 } else {
                     await DisplayAlert("Error", "Your password wasn't able to be changed", "OK");

@@ -17,9 +17,14 @@
                 <Entry x:Name="loginPassword" Placeholder="Password"  IsPassword="True"></Entry>
                 
                 <Button Text="Login" x:Name="Login" Clicked="ClickedLogin"></Button>
+                <Label x:Name="forgotPasswordLabel" Text="Forgot Password?" TextColor="Black" FontSize="Medium" VerticalOptions="Center" HorizontalOptions="Center" TextDecorations="Underline">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
             </StackLayout>
 
-            <StackLayout VerticalOptions="EndAndExpand"  HorizontalOptions="Center">
+            <StackLayout VerticalOptions="EndAndExpand"  HorizontalOptions="Center" Margin="0,50,0,0">
                 <Label Text="Don't have an account?" TextColor="Black" VerticalOptions="End"/>
                 <Button Text="Sign Up" Clicked="SignUpClicked"/>
 

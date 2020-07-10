@@ -7,11 +7,14 @@ using InfiniteMeals.ViewModel.MealSelect;
 using InfiniteMeals.ViewModel.Profile;
 using InfiniteMeals.ViewModel.Subscribe;
 using InfiniteMeals.Model.Database;
+using System.Windows.Input;
 
 namespace InfiniteMeals {
 
     // main page or home page of the app
     public partial class MainPage : ContentPage {
+
+        public ICommand ForgotPasswordCommand => new Command(onForgotPassword);
 
         public MainPage() {
             InitializeComponent();
@@ -70,8 +73,11 @@ namespace InfiniteMeals {
             }
         }
 
+        private async void onForgotPassword() {
+            System.Diagnostics.Debug.WriteLine("clicked");
+            await Navigation.PushAsync(new ResetPasswordPage());
+        }
 
-       
 
     }
 }

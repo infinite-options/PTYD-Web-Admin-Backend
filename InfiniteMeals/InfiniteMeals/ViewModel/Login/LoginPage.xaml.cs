@@ -14,7 +14,7 @@ using InfiniteMeals.ViewModel.SignUp;
 using InfiniteMeals.Model.User;
 using System.Threading.Tasks;
 using InfiniteMeals.Model.Database;
-
+using System.Windows.Input;
 
 namespace InfiniteMeals.ViewModel.Login
 {
@@ -24,12 +24,14 @@ namespace InfiniteMeals.ViewModel.Login
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
         public HttpClient client = new HttpClient(); // client to handle all api calls
+        
 
         public LoginPage() {
             InitializeComponent();
-            
+
         }
 
+        // handles when login button is clicked
         private async void ClickedLogin(object sender, EventArgs e) {
             if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // checks that all fields are filled
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
@@ -74,14 +76,14 @@ namespace InfiniteMeals.ViewModel.Login
             var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
             if (deviceIpAddress != null) {
                 try {
-                    System.Diagnostics.Debug.WriteLine("ip: " + deviceIpAddress);
+
                     LoginPost loginPostContent = new LoginPost() { // object that contains ip address and browser type; will be converted into a json object 
                         ipAddress = deviceIpAddress.ToString(),
                         browserType = deviceBrowserType
                     };
 
                     string loginPostContentJson = JsonConvert.SerializeObject(loginPostContent); // make orderContent into json
-                    System.Diagnostics.Debug.WriteLine(loginPostContentJson);
+
                     var httpContent = new StringContent(loginPostContentJson, Encoding.UTF8, "application/json"); // encode orderContentJson into format to send to database
 
 
@@ -91,13 +93,13 @@ namespace InfiniteMeals.ViewModel.Login
 
 
                     var response = await client.PostAsync(loginURL + userEmail + "/" + hashedPassword, httpContent); // try to post to database
-                    System.Diagnostics.Debug.WriteLine("response: " + response);
+
 
                     if (response.Content != null) { // post was successful
                         var responseContent = await response.Content.ReadAsStringAsync();
 
                         var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
-
+                        
                         return loginResponse;
 
                     }
@@ -117,8 +119,6 @@ namespace InfiniteMeals.ViewModel.Login
         public async Task<AccountSalt> retrieveAccountSalt(string userEmail) {
             try {
                 var content = await client.GetStringAsync(accountSaltURL + userEmail); // get the requested account salt
-                System.Diagnostics.Debug.WriteLine("content");
-                System.Diagnostics.Debug.WriteLine(content);
                 var accountSalt = JsonConvert.DeserializeObject<AccountSalt>(content);
                 return accountSalt;
             } catch(Exception ex) {
@@ -132,5 +132,6 @@ namespace InfiniteMeals.ViewModel.Login
         private async void SignUpClicked(object sender, EventArgs e) {
             await Navigation.PushAsync(new SignUpPage());
         }
+      
     }
 }
