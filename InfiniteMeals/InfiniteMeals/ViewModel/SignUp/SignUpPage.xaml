@@ -5,24 +5,79 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="InfiniteMeals.ViewModel.SignUp.SignUpPage">
-    <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
-        <Entry Placeholder="Enter Username"></Entry>
-        <StackLayout Orientation="Horizontal">
-            <Entry Placeholder="First Name"></Entry>
-            <Entry Placeholder="Last Name"></Entry>
-        </StackLayout>
-        <Entry Placeholder="Email"></Entry>
-        <Entry Placeholder="Confirm Email"></Entry>
-        <Entry Placeholder="Password" IsPassword="True"></Entry>
-        <Entry Placeholder="Confirm Password" IsPassword="True"></Entry>
-        <Entry Placeholder="Enter Phone Number"></Entry>
-        <Label Text="Address"></Label>
-        <Editor></Editor>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Save Password"></Label>
-            <Switch IsToggled="False"></Switch>
-        </StackLayout>
-        <Button Text="Sign Up" Clicked="ClickedSignUp"></Button>
-        <Button Text="Already have account? Sign In" TextColor="Blue" Clicked="ClickedSignIn" ></Button>
-    </StackLayout>
+
+    <Grid Padding="15,15,15,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <BoxView Grid.Row="0"/>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Sign Up" TextColor="Black" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center"/>
+
+        <BoxView Grid.Row="1"/>
+        <Label Grid.Row="1" Text="First Name" HorizontalOptions="Start" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry Grid.Row="1" Placeholder="First Name" VerticalOptions="Center"/>
+        <Label Grid.Row="1" Text="First Name is required" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Column="1" Grid.Row="1"/>
+        <Label Grid.Column="1" Grid.Row="1" Text="Last Name" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry Grid.Column="1" Grid.Row="1" Placeholder="Last Name" VerticalOptions="Center"/>
+        <Label Grid.Column="1" Grid.Row="1" Text="Last Name is required" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="2" Grid.ColumnSpan="2"/>
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Text="Email" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry Grid.Row="2" Grid.ColumnSpan="2" Placeholder="Email" VerticalOptions="Center"/>
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Text="Email is required" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="3" Grid.ColumnSpan="2"/>
+        <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Confirm Email" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry Grid.Row="3" Grid.ColumnSpan="2" Placeholder="Confirm Email" VerticalOptions="Center"/>
+        <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Please confirm your email" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="4"/>
+        <Label Grid.Row="4" Text="Password" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry Grid.Row="4" Placeholder="Password" VerticalOptions="Center" IsPassword="True"/>
+        <Label Grid.Row="4" Text="Password is required" TextColor="Red" VerticalOptions="End"/>
+
+
+        <BoxView Grid.Column="1" Grid.Row="4"/>
+        <Label Grid.Column="1" Grid.Row="4" Text="Confirm Password" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry Grid.Column="1" Grid.Row="4" Placeholder="Confirm Password" VerticalOptions="Center" IsPassword="True"/>
+        <Label Grid.Column="1" Grid.Row="4" Text="Passwords do not match" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Row="5"/>
+        <Label Grid.Row="5" Text="Phone Number" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Entry Grid.Row="5" Placeholder="Phone Number" VerticalOptions="Center" Keyboard="Numeric"/>
+        <Label Grid.Row="5" Text="Phone # must be 10 digits" TextColor="Red" VerticalOptions="End"/>
+
+        <BoxView Grid.Column="1" Grid.Row="5"/>
+        <Label Grid.Column="1" Grid.Row="5" Text="Referral" VerticalOptions="Start" TextColor="Black" FontAttributes="Bold"/>
+        <Picker Grid.Column="1" Grid.Row="5" VerticalOptions="Center" Title="Referral">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Website</x:String>
+                    <x:String>Social Media</x:String>
+                    <x:String>Friend</x:String>
+                    <x:String>Event</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <BoxView Grid.Row="6"/>
+        <RadioButton Grid.Row="6" Grid.ColumnSpan="2" Text="Sign me up for weekly updates!" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+        <BoxView Grid.Row="7"/>
+        <Button Grid.Row="7" Grid.ColumnSpan="2" Text="Sign Up" FontSize="Large"/>
+
+    </Grid>
 </ContentPage>
