@@ -3,22 +3,28 @@
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
   <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs" Line="1003" Column="32" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="46" Column="135" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs" Line="1292" Column="32" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="InfiniteMeals" expanded="True">
             <Node name="InfiniteMeals" expanded="True">
-              <Node name="Model" expanded="True" />
+              <Node name="Model" expanded="True">
+                <Node name="Database" expanded="True" />
+              </Node>
               <Node name="ViewModel" expanded="True">
                 <Node name="MealSelect" expanded="True">
+                  <Node name="AddOnChoices.xaml" expanded="True" />
                   <Node name="MealChoices.xaml" expanded="True" />
                   <Node name="MealSchedule.xaml" expanded="True">
                     <Node name="MealSchedule.xaml.cs" selected="True" />
                   </Node>
+                  <Node name="SelectMealOptions.xaml" expanded="True" />
                 </Node>
               </Node>
+              <Node name="MainPage.xaml" expanded="True" />
             </Node>
             <Node name="InfiniteMeals.Android" expanded="True" />
           </Node>

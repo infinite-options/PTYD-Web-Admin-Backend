@@ -8,10 +8,12 @@
              NavigationPage.HasBackButton="False">
     <ContentPage.Content>
         <ScrollView>
-        <StackLayout>
+        <StackLayout x:Name="StackL">
            <Picker
               x:Name="SubscriptionPicker"
+               Title="Select a Subscription"
               Margin="30,20,30,0"
+               SelectedIndexChanged="SubscriptionPicker_SelectedIndexChanged"
             />
             <Label x:Name="nullPicker" Text ="Please Select a Subscription" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"></Label>
             <Label x:Name="HeaderLabel" Margin = "0,20,0,0" FontSize ="18" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
@@ -47,7 +49,6 @@
                 <RowDefinition Height="16.66*" />
             </Grid.RowDefinitions>
 
-            <Label Text="Week 1" Grid.Row = "0" Grid.ColumnSpan="3"  FontSize ="16" Margin ="20,0,20,0" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center"/>
                 <Button ClassId = "SunButton"
                     x:Name="SundayButton"
                     BorderColor="Black"
@@ -60,7 +61,7 @@
                     HorizontalOptions="Center"
                     Grid.Column="0"
                     Grid.Row="1"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Clicked="ClickedColor" />
             <Button ClassId = "MonButton"
                     x:Name="MondayButton"
@@ -105,7 +106,7 @@
                     Clicked="ClickedSelectMeal"/>
             <Button ClassId = "SurpriseButton"
                     x:Name="SurpriseButton"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     WidthRequest="100"
                     HeightRequest="100"
                     BorderColor="Black"
@@ -132,8 +133,6 @@
                     Grid.Row="2"
                     Clicked="ClickedAddOn"/>
 
-
-            <Label Text="Week 2" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="3" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton2"
                     x:Name="SundayButton2"
                     WidthRequest="100"
@@ -146,7 +145,7 @@
                     HorizontalOptions="Center"
                     Grid.Column="0"
                     Grid.Row="4"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Clicked="ClickedColor" />
 
             <Button ClassId = "MonButton2"
@@ -199,7 +198,7 @@
                     BorderWidth="0.1"
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="5"
@@ -221,7 +220,6 @@
 
 
 
-            <Label Text="Week 3" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="6" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton3"
                     x:Name="SundayButton3"
                     WidthRequest="100"
@@ -234,7 +232,7 @@
                     HorizontalOptions="Center"
                     Grid.Column="0"
                     Grid.Row="7"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Clicked="ClickedColor" />
 
             <Button ClassId = "MonButton3"
@@ -287,7 +285,7 @@
                     BorderWidth="0.1"
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="8"
@@ -307,7 +305,6 @@
                     Grid.Row="8"
                     Clicked="ClickedAddOn"/>
 
-                <Label Text="Week 4" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="9" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton4"
                     x:Name="SundayButton4"
                     WidthRequest="100"
@@ -320,7 +317,7 @@
                     HorizontalOptions="Center"
                     Grid.Column="0"
                     Grid.Row="10"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Clicked="ClickedColor" />
 
             <Button ClassId = "MonButton4"
@@ -373,7 +370,7 @@
                     BorderWidth="0.1"
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="11"
@@ -396,7 +393,6 @@
 
 
 
-            <Label Text="Week 5" Grid.ColumnSpan="3"  FontSize ="16" Margin ="20,0,20,0" Grid.Row="12" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton5"
                     x:Name="SundayButton5"
                     WidthRequest="100"
@@ -409,7 +405,7 @@
                     HorizontalOptions="Center"
                     Grid.Column="0"
                     Grid.Row="13"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Clicked="ClickedColor" />
 
             <Button ClassId = "MonButton5"
@@ -462,7 +458,7 @@
                     BorderWidth="0.1"
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="14"
@@ -484,7 +480,6 @@
 
 
 
-            <Label Text="Week 6" Grid.ColumnSpan="3"  FontSize ="16" Grid.Row="15" Margin ="20,0,20,0" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
                 <Button ClassId = "SunButton6"
                     x:Name="SundayButton6"
                     WidthRequest="100"
@@ -497,7 +492,7 @@
                     HorizontalOptions="Center"
                     Grid.Column="0"
                     Grid.Row="16"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Clicked="ClickedColor" />
 
             <Button ClassId = "MonButton6"
@@ -550,7 +545,7 @@
                     BorderWidth="0.1"
                     VerticalOptions="Start"
                     HorizontalOptions="Center"
-                    BackgroundColor="#8FBC8F"
+                    BackgroundColor="#F5F5F5"
                     Text="Surprise Me"
                     Grid.Column ="0"
                     Grid.Row="17"
