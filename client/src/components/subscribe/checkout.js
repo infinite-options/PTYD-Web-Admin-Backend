@@ -110,9 +110,7 @@ class Checkout extends Component {
       //calculate original charge
       let mealPrice = parseFloat(this.props.location.item.total);
       let shipping = this.state.original_charge.shipping;
-      let tax = parseFloat(
-        ((mealPrice + shipping) * this.state.tax_rate).toFixed(2)
-      );
+      let tax = parseFloat((mealPrice * this.state.tax_rate).toFixed(2));
 
       let total_charge = parseFloat((mealPrice + shipping + tax).toFixed(2));
       console.log("tax: ", typeof tax);
@@ -160,7 +158,7 @@ class Checkout extends Component {
           console.log(purApi);
           let len = purApi.result.length;
           this.setState({purchase: purApi.result[len - 1]});
-
+          console.log("purchase: ", this.state.purchase);
           //parse purchase cc exp date into month and year
           const parsedValues = purApi.result[len - 1].cc_exp_date.split("-");
           this.setState(prevState => ({
