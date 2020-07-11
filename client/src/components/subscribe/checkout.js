@@ -158,7 +158,7 @@ class Checkout extends Component {
           console.log(purApi);
           let len = purApi.result.length;
           this.setState({purchase: purApi.result[len - 1]});
-
+          console.log("purchase: ", this.state.purchase);
           //parse purchase cc exp date into month and year
           const parsedValues = purApi.result[len - 1].cc_exp_date.split("-");
           this.setState(prevState => ({

@@ -117,7 +117,7 @@ export default function Main({appProps}) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_SUBCRIPTION_URL: `${DEV_URL}v2/update-subscription`,
+          CHANGE_SUBCRIPTION_URL: `${DEV_URL}v2/change-subscription`,
           UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
           UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
         }}
@@ -138,7 +138,7 @@ export default function Main({appProps}) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_SUBCRIPTION_URL: `${DEV_URL}v2/update-subscription`,
+          CHANGE_SUBCRIPTION_URL: `${DEV_URL}v2/change-subscription`,
           UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
           UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
         }}

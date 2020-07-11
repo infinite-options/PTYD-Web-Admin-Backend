@@ -29,6 +29,9 @@ export default class MakeChange extends Component {
       showPasswordChange: false,
       showDeleteModal: false,
       showSaveModal: false,
+      //handle error
+      showErrorModal: false,
+      errorMessage: "",
       //some variables need for submit forms
       updateMealPlan: {
         meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
@@ -168,6 +171,11 @@ export default class MakeChange extends Component {
       this.UpdateChangingSubcription();
     }
   };
+  ShowHideErrorModal = () => {
+    this.state.showErrorModal
+      ? this.setState({showErrorModal: false})
+      : this.setState({showErrorModal: true});
+  };
   DeleteCurrentPurchase = () => {
     fetch(this.props.DELETE_URL, {
       method: "PATCH",
@@ -223,13 +231,23 @@ export default class MakeChange extends Component {
           billing_zip: this.state.currentPurchase.billing_zip,
           ...this.state.deliveryAddress
         };
-        await axios.post(`${this.props.UPDATE_SUBCRIPTION_URL}`, data); //update
+        await axios
+          .post(`${this.props.CHANGE_SUBCRIPTION_URL}`, data)
+          .catch(err => {
+            throw err.response.data.message;
+          }); //update
       }
 
       this.props.history.push("/mealschedule");
       window.location.reload("false");
     } catch (err) {
-      console.log(err);
+      this.setState({
+        errorMessage: err,
+        showDeleteModal: false,
+        showPasswordChange: false,
+        showSaveModal: false
+      });
+      this.ShowHideErrorModal();
     }
   };
   render() {
@@ -238,7 +256,8 @@ export default class MakeChange extends Component {
         {this.state.show &&
           !this.state.showPasswordChange &&
           !this.state.showDeleteModal &&
-          !this.state.showSaveModal && (
+          !this.state.showSaveModal &&
+          !this.state.ShowHideErrorModal && (
             <Modal
               show={this.state.show}
               onHide={this.props.ChangeAccountInfo}
@@ -302,22 +321,6 @@ export default class MakeChange extends Component {
                               ) *
                                 (1 + this.state.tax_rate) +
                               this.state.shipping;
-                            // if (paymentPlans[e.target.value] !== undefined) { //this is prevent error when not choosing anthing from drop down menu in meal plans
-                            //   paid =
-                            //     paymentPlans[e.target.value].meal_plan_price *
-                            //       (1 + this.state.tax_rate) +
-                            //     this.state.shipping;
-                            // }
-                            // if (
-                            //   this.state.currentPurchase.meal_plan_id !==
-                            //   paymentPlans[e.target.value].meal_plan_id
-                            // ) {
-                            //   paid =
-                            //     this.state.currentPurchase.meal_plan_price *
-                            //       (1 + this.state.tax_rate) +
-                            //     this.state.shipping;
-                            // }
-
                             this.setState(prevState => ({
                               updateMealPlan: {
                                 ...prevState.updateMealPlan,
@@ -651,23 +654,25 @@ export default class MakeChange extends Component {
               aria-describedby='alert-dialog-description'
             >
               <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
-              {this.state.updateMealPlan.amount_paid &&
-              this.state.updateMealPlan.amount_paid >= 0 ? (
-                <DialogContent>
-                  <DialogContentText id='alert-dialog-description'>
-                    You will be charged {this.state.updateMealPlan.amount_paid}.
-                    Do you want to continue this transaction.
-                  </DialogContentText>
-                </DialogContent>
-              ) : (
-                <DialogContent>
-                  <DialogContentText id='alert-dialog-description'>
-                    You will be refunded{" "}
-                    {0 - this.state.updateMealPlan.amount_paid}. Do you want to
-                    continue this transaction.
-                  </DialogContentText>
-                </DialogContent>
-              )}
+
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  You will be{" "}
+                  <span>
+                    {this.state.updateMealPlan.amount_paid &&
+                    this.state.updateMealPlan.amount_paid >= 0 ? (
+                      <span>
+                        charged ${this.state.updateMealPlan.amount_paid}.{" "}
+                      </span>
+                    ) : (
+                      <span>
+                        refunded ${0 - this.state.updateMealPlan.amount_paid}.{" "}
+                      </span>
+                    )}
+                  </span>
+                  Do you want to continue this transaction.
+                </DialogContentText>
+              </DialogContent>
 
               <DialogActions>
                 <Button onClick={this.ShowHideSaveModal} color='primary'>
@@ -679,6 +684,29 @@ export default class MakeChange extends Component {
                   autoFocus
                 >
                   Yes,Please
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
+        {this.state.showErrorModal && (
+          <div>
+            <Dialog
+              open={this.state.showErrorModal}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
+
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  Sorry!!! {this.state.errorMessage}
+                </DialogContentText>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={this.ShowHideErrorModal} color='primary'>
+                  Close
                 </Button>
               </DialogActions>
             </Dialog>
