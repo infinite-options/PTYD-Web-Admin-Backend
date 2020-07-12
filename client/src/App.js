@@ -83,13 +83,8 @@ const App = (props) => {
       <div
         className="row justify-content-center text-nowrap"
       >
-        {/* <Grid>
-          <Cell col={1}></Cell>
-          <Cell col={10}> */}
         <Navbar
-          // style={{padding:"0 100px"}}
           collapseOnSelect expand='lg'
-          className="text-nowrap"
         >
           <Navbar.Brand href="/">
             {/* <div className="navigation-logo-container"> */}
@@ -231,9 +226,6 @@ const App = (props) => {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        {/* </Cell>
-          <Cell col={1}></Cell>
-        </Grid> */}
       </div>
 
       <div
