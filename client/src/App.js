@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { Layout, Header, Content } from "react-mdl";
-import { Button } from "react-bootstrap";
+import { Layout, Header, Content, Grid, Cell} from "react-mdl";
+import { Button, Navbar } from "react-bootstrap";
 // import {Navigation, Drawer } from "react-mdl";
 // import {Link} from "react-router-dom";
 
@@ -80,251 +80,179 @@ const App = (props) => {
 
   let stuff = !isAuthenticating && (
     <div>
-      <Layout>
-        <Header
-          // className='header-color'
-          // title={
-          //   <span>
-          //     <span style={{color: "white"}}>Area / </span>
-          //     <strong>The Title</strong>
-          //   </span>
-          // }
-          style={{ background: "white" }}
-          scroll
+      
+      <div 
+        className="row justify-content-center text-nowrap"
+      >
+        {/* <Grid>
+          <Cell col={1}></Cell>
+          <Cell col={10}> */}
+            <Navbar
+          // style={{padding:"0 100px"}}
+          collapseOnSelect expand='lg'
+          className="text-nowrap"
         >
-          <Nav
-            className="navbar fixed-top justify-content-center font2 navigation-container"
-            activeKey="/home"
-          >
-            <div className="navigation-logo-container">
-              <a className="navbar-brand" href="/">
-                <img src={logo} alt="Logo" className="logo"></img>
+          <Navbar.Brand href="/">
+            {/* <div className="navigation-logo-container"> */}
+              <a className="navbar-brand">
+                <img src={logo} alt="Logo" className="logo"/>
               </a>
               <div className="logo-austin-houston">
                 <p className="font9">AUSTIN &</p>
                 <p className="font9">HOUSTON</p>
               </div>
-            </div>
+            {/* </div> */}
+          </Navbar.Brand>
 
-            <Nav.Item className="navigation-link">
-              <Nav.Link className="black-link" href="/selectmealplan">
-                SUBSCRIBE
-              </Nav.Link>
-            </Nav.Item>
-
-            <NavDropdown
-              className="navigation-link black-link"
-              title="MENU"
-              id="nav-dropdown"
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" 
+          // class="justify-content-md-end"
+          />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav
+              // className="mr-auto"
+              // className="navbar fixed-top justify-content-center font2 navigation-container"
+              activeKey="/home"
             >
-              <NavDropdown.Item href="/menuthisweek">
-                THIS WEEK
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/menunextweek">
-                NEXT WEEK
-              </NavDropdown.Item>
-              {isAuthenticated && (
-                <Fragment>
-                  {/* <NavDropdown.Item href='/menuthisweek'>
-                    THIS WEEK
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href='/menunextweek'>
-                    NEXT WEEK
-                  </NavDropdown.Item> */}
-                  {searchCookie4UserID(document.cookie) !== "null" && (
-                    <NavDropdown.Item href="/mealschedule">
-                      MEAL SCHEDULE
+              
+              <Nav.Item className="navigation-link">
+                <Nav.Link className="black-link" href="/selectmealplan">
+                  SUBSCRIBE
+                </Nav.Link>
+              </Nav.Item>
+
+              <NavDropdown
+                className="navigation-link black-link"
+                title="MENU"
+                id="nav-dropdown"
+              >
+                <NavDropdown.Item href="/menuthisweek">
+                  THIS WEEK
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/menunextweek">
+                  NEXT WEEK
+                </NavDropdown.Item>
+                {isAuthenticated && (
+                  <Fragment>
+                    {/* <NavDropdown.Item href='/menuthisweek'>
+                      THIS WEEK
                     </NavDropdown.Item>
-                  )}
-                </Fragment>
-              )}
-            </NavDropdown>
+                    <NavDropdown.Item href='/menunextweek'>
+                      NEXT WEEK
+                    </NavDropdown.Item> */}
+                    {searchCookie4UserID(document.cookie) !== "null" && (
+                      <NavDropdown.Item href="/mealschedule">
+                        MEAL SCHEDULE
+                      </NavDropdown.Item>
+                    )}
+                  </Fragment>
+                )}
+              </NavDropdown>
 
-            <Nav.Item className="navigation-link">
-              <Nav.Link className="black-link" href="/findus">
-                FIND US
-              </Nav.Link>
-            </Nav.Item>
+              <Nav.Item className="navigation-link">
+                <Nav.Link className="black-link" href="/findus">
+                  FIND US
+                </Nav.Link>
+              </Nav.Item>
 
-            <Nav.Item className="navigation-link">
-              <Nav.Link className="black-link" href="/giftcards">
-                GIFT CARDS
-              </Nav.Link>
-            </Nav.Item>
+              <Nav.Item className="navigation-link">
+                <Nav.Link className="black-link" href="/giftcards">
+                  GIFT CARDS
+                </Nav.Link>
+              </Nav.Item>
 
-            <NavDropdown
-              className="navigation-link black-link"
-              title="ABOUT"
-              id="nav-dropdown"
-            >
-              <NavDropdown.Item href="/howitworks">
-                HOW IT WORKS
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/ourstory">OUR STORY</NavDropdown.Item>
-              <NavDropdown.Item href="/faq">FAQ</NavDropdown.Item>
-              <NavDropdown.Item
-                href="https://www.messenger.com/t/preptoyourdoor"
-                target="_blank"
+              <NavDropdown
+                className="navigation-link black-link"
+                title="ABOUT"
+                id="nav-dropdown"
               >
-                CONTACT
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
-            </NavDropdown>
-            {/*             
-            <Nav.Item style={{marginTop: "30px"}}>
-              <Nav.Link style={{color: "black"}} href='/get100'>
-                GET $100
-              </Nav.Link>
-            </Nav.Item> */}
-
-            <div className="navigation-start">
-              {searchCookie4Login("loginStatus") !== null ? (
-                <div>
-                  <p id="loginStatus" className="login-hello">
-                    <span>Hello, </span>
-                    <span>{searchCookie4Login("loginStatus")}</span>
-                    <span>!</span>
-                  </p>
-                  <a
-                    href="/logout"
-                    id="logoutButton"
-                    onClick={() => {
-                      document.cookie = "loginStatus=; path=/";
-                      window.location.reload(false);
-                    }}
-                  >
-                    <u>Log Out</u>
-                  </a>
-                </div>
-              ) : (
-                <div>
+                <NavDropdown.Item href="/howitworks">
+                  HOW IT WORKS
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/ourstory">OUR STORY</NavDropdown.Item>
+                <NavDropdown.Item href="/faq">FAQ</NavDropdown.Item>
+                <NavDropdown.Item
+                  href="https://www.messenger.com/t/preptoyourdoor"
+                  target="_blank"
+                >
+                  CONTACT
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/jobs">JOBS</NavDropdown.Item>
+              </NavDropdown>
+              
+              <div className="navigation-start">
+                {searchCookie4Login("loginStatus") !== null ? (
                   <div>
+                    <p id="loginStatus" className="login-hello">
+                      <span>Hello, </span>
+                      <span>{searchCookie4Login("loginStatus")}</span>
+                      <span>!</span>
+                    </p>
                     <a
-                      href="/selectmealplan"
-                      className="top-btn1 top-btn1-primary font5"
-                    >
-                      Get Started
-                    </a>
-                  </div>
-                  <a
-                    href="/login"
-                    id="loginButton"
-                    onClick={() => window.location.reload(false)}
-                  >
-                    <u>Login</u>
-                  </a>
-                  {/* <p
-                    id='loginStatus'
-                    style={{
-                      fontSize: "12px",
-                      textAlign: "right",
-                      color: "black"
-                    }}
-                  >
-                    {searchCookie4Login("loginStatus")}
-                  </p> */}
-                </div>
-              )}
-            </div>
-          </Nav>
-        </Header>
-
-        {/* <Drawer
-          style={{backgroundColor: "#493f3f"}}
-          className='header-color-background'
-          title={
-            <Link style={{fontFamily: "Kalam", color: "white"}} to='/'>
-              Prep To Your Door
-            </Link>
-          }
-        >
-          <Navigation>
-            <a href='/selectmealplan'>SUBSCRIBE</a>
-            <a href='/menuthisweek'>MENU</a>
-            <a href='/findus'>FIND US</a>
-            <a href='/giftcards'>GIFT CARDS</a>
-            <NavDropdown
-              title='ABOUT'
-              id='nav-dropdown'
-              style={{marginLeft: "-10px", color: "black"}}
-            >
-              <NavDropdown.Item href='/howitworks'>
-                HOW IT WORKS
-              </NavDropdown.Item>
-              <NavDropdown.Item href='/ourstory'>OUR STORY</NavDropdown.Item>
-              <NavDropdown.Item href='/faq'>FAQ</NavDropdown.Item>
-              <NavDropdown.Item
-                href='https://www.messenger.com/t/preptoyourdoor'
-                target='_blank'
-              >
-                CONTACT
-              </NavDropdown.Item>
-              <NavDropdown.Item href='/jobs'>JOBS</NavDropdown.Item>
-            </NavDropdown>
-            <a href='/get100'>GET $100</a>
-            <div className='sideNavLogin'>
-              {searchCookie4Login("loginStatus") !== null ? (
-                <div>
-                  <a href='/logout'>
-                    <Button
-                      id='logoutButton'
-                      variant='success'
-                      size='sm'
+                      href="/logout"
+                      id="logoutButton"
                       onClick={() => {
                         document.cookie = "loginStatus=; path=/";
                         window.location.reload(false);
                       }}
                     >
-                      Log Out
-                    </Button>
-                  </a>
-                  <p
-                    id='loginStatus'
-                    style={{
-                      fontSize: "20px",
-                      textAlign: "right",
-                      color: "black"
-                    }}
-                  >
-                    {searchCookie4Login("loginStatus")}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <a href='/login'>
-                    <Button
-                      id='loginButton'
-                      variant='success'
-                      size='sm'
+                      <u>Log Out</u>
+                    </a>
+                  </div>
+                ) : (
+                  <div>
+                    <div>
+                      <a
+                        href="/selectmealplan"
+                        className="top-btn1 top-btn1-primary font5"
+                      >
+                        Get Started
+                      </a>
+                    </div>
+                    <a
+                      href="/login"
+                      id="loginButton"
                       onClick={() => window.location.reload(false)}
                     >
-                      Login
-                    </Button>
-                  </a>
-                  <p
-                    id='loginStatus'
-                    Style='font-size:12px; text-align:right; color:black;'
-                  >
-                    {searchCookie4Login("loginStatus")}
-                  </p>
-                </>
-              )}
-            </div>
-          </Navigation>
-        </Drawer> */}
+                      <u>Login</u>
+                    </a>
+                    {/* <p
+                      id='loginStatus'
+                      style={{
+                        fontSize: "12px",
+                        textAlign: "right",
+                        color: "black"
+                      }}
+                    >
+                      {searchCookie4Login("loginStatus")}
+                    </p> */}
+                  </div>
+                )}
+              </div>
+              
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+          {/* </Cell>
+          <Cell col={1}></Cell>
+        </Grid> */}
+      </div> 
 
-        <Content className="content-container">
-          <div className="page-content" />
-          <Main
-            appProps={{
-              isAuthenticated,
-              userHasAuthenticated,
-              first_name,
-              user_uid,
-            }}
-          />
-        </Content>
-        <footer className="container font2">
+      <div 
+      class="row justify-content-md-center"
+      >  
+      {/* <Content className="content-container"> */}
+        <div className="page-content" />
+        <Main
+          appProps={{
+            isAuthenticated,
+            userHasAuthenticated,
+            first_name,
+            user_uid,
+          }}
+        />
+      {/* </Content> */}
+
+      <footer className="container font2">
           <div className="row footer-container">
             <div className="col">
               <div className="center-content">
@@ -533,7 +461,8 @@ const App = (props) => {
             </div>
           </div>
         </footer>
-      </Layout>
+      
+      </div>
     </div>
   );
 
