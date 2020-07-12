@@ -42,8 +42,8 @@ namespace InfiniteMeals.MealSelect
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
         private static string mealsUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals";
-        private static string mealSelectionUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000002";
-        private static string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000001";
+        private static string mealSelectionUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001";
+        private static string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000016";
 
 
 
@@ -911,7 +911,7 @@ namespace InfiniteMeals.MealSelect
 
             var mealSelectInfoToSend = new MealSelectInformation
             {
-                PurchaseId = "300-000001",                  // Constant for now
+                PurchaseId = "300-000021",                  // Constant for now
                 WeekAffected = weekAffectedList[weekNumber - 1],            // Week affected - DONE
                 MealQuantities = mealQtyDict,               // Dictionary inserted - DONE
                 DeliveryDay = deliveryDayList[0],               // Day selected - DONE
@@ -955,7 +955,6 @@ namespace InfiniteMeals.MealSelect
                 colorToReturn = Color.FromHex(green);
 
                 ClickedSave(sender, e);
-                //getPostedData();
             }
         }
 
