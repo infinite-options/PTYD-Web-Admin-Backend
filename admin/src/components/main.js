@@ -38,7 +38,7 @@ const Main = ({ appProps }) => (
         appProps,
         API_URL_MEALPLANS: `${DEV_URL}MealPlansAPI`,
         API_URL_COUPONS: `${DEV_URL}CouponsAPI`,
-        API_URL_TAXRATE: `${DEV_URL}TaxRateAPI`,
+        API_URL_TAXRATE: `${DEV_URL}saturdays`,
       }}
     />
     <AppliedRoute

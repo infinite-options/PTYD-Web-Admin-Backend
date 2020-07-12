@@ -82,12 +82,11 @@ export default function Customers(props) {
 
   return (
     <div style={{ margin: "1%" }}>
-        <Graph />
-  
+      <Graph />
     </div>
   );
 
-/*
+  /*
    </div>   
     <div style={{ padding: "10px 20px" }}>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "10px" }}>
@@ -117,9 +116,4 @@ export default function Customers(props) {
         />
       )}
 */
-
-
-
-
-
 }
