@@ -12,9 +12,8 @@ import Orders from "./Orders/Orders";
 import Customers from "./Customers/Customers";
 import EditMeals from "./Edit-Meal/edit-meals";
 import Settings from "./Settings/Settings";
-const DEV_URL =
-  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
-// const DEV_URL = "http://localhost:2000/api/v2/";
+//const DEV_URL ="https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
+const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
   <Switch>

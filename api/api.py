@@ -3804,7 +3804,7 @@ class All_Meals(Resource):
 
             items = execute("""SELECT 
                                     allmeals.*,
-                                    meals_ordered.*
+                                    meals_ordered.total
                                     FROM (# QUERY 8
                                     SELECT 
                                         menu_date,
@@ -4034,6 +4034,7 @@ class All_Meals(Resource):
 
             response['message'] = 'successful'
             response['result'] = items
+            print(items)
 
             return response, 200
         except:
