@@ -136,7 +136,7 @@ function SignUp(props) {
         <Row className='justify-content-md-center'>
           <Col></Col>
           <Col md={10}>
-            <Row className='justify-content-md-center'>
+            <Row className='justify-content-center'>
               <h1 style={{color: "#6e6565"}}>SIGN UP</h1>
             </Row>
             {erro != null && (
