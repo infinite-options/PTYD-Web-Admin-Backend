@@ -3424,18 +3424,18 @@ class Change_Subscription(Resource):
                 DeliveryUnit = 'NULL'
             purchaseIDresponse = execute(
                 "CALL get_new_purchase_id;", 'get', conn)
-            paymentIDresponse = execute(
-                "CALL get_new_payment_id;", 'get', conn)
+            # paymentIDresponse = execute(
+            #     "CALL get_new_payment_id;", 'get', conn)
             snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
 
             print(snapshotIDresponse)
             print(purchaseIDresponse)
-            print(paymentIDresponse)
+            # print(paymentIDresponse)
 
             snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
 
-            paymentId = paymentIDresponse['result'][0]['new_id']
+            # paymentId = paymentIDresponse['result'][0]['new_id']
 
             if snapshotId == None:
                 snapshotId = '160-000001'
@@ -3443,8 +3443,8 @@ class Change_Subscription(Resource):
             if purchaseId == None:
                 purchaseId = '300-000001'
 
-            if paymentId == None:
-                paymentId = '200-000001'
+            # if paymentId == None:
+            #     paymentId = '200-000001'
             print("before mealPlan")
             mealPlan = data['item'].split(' Subscription')[0]
             print(data['user_uid'])
@@ -3511,18 +3511,19 @@ class Change_Subscription(Resource):
                     # update payment table
                     reply = [execute(update_query, 'post', conn)]
                     refund_info['refund_amount'] = round(0 - new_charge, 2) #update the refund amount to make a stripe refund
+                    # Write the most recent refund to database
+                    paymentIDresponse = execute("CALL get_new_payment_id;", 'get', conn)
+                    paymentId = paymentIDresponse['result'][0]['new_id']
                     payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info,
                                                          stripe_charge.get('id'), stripe_refund.get('id'))
                     reply += [execute(payment_query, 'post', conn)]
                     Cancel_SubscriptionNow().stripe_refund(conn, refund_info, upgrade=True)
-                    #Write the most recent refund to database
-                    paymentIDresponse = execute(
-                        "CALL get_new_payment_id;", 'get', conn)
-                    paymentId = paymentIDresponse['result'][0]['new_id']
+
                     print("refund_info before write to database in change_subscription: ", refund_info)
                     stripe_charge['id'] = refund_info.get('stripe_charge_id')
                     stripe_refund['id'] = refund_info.get('stripe_refund_id')
-
+                    print("stripe_charge['id']: ", stripe_charge['id'])
+                    print("stripe_refund['id']: ", stripe_refund['id'])
                     previous = "'" + refund_info.get('previous_payment') + "'" if refund_info.get('previous_payment') is not None else 'NULL'
 
                     update_query = """UPDATE ptyd_payments SET stripe_charge_id = '""" + str(stripe_charge['id']) + """',
@@ -3586,7 +3587,7 @@ class Change_Subscription(Resource):
             purchase_query = []
             purchase_query.append("""UPDATE ptyd_purchases
                                         SET purchase_status = 'CANCELLED'
-                                        WHERE purchase_id = '""" + refund_info.get('purchase_id') + "';")
+                                        WHERE purchase_id = '""" + data['purchase_id'] + "';")
 
             purchase_query.append(""" INSERT INTO ptyd_purchases
                     (
