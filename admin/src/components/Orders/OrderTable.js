@@ -393,8 +393,6 @@ export default function OrderTable(props) {
                       <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.default_meal}</TableCell>
                       <TableCell align="right">{row.meal_phot_URL}</TableCell>
-                      <TableCell align="right">{row.meal_selected}</TableCell>
-                      <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.total}</TableCell>
                     </TableRow>
                   );
