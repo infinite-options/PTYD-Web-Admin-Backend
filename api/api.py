@@ -3209,25 +3209,55 @@ class Cancel_SubscriptionNow(Resource):
             purchase_id = refund_info.get('purchase_id')
             refund = refund_info.get('refund_amount')
             stripe_charge_id = refund_info.get('stripe_charge_id')
-            upgrade_subscription = False
-            # check if refund is larger than what we charged (for the current chargeID)
-            # we have to refund MULTIPLE times
-            exact_refund = refund
-            amount_paid = float(refund_info['amount_paid']) if float(refund_info['amount_paid']) > 0 else refund_info.get('refund_amount')
-            # second = False
-            # second_payment_id = None
-            while exact_refund > 0:
-                if exact_refund >= amount_paid:
-                    refund = amount_paid
-                # elif amount_paid < 0:
-                #     #we have partial refunded here
 
+            exact_refund = refund
+            amount_paid = float(refund_info['amount_paid']) if float(refund_info['amount_paid']) > 0 else 0
+
+            while exact_refund > 0:
+                if exact_refund >= amount_paid and amount_paid > 0:
+                    refund = amount_paid
+                    # what is refund amount is larger than the amount that charge_id can refund?
+                    
+                elif amount_paid == 0:
+                #we have partial refunded here
+                    try:
+                        charge_retrieved = stripe.Charge.retrieve(str(stripe_charge_id))
+                        print('charge_retrieved: ', charge_retrieved)
+                        max_amount_can_refund = round((charge_retrieved['amount'] - charge_retrieved['amount_refunded'])/100, 2)
+                        while (max_amount_can_refund <= 0):
+                            charge_id_lookup = """SELECT purchase_id, stripe_charge_id, previous_payment FROM ptyd_payments
+                                                                        WHERE payment_id = '""" + refund_info.get('previous_payment') + "';"
+                            # is this the last charge_id we need
+                            # is this charge_id has been refunded before, retrieve info from stripe
+                            print("charge_id_lookup: ", charge_id_lookup)
+                            res = execute(charge_id_lookup, 'get', conn);
+                            print("charge_id_lookup: ", res)
+                            if res['result']:
+                                stripe_charge_id = res['result'][0].get('stripe_charge_id')
+                                charge_retrieved = stripe.Charge.retrieve(str(stripe_charge_id))
+                                print('charge_retrieved: ', charge_retrieved)
+                                # amount_paid = round((charge_retrieved['amount'] - charge_retrieved['amount_refunded']) / 100, 2)
+                                purchase_id = res['result'][0]['purchase_id']
+                                refund_info['previous_payment'] = res['result'][0]['previous_payment']
+                                refund_info['stripe_charge_id'] = res['result'][0]['stripe_charge_id']
+                                max_amount_can_refund = charge_retrieved['amount'] - charge_retrieved['amount_refunded']
+                            else:
+                                response['message'] = 'There is no stripe charge ID in previous payment id'
+                                return response, 400
+                        if exact_refund > max_amount_can_refund:
+                            refund = max_amount_can_refund
+                        else:
+                            refund = exact_refund
+                    except stripe.error.StripeError as e:
+                        print("error in charge_retrieved: ", e)
+                        response['message'] = "Stripe charge retrieved error"
+                        return response, 400
                 print("refund when cancel: ", refund)
                 refund_info['refund_amount'] = exact_refund
                 refund_info['purchase_id'] = purchase_id
-
                 stripe_refund = stripe.Refund.create(charge=str(stripe_charge_id), amount=int(round(refund, 2) * 100))
                 print(stripe_refund)
+                refund_info['stripe_refund_id'] = stripe_refund['id']
                 if upgrade==False:
                     self.write_payment(conn, refund_info, refund, stripe_charge_id, stripe_refund.get('id'), purchaseID)
                 # check if there is other refund left
@@ -3355,7 +3385,8 @@ class Change_Subscription(Resource):
                                         WHERE purchase_id = '""" + purchaseID + "';"
     def getPaymentQuery(self, data, newpaymentId, purchaseID, refund_info, stripe_chargeID, stripe_refundID):
         refund_amount = refund_info.get('refund_amount')
-        new_charge = data['item_price'] * (1 + data['tax_rate']) + data['shipping']
+        meal_price = data['item_price'] * (1 + data['tax_rate']) + data['shipping']
+        new_charge = meal_price if meal_price > round(float(refund_info['amount_due']), 2) else 0
         exp_date = datetime(int(data['cc_exp_year']), int(data['cc_exp_month']), 1).strftime("%Y-%m-%d")
         stripe_charge_id = "'" + stripe_chargeID + "'" if stripe_chargeID is not None else 'NULL'
         stripe_refund_id = "'" + stripe_refundID + "'" if stripe_refundID is not None else 'NULL'
@@ -3386,7 +3417,7 @@ class Change_Subscription(Resource):
                         \'TRUE\',
                         \'""" + data['is_gift'] + """\',
                         NULL,
-                        \'""" + str(round(new_charge,2)) + """\',
+                        \'""" + str(round(meal_price,2)) + """\',
                         \'""" + str(round(new_charge - refund_amount, 2)) + """\',
                         """ + purchase_id + """,
                         \'""" + getNow() + """\',
@@ -3471,8 +3502,8 @@ class Change_Subscription(Resource):
             refund_info = Cancel_SubscriptionNow().refund_calculator(conn,data['purchase_id'])
             print("refund_info: ", refund_info)
             current_meal_refund = refund_info.get('refund_amount')
-            refund = round((float(new_plan_price) * (1 + data['tax_rate']) + data['shipping']) - current_meal_refund,2)
-            print("refund: ", refund)
+            new_charge = round((float(new_plan_price) * (1 + data['tax_rate']) + data['shipping']) - current_meal_refund,2)
+            print("new_charge: ", new_charge )
             # stripe refund before update database
             stripe_refund = {}
             stripe_charge = {}
@@ -3498,27 +3529,34 @@ class Change_Subscription(Resource):
                         return response, 400
                     data['cc_num'] = card_selected['result'][0]['cc_num']
                 #consider we should refund or charge for the plan
-                if refund < 0:
-                    refund_info['refund_amount'] = round(0 - refund, 2)
+                if new_charge < 0:
+                    update_query = self.update_payment_query(refund_info.get('purchase_id'))
+                    print(update_query)
+                    # update payment table
+                    reply = [execute(update_query, 'post', conn)]
+                    refund_info['refund_amount'] = round(0 - new_charge, 2) #update the refund amount to make a stripe refund
                     Cancel_SubscriptionNow().stripe_refund(conn, refund_info, upgrade=True)
                     #Write the most recent refund to database
                     paymentIDresponse = execute(
                         "CALL get_new_payment_id;", 'get', conn)
                     paymentId = paymentIDresponse['result'][0]['new_id']
+                    print("refund_info before write to database in change_subscription: ", refund_info)
+                    stripe_charge['id'] = refund_info.get('stripe_charge_id')
+                    stripe_refund['id'] = refund_info.get('stripe_refund_id')
                     payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info,
                                                          stripe_charge.get('id'), stripe_refund.get('id'))
-                    print(payment_query)
-                    reply += [execute(payment_query, 'post', conn)]
+                    reply = [execute(payment_query, 'post', conn)]
+                    print(reply)
                     # stripe_charge_id = refund_info.get('stripe_charge_id')
                     # stripe_refund = stripe.Refund.create(charge=str(stripe_charge_id), amount=int(round(0-refund,2)*100))
                     #we need to update the stripe_charge id in first row
-                elif refund > 0:
+                elif new_charge > 0:
                     card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']), "exp_year": int(data['cc_exp_year']), "cvc": data['cc_cvv'], }
                     print("card dict: ", card_dict)
                     try:
                         card_token = stripe.Token.create(card=card_dict)
                         stripe_charge = stripe.Charge.create(
-                            amount=int(round(refund * 100, 0)),
+                            amount=int(round(new_charge * 100, 0)),
                             currency="usd",
                             source=card_token,
                             description="Charge customer %s for %s" % (data['delivery_first_name'] + " " + data['delivery_last_name'], "For changing subscription"))
