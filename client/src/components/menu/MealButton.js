@@ -93,7 +93,7 @@ export default class MealButton extends Component {
         let data;
         if (res.data.result !== undefined) {
           data = res.data.result;
-          console.log("data when calling getSelected function: ", data);
+          // console.log("data when calling getSelected function: ", data);
           if (data.Meals.length > 0) {
             for (let meal of data.Meals) {
               if (meal.week_affected === this.props.weekMenu.SaturdayDate) {

@@ -3,7 +3,7 @@ import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/creditCard.png";
 import {Link} from "react-router-dom";
-import {timingSafeEqual} from "crypto";
+// import {timingSafeEqual} from "crypto";
 
 class Selectmealplan extends Component {
   constructor(props) {
@@ -28,12 +28,8 @@ class Selectmealplan extends Component {
             </h2>
             <hr className='two' />
             <article className='bottom_header'>
-              <p>
-                LOCAL. ORGANIC. RESPONSIBLE.
-              </p>
-              <p>
-                STRAIGHT TO YOUR DOOR
-              </p>
+              <p>LOCAL. ORGANIC. RESPONSIBLE.</p>
+              <p>STRAIGHT TO YOUR DOOR</p>
             </article>
             <CardDeck>
               {this.state.mealPlans.map((mealPlan, key) => (
@@ -101,7 +97,7 @@ class Selectmealplan extends Component {
                             paddingBottom: "5px",
                             color: "white",
                             fontSize: "12px",
-                            fontWeight:"bold"
+                            fontWeight: "bold"
                           }}
                         >
                           CHOOSE {mealPlan.num_meals} MEALS

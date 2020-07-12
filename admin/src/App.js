@@ -110,49 +110,22 @@ function App() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto" style={{ marginLeft: "3%" }}>
-            <Nav.Link href="/customerProfile">Customers</Nav.Link>
-            &nbsp;&nbsp;&nbsp;
-            <Nav.Link>
-              <Badge
-                badgeContent={84}
-                color="secondary"
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              ></Badge>
-            </Nav.Link>
-            &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/">Active Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
-            <Nav.Link>
-              <Badge
-                badgeContent={42}
-                color="secondary"
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              ></Badge>
-            </Nav.Link>
-            &nbsp;&nbsp;&nbsp;
             <NavDropdown title="Do It Yourself" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/createMeal">
-                Create Meals
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/createMeal">Edit Meals</NavDropdown.Item>
-              <NavDropdown.Item href="/editMeal">
-                Edit Meal Recipes
-              </NavDropdown.Item>
               <NavDropdown.Item href="/createMenu">
                 Create Menus
               </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
+              <NavDropdown.Item href="/editMealDesc">
+                Edit Meals
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/createMeal">
+                Create Meals
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/editMeal">
+                Edit Meal Recipes
               </NavDropdown.Item>
             </NavDropdown>
             &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/settings">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link href="/orders">Orders</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers">Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link>

@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {Switch} from "react-router-dom";
-import {CookiesProvider} from "react-cookie";
+// import {CookiesProvider} from "react-cookie";
 import AppliedRoute from "./AppliedRoute";
 
 import LandingPage from "./landingpage";
@@ -18,7 +18,7 @@ import FaQ from "./about/faq";
 import JobS from "./about/jobs";
 import Get100 from "./get100";
 import MealSchedule from "./menu/mealschedule";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import NotFound from "./NotFound";
 import SignUp from "./signup";
@@ -31,14 +31,14 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-// const DEV_URL =
-//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
+const DEV_URL =
+  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
-const DEV_URL = "http://localhost:2000/api/";
+// const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({appProps}) {
-  const [objectIndex, setObjectIndex] = useState(0);
+  // const [objectIndex, setObjectIndex] = useState(0);
   return (
     <Switch>
       <AppliedRoute
@@ -88,10 +88,13 @@ export default function Main({appProps}) {
         component={appProps.isAuthenticated ? Checkout : Login}
         appProps={{
           appProps,
+          DEV_URL: DEV_URL,
           SESSION_URL: `${DEV_URL}v2/sessionverification`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
           CHECKOUT_URL: `${DEV_URL}v2/checkout`,
           SINGLE_ACC_API_URL: `${DEV_URL}v2/account`,
+          API_URL: `${DEV_URL}v2/accountsalt`,
+          SOCIAL_API_URL: `${DEV_URL}v2/social`,
           redirect_after_login: "/checkout",
           user_uid: appProps.user_uid
         }}
@@ -114,7 +117,7 @@ export default function Main({appProps}) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_SUBCRIPTION_URL: `${DEV_URL}v2/update-subscription`,
+          CHANGE_SUBCRIPTION_URL: `${DEV_URL}v2/change-subscription`,
           UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
           UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
         }}
@@ -135,7 +138,7 @@ export default function Main({appProps}) {
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
-          UPDATE_SUBCRIPTION_URL: `${DEV_URL}v2/update-subscription`,
+          CHANGE_SUBCRIPTION_URL: `${DEV_URL}v2/change-subscription`,
           UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
           UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
         }}

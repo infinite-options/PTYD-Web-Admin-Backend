@@ -30,7 +30,6 @@ function createData(obj) {
     meal_name,
     default_meal,
     meal_phot_URL,
-    week_affected,
     meal_selected,
     meals_ordered_meal_name,
     total,
@@ -45,7 +44,6 @@ function createData(obj) {
     meal_name,
     default_meal,
     meal_phot_URL,
-    week_affected,
     meal_selected,
     meals_ordered_meal_name,
     total,
@@ -117,6 +115,7 @@ function OrderTableHead(props) {
     onRequestSort(event, property);
   };
 
+  console.log(headCells);
   return (
     <TableHead>
       <TableRow>
@@ -394,7 +393,6 @@ export default function OrderTable(props) {
                       <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.default_meal}</TableCell>
                       <TableCell align="right">{row.meal_phot_URL}</TableCell>
-                      <TableCell align="right">{row.week_affected}</TableCell>
                       <TableCell align="right">{row.meal_selected}</TableCell>
                       <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.total}</TableCell>

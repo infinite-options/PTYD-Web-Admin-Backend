@@ -6,3 +6,4 @@ itsdangerous
 pymysql
 zappa
 awscli
+stripe

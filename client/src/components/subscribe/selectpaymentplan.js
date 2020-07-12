@@ -25,16 +25,16 @@ class SelectPaymentPlan extends Component {
 
   render() {
     return (
-      <section class='content-section'>
-        <div class='container font2'>
+      <section className='content-section'>
+        <div className='container font2'>
           <center>
-            <h2 class='font1'>{this.state.meals} MEALS PAYMENT OPTIONS</h2>
-            <hr class='two' />
+            <h2 className='font1'>{this.state.meals} MEALS PAYMENT OPTIONS</h2>
+            <hr className='two' />
             <article className='bottom_header'>
               <p>LOCAL. ORGANIC. RESPONSIBLE.</p>
               <p>STRAIGHT TO YOUR DOOR</p>
             </article>
-            <hr class='three' />
+            <hr className='three' />
             <div className='number-of-meals-margin'>
               <a className='number-of-meals' href='/5-meals-subscription'>
                 5 MEALS
@@ -52,22 +52,21 @@ class SelectPaymentPlan extends Component {
                 20 MEALS{" "}
               </a>
             </div>
-            <hr class='three' />
-            <div class='justify-content-center'>
+            <hr className='three' />
+            <div className='justify-content-center'>
               <CardDeck className='d-flex justify-content-center'>
                 {this.state.paymentPlans.map(paymentPlan => (
-                  <Card.Body className='borderr border_card_subcribe paymentCard '>
+                  <Card.Body
+                    key={paymentPlan.meal_plan_id}
+                    className='borderr border_card_subcribe paymentCard '
+                  >
                     <Card.Header className='p-0 position-relative background_black'>
                       <Card.Img
                         className='blackM background_black'
                         variant='top'
                         src={paymentPlan.photo_URL}
-                        // style={{
-                        //   "border-top-left-radius": "0px",
-                        //   "border-top-right-radius": "0px"
-                        // }}
                       />
-                      <div class='d-flex card-img-overlay'>
+                      <div className='d-flex card-img-overlay'>
                         <span className='px-0 align-self-center mx-auto mealoption-center '>
                           {paymentPlan.num_meals}
                         </span>
@@ -103,7 +102,7 @@ class SelectPaymentPlan extends Component {
                       >
                         <button
                           type='button'
-                          class='btn2 btn2-primary font2'
+                          className='btn2 btn2-primary font2'
                           style={{
                             marginTop: "10px",
                             paddingLeft: "30px",
@@ -118,7 +117,7 @@ class SelectPaymentPlan extends Component {
                         </button>
                       </Link>
                       <img
-                        class='img-fluid'
+                        className='img-fluid'
                         src={IMG9}
                         alt=''
                         style={{
@@ -131,7 +130,7 @@ class SelectPaymentPlan extends Component {
               </CardDeck>
             </div>
             <hr className='mt-5' />
-            <h3 class='font1 feedback_marginTop' style={{color: "#196F3D"}}>
+            <h3 className='font1 feedback_marginTop' style={{color: "#196F3D"}}>
               Our Customers Say
             </h3>
             <Container style={{fontSize: "20px"}}>
@@ -139,11 +138,11 @@ class SelectPaymentPlan extends Component {
                 <Col>
                   <div className='shadow w-75'>
                     <div className='mb-2'>
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
                     </div>
                     <p>Convenience and goodness</p>
                   </div>
@@ -151,11 +150,11 @@ class SelectPaymentPlan extends Component {
                 <Col>
                   <div className='shadow w-75'>
                     <div className='mb-2'>
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
                     </div>
                     <p>PTYD feels like family!</p>
                   </div>
@@ -163,11 +162,11 @@ class SelectPaymentPlan extends Component {
                 <Col>
                   <div className='shadow w-75'>
                     <div className='mb-2'>
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
-                      <span class='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
+                      <span className='fa fa-star checked' />
                     </div>
                     <p>They make life SO easy!</p>
                   </div>

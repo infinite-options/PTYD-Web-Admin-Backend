@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 
 import {Grid, Cell} from "react-mdl";
 import {Button, Row} from "react-bootstrap";
@@ -91,7 +91,7 @@ export default class MealSchedule extends Component {
         params: {startdate: this.props.match.params.startdate}
       })
       .then(res => {
-        console.log("res: ", res);
+        // console.log("res: ", res);
         if (res.data !== undefined && res.data.result !== undefined) {
           if (res.data.result.length > 0) {
             this.setState({purchases: res.data.result});
@@ -103,7 +103,7 @@ export default class MealSchedule extends Component {
               // addonCharge: res.data.result[0].total_charge
             });
           } else {
-            throw "There are no subscribed purchases.";
+            this.setState({error: "There are no subscribed purchases."});
           }
         }
       })
@@ -112,7 +112,8 @@ export default class MealSchedule extends Component {
           this.setState({error: err});
           console.log(err);
         } else {
-          this.setState({error: err.response});
+          if (err.response !== undefined && err.response.data !== undefined)
+            this.setState({error: err.response.data.message});
           console.log(err.response);
         }
       });
@@ -121,9 +122,9 @@ export default class MealSchedule extends Component {
       .get(`${this.props.PLANS_URL}`)
       .then(res => {
         let data = res.data;
-        console.log(data.result);
+        // console.log(data.result);
         if (data !== undefined && data.result !== undefined) {
-          console.log("here");
+          // console.log("here");
           this.setState({mealPlans: data.result});
         }
       })
@@ -188,7 +189,7 @@ export default class MealSchedule extends Component {
                   history={this.props.history}
                   DEV_URL={this.props.DEV_URL}
                   DELETE_URL={this.props.DELETE_URL}
-                  UPDATE_SUBCRIPTION_URL={this.props.UPDATE_SUBCRIPTION_URL}
+                  CHANGE_SUBCRIPTION_URL={this.props.CHANGE_SUBCRIPTION_URL}
                   UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
                   UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
                   user_uid={this.state.userID}
@@ -233,7 +234,7 @@ export default class MealSchedule extends Component {
                 ) : (
                   <div className='has-text-danger'>
                     {" "}
-                    Something wrong happened
+                    Oops... Something went wrong !!!
                   </div>
                 )}
               </div>
