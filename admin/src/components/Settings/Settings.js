@@ -5,6 +5,7 @@ import { Table, Card, Container, Row, Col } from "react-bootstrap";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
+import Avatar from "@material-ui/core/Avatar";
 
 class Settings extends Component {
   constructor(props) {
@@ -35,6 +36,11 @@ class Settings extends Component {
       taxrate: taxrate,
     });
   }
+
+  addDefaultSrc = (ev) => {
+    ev.target.src =
+      "https://prep-to-your-door-s3.s3-us-west-1.amazonaws.com/dev_imgs/select5meals.jpg";
+  };
 
   render() {
     console.log(this.props.API_URL_MEALPLANS);
@@ -106,7 +112,7 @@ class Settings extends Component {
                       <th>Plan Description</th>
                       <th>Payment Frequency</th>
                       <th>In Short</th>
-                      <th>Pic URL</th>
+                      <th>Pic</th>
                       <th>Num of Meals</th>
                       <th>Weekly Price</th>
                       <th>Plan Price</th>
@@ -128,7 +134,17 @@ class Settings extends Component {
                         <td>{meal.plan_headline}</td>
                         <td>{meal.payment_frequency}</td>
                         <td>{meal.plan_footer}</td>
-                        <td>{meal.photo_URL}</td>
+                        <td>
+                          <img
+                            src={meal.photo_URL}
+                            onError={this.addDefaultSrc}
+                            className="img-responsive"
+                            style={{
+                              height: "100px",
+                              width: "100px",
+                            }}
+                          />
+                        </td>
                         <td>{meal.num_meals}</td>
                         <td>{meal.meal_weekly_price}</td>
                         <td>{meal.meal_plan_price}</td>

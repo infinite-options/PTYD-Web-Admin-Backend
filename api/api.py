@@ -3828,7 +3828,7 @@ class All_Meals(Resource):
 
             items = execute("""SELECT 
                                     allmeals.*,
-                                    meals_ordered.*
+                                    meals_ordered.total
                                     FROM (# QUERY 8
                                     SELECT 
                                         menu_date,
@@ -4058,6 +4058,7 @@ class All_Meals(Resource):
 
             response['message'] = 'successful'
             response['result'] = items
+            print(items)
 
             return response, 200
         except:
@@ -4926,6 +4927,50 @@ class MenuCreation(Resource):
         finally:
             disconnect(conn)
 
+class Add_Coupon(Resource):
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            print("connection done...")
+            data = request.get_json(force=True)
+            print("data collected...")
+            print(data)
+            
+            coupon_id = data['coupon_id']
+            active = data['active']
+            discount_percent = data['discount_percent']
+            discount_amount = data['discount_amount']
+            discount_shipping = data['discount_shipping']
+            expire_date = data['expire_date']
+            limits = data['limits']
+            notes = data['notes']
+            num_used = data['num_used']
+            recurring = data['recurring']
+            email = data['email']
+
+            print("Items read...")
+            items['new_coupon_insert'] = execute("""INSERT INTO ptyd_coupons ( 	
+                                                coupon_id,active,discount_percent,discount_amount,discount_shipping,
+                                                expire_date,limits,notes,num_used,recurring,email 
+                                                ) 
+                                                VALUES ( 	
+                                                \'""" + str(coupon_id) + """\',\'""" + str(active) + """\',
+                                                \'""" + str(discount_percent) + """\',\'""" + str(discount_amount) + """\',
+                                                \'""" + str(discount_shipping) + """\',\'""" + str(expire_date) + """\',
+                                                \'""" + str(limits) + """\',\'""" + str(notes) + """\',
+                                                \'""" + str(num_used) + """\',\'""" + str(recurring) + """\',
+                                                \'""" + str(email) + """\' 
+                                                );""", 'post', conn)
+
+            print("Coupon_inserted...")
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class CouponsAPI(Resource):       
 
     def get(self):
@@ -4948,6 +4993,93 @@ class CouponsAPI(Resource):
         finally:
             disconnect(conn)
 
+    def patch(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+           
+            coupon_id = data['coupon_id']
+            active = data['active']
+            discount_percent = data['discount_percent']
+            discount_amount = data['discount_amount']
+            discount_shipping = data['discount_shipping']
+            expire_date = data['expire_date']
+            limits = data['limits']
+            notes = data['notes']
+            num_used = data['num_used']
+            recurring = data['recurring']
+            email = data['email']
+            print(data)
+            print("Items read...")
+            items['update_coupon'] = execute("""update ptyd_coupons
+                                                set 
+                                                    active = \'""" + str(active) + """\', 
+                                                    discount_percent = \'""" + str(discount_percent) + """\',
+                                                    discount_amount = \'""" + str(discount_amount) + """\',
+                                                    discount_shipping = \'""" + str(discount_shipping) + """\',
+                                                    expire_date = \'""" + str(expire_date) + """\',
+                                                    limits = \'""" + str(limits) + """\',
+                                                    notes = \'""" + str(notes) + """\',
+                                                    num_used = \'""" + str(num_used) + """\',
+                                                    recurring = \'""" + str(recurring) + """\',
+                                                    email = \'""" + str(email) + """\'
+                                                where coupon_id = \'""" + str(coupon_id) + """\';""", 'post', conn)
+                                            
+            print("coupon_updated...")
+            
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class Add_Meal_plan(Resource):
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            print("connection done...")
+            data = request.get_json(force=True)
+            print("data collected...")
+            print(data)
+            meal_planIdQuery = execute("""CALL get_new_meal_plan_id();""", 'get', conn)
+            print("meal_Plan_id called..")
+            mealPlanId = meal_planIdQuery['result'][0]['new_id']
+            print("new_meal_plan_id created...")
+            
+            meal_plan_desc = data['meal_plan_desc']
+            payment_frequency = data['payment_frequency']
+            photo_URL = data['photo_URL']
+            plan_headline = data['plan_headline']
+            plan_footer = data['plan_footer']
+            num_meals = data['num_meals']
+            meal_weekly_price = data['meal_weekly_price']
+            meal_plan_price = data['meal_plan_price']
+            meal_shipping = data['meal_shipping']
+            meal_tax  = data['meal_tax']
+
+            print("Items read...")
+            items['new_meal_insert'] = execute("""INSERT INTO ptyd_meal_plans  ( 	
+                                                    meal_plan_id,meal_plan_desc,payment_frequency,photo_URL,plan_headline,
+                                                    plan_footer,num_meals,meal_weekly_price,meal_plan_price,meal_shipping,meal_tax 
+                                                    ) 
+                                                    VALUES ( 	
+                                                    \'""" + str(mealPlanId) + """\',\'""" + str(meal_plan_desc) + """\',
+                                                    \'""" + str(payment_frequency) + """\',\'""" + str(photo_URL) + """\',
+                                                    \'""" + str(plan_headline) + """\',\'""" + str(plan_footer) + """\',
+                                                    \'""" + str(num_meals) + """\',\'""" + str(meal_weekly_price) + """\',
+                                                    \'""" + str(meal_plan_price) + """\',\'""" + str(meal_shipping) + """\',
+                                                    \'""" + str(meal_tax) + """\'
+                                                    );""", 'post', conn)
+
+            print("meal_plan_inserted...")
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class MealPlansAPI(Resource):       
 
@@ -4971,7 +5103,50 @@ class MealPlansAPI(Resource):
         finally:
             disconnect(conn)
 
-class TaxRateAPI(Resource):
+    def patch(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+           
+            meal_plan_id = data['meal_plan_id']
+            meal_plan_desc = data['meal_plan_desc']
+            payment_frequency = data['payment_frequency']
+            photo_URL = data['photo_URL']
+            plan_headline = data['plan_headline']
+            plan_footer = data['plan_footer']
+            num_meals = data['num_meals']
+            meal_weekly_price = data['meal_weekly_price']
+            meal_plan_price = data['meal_plan_price']
+            meal_shipping = data['meal_shipping']
+            meal_tax  = data['meal_tax']
+
+            print(data)
+            print("Items read...")
+            items['update_meal_plan'] = execute("""update ptyd_meal_plans
+                                                set 
+                                                    meal_plan_desc = \'""" + str(meal_plan_desc) + """\',
+                                                    payment_frequency = \'""" + str(payment_frequency) + """\',
+                                                    photo_URL = \'""" + str(photo_URL) + """\',
+                                                    plan_headline = \'""" + str(plan_headline) + """\',
+                                                    plan_footer = \'""" + str(plan_footer) + """\',
+                                                    num_meals = \'""" + str(num_meals) + """\',
+                                                    meal_weekly_price = \'""" + str(meal_weekly_price) + """\',
+                                                    meal_plan_price = \'""" + str(meal_plan_price) + """\',
+                                                    meal_shipping = \'""" + str(meal_shipping) + """\',
+                                                    meal_tax  = \'""" + str(meal_tax) + """\'
+                                                where meal_plan_id = \'""" + str(meal_plan_id) + """\';""", 'post', conn)
+                                            
+            print("meal_plan_updated...")
+            
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class TaxRateAPI(Resource):       
+
     def get(self):
         response = {}
         items = {}
@@ -5048,6 +5223,8 @@ api.add_resource(CouponsAPI, '/api/v2/CouponsAPI')
 api.add_resource(MealPlansAPI, '/api/v2/MealPlansAPI')
 api.add_resource(TaxRateAPI, '/api/v2/TaxRateAPI')
 
+api.add_resource(Add_Meal_plan, '/api/v2/Add_Meal_plan')
+api.add_resource(Add_Coupon, '/api/v2/Add_Coupon')
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
