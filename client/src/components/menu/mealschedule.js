@@ -112,7 +112,7 @@ export default class MealSchedule extends Component {
           this.setState({error: err});
           console.log(err);
         } else {
-          if (err.response.data !== undefined)
+          if (err.response !== undefined && err.response.data !== undefined)
             this.setState({error: err.response.data.message});
           console.log(err.response);
         }
@@ -189,7 +189,7 @@ export default class MealSchedule extends Component {
                   history={this.props.history}
                   DEV_URL={this.props.DEV_URL}
                   DELETE_URL={this.props.DELETE_URL}
-                  UPDATE_SUBCRIPTION_URL={this.props.UPDATE_SUBCRIPTION_URL}
+                  CHANGE_SUBCRIPTION_URL={this.props.CHANGE_SUBCRIPTION_URL}
                   UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
                   UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
                   user_uid={this.state.userID}
@@ -234,7 +234,7 @@ export default class MealSchedule extends Component {
                 ) : (
                   <div className='has-text-danger'>
                     {" "}
-                    Something wrong happened
+                    Oops... Something went wrong !!!
                   </div>
                 )}
               </div>
