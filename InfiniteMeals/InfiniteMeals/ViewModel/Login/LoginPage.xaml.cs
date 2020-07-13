@@ -31,42 +31,33 @@ namespace InfiniteMeals.ViewModel.Login
 
         }
 
-        // handles when login button is clicked
+        // handles when the login button is clicked
         private async void ClickedLogin(object sender, EventArgs e) {
-            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // checks that all fields are filled
+            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // check if all fields are filled out
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
-            } else {
-               
+            }
+            else {
+
                 var accountSalt = await retrieveAccountSalt(this.loginEmail.Text); // retrieve user's account salt
+                System.Diagnostics.Debug.WriteLine("account salt: " + accountSalt.result[0]);
                 if (accountSalt != null && accountSalt.result.Count != 0) { // make sure the account salt exists 
                     var loginAttempt = await login(this.loginEmail.Text, this.loginPassword.Text, accountSalt);
+                    System.Diagnostics.Debug.WriteLine("login attempt: " + loginAttempt.GetType());
                     if (loginAttempt != null && loginAttempt.Message != "Request failed, wrong password.") { // make sure the login attempt was successful
-                        var userSessionInformation = new UserLoginSession { // object to send into local database
-                            UserUid = loginAttempt.Result.Result[0].UserUid,
-                            FirstName = loginAttempt.Result.Result[0].FirstName,
-                            SessionId = loginAttempt.LoginAttemptLog.SessionId,
-                            LoginId = loginAttempt.LoginAttemptLog.LoginId,
-                            Email = loginAttempt.Result.Result[0].UserEmail
-                        };
-                        await App.Database.SaveItemAsync(userSessionInformation); // send login session to local database
-                        App.setLoggedIn(true);
-                        if (this.BindingContext != null) {
-                            MainPage mainPage = (MainPage)this.BindingContext;
-                            mainPage.updateLoginButton();
-                        }
-                        
+                        captureLoginSession(loginAttempt);
                         await Navigation.PopAsync();
-                        
-                        await DisplayAlert("Note", "Successfully logged in!", "OK");
-                    } else {
+
+                    }
+                    else {
                         await DisplayAlert("Error", "Wrong password was entered", "OK");
                     }
-                } else {
+                }
+                else {
                     await DisplayAlert("Error", "An account with that email does not exist", "OK");
-                }  
+                }
 
             }
-            
+
         }
 
         // logs the user into the app 
@@ -99,19 +90,20 @@ namespace InfiniteMeals.ViewModel.Login
                         var responseContent = await response.Content.ReadAsStringAsync();
 
                         var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
-                        
                         return loginResponse;
 
                     }
                 } 
                 catch (Exception e) {
-                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    System.Diagnostics.Debug.WriteLine("Exception message: " + e.Message);
+                    return null;
                   
                 }
 
 
             }
             return null;
+            
         }
 
         // uses account salt api to retrieve the user's account salt
@@ -120,6 +112,7 @@ namespace InfiniteMeals.ViewModel.Login
             try {
                 var content = await client.GetStringAsync(accountSaltURL + userEmail); // get the requested account salt
                 var accountSalt = JsonConvert.DeserializeObject<AccountSalt>(content);
+                System.Diagnostics.Debug.WriteLine("account salt good");
                 return accountSalt;
             } catch(Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
@@ -132,6 +125,22 @@ namespace InfiniteMeals.ViewModel.Login
         private async void SignUpClicked(object sender, EventArgs e) {
             await Navigation.PushAsync(new SignUpPage());
         }
-      
+
+
+        public async void captureLoginSession(LoginResponse loginResponse) {
+
+            var userSessionInformation = new UserLoginSession { // object to send into local database
+                UserUid = loginResponse.Result.Result[0].UserUid,
+                FirstName = loginResponse.Result.Result[0].FirstName,
+                SessionId = loginResponse.LoginAttemptLog.SessionId,
+                LoginId = loginResponse.LoginAttemptLog.LoginId,
+                Email = loginResponse.Result.Result[0].UserEmail
+            };
+            await App.Database.SaveItemAsync(userSessionInformation); // send login session to local database
+            App.setLoggedIn(true);
+            MainPage mainPage = (MainPage)Navigation.NavigationStack[0];
+            mainPage.updateLoginButton();
+        }
+
     }
 }

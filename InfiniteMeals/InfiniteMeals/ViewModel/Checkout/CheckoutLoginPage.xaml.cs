@@ -58,7 +58,6 @@ namespace InfiniteMeals.ViewModel.Checkout {
                         App.setLoggedIn(true); // login state is true for the app
                         MainPage homePage = (MainPage)Navigation.NavigationStack[0];
                         homePage.updateLoginButton(); // update the login button on the homepage
-                        System.Diagnostics.Debug.WriteLine(this.BindingContext);
                         if (this.BindingContext != null) {
                             SubscriptionPlan subscriptionPlan = (SubscriptionPlan)this.BindingContext;
                             DeliveryPage delivery = new DeliveryPage();

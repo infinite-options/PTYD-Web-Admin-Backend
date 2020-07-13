@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 
 namespace InfiniteMeals.Model.Profile {
-    class ChangePasswordItem {
+    public class ChangePasswordItem {
 
         [JsonProperty("ID")]
         public string ID { get; set; }

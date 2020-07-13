@@ -18,6 +18,12 @@ namespace InfiniteMeals {
 
         public App() {
             InitializeComponent();
+            
+            if (database == null) {
+                database = new UserLoginDatabase();
+            }
+
+            System.Diagnostics.Debug.WriteLine(database.GetItemsAsync().Result.Count);
 
 
             MainPage = new NavigationPage(new MainPage());
