@@ -132,11 +132,11 @@ function SignUp(props) {
           </div>
         </div>
       )}
-      <main Style={"margin-top:-80px;" + (loading ? "opacity: 0.5" : "")}>
-        <Row>
+      <main Style={"" + (loading ? "opacity: 0.5" : "")}>
+        <Row className='justify-content-md-center'>
           <Col></Col>
-          <Col sm={8}>
-            <Row className='justify-content-md-center'>
+          <Col md={10}>
+            <Row className='justify-content-center'>
               <h1 style={{color: "#6e6565"}}>SIGN UP</h1>
             </Row>
             {erro != null && (
@@ -153,9 +153,9 @@ function SignUp(props) {
                 <Col></Col>
               </Row>
             )}
-            <Row className='justify-content-md-center font2'>
+            <Row className='font2'>
               <Container
-                className='container fluid justify-content-center bg-white'
+                className='container fluid bg-white'
                 style={{
                   textAlign: "left",
                   fontWeight: "bold",
@@ -226,9 +226,9 @@ function SignUp(props) {
                         onChange={e => setConfirmEmail(e.target.value)}
                         placeholder='Confirm Email'
                       />
-                      {!confirmEmail ? (
+                      {confirmEmail !== email ? (
                         <span className='required-red'>
-                          Please confirm your email
+                          Confirm email does not match
                         </span>
                       ) : (
                         ""
@@ -323,7 +323,7 @@ function SignUp(props) {
                   </Form.Group>
                   <Form.Group
                     id='formGridServiceTerms'
-                    style={{paddingLeft: "300px", fontWeight: "normal"}}
+                    style={{fontWeight: "normal"}}
                   >
                     <Form.Check
                       type='checkbox'
@@ -333,7 +333,7 @@ function SignUp(props) {
                   </Form.Group>
                   <Form.Group
                     id='formGridCheckbox'
-                    style={{paddingLeft: "300px", fontWeight: "normal"}}
+                    style={{fontWeight: "normal"}}
                   >
                     <Form.Check
                       id='weeklyUpdateCheck'
@@ -359,17 +359,18 @@ function SignUp(props) {
                                       />
                                       */}
                   </Form.Group>
+
                   <div style={{textAlign: "center"}}>
                     <Button
                       onClick={sendForm}
                       variant='success'
                       type='submit'
-                      size='lg'
-                      style={{width: "33%"}}
+                      style={{width: "100%"}}
                     >
                       Sign Up
                     </Button>
                   </div>
+
                   <hr />
                   &nbsp;
                   <div className='text-center'>
@@ -377,7 +378,7 @@ function SignUp(props) {
                       Already have an account?
                     </p>
                     <a href='/login'>
-                      <strong style={{color: "#469b47"}}>Login Here</strong>
+                      <strong style={{color: "#469b47", textDecoration:"underline"}}>Login Here</strong>
                     </a>
                   </div>
                 </Form>
@@ -387,7 +388,6 @@ function SignUp(props) {
           </Col>
           <Col></Col>
         </Row>
-        <hr />
       </main>
     </Fragment>
   );
