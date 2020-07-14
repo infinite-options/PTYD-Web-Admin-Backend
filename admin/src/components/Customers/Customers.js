@@ -7,6 +7,7 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 
 import CustomerInfo from "./CustomerInfo";
+import Graph from "../Homepage/mapGraph";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,6 +81,13 @@ export default function Customers(props) {
   };
 
   return (
+    <div style={{ margin: "1%" }}>
+      <Graph />
+    </div>
+  );
+
+  /*
+   </div>   
     <div style={{ padding: "10px 20px" }}>
       <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: "10px" }}>
         <Link color="inherit">Admin Site</Link>
@@ -107,6 +115,5 @@ export default function Customers(props) {
           PURCHASE_API_URL={props.PURCHASE_API_URL}
         />
       )}
-    </div>
-  );
+*/
 }

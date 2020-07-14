@@ -30,7 +30,6 @@ function createData(obj) {
     meal_name,
     default_meal,
     meal_phot_URL,
-    week_affected,
     meal_selected,
     meals_ordered_meal_name,
     total,
@@ -45,7 +44,6 @@ function createData(obj) {
     meal_name,
     default_meal,
     meal_phot_URL,
-    week_affected,
     meal_selected,
     meals_ordered_meal_name,
     total,
@@ -117,6 +115,7 @@ function OrderTableHead(props) {
     onRequestSort(event, property);
   };
 
+  console.log(headCells);
   return (
     <TableHead>
       <TableRow>
@@ -284,7 +283,7 @@ export default function OrderTable(props) {
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -394,9 +393,6 @@ export default function OrderTable(props) {
                       <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.default_meal}</TableCell>
                       <TableCell align="right">{row.meal_phot_URL}</TableCell>
-                      <TableCell align="right">{row.week_affected}</TableCell>
-                      <TableCell align="right">{row.meal_selected}</TableCell>
-                      <TableCell align="right">{row.meal_name}</TableCell>
                       <TableCell align="right">{row.total}</TableCell>
                     </TableRow>
                   );
@@ -410,7 +406,7 @@ export default function OrderTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[15, 30, 45]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

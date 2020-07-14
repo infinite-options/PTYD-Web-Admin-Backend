@@ -11,9 +11,10 @@ import CreateMenu from "./Create-Menu/create-menu";
 import Orders from "./Orders/Orders";
 import Customers from "./Customers/Customers";
 import EditMeals from "./Edit-Meal/edit-meals";
-// const DEV_URL =
-//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
-const DEV_URL = "http://localhost:2000/api/v2/";
+import Settings from "./Settings/Settings";
+const DEV_URL =
+  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
+//const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
   <Switch>
@@ -27,6 +28,17 @@ const Main = ({ appProps }) => (
         API_URL_INGREDIENTS: `${DEV_URL}displayIngredients`,
         API_URL_CUSTINFO: `${DEV_URL}customerinfo`,
         API_URL_MEALINFO: `${DEV_URL}meal_info`,
+      }}
+    />
+    <AppliedRoute
+      exact
+      path="/settings"
+      component={Settings}
+      appProps={{
+        appProps,
+        API_URL_MEALPLANS: `${DEV_URL}MealPlansAPI`,
+        API_URL_COUPONS: `${DEV_URL}CouponsAPI`,
+        API_URL_TAXRATE: `${DEV_URL}saturdays`,
       }}
     />
     <AppliedRoute
@@ -50,6 +62,7 @@ const Main = ({ appProps }) => (
         API_URL_SAVERECIPE: `${DEV_URL}Edit_Recipe`,
         API_URL_ADDINGREDIENT: `${DEV_URL}Add_New_Ingredient`,
         API_URL_GETUNITS: `${DEV_URL}GetUnits`,
+        API_URL_ADDUNIT: `${DEV_URL}Add_New_Measure_Unit`,
       }}
     />
     <AppliedRoute

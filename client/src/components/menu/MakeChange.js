@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 
 import ChangePassword from "../ChangePassword";
 import {
@@ -29,6 +29,9 @@ export default class MakeChange extends Component {
       showPasswordChange: false,
       showDeleteModal: false,
       showSaveModal: false,
+      //handle error
+      showErrorModal: false,
+      errorMessage: "",
       //some variables need for submit forms
       updateMealPlan: {
         meal_plan_id: this.props.currentPurchase.meal_plan_id, //use for saving temporary value when updating
@@ -36,6 +39,9 @@ export default class MakeChange extends Component {
         price: this.props.currentPurchase.meal_plan_price,
         amount_paid: 0
       },
+      tax_rate: 0.0825, //these info should be taken from database instead of hard coded
+      shipping: 15,
+      loading: false,
       creditCard: {
         cc_num: this.props.currentPurchase.cc_num,
         cc_cvv: this.props.currentPurchase.cc_cvv,
@@ -165,30 +171,54 @@ export default class MakeChange extends Component {
       this.UpdateChangingSubcription();
     }
   };
+  ShowHideErrorModal = () => {
+    this.state.showErrorModal
+      ? this.setState({showErrorModal: false})
+      : this.setState({showErrorModal: true});
+  };
   DeleteCurrentPurchase = () => {
-    fetch(this.props.DELETE_URL, {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+    this.setState({loading: true});
+    axios
+      .patch(this.props.DELETE_URL, {
         purchase_id: this.state.currentPurchase.purchase_id
       })
-    })
-      .then(() => {
+      .then(res => {
         //success => reload the current page
         this.props.history.push("/mealschedule");
         window.location.reload(false);
+        this.setState({loading: false});
       })
       .catch(err => {
         console.log(err);
+
+        this.setState({
+          errorMessage: err,
+          showDeleteModal: false,
+          showPasswordChange: false,
+          showSaveModal: false,
+          loading: false
+        });
+        this.ShowHideErrorModal();
       });
   };
 
   UpdateChangingSubcription = async () => {
+    this.setState({loading: true});
     // update changing subcription
     try {
+      //update changing delivery address
+      await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
+        ...this.state.deliveryAddress,
+        purchase_id: this.state.currentPurchase.purchase_id
+      });
+      //update changing payment for subcription
+      let creditCard = this.state.creditCard;
+      await axios.patch(this.props.UPDATE_PAYMENT_URL, {
+        purchase_id: this.state.currentPurchase.purchase_id,
+        ...this.state.creditCard,
+        cc_exp_month: creditCard.cc_exp_month,
+        cc_exp_year: creditCard.cc_exp_year
+      });
       if (
         this.state.currentPurchase.meal_plan_id !==
         this.state.updateMealPlan.meal_plan_id
@@ -197,44 +227,45 @@ export default class MakeChange extends Component {
         // buy a new purchase
         let data = {
           user_uid: this.props.user_uid,
+          purchase_id: this.state.currentPurchase.purchase_id,
           is_gift: this.state.currentPurchase.gift,
           item: this.state.updateMealPlan.name, // target meal plan
           item_price: this.state.updateMealPlan.price, //target meal plan's price
+          tax_rate: this.state.tax_rate,
+          shipping: this.state.shipping,
           ...this.state.creditCard,
           billing_zip: this.state.currentPurchase.billing_zip,
-          ...this.state.deliveryAddress,
-          purchase_id: this.state.currentPurchase.purchase_id
+          ...this.state.deliveryAddress
         };
-
-        await axios.post(`${this.props.UPDATE_SUBCRIPTION_URL}`, data); //update
-      } else {
-        //update changing delivery address
-        await axios.patch(`${this.props.UPDATE_ADDRESS_URL}`, {
-          ...this.state.deliveryAddress,
-          purchase_id: this.state.currentPurchase.purchase_id
-        });
-        //update changing payment for subcription
-        let creditCard = this.state.creditCard;
-        await axios.patch(this.props.UPDATE_PAYMENT_URL, {
-          purchase_id: this.state.currentPurchase.purchase_id,
-          ...this.state.creditCard,
-          cc_exp_month: creditCard.cc_exp_month,
-          cc_exp_year: creditCard.cc_exp_year
-        });
+        await axios
+          .post(`${this.props.CHANGE_SUBCRIPTION_URL}`, data)
+          .catch(err => {
+            throw err.response.data.message;
+          }); //update
       }
+
       this.props.history.push("/mealschedule");
       window.location.reload("false");
+      this.setState({loading: false});
     } catch (err) {
-      console.log(err);
+      this.setState({
+        errorMessage: err,
+        showDeleteModal: false,
+        showPasswordChange: false,
+        showSaveModal: false,
+        loading: false
+      });
+      this.ShowHideErrorModal();
     }
   };
   render() {
     return (
-      <Fragment>
+      <>
         {this.state.show &&
           !this.state.showPasswordChange &&
           !this.state.showDeleteModal &&
-          !this.state.showSaveModal && (
+          !this.state.showSaveModal &&
+          !this.state.ShowHideErrorModal && (
             <Modal
               show={this.state.show}
               onHide={this.props.ChangeAccountInfo}
@@ -292,18 +323,12 @@ export default class MakeChange extends Component {
                           onChange={e => {
                             e.persist();
                             let paymentPlans = this.state.paymentPlans;
-                            let paid = 0;
-                            if (paymentPlans[e.target.value] !== undefined) {
-                              paid =
-                                paymentPlans[e.target.value].meal_plan_price;
-                            }
-                            if (
-                              this.state.currentPurchase.meal_plan_id !==
-                              paymentPlans[e.target.value].meal_plan_id
-                            ) {
-                              paid = this.state.currentPurchase.meal_plan_price;
-                            }
-
+                            let paid =
+                              parseFloat(
+                                this.state.currentPurchase.meal_plan_price
+                              ) *
+                                (1 + this.state.tax_rate) +
+                              this.state.shipping;
                             this.setState(prevState => ({
                               updateMealPlan: {
                                 ...prevState.updateMealPlan,
@@ -314,7 +339,11 @@ export default class MakeChange extends Component {
                                 price:
                                   paymentPlans[e.target.value].meal_plan_price,
                                 amount_paid: (
-                                  paymentPlans[e.target.value].meal_plan_price -
+                                  parseFloat(
+                                    paymentPlans[e.target.value].meal_plan_price
+                                  ) *
+                                    (1 + this.state.tax_rate) +
+                                  this.state.shipping -
                                   paid
                                 ).toFixed(2)
                               }
@@ -611,15 +640,20 @@ export default class MakeChange extends Component {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.ShowHideDeleteModal} color='primary'>
+                <Button
+                  onClick={this.ShowHideDeleteModal}
+                  color='primary'
+                  disabled={this.state.loading}
+                >
                   No,Keep
                 </Button>
                 <Button
                   onClick={this.DeleteCurrentPurchase}
                   variant='danger'
                   autoFocus
+                  disabled={this.state.loading}
                 >
-                  Yes,Delete
+                  {this.state.loading ? "Please Wait..." : "Yes,Delete"}
                 </Button>
               </DialogActions>
             </Dialog>
@@ -633,28 +667,70 @@ export default class MakeChange extends Component {
               aria-describedby='alert-dialog-description'
             >
               <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
+
               <DialogContent>
                 <DialogContentText id='alert-dialog-description'>
-                  You will be charged {this.state.updateMealPlan.amount_paid}.
+                  You will be{" "}
+                  <span>
+                    {this.state.updateMealPlan.amount_paid &&
+                    this.state.updateMealPlan.amount_paid >= 0 ? (
+                      <span>
+                        charged ${this.state.updateMealPlan.amount_paid}.{" "}
+                      </span>
+                    ) : (
+                      <span>
+                        refunded ${0 - this.state.updateMealPlan.amount_paid}.{" "}
+                      </span>
+                    )}
+                  </span>
                   Do you want to continue this transaction.
                 </DialogContentText>
               </DialogContent>
+
               <DialogActions>
-                <Button onClick={this.ShowHideSaveModal} color='primary'>
+                <Button
+                  onClick={this.ShowHideSaveModal}
+                  color='primary'
+                  disabled={this.state.loading}
+                >
                   No,Thanks
                 </Button>
                 <Button
                   onClick={this.UpdateChangingSubcription}
                   variant='danger'
                   autoFocus
+                  disabled={this.state.loading}
                 >
-                  Yes,Please
+                  {this.state.loading ? "Please wait..." : "Yes,Please"}
                 </Button>
               </DialogActions>
             </Dialog>
           </div>
         )}
-      </Fragment>
+        {this.state.showErrorModal && (
+          <div>
+            <Dialog
+              open={this.state.showErrorModal}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>{"Warning"}</DialogTitle>
+
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  Sorry!!! {this.state.errorMessage}
+                </DialogContentText>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={this.ShowHideErrorModal} color='primary'>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
+      </>
     );
   }
 }

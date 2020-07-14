@@ -51,6 +51,7 @@ export default function Orders(props) {
   };
 
   const order = useFetch(props.API_URL + `All_Meals?date=${date}`, date);
+  console.log(order.data);
   const ingredient = useFetch(
     props.API_URL + `All_Ingredients?date=${date}`,
     date
