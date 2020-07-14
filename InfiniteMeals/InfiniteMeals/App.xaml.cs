@@ -25,7 +25,7 @@ namespace InfiniteMeals {
 
             System.Diagnostics.Debug.WriteLine(database.GetItemsAsync().Result.Count);
 
-
+            
             MainPage = new NavigationPage(new MainPage());
             //MainPage = new MainPage() { BindingContext = new MainPageViewModel() };
         }

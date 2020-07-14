@@ -17,5 +17,8 @@ namespace InfiniteMeals.Model.SignUp {
 
         [JsonProperty("user_uid")]
         public string UserUId { get; set; }
+
+        [JsonProperty("result")]
+        public string Result { get; set; }
     }
 }

@@ -33,20 +33,25 @@ namespace InfiniteMeals.ViewModel.SignUp {
         }
 
         private async void ClickedSignUp(object sender, EventArgs e) {
-            System.Diagnostics.Debug.WriteLine("navigation stack: " + Navigation.NavigationStack.Count);
+            System.Diagnostics.Debug.WriteLine("begin check: " + (Navigation == null).ToString());
+            System.Diagnostics.Debug.WriteLine("begin navigation count: " + Navigation.NavigationStack.Count);
             if (String.IsNullOrEmpty(this.firstNameEntry.Text) || String.IsNullOrEmpty(this.lastNameEntry.Text) || String.IsNullOrEmpty(this.emailEntry.Text) ||
                 String.IsNullOrEmpty(this.confirmEmailEntry.Text) || String.IsNullOrEmpty(this.passwordEntry.Text) || String.IsNullOrEmpty(this.confirmPasswordEntry.Text) ||
                 String.IsNullOrEmpty(this.phoneNumberEntry.Text)) { // fields are empty  
                 await DisplayAlert("Error", "Please fill all fields", "OK");
+                return;
             } else { 
                 if(!validateEmail(this.emailEntry.Text) || !validateEmail(this.confirmEmailEntry.Text)) { // email isn't valid
                     await DisplayAlert("Error", "Please enter a valid email", "OK");
+                    return;
                 } else {
                     if(this.emailEntry.Text != this.confirmEmailEntry.Text) { // email and confirm email don't match
                         await DisplayAlert("Error", "Emails do not match", "OK");
+                        return;
                     } else {
                         if(this.passwordEntry.Text != this.confirmPasswordEntry.Text) { // passwords don't match
                             await DisplayAlert("Error", "Passwords do not match", "OK");
+                            return;
                         } else {
                             if (this.phoneNumberEntry.Text.Length < 10) { // phone number isn't valid 
                                 await DisplayAlert("Error", "Please enter a valid phone number", "OK");
@@ -54,17 +59,37 @@ namespace InfiniteMeals.ViewModel.SignUp {
                                 if (!termsOfServiceChecked) { // terms of service aren't checked
 
                                     await DisplayAlert("Error", "The Terms of Service must be accepted", "OK");
+                                    return;
                                 } else {
-                                     if (await signUp() != null) { // successful sign up 
-                                         //AccountSalt accountSalt = await retrieveAccountSalt(this.emailEntry.Text);
-                                         //await login(this.emailEntry.Text, this.passwordEntry.Text, accountSalt);
-                                         await Navigation.PopAsync();
-                                         await DisplayAlert("Success", "Your account was created", "OK"); 
+                                    var signUpAttempt = await signUp();
+
+                                     if (signUpAttempt != null) { // successful sign up 
+                                        if(signUpAttempt.Result == "Email address taken.") {
+                                            await DisplayAlert("Error", "That email is already taken", "OK");
+                                            return;
+                                        }
+                                        AccountSalt accountSalt = await retrieveAccountSalt(this.emailEntry.Text);
+                                        System.Diagnostics.Debug.WriteLine("salt: " + accountSalt.result[0]);
+                                        if(accountSalt != null && accountSalt.result.Count != 0) { 
+                                        var loginAttempt = await login(this.emailEntry.Text, this.passwordEntry.Text, accountSalt);
+                                            System.Diagnostics.Debug.WriteLine("logging in");
+                                            if (loginAttempt != null && loginAttempt.Message != "Request failed, wrong password.") {
+                                                System.Diagnostics.Debug.WriteLine("capturing login");
+                                                captureLoginSession(loginAttempt);
+
+                                             
+                                            }
+                                        } else {
+                                            await DisplayAlert("Error", "There was an error logging in", "OK");
+                                            return;
+                                        }
+                                   
 
 
                                      } else {
                                          await DisplayAlert("Error", "There was an error creating the account", "OK");
-                                     } 
+                                        return;
+                                    } 
                                     
                                 }
                             }
@@ -72,7 +97,7 @@ namespace InfiniteMeals.ViewModel.SignUp {
                     }
                 }
             }
-            
+            //await Navigation.PopToRootAsync(); 
         }
         
         // validates an email 
@@ -117,6 +142,9 @@ namespace InfiniteMeals.ViewModel.SignUp {
             Entry firstNameEntry = (Entry)sender;
             if (!String.IsNullOrEmpty(firstNameEntry.Text)) { // if first name entry is filled 
                 this.firstNameWarning.IsVisible = false; // hide warning 
+                if(!String.IsNullOrEmpty(lastNameEntry.Text)) {
+                    this.lastNameWarning.IsVisible = false;
+                }
             }
             else {
                 this.firstNameWarning.IsVisible = true; // display warning if unfilled
@@ -138,7 +166,9 @@ namespace InfiniteMeals.ViewModel.SignUp {
             if(!String.IsNullOrEmpty(emailEntry.Text)) {
                 if(validateEmail(emailEntry.Text)) {
                     this.emailWarning.IsVisible = false;
-                    if(!String.IsNullOrEmpty(this.confirmEmailEntry.Text) && emailEntry.Text != this.confirmEmailEntry.Text) {
+                    if(!String.IsNullOrEmpty(this.confirmEmailEntry.Text) && emailEntry.Text == this.confirmEmailEntry.Text) {
+                        this.confirmEmailWarning.IsVisible = false;
+                    } else {
                         this.confirmEmailWarning.Text = "Emails do not match";
                         this.confirmEmailWarning.IsVisible = true;
                     }
@@ -283,8 +313,6 @@ namespace InfiniteMeals.ViewModel.SignUp {
 
                         var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
 
-                        captureLoginSession(loginResponse);
-
                         return loginResponse;
 
                     }
@@ -311,8 +339,11 @@ namespace InfiniteMeals.ViewModel.SignUp {
             };
             await App.Database.SaveItemAsync(userSessionInformation); // send login session to local database
             App.setLoggedIn(true); // update the login status for the app
+            System.Diagnostics.Debug.WriteLine("change main page");
             MainPage mainPage = (MainPage)Navigation.NavigationStack[0];
             mainPage.updateLoginButton(); // update login button 
+            await Navigation.PopToRootAsync();
+            await DisplayAlert("Success", "Your account was created", "OK");
         }
 
         
