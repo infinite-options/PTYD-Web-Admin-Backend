@@ -42,11 +42,7 @@ namespace InfiniteMeals.MealSelect
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
         private static string mealsUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals";
-        private static string mealSelectionUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001";
         private static string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000016";
-
-
-
 
         public MealChoices()
         {
@@ -102,7 +98,7 @@ namespace InfiniteMeals.MealSelect
             var content = client.DownloadString(mealsUrl);
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
-            if(weekNumber == 1)
+            if(weekNumber == 0)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek1.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek1.Meals.Weekly;
@@ -202,7 +198,7 @@ namespace InfiniteMeals.MealSelect
                 grouped.Add(seasonalMealGroup);
                 grouped.Add(smoothieGroup);
             }
-            else if (weekNumber == 2)
+            else if (weekNumber == 1)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek2.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek2.Meals.Weekly;
@@ -303,7 +299,7 @@ namespace InfiniteMeals.MealSelect
                 grouped.Add(smoothieGroup);
 
             }
-            else if (weekNumber == 3)
+            else if (weekNumber == 2)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek3.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek3.Meals.Weekly;
@@ -403,7 +399,7 @@ namespace InfiniteMeals.MealSelect
                 grouped.Add(seasonalMealGroup);
                 grouped.Add(smoothieGroup);
             }
-            else if(weekNumber == 4)
+            else if(weekNumber == 3)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek4.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek4.Meals.Weekly;
@@ -503,7 +499,7 @@ namespace InfiniteMeals.MealSelect
                 grouped.Add(seasonalMealGroup);
                 grouped.Add(smoothieGroup);
             }
-            else if (weekNumber == 5)
+            else if (weekNumber == 4)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek5.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek5.Meals.Weekly;
@@ -892,26 +888,22 @@ namespace InfiniteMeals.MealSelect
             BindingContext = this;
         }
 
-        public void getPostedData()
-        {
-            WebClient client = new WebClient();
-
-            // Get user zipcodes
-            var userPurchClient = client.DownloadString(mealSelectionUrl);
-            var userPurchID = JsonConvert.DeserializeObject<GetPostedMeals>(userPurchClient);
-        }
-
         public async void postData(object sender, EventArgs e)
         {
             HttpClient client = new HttpClient();
             MealSchedule ms = new MealSchedule();
-            int weekNumber = ms.getNum();            // Getter Information 
+
+            // Getter Information
+            int weekNumber = ms.getNum();
+            string postUrl = ms.getPlanPicked();
+            string pid = ms.getPlanNumPicked();
+
             List<DateTimeOffset> weekAffectedList = ms.getWeekList();    // Week Affected Dates
             string[] deliveryDayList = ms.getDDArray();                  // Delivery Days ( 6 of them )
 
             var mealSelectInfoToSend = new MealSelectInformation
             {
-                PurchaseId = "300-000021",                  // Constant for now
+                PurchaseId = pid,                  // Constant for now
                 WeekAffected = weekAffectedList[weekNumber - 1],            // Week affected - DONE
                 MealQuantities = mealQtyDict,               // Dictionary inserted - DONE
                 DeliveryDay = deliveryDayList[0],               // Day selected - DONE
@@ -938,7 +930,7 @@ namespace InfiniteMeals.MealSelect
                 try
                 {
                     var httpContent = new StringContent(mealSelectInfoJson, Encoding.UTF8, "application/json"); // create a http response to send
-                    var response = await client.PostAsync(mealSelectionUrl, httpContent); // send the json file to database
+                    var response = await client.PostAsync(postUrl, httpContent); // send the json file to database
                     if (response.Content != null)
                     {
                         var responseContent = await response.Content.ReadAsStringAsync(); // get the success response
@@ -1097,7 +1089,9 @@ namespace InfiniteMeals.MealSelect
         {
             MealSchedule ms = new MealSchedule();
             int weekNumber = ms.getNum();
-            if(weekNumber == 1)
+            System.Diagnostics.Debug.WriteLine("CLICKED SKIP HERE " + weekNumber);
+
+            if (weekNumber == 1)
             {
                 if (this.BindingContext != null)
                 {
