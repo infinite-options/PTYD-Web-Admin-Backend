@@ -3117,20 +3117,26 @@ class Cancel_SubscriptionNow(Resource):
             print("matching 4 week pre-pay")
             if week_remaining == 0:
                 refund = 0
+                shipping = 0
             elif week_remaining == 1:
                 refund = amount_calculating - float(price.get('2 Week Pre-Pay')) - float(price.get("Weekly"))
+                shipping = 0.25*shipping
             elif week_remaining == 2:
                 refund = amount_calculating - float(price.get('2 Week Pre-Pay'))
+                shipping = 0.5*shipping
             elif week_remaining == 3:
                 refund = amount_calculating - float(price.get('Weekly'))
+                shipping = 0.75*shipping
             elif week_remaining == 4:
                 refund = amount_calculating
         elif name_matching[1] == "2 Week Pre-Pay":
             print("matching 2 week Pre-pay")
             if week_remaining == 0:
                 refund = 0
+                shipping = 0
             elif week_remaining == 1:
                 refund = amount_calculating - float(price.get("Weekly"))
+                shipping = 0.5*shipping
             elif week_remaining == 2:
                 refund = amount_calculating
         elif name_matching[1] == "Weekly":
