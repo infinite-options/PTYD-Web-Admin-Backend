@@ -569,6 +569,8 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Androi
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\shippingstatus.png
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\paymentstatus.png
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\summarystatus.png
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\checkboxunselected.png
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\checkboxselected.png
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\uploadflags.txt
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\resolvedassemblies.hash
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\android\assets\AWSSDK.CognitoIdentity.dll
@@ -1101,5 +1103,3 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Androi
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GenerateJavaStubs.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_ResolveLibraryProjectImports.stamp
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\checkboxunselected.png
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\checkboxselected.png

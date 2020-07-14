@@ -13,7 +13,7 @@
         public string PurchaseId { get; set; }
 
         [JsonProperty("week_affected")]
-        public DateTimeOffset WeekAffected { get; set; }
+        public string WeekAffected { get; set; }
 
         [JsonProperty("addon_quantities")]
         public Dictionary<string,int> AddonQuantities { get; set; }

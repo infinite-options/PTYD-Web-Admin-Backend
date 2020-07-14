@@ -4,7 +4,7 @@
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Subscribe" Clicked="ClickedSubscribe"/>
         <ToolbarItem Text="Menu" Clicked="ClickedMealSchedule"/>
-        <ToolbarItem Text="User Profile" Clicked="ClickedUserProfile" />
+        <ToolbarItem Text="Profile" Clicked="ClickedUserProfile" />
     </ContentPage.ToolbarItems>
 
     <StackLayout>

@@ -71,7 +71,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             var content =  client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
-            if(weekNumber == 1)
+            if (weekNumber == 0)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek1.Addons.AddonsAddons;
@@ -180,7 +180,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(addMealGroup);
                 grouped.Add(addSmoothieGroup);
             }
-            else if(weekNumber == 2)
+            else if(weekNumber == 1)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek2.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek2.Addons.AddonsAddons;
@@ -289,7 +289,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(addMealGroup);
                 grouped.Add(addSmoothieGroup);
             }
-            else if (weekNumber == 3)
+            else if (weekNumber == 2)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek3.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek3.Addons.AddonsAddons;
@@ -398,7 +398,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(addMealGroup);
                 grouped.Add(addSmoothieGroup);
             }
-            else if(weekNumber == 4)
+            else if(weekNumber == 3)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek4.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek4.Addons.AddonsAddons;
@@ -507,7 +507,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(addMealGroup);
                 grouped.Add(addSmoothieGroup);
             }
-            else if(weekNumber == 5)
+            else if(weekNumber == 4)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek5.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek5.Addons.AddonsAddons;
@@ -836,11 +836,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         mealQtyDict.Remove(model.id);
                     }
                     mealQtyDict.Add(model.id, model.qty);
-                    foreach(var pk in mealQtyDict)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Printing: " + pk);
-
-                    }
                 }
 
                 if (subTotal == 0)
@@ -897,37 +892,33 @@ namespace InfiniteMeals.ViewModel.MealSelect
             HttpClient client = new HttpClient();
             MealSchedule ms = new MealSchedule();
             int weekNumber = ms.getNum();
+            string postUrl = ms.getPlanPicked();
+            string pid = ms.getPlanNumPicked();
+
             // Getter Information
             List<DateTimeOffset> weekAffectedList = ms.getWeekList();    // Week Affected Dates
             string[] deliveryDayList = ms.getDDArray();                  // Delivery Days ( 6 of them )
+            Dictionary<string, int> emptyDict = new Dictionary<string, int>();
+            emptyDict.Add("", 0);
 
-            var mealSelectInfoToSend = new AddonInfo
-            {
-                PurchaseId = "300-000001",                  // Constant for now
-                WeekAffected = weekAffectedList[weekNumber - 1],            // Week affected - DONE
-                AddonQuantities = mealQtyDict,               // Dictionary inserted - DONE
-                IsAddons = true,                    // Always False - DONE
-
-            };
-
+            // If no add ons
             if (mealQtyDict.Count == 0)
             {
                 colorToReturn = Color.FromHex(def);
-                BackToSchedule(sender, e);
-            }
-            else
-            {
-                foreach (var pk in mealQtyDict)
+                var mealSelectInfoToSend = new AddonInfo
                 {
-                    System.Diagnostics.Debug.WriteLine("Dictionary Count " + pk);
-                }
-                System.Diagnostics.Debug.WriteLine("Dictionary Count " + mealQtyDict.Count);
+                    PurchaseId = pid,                  // Constant for now
+                    WeekAffected = weekAffectedList[weekNumber - 1].ToString("yyyy-MM-dd"),            // Week affected - DONE
+                    AddonQuantities = emptyDict,               // Dictionary inserted - DONE
+                    IsAddons = true,                    // Always False - DONE
+
+                };
                 string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoToSend); // convert to json
 
                 try
                 {
                     var httpContent = new StringContent(mealSelectInfoJson, Encoding.UTF8, "application/json"); // create a http response to send
-                    var response = await client.PostAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001", httpContent); // send the json file to database
+                    var response = await client.PostAsync(postUrl, httpContent); // send the json file to database
                     if (response.Content != null)
                     {
                         var responseContent = await response.Content.ReadAsStringAsync(); // get the success response
@@ -945,8 +936,113 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                 if (this.BindingContext != null)
                 {
+                    if(weekNumber == 1)
+                    {
+                        MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                        Button test = (Button)mealSchedulePage.FindByName("AddonButton");
+                        test.BackgroundColor = Color.FromHex(def);
+                    }
+                    else if (weekNumber == 2)
+                    {
+                        MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                        Button test = (Button)mealSchedulePage.FindByName("AddonButton2");
+                        test.BackgroundColor = Color.FromHex(def);
+                    }
+                    else if (weekNumber == 3)
+                    {
+                        MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                        Button test = (Button)mealSchedulePage.FindByName("AddonButton3");
+                        test.BackgroundColor = Color.FromHex(def);
+                    }
+                    else if (weekNumber == 4)
+                    {
+                        MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                        Button test = (Button)mealSchedulePage.FindByName("AddonButton4");
+                        test.BackgroundColor = Color.FromHex(def);
+                    }
+                    else if (weekNumber == 5)
+                    {
+                        MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                        Button test = (Button)mealSchedulePage.FindByName("AddonButton5");
+                        test.BackgroundColor = Color.FromHex(def);
+                    }
+                    else if (weekNumber == 6)
+                    {
+                        MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                        Button test = (Button)mealSchedulePage.FindByName("AddonButton6");
+                        test.BackgroundColor = Color.FromHex(def);
+                    }
+
+                }
+                BackToSchedule(sender, e);
+
+            }
+            // If the add ons are not empty
+            else
+            {
+                var mealSelectInfoToSend = new AddonInfo
+                {
+                    PurchaseId = pid,                  // Constant for now
+                    WeekAffected = weekAffectedList[weekNumber - 1].ToString("yyyy-MM-dd"),            // Week affected - DONE
+                    AddonQuantities = mealQtyDict,               // Dictionary inserted - DONE
+                    IsAddons = true,                    // Always False - DONE
+
+                };
+                string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoToSend); // convert to json
+
+                try
+                {
+                    var httpContent = new StringContent(mealSelectInfoJson, Encoding.UTF8, "application/json"); // create a http response to send
+                    var response = await client.PostAsync(postUrl, httpContent); // send the json file to database
+                    if (response.Content != null)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync(); // get the success response
+
+                        System.Diagnostics.Debug.WriteLine(responseContent); // print in the logs
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+
+                colorToReturn = Color.FromHex(yellow);
+
+                if (weekNumber == 1)
+                {
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button test = (Button)mealSchedulePage.FindByName("AddonButton");
+                    test.BackgroundColor = Color.FromHex(yellow);
+                }
+                else if (weekNumber == 2)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button test = (Button)mealSchedulePage.FindByName("AddonButton2");
+                    test.BackgroundColor = Color.FromHex(yellow);
+                }
+                else if (weekNumber == 3)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button test = (Button)mealSchedulePage.FindByName("AddonButton3");
+                    test.BackgroundColor = Color.FromHex(yellow);
+                }
+                else if (weekNumber == 4)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button test = (Button)mealSchedulePage.FindByName("AddonButton4");
+                    test.BackgroundColor = Color.FromHex(yellow);
+                }
+                else if (weekNumber == 5)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button test = (Button)mealSchedulePage.FindByName("AddonButton5");
+                    test.BackgroundColor = Color.FromHex(yellow);
+                }
+                else if (weekNumber == 6)
+                {
+                    MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
+                    Button test = (Button)mealSchedulePage.FindByName("AddonButton6");
                     test.BackgroundColor = Color.FromHex(yellow);
                 }
                 BackToSchedule(sender, e);

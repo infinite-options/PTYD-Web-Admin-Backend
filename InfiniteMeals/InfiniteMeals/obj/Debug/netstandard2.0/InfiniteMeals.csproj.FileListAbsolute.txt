@@ -1,7 +1,3 @@
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.deps.json
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.dll
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\ref\InfiniteMeals.dll
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.pdb
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.csprojAssemblyReference.cache
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.Properties.Resources.resources
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.csproj.GenerateResource.cache
@@ -16,10 +12,12 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Checkout\SummaryPasswordPopup.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Dbvm\Dbvm.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Login\LoginPage.xaml.g.cs
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Login\ResetPasswordPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\AddOnChoices.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\MealChoices.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\MealSchedule.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\SelectMealOptions.xaml.g.cs
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Profile\ChangePasswordPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Profile\UserProfile.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\SignUp\SignUpPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Steppers\BasicSteppers.xaml.g.cs
@@ -29,9 +27,11 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.AssemblyInfoInputs.cache
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.AssemblyInfo.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.csproj.CoreCompileInputs.cache
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.deps.json
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\ref\InfiniteMeals.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\bin\Debug\netstandard2.0\InfiniteMeals.pdb
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\XamlC.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.dll
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ref\InfiniteMeals.dll
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.pdb
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Profile\ChangePasswordPage.xaml.g.cs
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Login\ResetPasswordPage.xaml.g.cs

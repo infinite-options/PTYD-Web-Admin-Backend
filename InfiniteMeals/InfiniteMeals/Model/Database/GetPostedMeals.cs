@@ -31,7 +31,7 @@ namespace InfiniteMeals.Model.Database
         public string PurchaseId { get; set; }
 
         [JsonProperty("week_affected")]
-        public string WeekAffected { get; set; }
+        public DateTimeOffset WeekAffected { get; set; }
 
         [JsonProperty("meal_selection")]
         public string MealSelection { get; set; }

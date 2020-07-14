@@ -1,6 +1,4 @@
-﻿
-
-namespace InfiniteMeals.Model.Meals
+﻿namespace InfiniteMeals.Model.Meals
 {
     using System;
     using System.Collections.Generic;

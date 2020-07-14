@@ -41,7 +41,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public static string green = "#8FBC8F";
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
-
+        private static string mealsUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals";
+        private static string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000016";
 
         public MealChoices()
         {
@@ -94,10 +95,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
             // Data
 
             WebClient client = new WebClient();
-            var content = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
+            var content = client.DownloadString(mealsUrl);
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
-            if(weekNumber == 1)
+            if(weekNumber == 0)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek1.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek1.Meals.Weekly;
@@ -197,7 +198,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(seasonalMealGroup);
                 grouped.Add(smoothieGroup);
             }
-            else if (weekNumber == 2)
+            else if (weekNumber == 1)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek2.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek2.Meals.Weekly;
@@ -298,7 +299,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(smoothieGroup);
 
             }
-            else if (weekNumber == 3)
+            else if (weekNumber == 2)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek3.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek3.Meals.Weekly;
@@ -398,7 +399,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(seasonalMealGroup);
                 grouped.Add(smoothieGroup);
             }
-            else if(weekNumber == 4)
+            else if(weekNumber == 3)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek4.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek4.Meals.Weekly;
@@ -498,7 +499,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(seasonalMealGroup);
                 grouped.Add(smoothieGroup);
             }
-            else if (weekNumber == 5)
+            else if (weekNumber == 4)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek5.Meals.Weekly.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek5.Meals.Weekly;
@@ -745,6 +746,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             lstView.GroupDisplayBinding = new Binding("LongName");
             lstView.GroupShortNameBinding = new Binding("ShortName");
 
+
             lstView.ItemTemplate = new DataTemplate(() =>
             {
                 var grid = new Grid { HeightRequest = 100,
@@ -764,6 +766,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
                 imgLabel.Margin = new Thickness(10, 0, 0, 10);
+
                 Label quantity = new Label
                 {
                     WidthRequest = 20,
@@ -785,20 +788,20 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     DisplayAlert("Ingredients", model.description.ToString(), "OK");
                 };
 
-                var steppers = new Stepper {
-                    Value = 0,
+                var steppers = new Stepper
+                {
                     Maximum = mealsAllowed,
                     Increment = 1,
                     HeightRequest = 50,
                     Scale = 0.5,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
-
                 };
 
-                steppers.Margin = new Thickness(40, 0, 0, 0);
-                totalMealsSelected = (int)steppers.Value;
 
+
+
+                steppers.Margin = new Thickness(40, 0, 0, 0);
                 steppers.ValueChanged += (sender, e) =>
                 {
                     Stepper stepper = sender as Stepper;
@@ -841,7 +844,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     }
                     totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected));
 
-                    System.Diagnostics.Debug.WriteLine(mealsAllowed + " " + totalMealsSelected + " Hello ");
                     if (mealsAllowed - totalMealsSelected == 0)
                     {
                         saveNav.BackgroundColor = Color.FromHex(green);
@@ -851,7 +853,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     {
                         saveNav.BackgroundColor = Color.FromHex(def);
                     }
-
                 };
 
                 quantity = new Label {
@@ -887,34 +888,22 @@ namespace InfiniteMeals.ViewModel.MealSelect
             BindingContext = this;
         }
 
-        public void getPostedData()
-        {
-            WebClient client = new WebClient();
-
-            // Get user zipcodes
-            var userPurchClient = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001");
-            var userPurchID = JsonConvert.DeserializeObject<GetPostedMeals>(userPurchClient);
-            for (int i = 0; i < userPurchID.Result.Meals.Length; i++)
-            {
-                System.Diagnostics.Debug.WriteLine("Purchase ID: " + userPurchID.Result.Meals[i].PurchaseId);
-                System.Diagnostics.Debug.WriteLine("Week Affected: " + userPurchID.Result.Meals[i].WeekAffected );
-                System.Diagnostics.Debug.WriteLine("Meal Selection: " + userPurchID.Result.Meals[i].MealSelection);
-                System.Diagnostics.Debug.WriteLine("Delivery Day: " + userPurchID.Result.Meals[i].DeliveryDay);
-                System.Diagnostics.Debug.WriteLine("Meals Selected: " + userPurchID.Result.Meals[i].MealsSelected + "\n\n");
-            }
-        }
-
         public async void postData(object sender, EventArgs e)
         {
             HttpClient client = new HttpClient();
             MealSchedule ms = new MealSchedule();
-            int weekNumber = ms.getNum();            // Getter Information 
+
+            // Getter Information
+            int weekNumber = ms.getNum();
+            string postUrl = ms.getPlanPicked();
+            string pid = ms.getPlanNumPicked();
+
             List<DateTimeOffset> weekAffectedList = ms.getWeekList();    // Week Affected Dates
             string[] deliveryDayList = ms.getDDArray();                  // Delivery Days ( 6 of them )
 
             var mealSelectInfoToSend = new MealSelectInformation
             {
-                PurchaseId = "300-000001",                  // Constant for now
+                PurchaseId = pid,                  // Constant for now
                 WeekAffected = weekAffectedList[weekNumber - 1],            // Week affected - DONE
                 MealQuantities = mealQtyDict,               // Dictionary inserted - DONE
                 DeliveryDay = deliveryDayList[0],               // Day selected - DONE
@@ -941,7 +930,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 try
                 {
                     var httpContent = new StringContent(mealSelectInfoJson, Encoding.UTF8, "application/json"); // create a http response to send
-                    var response = await client.PostAsync("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/300-000001", httpContent); // send the json file to database
+                    var response = await client.PostAsync(postUrl, httpContent); // send the json file to database
                     if (response.Content != null)
                     {
                         var responseContent = await response.Content.ReadAsStringAsync(); // get the success response
@@ -954,10 +943,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 {
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
+
                 colorToReturn = Color.FromHex(green);
 
                 ClickedSave(sender, e);
-                getPostedData();
             }
         }
 
@@ -966,7 +955,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
            WebClient client = new WebClient();
 
             // Get user zipcodes
-            var userPurchClient = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/100-000006");
+            var userPurchClient = client.DownloadString(acctUrl);
             var userPurchID = JsonConvert.DeserializeObject<UserInfo>(userPurchClient);
             for (int i = 0; i < userPurchID.Result.Length; i++)
             {
@@ -1100,7 +1089,9 @@ namespace InfiniteMeals.ViewModel.MealSelect
         {
             MealSchedule ms = new MealSchedule();
             int weekNumber = ms.getNum();
-            if(weekNumber == 1)
+            System.Diagnostics.Debug.WriteLine("CLICKED SKIP HERE " + weekNumber);
+
+            if (weekNumber == 1)
             {
                 if (this.BindingContext != null)
                 {
@@ -1221,7 +1212,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     sun1.BackgroundColor = Color.FromHex(def);
                     mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
-                    ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton6"), e);
+                   ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton6"), e);
 
                 }
                 await Navigation.PopAsync();
