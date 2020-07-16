@@ -5121,6 +5121,71 @@ class MealPlansAPI(Resource):
         finally:
             disconnect(conn)
 
+class Edit_Menu(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" select meal_name from ptyd_meals;""", 'get', conn)
+            items2 = execute(""" select * from ptyd_menu;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+            response['result2'] = items2
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            print("connected")
+            menu_date = data['menu_date']
+            menu = data['menu']
+            print("data received")
+            print(menu_date)
+            print(menu)
+            items['delete_menu'] = execute("""delete from ptyd_menu
+                                                        where menu_date = \'""" + str(menu_date) + """\';
+                                                            """, 'post', conn)
+            print("menu deleted")
+
+            i = 0
+            for eachitem in data['menu']:
+                menu_category = menu[i]['menu_category']
+                menu_type = menu[i]['menu_type'] 
+                meal_cat = menu[i]['meal_cat']
+                meal_name = menu[i]['meal_name'] 
+                default_meal = menu[i]['default_meal'] 
+                
+                print(menu_category)
+                print(menu_type)
+                print(meal_cat)
+                print(meal_name)
+                print(default_meal)
+                
+                items['menu_insert'] = execute(""" insert into ptyd_menu 
+                                                    values 
+                                                    (\'""" + str(menu_date) + """\',\'""" + str(menu_category) + """\',
+                                                    \'""" + str(menu_type) + """\',\'""" + str(meal_cat) + """\',
+                                                    (select meal_id from ptyd_meals where meal_name = \'""" + str(meal_name) + """\'),
+                                                    \'""" + str(default_meal) + """\');
+                                                    """, 'post', conn)
+                i += 1
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class TaxRateAPI(Resource):       
 
     def get(self):
@@ -5138,6 +5203,30 @@ class TaxRateAPI(Resource):
             response['result'] = items
 
             return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+    def patch(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            Tax_Rate = data['Tax_Rate']
+            Saturday = data['Saturday']
+
+            print(data)
+            print("Items read...")
+            items['update_tax'] = execute("""UPDATE ptyd_saturdays
+                                            SET Tax_Rate = \'""" + str(Tax_Rate) + """\'
+                                            WHERE Saturday >= \'""" + str(Saturday) + """\';
+                                            """, 'post', conn)
+                                            
+            print("meal_plan_updated...")
+            
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -5198,6 +5287,7 @@ api.add_resource(Get_All_Units, '/api/v2/GetUnits')
 api.add_resource(CouponsAPI, '/api/v2/CouponsAPI')
 api.add_resource(MealPlansAPI, '/api/v2/MealPlansAPI')
 api.add_resource(TaxRateAPI, '/api/v2/TaxRateAPI')
+api.add_resource(Edit_Menu, '/api/v2/Edit_Menu')
 
 api.add_resource(Add_Meal_plan, '/api/v2/Add_Meal_plan')
 api.add_resource(Add_Coupon, '/api/v2/Add_Coupon')
