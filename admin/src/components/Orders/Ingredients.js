@@ -13,13 +13,13 @@ import useFetch from "../hooks/useFetch";
 import ReactDOM from "react-dom";
 import tableau from "tableau-api";
 
-class Orders extends Component {
+class Ingredients extends Component {
   componentDidMount() {
     this.initViz();
   }
   initViz() {
     const vizUrl =
-      "https://public.tableau.com/views/Orders_15948613601670/Dashboard1?:language=en&:display_count=y&:origin=viz_share_link";
+      "https://public.tableau.com/views/Ingredients_15948613340460/Dashboard1?:language=en&:display_count=y&:origin=viz_share_link";
     const vizContainer = this.vizContainer;
     let viz = new window.tableau.Viz(vizContainer, vizUrl);
   }
@@ -35,7 +35,7 @@ class Orders extends Component {
     );
   }
 }
-export default Orders;
+export default Ingredients;
 
 /*const override = css`
   display: flex;

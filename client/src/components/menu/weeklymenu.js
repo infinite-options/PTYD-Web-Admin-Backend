@@ -32,7 +32,7 @@ class WeeklyMenu extends Component {
   }
   render() {
     return (
-      <main Style="margin-top:-80px;">
+      <main>
         <div class="container text-center">
           <h3 class="font1">{this.props.header_label}</h3>
           <h5 class="font3" Style="margin-top:-10px;">

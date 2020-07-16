@@ -140,13 +140,21 @@ export default function SocialSignUp(props) {
           </div>
         </div>
       )}
-      <main Style={"margin-top:-80px;" + (loading ? "opacity: 0.5" : "")}>
-        <div class='container text-center' Style='margin-top:-40px;'>
+      <main Style={"margin:30px 0;" + (loading ? "opacity: 0.5" : "")}>
+        <div class='container text-center' Style='margin-top:-40px;color:#494949;'>
           <h1>Social Media Sign Up</h1>
           <div class='row'>
             <Col></Col>
 
-            <Container className='justify-content-center bg-success'>
+            <Container className='justify-content-center bg-white font2'
+            style={{
+              textAlign: "left",
+              fontWeight: "bold",
+              color: "#494949",
+              cursor: "default",
+              border: "none",
+              padding: "10px"
+            }}>
               <Row>
                 <Col size={6}>
                   {error !== null && error !== undefined && (
@@ -223,7 +231,7 @@ export default function SocialSignUp(props) {
                       />
                     </Form.Group>
 
-                    <Form.Group as={Col} controlId='formGridReferral'>
+                    <Form.Group controlId='formGridReferral'>
                       <Form.Label>Referral</Form.Label>
                       <Form.Control
                         as='select'
@@ -253,6 +261,7 @@ export default function SocialSignUp(props) {
                         }}
                         type='checkbox'
                         label='Sign Me Up For Weekly Prep To Your Door Updates!'
+                        style={{fontWeight: "normal"}}
                       />
                     </Form.Group>
 
@@ -260,12 +269,16 @@ export default function SocialSignUp(props) {
                       <Form.Check
                         type='checkbox'
                         label='Agree To Prep To Your Door Terms Of Service.'
+                        style={{fontWeight: "normal"}}
                       />
                     </Form.Group>
+                    
+                    <div style={{textAlign: "center"}}>
+                      <Button onClick={sendForm} variant='success' disabled={!phoneNumber} style={{width:"100%"}} type='submit'>
+                        Submit
+                      </Button>
+                    </div>
 
-                    <Button onClick={sendForm} variant='dark' type='submit'>
-                      Submit
-                    </Button>
                   </Form>
                 </Col>
               </Row>

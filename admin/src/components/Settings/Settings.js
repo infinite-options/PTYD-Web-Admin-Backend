@@ -6,6 +6,15 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import Avatar from "@material-ui/core/Avatar";
+//import EditSettings from "./EditSettings";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import axios from "axios";
 
 class Settings extends Component {
   constructor(props) {
@@ -14,6 +23,12 @@ class Settings extends Component {
       mealPlans: [],
       coupons: [],
       taxrate: [],
+      open: false,
+      selIndex: 0,
+      copen: false,
+      selCIndex: 0,
+      topen: false,
+      selTIndex: 0,
     };
   }
 
@@ -42,10 +57,215 @@ class Settings extends Component {
       "https://prep-to-your-door-s3.s3-us-west-1.amazonaws.com/dev_imgs/select5meals.jpg";
   };
 
+  handleMealDesc = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].meal_plan_desc = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handleMealHeadline = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].plan_headline = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handlePaymentFrequency = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].payment_frequency = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handlePlanFooter = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].plan_footer = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handlePhotoUrl = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].photo_URL = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handleNumOfMeals = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].num_meals = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handlePlanWeeklyPrice = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].meal_weekly_price = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handlePlanPrice = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].meal_plan_price = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handleShippingOfMeal = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].meal_shipping = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handleMealTax = (e) => {
+    let newMealPlans = this.state.mealPlans;
+    newMealPlans[this.state.selIndex].meal_tax = e.target.value;
+    this.setState({ mealPlans: newMealPlans });
+  };
+
+  handleCouponId = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].coupon_id = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponActive = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].active = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponDiscountPercent = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].discount_percent = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponDiscountAmount = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].discount_amount = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponDiscountShipping = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].discount_shipping = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponExpiryDate = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].expire_date = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponLimits = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].limits = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponNotes = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].notes = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponNumUsed = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].num_used = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponRecurring = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].recurring = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleCouponEmail = (e) => {
+    let newCoupons = this.state.coupons;
+    newCoupons[this.state.selCIndex].email = e.target.value;
+    this.setState({ coupons: newCoupons });
+  };
+
+  handleSaturdayDate = (e) => {
+    let newTaxRate = this.state.taxrate;
+    newTaxRate[this.state.selTIndex].Saturday = e.target.value;
+    this.setState({ taxrate: newTaxRate });
+  };
+
+  handleTaxRate = (e) => {
+    let newTaxRate = this.state.taxrate;
+    newTaxRate[this.state.selTIndex].Tax_Rate = e.target.value;
+    this.setState({ taxrate: newTaxRate });
+  };
+
   render() {
     console.log(this.props.API_URL_MEALPLANS);
     console.log(this.state.mealPlans);
     console.log(this.state.taxrate);
+    let plan_desc_temp = "NONE";
+    let plan_headline_temp = "NONE";
+    let plan_payment_frequency_temp = "NONE";
+    let plan_photo_url_temp = "NONE";
+    let plan_footer_temp = "NONE";
+    let plan_num_meals_temp = 0;
+    let plan_meal_weekly_price_temp = 0;
+    let plan_price_temp = 0;
+    let plan_shipping_temp = 0;
+    let plan_meal_tax_temp = 0;
+
+    let coupon_id_t = "NONE";
+    let coupon_active_t = "NONE";
+    let coupon_discount_percent_t = 0;
+    let coupon_discount_amount_t = 0;
+    let coupon_discount_shipping_t = 0;
+    let coupon_expire_date_t = "NONE";
+    let coupon_limits_t = 0;
+    let coupon_notes_t = "NONE";
+    let coupon_num_used_t = 0;
+    let coupon_recurring_t = "NONE";
+    let coupon_email_t = "NONE";
+
+    let tax_rate_saturday_t = "NONE";
+    let tax_rate_rate_t = 0;
+
+    if (this.state.mealPlans.length > 0) {
+      plan_desc_temp = this.state.mealPlans[this.state.selIndex].meal_plan_desc;
+      plan_headline_temp = this.state.mealPlans[this.state.selIndex]
+        .plan_headline;
+      plan_payment_frequency_temp = this.state.mealPlans[this.state.selIndex]
+        .payment_frequency;
+      plan_footer_temp = this.state.mealPlans[this.state.selIndex].plan_footer;
+      plan_photo_url_temp = this.state.mealPlans[this.state.selIndex].photo_URL;
+      plan_num_meals_temp = this.state.mealPlans[this.state.selIndex].num_meals;
+      plan_meal_weekly_price_temp = this.state.mealPlans[this.state.selIndex]
+        .meal_weekly_price;
+      plan_price_temp = this.state.mealPlans[this.state.selIndex]
+        .meal_plan_price;
+      plan_shipping_temp = this.state.mealPlans[this.state.selIndex]
+        .meal_shipping;
+      plan_meal_tax_temp = this.state.mealPlans[this.state.selIndex].meal_tax;
+    }
+
+    if (this.state.coupons.length > 0) {
+      coupon_id_t = this.state.coupons[this.state.selCIndex].coupon_id;
+      coupon_active_t = this.state.coupons[this.state.selCIndex].active;
+      coupon_discount_percent_t = this.state.coupons[this.state.selCIndex]
+        .discount_percent;
+      coupon_discount_amount_t = this.state.coupons[this.state.selCIndex]
+        .discount_amount;
+      coupon_discount_shipping_t = this.state.coupons[this.state.selCIndex]
+        .discount_shipping;
+      coupon_expire_date_t = this.state.coupons[this.state.selCIndex]
+        .expire_date;
+      coupon_limits_t = this.state.coupons[this.state.selCIndex].limits;
+      coupon_notes_t = this.state.coupons[this.state.selCIndex].notes;
+      coupon_num_used_t = this.state.coupons[this.state.selCIndex].num_used;
+      coupon_recurring_t = this.state.coupons[this.state.selCIndex].recurring;
+      coupon_email_t = this.state.coupons[this.state.selCIndex].email;
+    }
+
+    if (this.state.taxrate.length > 0) {
+      tax_rate_saturday_t = this.state.taxrate[this.state.selTIndex].Saturday;
+      tax_rate_rate_t = this.state.taxrate[this.state.selTIndex].Tax_Rate;
+    }
+
     return (
       // <div className="container" style={{ marginTop: "10%" }}>
       <div style={{ margin: "1%" }}>
@@ -88,9 +308,530 @@ class Settings extends Component {
 
         <br />
         <br />
+
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">
+            Edit Meal Plans Table Here
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To Edit the Meal Plans table : Change all these fields accordingly
+              and press "Save" else Press "Cancel" if you don't want to edit
+              anything.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="xyz"
+              label="Plan"
+              type="text"
+              value={plan_desc_temp}
+              onChange={this.handleMealDesc}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Plan Description"
+              type="text"
+              value={plan_headline_temp}
+              onChange={this.handleMealHeadline}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name2"
+              label="Payment Frequency"
+              type="text"
+              value={plan_payment_frequency_temp}
+              onChange={this.handlePaymentFrequency}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name3"
+              label="In Short"
+              type="text"
+              value={plan_footer_temp}
+              onChange={this.handlePlanFooter}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name4"
+              label="Pic URL"
+              type="url"
+              value={plan_photo_url_temp}
+              onChange={this.handlePhotoUrl}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name5"
+              label="Num of Meals"
+              type="number"
+              value={plan_num_meals_temp}
+              onChange={this.handleNumOfMeals}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name6"
+              label="Weekly Price"
+              type="number"
+              value={plan_meal_weekly_price_temp}
+              onChange={this.handlePlanWeeklyPrice}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name7"
+              label="Plan Price"
+              type="number"
+              value={plan_price_temp}
+              onChange={this.handlePlanPrice}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name8"
+              label="Meal Shipping"
+              type="number"
+              value={plan_shipping_temp}
+              onChange={this.handleShippingOfMeal}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name9"
+              label="Meal Tax"
+              type="number"
+              value={plan_meal_tax_temp}
+              onChange={this.handleMealTax}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseCancel} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleCloseSave} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={this.state.copen}
+          onClose={this.chandleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Edit Coupons Here</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To Edit the Coupons : Change all these fields accordingly and
+              press "Save" else Press "Cancel" if you don't want to edit
+              anything.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name10"
+              label="Coupon ID"
+              type="text"
+              value={coupon_id_t}
+              onChange={this.handleCouponId}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name11"
+              label="Activation Status"
+              type="text"
+              value={coupon_active_t}
+              onChange={this.handleCouponActive}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name12"
+              label="Discount %"
+              type="text"
+              value={coupon_discount_percent_t}
+              onChange={this.handleCouponDiscountPercent}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name13"
+              label="Discount Amount"
+              type="number"
+              value={coupon_discount_amount_t}
+              onChange={this.handleCouponDiscountAmount}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name14"
+              label="Discount Shipping"
+              type="number"
+              value={coupon_discount_shipping_t}
+              onChange={this.handleCouponDiscountShipping}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name15"
+              label="Expiry Date"
+              type="date"
+              value={coupon_expire_date_t}
+              onChange={this.handleCouponExpiryDate}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name16"
+              label="Limits"
+              type="number"
+              value={coupon_limits_t}
+              onChange={this.handleCouponLimits}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name17"
+              label="Notes"
+              type="text"
+              value={coupon_notes_t}
+              onChange={this.handleCouponNotes}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name18"
+              label="Num Used"
+              type="number"
+              value={coupon_num_used_t}
+              onChange={this.handleCouponNumUsed}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name19"
+              label="Recurring"
+              type="text"
+              value={coupon_recurring_t}
+              onChange={this.handleCouponRecurring}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name20"
+              label="Email"
+              type="email"
+              value={coupon_email_t}
+              onChange={this.handleCouponEmail}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.chandleCloseCancel} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.chandleCloseSave} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={this.state.topen}
+          onClose={this.thandleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Edit Tax Rate Here</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To Edit the Tax Rate : Change all these fields accordingly and
+              press "Save" else Press "Cancel" if you don't want to edit
+              anything.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name21"
+              label="Saturday Date"
+              type="date"
+              value={tax_rate_saturday_t}
+              onChange={this.handleSaturdayDate}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name22"
+              label="Tax Rate"
+              type="number"
+              value={tax_rate_rate_t}
+              onChange={this.handleTaxRate}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.thandleCloseCancel} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.thandleCloseSave} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
+
+  handleClickOpen = (meal, index) => {
+    this.setState({ selIndex: index }, () => {
+      this.setState({
+        open: true,
+      });
+    });
+  };
+
+  handleClose = (e) => {
+    this.setState({
+      open: false,
+    });
+  };
+
+  handleCloseSave = (e) => {
+    e.preventDefault();
+    if (this.state.mealPlans.length > 0) {
+      var mealData = {
+        meal_plan_id: this.state.mealPlans[this.state.selIndex].meal_plan_id,
+        meal_plan_desc: this.state.mealPlans[this.state.selIndex]
+          .meal_plan_desc,
+        plan_headline: this.state.mealPlans[this.state.selIndex].plan_headline,
+        payment_frequency: this.state.mealPlans[this.state.selIndex]
+          .payment_frequency,
+        plan_footer: this.state.mealPlans[this.state.selIndex].plan_footer,
+        photo_URL: this.state.mealPlans[this.state.selIndex].photo_URL,
+        num_meals: this.state.mealPlans[this.state.selIndex].num_meals,
+        meal_weekly_price: this.state.mealPlans[this.state.selIndex]
+          .meal_weekly_price,
+        meal_plan_price: this.state.mealPlans[this.state.selIndex]
+          .meal_plan_price,
+        meal_shipping: this.state.mealPlans[this.state.selIndex].meal_shipping,
+        meal_tax: this.state.mealPlans[this.state.selIndex].meal_tax,
+      };
+
+      console.log(mealData);
+      axios
+        .patch(this.props.API_URL_MEALPLANS, mealData)
+        .then((res) => {
+          if (res.status === 200) {
+            // if success
+            // if (res.data !== undefined && res.data !== null) {// if success
+            //   // this should not be here. this will allows login without add username and password in database
+            //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+            // }
+
+            // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+            // window.location.reload(false);
+            //props.history.push("/signupwaiting");
+            //setLoading(false);
+            console.log("API PATCH MEAL PLANS WORKED");
+            this.setState({ open: false }, () => {
+              window.location.reload(true);
+            });
+          }
+        })
+        .catch((err) => {
+          if (err.response !== undefined) {
+            //setErro(err.response.data.result);
+            //window.location.reload(false);
+            console.log("API PATCH MEAL PLANS Failed");
+          } else if (typeof err === "string") {
+            //setErro(err);
+            console.log(err);
+          }
+          //setLoading(false);
+        });
+    }
+  };
+
+  handleCloseCancel = (e) => {
+    this.setState({ open: false }, () => {
+      window.location.reload(true);
+    });
+  };
+
+  //COUPONS
+  chandleClickOpen = (meal, index) => {
+    this.setState({ selCIndex: index }, () => {
+      this.setState({
+        copen: true,
+      });
+    });
+  };
+
+  chandleClose = (e) => {
+    this.setState({
+      copen: false,
+    });
+  };
+
+  chandleCloseSave = (e) => {
+    e.preventDefault();
+    if (this.state.coupons.length > 0) {
+      var couponData = {
+        coupon_id: this.state.coupons[this.state.selCIndex].coupon_id,
+        active: this.state.coupons[this.state.selCIndex].active,
+        discount_percent: this.state.coupons[this.state.selCIndex]
+          .discount_percent,
+        discount_amount: this.state.coupons[this.state.selCIndex]
+          .discount_amount,
+        discount_shipping: this.state.coupons[this.state.selCIndex]
+          .discount_shipping,
+        expire_date: this.state.coupons[this.state.selCIndex].expire_date,
+        limits: this.state.coupons[this.state.selCIndex].limits,
+        notes: this.state.coupons[this.state.selCIndex].notes,
+        num_used: this.state.coupons[this.state.selCIndex].num_used,
+        recurring: this.state.coupons[this.state.selCIndex].recurring,
+        email: this.state.coupons[this.state.selCIndex].email,
+      };
+
+      console.log(couponData);
+      axios
+        .patch(this.props.API_URL_COUPONS, couponData)
+        .then((res) => {
+          if (res.status === 200) {
+            // if success
+            // if (res.data !== undefined && res.data !== null) {// if success
+            //   // this should not be here. this will allows login without add username and password in database
+            //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+            // }
+
+            // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+            // window.location.reload(false);
+            //props.history.push("/signupwaiting");
+            //setLoading(false);
+            console.log("API PATCH COUPONS WORKED");
+            this.setState({ copen: false }, () => {
+              window.location.reload(true);
+            });
+          }
+        })
+        .catch((err) => {
+          if (err.response !== undefined) {
+            //setErro(err.response.data.result);
+            //window.location.reload(false);
+            console.log("API PATCH COUPONS Failed");
+          } else if (typeof err === "string") {
+            //setErro(err);
+            console.log(err);
+          }
+          //setLoading(false);
+        });
+    }
+  };
+
+  chandleCloseCancel = (e) => {
+    this.setState({ copen: false }, () => {
+      window.location.reload(true);
+    });
+  };
+
+  //COUPONS
+
+  thandleClickOpen = (meal, index) => {
+    this.setState({ selTIndex: index }, () => {
+      this.setState({
+        topen: true,
+      });
+    });
+  };
+
+  thandleClose = (e) => {
+    this.setState({
+      topen: false,
+    });
+  };
+
+  thandleCloseSave = (e) => {
+    e.preventDefault();
+    if (this.state.taxrate.length > 0) {
+      var taxData = {
+        Saturday: this.state.taxrate[this.state.selTIndex].Saturday,
+        Tax_Rate: this.state.taxrate[this.state.selTIndex].Tax_Rate,
+      };
+
+      console.log(taxData);
+      axios
+        .patch(this.props.API_URL_TAXRATE, taxData)
+        .then((res) => {
+          if (res.status === 200) {
+            // if success
+            // if (res.data !== undefined && res.data !== null) {// if success
+            //   // this should not be here. this will allows login without add username and password in database
+            //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+            // }
+
+            // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+            // window.location.reload(false);
+            //props.history.push("/signupwaiting");
+            //setLoading(false);
+            console.log("API PATCH TAXRATE WORKED");
+            this.setState({ topen: false }, () => {
+              window.location.reload(true);
+            });
+          }
+        })
+        .catch((err) => {
+          if (err.response !== undefined) {
+            //setErro(err.response.data.result);
+            //window.location.reload(false);
+            console.log("API PATCH TAXRATE Failed");
+          } else if (typeof err === "string") {
+            //setErro(err);
+            console.log(err);
+          }
+          //setLoading(false);
+        });
+    }
+  };
+
+  thandleCloseCancel = (e) => {
+    this.setState({ topen: false }, () => {
+      window.location.reload(true);
+    });
+  };
 
   mealPlans_function = () => {
     return (
@@ -128,7 +869,7 @@ class Settings extends Component {
                       overflow: "scroll",
                     }}
                   >
-                    {this.state.mealPlans.map((meal) => (
+                    {this.state.mealPlans.map((meal, index) => (
                       <tr>
                         <td>{meal.meal_plan_desc}</td>
                         <td>{meal.plan_headline}</td>
@@ -150,6 +891,18 @@ class Settings extends Component {
                         <td>{meal.meal_plan_price}</td>
                         <td>{meal.meal_shipping}</td>
                         <td>{meal.meal_tax}</td>
+                        <td>
+                          {" "}
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={(e) => {
+                              this.handleClickOpen(meal, index);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -180,7 +933,7 @@ class Settings extends Component {
                     <tr>
                       <th>ID</th>
                       <th>Activation Status</th>
-                      <th>Discount Percent</th>
+                      <th>Discount %</th>
                       <th>Discount Amount</th>
                       <th>Discount Shipping</th>
                       <th>Expiry Date</th>
@@ -199,11 +952,11 @@ class Settings extends Component {
                       overflow: "scroll",
                     }}
                   >
-                    {this.state.coupons.map((meal) => (
+                    {this.state.coupons.map((meal, index) => (
                       <tr>
                         <td>{meal.coupon_id}</td>
                         <td>{meal.active}</td>
-                        <td>{meal.discount_percent}</td>
+                        <td>{meal.discount_percent * 100}</td>
                         <td>{meal.discount_amount}</td>
                         <td>{meal.discount_shipping}</td>
                         <td>{meal.expire_date}</td>
@@ -212,6 +965,18 @@ class Settings extends Component {
                         <td>{meal.num_used}</td>
                         <td>{meal.recurring}</td>
                         <td>{meal.email}</td>
+                        <td>
+                          {" "}
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={(e) => {
+                              this.chandleClickOpen(meal, index);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -230,7 +995,7 @@ class Settings extends Component {
         <Col>
           <Card
             style={{
-              width: "25%",
+              width: "45%",
               boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
             }}
           >
@@ -251,10 +1016,22 @@ class Settings extends Component {
                       overflow: "scroll",
                     }}
                   >
-                    {this.state.taxrate.map((meal) => (
+                    {this.state.taxrate.map((meal, index) => (
                       <tr>
                         <td>{meal.Saturday}</td>
-                        <td>{meal["Tax Rate"]}</td>
+                        <td>{meal.Tax_Rate}</td>
+                        <td>
+                          {" "}
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={(e) => {
+                              this.thandleClickOpen(meal, index);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
