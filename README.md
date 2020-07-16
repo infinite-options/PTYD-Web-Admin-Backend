@@ -9,6 +9,7 @@ Once Node is running the app, you can access it on your browser at `localhost:30
 
 ### `admin/`
 Similar to `client/`, but for the admin-facing web user interface.
+(https://preptoyourdoor-admin.netlify.app/)
 
 ### `api/`
 This directory contains code for middleware / backend stuff. The APIs allow the web user interface to talk to the database.
