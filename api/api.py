@@ -4341,7 +4341,7 @@ class DisplaySaturdays(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-            
+
     def patch(self):
         response = {}
         items = {}

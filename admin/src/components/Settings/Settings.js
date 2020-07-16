@@ -191,7 +191,7 @@ class Settings extends Component {
 
   handleTaxRate = (e) => {
     let newTaxRate = this.state.taxrate;
-    newTaxRate[this.state.selTIndex]["Tax Rate"] = e.target.value;
+    newTaxRate[this.state.selTIndex].Tax_Rate = e.target.value;
     this.setState({ taxrate: newTaxRate });
   };
 
@@ -263,7 +263,7 @@ class Settings extends Component {
 
     if (this.state.taxrate.length > 0) {
       tax_rate_saturday_t = this.state.taxrate[this.state.selTIndex].Saturday;
-      tax_rate_rate_t = this.state.taxrate[this.state.selTIndex]["Tax Rate"];
+      tax_rate_rate_t = this.state.taxrate[this.state.selTIndex].Tax_Rate;
     }
 
     return (
@@ -788,7 +788,7 @@ class Settings extends Component {
     if (this.state.taxrate.length > 0) {
       var taxData = {
         Saturday: this.state.taxrate[this.state.selTIndex].Saturday,
-        Tax_Rate: this.state.taxrate[this.state.selTIndex]["Tax Rate"],
+        Tax_Rate: this.state.taxrate[this.state.selTIndex].Tax_Rate,
       };
 
       console.log(taxData);
@@ -1019,7 +1019,7 @@ class Settings extends Component {
                     {this.state.taxrate.map((meal, index) => (
                       <tr>
                         <td>{meal.Saturday}</td>
-                        <td>{meal["Tax Rate"]}</td>
+                        <td>{meal.Tax_Rate}</td>
                         <td>
                           {" "}
                           <Button
