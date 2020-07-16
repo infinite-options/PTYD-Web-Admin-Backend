@@ -644,35 +644,8 @@ class Checkout extends Component {
                       ) : (
                         ""
                       )}
-                    </Form.Row>
-                  </Form>
-                </Col>
-                <Col>
-                  <h5>Delivery Address</h5>
-                  <Form>
-                    <Form.Row>
-                      <Form.Group as={Col} controlId='formGridFirstName'>
-                        <Form.Label>
-                          First Name
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='Enter First Name'
-                          value={this.state.purchase.delivery_first_name || ""}
-                          name='delivery_first_name'
-                          onChange={this.handleChange}
-                        />
-                        {!this.state.purchase.delivery_first_name ? (
-                          <span className='required-red'>
-                            First Name field is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
+                    </Form.Group>
+                  </Form.Row>
 
                   <Form.Group controlId='formGridNotes'>
                     <Form.Label>
