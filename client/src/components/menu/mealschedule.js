@@ -173,7 +173,12 @@ export default class MealSchedule extends Component {
               </Row>
 
               <Row className='mb-1'>
-                <Button onClick={this.ChangeAccountInfo} size='lg' block>
+                <Button
+                  onClick={this.ChangeAccountInfo}
+                  size='lg'
+                  block
+                  disabled={!this.state.currentPurchase.purchase_id}
+                >
                   Change Account Info
                 </Button>
               </Row>
