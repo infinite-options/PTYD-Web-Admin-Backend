@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/creditCard.png";
-import {Link} from "react-router-dom";
+// import {Link} from "react-router-dom";
 
 class SelectPaymentPlan extends Component {
   constructor(props) {
@@ -86,36 +86,37 @@ class SelectPaymentPlan extends Component {
                       <Card.Text style={{fontSize: "13px", color: "#888785"}}>
                         Sales tax of 8.25% will be added
                       </Card.Text>
-                      <Link
-                        style={{fontFamily: "Kalam", color: "white"}}
-                        to={{
-                          pathname: "/checkout",
-                          item: {
-                            name: `${
-                              paymentPlan.meal_plan_desc
-                            } Subscription - $${paymentPlan.meal_plan_price.toFixed(
-                              2
-                            )}`,
-                            total: paymentPlan.meal_plan_price.toFixed(2)
-                          }
+
+                      <button
+                        type='button'
+                        className='btn2 btn2-primary font2'
+                        style={{
+                          marginTop: "10px",
+                          paddingLeft: "30px",
+                          paddingRight: "30px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                          color: "white",
+                          fontSize: "15px"
+                        }}
+                        onClick={() => {
+                          this.props.history.push({
+                            pathname: "/checkout",
+                            state: {
+                              item: {
+                                name: `${
+                                  paymentPlan.meal_plan_desc
+                                } Subscription - $${paymentPlan.meal_plan_price.toFixed(
+                                  2
+                                )}`,
+                                total: paymentPlan.meal_plan_price.toFixed(2)
+                              }
+                            }
+                          });
                         }}
                       >
-                        <button
-                          type='button'
-                          className='btn2 btn2-primary font2'
-                          style={{
-                            marginTop: "10px",
-                            paddingLeft: "30px",
-                            paddingRight: "30px",
-                            paddingTop: "5px",
-                            paddingBottom: "5px",
-                            color: "white",
-                            fontSize: "15px"
-                          }}
-                        >
-                          CHECKOUT
-                        </button>
-                      </Link>
+                        CHECKOUT
+                      </button>
                       <img
                         className='img-fluid'
                         src={IMG9}

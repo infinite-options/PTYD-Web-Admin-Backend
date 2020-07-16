@@ -1515,7 +1515,7 @@ class Checkout(Resource):
                     response['message'] = 'Could not authenticate user.'
                     return response, 400
             elif userAuth['code'] != 280 or len(userAuth['result']) != 1:
-                response['message'] = 'Could not authenticate user.'
+                response['message'] = 'Sorry!!! Could not authenticate user. Wrong Password.'
                 response['error'] = userAuth
                 print("Error:", response['message'])
                 print("Error JSON:", response['error'])

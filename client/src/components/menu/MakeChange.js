@@ -186,7 +186,7 @@ export default class MakeChange extends Component {
         //success => reload the current page
         this.props.history.push("/mealschedule");
         window.location.reload(false);
-        this.setState({loading: false});
+        // this.setState({loading: false});
       })
       .catch(err => {
         console.log(err);
@@ -246,7 +246,7 @@ export default class MakeChange extends Component {
 
       this.props.history.push("/mealschedule");
       window.location.reload("false");
-      this.setState({loading: false});
+      // this.setState({loading: false});
     } catch (err) {
       this.setState({
         errorMessage: err,
