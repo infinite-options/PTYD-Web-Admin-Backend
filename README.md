@@ -8,8 +8,7 @@ This is where the frontend lies. It is done in React, and can be run within the 
 Once Node is running the app, you can access it on your browser at `localhost:3000`.
 
 ### `admin/`
-Similar to `client/`, but for the admin-facing web user interface. You can access live admin website [here.]
-(https://preptoyourdoor-admin.netlify.app/)
+Similar to `client/`, but for the admin-facing web user interface. You can access live admin website [here.](https://preptoyourdoor-admin.netlify.app)
 
 ### `api/`
 This directory contains code for middleware / backend stuff. The APIs allow the web user interface to talk to the database.
