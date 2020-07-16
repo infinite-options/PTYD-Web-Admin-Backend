@@ -4034,7 +4034,7 @@ class All_Meals(Resource):
 
             response['message'] = 'successful'
             response['result'] = items
-            print(items)
+            #print(items)
 
             return response, 200
         except:
@@ -4286,6 +4286,8 @@ class All_Ingredients(Resource):
 
             response['message'] = 'successful'
             response['result'] = items
+            print("Ingredients:")
+            print(items)
 
             return response
         except:
@@ -4309,6 +4311,31 @@ class DisplaySaturdays(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+            
+    def patch(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+
+            Tax_Rate = data['Tax_Rate']
+            Saturday = data['Saturday']
+
+            print(data)
+            print("Items read...")
+            items['update_tax'] = execute("""UPDATE ptyd_saturdays
+                                            SET Tax_Rate = \'""" + str(Tax_Rate) + """\'
+                                            WHERE Saturday >= \'""" + str(Saturday) + """\';
+                                            """, 'post', conn)
+                                            
+            print("meal_plan_updated...")
+            
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 
 
 class MealCreation(Resource):

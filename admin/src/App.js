@@ -126,7 +126,13 @@ function App() {
             </NavDropdown>
             &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/settings">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/orders">Orders</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <NavDropdown title="Orders" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="/orders">Orders Table</NavDropdown.Item>
+              <NavDropdown.Item href="/ingredients">
+                Ingredients Table
+              </NavDropdown.Item>
+            </NavDropdown>
+            &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers">Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link>
               <Badge

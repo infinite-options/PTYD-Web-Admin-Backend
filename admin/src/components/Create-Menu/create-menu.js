@@ -29,7 +29,7 @@ class CreateMenu extends Component {
       newMealCategory: "",
       newMeal: 0,
       newMeal2: 0,
-      newMealName: ""
+      newMealName: "",
       //add selection and
     };
   }
@@ -86,7 +86,7 @@ class CreateMenu extends Component {
         meal_type_map, // {"The Energizer": "Local Treat", "Detox Smoothie": "Local Treat", ...}
         categorykey, //[Soup, Breakfast, Entree, ...]
         addingSelection: 0,
-        mealToAvgPostMap
+        mealToAvgPostMap,
         // newMealName: temp_newMealName
       },
       () => {
@@ -96,7 +96,7 @@ class CreateMenu extends Component {
     );
   }
   //date
-  handleChange = event => {
+  handleChange = (event) => {
     //get new dropdown value
     let x = this.state.datekeys[event.target.value];
     let len = this.state.createMenu[x].length;
@@ -108,7 +108,7 @@ class CreateMenu extends Component {
 
     this.setState({
       selection: event.target.value,
-      selectionOfDropMenu: tempSelectionOfDropMenu
+      selectionOfDropMenu: tempSelectionOfDropMenu,
     });
   };
 
@@ -123,7 +123,7 @@ class CreateMenu extends Component {
 
     this.setState({
       selectionOfDropMenu: arr,
-      CreateMenu: newCreateMenu
+      CreateMenu: newCreateMenu,
     });
   };
 
@@ -230,7 +230,7 @@ class CreateMenu extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.newMeal}
-          onChange={e => {
+          onChange={(e) => {
             this.setState({ newMeal: e.target.value, newMeal2: 0 });
           }}
         >
@@ -259,10 +259,10 @@ class CreateMenu extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.newMeal2}
-          onChange={e => {
+          onChange={(e) => {
             this.setState({
               newMeal2: e.target.value,
-              newMealName: specificMealArr[e.target.value].Meal_Name
+              newMealName: specificMealArr[e.target.value].Meal_Name,
             });
           }}
         >
@@ -271,7 +271,7 @@ class CreateMenu extends Component {
       </FormControl>
     );
   };
-  avgpost = mealName => {
+  avgpost = (mealName) => {
     let x = this.state.mealToAvgPostMap[mealName];
     return this.state.mealToAvgPostMap[mealName];
   };
@@ -287,7 +287,7 @@ class CreateMenu extends Component {
 
     let element = {
       Menu_Type: this.state.newMealCategory,
-      Meal_Name: this.state.mealMap[this.state.newMeal]
+      Meal_Name: this.state.mealMap[this.state.newMeal],
     };
     mealArray.push(element);
 
@@ -295,7 +295,7 @@ class CreateMenu extends Component {
       selectionOfDropMenu: arr,
       CreateMenu: newCreateMenu,
       newMeal: 0,
-      newMealCategory: ""
+      newMealCategory: "",
     });
   };
 
@@ -337,7 +337,7 @@ class CreateMenu extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.selectionOfDropMenu[index]}
-          onChange={e => {
+          onChange={(e) => {
             this.handleChange2(e.target.value, index);
           }}
           // style={{ color: "white" }}
