@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/creditCard.png";
+import axios from "axios";
 // import {Link} from "react-router-dom";
 
 class SelectPaymentPlan extends Component {
@@ -11,7 +12,6 @@ class SelectPaymentPlan extends Component {
   }
 
   async componentDidMount() {
-    console.log("selectpaymentplan: ", this.props.API_URL);
     this.setState({obj: this.props.objectIndex});
     this.setState({meals: this.props.meals});
     const res = await fetch(this.props.API_URL);
@@ -21,6 +21,11 @@ class SelectPaymentPlan extends Component {
     this.setState({paymentPlans: plans});
     //  const otherPlans = plansData.OtherPaymentPlans;
     //  this.setState( {otherPlans: otherPlans} );
+    console.log("tax rate url: ", this.props.TAX_RATE_URL);
+    const tax_res = await axios.get(this.props.TAX_RATE_URL, {
+      params: {affected_date: Date(Date.now())}
+    });
+    console.log("tax_res: ", tax_res);
   }
 
   render() {
