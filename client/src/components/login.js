@@ -6,7 +6,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import {Container} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+// import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 // import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
