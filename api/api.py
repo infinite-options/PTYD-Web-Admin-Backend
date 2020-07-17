@@ -4781,6 +4781,9 @@ class MenuCreation(Resource):
                         menu_date,
                         menu_type,
                         meal_category,
+                        meal_cat,
+                        menu_category,
+                        default_meal,
                         meal_name
                         FROM 
                         ptyd_menu
@@ -4816,12 +4819,21 @@ class MenuCreation(Resource):
                         
                         key1 = "Menu_Type"
                         key2 = "Meal_Name"
+                        key3 = "Meal_Cat"
+                        key4 = "Menu_Category"
+                        key5 = "Default_Meal"
                         
                         menuType = items['result'][index2]['menu_type']
                         mealNames = items['result'][index2]['meal_name']
+                        mealCat = items['result'][index2]['meal_cat']
+                        menuCategory = items['result'][index2]['menu_category']
+                        defaultMeal = items['result'][index2]['default_meal']
 
                         tempDict[key1] = menuType
                         tempDict[key2] = mealNames
+                        tempDict[key3] = mealCat
+                        tempDict[key4] = menuCategory
+                        tempDict[key5] = defaultMeal
                         
                         menuInfo.append(tempDict)
 
@@ -4960,6 +4972,51 @@ class MenuCreation(Resource):
         finally:
             disconnect(conn)
 
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            print("connected")
+            menu_date = data['menu_date']
+            menu = data['menu']
+            print("data received")
+            print(menu_date)
+            print(menu)
+            items['delete_menu'] = execute("""delete from ptyd_menu
+                                                        where menu_date = \'""" + str(menu_date) + """\';
+                                                            """, 'post', conn)
+            print("menu deleted")
+
+            i = 0
+            for eachitem in data['menu']:
+                menu_category = menu[i]['Menu_Category']
+                menu_type = menu[i]['Menu_Type'] 
+                meal_cat = menu[i]['Meal_Cat']
+                meal_name = menu[i]['Meal_Name'] 
+                default_meal = menu[i]['Default_Meal'] 
+                
+                print(menu_category)
+                print(menu_type)
+                print(meal_cat)
+                print(meal_name)
+                print(default_meal)
+                
+                items['menu_insert'] = execute(""" insert into ptyd_menu 
+                                                    values 
+                                                    (\'""" + str(menu_date) + """\',\'""" + str(menu_category) + """\',
+                                                    \'""" + str(menu_type) + """\',\'""" + str(meal_cat) + """\',
+                                                    (select meal_id from ptyd_meals where meal_name = \'""" + str(meal_name) + """\'),
+                                                    \'""" + str(default_meal) + """\');
+                                                    """, 'post', conn)
+                i += 1
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 class Add_Coupon(Resource):
     def post(self):
         response = {}
@@ -5062,6 +5119,50 @@ class CouponsAPI(Resource):
                                             
             print("coupon_updated...")
             
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            print("connection done...")
+            data = request.get_json(force=True)
+            print("data collected...")
+            print(data)
+            
+            coupon_id = data['coupon_id']
+            active = data['active']
+            discount_percent = data['discount_percent']
+            discount_amount = data['discount_amount']
+            discount_shipping = data['discount_shipping']
+            expire_date = data['expire_date']
+            limits = data['limits']
+            notes = data['notes']
+            num_used = data['num_used']
+            recurring = data['recurring']
+            email = data['email']
+
+            print("Items read...")
+            items['new_coupon_insert'] = execute("""INSERT INTO ptyd_coupons ( 	
+                                                coupon_id,active,discount_percent,discount_amount,discount_shipping,
+                                                expire_date,limits,notes,num_used,recurring,email 
+                                                ) 
+                                                VALUES ( 	
+                                                \'""" + str(coupon_id) + """\',\'""" + str(active) + """\',
+                                                \'""" + str(discount_percent) + """\',\'""" + str(discount_amount) + """\',
+                                                \'""" + str(discount_shipping) + """\',\'""" + str(expire_date) + """\',
+                                                \'""" + str(limits) + """\',\'""" + str(notes) + """\',
+                                                \'""" + str(num_used) + """\',\'""" + str(recurring) + """\',
+                                                \'""" + str(email) + """\' 
+                                                );""", 'post', conn)
+
+            print("Coupon_inserted...")
+
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -5199,6 +5300,70 @@ class TaxRateAPI(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+class Edit_Menu(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+
+            items = execute(""" select meal_name from ptyd_meals;""", 'get', conn)
+            items2 = execute(""" select * from ptyd_menu;""", 'get', conn)
+
+            response['message'] = 'Request successful.'
+            response['result'] = items
+            response['result2'] = items2
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+    
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            data = request.get_json(force=True)
+            print("connected")
+            menu_date = data['menu_date']
+            menu = data['menu']
+            print("data received")
+            print(menu_date)
+            print(menu)
+            items['delete_menu'] = execute("""delete from ptyd_menu
+                                                        where menu_date = \'""" + str(menu_date) + """\';
+                                                            """, 'post', conn)
+            print("menu deleted")
+
+            i = 0
+            for eachitem in data['menu']:
+                menu_category = menu[i]['menu_category']
+                menu_type = menu[i]['menu_type'] 
+                meal_cat = menu[i]['meal_cat']
+                meal_name = menu[i]['meal_name'] 
+                default_meal = menu[i]['default_meal'] 
+                
+                print(menu_category)
+                print(menu_type)
+                print(meal_cat)
+                print(meal_name)
+                print(default_meal)
+                
+                items['menu_insert'] = execute(""" insert into ptyd_menu 
+                                                    values 
+                                                    (\'""" + str(menu_date) + """\',\'""" + str(menu_category) + """\',
+                                                    \'""" + str(menu_type) + """\',\'""" + str(meal_cat) + """\',
+                                                    (select meal_id from ptyd_meals where meal_name = \'""" + str(meal_name) + """\'),
+                                                    \'""" + str(default_meal) + """\');
+                                                    """, 'post', conn)
+                i += 1
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 # Define API routes
 # Customer page
@@ -5258,6 +5423,7 @@ api.add_resource(TaxRateAPI, '/api/v2/TaxRateAPI')
 
 api.add_resource(Add_Meal_plan, '/api/v2/Add_Meal_plan')
 api.add_resource(Add_Coupon, '/api/v2/Add_Coupon')
+api.add_resource(Edit_Menu, '/api/v2/Edit_Menu')
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')

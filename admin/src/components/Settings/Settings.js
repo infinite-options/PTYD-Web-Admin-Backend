@@ -26,9 +26,23 @@ class Settings extends Component {
       open: false,
       selIndex: 0,
       copen: false,
+      ncopen: false,
       selCIndex: 0,
       topen: false,
       selTIndex: 0,
+      newCoupon: {
+        coupon_id: "None",
+        active: "FALSE",
+        discount_percent: 0,
+        discount_amount: 0,
+        discount_shipping: 0,
+        expire_date: "2020-07-25",
+        limits: 0,
+        notes: "None",
+        num_used: 0,
+        recurring: "FLASE",
+        email: "None",
+      },
     };
   }
 
@@ -292,6 +306,17 @@ class Settings extends Component {
           <Typography color="textPrimary">Coupons</Typography>
         </Breadcrumbs>
         {this.coupons_function()}
+        <br />
+        <Button
+          variant="contained"
+          color="primary"
+          className="float-right"
+          onClick={(e) => {
+            this.nchandleClickOpen(e);
+          }}
+        >
+          Add New Coupon
+        </Button>
 
         <br />
         <br />
@@ -562,6 +587,182 @@ class Settings extends Component {
               Cancel
             </Button>
             <Button onClick={this.chandleCloseSave} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={this.state.ncopen}
+          onClose={this.nchandleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Add New Coupon Here</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To Add the Coupon : Change all these fields accordingly and press
+              "Save" else Press "Cancel" if you want to discard.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name10"
+              label="Coupon ID"
+              type="text"
+              value={this.state.newCoupon.coupon_id}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.coupon_id = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name11"
+              label="Activation Status"
+              type="text"
+              value={this.state.newCoupon.active}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.active = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name12"
+              label="Discount %"
+              type="text"
+              value={this.state.newCoupon.discount_percent}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.discount_percent = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name13"
+              label="Discount Amount"
+              type="number"
+              value={this.state.newCoupon.discount_amount}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.discount_amount = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name14"
+              label="Discount Shipping"
+              type="number"
+              value={this.state.newCoupon.discount_shipping}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.discount_shipping = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name15"
+              label="Expiry Date"
+              type="date"
+              value={this.state.newCoupon.expire_date}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.expire_date = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name16"
+              label="Limits"
+              type="number"
+              value={this.state.newCoupon.limits}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.limits = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name17"
+              label="Notes"
+              type="text"
+              value={this.state.newCoupon.notes}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.notes = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name18"
+              label="Num Used"
+              type="number"
+              value={this.state.newCoupon.num_used}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.num_used = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name19"
+              label="Recurring"
+              type="text"
+              value={this.state.newCoupon.recurring}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.recurring = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name20"
+              label="Email"
+              type="email"
+              value={this.state.newCoupon.email}
+              onChange={(e) => {
+                let newCoupon = this.state.newCoupon;
+                newCoupon.email = e.target.value;
+                this.setState({ newCoupon: newCoupon });
+              }}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.nchandleCloseCancel} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.nchandleCloseSave} color="primary">
               Save
             </Button>
           </DialogActions>
@@ -931,8 +1132,8 @@ class Settings extends Component {
                 <Table striped bordered hover>
                   <thead style={{ overflow: "scroll" }}>
                     <tr>
-                      <th>ID</th>
-                      <th>Activation Status</th>
+                      <th>Coupon ID</th>
+                      <th>Active</th>
                       <th>Discount %</th>
                       <th>Discount Amount</th>
                       <th>Discount Shipping</th>
@@ -1042,6 +1243,77 @@ class Settings extends Component {
         </Col>
       </Row>
     );
+  };
+
+  //NEW COUPONS
+  nchandleClickOpen = (e) => {
+    this.setState({
+      ncopen: true,
+    });
+  };
+
+  nchandleClose = (e) => {
+    this.setState({
+      ncopen: false,
+    });
+  };
+
+  nchandleCloseSave = (e) => {
+    e.preventDefault();
+
+    var couponData = {
+      coupon_id: this.state.newCoupon.coupon_id,
+      active: this.state.newCoupon.active,
+      discount_percent: this.state.newCoupon.discount_percent,
+      discount_amount: this.state.newCoupon.discount_amount,
+      discount_shipping: this.state.newCoupon.discount_shipping,
+      expire_date: this.state.newCoupon.expire_date,
+      limits: this.state.newCoupon.limits,
+      notes: this.state.newCoupon.notes,
+      num_used: this.state.newCoupon.num_used,
+      recurring: this.state.newCoupon.recurring,
+      email: this.state.newCoupon.email,
+    };
+
+    console.log(couponData);
+    axios
+      .post(this.props.API_URL_COUPONS, couponData)
+      .then((res) => {
+        if (res.status === 200) {
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
+
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+          // window.location.reload(false);
+          //props.history.push("/signupwaiting");
+          //setLoading(false);
+          console.log("API POST COUPONS WORKED");
+          this.setState({ ncopen: false }, () => {
+            window.location.reload(true);
+          });
+        }
+      })
+      .catch((err) => {
+        if (err.response !== undefined) {
+          //setErro(err.response.data.result);
+          //window.location.reload(false);
+          console.log("API POST COUPONS Failed");
+        } else if (typeof err === "string") {
+          //setErro(err);
+          console.log(err);
+        }
+        //setLoading(false);
+      });
+  };
+
+  nchandleCloseCancel = (e) => {
+    this.setState({ ncopen: false }, () => {
+      window.location.reload(true);
+    });
   };
 }
 export default Settings;
