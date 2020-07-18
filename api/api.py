@@ -795,7 +795,7 @@ class ResetPassword(Resource):
                     response['result'] = {"user_uid": user_uid}
                     return response, 200
                 else:
-                    return 500
+                    return dict(message='Internal Server Error'), 500
             else:
                 response['message'] = "User is not found"
                 return response, 404
@@ -5283,17 +5283,27 @@ class TaxRateAPI(Resource):
 
     def get(self):
         response = {}
-        items = {}
         try:
+            data = request.args.get('affected_date')
             conn = connect()
-
-            items = execute(""" SELECT
+            print("data: ", data)
+            if data is None:
+                res = execute(""" SELECT
                                 *
                                 FROM
                                 ptyd_saturdays;""", 'get', conn)
-
+            else:
+                #is that affected date is saturday?
+                today = datetime.strptime(data, "%Y-%m-%d")
+                saturday = today.strftime("%Y-%m-%d")
+                if today.weekday() != 5:
+                    saturday = (today - timedelta(days=((today.weekday() - 5)%7))).strftime("%Y-%m-%d")
+                print("saturday: ", saturday)
+                query = """SELECT tax_rate FROM ptyd_saturdays WHERE Saturday = '{}'""".format(saturday)
+                res = execute(query, 'get', conn)
+            print("res: ", res)
             response['message'] = 'Request successful.'
-            response['result'] = items
+            response['result'] = res['result']
 
             return response, 200
         except:
