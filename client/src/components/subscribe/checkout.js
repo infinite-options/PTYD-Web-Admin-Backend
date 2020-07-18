@@ -40,13 +40,13 @@ class Checkout extends Component {
       send_error: null,
       coupon_error: null,
       original_charge: {
-        shipping: 15,
+        shipping: 0,
         meal_price: 0,
         tax: 0,
         total_charge: 0
       },
       will_charge: {
-        shipping: 15,
+        shipping: 0,
         meal_price: 0,
         tax: 0,
         total_charge: 0
@@ -56,8 +56,7 @@ class Checkout extends Component {
         total: 0
       },
       discount: {percent: 0, amount: 0, shipping: 0},
-      tax_rate: 0.0825,
-      shipping: 0,
+
       coupon_disable: false
     };
 
@@ -111,8 +110,10 @@ class Checkout extends Component {
       };
       //calculate original charge
       let mealPrice = parseFloat(this.props.location.state.item.total);
-      let shipping = this.state.original_charge.shipping;
-      let tax = parseFloat((mealPrice * this.state.tax_rate).toFixed(2));
+      let shipping = this.props.location.state.shipping;
+      let tax = parseFloat(
+        (mealPrice * this.props.location.state.tax_rate).toFixed(2)
+      );
 
       let total_charge = parseFloat((mealPrice + shipping + tax).toFixed(2));
       console.log("tax: ", typeof tax);
@@ -124,12 +125,14 @@ class Checkout extends Component {
         },
         original_charge: {
           ...prevState.original_charge,
+          shipping: shipping,
           meal_price: mealPrice,
           tax: tax,
           total_charge: total_charge
         },
         will_charge: {
           ...prevState.will_charge,
+          shipping: shipping,
           meal_price: mealPrice,
           total_charge: total_charge,
           tax: tax

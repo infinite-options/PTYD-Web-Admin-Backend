@@ -28,13 +28,17 @@ class SelectPaymentPlan extends Component {
     let dd = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
     let yyyy = today.getFullYear();
     axios
-      .get(`${this.props.TAX_RATE_API}`, {
+      .get(`${this.props.TAX_RATE_URL}`, {
         params: {affected_date: `${yyyy}-${mm}-${dd}`}
       })
       .then(res => {
         console.log(res);
-        let rate = parseFloat((parseFloat(res.data.tax_rate) / 100).toFixed(2));
-        this.setState({tax_rate: rate, shipping: 15}); // should get shipping from databse too.
+        if (res.data.result !== undefined) {
+          let rate = parseFloat(
+            (parseFloat(res.data.result.tax_rate) / 100).toFixed(2)
+          );
+          this.setState({tax_rate: rate, shipping: 15}); // should get shipping from databse too.
+        }
       });
   }
 
@@ -99,7 +103,8 @@ class SelectPaymentPlan extends Component {
                         ${paymentPlan.meal_weekly_price.toFixed(2)} /week
                       </Card.Title>
                       <Card.Text style={{fontSize: "13px", color: "#888785"}}>
-                        Sales tax of 8.25% will be added
+                        Sales tax of {(this.state.tax_rate * 100).toFixed(2)}%
+                        will be added
                       </Card.Text>
 
                       <button
@@ -125,7 +130,9 @@ class SelectPaymentPlan extends Component {
                                   2
                                 )}`,
                                 total: paymentPlan.meal_plan_price.toFixed(2)
-                              }
+                              },
+                              tax_rate: this.state.tax_rate,
+                              shipping: this.state.shipping
                             }
                           });
                         }}
