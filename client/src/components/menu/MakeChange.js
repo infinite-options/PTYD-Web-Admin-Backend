@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 
 import ChangePassword from "../ChangePassword";
 import {
@@ -41,7 +41,7 @@ export default class MakeChange extends Component {
       },
       tax_rate: 0.0825, //these info should be taken from database instead of hard coded
       shipping: 15,
-
+      loading: false,
       creditCard: {
         cc_num: this.props.currentPurchase.cc_num,
         cc_cvv: this.props.currentPurchase.cc_cvv,
@@ -177,27 +177,33 @@ export default class MakeChange extends Component {
       : this.setState({showErrorModal: true});
   };
   DeleteCurrentPurchase = () => {
-    fetch(this.props.DELETE_URL, {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+    this.setState({loading: true});
+    axios
+      .patch(this.props.DELETE_URL, {
         purchase_id: this.state.currentPurchase.purchase_id
       })
-    })
       .then(res => {
         //success => reload the current page
         this.props.history.push("/mealschedule");
         window.location.reload(false);
+        // this.setState({loading: false});
       })
       .catch(err => {
         console.log(err);
+
+        this.setState({
+          errorMessage: err,
+          showDeleteModal: false,
+          showPasswordChange: false,
+          showSaveModal: false,
+          loading: false
+        });
+        this.ShowHideErrorModal();
       });
   };
 
   UpdateChangingSubcription = async () => {
+    this.setState({loading: true});
     // update changing subcription
     try {
       //update changing delivery address
@@ -240,19 +246,21 @@ export default class MakeChange extends Component {
 
       this.props.history.push("/mealschedule");
       window.location.reload("false");
+      // this.setState({loading: false});
     } catch (err) {
       this.setState({
         errorMessage: err,
         showDeleteModal: false,
         showPasswordChange: false,
-        showSaveModal: false
+        showSaveModal: false,
+        loading: false
       });
       this.ShowHideErrorModal();
     }
   };
   render() {
     return (
-      <Fragment>
+      <>
         {this.state.show &&
           !this.state.showPasswordChange &&
           !this.state.showDeleteModal &&
@@ -632,15 +640,20 @@ export default class MakeChange extends Component {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.ShowHideDeleteModal} color='primary'>
+                <Button
+                  onClick={this.ShowHideDeleteModal}
+                  color='primary'
+                  disabled={this.state.loading}
+                >
                   No,Keep
                 </Button>
                 <Button
                   onClick={this.DeleteCurrentPurchase}
                   variant='danger'
                   autoFocus
+                  disabled={this.state.loading}
                 >
-                  Yes,Delete
+                  {this.state.loading ? "Please Wait..." : "Yes,Delete"}
                 </Button>
               </DialogActions>
             </Dialog>
@@ -675,15 +688,20 @@ export default class MakeChange extends Component {
               </DialogContent>
 
               <DialogActions>
-                <Button onClick={this.ShowHideSaveModal} color='primary'>
+                <Button
+                  onClick={this.ShowHideSaveModal}
+                  color='primary'
+                  disabled={this.state.loading}
+                >
                   No,Thanks
                 </Button>
                 <Button
                   onClick={this.UpdateChangingSubcription}
                   variant='danger'
                   autoFocus
+                  disabled={this.state.loading}
                 >
-                  Yes,Please
+                  {this.state.loading ? "Please wait..." : "Yes,Please"}
                 </Button>
               </DialogActions>
             </Dialog>
@@ -712,7 +730,7 @@ export default class MakeChange extends Component {
             </Dialog>
           </div>
         )}
-      </Fragment>
+      </>
     );
   }
 }

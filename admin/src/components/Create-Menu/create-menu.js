@@ -7,6 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
+import axios from "axios";
 
 class CreateMenu extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class CreateMenu extends Component {
       newMealCategory: "",
       newMeal: 0,
       newMeal2: 0,
-      newMealName: ""
+      newMealName: "",
       //add selection and
     };
   }
@@ -86,7 +87,7 @@ class CreateMenu extends Component {
         meal_type_map, // {"The Energizer": "Local Treat", "Detox Smoothie": "Local Treat", ...}
         categorykey, //[Soup, Breakfast, Entree, ...]
         addingSelection: 0,
-        mealToAvgPostMap
+        mealToAvgPostMap,
         // newMealName: temp_newMealName
       },
       () => {
@@ -96,7 +97,7 @@ class CreateMenu extends Component {
     );
   }
   //date
-  handleChange = event => {
+  handleChange = (event) => {
     //get new dropdown value
     let x = this.state.datekeys[event.target.value];
     let len = this.state.createMenu[x].length;
@@ -108,7 +109,7 @@ class CreateMenu extends Component {
 
     this.setState({
       selection: event.target.value,
-      selectionOfDropMenu: tempSelectionOfDropMenu
+      selectionOfDropMenu: tempSelectionOfDropMenu,
     });
   };
 
@@ -123,7 +124,7 @@ class CreateMenu extends Component {
 
     this.setState({
       selectionOfDropMenu: arr,
-      CreateMenu: newCreateMenu
+      CreateMenu: newCreateMenu,
     });
   };
 
@@ -143,7 +144,8 @@ class CreateMenu extends Component {
         <tr>
           <td>{arr[i].Menu_Type}</td>
           <td>{this.mealDropdown(arr[i].Meal_Name, i)}</td>
-          <td>{this.avgpost(arr[i].Meal_Name)}</td>
+          <td>{arr[i].Meal_Cat}</td>
+          <td>{arr[i].Menu_Category}</td>
         </tr>
       );
       displayrows.push(tempelement);
@@ -155,7 +157,7 @@ class CreateMenu extends Component {
           <Link color="inherit" onClick={this.handleClick}>
             Admin Site
           </Link>
-          <Typography color="textPrimary">Create Menu</Typography>
+          <Typography color="textPrimary">Create Or Edit Menu</Typography>
         </Breadcrumbs>
         <Row>
           <Col>
@@ -169,9 +171,10 @@ class CreateMenu extends Component {
               </thead>
               <thead>
                 <tr>
-                  <th>Meal Category</th>
+                  <th>Meal Type</th>
                   <th>Meal</th>
-                  <th>Avg Sales/Posting</th>
+                  <th>Meal Category</th>
+                  <th>Menu Category</th>
                 </tr>
               </thead>
               <tbody>{displayrows}</tbody>
@@ -179,11 +182,10 @@ class CreateMenu extends Component {
             </Table>
             <Button
               variant="success"
-              onClick={() => {
-                this.setState({ addShow: !this.state.addShow });
-              }}
+              className="float-right"
+              onClick={this.postMenuForThisDate}
             >
-              Add Meal
+              Save
             </Button>
           </Col>
           <Col></Col>
@@ -192,6 +194,61 @@ class CreateMenu extends Component {
     );
   }
 
+  postMenuForThisDate = (e) => {
+    e.preventDefault();
+    let day = this.state.datekeys[this.state.selection]; //get the current date
+    let newCreateMenu = this.state.createMenu;
+    let mealArray = newCreateMenu[day];
+    var menuData = {
+      menu_date: day,
+      menu: mealArray,
+    };
+
+    console.log(menuData);
+    axios
+      .post(this.props.API_URL_CREATEMENU, menuData)
+      .then((res) => {
+        if (res.status === 200) {
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
+
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+          // window.location.reload(false);
+          //props.history.push("/signupwaiting");
+          //setLoading(false);
+          console.log("API PATCH CREATEMENU WORKED");
+
+          window.location.reload(true);
+        }
+      })
+      .catch((err) => {
+        if (err.response !== undefined) {
+          //setErro(err.response.data.result);
+          //window.location.reload(false);
+          console.log("API PATCH CREATEMENU Failed");
+        } else if (typeof err === "string") {
+          //setErro(err);
+          console.log(err);
+        }
+        //setLoading(false);
+      });
+  };
+
+  /* Savung for later:
+    <Button
+              variant="success"
+              className="float-right"
+              onClick={() => {
+                this.setState({ addShow: !this.state.addShow });
+              }}
+            >
+              Save
+            </Button>
+  */
   //The row that shows when we click on "Add Meal" Button
   addRowTemplate = () => {
     return (
@@ -230,7 +287,7 @@ class CreateMenu extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.newMeal}
-          onChange={e => {
+          onChange={(e) => {
             this.setState({ newMeal: e.target.value, newMeal2: 0 });
           }}
         >
@@ -259,10 +316,10 @@ class CreateMenu extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.newMeal2}
-          onChange={e => {
+          onChange={(e) => {
             this.setState({
               newMeal2: e.target.value,
-              newMealName: specificMealArr[e.target.value].Meal_Name
+              newMealName: specificMealArr[e.target.value].Meal_Name,
             });
           }}
         >
@@ -271,7 +328,7 @@ class CreateMenu extends Component {
       </FormControl>
     );
   };
-  avgpost = mealName => {
+  avgpost = (mealName) => {
     let x = this.state.mealToAvgPostMap[mealName];
     return this.state.mealToAvgPostMap[mealName];
   };
@@ -287,7 +344,7 @@ class CreateMenu extends Component {
 
     let element = {
       Menu_Type: this.state.newMealCategory,
-      Meal_Name: this.state.mealMap[this.state.newMeal]
+      Meal_Name: this.state.mealMap[this.state.newMeal],
     };
     mealArray.push(element);
 
@@ -295,7 +352,7 @@ class CreateMenu extends Component {
       selectionOfDropMenu: arr,
       CreateMenu: newCreateMenu,
       newMeal: 0,
-      newMealCategory: ""
+      newMealCategory: "",
     });
   };
 
@@ -337,7 +394,7 @@ class CreateMenu extends Component {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={this.state.selectionOfDropMenu[index]}
-          onChange={e => {
+          onChange={(e) => {
             this.handleChange2(e.target.value, index);
           }}
           // style={{ color: "white" }}

@@ -50,11 +50,9 @@ class Landing extends Component {
           </div>
 
           <div className='bottom-left'>
-            {/* {this.state.isLoggedIn === false && ( */}
             <a id='already-a-member' href='/login'>
               <h1><u>Already a Member? Sign In</u></h1>
             </a>
-            {/* )} */}
           </div>
         </div>
         

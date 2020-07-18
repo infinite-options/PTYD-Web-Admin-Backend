@@ -2,6 +2,7 @@ import React, {Component, Fragment} from "react";
 
 import {Button, Form, Row, Col, Container} from "react-bootstrap";
 import TruckIcon from "../../img/prepTruckIcon.png";
+import ErrorHandle from "../ErrorHandle";
 
 import crypto from "crypto";
 import Cookies from "js-cookie";
@@ -39,13 +40,13 @@ class Checkout extends Component {
       send_error: null,
       coupon_error: null,
       original_charge: {
-        shipping: 15,
+        shipping: 0,
         meal_price: 0,
         tax: 0,
         total_charge: 0
       },
       will_charge: {
-        shipping: 15,
+        shipping: 0,
         meal_price: 0,
         tax: 0,
         total_charge: 0
@@ -55,7 +56,7 @@ class Checkout extends Component {
         total: 0
       },
       discount: {percent: 0, amount: 0, shipping: 0},
-      tax_rate: 0.0825,
+
       coupon_disable: false
     };
 
@@ -102,32 +103,36 @@ class Checkout extends Component {
     return this.getCookieAttrHelper(cname, "session_id");
   }
   async componentDidMount() {
-    if (this.props.location.item !== undefined) {
+    if (this.props.location.state.item !== undefined) {
       const login_session = {
         login_id: this.searchCookie4Login("loginStatus"),
         session_id: this.searchCookie4SessionID("loginStatus")
       };
       //calculate original charge
-      let mealPrice = parseFloat(this.props.location.item.total);
-      let shipping = this.state.original_charge.shipping;
-      let tax = parseFloat((mealPrice * this.state.tax_rate).toFixed(2));
+      let mealPrice = parseFloat(this.props.location.state.item.total);
+      let shipping = this.props.location.state.shipping;
+      let tax = parseFloat(
+        (mealPrice * this.props.location.state.tax_rate).toFixed(2)
+      );
 
       let total_charge = parseFloat((mealPrice + shipping + tax).toFixed(2));
       console.log("tax: ", typeof tax);
       this.setState(prevState => ({
         item: {
           ...prevState.item,
-          name: this.props.location.item.name,
-          total: this.props.location.item.total
+          name: this.props.location.state.item.name,
+          total: this.props.location.state.item.total
         },
         original_charge: {
           ...prevState.original_charge,
+          shipping: shipping,
           meal_price: mealPrice,
           tax: tax,
           total_charge: total_charge
         },
         will_charge: {
           ...prevState.will_charge,
+          shipping: shipping,
           meal_price: mealPrice,
           total_charge: total_charge,
           tax: tax
@@ -218,8 +223,8 @@ class Checkout extends Component {
       salt: this.state.salt,
       is_gift: this.state.gift,
       user_uid: this.state.user_uid,
-      item: this.props.location.item.name,
-      item_price: this.props.location.item.total,
+      item: this.props.location.state.item.name,
+      item_price: this.props.location.state.item.total,
       coupon_id: coupon,
       shipping: this.state.original_charge.shipping,
       total_charge: this.state.original_charge.total_charge,
@@ -242,7 +247,14 @@ class Checkout extends Component {
         } else {
           this.setState({send_error: "Request failed."});
         }
-        this.props.history.push("/checkout");
+        this.props.history.push({
+          pathname: "/checkout",
+          state: {
+            item: {
+              ...this.props.location.state.item
+            }
+          }
+        });
       });
   }
   async checkout(event) {
@@ -462,576 +474,557 @@ class Checkout extends Component {
       discount: {}
     });
   };
+
+  closeError = () => {
+    this.setState({send_error: null, loading: false});
+  };
   render() {
     return (
       <Fragment>
-        {!this.state.send_error ? (
-          <Fragment>
-            {this.state.loading && (
-              <div className='d-flex justify-content-center'>
-                <div className='loading'>
-                  <div className='spinner-border' role='status'>
-                    <span className='sr-only'>Loading...</span>
-                  </div>
+        {this.state.send_error !== null && (
+          <ErrorHandle
+            errMsg={this.state.send_error}
+            closeError={this.closeError}
+          />
+        )}
+        <Fragment>
+          {this.state.loading && (
+            <div className='d-flex justify-content-center'>
+              <div className='loading'>
+                <div className='spinner-border' role='status'>
+                  <span className='sr-only'>Loading...</span>
                 </div>
               </div>
-            )}
-            <Container>
-              <Row className={this.state.loading ? "half-opacity" : ""}>
-                <Col md={4}>
-                  <div className='justify-content-md-center'>
-                    <img
-                      src={TruckIcon}
-                      style={{height: "75%", width: "75%"}}
-                      alt='Delivery Truck Icon'
-                    />
-                  </div>
-                  <h3>Account Holder Information</h3>
-                  <p>First Name: {this.state.purchase.delivery_first_name}</p>
-                  <p>Last Name: {this.state.purchase.delivery_last_name}</p>
-                  <p>Email: {this.state.purchase.delivery_email}</p>
-                  <hr />
-                  <h3>Order Summary</h3>
-                  <div id='cart'>
-                    <p>{this.state.item.name}</p>
-                  </div>
+            </div>
+          )}
+          <Container>
+            <Row className={this.state.loading ? "half-opacity" : ""}>
+              <Col md={4}>
+                <div className='justify-content-md-center'>
+                  <img
+                    src={TruckIcon}
+                    style={{height: "75%", width: "75%"}}
+                    alt='Delivery Truck Icon'
+                  />
+                </div>
+                <h3>Account Holder Information</h3>
+                <p>First Name: {this.state.purchase.delivery_first_name}</p>
+                <p>Last Name: {this.state.purchase.delivery_last_name}</p>
+                <p>Email: {this.state.purchase.delivery_email}</p>
+                <hr />
+                <h3>Order Summary</h3>
+                <div id='cart'>
+                  <p>{this.state.item.name}</p>
+                </div>
 
-                  <hr />
-                  <p>
-                    Estimated Shipping - ${this.state.original_charge.shipping}
-                  </p>
-                  <p>Estimated Tax - ${this.state.original_charge.tax}</p>
-                  {this.state.coupon_disable && (
-                    <Fragment>
-                      <hr />
-                      {this.state.discount.percent !== 0 && (
-                        <p>
-                          Discount percentage:{" "}
-                          {this.state.discount.percent > 1
-                            ? this.state.discount.percent
-                            : parseFloat(
-                                (this.state.discount.percent * 100).toFixed(2)
-                              )}
-                          %
-                        </p>
-                      )}
-                      {this.state.discount.mount !== 0 && (
-                        <p>Discount amount: ${this.state.discount.amount}</p>
-                      )}
-                      {this.state.discount.shipping !== 0 && (
-                        <p>
-                          Discount shipping: ${this.state.discount.shipping}
-                        </p>
-                      )}
+                <hr />
+                <p>
+                  Estimated Shipping - ${this.state.original_charge.shipping}
+                </p>
+                <p>Estimated Tax - ${this.state.original_charge.tax}</p>
+                {this.state.coupon_disable && (
+                  <Fragment>
+                    <hr />
+                    {this.state.discount.percent !== 0 && (
                       <p>
-                        Total discount: $
-                        {parseFloat(
-                          (
-                            this.state.original_charge.total_charge -
-                            this.state.will_charge.total_charge
-                          ).toFixed(2)
-                        )}
+                        Discount percentage:{" "}
+                        {this.state.discount.percent > 1
+                          ? this.state.discount.percent
+                          : parseFloat(
+                              (this.state.discount.percent * 100).toFixed(2)
+                            )}
+                        %
                       </p>
-                    </Fragment>
-                  )}
-                  <hr />
-                  <h3>Total: ${this.state.will_charge.total_charge}</h3>
-                  <Form>
-                    <Form.Row>
-                      {this.state.coupon_error !== null && (
-                        <p className='text-danger'>{this.state.coupon_error}</p>
+                    )}
+                    {this.state.discount.mount !== 0 && (
+                      <p>Discount amount: ${this.state.discount.amount}</p>
+                    )}
+                    {this.state.discount.shipping !== 0 && (
+                      <p>Discount shipping: ${this.state.discount.shipping}</p>
+                    )}
+                    <p>
+                      Total discount: $
+                      {parseFloat(
+                        (
+                          this.state.original_charge.total_charge -
+                          this.state.will_charge.total_charge
+                        ).toFixed(2)
                       )}
-                      <Form.Group
-                        as={Col}
-                        md={8}
-                        controlId='formGridCouponCode'
+                    </p>
+                  </Fragment>
+                )}
+                <hr />
+                <h3>Total: ${this.state.will_charge.total_charge}</h3>
+                <Form>
+                  <Form.Row>
+                    {this.state.coupon_error !== null && (
+                      <p className='text-danger'>{this.state.coupon_error}</p>
+                    )}
+                    <Form.Group as={Col} md={8} controlId='formGridCouponCode'>
+                      <Form.Label>Coupon/Gift Code</Form.Label>
+
+                      <Form.Control
+                        placeholder='Secret Passcode'
+                        value={this.state.coupon}
+                        type='text'
+                        onChange={event =>
+                          this.setState({
+                            coupon: event.target.value,
+                            coupon_error: null
+                          })
+                        }
+                        disabled={this.state.coupon_disable ? true : false}
+                      />
+                    </Form.Group>
+                    {!this.state.coupon_disable ? (
+                      <Button
+                        variant='success'
+                        size='sm'
+                        style={{height: "30px", marginTop: "30px"}}
+                        type='submit'
+                        onClick={this.applyCoupon}
                       >
-                        <Form.Label>Coupon/Gift Code</Form.Label>
-
-                        <Form.Control
-                          placeholder='Secret Passcode'
-                          value={this.state.coupon}
-                          type='text'
-                          onChange={event =>
-                            this.setState({
-                              coupon: event.target.value,
-                              coupon_error: null
-                            })
-                          }
-                          disabled={this.state.coupon_disable ? true : false}
-                        />
-                      </Form.Group>
-                      {!this.state.coupon_disable ? (
-                        <Button
-                          variant='success'
-                          size='sm'
-                          style={{height: "30px", marginTop: "30px"}}
-                          type='submit'
-                          onClick={this.applyCoupon}
-                        >
-                          Apply
-                        </Button>
-                      ) : (
-                        <Button
-                          variant='success'
-                          size='sm'
-                          style={{height: "30px", marginTop: "30px"}}
-                          type='submit'
-                          onClick={this.cancelCoupon}
-                        >
-                          Cancel
-                        </Button>
-                      )}
-                    </Form.Row>
-                  </Form>
-                </Col>
-                <Col style={{marginTop: "-50px"}}>
-                  <h5>Delivery Address</h5>
-                  <Form>
-                    <Form.Row>
-                      <Form.Group as={Col} controlId='formGridFirstName'>
-                        <Form.Label>
-                          First Name
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='Enter First Name'
-                          value={this.state.purchase.delivery_first_name || ""}
-                          name='delivery_first_name'
-                          onChange={this.handleChange}
-                        />
-                        {!this.state.purchase.delivery_first_name ? (
-                          <span className='required-red'>
-                            First Name field is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-
-                      <Form.Group as={Col} controlId='formGridLastName'>
-                        <Form.Label>
-                          Last Name
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='Enter Last Name'
-                          value={this.state.purchase.delivery_last_name || ""}
-                          name='delivery_last_name'
-                          onChange={this.handleChange}
-                        />
-                        {!this.state.purchase.delivery_last_name ? (
-                          <span className='required-red'>
-                            Last Name field is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-                    </Form.Row>
-
-                    <Form.Group controlId='formGridNotes'>
+                        Apply
+                      </Button>
+                    ) : (
+                      <Button
+                        variant='success'
+                        size='sm'
+                        style={{height: "30px", marginTop: "30px"}}
+                        type='submit'
+                        onClick={this.cancelCoupon}
+                      >
+                        Cancel
+                      </Button>
+                    )}
+                  </Form.Row>
+                </Form>
+              </Col>
+              <Col style={{marginTop: "-50px"}}>
+                <h5>Delivery Address</h5>
+                <Form>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId='formGridFirstName'>
                       <Form.Label>
-                        Delivery Notes
+                        First Name
                         <span className='required-red'>
                           {" "}
                           <b>*</b>
                         </span>
                       </Form.Label>
                       <Form.Control
-                        placeholder='Enter Notes or N/A (e.g. Gate Code, Special Instructions)'
-                        value={this.state.purchase.delivery_instructions || ""}
-                        name='delivery_instructions'
+                        placeholder='Enter First Name'
+                        value={this.state.purchase.delivery_first_name || ""}
+                        name='delivery_first_name'
                         onChange={this.handleChange}
                       />
-                      {!this.state.purchase.delivery_instructions ? (
+                      {!this.state.purchase.delivery_first_name ? (
                         <span className='required-red'>
-                          Delivery Notes field is required
+                          First Name field is required
                         </span>
                       ) : (
                         ""
                       )}
                     </Form.Group>
 
-                    <Form.Row>
-                      <Form.Group as={Col} controlId='formGridEmailAddress'>
-                        <Form.Label>
-                          Email
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          type='email'
-                          placeholder='Enter Email'
-                          value={this.state.purchase.delivery_email || ""}
-                          name='delivery_email'
-                          onChange={this.handleChange}
-                        />
-                        {!this.state.purchase.delivery_email ? (
-                          <span className='required-red'>
-                            Valid email is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-
-                      <Form.Group as={Col} controlId='formGridPhoneNumber'>
-                        <Form.Label>
-                          Phone Number
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='1234567890'
-                          value={this.state.purchase.delivery_phone || ""}
-                          name='delivery_phone'
-                          onChange={this.handleChange}
-                        />
-                        {this.state.purchase.delivery_phone.length !== 10 ? (
-                          <span className='required-red'>
-                            Phone Number must be 10 digits
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-                    </Form.Row>
-                    <Form.Row>
-                      <Form.Group as={Col} controlId='formGridAddress'>
-                        <Form.Label>
-                          Address
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='1234 Main St'
-                          value={this.state.purchase.delivery_address || ""}
-                          name='delivery_address'
-                          onChange={this.handleChange}
-                        />
-                        {!this.state.purchase.delivery_address ? (
-                          <span className='required-red'>
-                            Delivery Address is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-
-                      <Form.Group as={Col} controlId='formGridAptNum'>
-                        <Form.Label>Apartment/Unit (if applicable)</Form.Label>
-                        <Form.Control
-                          placeholder='Apartment, studio, or floor'
-                          value={
-                            this.state.purchase.delivery_address_unit || ""
-                          }
-                          name='delivery_address_unit'
-                          onChange={this.handleChange}
-                        />
-                      </Form.Group>
-                    </Form.Row>
-
-                    <Form.Row>
-                      <Form.Group as={Col} controlId='formGridCity'>
-                        <Form.Label>
-                          City
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='Prep City'
-                          value={this.state.purchase.delivery_city || ""}
-                          name='delivery_city'
-                          onChange={this.handleChange}
-                        />
-                        {!this.state.purchase.delivery_city ? (
-                          <span className='required-red'>City is required</span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-
-                      <Form.Group as={Col} controlId='formGridState'>
-                        <Form.Label>
-                          State
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          as='select'
-                          value={this.state.purchase.delivery_state || ""}
-                          name='delivery_state'
-                          onChange={this.handleChange}
-                        >
-                          <option>Choose...</option>
-                          <option>TX</option>
-                        </Form.Control>
-                        {this.state.purchase.delivery_state !== "TX" ? (
-                          <span className='required-red'>
-                            State is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-
-                      <Form.Group as={Col} controlId='formGridZip'>
-                        <Form.Label>
-                          Zip
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='12345'
-                          value={this.state.purchase.delivery_zip || ""}
-                          name='delivery_zip'
-                          onChange={this.handleChange}
-                        />
-                        {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(
-                          this.state.purchase.delivery_zip
-                        ) ? (
-                          ""
-                        ) : (
-                          <span className='required-red'>Invalid Zip Code</span>
-                        )}
-                      </Form.Group>
-                    </Form.Row>
-                    <Form.Group id='formGridCheckbox'>
-                      <Form.Check
-                        id='isGift'
-                        type='checkbox'
-                        label='This is a Gift'
-                        value={this.state.gift}
-                        onChange={this.handleGiftChange}
+                    <Form.Group as={Col} controlId='formGridLastName'>
+                      <Form.Label>
+                        Last Name
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='Enter Last Name'
+                        value={this.state.purchase.delivery_last_name || ""}
+                        name='delivery_last_name'
+                        onChange={this.handleChange}
                       />
+                      {!this.state.purchase.delivery_last_name ? (
+                        <span className='required-red'>
+                          Last Name field is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Form.Group controlId='formGridNotes'>
+                    <Form.Label>
+                      Delivery Notes
+                      <span className='required-red'>
+                        {" "}
+                        <b>*</b>
+                      </span>
+                    </Form.Label>
+                    <Form.Control
+                      placeholder='Enter Notes or N/A (e.g. Gate Code, Special Instructions)'
+                      value={this.state.purchase.delivery_instructions || ""}
+                      name='delivery_instructions'
+                      onChange={this.handleChange}
+                    />
+                    {!this.state.purchase.delivery_instructions ? (
+                      <span className='required-red'>
+                        Delivery Notes field is required
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </Form.Group>
+
+                  <Form.Row>
+                    <Form.Group as={Col} controlId='formGridEmailAddress'>
+                      <Form.Label>
+                        Email
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        type='email'
+                        placeholder='Enter Email'
+                        value={this.state.purchase.delivery_email || ""}
+                        name='delivery_email'
+                        onChange={this.handleChange}
+                      />
+                      {!this.state.purchase.delivery_email ? (
+                        <span className='required-red'>
+                          Valid email is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </Form.Group>
 
-                    <h5>Billing Information</h5>
+                    <Form.Group as={Col} controlId='formGridPhoneNumber'>
+                      <Form.Label>
+                        Phone Number
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='1234567890'
+                        value={this.state.purchase.delivery_phone || ""}
+                        name='delivery_phone'
+                        onChange={this.handleChange}
+                      />
+                      {this.state.purchase.delivery_phone.length !== 10 ? (
+                        <span className='required-red'>
+                          Phone Number must be 10 digits
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId='formGridAddress'>
+                      <Form.Label>
+                        Address
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='1234 Main St'
+                        value={this.state.purchase.delivery_address || ""}
+                        name='delivery_address'
+                        onChange={this.handleChange}
+                      />
+                      {!this.state.purchase.delivery_address ? (
+                        <span className='required-red'>
+                          Delivery Address is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
 
-                    <Form.Row>
-                      <Form.Group
-                        as={Col}
-                        md={6}
-                        controlId='formGridCardNumber'
+                    <Form.Group as={Col} controlId='formGridAptNum'>
+                      <Form.Label>Apartment/Unit (if applicable)</Form.Label>
+                      <Form.Control
+                        placeholder='Apartment, studio, or floor'
+                        value={this.state.purchase.delivery_address_unit || ""}
+                        name='delivery_address_unit'
+                        onChange={this.handleChange}
+                      />
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Form.Row>
+                    <Form.Group as={Col} controlId='formGridCity'>
+                      <Form.Label>
+                        City
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='Prep City'
+                        value={this.state.purchase.delivery_city || ""}
+                        name='delivery_city'
+                        onChange={this.handleChange}
+                      />
+                      {!this.state.purchase.delivery_city ? (
+                        <span className='required-red'>City is required</span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
+
+                    <Form.Group as={Col} controlId='formGridState'>
+                      <Form.Label>
+                        State
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        as='select'
+                        value={this.state.purchase.delivery_state || ""}
+                        name='delivery_state'
+                        onChange={this.handleChange}
                       >
-                        <Form.Label>
-                          Credit Card Number
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='Enter Card Number'
-                          value={this.state.purchase.cc_num || ""}
-                          name='cc_num'
-                          onChange={this.handleChange}
-                        />
-                        {/^.{16}$/.test(this.state.purchase.cc_num) ? (
-                          ""
-                        ) : (
-                          <span className='required-red'>
-                            Invalid Credit Card Number
-                          </span>
-                        )}
-                      </Form.Group>
+                        <option>Choose...</option>
+                        <option>TX</option>
+                      </Form.Control>
+                      {this.state.purchase.delivery_state !== "TX" ? (
+                        <span className='required-red'>State is required</span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
 
-                      <Form.Group as={Col} md={3} controlId='formGridCardCvc'>
-                        <Form.Label>
-                          CVC/CVV
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='123'
-                          value={this.state.purchase.cc_cvv || ""}
-                          name='cc_cvv'
-                          onChange={this.handleChange}
-                        />
-                        {/^[0-9]{3,4}$/.test(this.state.purchase.cc_cvv) ? (
-                          ""
-                        ) : (
-                          <span className='required-red'>Invalid CVC/CVV</span>
-                        )}
-                      </Form.Group>
-                    </Form.Row>
+                    <Form.Group as={Col} controlId='formGridZip'>
+                      <Form.Label>
+                        Zip
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='12345'
+                        value={this.state.purchase.delivery_zip || ""}
+                        name='delivery_zip'
+                        onChange={this.handleChange}
+                      />
+                      {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(
+                        this.state.purchase.delivery_zip
+                      ) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>Invalid Zip Code</span>
+                      )}
+                    </Form.Group>
+                  </Form.Row>
+                  <Form.Group id='formGridCheckbox'>
+                    <Form.Check
+                      id='isGift'
+                      type='checkbox'
+                      label='This is a Gift'
+                      value={this.state.gift}
+                      onChange={this.handleGiftChange}
+                    />
+                  </Form.Group>
 
-                    <Form.Row>
-                      <Form.Group as={Col} md={4} controlId='formGridCardMonth'>
-                        <Form.Label>
-                          Month
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          as='select'
-                          value={this.state.purchase.cc_exp_month || ""}
-                          name='cc_exp_month'
-                          onChange={this.handleMonthChange}
-                        >
-                          <option>Choose...</option>
-                          <option>01</option>
-                          <option>02</option>
-                          <option>03</option>
-                          <option>04</option>
-                          <option>05</option>
-                          <option>06</option>
-                          <option>07</option>
-                          <option>08</option>
-                          <option>09</option>
-                          <option>10</option>
-                          <option>11</option>
-                          <option>12</option>
-                        </Form.Control>
-                        {isNaN(this.state.purchase.cc_exp_month) ? (
-                          <span className='required-red'>
-                            Expiration month is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
+                  <h5>Billing Information</h5>
 
-                      <Form.Group as={Col} md={4} controlId='formGridCardYear'>
-                        <Form.Label>
-                          Year
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          as='select'
-                          value={this.state.purchase.cc_exp_year || ""}
-                          name='cc_exp_year'
-                          onChange={this.handleYearChange}
-                        >
-                          <option>Choose...</option>
-                          <option>2020</option>
-                          <option>2021</option>
-                          <option>2022</option>
-                          <option>2023</option>
-                          <option>2024</option>
-                          <option>2025</option>
-                          <option>2026</option>
-                          <option>2027</option>
-                          <option>2028</option>
-                          <option>2029</option>
-                        </Form.Control>
-                        {isNaN(this.state.purchase.cc_exp_year) ? (
-                          <span className='required-red'>
-                            Expiration year is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
+                  <Form.Row>
+                    <Form.Group as={Col} md={6} controlId='formGridCardNumber'>
+                      <Form.Label>
+                        Credit Card Number
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='Enter Card Number'
+                        value={this.state.purchase.cc_num || ""}
+                        name='cc_num'
+                        onChange={this.handleChange}
+                      />
+                      {/^.{16}$/.test(this.state.purchase.cc_num) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>
+                          Invalid Credit Card Number
+                        </span>
+                      )}
+                    </Form.Group>
 
-                      <Form.Group
-                        as={Col}
-                        md={4}
-                        controlId='formGridBillingZip'
+                    <Form.Group as={Col} md={3} controlId='formGridCardCvc'>
+                      <Form.Label>
+                        CVC/CVV
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='123'
+                        value={this.state.purchase.cc_cvv || ""}
+                        name='cc_cvv'
+                        onChange={this.handleChange}
+                      />
+                      {/^[0-9]{3,4}$/.test(this.state.purchase.cc_cvv) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>Invalid CVC/CVV</span>
+                      )}
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Form.Row>
+                    <Form.Group as={Col} md={4} controlId='formGridCardMonth'>
+                      <Form.Label>
+                        Month
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        as='select'
+                        value={this.state.purchase.cc_exp_month || ""}
+                        name='cc_exp_month'
+                        onChange={this.handleMonthChange}
                       >
-                        <Form.Label>
-                          Billing Zip Code
-                          <span className='required-red'>
-                            {" "}
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          placeholder='12345'
-                          value={this.state.purchase.billing_zip || ""}
-                          name='billing_zip'
-                          onChange={this.handleChange}
-                        />
-                        {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(
-                          this.state.purchase.billing_zip
-                        ) ? (
-                          ""
-                        ) : (
-                          <span className='required-red'>
-                            Invalid Billing Zip Code
-                          </span>
-                        )}
-                      </Form.Group>
-                    </Form.Row>
+                        <option>Choose...</option>
+                        <option>01</option>
+                        <option>02</option>
+                        <option>03</option>
+                        <option>04</option>
+                        <option>05</option>
+                        <option>06</option>
+                        <option>07</option>
+                        <option>08</option>
+                        <option>09</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                      </Form.Control>
+                      {isNaN(this.state.purchase.cc_exp_month) ? (
+                        <span className='required-red'>
+                          Expiration month is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
 
-                    <Form.Row></Form.Row>
+                    <Form.Group as={Col} md={4} controlId='formGridCardYear'>
+                      <Form.Label>
+                        Year
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        as='select'
+                        value={this.state.purchase.cc_exp_year || ""}
+                        name='cc_exp_year'
+                        onChange={this.handleYearChange}
+                      >
+                        <option>Choose...</option>
+                        <option>2020</option>
+                        <option>2021</option>
+                        <option>2022</option>
+                        <option>2023</option>
+                        <option>2024</option>
+                        <option>2025</option>
+                        <option>2026</option>
+                        <option>2027</option>
+                        <option>2028</option>
+                        <option>2029</option>
+                      </Form.Control>
+                      {isNaN(this.state.purchase.cc_exp_year) ? (
+                        <span className='required-red'>
+                          Expiration year is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
 
-                    <Form.Row>
-                      <Form.Group as={Col} md={3} controlId='formGridPassword'>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                          type='password'
-                          placeholder={
-                            !this.state.password_salt
-                              ? "Social Media Account"
-                              : "Enter Password"
-                          }
-                          value={this.state.password}
-                          name='password'
-                          onChange={this.handlePwChange}
-                          disabled={!this.state.password_salt ? true : false}
-                        />
-                        {this.searchCookie4loginMethod("loginStatus") !==
-                          "social" && this.state.password === "" ? (
-                          <span className='required-red'>
-                            Password is required
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Group>
-                    </Form.Row>
+                    <Form.Group as={Col} md={4} controlId='formGridBillingZip'>
+                      <Form.Label>
+                        Billing Zip Code
+                        <span className='required-red'>
+                          {" "}
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        placeholder='12345'
+                        value={this.state.purchase.billing_zip || ""}
+                        name='billing_zip'
+                        onChange={this.handleChange}
+                      />
+                      {/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(
+                        this.state.purchase.billing_zip
+                      ) ? (
+                        ""
+                      ) : (
+                        <span className='required-red'>
+                          Invalid Billing Zip Code
+                        </span>
+                      )}
+                    </Form.Group>
+                  </Form.Row>
 
-                    <Button
-                      onClick={this.checkout}
-                      variant='success'
-                      type='submit'
-                      disabled={this.validateForm()}
-                    >
-                      Checkout
-                    </Button>
-                  </Form>
-                </Col>
-              </Row>
-              &nbsp;
-            </Container>
-          </Fragment>
-        ) : (
-          <div className='container text-center'>
-            <h1>Cart Lost: Select Another Plan</h1>
-            <h4>{this.state.send_error}</h4>
-            <a href='/selectmealplan'>
-              <img src={TruckIcon} alt='Truck Icon' />
-              <p>Select a Meal Plan</p>
-            </a>
-          </div>
-        )}
+                  <Form.Row></Form.Row>
+
+                  <Form.Row>
+                    <Form.Group as={Col} md={3} controlId='formGridPassword'>
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control
+                        type='password'
+                        placeholder={
+                          !this.state.password_salt
+                            ? "Social Media Account"
+                            : "Enter Password"
+                        }
+                        value={this.state.password}
+                        name='password'
+                        onChange={this.handlePwChange}
+                        disabled={!this.state.password_salt ? true : false}
+                      />
+                      {this.searchCookie4loginMethod("loginStatus") !==
+                        "social" && this.state.password === "" ? (
+                        <span className='required-red'>
+                          Password is required
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Button
+                    onClick={this.checkout}
+                    variant='success'
+                    type='submit'
+                    disabled={this.validateForm()}
+                  >
+                    Checkout
+                  </Button>
+                </Form>
+              </Col>
+            </Row>
+            &nbsp;
+          </Container>
+        </Fragment>
       </Fragment>
     );
   }

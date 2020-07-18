@@ -110,23 +110,74 @@ function App() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto" style={{ marginLeft: "3%" }}>
-            <NavDropdown title="Do It Yourself" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/createMenu">
-                Create Menus
+            <NavDropdown title="Meals & Menus" id="collasible-nav-dropdown">
+              <NavDropdown.Item
+                href="/createMenu"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "white",
+                }}
+              >
+                Create / Edit Menus
               </NavDropdown.Item>
-              <NavDropdown.Item href="/editMealDesc">
+              <NavDropdown.Item
+                href="/editMealDesc"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "honeydew",
+                }}
+              >
                 Edit Meals
               </NavDropdown.Item>
-              <NavDropdown.Item href="/createMeal">
+              <NavDropdown.Item
+                href="/createMeal"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "white",
+                }}
+              >
                 Create Meals
               </NavDropdown.Item>
-              <NavDropdown.Item href="/editMeal">
+              <NavDropdown.Item
+                href="/editMeal"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "honeydew",
+                }}
+              >
                 Edit Meal Recipes
               </NavDropdown.Item>
             </NavDropdown>
             &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/settings">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/orders">Orders</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/settings">Plans & Coupons</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
+            <NavDropdown title="Orders" id="collasible-nav-dropdown">
+              <NavDropdown.Item
+                href="/orders"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "white",
+                }}
+              >
+                Orders Table
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                href="/ingredients"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "honeydew",
+                }}
+              >
+                Ingredients Table
+              </NavDropdown.Item>
+            </NavDropdown>
+            &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers">Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link>
               <Badge

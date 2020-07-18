@@ -9,6 +9,7 @@ import EditCreateMeal from "./Edit-Meal/edit-create-meals";
 import CreateNewMeal from "./Edit-Meal/create-new-meals";
 import CreateMenu from "./Create-Menu/create-menu";
 import Orders from "./Orders/Orders";
+import Ingredients from "./Orders/Ingredients";
 import Customers from "./Customers/Customers";
 import EditMeals from "./Edit-Meal/edit-meals";
 import Settings from "./Settings/Settings";
@@ -107,6 +108,15 @@ const Main = ({ appProps }) => (
       exact
       path="/orders"
       component={Orders}
+      appProps={{
+        API_URL: `${DEV_URL}`,
+        DISPLAY_SAT_API_URL: `${DEV_URL}saturdays`,
+      }}
+    />
+    <AppliedRoute
+      exact
+      path="/ingredients"
+      component={Ingredients}
       appProps={{
         API_URL: `${DEV_URL}`,
         DISPLAY_SAT_API_URL: `${DEV_URL}saturdays`,

@@ -6,7 +6,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import {Container} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+// import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 // import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
@@ -367,7 +367,7 @@ export default function Login(props) {
         </div>
       )}
       <main
-        style={{marginTop: "-80px"}}
+        style={{marginTop: "30px"}}
         className={loading ? "half-opacity" : ""}
       >
         <div className='container text-center' style={{marginTop: "-40px"}}>
@@ -421,7 +421,7 @@ export default function Login(props) {
           </Row>
 
           <div className='row'>
-            <Col></Col>
+            {/* <Col></Col> */}
             <Container
               className='justify-content-center bg-white font2 w-20'
               style={{
@@ -526,7 +526,7 @@ export default function Login(props) {
                   style={{
                     border: "2px solid #469b47",
                     color: "#469b47",
-                    padding: "8px 90px",
+                    padding: "8px 110px",
                     borderRadius: "4px"
                   }}
                 >
@@ -534,11 +534,10 @@ export default function Login(props) {
                 </a>
               </div>
             </Container>
-            <Col></Col>
+            {/* <Col></Col> */}
           </div>
 
           {/* &nbsp; */}
-          <hr></hr>
         </div>
       </main>
     </Fragment>

@@ -3,6 +3,7 @@ import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/creditCard.png";
 import {Link} from "react-router-dom";
+import axios from "axios";
 // import {timingSafeEqual} from "crypto";
 
 class Selectmealplan extends Component {
@@ -17,6 +18,27 @@ class Selectmealplan extends Component {
     const api = await res.json();
     const mealPlans = api.result.MealPlans.result;
     this.setState({mealPlans});
+    //calling tax_rate api
+    let today = new Date();
+    let mm =
+      today.getMonth() + 1 >= 10
+        ? today.getMonth() + 1
+        : "0" + (today.getMonth() + 1);
+    let dd = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
+    let yyyy = today.getFullYear();
+    axios
+      .get(`${this.props.TAX_RATE_URL}`, {
+        params: {affected_date: `${yyyy}-${mm}-${dd}`}
+      })
+      .then(res => {
+        console.log(res);
+        if (res.data.result !== undefined) {
+          let rate = parseFloat(
+            (parseFloat(res.data.result.tax_rate) / 100).toFixed(2)
+          );
+          this.setState({tax_rate: rate, shipping: 15}); // should get shipping from databse too.
+        }
+      });
   }
   render() {
     return (
@@ -80,7 +102,8 @@ class Selectmealplan extends Component {
                         /week
                       </Card.Text>
                       <Card.Text style={{fontSize: "13px", color: "#888785"}}>
-                        Sales tax of 8.25% will be added
+                        Sales tax of {(this.state.tax_rate * 100).toFixed(2)}%
+                        will be added
                       </Card.Text>
                       <Link
                         style={{fontFamily: "Kalam", color: "white"}}

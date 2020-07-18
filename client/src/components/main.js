@@ -31,11 +31,11 @@ import Logout from "./logout";
 // import {SIGUNUSED} from "constants";
 
 //  Live API from AWS S3 Bucket
-const DEV_URL =
-  "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
+// const DEV_URL =
+//   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/";
 
 //  Localhost API that can be run from /backend/api directory
-// const DEV_URL = "http://localhost:2000/api/";
+const DEV_URL = "http://localhost:2000/api/";
 
 export default function Main({appProps}) {
   // const [objectIndex, setObjectIndex] = useState(0);
@@ -53,7 +53,8 @@ export default function Main({appProps}) {
         component={SelectMealPlan}
         appProps={{
           appProps,
-          API_URL: `${DEV_URL}v2/plans`
+          API_URL: `${DEV_URL}v2/plans`,
+          TAX_RATE_URL: `${DEV_URL}v2/TaxRateAPI`
         }}
       />
       <AppliedRoute
@@ -114,6 +115,7 @@ export default function Main({appProps}) {
           ACC_URL: `${DEV_URL}v2/account`,
           API_URL: `${DEV_URL}v2/meals`,
           PURCHASE_API_URL: `${DEV_URL}v2/accountpurchases`,
+          TAX_RATE_URL: `${DEV_URL}v2/TaxRateAPI`,
           MEAL_SELECT_API_URL: `${DEV_URL}v2/mealselection`,
           PLANS_URL: `${DEV_URL}v2/plans`,
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
@@ -151,6 +153,7 @@ export default function Main({appProps}) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/plans`,
+          TAX_RATE_URL: `${DEV_URL}v2/TaxRateAPI`,
           objectIndex: "FiveMealPaymentPlans",
           meals: 5
         }}
@@ -162,6 +165,7 @@ export default function Main({appProps}) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/plans`,
+          TAX_RATE_URL: `${DEV_URL}v2/TaxRateAPI`,
           objectIndex: "TenMealPaymentPlans",
           meals: 10
         }}
@@ -173,6 +177,7 @@ export default function Main({appProps}) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/plans`,
+          TAX_RATE_URL: `${DEV_URL}v2/TaxRateAPI`,
           objectIndex: "FifteenMealPaymentPlans",
           meals: 15
         }}
@@ -184,6 +189,7 @@ export default function Main({appProps}) {
         appProps={{
           appProps,
           API_URL: `${DEV_URL}v2/plans`,
+          TAX_RATE_URL: `${DEV_URL}v2/TaxRateAPI`,
           objectIndex: "TwentyMealPaymentPlans",
           meals: 20
         }}
