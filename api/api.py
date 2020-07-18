@@ -181,7 +181,6 @@ class Plans(Resource):
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
                         meal_shipping,
-                        meal_tax,
                         CONCAT('/', num_meals, '-meals-subscription') AS RouteOnclick
                     FROM ptyd_meal_plans
                     WHERE payment_frequency = \'4 Week Pre-Pay\';""",
@@ -195,7 +194,6 @@ class Plans(Resource):
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
                         meal_shipping,
-                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 5;""",
                 """SELECT
@@ -208,7 +206,6 @@ class Plans(Resource):
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
                         meal_shipping,
-                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 10;""",
                 """SELECT
@@ -221,7 +218,6 @@ class Plans(Resource):
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
                         meal_shipping,
-                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 15;""",
                 """SELECT
@@ -234,7 +230,6 @@ class Plans(Resource):
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
                         meal_shipping,
-                        meal_tax
                     FROM ptyd_meal_plans
                     WHERE num_meals = 20;"""]
 
@@ -4933,7 +4928,8 @@ class Add_Coupon(Resource):
                                                 ) 
                                                 VALUES ( 	
                                                 \'""" + str(coupon_id) + """\',\'""" + str(active) + """\',
-                                                \'""" + str(discount_percent) + """\',\'""" + str(discount_amount) + """\',
+                                                (\'""" + str(discount_percent) + """\'/100),
+                                                \'""" + str(discount_amount) + """\',
                                                 \'""" + str(discount_shipping) + """\',\'""" + str(expire_date) + """\',
                                                 \'""" + str(limits) + """\',\'""" + str(notes) + """\',
                                                 \'""" + str(num_used) + """\',\'""" + str(recurring) + """\',
@@ -4955,10 +4951,19 @@ class CouponsAPI(Resource):
         try:
             conn = connect()
 
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_coupons;""", 'get', conn)
+            items = execute(""" select 
+                                    coupon_id,
+                                    active,
+                                    FLOOR(discount_percent*100),
+                                    discount_amount,
+                                    discount_shipping,
+                                    expire_date,
+                                    limits,
+                                    notes,
+                                    num_used,
+                                    recurring,
+                                    email
+                                from ptyd_coupons;""", 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -4992,7 +4997,7 @@ class CouponsAPI(Resource):
             items['update_coupon'] = execute("""update ptyd_coupons
                                                 set 
                                                     active = \'""" + str(active) + """\', 
-                                                    discount_percent = \'""" + str(discount_percent) + """\',
+                                                    discount_percent = (\'""" + str(discount_percent) + """\'/100),
                                                     discount_amount = \'""" + str(discount_amount) + """\',
                                                     discount_shipping = \'""" + str(discount_shipping) + """\',
                                                     expire_date = \'""" + str(expire_date) + """\',
@@ -5034,20 +5039,18 @@ class Add_Meal_plan(Resource):
             meal_weekly_price = data['meal_weekly_price']
             meal_plan_price = data['meal_plan_price']
             meal_shipping = data['meal_shipping']
-            meal_tax  = data['meal_tax']
 
             print("Items read...")
             items['new_meal_insert'] = execute("""INSERT INTO ptyd_meal_plans  ( 	
                                                     meal_plan_id,meal_plan_desc,payment_frequency,photo_URL,plan_headline,
-                                                    plan_footer,num_meals,meal_weekly_price,meal_plan_price,meal_shipping,meal_tax 
+                                                    plan_footer,num_meals,meal_weekly_price,meal_plan_price,meal_shipping 
                                                     ) 
                                                     VALUES ( 	
                                                     \'""" + str(mealPlanId) + """\',\'""" + str(meal_plan_desc) + """\',
                                                     \'""" + str(payment_frequency) + """\',\'""" + str(photo_URL) + """\',
                                                     \'""" + str(plan_headline) + """\',\'""" + str(plan_footer) + """\',
                                                     \'""" + str(num_meals) + """\',\'""" + str(meal_weekly_price) + """\',
-                                                    \'""" + str(meal_plan_price) + """\',\'""" + str(meal_shipping) + """\',
-                                                    \'""" + str(meal_tax) + """\'
+                                                    \'""" + str(meal_plan_price) + """\',\'""" + str(meal_shipping) + """\'
                                                     );""", 'post', conn)
 
             print("meal_plan_inserted...")
@@ -5096,7 +5099,6 @@ class MealPlansAPI(Resource):
             meal_weekly_price = data['meal_weekly_price']
             meal_plan_price = data['meal_plan_price']
             meal_shipping = data['meal_shipping']
-            meal_tax  = data['meal_tax']
 
             print(data)
             print("Items read...")
@@ -5110,8 +5112,7 @@ class MealPlansAPI(Resource):
                                                     num_meals = \'""" + str(num_meals) + """\',
                                                     meal_weekly_price = \'""" + str(meal_weekly_price) + """\',
                                                     meal_plan_price = \'""" + str(meal_plan_price) + """\',
-                                                    meal_shipping = \'""" + str(meal_shipping) + """\',
-                                                    meal_tax  = \'""" + str(meal_tax) + """\'
+                                                    meal_shipping = \'""" + str(meal_shipping) + """\'
                                                 where meal_plan_id = \'""" + str(meal_plan_id) + """\';""", 'post', conn)
                                             
             print("meal_plan_updated...")
