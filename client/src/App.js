@@ -222,7 +222,7 @@ const App = props => {
         </Navbar>
       </div>
 
-      <div class='row justify-content-center'>
+      <div className='row justify-content-center'>
         {/* <Content className="content-container"> */}
         {/* <div className="page-content" /> */}
 
@@ -237,7 +237,7 @@ const App = props => {
         {/* </Content> */}
       </div>
 
-      <div class='row justify-content-md-center'>
+      <div className='row justify-content-md-center'>
         <footer className=' font2'>
           <div className='row footer-container'>
             <div className='col'>

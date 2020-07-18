@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/creditCard.png";
+import axios from "axios";
 // import {Link} from "react-router-dom";
 
 class SelectPaymentPlan extends Component {
@@ -11,7 +12,6 @@ class SelectPaymentPlan extends Component {
   }
 
   async componentDidMount() {
-    console.log("selectpaymentplan: ", this.props.API_URL);
     this.setState({obj: this.props.objectIndex});
     this.setState({meals: this.props.meals});
     const res = await fetch(this.props.API_URL);
@@ -19,8 +19,27 @@ class SelectPaymentPlan extends Component {
     const plans = api.result[this.state.obj].result;
     //  const plans = plansData.Plans;
     this.setState({paymentPlans: plans});
-    //  const otherPlans = plansData.OtherPaymentPlans;
-    //  this.setState( {otherPlans: otherPlans} );
+    //calling tax_rate api
+    let today = new Date();
+    let mm =
+      today.getMonth() + 1 >= 10
+        ? today.getMonth() + 1
+        : "0" + (today.getMonth() + 1);
+    let dd = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
+    let yyyy = today.getFullYear();
+    axios
+      .get(`${this.props.TAX_RATE_URL}`, {
+        params: {affected_date: `${yyyy}-${mm}-${dd}`}
+      })
+      .then(res => {
+        console.log(res);
+        if (res.data.result !== undefined) {
+          let rate = parseFloat(
+            (parseFloat(res.data.result.tax_rate) / 100).toFixed(2)
+          );
+          this.setState({tax_rate: rate, shipping: 15}); // should get shipping from databse too.
+        }
+      });
   }
 
   render() {
@@ -84,7 +103,8 @@ class SelectPaymentPlan extends Component {
                         ${paymentPlan.meal_weekly_price.toFixed(2)} /week
                       </Card.Title>
                       <Card.Text style={{fontSize: "13px", color: "#888785"}}>
-                        Sales tax of 8.25% will be added
+                        Sales tax of {(this.state.tax_rate * 100).toFixed(2)}%
+                        will be added
                       </Card.Text>
 
                       <button
@@ -110,7 +130,9 @@ class SelectPaymentPlan extends Component {
                                   2
                                 )}`,
                                 total: paymentPlan.meal_plan_price.toFixed(2)
-                              }
+                              },
+                              tax_rate: this.state.tax_rate,
+                              shipping: this.state.shipping
                             }
                           });
                         }}

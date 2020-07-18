@@ -5279,14 +5279,12 @@ class MealPlansAPI(Resource):
         finally:
             disconnect(conn)
 
-class TaxRateAPI(Resource):       
-
+class TaxRateAPI(Resource):
     def get(self):
         response = {}
         try:
             data = request.args.get('affected_date')
             conn = connect()
-            print("data: ", data)
             if data is None:
                 res = execute(""" SELECT
                                 *
@@ -5298,12 +5296,10 @@ class TaxRateAPI(Resource):
                 saturday = today.strftime("%Y-%m-%d")
                 if today.weekday() != 5:
                     saturday = (today - timedelta(days=((today.weekday() - 5)%7))).strftime("%Y-%m-%d")
-                print("saturday: ", saturday)
                 query = """SELECT tax_rate FROM ptyd_saturdays WHERE Saturday = '{}'""".format(saturday)
                 res = execute(query, 'get', conn)
-            print("res: ", res)
             response['message'] = 'Request successful.'
-            response['result'] = res['result']
+            response['result'] = res['result'][0]
 
             return response, 200
         except:
