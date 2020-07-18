@@ -57,6 +57,7 @@ class Checkout extends Component {
       },
       discount: {percent: 0, amount: 0, shipping: 0},
       tax_rate: 0.0825,
+      shipping: 0,
       coupon_disable: false
     };
 

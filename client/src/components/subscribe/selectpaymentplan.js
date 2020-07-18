@@ -19,13 +19,23 @@ class SelectPaymentPlan extends Component {
     const plans = api.result[this.state.obj].result;
     //  const plans = plansData.Plans;
     this.setState({paymentPlans: plans});
-    //  const otherPlans = plansData.OtherPaymentPlans;
-    //  this.setState( {otherPlans: otherPlans} );
-    console.log("tax rate url: ", this.props.TAX_RATE_URL);
-    const tax_res = await axios.get(this.props.TAX_RATE_URL, {
-      params: {affected_date: Date(Date.now())}
-    });
-    console.log("tax_res: ", tax_res);
+    //calling tax_rate api
+    let today = new Date();
+    let mm =
+      today.getMonth() + 1 >= 10
+        ? today.getMonth() + 1
+        : "0" + (today.getMonth() + 1);
+    let dd = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
+    let yyyy = today.getFullYear();
+    axios
+      .get(`${this.props.TAX_RATE_API}`, {
+        params: {affected_date: `${yyyy}-${mm}-${dd}`}
+      })
+      .then(res => {
+        console.log(res);
+        let rate = parseFloat((parseFloat(res.data.tax_rate) / 100).toFixed(2));
+        this.setState({tax_rate: rate, shipping: 15}); // should get shipping from databse too.
+      });
   }
 
   render() {
