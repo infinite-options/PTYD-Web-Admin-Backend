@@ -448,10 +448,7 @@ export default function Login(props) {
                 </strong>
               </div>
 
-              {/* <Row> */}
-              {/* <Col> */}
               <Form onSubmit={handleSubmit} autoComplete='off'>
-                {/* <Form.Label>Email</Form.Label> */}
                 <InputGroup className='mb-3'>
                   <FormControl
                     type='email'
@@ -467,7 +464,6 @@ export default function Login(props) {
                   />
                 </InputGroup>
 
-                {/* <Form.Label>Password</Form.Label> */}
                 <InputGroup className='mb-3'>
                   <FormControl
                     value={password}
