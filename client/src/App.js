@@ -296,7 +296,7 @@ const App = (props) => {
                 </Nav>
               </div>
 
-              <div className="col-2">
+              <div className="col">
                 <Nav defaultActiveKey="/" className="flex-column">
                   <Nav.Link id="green" disabled>
                     Company

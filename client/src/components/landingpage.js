@@ -28,10 +28,10 @@ class Landing extends Component {
   }
   render() {
     return (
-      <section className='content-section landing'>
+      <div className='content-section landing'>
         <div className='container title-image-container'>
           <img className='img-fluid title-image' src={IMG1} alt='img1' />
-          <div className='top-left'>
+          {/* <div className='top-left'>
             <h1 className='home_title'>LOCAL</h1>
             <h1 className='home_title'>ORGANIC</h1>
             <h1 className='home_title'>RESPONSIBLE</h1>
@@ -53,7 +53,7 @@ class Landing extends Component {
             <a id='already-a-member' href='/login'>
               <h1><u>Already a Member? Sign In</u></h1>
             </a>
-          </div>
+          </div> */}
         </div>
         
         <div className='container'>
@@ -313,7 +313,7 @@ class Landing extends Component {
             </center>
           </Grid>
         </div>
-      </section>
+      </div>
     );
   }
 }
