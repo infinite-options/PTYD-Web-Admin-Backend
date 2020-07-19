@@ -8,6 +8,7 @@ import QuoteCarousel from "./QuoteCarousel"
 
 import IMG1 from "../img/img1.jpg";
 import IMG2 from "../img/img2.jpg";
+
 import LOGOBOULDIN from "../img/logo-bouldinfoodforest.jpg";
 import LOGOFOX7 from "../img/logo-fox7austin.jpg";
 import LOGOCREDO from "../img/logo-credo.jpg";
@@ -29,6 +30,7 @@ class Landing extends Component {
   render() {
     return (
       <div className='content-section landing'>
+
         <div className='container title-image-container'>
           <img className='img-fluid title-image' src={IMG1} alt='img1' />
           <div className='top-left'>
@@ -68,6 +70,22 @@ class Landing extends Component {
             <div className='box-shadow-top'>&#x200b;</div>
 
             <div className='zero-waste-subtext'>
+
+              {/* <div className="row">
+                <div className="col-sm">
+                  <h4 className='zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
+                  <p>Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.</p>
+                </div>
+                <div className="col-sm">
+                  <h4 className='zero-waste-subtitle text-wrap'>WEEKLY DELIVERY</h4>
+                  <p>Seamless non-contact delivery in Austin & Houston.</p>
+                </div>
+                <div className="col-sm">
+                  <h4 className='zero-waste-subtitle text-wrap'>RETURN YOUR JARS</h4>
+                  <p>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
+                </div>
+              </div> */}
+
               <Grid>
                 <Cell col={4} className='zero-waste-cell'>
                   <h4 className='zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
@@ -88,7 +106,6 @@ class Landing extends Component {
 
             <center>
               <a
-                // type='button'
                 href='/selectmealplan'
                 className='btn1 btn1-primary start_button'
               >

@@ -38,7 +38,7 @@
 }
 
 p {
-  font-family: "montserrat";
+  font-family: "montserrat", sans-serif;
 }
 
 h2,
@@ -46,11 +46,11 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "oswald" !important;
+  font-family: "oswald", sans-serif !important;
 }
 
 h1 {
-  font-family: brandongrotw01-lightregular !important;
+  font-family: brandongrotw01-lightregular, sans-serif !important;
 }
 
 a {
@@ -193,26 +193,13 @@ a {
 }
 
 .title-image-container {
+  /*text color*/
   color: white;
 }
 .title-image {
   max-width: 100%;
   height: auto;
   object-fit: cover;
-}
-
-/* @media only screen and (max-width: 478px) {
-  .title-image {
-    width: 400px;
-    object-fit: cover;
-  }
-} */
-
-@media only screen and (max-width: 768px) {
-  .title-image {
-    max-width: 400px;
-    /* object-fit:cover; */
-  }
 }
 
 .top-left {
@@ -302,6 +289,63 @@ a {
 .zero-waste-subtext p {
   text-align: left;
   font-size: 16px;
+}
+
+
+@media only screen and (max-width: 478px) {
+  .content-section .landing {
+    max-width: 500px !important;
+  }
+
+  .title-image-container {
+    background-image: url(./img/img1.jpg);
+    max-width: 500px;
+    /* object-fit: cover; */
+  }
+  .title-image-container img {
+    max-width: 600px;
+  }
+  .top-left h1 {
+    font-size:44px;
+    line-height: 40px;
+    padding: 0 0 0 70px;
+  }
+  .top-left {
+    margin-top: -60px;
+  }
+  .bottom-left {
+    padding: 0 0 0 62px;
+    margin-top: 100px;
+  }
+  .plant-based-text {
+    margin-bottom: 30px !important;
+  }
+  .plant-based-text h1 {
+    font-size: 20px !important;
+    line-height: 14px;
+  }
+  .home_subtitle {
+    margin-bottom: 80px !important;
+  }
+  /*title*/
+  .zero-waste {
+    width: 300px;
+    font-size: 20px;
+  }
+  /*subtitle*/
+  .zero-waste-subtext {
+    /* width: 300px !important; */
+  }
+  .box-shadow-top, .box-shadow-bottom {
+    display:none;
+  }
+
+  .eat-better-now-button-container, .eat-better-now-button-container a {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    height: 38px;
+    margin-left: 40px !important;
+  }
 }
 
 .box-shadow-top {
