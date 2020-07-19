@@ -193,7 +193,7 @@ class Plans(Resource):
                         meal_weekly_price,
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
-                        meal_shipping,
+                        meal_shipping
                     FROM ptyd_meal_plans
                     WHERE num_meals = 5;""",
                 """SELECT
@@ -205,7 +205,7 @@ class Plans(Resource):
                         meal_weekly_price,
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
-                        meal_shipping,
+                        meal_shipping
                     FROM ptyd_meal_plans
                     WHERE num_meals = 10;""",
                 """SELECT
@@ -217,7 +217,7 @@ class Plans(Resource):
                         meal_weekly_price,
                         meal_plan_price,
                         meal_weekly_price/num_meals AS meal_plan_price_per_meal,
-                        meal_shipping,
+                        meal_shipping
                     FROM ptyd_meal_plans
                     WHERE num_meals = 15;""",
                 """SELECT
