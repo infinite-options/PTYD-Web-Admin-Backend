@@ -246,7 +246,7 @@ const App = (props) => {
       </div>
 
         <div class="row justify-content-md-center">
-          <footer className=" font2">
+          <footer className="font2">
             <div className="row footer-container">
               <div className="col">
                 <div className="center-content">
@@ -268,21 +268,21 @@ const App = (props) => {
                   <Nav.Link
                     id="footer-margin-padding"
                     className="black-grey"
-                    href="/"
+                    href="/menuthisweek"
                   >
                     Menu
                 </Nav.Link>
                   <Nav.Link
                     id="footer-margin-padding"
                     className="black-grey"
-                    href="/"
+                    href="/selectmealplan"
                   >
                     Plans
                 </Nav.Link>
                   <Nav.Link
                     id="footer-margin-padding"
                     className="black-grey"
-                    href="/"
+                    href="/howitworks"
                   >
                     How it Works
                 </Nav.Link>
@@ -325,7 +325,7 @@ const App = (props) => {
                   <Nav.Link
                     id="footer-margin-padding"
                     className="black-grey"
-                    href="/"
+                    href="/jobs"
                   >
                     Jobs
                 </Nav.Link>
@@ -347,11 +347,12 @@ const App = (props) => {
                   <Nav.Link
                     id="footer-margin-padding"
                     className="black-grey"
-                    href="/"
+                    href="/faq"
                   >
                     FAQs
                 </Nav.Link>
                   <Nav.Link
+                  disabled
                     id="footer-margin-padding"
                     className="black-grey"
                     href="/"
@@ -361,7 +362,7 @@ const App = (props) => {
                   <Nav.Link
                     id="footer-margin-padding"
                     className="black-grey"
-                    href="/"
+                    href="/mailto:info@preptoyourdoor.com"
                   >
                     info@preptoyourdoor.com
                 </Nav.Link>
