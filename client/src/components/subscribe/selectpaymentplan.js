@@ -32,7 +32,6 @@ class SelectPaymentPlan extends Component {
         params: {affected_date: `${yyyy}-${mm}-${dd}`}
       })
       .then(res => {
-        console.log(res);
         if (res.data.result !== undefined) {
           let rate = parseFloat(
             (parseFloat(res.data.result.tax_rate) / 100).toFixed(2)

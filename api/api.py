@@ -5293,7 +5293,7 @@ class TaxRateAPI(Resource):
                                 FROM
                                 ptyd_saturdays;""", 'get', conn)
             else:
-                #is that affected date is saturday?
+                #is affected date saturday?
                 today = datetime.strptime(data, "%Y-%m-%d")
                 saturday = today.strftime("%Y-%m-%d")
                 if today.weekday() != 5:
