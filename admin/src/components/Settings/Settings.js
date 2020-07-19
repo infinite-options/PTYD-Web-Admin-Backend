@@ -1157,7 +1157,7 @@ class Settings extends Component {
                       <tr>
                         <td>{meal.coupon_id}</td>
                         <td>{meal.active}</td>
-                        <td>{meal.discount_percent * 100}</td>
+                        <td>{meal.discount_percent}</td>
                         <td>{meal.discount_amount}</td>
                         <td>{meal.discount_shipping}</td>
                         <td>{meal.expire_date}</td>

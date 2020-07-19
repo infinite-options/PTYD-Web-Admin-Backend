@@ -5069,10 +5069,19 @@ class CouponsAPI(Resource):
         try:
             conn = connect()
 
-            items = execute(""" SELECT
-                                *
-                                FROM
-                                ptyd_coupons;""", 'get', conn)
+            items = execute("""select
+                                 coupon_id,
+                                    active,
+                                    (discount_percent*100) as discount_percent,
+                                    discount_amount,
+                                    discount_shipping,
+                                    expire_date,
+                                    limits,
+                                    notes,
+                                    num_used,
+                                    recurring,
+                                    email
+                                from ptyd_coupons;""", 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
