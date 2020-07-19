@@ -164,7 +164,7 @@ export default class MealSchedule extends Component {
         <Grid>
           <Cell col={4}>
             <div className='box'>
-              <h4>Hi, {this.state.firstname}!</h4>
+              <h4 style={{marginTop: "0"}}>Hi, {this.state.firstname}!</h4>
               <Row className='mb-1'>
                 <Selector
                   purchases={this.state.purchases}
