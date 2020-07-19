@@ -14,6 +14,7 @@ public class SwipeViewRenderer
 			"n_onAttachedToWindow:()V:GetOnAttachedToWindowHandler\n" +
 			"n_onTouchEvent:(Landroid/view/MotionEvent;)Z:GetOnTouchEvent_Landroid_view_MotionEvent_Handler\n" +
 			"n_onInterceptTouchEvent:(Landroid/view/MotionEvent;)Z:GetOnInterceptTouchEvent_Landroid_view_MotionEvent_Handler\n" +
+			"n_dispatchTouchEvent:(Landroid/view/MotionEvent;)Z:GetDispatchTouchEvent_Landroid_view_MotionEvent_Handler\n" +
 			"";
 		mono.android.Runtime.register ("Xamarin.Forms.Platform.Android.SwipeViewRenderer, Xamarin.Forms.Platform.Android", SwipeViewRenderer.class, __md_methods);
 	}
@@ -73,6 +74,14 @@ public class SwipeViewRenderer
 	}
 
 	private native boolean n_onInterceptTouchEvent (android.view.MotionEvent p0);
+
+
+	public boolean dispatchTouchEvent (android.view.MotionEvent p0)
+	{
+		return n_dispatchTouchEvent (p0);
+	}
+
+	private native boolean n_dispatchTouchEvent (android.view.MotionEvent p0);
 
 	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)
