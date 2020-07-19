@@ -1766,6 +1766,7 @@ class UpdatePurchases(Resource):
                     affDateObj + timedelta(days=(5 - affDateObj.weekday() % 7)), "%Y-%m-%d")
             else:
                 # Get following Saturday (same day if Saturday) as a string
+                print("here")
                 thisSat = datetime.strftime(
                     date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
                 nextSat = datetime.strftime(
@@ -2240,6 +2241,12 @@ class ChargeSubscribers(Resource):
                             ;"""
                 return query
 
+            nextSat = paramDate + timedelta(days=2)
+            print("nextSat: ", nextSat)
+            nextSat_str = nextSat.strftime("%Y-%m-%d")
+            tax_rate_query = """SELECT tax_rate FROM ptyd_saturdays WHERE Saturday = '{}'""".format(nextSat_str)
+            tax_rate = round(float(execute(tax_rate_query, 'get', conn)['result'][0]['tax_rate'])/100, 2)
+            shipping = 15
             for eachPayment in Payments['result']:
                 print("each payment: ", eachPayment)
                 subscription_charge = 0
@@ -2248,12 +2255,12 @@ class ChargeSubscribers(Resource):
                 # thursday. What will happen if recurring == false and they still choosing ADD LOCAL TREATS. Should
                 # we charge them or not, because those addons have written into the database and it will be delivered.
                 if (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == "TRUE"):
-                    subscription_charge = float(eachPayment['meal_plan_price'])
+                    subscription_charge = float(eachPayment['meal_plan_price']) * tax_rate + shipping
                 # check for the addon for the next week
                 # paramDate is Thursday
-                nextSat = paramDate + timedelta(days=2)
-                print("nextSat: ", nextSat)
-                nextSat_str = nextSat.strftime("%Y-%m-%d")
+                # nextSat = paramDate + timedelta(days=2)
+                # print("nextSat: ", nextSat)
+                # nextSat_str = nextSat.strftime("%Y-%m-%d")
 
                 addon_query = """SELECT * FROM ptyd_addons_selected
                                     WHERE purchase_id = '""" + eachPayment['purchase_id'] + """'
@@ -2272,17 +2279,17 @@ class ChargeSubscribers(Resource):
                 if addon_result:
                     meal_selected = addon_result[0].get(
                         'meal_selection').split(";")
-                    print("meal_selected: ", meal_selected)
-                    for id in meal_selected:
-                        addon_charge += float(price.get(id))
+                    print("meal_selected: ", meal_selected)]
+                    if (len(meal_selected) > 0 and meal_selected[0] !=""):
+                        for id in meal_selected:
+                            addon_charge += float(price.get(id))
                 # start to write to the database
 
                 if subscription_charge > 0:  # time to renew subcription
-                    print("subcribtion > 0")
+                    print("subcription > 0")
                     newPaymentId = get_new_paymentID()
-                    if addon_charge > 0:  # write this addon into database without strip info
+                    if addon_charge > 0:  # write this addon into database without stripe info
                         try:
-                            print("cuc cu")
                             temp_query = query_template(
                                 newPaymentId, eachPayment['payment_id'], addon_charge)
                             print("ther")
@@ -2304,6 +2311,7 @@ class ChargeSubscribers(Resource):
                         except:
                             return "Internal server Error", 500
                     else:
+                        print("charging")
                         chargeQuery = charge_query(newPaymentId, eachPayment['payment_id'],
                                                    subscription_charge, True)
                         res = execute(chargeQuery, 'post', conn)
