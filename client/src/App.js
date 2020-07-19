@@ -17,6 +17,9 @@ import Cookies from "js-cookie";
 
 import logo from "./img/LOGO-homepage.png";
 
+//using react google analystic
+import ReactGA from "react-ga";
+
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -25,6 +28,8 @@ const App = props => {
 
   useEffect(() => {
     onLoad();
+    ReactGA.initialize("UA-173037172-1");
+    ReactGA.pageview(window.location.pathname + window.location.search);
     // eslint-disable-next-line
   }, []);
 

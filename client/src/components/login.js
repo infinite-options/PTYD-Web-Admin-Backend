@@ -13,7 +13,7 @@ import axios from "axios";
 import crypto from "crypto";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
-
+import ReactGA from "react-ga";
 import {getIp, getBrowser} from "../functions/getClientInfo";
 
 export default function Login(props) {
@@ -316,6 +316,10 @@ export default function Login(props) {
 
   function checkLogin() {
     // let t = [];
+    ReactGA.event({
+      category: "Log In",
+      action: "User is logging in"
+    });
     setLoading(true);
     grabLoginInfoForUser(email, password)
       .then(res => {
