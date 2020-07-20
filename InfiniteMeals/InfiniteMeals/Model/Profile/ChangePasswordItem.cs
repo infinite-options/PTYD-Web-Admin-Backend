@@ -5,6 +5,9 @@ using System.Text;
 using Newtonsoft.Json;
 
 namespace InfiniteMeals.Model.Profile {
+
+    // object to send to database when user wants to change his/her password
+    // api link: https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/changepassword
     public class ChangePasswordItem {
 
         [JsonProperty("ID")]

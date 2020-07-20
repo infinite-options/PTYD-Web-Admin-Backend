@@ -14,11 +14,10 @@ namespace InfiniteMeals {
     // main page or home page of the app
     public partial class MainPage : ContentPage {
 
-        public ICommand ForgotPasswordCommand => new Command(onForgotPassword);
+        public ICommand ForgotPasswordCommand => new Command(onForgotPassword); // command for when the user forgets password
 
         public MainPage() {
             InitializeComponent();
-            System.Diagnostics.Debug.WriteLine("logged in: " + App.LoggedIn);
             if (!App.LoggedIn) {
                 this.loginButton.Text = "Log in";
             }
@@ -30,11 +29,11 @@ namespace InfiniteMeals {
 
         private async void ClickedLogin(object sender, EventArgs e)
         {
-            if (!App.LoggedIn) {
+            if (!App.LoggedIn) { // navigate user to LoginPage if not logged in
                 LoginPage loginPage = new LoginPage();
                 loginPage.BindingContext = this;
                 await Navigation.PushAsync(loginPage);
-            } else {
+            } else { // log out, update logged in status
                 App.setLoggedIn(false);
                 updateLoginButton();
             }
@@ -73,6 +72,8 @@ namespace InfiniteMeals {
             }
         }
 
+        // command for sign up page 
+        // navigates to a ResetPasswordPage
         private async void onForgotPassword() {
             System.Diagnostics.Debug.WriteLine("clicked");
             await Navigation.PushAsync(new ResetPasswordPage());

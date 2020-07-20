@@ -14,24 +14,26 @@ using System.Security.Cryptography;
 using System.Net;
 using InfiniteMeals.Model.User;
 using System.Threading.Tasks;
-using Rg.Plugins.Popup;
-using InfiniteMeals.ViewModel.Checkout;
-using Rg.Plugins.Popup.Services;
+using InfiniteMeals.Model.Database;
+using InfiniteMeals.Model.Coupon;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SummaryPage : ContentPage {
-        public string password = ""; 
+        public string password = "";
         const string checkoutURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/checkout"; // api to post to checkout database
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end
         public HttpClient client = new HttpClient(); // client to handle all api requests
+        const string couponURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/coupon"; // api to get coupon
+        public string couponID = ""; // stores the coupon ID
+        public double totalDiscount = 0.00;
+        public double totalCharge = 0.00;
 
 
         public SummaryPage() {
 
             InitializeComponent();
-
-
+           
         }
 
 
@@ -40,16 +42,16 @@ namespace InfiniteMeals.ViewModel.Checkout {
             SummaryPasswordPopup passwordPopup = new SummaryPasswordPopup();
             passwordPopup.BindingContext = this;
             await Navigation.PushAsync(passwordPopup);
- 
+
         }
-        
+
         // performs the checkout and sends to local database and stripe
         // returns HttpStatusCode.OK if successful and HttpStatusCode.BadRequest if unsuccessful
         public async Task<HttpStatusCode> checkout() { // completes the checkout and sends the information as a json to the database
             OrderInformation orderInformation = (OrderInformation)this.BindingContext; // contains all the info about the order 
 
             try {
-                
+
 
 
                 var content = await client.GetStringAsync(accountSaltURL + App.Database.GetLastItem().Email); // get the requested account salt
@@ -63,7 +65,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
 
                 var orderContent = new CheckoutOrder { // contains json information to send to checkout database
-                    
+
                     ccNum = orderInformation.paymentInformation.cardNumber,
                     ccCVV = orderInformation.paymentInformation.cvv,
                     billingZip = orderInformation.shippingInformation.zipCode, // using zipcode for delivery
@@ -86,17 +88,12 @@ namespace InfiniteMeals.ViewModel.Checkout {
                     item = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + " - " + // meal plan
                            PaymentOptionExtension.paymentOptionToString(orderInformation.shippingInformation.subscriptionPlan.paymentOption) + " - " + // payment option
                            orderInformation.shippingInformation.subscriptionPlan.cost.ToString(), // cost
-                    totalCharge = orderInformation.shippingInformation.subscriptionPlan.cost,
-                    totalDiscount = 0.00,
-                    couponId = "" 
-
-        
-           
-
-
+                    totalCharge = this.totalCharge,
+                    totalDiscount = this.totalDiscount,
+                    couponId = this.couponID
                 };
 
-                
+
 
                 string orderContentJson = JsonConvert.SerializeObject(orderContent); // make orderContent into json
 
@@ -112,8 +109,49 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
             return HttpStatusCode.BadRequest;
         }
-       
 
 
+
+        private async void couponButtonClicked(object sender, EventArgs e) {
+            UserLoginSession currentUserInfo = App.Database.GetLastItem(); 
+            if(!String.IsNullOrEmpty(this.couponEntry.Text)) {
+                try {
+
+                    var fullCouponURL = couponURL + "?coupon_id=" + this.couponEntry.Text + "&email=" + currentUserInfo.Email; // coupon url with params coupon_id and email
+                    
+                    var response = await client.GetStringAsync(fullCouponURL);
+
+                    var couponResult = JsonConvert.DeserializeObject<CouponResponse>(response);
+                    if (couponResult.Message == "Invalid email address for current coupon ID.") { //invalid email
+                        await DisplayAlert("Invalid Email", couponResult.Message, "OK");
+                    }
+                    else if (couponResult.Message == "This coupon is no longer available.") { 
+                        await DisplayAlert("Invalid Coupon", couponResult.Message, "OK");
+                    }
+                    else if (couponResult.Message == "This coupon has expired.") {
+                        await DisplayAlert("Expired Coupon", couponResult.Message, "OK");
+                    }
+                    else if (couponResult.Message == "This coupon is no longer active.") {
+                        await DisplayAlert("Inactive Coupon", couponResult.Message, "OK");
+                    }
+                    else if (couponResult.Message == "Invalid coupon ID") {
+                        await DisplayAlert("Invalid Coupon", couponResult.Message, "OK");
+                    }
+                    else { // success, set coupon id and change front end costs
+                        this.couponID = couponResult.Result.CouponID;
+                        this.totalDiscount = couponResult.Result.DiscountAmount;
+                        this.totalCost.Text = (this.totalCharge - this.totalDiscount).ToString();
+                        this.totalCharge -= this.totalDiscount;
+                    }
+                } catch(Exception ex) { // invalid coupon
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    await DisplayAlert("Invalid Coupon", "Coupon is invalid.", "OK");
+                }
+
+            } else {
+                await DisplayAlert("Error", "Invalid coupon ID", "OK");
+            }
+            
+        }
     }
 }

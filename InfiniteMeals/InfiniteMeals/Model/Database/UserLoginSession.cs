@@ -7,6 +7,7 @@ namespace InfiniteMeals.Model.Database {
 
     // contains information about a user's session 
     // information is received from sending a POST request to aws
+    // link: https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/<string:accId>
     public class UserLoginSession {
 
         [PrimaryKey, AutoIncrement]

@@ -36,6 +36,7 @@
                     <RowDefinition/>    <!-- estimated tax + estimated tax cost-->
                     <RowDefinition/>    <!-- total cost -->
                     <RowDefinition/>
+                    <RowDefinition Height="1.85*"/>
                 </Grid.RowDefinitions>
 
                 <!-- order summary header-->
@@ -63,6 +64,12 @@
                 <Label Grid.Row="4" Text="Total: " FontAttributes="Bold" TextColor="Black" Padding="10,0,0,0"/>
                 <Label x:Name="totalCost" Grid.Column="1" Grid.Row="4" FontAttributes="Bold" TextColor="Black" HorizontalOptions="End"/>
 
+                <!-- coupon -->
+                <StackLayout Grid.Row="5" Grid.ColumnSpan="2"  Orientation="Horizontal" Padding="10,0,0,0">
+                    <Label Grid.Row="5" Text="Coupon" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                    <Entry x:Name="couponEntry"  Grid.Row="5" Placeholder="Enter coupon" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+                    <Button x:Name="couponButton"  Grid.Row="5" Text="Apply" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Clicked="couponButtonClicked"/>
+                </StackLayout>
             </Grid>
 
 
