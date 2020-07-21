@@ -39,15 +39,14 @@ namespace InfiniteMeals.ViewModel.Checkout {
                 SummaryPage summaryPage = new SummaryPage();
                 summaryPage.BindingContext = orderInfo;
                 ShippingInformation shippingInfo = (ShippingInformation)this.BindingContext;
-                Label mealPlan = (Label)summaryPage.FindByName("mealPlan");
-                Label paymentOption = (Label)summaryPage.FindByName("paymentOption");
                 Label lastFourDigits = (Label)summaryPage.FindByName("lastFourDigits");
+                Label fullPlan = (Label)summaryPage.FindByName("fullPlan");
                 Label totalCost = (Label)summaryPage.FindByName("totalCost");
-                mealPlan.Text = MealPlanExtension.mealPlanToString(shippingInfo.subscriptionPlan.mealPlan);
-                paymentOption.Text = PaymentOptionExtension.paymentOptionToString(shippingInfo.subscriptionPlan.paymentOption);
                 lastFourDigits.Text = "XXXXXXXXXXXX" + this.cardNumberEntry.Text.Substring(cardNumberEntry.Text.Length - 4);
-                totalCost.Text = "$" + String.Format("{0:0.00}",(shippingInfo.subscriptionPlan.cost + 25.00).ToString()); // set total cost text
+                totalCost.Text = "$" + String.Format("{0:0.00}",(Math.Round(shippingInfo.subscriptionPlan.cost + 25.00,2))); // set total cost text
                 summaryPage.totalCharge = shippingInfo.subscriptionPlan.cost + 25.00;
+                string fullPlanText = MealPlanExtension.mealPlanToString(shippingInfo.subscriptionPlan.mealPlan) + " - " + PaymentOptionExtension.paymentOptionToString(shippingInfo.subscriptionPlan.paymentOption).Replace("Subscription", " ");
+                fullPlan.Text = fullPlanText;
                 await Navigation.PushAsync(summaryPage);
             }
         }

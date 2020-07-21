@@ -28,6 +28,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
         public string couponID = ""; // stores the coupon ID
         public double totalDiscount = 0.00;
         public double totalCharge = 0.00;
+        public Boolean couponApplied = false;
 
 
         public SummaryPage() {
@@ -116,7 +117,11 @@ namespace InfiniteMeals.ViewModel.Checkout {
             UserLoginSession currentUserInfo = App.Database.GetLastItem(); 
             if(!String.IsNullOrEmpty(this.couponEntry.Text)) {
                 try {
-
+                    if(couponApplied) {
+                        await DisplayAlert("Coupon Already Applied", "A coupon has been applied already.", "OK"); 
+                        return;
+                    }
+                    
                     var fullCouponURL = couponURL + "?coupon_id=" + this.couponEntry.Text + "&email=" + currentUserInfo.Email; // coupon url with params coupon_id and email
                     
                     var response = await client.GetStringAsync(fullCouponURL);
@@ -140,8 +145,10 @@ namespace InfiniteMeals.ViewModel.Checkout {
                     else { // success, set coupon id and change front end costs
                         this.couponID = couponResult.Result.CouponID;
                         this.totalDiscount = couponResult.Result.DiscountAmount;
-                        this.totalCost.Text = (this.totalCharge - this.totalDiscount).ToString();
+                        this.totalCost.Text = "$" + Math.Round((this.totalCharge - this.totalDiscount),2).ToString();
                         this.totalCharge -= this.totalDiscount;
+                        this.fullPlan.Text += "- " + this.couponID;
+                        this.totalCostLabel.Text += " - $" + String.Format("{0:.00}",Math.Round(couponResult.Result.DiscountAmount,2));
                     }
                 } catch(Exception ex) { // invalid coupon
                     System.Diagnostics.Debug.WriteLine(ex.Message);

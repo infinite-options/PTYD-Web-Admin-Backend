@@ -73,7 +73,7 @@ namespace InfiniteMeals.ViewModel.Login
                         browserType = deviceBrowserType
                     };
 
-                    string loginPostContentJson = JsonConvert.SerializeObject(loginPostContent); // make orderContent into json
+                    string loginPostContentJson = JsonConvert.SerializeObject(loginPostContent); // make loginContent into json
 
                     var httpContent = new StringContent(loginPostContentJson, Encoding.UTF8, "application/json"); // encode orderContentJson into format to send to database
 
