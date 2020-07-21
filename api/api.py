@@ -923,7 +923,8 @@ class AccountPurchases(Resource):
                     ,snap.next_billing_date AS next_charge_date
                     ,IFNULL(addon.total_charge, 0.00) AS total_charge
                     ,pay.amount_due AS amount_due_before_addon
-                    ,addon.week_affected
+                    ,snap.week_affected
+                    ,snap.weeks_remaining
                     , \'""" + thur + """\' AS next_addon_charge_date
                 FROM (
                 -- Snapshot Query
@@ -933,6 +934,7 @@ class AccountPurchases(Resource):
                     ,ms1.delivery_start_date
                     ,ms1.subscription_weeks
                     ,ms1.weeks_remaining
+                    ,ms1.week_affected
                     ,ms1.next_billing_date
                 FROM 
                     ptyd_snapshots ms1
@@ -1352,7 +1354,6 @@ class Checkout(Resource):
             stripe_charge_id = "'" + stripe_chargeID + "'"
         else:
             stripe_charge_id = 'NULL'
-        print("string stripe_charge_id: ", stripe_charge_id)
         query = """ INSERT INTO ptyd_payments
                     (
                         payment_id,
@@ -1455,9 +1456,6 @@ class Checkout(Resource):
             purchaseIDresponse = execute(
                 "CALL get_new_purchase_id;", 'get', conn)
             snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
-
-            print(snapshotIDresponse)
-            print(purchaseIDresponse)
 
             snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
@@ -1627,14 +1625,11 @@ class Checkout(Resource):
                                                             AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
                                                             AND cc_cvv = '""" + data['cc_cvv'] + """') AS p)
                                                     AND cc_num IS NOT NULL;"""
-                print(select_card_query)
                 card_selected = execute(select_card_query, 'get', conn)
-                print("card_selected: ", card_selected)
                 if not card_selected['result']:
                     response['message'] = "Credit card info is incorrect."
                     return response, 400
                 # update data['cc_num'] to write to database
-                print(card_selected['result'][0].get('cc_num'))
                 data['cc_num'] = card_selected['result'][0].get('cc_num')
             #checking for coupon and preparing for stripe charge
             coupon_id = data.get('coupon_id')
@@ -1647,7 +1642,6 @@ class Checkout(Resource):
             try:
                 #create a token for stripe
                 card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
-                print ("card dict: ", card_dict)
                 try:
                     card_token = stripe.Token.create(card=card_dict)
                     stripe_charge = stripe.Charge.create(
@@ -1656,8 +1650,6 @@ class Checkout(Resource):
                                             source=card_token,
                                             description="Charge customer %s for %s" %(data['delivery_first_name'] + " " + data['delivery_last_name'], data['item'] ))
 
-                    print("charge success: ", stripe_charge)
-                    print("charge_id: ", stripe_charge.get('id'))
                 except stripe.error.CardError as e:
                     # Since it's a decline, stripe.error.CardError will be caught
                     response['message'] = e.error.message
@@ -1665,7 +1657,6 @@ class Checkout(Resource):
                 # write everything into payment table
                 if coupon_id == "" or coupon_id is None:
                     payment_query = self.getPaymentQuery(data, 'NULL', charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
-                    print("query: ", payment_query)
                 elif coupon_id != "" and coupon_id is not None:
                     coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
                     temp_query = """ INSERT INTO ptyd_payments
@@ -1713,19 +1704,14 @@ class Checkout(Resource):
                                         \'""" + str(0-data['total_discount']) + """\',0,
                                         \'""" + purchaseId + """\',
                                         \'""" + getNow() + """\');"""
-                    print("temp2: ", temp_query)
                     res = execute(temp_query, 'post', conn)
-                    print("after execute temp query 2: ", res)
                     # update coupon table
                     coupon_query = """UPDATE ptyd_coupons SET num_used = num_used + 1 
                                 WHERE coupon_id = """ + coupon_id + ";"
                     res = execute(coupon_query, 'post', conn)
-                    print("after execute coupon_query: ", res)
                     paymentId = get_new_paymentID()
 
                     payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
-                    print("payment_query: ", payment_query)
-
                 reply['payment'] = execute(payment_query, 'post', conn)
                 if reply['payment']['code'] != 281:
                     response['message'] = "Internal Server Error"
@@ -2298,7 +2284,7 @@ class ChargeSubscribers(Resource):
                 if (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == "TRUE"):
                     print("tax_rate: ", tax_rate)
                     print("meal_price: ", eachPayment['meal_plan_price'])
-                    subscription_charge = float(eachPayment['meal_plan_price']) * tax_rate + shipping
+                    subscription_charge = float(eachPayment['meal_plan_price']) * (1 + tax_rate) + shipping
 
                     print("subcription_charge: ", subscription_charge)
                 # check for the addon for the next week
@@ -3161,14 +3147,15 @@ class CustomerInfo2(Resource):
 
 class Cancel_SubscriptionNow(Resource):
     global RDS_PW
-    def refund_calculator(self, conn, purchaseID, data=None):
-        current_purchase_query = """SELECT purchase.purchase_id, purchase.meal_plan_id, plans.meal_plan_desc, 
-                                                      plans.meal_plan_price, payment.payment_id, payment.buyer_id, 
-                                                      payment.gift, payment.amount_due, payment.amount_paid, 
-                                                      payment.cc_num, payment.cc_cvv, payment.cc_exp_date, 
-                                                      payment.payment_type, payment.billing_zip, 
-                                                      payment.isAddon, payment.stripe_charge_id, payment.previous_payment,
-                                                      snapshot1.weeks_remaining, snapshot1.week_affected
+    def refund_calculator(self, conn, purchaseID):
+        current_purchase_query = """SELECT purchase.purchase_id, purchase.meal_plan_id, purchase.start_date,
+                                                    plans.meal_plan_desc, plans.meal_plan_price, 
+                                                    payment.payment_id, payment.buyer_id, 
+                                                    payment.gift, payment.amount_due, payment.amount_paid, 
+                                                    payment.cc_num, payment.cc_cvv, payment.cc_exp_date, 
+                                                    payment.payment_type, payment.billing_zip, 
+                                                    payment.isAddon, payment.stripe_charge_id, payment.previous_payment,
+                                                    snapshot1.weeks_remaining, snapshot1.week_affected
                                            FROM ptyd_purchases purchase, ptyd_payments payment, 
                                                   ptyd_snapshots snapshot1, ptyd_meal_plans plans
                                            WHERE  purchase.purchase_id = '""" + purchaseID + """' AND
@@ -3201,14 +3188,20 @@ class Cancel_SubscriptionNow(Resource):
         week_remaining = int(current_purchase_info.get('weeks_remaining'))
 
         amount_calculating = current_purchase_info.get('meal_plan_price')
-        # we need to take these info from database or it will be sent from front end to make sure we have the same info
-        # from front to back
-        if data==None:
-            shipping = 15
-            tax_rate = 0.0825
+
+        #get tax_rate at current time
+        start_date = datetime.strptime(current_purchase_info['start_date'], "%Y-%m-%d")
+        if start_date.weekday() == 5:
+            saturday = start_date.strftime("%Y-%m-%d")
         else:
-            shipping = data['shipping']
-            tax_rate = data['tax_rate']
+            saturday = (start_date - timedelta(days=((start_date.weekday() - 5) % 7))).strftime("%Y-%m-%d")
+        query = """SELECT tax_rate FROM ptyd_saturdays WHERE Saturday = '{}'""".format(saturday)
+        res = execute(query, 'get', conn)
+        if res['code'] != 280:
+            return dict(message="Internal Server Error"), 500
+        tax_rate = round(float(res['result'][0]['tax_rate'])/100, 2)
+        shipping = 15
+
         refund = 0
         # create a temp dictionary to keep the meal plan price
         price = {}
@@ -3245,6 +3238,7 @@ class Cancel_SubscriptionNow(Resource):
             print("matching weekly")
             if week_remaining == 0:
                 refund = 0
+                shipping = 0
             elif week_remaining == 1:
                 refund = amount_calculating
         else:
@@ -3410,6 +3404,20 @@ class Cancel_SubscriptionNow(Resource):
         finally:
             disconnect(conn)
 
+class RefundCalculator (Resource):
+    def get(self):
+        try:
+            conn = connect()
+
+            purchase_id = request.args.get('purchase_id')
+            response = Cancel_SubscriptionNow().refund_calculator(conn, purchase_id)
+
+            print(response)
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class DoNotRenewSubscription(Resource):
     def patch(self):
@@ -3532,13 +3540,9 @@ class Change_Subscription(Resource):
                 DeliveryUnit = 'NULL'
             purchaseIDresponse = execute(
                 "CALL get_new_purchase_id;", 'get', conn)
-            # paymentIDresponse = execute(
-            #     "CALL get_new_payment_id;", 'get', conn)
+
             snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
 
-            print(snapshotIDresponse)
-            print(purchaseIDresponse)
-            # print(paymentIDresponse)
 
             snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
@@ -3550,13 +3554,7 @@ class Change_Subscription(Resource):
 
             if purchaseId == None:
                 purchaseId = '300-000001'
-
-            # if paymentId == None:
-            #     paymentId = '200-000001'
-            print("before mealPlan")
             mealPlan = data['item'].split(' Subscription')[0]
-            print(data['user_uid'])
-            print("after mealPlan: ", mealPlan)
             queries = """
                 SELECT
                     meal_plan_id
@@ -3568,22 +3566,17 @@ class Change_Subscription(Resource):
 
             mealPlanQuery = execute(queries, 'get', conn)
 
-            print("Passed mealPlanQuery")
             if mealPlanQuery['code'] == 280:
-                print("Getting meal plan ID...")
                 mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
                 dates = Checkout().getDates(
                     mealPlanQuery['result'][0]['payment_frequency'])
-                print("Meal Plan ID:", mealPlanId)
             else:
                 response['message'] = 'Could not retrieve meal ID of requested plan.'
                 response['error'] = mealPlanQuery
-                print("Error:", response['message'])
-                print("Error JSON:", response['error'])
                 return response, 501
             # calculate the refund.
             new_plan_price = data['item_price']
-            refund_info = Cancel_SubscriptionNow().refund_calculator(conn,data['purchase_id'])
+            refund_info = Cancel_SubscriptionNow().refund_calculator(conn,data['purchase_id'],)
             print("refund_info: ", refund_info)
             current_meal_refund = refund_info.get('refund_amount')
             new_charge = round((float(new_plan_price) * (1 + data['tax_rate']) + data['shipping']) - current_meal_refund,2)
@@ -3595,7 +3588,6 @@ class Change_Subscription(Resource):
                 #update the card if there are X in the card number
                 if data['cc_num'][0:12] == "XXXXXXXXXXXX":
                     last_four_digits = data['cc_num'][12:]
-                    print("purchase_id: ", data['purchase_id'])
                     # "{:02}".format is used for format integer
                     select_card_query = """SELECT cc_num FROM ptyd_payments p1
                                                 WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp) FROM 
@@ -3605,9 +3597,7 @@ class Change_Subscription(Resource):
                                                         AND cc_exp_date = '""" + str(data['cc_exp_year']) + "-" + str("{:02}".format(data['cc_exp_month'])) + """-01'
                                                         AND cc_cvv = '""" + data['cc_cvv'] + """') AS p)
                                                 AND cc_num is not NULL;"""
-                    print("select_card_query: ", select_card_query)
                     card_selected = execute(select_card_query, 'get', conn)
-                    print("card_selected: ", card_selected)
                     if not card_selected['result']:
                         response['message'] = "Credit card info is incorrect."
                         return response, 400
@@ -3626,27 +3616,17 @@ class Change_Subscription(Resource):
                                                          stripe_charge.get('id'), stripe_refund.get('id'))
                     reply += [execute(payment_query, 'post', conn)]
                     Cancel_SubscriptionNow().stripe_refund(conn, refund_info, upgrade=True)
-
-                    print("refund_info before write to database in change_subscription: ", refund_info)
                     stripe_charge['id'] = refund_info.get('stripe_charge_id')
                     stripe_refund['id'] = refund_info.get('stripe_refund_id')
-                    print("stripe_charge['id']: ", stripe_charge['id'])
-                    print("stripe_refund['id']: ", stripe_refund['id'])
                     previous = "'" + refund_info.get('previous_payment') + "'" if refund_info.get('previous_payment') is not None else 'NULL'
-
                     update_query = """UPDATE ptyd_payments SET stripe_charge_id = '""" + str(stripe_charge['id']) + """',
                                         stripe_refund_id = '""" + str(stripe_refund['id']) + """',
                                         previous_payment = """ + previous + """
                                         WHERE payment_id = '""" + paymentId + "';"
-                    print("update total refund: ", update_query)
                     reply += [execute(update_query, 'post', conn)]
-                    print(reply)
-                    # stripe_charge_id = refund_info.get('stripe_charge_id')
-                    # stripe_refund = stripe.Refund.create(charge=str(stripe_charge_id), amount=int(round(0-refund,2)*100))
                     #we need to update the stripe_charge id in first row
                 elif new_charge > 0:
                     card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']), "exp_year": int(data['cc_exp_year']), "cvc": data['cc_cvv'], }
-                    print("card dict: ", card_dict)
                     try:
                         card_token = stripe.Token.create(card=card_dict)
                         stripe_charge = stripe.Charge.create(
@@ -3654,15 +3634,11 @@ class Change_Subscription(Resource):
                             currency="usd",
                             source=card_token,
                             description="Charge customer %s for %s" % (data['delivery_first_name'] + " " + data['delivery_last_name'], "For changing subscription"))
-
-                        print("charge success: ", stripe_charge)
-                        print("charge_id: ", stripe_charge.get('id'))
                     except stripe.error.CardError as e:
                         # Since it's a decline, stripe.error.CardError will be caught
                         response['message'] = e.error.message
                         return response, 400
                     update_query = self.update_payment_query(refund_info.get('purchase_id'))
-                    print(update_query)
                     # update payment table
                     reply = [execute(update_query, 'post', conn)]
 
@@ -3672,7 +3648,6 @@ class Change_Subscription(Resource):
                     paymentId = paymentIDresponse['result'][0]['new_id']
                     payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info,
                                                          stripe_charge.get('id'), stripe_refund.get('id'))
-                    print(payment_query)
                     reply += [execute(payment_query, 'post', conn)]
             except:
                 response['message'] ="Stripe charging/refund error"
@@ -3775,7 +3750,6 @@ class Change_Subscription(Resource):
 
             # execute the rest of query
             reply += [execute(query, 'post', conn) for type in [purchase_query, snapshot_query] for query in type]
-            print("reply: ", reply)
             response['result'] = reply
             return response, 200
         except:
@@ -5511,6 +5485,9 @@ api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
 api.add_resource(UpdatePayments, '/api/v2/update-payments')
 api.add_resource(Change_Subscription, '/api/v2/change-subscription')
 api.add_resource(Cancel_SubscriptionNow, '/api/v2/cancel-subscription-now')
+
+#refund calculator
+api.add_resource(RefundCalculator, '/api/v2/refund_calculator')
 
 #Not sure which page is using this endpoint?
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
