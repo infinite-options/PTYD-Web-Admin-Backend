@@ -217,6 +217,7 @@ export default class MealSchedule extends Component {
                   CHANGE_SUBCRIPTION_URL={this.props.CHANGE_SUBCRIPTION_URL}
                   UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
                   UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
+                  REFUND_URL={this.props.REFUND_URL}
                   user_uid={this.state.userID}
                   tax_rate={this.state.tax_rate}
                   shipping={this.state.shipping}
