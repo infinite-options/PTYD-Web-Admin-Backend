@@ -13,7 +13,7 @@
 namespace InfiniteMeals.ViewModel.Dbvm {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Dbvm\\Dbvm.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel/Dbvm/Dbvm.xaml")]
     public partial class Dbvm : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]

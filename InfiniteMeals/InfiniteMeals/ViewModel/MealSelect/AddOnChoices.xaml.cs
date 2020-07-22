@@ -21,10 +21,43 @@ namespace InfiniteMeals.ViewModel.MealSelect
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddOnChoices : ContentPage
     {
+        public static Label quantity;
+        public ToolbarItem totalBar = new ToolbarItem();
         public Dictionary<string, int> mealQtyDict = new Dictionary<string, int>();
-        private ObservableCollection<MealGroup> grouped { get; set; }
+        private static ObservableCollection<MealGroup> grouped { get; set; }
+        private static ObservableCollection<MealGroup> grouped2 { get; set; }
+        private static ObservableCollection<MealGroup> grouped3 { get; set; }
+        private static ObservableCollection<MealGroup> grouped4 { get; set; }
+        private static ObservableCollection<MealGroup> grouped5 { get; set; }
+        private static ObservableCollection<MealGroup> grouped6 { get; set; }
+
+        // Week 1
+        public static MealGroup addAddOnGroup = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
+        public static MealGroup addMealGroup = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
+        public static MealGroup addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        // Week 2
+        public static MealGroup addAddOnGroup2 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
+        public static MealGroup addMealGroup2 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
+        public static MealGroup addSmoothieGroup2 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        // Week 3
+        public static MealGroup addAddOnGroup3 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
+        public static MealGroup addMealGroup3 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
+        public static MealGroup addSmoothieGroup3 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        // Week 4
+        public static MealGroup addAddOnGroup4 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
+        public static MealGroup addMealGroup4 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
+        public static MealGroup addSmoothieGroup4 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        // Week 5
+        public static MealGroup addAddOnGroup5 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
+        public static MealGroup addMealGroup5 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
+        public static MealGroup addSmoothieGroup5 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        // Week 6
+        public static MealGroup addAddOnGroup6 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
+        public static MealGroup addMealGroup6 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
+        public static MealGroup addSmoothieGroup6 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+
         String infoImg = "info.jpg";
-        double subTotal = 0.00;
+        public double subTotal;
         public static string yellow = "#FFE573";
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
@@ -63,15 +96,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             // Grouping
             grouped = new ObservableCollection<MealGroup>();
-            var addAddOnGroup = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
-            var addMealGroup = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
-            var addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+            grouped2 = new ObservableCollection<MealGroup>();
+            grouped3 = new ObservableCollection<MealGroup>();
+            grouped4 = new ObservableCollection<MealGroup>();
+            grouped5 = new ObservableCollection<MealGroup>();
+            grouped6 = new ObservableCollection<MealGroup>();
+
 
             WebClient client = new WebClient();
             var content =  client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
-            if (weekNumber == 0)
+            if (weekNumber == 1)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek1.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek1.Addons.AddonsAddons;
@@ -99,7 +135,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     }
 
-                    addAddOnGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
                         name = AddNames[placeHolder],
@@ -109,7 +145,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddQty[placeHolder],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addAddOnGroup.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
+                    {
+                        addAddOnGroup.Remove(addAddOnGroup.Where(x => x.id == jsonObject.Menu[placeHolder].MealId).Single());
+                        addAddOnGroup.Add(holder);
+
+                    }
+                    else
+                    {
+                        addAddOnGroup.Add(holder);
+                    }
                 }
 
                 for (int j = 0; j < jsonObjectSeasonalLength; j++)
@@ -131,7 +178,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         AddMealImage.Add(imageMeal);
 
                     }
-                    addMealGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[j].MealId,
                         name = AddMealName[j],
@@ -141,7 +189,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddMealQty[j],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addMealGroup.Any(x => x.id == jsonObjectSeasonal.Menu[j].MealId))
+                    {
+                        addMealGroup.Remove(addMealGroup.Where(x => x.id == jsonObjectSeasonal.Menu[j].MealId).Single());
+                        addMealGroup.Add(holder);
+
+                    }
+                    else
+                    {
+                        addMealGroup.Add(holder);
+                    }
                 }
 
                 for (int k = 0; k < jsonObjectSmoothieLength; k++)
@@ -162,7 +221,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
                         AddSmoothiesImage.Add(imageMeal);
                     }
-                    addSmoothieGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[k].MealId,
                         name = jsonObjectSmoothie.Menu[k].MealName,
@@ -172,15 +232,25 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddSmoothieQty[k],
                         total = 0.00,
-                    });
+                    };
 
+                    if (addSmoothieGroup.Any(x => x.id == jsonObjectSmoothie.Menu[k].MealId))
+                    {
+                        addSmoothieGroup.Remove(addSmoothieGroup.Where(x => x.id == jsonObjectSmoothie.Menu[k].MealId).Single());
+                        addSmoothieGroup.Add(holder);
+
+                    }
+                    else
+                    {
+                        addSmoothieGroup.Add(holder);
+                    }
                 }
 
                 grouped.Add(addAddOnGroup);
                 grouped.Add(addMealGroup);
                 grouped.Add(addSmoothieGroup);
             }
-            else if(weekNumber == 1)
+            else if(weekNumber == 2)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek2.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek2.Addons.AddonsAddons;
@@ -208,7 +278,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     }
 
-                    addAddOnGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
                         name = AddNames[placeHolder],
@@ -218,7 +288,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddQty[placeHolder],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addAddOnGroup2.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
+                    {
+                        addAddOnGroup2.Remove(addAddOnGroup2.Where(x => x.id == jsonObject.Menu[placeHolder].MealId).Single());
+                        addAddOnGroup2.Add(holder);
+
+                    }
+                    else
+                    {
+                        addAddOnGroup2.Add(holder);
+                    }
                 }
 
                 for (int j = 0; j < jsonObjectSeasonalLength; j++)
@@ -240,7 +321,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         AddMealImage.Add(imageMeal);
 
                     }
-                    addMealGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[j].MealId,
                         name = AddMealName[j],
@@ -250,7 +331,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddMealQty[j],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addMealGroup2.Any(x => x.id == jsonObjectSeasonal.Menu[j].MealId))
+                    {
+                        addMealGroup2.Remove(addMealGroup2.Where(x => x.id == jsonObjectSeasonal.Menu[j].MealId).Single());
+                        addMealGroup2.Add(holder);
+
+                    }
+                    else
+                    {
+                        addMealGroup2.Add(holder);
+                    }
                 }
 
                 for (int k = 0; k < jsonObjectSmoothieLength; k++)
@@ -271,7 +363,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
                         AddSmoothiesImage.Add(imageMeal);
                     }
-                    addSmoothieGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[k].MealId,
                         name = jsonObjectSmoothie.Menu[k].MealName,
@@ -281,15 +374,26 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddSmoothieQty[k],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addSmoothieGroup2.Any(x => x.id == jsonObjectSmoothie.Menu[k].MealId))
+                    {
+                        addSmoothieGroup2.Remove(addSmoothieGroup2.Where(x => x.id == jsonObjectSmoothie.Menu[k].MealId).Single());
+                        addSmoothieGroup2.Add(holder);
+
+                    }
+                    else
+                    {
+                        addSmoothieGroup2.Add(holder);
+                    }
 
                 }
 
-                grouped.Add(addAddOnGroup);
-                grouped.Add(addMealGroup);
-                grouped.Add(addSmoothieGroup);
+                grouped2.Add(addAddOnGroup2);
+                grouped2.Add(addMealGroup2);
+                grouped2.Add(addSmoothieGroup2);
             }
-            else if (weekNumber == 2)
+            else if (weekNumber == 3)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek3.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek3.Addons.AddonsAddons;
@@ -317,7 +421,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     }
 
-                    addAddOnGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
                         name = AddNames[placeHolder],
@@ -327,7 +431,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddQty[placeHolder],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addAddOnGroup3.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
+                    {
+                        addAddOnGroup3.Remove(addAddOnGroup3.Where(x => x.id == jsonObject.Menu[placeHolder].MealId).Single());
+                        addAddOnGroup3.Add(holder);
+
+                    }
+                    else
+                    {
+                        addAddOnGroup3.Add(holder);
+                    }
                 }
 
                 for (int j = 0; j < jsonObjectSeasonalLength; j++)
@@ -349,7 +464,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         AddMealImage.Add(imageMeal);
 
                     }
-                    addMealGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[j].MealId,
                         name = AddMealName[j],
@@ -359,7 +475,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddMealQty[j],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addMealGroup3.Any(x => x.id == jsonObjectSeasonal.Menu[j].MealId))
+                    {
+                        addMealGroup3.Remove(addMealGroup3.Where(x => x.id == jsonObjectSeasonal.Menu[j].MealId).Single());
+                        addMealGroup3.Add(holder);
+
+                    }
+                    else
+                    {
+                        addMealGroup3.Add(holder);
+                    }
                 }
 
                 for (int k = 0; k < jsonObjectSmoothieLength; k++)
@@ -380,7 +507,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
                         AddSmoothiesImage.Add(imageMeal);
                     }
-                    addSmoothieGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[k].MealId,
                         name = jsonObjectSmoothie.Menu[k].MealName,
@@ -390,15 +518,26 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddSmoothieQty[k],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addSmoothieGroup3.Any(x => x.id == jsonObjectSmoothie.Menu[k].MealId))
+                    {
+                        addSmoothieGroup3.Remove(addSmoothieGroup3.Where(x => x.id == jsonObjectSmoothie.Menu[k].MealId).Single());
+                        addSmoothieGroup3.Add(holder);
+
+                    }
+                    else
+                    {
+                        addSmoothieGroup3.Add(holder);
+                    }
 
                 }
 
-                grouped.Add(addAddOnGroup);
-                grouped.Add(addMealGroup);
-                grouped.Add(addSmoothieGroup);
+                grouped3.Add(addAddOnGroup3);
+                grouped3.Add(addMealGroup3);
+                grouped3.Add(addSmoothieGroup3);
             }
-            else if(weekNumber == 3)
+            else if(weekNumber == 4)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek4.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek4.Addons.AddonsAddons;
@@ -426,7 +565,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     }
 
-                    addAddOnGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
                         name = AddNames[placeHolder],
@@ -436,7 +575,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddQty[placeHolder],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addAddOnGroup4.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
+                    {
+                        addAddOnGroup4.Remove(addAddOnGroup4.Where(x => x.id == jsonObject.Menu[placeHolder].MealId).Single());
+                        addAddOnGroup4.Add(holder);
+
+                    }
+                    else
+                    {
+                        addAddOnGroup4.Add(holder);
+                    }
                 }
 
                 for (int j = 0; j < jsonObjectSeasonalLength; j++)
@@ -458,7 +608,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         AddMealImage.Add(imageMeal);
 
                     }
-                    addMealGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[j].MealId,
                         name = AddMealName[j],
@@ -468,7 +618,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddMealQty[j],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addMealGroup4.Any(x => x.id == jsonObjectSeasonal.Menu[j].MealId))
+                    {
+                        addMealGroup4.Remove(addMealGroup4.Where(x => x.id == jsonObjectSeasonal.Menu[j].MealId).Single());
+                        addMealGroup4.Add(holder);
+
+                    }
+                    else
+                    {
+                        addMealGroup4.Add(holder);
+                    }
                 }
 
                 for (int k = 0; k < jsonObjectSmoothieLength; k++)
@@ -489,7 +650,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
                         AddSmoothiesImage.Add(imageMeal);
                     }
-                    addSmoothieGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[k].MealId,
                         name = jsonObjectSmoothie.Menu[k].MealName,
@@ -499,15 +661,26 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddSmoothieQty[k],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addSmoothieGroup4.Any(x => x.id == jsonObjectSmoothie.Menu[k].MealId))
+                    {
+                        addSmoothieGroup4.Remove(addSmoothieGroup4.Where(x => x.id == jsonObjectSmoothie.Menu[k].MealId).Single());
+                        addSmoothieGroup4.Add(holder);
+
+                    }
+                    else
+                    {
+                        addSmoothieGroup4.Add(holder);
+                    }
 
                 }
 
-                grouped.Add(addAddOnGroup);
-                grouped.Add(addMealGroup);
-                grouped.Add(addSmoothieGroup);
+                grouped4.Add(addAddOnGroup4);
+                grouped4.Add(addMealGroup4);
+                grouped4.Add(addSmoothieGroup4);
             }
-            else if(weekNumber == 4)
+            else if(weekNumber == 5)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek5.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek5.Addons.AddonsAddons;
@@ -535,7 +708,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     }
 
-                    addAddOnGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
                         name = AddNames[placeHolder],
@@ -545,7 +718,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddQty[placeHolder],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addAddOnGroup5.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
+                    {
+                        addAddOnGroup5.Remove(addAddOnGroup5.Where(x => x.id == jsonObject.Menu[placeHolder].MealId).Single());
+                        addAddOnGroup5.Add(holder);
+
+                    }
+                    else
+                    {
+                        addAddOnGroup5.Add(holder);
+                    }
                 }
 
                 for (int j = 0; j < jsonObjectSeasonalLength; j++)
@@ -567,7 +751,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         AddMealImage.Add(imageMeal);
 
                     }
-                    addMealGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[j].MealId,
                         name = AddMealName[j],
@@ -577,7 +761,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddMealQty[j],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addMealGroup5.Any(x => x.id == jsonObjectSeasonal.Menu[j].MealId))
+                    {
+                        addMealGroup5.Remove(addMealGroup5.Where(x => x.id == jsonObjectSeasonal.Menu[j].MealId).Single());
+                        addMealGroup5.Add(holder);
+
+                    }
+                    else
+                    {
+                        addMealGroup5.Add(holder);
+                    }
                 }
 
                 for (int k = 0; k < jsonObjectSmoothieLength; k++)
@@ -598,7 +793,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
                         AddSmoothiesImage.Add(imageMeal);
                     }
-                    addSmoothieGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[k].MealId,
                         name = jsonObjectSmoothie.Menu[k].MealName,
@@ -608,13 +804,24 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddSmoothieQty[k],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addSmoothieGroup5.Any(x => x.id == jsonObjectSmoothie.Menu[k].MealId))
+                    {
+                        addSmoothieGroup5.Remove(addSmoothieGroup5.Where(x => x.id == jsonObjectSmoothie.Menu[k].MealId).Single());
+                        addSmoothieGroup5.Add(holder);
+
+                    }
+                    else
+                    {
+                        addSmoothieGroup5.Add(holder);
+                    }
 
                 }
 
-                grouped.Add(addAddOnGroup);
-                grouped.Add(addMealGroup);
-                grouped.Add(addSmoothieGroup);
+                grouped5.Add(addAddOnGroup5);
+                grouped5.Add(addMealGroup5);
+                grouped5.Add(addSmoothieGroup5);
             }
             else
             {
@@ -644,7 +851,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     }
 
-                    addAddOnGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
                         name = AddNames[placeHolder],
@@ -654,7 +861,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddQty[placeHolder],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addAddOnGroup6.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
+                    {
+                        addAddOnGroup6.Remove(addAddOnGroup6.Where(x => x.id == jsonObject.Menu[placeHolder].MealId).Single());
+                        addAddOnGroup6.Add(holder);
+
+                    }
+                    else
+                    {
+                        addAddOnGroup6.Add(holder);
+                    }
                 }
 
                 for (int j = 0; j < jsonObjectSeasonalLength; j++)
@@ -676,7 +894,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         AddMealImage.Add(imageMeal);
 
                     }
-                    addMealGroup.Add(new Meal
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[j].MealId,
                         name = AddMealName[j],
@@ -686,7 +904,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddMealQty[j],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addMealGroup6.Any(x => x.id == jsonObjectSeasonal.Menu[j].MealId))
+                    {
+                        addMealGroup6.Remove(addMealGroup6.Where(x => x.id == jsonObjectSeasonal.Menu[j].MealId).Single());
+                        addMealGroup6.Add(holder);
+
+                    }
+                    else
+                    {
+                        addMealGroup6.Add(holder);
+                    }
                 }
 
                 for (int k = 0; k < jsonObjectSmoothieLength; k++)
@@ -707,7 +936,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObjectSmoothie.Menu[k].MealPhotoUrl.ToString();
                         AddSmoothiesImage.Add(imageMeal);
                     }
-                    addSmoothieGroup.Add(new Meal
+
+                    Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[k].MealId,
                         name = jsonObjectSmoothie.Menu[k].MealName,
@@ -717,26 +947,65 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         infoUrl = infoImg,
                         qty = AddSmoothieQty[k],
                         total = 0.00,
-                    });
+                    };
+
+                    if (addSmoothieGroup6.Any(x => x.id == jsonObjectSmoothie.Menu[k].MealId))
+                    {
+                        addSmoothieGroup6.Remove(addSmoothieGroup6.Where(x => x.id == jsonObjectSmoothie.Menu[k].MealId).Single());
+                        addSmoothieGroup6.Add(holder);
+
+                    }
+                    else
+                    {
+                        addSmoothieGroup6.Add(holder);
+                    }
 
                 }
 
-                grouped.Add(addAddOnGroup);
-                grouped.Add(addMealGroup);
-                grouped.Add(addSmoothieGroup);
+                grouped6.Add(addAddOnGroup6);
+                grouped6.Add(addMealGroup6);
+                grouped6.Add(addSmoothieGroup6);
             }
 
-            ToolbarItem totalBar = new ToolbarItem
+            totalBar.Order = ToolbarItemOrder.Primary;
+            totalBar.Priority = 0;
+
+            if (subTotal == 0)
             {
-                Text = "Close",
-                Order = ToolbarItemOrder.Primary,
-                Priority = 0,
-            };
-            //totalBar.Clicked += GetText;
+                totalBar.Text = "Close";
+            }
+            else
+            {
+                totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
+            }
+
             totalBar.Clicked += postData;
             this.ToolbarItems.Add(totalBar);
 
-            lstView.ItemsSource = grouped;
+            if (weekNumber == 1)
+            {
+                lstView.ItemsSource = grouped;
+            }
+            else if (weekNumber == 2)
+            {
+                lstView.ItemsSource = grouped2;
+            }
+            else if (weekNumber == 3)
+            {
+                lstView.ItemsSource = grouped3;
+            }
+            else if (weekNumber == 4)
+            {
+                lstView.ItemsSource = grouped4;
+            }
+            else if (weekNumber == 5)
+            {
+                lstView.ItemsSource = grouped5;
+            }
+            else
+            {
+                lstView.ItemsSource = grouped6;
+            }
             lstView.SelectionMode = ListViewSelectionMode.None;
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
@@ -850,7 +1119,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             };
 
-                Label quantity = new Label
+                
+                quantity = new Label
                 {
                     FontSize = 15,
                     FontAttributes = FontAttributes.Bold,
@@ -860,7 +1130,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     HorizontalTextAlignment = TextAlignment.Center,
 
                 };
-
+                
                 nameLabel.SetBinding(Label.TextProperty, "name");
                 costLabel.SetBinding(Label.TextProperty, "price");
                 quantity.SetBinding(Label.TextProperty, "qty");
@@ -901,8 +1171,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
             Dictionary<string, int> emptyDict = new Dictionary<string, int>();
             emptyDict.Add("", 0);
 
+            // If no changes
+            if (mealQtyDict.Count == 0 && !totalBar.Text.Equals("Close"))
+            {
+                BackToSchedule(sender, e);
+            }
             // If no add ons
-            if (mealQtyDict.Count == 0)
+            else if (mealQtyDict.Count == 0)
             {
                 colorToReturn = Color.FromHex(def);
                 var mealSelectInfoToSend = new AddonInfo
@@ -936,7 +1211,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                 if (this.BindingContext != null)
                 {
-                    if(weekNumber == 1)
+                    if (weekNumber == 1)
                     {
                         MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                         Button test = (Button)mealSchedulePage.FindByName("AddonButton");

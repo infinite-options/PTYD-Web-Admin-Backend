@@ -13,7 +13,7 @@
 namespace InfiniteMeals.ViewModel.Profile {
     
     
-    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel\\Profile\\ChangePasswordPage.xaml")]
+    [global::Xamarin.Forms.Xaml.XamlFilePathAttribute("ViewModel/Profile/ChangePasswordPage.xaml")]
     public partial class ChangePasswordPage : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
