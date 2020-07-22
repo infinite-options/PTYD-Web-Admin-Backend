@@ -3912,7 +3912,9 @@ class All_Meals(Resource):
             date = request.args.get("date")
             # date_affected = data['date_affected']
 
-            items = execute("""SELECT 
+            items = execute("""
+                            # QUERY 12 ADMIN PAGE QUERY SHOWING ALL MENUS, MEALS AND QUANTITIES ORDERED (SELECTED, ADDONS AND SURPRISE)
+                                SELECT 
                                     allmeals.*,
                                     meals_ordered.total
                                     FROM (# QUERY 8
@@ -4165,7 +4167,9 @@ class All_Ingredients(Resource):
             date = request.args.get("date")
             # date_affected = data['date_affected']
 
-            items = execute("""SELECT
+            items = execute("""
+                            #QUERY 13 INGREDIENTS QUERY
+                            SELECT
                                 meals_ordered.week_affected,
                                 -- meals_ordered.total,
                                 -- SUM(rec.recipe_ingredient_qty),
@@ -5534,7 +5538,9 @@ class PurchaseIdMeals(Resource):
             conn = connect()
             
             items = execute(
-                """ SELECT 
+                """ 
+                # QUERY 4:  FINDS MEAL SELECTION BY ALL DATES INCLUDING NON-SELECTIONS
+                SELECT 
                         act_pur.*,
                         -- act_meal.week_affected,
                         mp.meal_plan_desc,
