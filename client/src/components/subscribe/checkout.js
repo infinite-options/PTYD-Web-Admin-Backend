@@ -3,7 +3,7 @@ import React, {Component, Fragment} from "react";
 import {Button, Form, Row, Col, Container} from "react-bootstrap";
 import TruckIcon from "../../img/prepTruckIcon.png";
 import ErrorHandle from "../ErrorHandle";
-
+import ReactGA from "react-ga";
 import crypto from "crypto";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -259,6 +259,10 @@ class Checkout extends Component {
   }
   async checkout(event) {
     event.preventDefault();
+    ReactGA.event({
+      category: "Button",
+      action: "Checkout 'button' clicked"
+    });
     this.state.salt = await crypto
       .createHash("sha512")
       .update(this.state.password + this.state.password_salt)
