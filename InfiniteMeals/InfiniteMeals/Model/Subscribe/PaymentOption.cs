@@ -19,9 +19,9 @@ namespace InfiniteMeals.Model.Subscribe {
                 case PaymentOption.Week:
                     return "Weekly Subscription";
                 case PaymentOption.TwoWeek:
-                    return "2 week Pre-Pay Subscription";
+                    return "2 Week Pre-Pay Subscription";
                 case PaymentOption.FourWeek:
-                    return "4 week Pre-Pay Subscription";
+                    return "4 Week Pre-Pay Subscription";
                 default:
                     return "No payment option";
             }

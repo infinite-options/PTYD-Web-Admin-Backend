@@ -53,7 +53,17 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
             try {
 
-
+                string fullItemName; // stores full item name for api to parse
+                if(orderInformation.shippingInformation.subscriptionPlan.paymentOption.Equals(PaymentOption.TwoWeek) || 
+                    orderInformation.shippingInformation.subscriptionPlan.paymentOption.Equals(PaymentOption.TwoWeek)) {
+                    fullItemName = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + "  - " +  
+                    PaymentOptionExtension.paymentOptionToString(orderInformation.shippingInformation.subscriptionPlan.paymentOption) + " - " + 
+                    orderInformation.shippingInformation.subscriptionPlan.cost.ToString();
+                } else {
+                    fullItemName = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + " - " +
+                    PaymentOptionExtension.paymentOptionToString(orderInformation.shippingInformation.subscriptionPlan.paymentOption) + " - " +
+                    orderInformation.shippingInformation.subscriptionPlan.cost.ToString();
+                }
 
                 var content = await client.GetStringAsync(accountSaltURL + App.Database.GetLastItem().Email); // get the requested account salt
                 var obj = JsonConvert.DeserializeObject<AccountSalt>(content); // convert account salt into an object; obj[0] has the account salt
@@ -64,7 +74,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
                 byte[] data = sHA512.ComputeHash(Encoding.UTF8.GetBytes(password + obj.result[0].passwordSalt.ToString())); // take the password and account salt to generate hash
                 string hashedPassword = BitConverter.ToString(data).Replace("-", string.Empty).ToLower(); // convert hash to hex
 
-
+                
                 var orderContent = new CheckoutOrder { // contains json information to send to checkout database
 
                     ccNum = orderInformation.paymentInformation.cardNumber,
@@ -85,11 +95,9 @@ namespace InfiniteMeals.ViewModel.Checkout {
                     ccExpYear = orderInformation.paymentInformation.expirationYear,
                     salt = hashedPassword,
                     isGift = "false",
-                    userUId = App.Database.GetLastItem().UserUid,
-                    item = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + " - " + // meal plan
-                           PaymentOptionExtension.paymentOptionToString(orderInformation.shippingInformation.subscriptionPlan.paymentOption) + " - " + // payment option
-                           orderInformation.shippingInformation.subscriptionPlan.cost.ToString(), // cost
-                    totalCharge = this.totalCharge,
+                    userUId = App.Database.GetLastItem().UserUid, 
+                    item = fullItemName,
+                    totalCharge = Math.Round(this.totalCharge,2),
                     totalDiscount = this.totalDiscount,
                     couponId = this.couponID
                 };
@@ -98,10 +106,11 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
                 string orderContentJson = JsonConvert.SerializeObject(orderContent); // make orderContent into json
 
+                System.Diagnostics.Debug.WriteLine(orderContentJson);
+
                 var httpContent = new StringContent(orderContentJson, Encoding.UTF8, "application/json"); // encode orderContentJson into format to send to database
 
                 var response = await client.PostAsync(checkoutURL, httpContent); // try to post to database
-
                 return response.StatusCode;
             }
             catch (Exception ex) {
