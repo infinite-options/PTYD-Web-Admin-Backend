@@ -24,6 +24,7 @@
                             <Label Text="{Binding name}"></Label>
                             <Image Source="{Binding imageUrl}" Grid.RowSpan="2"></Image>
                             <ImageButton Source="{Binding infoUrl}"></ImageButton>
+                            <Label Text="{Binding qty}"></Label>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
