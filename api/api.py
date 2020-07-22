@@ -131,7 +131,7 @@ def execute(sql, cmd, conn, skipSerialization=False):
     try:
         with conn.cursor() as cur:
             cur.execute(sql)
-            if cmd is 'get':
+            if cmd == 'get':
                 result = cur.fetchall()
                 response['message'] = 'Successfully executed SQL query.'
                 # Return status code of 280 for successful GET request
@@ -638,7 +638,7 @@ def LogLoginAttempt(data, conn):
         login_id = login_id_res['result'][0]['new_id']
         # Generate random session ID
 
-        if data["auth_success"] is "TRUE":
+        if data["auth_success"] == "TRUE":
             session_id = "\'" + sha512(getNow().encode()).hexdigest() + "\'"
         else:
             session_id = "NULL"
@@ -5458,6 +5458,145 @@ class Edit_Menu(Resource):
         finally:
             disconnect(conn)
 
+class Latest_activity(Resource):
+    def get(self, user_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            
+            items = execute(
+                """ select acc.*,pur.*,mp.meal_plan_desc,
+                        pay.*
+                        from ptyd_accounts acc
+                        left join ptyd_payments pay
+                        on acc.user_uid = pay.buyer_id
+                        left join ptyd_purchases pur
+                        on pay.purchase_id = pur.purchase_id
+                        left join ptyd_meal_plans mp
+                        on pur.meal_plan_id = mp.meal_plan_id
+                        where acc.user_uid = \'""" + user_id + """\'
+                        and pay.payment_time_stamp in
+                        (select latest_time_stamp from
+                            (SELECT buyer_id, purchase_id, MAX(payment_time_stamp) as "latest_time_stamp" FROM
+                                (SELECT * FROM ptyd_payments where buyer_id = \'""" + user_id + """\') temp
+                                group by buyer_id, purchase_id) temp1
+                        )
+                        order by pur.purchase_id
+                        ;
+                        """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class All_Payments(Resource):
+    def get(self, user_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            
+            items = execute(
+                """ select acc.*,pur.*,mp.meal_plan_desc,
+                        pay.*
+                        from ptyd_accounts acc
+                        left join ptyd_payments pay
+                        on acc.user_uid = pay.buyer_id
+                        left join ptyd_purchases pur
+                        on pay.purchase_id = pur.purchase_id
+                        left join ptyd_meal_plans mp
+                        on pur.meal_plan_id = mp.meal_plan_id
+                        where acc.user_uid = \'""" + user_id + """\'
+                        order by pur.purchase_id
+                        ;
+                        """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class PurchaseIdMeals(Resource):
+    def get(self, purchase_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            
+            items = execute(
+                """ SELECT 
+                        act_pur.*,
+                        -- act_meal.week_affected,
+                        mp.meal_plan_desc,
+                        act_meal.selection_time,
+                        act_meal.meal_selection,
+                        act_meal.delivery_day
+                    FROM (
+                        SELECT * 
+                        FROM ptyd.ptyd_purchases pur
+                        JOIN ptyd.ptyd_saturdays sat
+                        WHERE pur.purchase_status = "ACTIVE"
+                            -- AND sat.Saturday < "2020-09-01"
+                            AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
+                            AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
+                            AND sat.Saturday > pur.start_date)
+                        AS act_pur
+                    LEFT JOIN (# QUERY 1 
+                        SELECT
+                            ms1.purchase_id
+                            , ms1.selection_time
+                            , ms1.week_affected
+                            , ms1.meal_selection
+                            , ms1.delivery_day
+                        FROM ptyd.ptyd_meals_selected AS ms1
+                        INNER JOIN (
+                            SELECT
+                                purchase_id
+                                , week_affected
+                                , meal_selection
+                                , MAX(selection_time) AS latest_selection
+                                , delivery_day
+                            FROM ptyd.ptyd_meals_selected
+                            GROUP BY purchase_id
+                                , week_affected)
+                            AS ms2 
+                        ON ms1.purchase_id = ms2.purchase_id 
+                            AND ms1.week_affected = ms2.week_affected 
+                            AND ms1.selection_time = ms2.latest_selection
+                        ORDER BY purchase_id
+                            , week_affected)
+                        AS act_meal
+                    ON act_pur.Saturday = act_meal.week_affected
+                        AND act_pur.purchase_id = act_meal.purchase_id
+                    left join ptyd_meal_plans mp
+                    on act_pur.meal_plan_id = mp.meal_plan_id    
+                    where act_pur.purchase_id = \'""" + purchase_id + """\'
+                    ORDER BY act_pur.purchase_id
+                        , act_pur.Saturday
+                        , act_meal.selection_time
+                    ;
+                        """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)            
+            
+
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
@@ -5516,10 +5655,14 @@ api.add_resource(Get_All_Units, '/api/v2/GetUnits')
 api.add_resource(CouponsAPI, '/api/v2/CouponsAPI')
 api.add_resource(MealPlansAPI, '/api/v2/MealPlansAPI')
 api.add_resource(TaxRateAPI, '/api/v2/TaxRateAPI')
-
 api.add_resource(Add_Meal_plan, '/api/v2/Add_Meal_plan')
 api.add_resource(Add_Coupon, '/api/v2/Add_Coupon')
 api.add_resource(Edit_Menu, '/api/v2/Edit_Menu')
+
+api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
+api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
+api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
+
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
