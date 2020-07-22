@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Grid, Cell } from "react-mdl";
+import { Typography } from "@material-ui/core";
 
 export default function CustomerInfo(props) {
   const [subscribed, setSubscribed] = useState(false);
@@ -37,10 +38,10 @@ export default function CustomerInfo(props) {
         {" "}
         <Grid>
           <Cell col={8}>
-            <h4 style={{ overflowWrap: "anywhere" }}>
+            <Typography variant="h4">
               Hi, {subscription_selection.delivery_first_name}
               {/* <th colSpan="2">{this.subscription_dropdown()}</th> */}
-            </h4>
+            </Typography>
           </Cell>
           {/* <MakeChanges
                 user_uid={this.searchCookie4UserID("loginStatus")}
