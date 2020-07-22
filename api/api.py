@@ -139,7 +139,7 @@ def execute(sql, cmd, conn, skipSerialization=False):
                 if not skipSerialization:
                     result = serializeResponse(result)
                 response['result'] = result
-            elif cmd in 'post':
+            elif cmd == 'post':
                 conn.commit()
                 response['message'] = 'Successfully committed SQL command.'
                 # Return status code of 281 for successful POST request
