@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import InputBase from "@material-ui/core/InputBase";
+import { Typography, Link, Breadcrumbs, InputBase, Grid } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 
 import CustomerInfo from "./CustomerInfo";
+import AllPayments from "./AllPayments";
 import Graph from "../Homepage/mapGraph";
 
 const useStyles = makeStyles((theme) => ({
@@ -103,10 +101,17 @@ export default function Customers(props) {
           />
         </div>
         {searchID && (
-          <CustomerInfo
-            searchID={searchID}
-            PURCHASE_API_URL={props.PURCHASE_API_URL}
-          />
+            <Grid container>
+                <Grid item xs="4">
+                    <CustomerInfo searchID={searchID} PURCHASE_API_URL={props.PURCHASE_API_URL} />
+                </Grid>
+                <Grid item xs="4">
+                    <AllPayments searchID={searchID} PURCHASE_API_URL={props.PURCHASE_API_URL} />
+                </Grid>
+                <Grid item xs="4">
+                    Latest Activity stuff
+                </Grid>
+            </Grid>
         )}
      </div>
     );
