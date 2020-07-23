@@ -14,6 +14,16 @@ class LatestActivity extends React.Component {
     }
 
     componentDidMount() {
+        this.fetchData();
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.searchID !== prevProps.searchID) {
+            this.fetchData();
+        }
+    }
+
+    fetchData = () => {
         let curComponent = this;
         axios
             .get(`${this.props.LATESTACTIVITY_API_URL}/${this.props.searchID}`)
