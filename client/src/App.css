@@ -345,6 +345,13 @@ a {
   .box-shadow-top, .box-shadow-bottom {
     max-width: 400px !important;
   }
+
+  #left-padding-reusable {
+    margin-left: 20px!important;
+  }
+  #left-padding-organic {
+    margin-left: 12px!important;
+  }
   .img-2-carrot {
     max-width: 300px !important;
     margin: 0!important;
@@ -368,8 +375,6 @@ a {
   .delivered-weekly-container {
     width: 500px !important;
     height: 650px!important;
-    /* padding-bottom: 10px; */
-    /* height:auto; */
   }
   .delivered-weekly-container2 {
     padding-bottom: 0!important;
@@ -384,6 +389,10 @@ a {
   }
   .pause-anytime {
     padding: 0!important;
+  }
+
+  .visibility-hidden-mobile {
+    display: none;
   }
 
 }
@@ -405,6 +414,14 @@ a {
   color: #4d4d4d;
   margin: 50px 0 0 20px;
 }
+
+#left-padding-reusable {
+  margin-left: -35px;
+}
+#left-padding-organic {
+  margin-left: -35px;
+}
+
 .four-items-subtitle {
   font-size: 27px;
   /* font-family: oswald; */

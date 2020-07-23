@@ -117,7 +117,7 @@ class Landing extends Component {
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={11} style={{marginLeft: "-35px"}}>
+                      <Cell col={11} id='left-padding-reusable'>
                         <p className='four-items-subtitle'>REUSABLE PACKAGING</p>
                         <p>
                           Did you know that every piece of plastic ever
@@ -140,7 +140,7 @@ class Landing extends Component {
                       </Cell>
                     </Col>
                     <Col>
-                      <Cell col={11} style={{marginLeft: "-35px"}}>
+                      <Cell col={11} id='left-padding-organic'>
                         <p className='four-items-subtitle'>ORGANIC PRODUCE</p>
                         <p>
                           Once upon a time, all food was organic. Healthy soil
@@ -208,7 +208,7 @@ class Landing extends Component {
           </div>
         </div>
 
-        {/* <div className='container container_space center-content'>
+        <div className='container container_space center-content visibility-hidden-mobile'>
           <h3 className='fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
           <div className='fresh-menu-subtitle-container'>
             <p className='fresh-menu-subtitle'>
@@ -221,23 +221,23 @@ class Landing extends Component {
           </div>
 
           <MenuCarousel className='carousel-space' />
-        </div> */}
+        </div>
 
         <div className='container center-content menu-next-week-button-container'>
           <a
             // type='button'
-            href='/selectmealplan'
+            href='/menunextweek'
             className='btn1 btn1-primary start_button'
           >
             SEE WHAT'S ON THE MENU NEXT WEEK
           </a>
         </div>
 
-        {/* <div className='container font2 container_space'>
+        <div className='container font2 container_space'>
           <h3 className='community-title'>What Our Community is Saying...</h3>
 
           <CommunityCarousel />
-        </div> */}
+        </div>
 
         {/* <div className='container'>
           <div className='try-us-today-button-container'>
