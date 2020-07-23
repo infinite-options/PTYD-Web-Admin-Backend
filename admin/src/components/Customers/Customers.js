@@ -5,6 +5,7 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import CustomerInfo from "./CustomerInfo";
 import AllPayments from "./AllPayments";
+import LatestActivity from "./LatestActivity";
 import Graph from "../Homepage/mapGraph";
 
 const useStyles = makeStyles((theme) => ({
@@ -102,14 +103,13 @@ export default function Customers(props) {
         </div>
         {searchID && (
             <Grid container>
-                <Grid item xs="4">
+                <Grid item xs="2">
                     <CustomerInfo searchID={searchID} PURCHASE_API_URL={props.PURCHASE_API_URL} />
                 </Grid>
-                <Grid item xs="4">
-                    <AllPayments searchID={searchID} PURCHASE_API_URL={props.PURCHASE_API_URL} />
-                </Grid>
-                <Grid item xs="4">
-                    Latest Activity stuff
+                <Grid item xs="10">
+                    <AllPayments searchID={searchID} ALLPAYMENTS_API_URL={props.ALLPAYMENTS_API_URL} />
+                    <br />
+                    <LatestActivity searchID={searchID} LATESTACTIVITY_API_URL={props.LATESTACTIVITY_API_URL} />
                 </Grid>
             </Grid>
         )}
