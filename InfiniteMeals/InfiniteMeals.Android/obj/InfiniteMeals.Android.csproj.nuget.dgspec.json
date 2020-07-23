@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj": {}
   },
   "projects": {
@@ -12,6 +13,19 @@
         "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
         "packagesPath": "/Users/Kristina/.nuget/packages/",
         "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/",
+=======
+    "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj": {}
+  },
+  "projects": {
+    "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
+        "projectName": "InfiniteMeals.Android",
+        "projectPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
+        "packagesPath": "/Users/Kristina/.nuget/packages/",
+        "outputPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/",
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
@@ -26,8 +40,13 @@
         "frameworks": {
           "monoandroid90": {
             "projectReferences": {
+<<<<<<< HEAD
               "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
                 "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
+=======
+              "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+                "projectPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
               }
             }
           }
@@ -80,6 +99,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -88,6 +108,16 @@
         "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
         "packagesPath": "/Users/Kristina/.nuget/packages/",
         "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
+=======
+    "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+        "projectName": "InfiniteMeals",
+        "projectPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+        "packagesPath": "/Users/Kristina/.nuget/packages/",
+        "outputPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Kristina/.config/NuGet/NuGet.Config"

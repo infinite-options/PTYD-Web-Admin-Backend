@@ -49,9 +49,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public static List<MealScheduleSaves.MealScheduleSavedColors> mss = new List<MealScheduleSaves.MealScheduleSavedColors>();
         MealChoices mc = (MealChoices)FormatterServices.GetUninitializedObject(typeof(MealChoices));
         private static string userID;
+<<<<<<< HEAD
         private static string mealPlanNo;
         private static int mealPlanNoTEST;
 
+=======
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
 
         public MealSchedule()
         {
@@ -74,6 +77,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             userID = mc.getUserAcct();
 
+<<<<<<< HEAD
             // Function Calls
             getZipcode();
             getDates();
@@ -102,6 +106,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             userID = mc.getUserAcct();
 
+=======
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
             // Function Calls
             getZipcode();
             getDates();
@@ -113,6 +119,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
         {
             nullPicker.SetValue(IsVisibleProperty, false);
             WebClient client = new WebClient();
+<<<<<<< HEAD
+=======
+            //MealChoices mc = new MealChoices();
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
             // Get user zipcodes
             var userZipCodes = client.DownloadString(acctUrl + userID);
             var userZipObj = JsonConvert.DeserializeObject<UserInformation>(userZipCodes);
@@ -272,6 +282,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
            | btn.ClassId == "SkipButton5" | btn.ClassId == "SkipButton6")
             {
                 if (btn.BackgroundColor.Equals(Color.FromHex(green)))
+<<<<<<< HEAD
                 {
                     btn.BackgroundColor = (Color.FromHex(def));
                     disabled = false;
@@ -279,6 +290,15 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 }
                 else if (btn.BackgroundColor.Equals(Color.FromHex(def)))
                 {
+=======
+                {
+                    btn.BackgroundColor = (Color.FromHex(def));
+                    disabled = false;
+                    ctr = 0;
+                }
+                else if (btn.BackgroundColor.Equals(Color.FromHex(def)))
+                {
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
                     btn.BackgroundColor = Color.FromHex(green);
                     switch (btn.ClassId)
                     {

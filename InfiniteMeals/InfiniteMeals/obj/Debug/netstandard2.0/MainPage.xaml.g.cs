@@ -20,16 +20,22 @@ namespace InfiniteMeals {
         private global::Xamarin.Forms.Button loginButton;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
+<<<<<<< HEAD
         private global::Xamarin.Forms.Button viewMenu;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
+=======
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
         private global::Xamarin.Forms.Image homepage;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private void InitializeComponent() {
             global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(MainPage));
             loginButton = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Button>(this, "loginButton");
+<<<<<<< HEAD
             viewMenu = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Button>(this, "viewMenu");
+=======
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
             homepage = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Image>(this, "homepage");
         }
     }

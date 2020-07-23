@@ -1737,6 +1737,7 @@
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GenerateJavaStubs.stamp
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GeneratePackageManagerJava.stamp
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_ResolveLibraryProjectImports.stamp
+<<<<<<< HEAD
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/bin/Debug/InfiniteMeals.Android.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/bin/Debug/InfiniteMeals.Android.pdb
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/bin/Debug/com.companyname.infinitemeals.apk
@@ -2358,3 +2359,5 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GenerateJavaStubs.stamp
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GeneratePackageManagerJava.stamp
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_ResolveLibraryProjectImports.stamp
+=======
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
