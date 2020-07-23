@@ -29,7 +29,7 @@ class Landing extends Component {
   }
   render() {
     return (
-      <div className='content-section landing' style={{paddingLeft: "100px"}}>
+      <div className='content-section landing' id='padding-mobile'>
 
         <div className='container title-image-container'>
           <img className='img-fluid title-image' src={IMG1} alt='img1' />

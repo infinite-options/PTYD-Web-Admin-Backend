@@ -294,16 +294,23 @@ a {
 
 @media only screen and (max-width: 478px) {
   .content-section .landing {
-    max-width: 500px !important;
+    max-width: 320px !important;
+    /* padding-left: 100px!important; */
+    /* style={{paddingLeft: "100px"}} */
+  }
+  #padding-mobile {
+    padding-left: 100px;
   }
 
   .title-image-container {
     background-image: url(./img/img1.jpg);
-    max-width: 450px;
+    max-width: 400px;
+    /* max-height: 600px; */
     /* object-fit: cover; */
   }
   .title-image-container img {
-    max-width: 450px;
+    /* max-height: 600px; */
+    max-width: 400px;
     /* object-fit: cover; */
   }
   .top-left h1 {
