@@ -5602,6 +5602,35 @@ class PurchaseIdMeals(Resource):
         finally:
             disconnect(conn)            
             
+class Add_Unit_Conversion(Resource):
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            print("connection done...")
+            data = request.get_json(force=True)
+            print("data collected...")
+            print(data)
+            
+            type = data['type']
+            unit1 = data['unit1']
+            conversion_ratio = data['conversion_ratio']
+            unit2 = data['unit2']
+
+            print("Items read...")
+            items['new_coupon_insert'] = execute("""insert into ptyd_conversion_units
+                                                    values
+                                                    (\'""" + str(type) + """\',\'""" + str(unit1) + """\',
+                                                    \'""" + conversion_ratio + """\',\'""" + str(unit2) + """\')
+                                                    ;""", 'post', conn)
+
+            print("Unit_conversion_inserted...")
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 # Define API routes
 # Customer page
@@ -5668,7 +5697,7 @@ api.add_resource(Edit_Menu, '/api/v2/Edit_Menu')
 api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
-
+api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
