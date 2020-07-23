@@ -13,7 +13,18 @@ class AllPayments extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchData();
+        let curComponent = this;
+        axios
+            .get(`${this.props.ALLPAYMENTS_API_URL}/${this.props.searchID}`)
+            .then(function (res) {
+                curComponent.setState({
+                    loaded: true,
+                    data: res.data.result.result,
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
     }
 
     componentDidUpdate(prevProps) {
@@ -28,10 +39,7 @@ class AllPayments extends React.Component {
             .get(`${this.props.ALLPAYMENTS_API_URL}/${this.props.searchID}`)
             .then(function (res) {
                 curComponent.setState({
-                    loaded: true,
                     data: res.data.result.result,
-                },() => {
-                    console.log("all payments api",curComponent.state.data);
                 })
             })
             .catch(function (error) {
