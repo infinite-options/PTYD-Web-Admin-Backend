@@ -299,53 +299,86 @@ a {
 
   .title-image-container {
     background-image: url(./img/img1.jpg);
-    max-width: 500px;
+    max-width: 450px;
     /* object-fit: cover; */
   }
   .title-image-container img {
-    max-width: 600px;
+    max-width: 450px;
+    /* object-fit: cover; */
   }
   .top-left h1 {
-    font-size:44px;
-    line-height: 40px;
-    padding: 0 0 0 70px;
+    font-size:36px;
+    line-height: 38px;
+    padding: 0 0 0 10px;
   }
   .top-left {
-    margin-top: -60px;
+    margin-top: -75px;
   }
   .bottom-left {
-    padding: 0 0 0 62px;
-    margin-top: 100px;
+    padding: 0 0 0 2px;
+    /* margin-top: 100px; */
   }
   .plant-based-text {
-    margin-bottom: 30px !important;
+    margin-bottom: 20px !important;
   }
   .plant-based-text h1 {
     font-size: 20px !important;
-    line-height: 14px;
+    line-height: 10px;
   }
   .home_subtitle {
-    margin-bottom: 80px !important;
+    margin-bottom: 40px !important;
   }
-  /*title*/
+  .bottom-left {
+    margin-bottom: -20px;
+  }
   .zero-waste {
-    width: 300px;
-    font-size: 20px;
-  }
-  /*subtitle*/
-  .zero-waste-subtext {
-    /* width: 300px !important; */
+    width: 400px;
+    font-size: 24px;
   }
   .box-shadow-top, .box-shadow-bottom {
-    display:none;
+    max-width: 400px !important;
+  }
+  .img-2-carrot {
+    max-width: 300px !important;
+    margin: 0!important;
   }
 
-  .eat-better-now-button-container, .eat-better-now-button-container a {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    height: 38px;
-    margin-left: 40px !important;
+  /* delivered weekly */
+  .background {
+    width: 500px !important;
   }
+  .delivered-title {
+    letter-spacing: .15em!important;
+    font-size: 41px!important;
+  }
+  .delivered-padding {
+    padding: 5px;
+  }
+  .delivered-titles-container {
+    padding-top: 15px!important;
+    padding-bottom: 0px!important;
+  }
+  .delivered-weekly-container {
+    width: 500px !important;
+    height: 650px!important;
+    /* padding-bottom: 10px; */
+    /* height:auto; */
+  }
+  .delivered-weekly-container2 {
+    padding-bottom: 0!important;
+    margin-bottom: 0!important;
+  }
+  .delivered-weekly-bullets-container {
+    padding-left: 20px !important;
+  }
+  .delivered-bullets-text {
+    margin: 5px!important;
+    font-size: 22px!important;
+  }
+  .pause-anytime {
+    padding: 0!important;
+  }
+
 }
 
 .box-shadow-top {
@@ -371,14 +404,16 @@ a {
 }
 .eat-better-now-button-container {
   margin-left: 30px;
+  max-height: 50px;
 }
 
 .img-2-carrot {
-  max-width: 100%;
+  /* max-width: 100%; */
   /* height: 80%; */
   height: auto;
   margin: 80px 0 0 -30px;
   object-fit: cover;
+  /* padding: 0 60px; */
 }
 
 .delivered-padding {
@@ -578,9 +613,6 @@ a {
   padding: 0;
   font-size: 12px !important;
   letter-spacing: 0.05em;
-}
-.award-text {
-  margin-top: -25px;
 }
 
 .top-right {

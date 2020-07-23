@@ -29,7 +29,7 @@ class Landing extends Component {
   }
   render() {
     return (
-      <div className='content-section landing'>
+      <div className='content-section landing' style={{paddingLeft: "100px"}}>
 
         <div className='container title-image-container'>
           <img className='img-fluid title-image' src={IMG1} alt='img1' />
@@ -67,25 +67,9 @@ class Landing extends Component {
               </div>
             </center>
 
-            <div className='box-shadow-top'>&#x200b;</div>
+            <div className='img-fluid box-shadow-top'>&#x200b;</div>
 
             <div className='zero-waste-subtext'>
-
-              {/* <div className="row">
-                <div className="col-sm">
-                  <h4 className='zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
-                  <p>Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.</p>
-                </div>
-                <div className="col-sm">
-                  <h4 className='zero-waste-subtitle text-wrap'>WEEKLY DELIVERY</h4>
-                  <p>Seamless non-contact delivery in Austin & Houston.</p>
-                </div>
-                <div className="col-sm">
-                  <h4 className='zero-waste-subtitle text-wrap'>RETURN YOUR JARS</h4>
-                  <p>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
-                </div>
-              </div> */}
-
               <Grid>
                 <Cell col={4} className='zero-waste-cell'>
                   <h4 className='zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
@@ -102,7 +86,7 @@ class Landing extends Component {
               </Grid>
             </div>
             
-            <div className='box-shadow-bottom'>&#x200b;</div>
+            <div className='img-fluid box-shadow-bottom'>&#x200b;</div>
 
             <center>
               <a
@@ -144,7 +128,7 @@ class Landing extends Component {
                     </Col>
                   </Row>
                   <Row className='mt-5' />
-                  <Row style={{marginTop: "-40px"}}>
+                  <Row style={{marginTop: "-30px"}}>
                     <Col>
                       <Cell col={10}>
                         <p className='four-items-subtitle'>ZERO WASTE</p>
@@ -223,7 +207,8 @@ class Landing extends Component {
             </div>
           </div>
         </div>
-        <div className='container container_space center-content'>
+
+        {/* <div className='container container_space center-content'>
           <h3 className='fresh-menu-title'>FRESH MENU EVERY WEEK</h3>
           <div className='fresh-menu-subtitle-container'>
             <p className='fresh-menu-subtitle'>
@@ -236,7 +221,7 @@ class Landing extends Component {
           </div>
 
           <MenuCarousel className='carousel-space' />
-        </div>
+        </div> */}
 
         <div className='container center-content menu-next-week-button-container'>
           <a
@@ -248,13 +233,13 @@ class Landing extends Component {
           </a>
         </div>
 
-        <div className='container font2 container_space'>
+        {/* <div className='container font2 container_space'>
           <h3 className='community-title'>What Our Community is Saying...</h3>
 
           <CommunityCarousel />
-        </div>
+        </div> */}
 
-        <div className='container'>
+        {/* <div className='container'>
           <div className='try-us-today-button-container'>
             <a
               // type='button'
@@ -264,13 +249,13 @@ class Landing extends Component {
               TRY US TODAY
             </a>
           </div>
-        </div>
+        </div> */}
 
-        <div className='container container_space'>
+        {/* <div className='container container_space'>
           <div className='container_space center-content'>
             <QuoteCarousel />
           </div>
-        </div>
+        </div> */}
 
         <div className='container'>
           <Grid>
@@ -303,35 +288,91 @@ class Landing extends Component {
                   </Cell>
                 </Grid>
                 <Grid className='awards'>
-                  <Cell col={3} align='middle'></Cell>
+                  <Cell hidePhone col={3} align='middle'></Cell>
                   <Cell col={3} align='middle'>
                     <img src={LOGOAU40} alt='au40' />
-                  </Cell>
-                  <Cell col={3} align='middle'>
-                    <img src={LOGOFAVE} alt='fave' />
-                  </Cell>
-                  <Cell col={3} align='middle'></Cell>
-                  <Cell col={3} align='middle'></Cell>
-                  <Cell col={3} align='middle'>
                     <div className='award-text'>
                       <p>Austin Under 40 2020 Finalist</p>
                       <p>Culinary Arts, Events, and Hospitality</p>
                     </div>
                   </Cell>
                   <Cell col={3} align='middle'>
-                    <div className='award-text'>
+                    <img src={LOGOFAVE} alt='fave' style={{paddingTop: "48px"}}/>
+                    <div className='award-text' style={{paddingTop: "40px"}}>
                       <p>FAVE 2019 Winner</p>
                       <p>FAVE Sustainable Business</p>
                     </div>
                   </Cell>
-                  <Cell col={3} align='middle'></Cell>
+                  <Cell hidePhone col={3} align='middle'></Cell>
                 </Grid>
               </div>
             </center>
           </Grid>
         </div>
+        
       </div>
     );
   }
 }
 export default Landing;
+
+
+{/* <div className="row">
+      <div className="col-sm">
+        <h4 className='zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
+        <p>Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.</p>
+      </div>
+      <div className="col-sm">
+        <h4 className='zero-waste-subtitle text-wrap'>WEEKLY DELIVERY</h4>
+        <p>Seamless non-contact delivery in Austin & Houston.</p>
+      </div>
+      <div className="col-sm">
+        <h4 className='zero-waste-subtitle text-wrap'>RETURN YOUR JARS</h4>
+        <p>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
+      </div>
+    </div> */}
+
+
+  {/* <div className='container'>
+    <div className='row'>
+      
+      <div className='col-sm '>
+        <p className='four-items-subtitle'>LOCAL FARMS</p>
+        <p>
+          Our organic produce comes directly from small Texas
+          farms to the PTYD kitchen. No middle men or long
+          transit times. We provide the most nutrient rich
+          ingredients straight to your door.
+        </p>
+
+        <p className='four-items-subtitle'>ZERO WASTE</p>
+        <p>
+          Nearly 40% of all food grown in the United States is
+          thrown away. In our kitchen, all food scraps are
+          composted to make healthy organic soil.{" "}
+        </p>
+      </div>
+
+      <div className='col-sm '>
+        <p className='four-items-subtitle'>REUSABLE PACKAGING</p>
+        <p>
+          Did you know that every piece of plastic ever
+          produced, still exists today? Enjoy a plastic-free
+          experience with your PTYD deliveries.
+        </p>
+
+        <p className='four-items-subtitle'>ORGANIC PRODUCE</p>
+        <p>
+          Once upon a time, all food was organic. Healthy soil
+          means healthy nutrients and healthy bodies. We source
+          100% organic ingredients, so there's no pesticides,
+          herbicides or sprays in your food, ever.
+        </p>
+      </div>
+
+      <div className='col-sm'>
+        <img className='img-fluid img-2-carrot' src={IMG2} alt='img2' />
+      </div>
+      
+    </div>
+  </div> */}
