@@ -121,7 +121,8 @@ export default function Main({appProps}) {
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
           CHANGE_SUBCRIPTION_URL: `${DEV_URL}v2/change-subscription`,
           UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
-          UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
+          UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`,
+          REFUND_URL: `${DEV_URL}v2/refund_calculator`
         }}
       />
 
@@ -142,7 +143,8 @@ export default function Main({appProps}) {
           DELETE_URL: `${DEV_URL}v2/cancel-subscription-now`,
           CHANGE_SUBCRIPTION_URL: `${DEV_URL}v2/change-subscription`,
           UPDATE_ADDRESS_URL: `${DEV_URL}v2/update-delivery-address`,
-          UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`
+          UPDATE_PAYMENT_URL: `${DEV_URL}v2/update-payments`,
+          REFUND_URL: `${DEV_URL}v2/refund_calculator`
         }}
       />
 

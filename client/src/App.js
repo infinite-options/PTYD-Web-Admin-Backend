@@ -17,6 +17,11 @@ import Cookies from "js-cookie";
 
 import logo from "./img/LOGO-homepage.png";
 
+//using react google analystic
+import ReactGA from "react-ga";
+//using facebook pixel https://www.npmjs.com/package/react-fb-pixel
+import ReactPixel from "react-facebook-pixel";
+
 const App = props => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -25,6 +30,12 @@ const App = props => {
 
   useEffect(() => {
     onLoad();
+    ReactGA.initialize("UA-173249175-1");
+    ReactGA.pageview(window.location.pathname + window.location.search);
+
+    //facebook pixel goes here
+    ReactPixel.init("342011940130879");
+    ReactPixel.pageView();
     // eslint-disable-next-line
   }, []);
 

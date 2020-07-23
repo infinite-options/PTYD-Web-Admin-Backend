@@ -144,7 +144,6 @@ export default class MealSchedule extends Component {
         params: {affected_date: `${yyyy}-${mm}-${dd}`}
       })
       .then(res => {
-        console.log(res);
         if (res.data.result !== undefined) {
           let rate = parseFloat(
             (parseFloat(res.data.result.tax_rate) / 100).toFixed(2)
@@ -218,6 +217,7 @@ export default class MealSchedule extends Component {
                   CHANGE_SUBCRIPTION_URL={this.props.CHANGE_SUBCRIPTION_URL}
                   UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
                   UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
+                  REFUND_URL={this.props.REFUND_URL}
                   user_uid={this.state.userID}
                   tax_rate={this.state.tax_rate}
                   shipping={this.state.shipping}

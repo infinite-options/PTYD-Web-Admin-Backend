@@ -131,7 +131,7 @@ def execute(sql, cmd, conn, skipSerialization=False):
     try:
         with conn.cursor() as cur:
             cur.execute(sql)
-            if cmd is 'get':
+            if cmd == 'get':
                 result = cur.fetchall()
                 response['message'] = 'Successfully executed SQL query.'
                 # Return status code of 280 for successful GET request
@@ -139,7 +139,7 @@ def execute(sql, cmd, conn, skipSerialization=False):
                 if not skipSerialization:
                     result = serializeResponse(result)
                 response['result'] = result
-            elif cmd in 'post':
+            elif cmd == 'post':
                 conn.commit()
                 response['message'] = 'Successfully committed SQL command.'
                 # Return status code of 281 for successful POST request
@@ -638,7 +638,7 @@ def LogLoginAttempt(data, conn):
         login_id = login_id_res['result'][0]['new_id']
         # Generate random session ID
 
-        if data["auth_success"] is "TRUE":
+        if data["auth_success"] == "TRUE":
             session_id = "\'" + sha512(getNow().encode()).hexdigest() + "\'"
         else:
             session_id = "NULL"
@@ -923,7 +923,8 @@ class AccountPurchases(Resource):
                     ,snap.next_billing_date AS next_charge_date
                     ,IFNULL(addon.total_charge, 0.00) AS total_charge
                     ,pay.amount_due AS amount_due_before_addon
-                    ,addon.week_affected
+                    ,snap.week_affected
+                    ,snap.weeks_remaining
                     , \'""" + thur + """\' AS next_addon_charge_date
                 FROM (
                 -- Snapshot Query
@@ -933,6 +934,7 @@ class AccountPurchases(Resource):
                     ,ms1.delivery_start_date
                     ,ms1.subscription_weeks
                     ,ms1.weeks_remaining
+                    ,ms1.week_affected
                     ,ms1.next_billing_date
                 FROM 
                     ptyd_snapshots ms1
@@ -1352,7 +1354,6 @@ class Checkout(Resource):
             stripe_charge_id = "'" + stripe_chargeID + "'"
         else:
             stripe_charge_id = 'NULL'
-        print("string stripe_charge_id: ", stripe_charge_id)
         query = """ INSERT INTO ptyd_payments
                     (
                         payment_id,
@@ -1455,9 +1456,6 @@ class Checkout(Resource):
             purchaseIDresponse = execute(
                 "CALL get_new_purchase_id;", 'get', conn)
             snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
-
-            print(snapshotIDresponse)
-            print(purchaseIDresponse)
 
             snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
@@ -1627,14 +1625,11 @@ class Checkout(Resource):
                                                             AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
                                                             AND cc_cvv = '""" + data['cc_cvv'] + """') AS p)
                                                     AND cc_num IS NOT NULL;"""
-                print(select_card_query)
                 card_selected = execute(select_card_query, 'get', conn)
-                print("card_selected: ", card_selected)
                 if not card_selected['result']:
                     response['message'] = "Credit card info is incorrect."
                     return response, 400
                 # update data['cc_num'] to write to database
-                print(card_selected['result'][0].get('cc_num'))
                 data['cc_num'] = card_selected['result'][0].get('cc_num')
             #checking for coupon and preparing for stripe charge
             coupon_id = data.get('coupon_id')
@@ -1647,7 +1642,6 @@ class Checkout(Resource):
             try:
                 #create a token for stripe
                 card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
-                print ("card dict: ", card_dict)
                 try:
                     card_token = stripe.Token.create(card=card_dict)
                     stripe_charge = stripe.Charge.create(
@@ -1656,8 +1650,6 @@ class Checkout(Resource):
                                             source=card_token,
                                             description="Charge customer %s for %s" %(data['delivery_first_name'] + " " + data['delivery_last_name'], data['item'] ))
 
-                    print("charge success: ", stripe_charge)
-                    print("charge_id: ", stripe_charge.get('id'))
                 except stripe.error.CardError as e:
                     # Since it's a decline, stripe.error.CardError will be caught
                     response['message'] = e.error.message
@@ -1665,7 +1657,6 @@ class Checkout(Resource):
                 # write everything into payment table
                 if coupon_id == "" or coupon_id is None:
                     payment_query = self.getPaymentQuery(data, 'NULL', charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
-                    print("query: ", payment_query)
                 elif coupon_id != "" and coupon_id is not None:
                     coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
                     temp_query = """ INSERT INTO ptyd_payments
@@ -1713,19 +1704,14 @@ class Checkout(Resource):
                                         \'""" + str(0-data['total_discount']) + """\',0,
                                         \'""" + purchaseId + """\',
                                         \'""" + getNow() + """\');"""
-                    print("temp2: ", temp_query)
                     res = execute(temp_query, 'post', conn)
-                    print("after execute temp query 2: ", res)
                     # update coupon table
                     coupon_query = """UPDATE ptyd_coupons SET num_used = num_used + 1 
                                 WHERE coupon_id = """ + coupon_id + ";"
                     res = execute(coupon_query, 'post', conn)
-                    print("after execute coupon_query: ", res)
                     paymentId = get_new_paymentID()
 
                     payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
-                    print("payment_query: ", payment_query)
-
                 reply['payment'] = execute(payment_query, 'post', conn)
                 if reply['payment']['code'] != 281:
                     response['message'] = "Internal Server Error"
@@ -1766,6 +1752,7 @@ class UpdatePurchases(Resource):
                     affDateObj + timedelta(days=(5 - affDateObj.weekday() % 7)), "%Y-%m-%d")
             else:
                 # Get following Saturday (same day if Saturday) as a string
+                print("here")
                 thisSat = datetime.strftime(
                     date.today() - timedelta(days=((date.today().weekday() - 5) % 7)), "%Y-%m-%d")
                 nextSat = datetime.strftime(
@@ -2149,7 +2136,7 @@ class ChargeSubscribers(Resource):
                 ;"""
 
             Payments = execute(query, 'get', conn)
-            print("duePayments: ", Payments['result'])
+
             if Payments['code'] != 280:
                 response['message'] = 'Could not retrieve meal selections.'
                 return response, 500
@@ -2201,8 +2188,10 @@ class ChargeSubscribers(Resource):
                             ;"""
                 return query
 
-            def charge_query(NewPaymentID, paymentID, amount, recurring):
-                recur = 'TRUE' if recurring else 'FALSE'
+            def getPaymentQuery(data, couponID, amount_due, amount_paid, paymentId, stripe_chargeID, purchaseId):
+                stripe_charge_id = "'" + stripe_chargeID + "'" if stripe_chargeID is not None else 'NULL'
+                couponID = "'" + couponID + "'" if couponID is not None else 'NULL'
+
                 query = """ INSERT INTO ptyd_payments
                             (
                                 payment_id,
@@ -2218,28 +2207,73 @@ class ChargeSubscribers(Resource):
                                 cc_num,
                                 cc_exp_date,
                                 cc_cvv,
-                                billing_zip
+                                billing_zip,
+                                stripe_charge_id
                             )
-                            SELECT
-                                \'""" + NewPaymentID + """\' AS payment_id,
-                                buyer_id, '""" + recur + """' ,
-                                gift,
-                                coupon_id, """ + str(amount) + """,
-                                """ + str(amount) + """,
-                                purchase_id,
+                            VALUES (
+                                \'""" + paymentId + """\',
+                                \'""" + data['user_uid'] + """\',
+                                \'""" + data['recurring'] + """\',
+                                \'""" + data['is_gift'] + """\',
+                                """ + couponID + """,
+                                \'""" + str(amount_due) + """\',
+                                \'""" + str(amount_paid) + """\',
+                                \'""" + purchaseId + """\',
                                 \'""" + getNow() + """\',
                                 \'STRIPE\',
-                                cc_num,
-                                cc_exp_date,
-                                cc_cvv,
-                                billing_zip
-                            FROM
-                                ptyd_payments
-                            WHERE
-                                payment_id = \'""" + paymentID + """\'
-                            ;"""
+                                \'""" + data['cc_num'] + """\',
+                                \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
+                                \'""" + data['cc_cvv'] + """\',
+                                \'""" + data['billing_zip'] + """\',
+                                """ + stripe_charge_id + """);"""
+
                 return query
 
+            # def charge_query(NewPaymentID, paymentID, amount, recurring):
+            #     recur = 'TRUE' if recurring else 'FALSE'
+            #     query = """ INSERT INTO ptyd_payments
+            #                 (
+            #                     payment_id,
+            #                     buyer_id,
+            #                     recurring,
+            #                     gift,
+            #                     coupon_id,
+            #                     amount_due,
+            #                     amount_paid,
+            #                     purchase_id,
+            #                     payment_time_stamp,
+            #                     payment_type,
+            #                     cc_num,
+            #                     cc_exp_date,
+            #                     cc_cvv,
+            #                     billing_zip
+            #                 )
+            #                 SELECT
+            #                     \'""" + NewPaymentID + """\' AS payment_id,
+            #                     buyer_id, '""" + recur + """' ,
+            #                     gift,
+            #                     coupon_id, """ + str(amount) + """,
+            #                     """ + str(amount) + """,
+            #                     purchase_id,
+            #                     \'""" + getNow() + """\',
+            #                     \'STRIPE\',
+            #                     cc_num,
+            #                     cc_exp_date,
+            #                     cc_cvv,
+            #                     billing_zip
+            #                 FROM
+            #                     ptyd_payments
+            #                 WHERE
+            #                     payment_id = \'""" + paymentID + """\'
+            #                 ;"""
+            #     return query
+
+            nextSat = paramDate + timedelta(days=2)
+            print("nextSat: ", nextSat)
+            nextSat_str = nextSat.strftime("%Y-%m-%d")
+            tax_rate_query = """SELECT tax_rate FROM ptyd_saturdays WHERE Saturday = '{}'""".format(nextSat_str)
+            tax_rate = round(float(execute(tax_rate_query, 'get', conn)['result'][0]['tax_rate'])/100, 2)
+            shipping = 15
             for eachPayment in Payments['result']:
                 print("each payment: ", eachPayment)
                 subscription_charge = 0
@@ -2248,23 +2282,27 @@ class ChargeSubscribers(Resource):
                 # thursday. What will happen if recurring == false and they still choosing ADD LOCAL TREATS. Should
                 # we charge them or not, because those addons have written into the database and it will be delivered.
                 if (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == "TRUE"):
-                    subscription_charge = float(eachPayment['meal_plan_price'])
+                    print("tax_rate: ", tax_rate)
+                    print("meal_price: ", eachPayment['meal_plan_price'])
+                    subscription_charge = float(eachPayment['meal_plan_price']) * (1 + tax_rate) + shipping
+
+                    print("subcription_charge: ", subscription_charge)
                 # check for the addon for the next week
                 # paramDate is Thursday
-                nextSat = paramDate + timedelta(days=2)
-                print("nextSat: ", nextSat)
-                nextSat_str = nextSat.strftime("%Y-%m-%d")
-
+                # nextSat = paramDate + timedelta(days=2)
+                # print("nextSat: ", nextSat)
+                # nextSat_str = nextSat.strftime("%Y-%m-%d")
                 addon_query = """SELECT * FROM ptyd_addons_selected
-                                    WHERE purchase_id = '""" + eachPayment['purchase_id'] + """'
-                                    AND week_affected = '""" + nextSat_str + "';"
+                                    WHERE selection_time = (SELECT MAX(selection_time) FROM ptyd_addons_selected
+                                                                WHERE purchase_id = '""" + eachPayment['purchase_id'] + """'
+                                                                AND week_affected = '""" + nextSat_str + """')
+                                    AND meal_selection <> '';"""
                 price_query = """SELECT meal_id, extra_meal_price FROM ptyd_meals;"""
                 price_result = execute(price_query, "get", conn).get("result")
 
                 price = {}
                 for item in price_result:
                     price[item['meal_id']] = item['extra_meal_price']
-                print("price: ", price)
                 print("addon query: ", addon_query)
                 addon_result = execute(addon_query, "get", conn).get('result')
                 print("addon_result: ", addon_result)
@@ -2272,88 +2310,143 @@ class ChargeSubscribers(Resource):
                 if addon_result:
                     meal_selected = addon_result[0].get(
                         'meal_selection').split(";")
-                    print("meal_selected: ", meal_selected)
-                    for id in meal_selected:
-                        addon_charge += float(price.get(id))
+                    if (len(meal_selected) > 0 and meal_selected[0] !=""):
+                        for id in meal_selected:
+                            addon_charge += float(price.get(id))
                 # start to write to the database
 
-                if subscription_charge > 0:  # time to renew subcription
-                    print("subcribtion > 0")
-                    newPaymentId = get_new_paymentID()
-                    if addon_charge > 0:  # write this addon into database without strip info
-                        try:
-                            print("cuc cu")
-                            temp_query = query_template(
-                                newPaymentId, eachPayment['payment_id'], addon_charge)
-                            print("ther")
-                            res = execute(temp_query, 'post', conn)
-                            print("after write addon into database:  line 2159", res)
-                            newPaymentId = get_new_paymentID()
-                            temp_query = query_template(
-                                newPaymentId, eachPayment['payment_id'], subscription_charge)
-                            res = execute(temp_query, 'post', conn)
-                            print(
-                                "after write subscription into database:  line 2163", res)
-                            # write total charge into database with strip info
-                            newPaymentId = get_new_paymentID()
-                            chargeQuery = charge_query(
-                                newPaymentId, eachPayment['payment_id'], subscription_charge + addon_charge, True)
-                            res = execute(chargeQuery, 'post', conn)
-                            print(
-                                "after write total charge into database line 2207: ", res)
-                        except:
-                            return "Internal server Error", 500
-                    else:
-                        chargeQuery = charge_query(newPaymentId, eachPayment['payment_id'],
-                                                   subscription_charge, True)
-                        res = execute(chargeQuery, 'post', conn)
-                        print(
-                            "after write total charge without addon into database line 2215: ", res)
-                    # New snapshot
-                    newSnapshotId = get_new_snapshotID()
-                    print("Passed newSnapshotID")
-                    dates = self.getDates(
-                        eachPayment['subscription_weeks'], paramDate)
-                    print("passed dates")
-                    query = """
-                                        INSERT INTO ptyd_snapshots
-                                        (
-                                            snapshot_id
-                                            , snapshot_timestamp
-                                            , purchase_id
-                                            , payment_id
-                                            , delivery_start_date
-                                            , subscription_weeks
-                                            , delivery_end_date
-                                            , next_billing_date
-                                            , weeks_remaining
-                                            , week_affected
-                                        )
-                                        SELECT
-                                            \'""" + newSnapshotId + """\' AS snapshot_id
-                                            , \'""" + getNow() + """\' AS snapshot_timestamp
-                                            , s1.purchase_id
-                                            , \'""" + newPaymentId + """\' AS payment_id
-                                            , \'""" + dates['startDate'] + """\'
-                                            , subscription_weeks
-                                            , \'""" + dates['endDate'] + """\'
-                                            , \'""" + dates['billingDate'] + """\'
-                                            , subscription_weeks
-                                            , \'""" + dates['startDate'] + """\'
-                                        FROM
-                                            ptyd_snapshots s1
-                                        WHERE
-                                            s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
+                newPaymentId = get_new_paymentID()
+                total_charge = round(addon_charge + subscription_charge, 2)
+                #collect info from payment table
+                couponID = None
+                card_query = """SELECT buyer_id as user_uid, coupon_id, gift as is_gift, cc_num, cc_exp_date, cc_cvv, billing_zip FROM ptyd_payments
+                                    WHERE payment_id = '{}'""".format(eachPayment['payment_id'])
+                card_res = execute(card_query, 'get', conn)
+                if card_res['code'] != 280:
+                    response['message'] = 'Cannot charge by using Stripe'
+                    return response, 500
+                print("card_res: ", card_res)
+                card_data = card_res['result'][0]
 
-                    items.append(execute(query, 'post', conn))
-                else:  # only charge for the addon
-                    print("no it's not")
-                    print("addon_charge: ", addon_charge)
-                    if addon_charge > 0:
-                        chargeQuery = charge_query(
-                            get_new_paymentID(), eachPayment['payment_id'], addon_charge, False)
-                        res = execute(chargeQuery, 'post', conn)
-                        print("after execute charge_query: ", res)
+                #check for coupon and update total charge
+                if card_data['coupon_id'] is not None:
+                    coupon_check = Coupon.get(couponID, coupon_email)
+                    print("coupon_check: ", coupon_check)
+                    #need some code to apply coupon
+
+
+                if total_charge > 0:
+                    card_data['cc_exp_month'] = card_data['cc_exp_date'].split('-')[1]
+                    card_data['cc_exp_year'] = card_data['cc_exp_date'].split('-')[0]
+                    print("card_data: ", card_data)
+                    # Charge by stripe
+                    card_dict = {"number": card_data['cc_num'], "exp_month": int(card_data['cc_exp_month']),
+                                 "exp_year": int(card_data['cc_exp_year']), "cvc": card_data['cc_cvv'], }
+                    print("card dict: ", card_dict)
+                    stripe_charge_id = None
+                    try:
+                        card_token = stripe.Token.create(card=card_dict)
+                        msg = "Charged for renew subcription." if subscription_charge > 0 else "Charged for addons"
+                        stripe_charge = stripe.Charge.create(
+                            amount=int(round(total_charge * 100, 0)),
+                            currency="usd",
+                            source=card_token,
+                            description=msg)
+
+                        print("charge success: ", stripe_charge)
+                        print("charge_id: ", stripe_charge.get('id'))
+                        stripe_charge_id = stripe_charge.get('id')
+                    except stripe.error.CardError as e:
+                        # Since it's a decline, stripe.error.CardError will be caught
+                        response['message'] = e.error.message
+                        return response, 400
+                        # if addon_charge > 0:  # write this addon into database without stripe info
+                        #     try:
+                        #         temp_query = query_template(
+                        #             newPaymentId, eachPayment['payment_id'], addon_charge)
+                        #         print("ther")
+                        #         res = execute(temp_query, 'post', conn)
+                        #         print("after write addon into database:  line 2159", res)
+                        #         newPaymentId = get_new_paymentID()
+                        #         temp_query = query_template(
+                        #             newPaymentId, eachPayment['payment_id'], subscription_charge)
+                        #         res = execute(temp_query, 'post', conn)
+                        #         print(
+                        #             "after write subscription into database:  line 2163", res)
+                        #         # write total charge into database with strip info
+                        #         newPaymentId = get_new_paymentID()
+                        #         chargeQuery = charge_query(
+                        #             newPaymentId, eachPayment['payment_id'], subscription_charge + addon_charge, True)
+                        #         res = execute(chargeQuery, 'post', conn)
+                        #         print(
+                        #             "after write total charge into database line 2207: ", res)
+                        #     except:
+                        #         return "Internal server Error", 500
+                        # else:
+                        #     print("charging")
+                        #     chargeQuery = charge_query(newPaymentId, eachPayment['payment_id'],
+                        #                                subscription_charge, True)
+                        #     res = execute(chargeQuery, 'post', conn)
+                        #     print(
+                        #         "after write total charge without addon into database line 2215: ", res)
+                    #write charge into payment table
+
+                    paymentId = get_new_paymentID()
+                    card_data['recurring'] = 'TRUE' if subscription_charge > 0 else 'FALSE'
+                    payment_query = getPaymentQuery(card_data, couponID, total_charge, total_charge, paymentId, stripe_charge_id, eachPayment['purchase_id'])
+                    print("payment_query: ", payment_query)
+                    items.append(execute(payment_query, 'post', conn))
+
+                    #update the recurring in the old payment
+                    res= execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(eachPayment['payment_id']), 'post', conn)
+                    items.append(res)
+                    # New snapshot
+                    # Only write to snapshot if it is a renew subscription
+                    if subscription_charge > 0 and stripe_charge_id is not None:
+                        newSnapshotId = get_new_snapshotID()
+                        print("Passed newSnapshotID")
+                        dates = self.getDates(
+                            eachPayment['subscription_weeks'], paramDate)
+                        print("passed dates")
+                        query = """
+                                            INSERT INTO ptyd_snapshots
+                                            (
+                                                snapshot_id
+                                                , snapshot_timestamp
+                                                , purchase_id
+                                                , payment_id
+                                                , delivery_start_date
+                                                , subscription_weeks
+                                                , delivery_end_date
+                                                , next_billing_date
+                                                , weeks_remaining
+                                                , week_affected
+                                            )
+                                            SELECT
+                                                \'""" + newSnapshotId + """\' AS snapshot_id
+                                                , \'""" + getNow() + """\' AS snapshot_timestamp
+                                                , s1.purchase_id
+                                                , \'""" + newPaymentId + """\' AS payment_id
+                                                , \'""" + dates['startDate'] + """\'
+                                                , subscription_weeks
+                                                , \'""" + dates['endDate'] + """\'
+                                                , \'""" + dates['billingDate'] + """\'
+                                                , subscription_weeks
+                                                , \'""" + dates['startDate'] + """\'
+                                            FROM
+                                                ptyd_snapshots s1
+                                            WHERE
+                                                s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
+
+                        items.append(execute(query, 'post', conn))
+                # else:  # only charge for the addon
+                #     print("no it's not")
+                #     print("addon_charge: ", addon_charge)
+                #     if addon_charge > 0:
+                #         chargeQuery = charge_query(
+                #             get_new_paymentID(), eachPayment['payment_id'], addon_charge, False)
+                #         res = execute(chargeQuery, 'post', conn)
+                #         print("after execute charge_query: ", res)
 
             response['message'] = 'POST request successful.'
 
@@ -3054,14 +3147,15 @@ class CustomerInfo2(Resource):
 
 class Cancel_SubscriptionNow(Resource):
     global RDS_PW
-    def refund_calculator(self, conn, purchaseID, data=None):
-        current_purchase_query = """SELECT purchase.purchase_id, purchase.meal_plan_id, plans.meal_plan_desc, 
-                                                      plans.meal_plan_price, payment.payment_id, payment.buyer_id, 
-                                                      payment.gift, payment.amount_due, payment.amount_paid, 
-                                                      payment.cc_num, payment.cc_cvv, payment.cc_exp_date, 
-                                                      payment.payment_type, payment.billing_zip, 
-                                                      payment.isAddon, payment.stripe_charge_id, payment.previous_payment,
-                                                      snapshot1.weeks_remaining, snapshot1.week_affected
+    def refund_calculator(self, conn, purchaseID):
+        current_purchase_query = """SELECT purchase.purchase_id, purchase.meal_plan_id, purchase.start_date,
+                                                    plans.meal_plan_desc, plans.meal_plan_price, 
+                                                    payment.payment_id, payment.buyer_id, 
+                                                    payment.gift, payment.amount_due, payment.amount_paid, 
+                                                    payment.cc_num, payment.cc_cvv, payment.cc_exp_date, 
+                                                    payment.payment_type, payment.billing_zip, 
+                                                    payment.isAddon, payment.stripe_charge_id, payment.previous_payment,
+                                                    snapshot1.weeks_remaining, snapshot1.week_affected
                                            FROM ptyd_purchases purchase, ptyd_payments payment, 
                                                   ptyd_snapshots snapshot1, ptyd_meal_plans plans
                                            WHERE  purchase.purchase_id = '""" + purchaseID + """' AND
@@ -3094,14 +3188,20 @@ class Cancel_SubscriptionNow(Resource):
         week_remaining = int(current_purchase_info.get('weeks_remaining'))
 
         amount_calculating = current_purchase_info.get('meal_plan_price')
-        # we need to take these info from database or it will be sent from front end to make sure we have the same info
-        # from front to back
-        if data==None:
-            shipping = 15
-            tax_rate = 0.0825
+
+        #get tax_rate at current time
+        start_date = datetime.strptime(current_purchase_info['start_date'], "%Y-%m-%d")
+        if start_date.weekday() == 5:
+            saturday = start_date.strftime("%Y-%m-%d")
         else:
-            shipping = data['shipping']
-            tax_rate = data['tax_rate']
+            saturday = (start_date - timedelta(days=((start_date.weekday() - 5) % 7))).strftime("%Y-%m-%d")
+        query = """SELECT tax_rate FROM ptyd_saturdays WHERE Saturday = '{}'""".format(saturday)
+        res = execute(query, 'get', conn)
+        if res['code'] != 280:
+            return dict(message="Internal Server Error"), 500
+        tax_rate = round(float(res['result'][0]['tax_rate'])/100, 2)
+        shipping = 15
+
         refund = 0
         # create a temp dictionary to keep the meal plan price
         price = {}
@@ -3138,6 +3238,7 @@ class Cancel_SubscriptionNow(Resource):
             print("matching weekly")
             if week_remaining == 0:
                 refund = 0
+                shipping = 0
             elif week_remaining == 1:
                 refund = amount_calculating
         else:
@@ -3303,6 +3404,20 @@ class Cancel_SubscriptionNow(Resource):
         finally:
             disconnect(conn)
 
+class RefundCalculator (Resource):
+    def get(self):
+        try:
+            conn = connect()
+
+            purchase_id = request.args.get('purchase_id')
+            response = Cancel_SubscriptionNow().refund_calculator(conn, purchase_id)
+
+            print(response)
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 class DoNotRenewSubscription(Resource):
     def patch(self):
@@ -3425,13 +3540,9 @@ class Change_Subscription(Resource):
                 DeliveryUnit = 'NULL'
             purchaseIDresponse = execute(
                 "CALL get_new_purchase_id;", 'get', conn)
-            # paymentIDresponse = execute(
-            #     "CALL get_new_payment_id;", 'get', conn)
+
             snapshotIDresponse = execute("CALL get_snapshots_id;", 'get', conn)
 
-            print(snapshotIDresponse)
-            print(purchaseIDresponse)
-            # print(paymentIDresponse)
 
             snapshotId = snapshotIDresponse['result'][0]['new_id']
             purchaseId = purchaseIDresponse['result'][0]['new_id']
@@ -3443,13 +3554,7 @@ class Change_Subscription(Resource):
 
             if purchaseId == None:
                 purchaseId = '300-000001'
-
-            # if paymentId == None:
-            #     paymentId = '200-000001'
-            print("before mealPlan")
             mealPlan = data['item'].split(' Subscription')[0]
-            print(data['user_uid'])
-            print("after mealPlan: ", mealPlan)
             queries = """
                 SELECT
                     meal_plan_id
@@ -3461,22 +3566,17 @@ class Change_Subscription(Resource):
 
             mealPlanQuery = execute(queries, 'get', conn)
 
-            print("Passed mealPlanQuery")
             if mealPlanQuery['code'] == 280:
-                print("Getting meal plan ID...")
                 mealPlanId = mealPlanQuery['result'][0]['meal_plan_id']
                 dates = Checkout().getDates(
                     mealPlanQuery['result'][0]['payment_frequency'])
-                print("Meal Plan ID:", mealPlanId)
             else:
                 response['message'] = 'Could not retrieve meal ID of requested plan.'
                 response['error'] = mealPlanQuery
-                print("Error:", response['message'])
-                print("Error JSON:", response['error'])
                 return response, 501
             # calculate the refund.
             new_plan_price = data['item_price']
-            refund_info = Cancel_SubscriptionNow().refund_calculator(conn,data['purchase_id'])
+            refund_info = Cancel_SubscriptionNow().refund_calculator(conn,data['purchase_id'],)
             print("refund_info: ", refund_info)
             current_meal_refund = refund_info.get('refund_amount')
             new_charge = round((float(new_plan_price) * (1 + data['tax_rate']) + data['shipping']) - current_meal_refund,2)
@@ -3488,7 +3588,6 @@ class Change_Subscription(Resource):
                 #update the card if there are X in the card number
                 if data['cc_num'][0:12] == "XXXXXXXXXXXX":
                     last_four_digits = data['cc_num'][12:]
-                    print("purchase_id: ", data['purchase_id'])
                     # "{:02}".format is used for format integer
                     select_card_query = """SELECT cc_num FROM ptyd_payments p1
                                                 WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp) FROM 
@@ -3498,9 +3597,7 @@ class Change_Subscription(Resource):
                                                         AND cc_exp_date = '""" + str(data['cc_exp_year']) + "-" + str("{:02}".format(data['cc_exp_month'])) + """-01'
                                                         AND cc_cvv = '""" + data['cc_cvv'] + """') AS p)
                                                 AND cc_num is not NULL;"""
-                    print("select_card_query: ", select_card_query)
                     card_selected = execute(select_card_query, 'get', conn)
-                    print("card_selected: ", card_selected)
                     if not card_selected['result']:
                         response['message'] = "Credit card info is incorrect."
                         return response, 400
@@ -3519,27 +3616,17 @@ class Change_Subscription(Resource):
                                                          stripe_charge.get('id'), stripe_refund.get('id'))
                     reply += [execute(payment_query, 'post', conn)]
                     Cancel_SubscriptionNow().stripe_refund(conn, refund_info, upgrade=True)
-
-                    print("refund_info before write to database in change_subscription: ", refund_info)
                     stripe_charge['id'] = refund_info.get('stripe_charge_id')
                     stripe_refund['id'] = refund_info.get('stripe_refund_id')
-                    print("stripe_charge['id']: ", stripe_charge['id'])
-                    print("stripe_refund['id']: ", stripe_refund['id'])
                     previous = "'" + refund_info.get('previous_payment') + "'" if refund_info.get('previous_payment') is not None else 'NULL'
-
                     update_query = """UPDATE ptyd_payments SET stripe_charge_id = '""" + str(stripe_charge['id']) + """',
                                         stripe_refund_id = '""" + str(stripe_refund['id']) + """',
                                         previous_payment = """ + previous + """
                                         WHERE payment_id = '""" + paymentId + "';"
-                    print("update total refund: ", update_query)
                     reply += [execute(update_query, 'post', conn)]
-                    print(reply)
-                    # stripe_charge_id = refund_info.get('stripe_charge_id')
-                    # stripe_refund = stripe.Refund.create(charge=str(stripe_charge_id), amount=int(round(0-refund,2)*100))
                     #we need to update the stripe_charge id in first row
                 elif new_charge > 0:
                     card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']), "exp_year": int(data['cc_exp_year']), "cvc": data['cc_cvv'], }
-                    print("card dict: ", card_dict)
                     try:
                         card_token = stripe.Token.create(card=card_dict)
                         stripe_charge = stripe.Charge.create(
@@ -3547,15 +3634,11 @@ class Change_Subscription(Resource):
                             currency="usd",
                             source=card_token,
                             description="Charge customer %s for %s" % (data['delivery_first_name'] + " " + data['delivery_last_name'], "For changing subscription"))
-
-                        print("charge success: ", stripe_charge)
-                        print("charge_id: ", stripe_charge.get('id'))
                     except stripe.error.CardError as e:
                         # Since it's a decline, stripe.error.CardError will be caught
                         response['message'] = e.error.message
                         return response, 400
                     update_query = self.update_payment_query(refund_info.get('purchase_id'))
-                    print(update_query)
                     # update payment table
                     reply = [execute(update_query, 'post', conn)]
 
@@ -3565,7 +3648,6 @@ class Change_Subscription(Resource):
                     paymentId = paymentIDresponse['result'][0]['new_id']
                     payment_query = self.getPaymentQuery(data, paymentId, purchaseId, refund_info,
                                                          stripe_charge.get('id'), stripe_refund.get('id'))
-                    print(payment_query)
                     reply += [execute(payment_query, 'post', conn)]
             except:
                 response['message'] ="Stripe charging/refund error"
@@ -3668,7 +3750,6 @@ class Change_Subscription(Resource):
 
             # execute the rest of query
             reply += [execute(query, 'post', conn) for type in [purchase_query, snapshot_query] for query in type]
-            print("reply: ", reply)
             response['result'] = reply
             return response, 200
         except:
@@ -3677,13 +3758,17 @@ class Change_Subscription(Resource):
             disconnect(conn)
 
 class Coupon (Resource):
-    def get(self):
+    def get(self, couponID = None, coupon_email = None):
         response = {}
         try:
-            data = request.args
-            print("Received: ", data)
-            coupon_id = data['coupon_id']
-            apply_email = data['email']
+            if couponID is None:
+                data = request.args
+                print("Received: ", data)
+                coupon_id = data['coupon_id']
+                apply_email = data['email']
+            else:
+                coupon_id = couponID
+                apply_email = coupon_email
             # prepare a query to get info of coupon
             query = """SELECT * FROM ptyd_coupons WHERE coupon_id = '""" + coupon_id + "';"
             # connect to database to get info of this coupon
@@ -5874,6 +5959,145 @@ class Edit_Menu(Resource):
         finally:
             disconnect(conn)
 
+class Latest_activity(Resource):
+    def get(self, user_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            
+            items = execute(
+                """ select acc.*,pur.*,mp.meal_plan_desc,
+                        pay.*
+                        from ptyd_accounts acc
+                        left join ptyd_payments pay
+                        on acc.user_uid = pay.buyer_id
+                        left join ptyd_purchases pur
+                        on pay.purchase_id = pur.purchase_id
+                        left join ptyd_meal_plans mp
+                        on pur.meal_plan_id = mp.meal_plan_id
+                        where acc.user_uid = \'""" + user_id + """\'
+                        and pay.payment_time_stamp in
+                        (select latest_time_stamp from
+                            (SELECT buyer_id, purchase_id, MAX(payment_time_stamp) as "latest_time_stamp" FROM
+                                (SELECT * FROM ptyd_payments where buyer_id = \'""" + user_id + """\') temp
+                                group by buyer_id, purchase_id) temp1
+                        )
+                        order by pur.purchase_id
+                        ;
+                        """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class All_Payments(Resource):
+    def get(self, user_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            
+            items = execute(
+                """ select acc.*,pur.*,mp.meal_plan_desc,
+                        pay.*
+                        from ptyd_accounts acc
+                        left join ptyd_payments pay
+                        on acc.user_uid = pay.buyer_id
+                        left join ptyd_purchases pur
+                        on pay.purchase_id = pur.purchase_id
+                        left join ptyd_meal_plans mp
+                        on pur.meal_plan_id = mp.meal_plan_id
+                        where acc.user_uid = \'""" + user_id + """\'
+                        order by pur.purchase_id
+                        ;
+                        """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
+class PurchaseIdMeals(Resource):
+    def get(self, purchase_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            
+            items = execute(
+                """ SELECT 
+                        act_pur.*,
+                        -- act_meal.week_affected,
+                        mp.meal_plan_desc,
+                        act_meal.selection_time,
+                        act_meal.meal_selection,
+                        act_meal.delivery_day
+                    FROM (
+                        SELECT * 
+                        FROM ptyd.ptyd_purchases pur
+                        JOIN ptyd.ptyd_saturdays sat
+                        WHERE pur.purchase_status = "ACTIVE"
+                            -- AND sat.Saturday < "2020-09-01"
+                            AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
+                            AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
+                            AND sat.Saturday > pur.start_date)
+                        AS act_pur
+                    LEFT JOIN (# QUERY 1 
+                        SELECT
+                            ms1.purchase_id
+                            , ms1.selection_time
+                            , ms1.week_affected
+                            , ms1.meal_selection
+                            , ms1.delivery_day
+                        FROM ptyd.ptyd_meals_selected AS ms1
+                        INNER JOIN (
+                            SELECT
+                                purchase_id
+                                , week_affected
+                                , meal_selection
+                                , MAX(selection_time) AS latest_selection
+                                , delivery_day
+                            FROM ptyd.ptyd_meals_selected
+                            GROUP BY purchase_id
+                                , week_affected)
+                            AS ms2 
+                        ON ms1.purchase_id = ms2.purchase_id 
+                            AND ms1.week_affected = ms2.week_affected 
+                            AND ms1.selection_time = ms2.latest_selection
+                        ORDER BY purchase_id
+                            , week_affected)
+                        AS act_meal
+                    ON act_pur.Saturday = act_meal.week_affected
+                        AND act_pur.purchase_id = act_meal.purchase_id
+                    left join ptyd_meal_plans mp
+                    on act_pur.meal_plan_id = mp.meal_plan_id    
+                    where act_pur.purchase_id = \'""" + purchase_id + """\'
+                    ORDER BY act_pur.purchase_id
+                        , act_pur.Saturday
+                        , act_meal.selection_time
+                    ;
+                        """, 'get', conn)
+
+            response['message'] = 'successful'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)            
+            
+
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
@@ -5901,6 +6125,9 @@ api.add_resource(UpdateDeliveryAddress, '/api/v2/update-delivery-address')
 api.add_resource(UpdatePayments, '/api/v2/update-payments')
 api.add_resource(Change_Subscription, '/api/v2/change-subscription')
 api.add_resource(Cancel_SubscriptionNow, '/api/v2/cancel-subscription-now')
+
+#refund calculator
+api.add_resource(RefundCalculator, '/api/v2/refund_calculator')
 
 #Not sure which page is using this endpoint?
 api.add_resource(DoNotRenewSubscription, '/api/v2/do-not-renew-subscription')
@@ -5931,10 +6158,14 @@ api.add_resource(Get_All_Units, '/api/v2/GetUnits')
 api.add_resource(CouponsAPI, '/api/v2/CouponsAPI')
 api.add_resource(MealPlansAPI, '/api/v2/MealPlansAPI')
 api.add_resource(TaxRateAPI, '/api/v2/TaxRateAPI')
-
 api.add_resource(Add_Meal_plan, '/api/v2/Add_Meal_plan')
 api.add_resource(Add_Coupon, '/api/v2/Add_Coupon')
 api.add_resource(Edit_Menu, '/api/v2/Edit_Menu')
+
+api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
+api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
+api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
+
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
