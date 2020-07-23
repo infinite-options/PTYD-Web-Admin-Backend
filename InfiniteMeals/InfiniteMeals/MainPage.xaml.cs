@@ -9,20 +9,25 @@ using InfiniteMeals.ViewModel.Subscribe;
 using InfiniteMeals.Model.Database;
 using System.Windows.Input;
 
-namespace InfiniteMeals {
+namespace InfiniteMeals
+{
 
     // main page or home page of the app
-    public partial class MainPage : ContentPage {
+    public partial class MainPage : ContentPage
+    {
 
         public ICommand ForgotPasswordCommand => new Command(onForgotPassword);
 
-        public MainPage() {
+        public MainPage()
+        {
             InitializeComponent();
             System.Diagnostics.Debug.WriteLine("logged in: " + App.LoggedIn);
-            if (!App.LoggedIn) {
+            if (!App.LoggedIn)
+            {
                 this.loginButton.Text = "Log in";
             }
-            else {
+            else
+            {
                 this.loginButton.Text = "Log out";
             }
             homepage.Source = ImageSource.FromFile("homepage.jpg");
@@ -30,14 +35,22 @@ namespace InfiniteMeals {
 
         private async void ClickedLogin(object sender, EventArgs e)
         {
-            if (!App.LoggedIn) {
+            if (!App.LoggedIn)
+            {
                 LoginPage loginPage = new LoginPage();
                 loginPage.BindingContext = this;
                 await Navigation.PushAsync(loginPage);
-            } else {
+            }
+            else
+            {
                 App.setLoggedIn(false);
                 updateLoginButton();
             }
+        }
+
+        private async void ClickedMenu(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MenuView());
         }
 
         private async void ClickedMealSchedule(object sender, EventArgs e)
@@ -47,10 +60,12 @@ namespace InfiniteMeals {
 
         private async void ClickedUserProfile(object sender, EventArgs e)
         {
-            if (!App.LoggedIn) {
+            if (!App.LoggedIn)
+            {
                 await DisplayAlert("Error", "You are currently not logged in", "OK");
             }
-            else {
+            else
+            {
                 UserProfile userProfile = new UserProfile();
                 UserLoginSession currentUserInfo = App.Database.GetLastItem();
                 userProfile.BindingContext = currentUserInfo;
@@ -64,16 +79,20 @@ namespace InfiniteMeals {
         }
 
         // updates the login button based on whether the user is logged in or logged out 
-        public void updateLoginButton() {
-            if (!App.LoggedIn) {
+        public void updateLoginButton()
+        {
+            if (!App.LoggedIn)
+            {
                 this.loginButton.Text = "Log in";
             }
-            else {
+            else
+            {
                 this.loginButton.Text = "Log out";
             }
         }
 
-        private async void onForgotPassword() {
+        private async void onForgotPassword()
+        {
             System.Diagnostics.Debug.WriteLine("clicked");
             await Navigation.PushAsync(new ResetPasswordPage());
         }

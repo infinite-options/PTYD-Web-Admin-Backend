@@ -1,19 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:InfiniteMeals" x:Class="InfiniteMeals.MainPage" Title="Prep To your Door">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:InfiniteMeals"
+             x:Class="InfiniteMeals.MainPage">
 
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Subscribe" Clicked="ClickedSubscribe"/>
         <ToolbarItem Text="Menu" Clicked="ClickedMealSchedule"/>
         <ToolbarItem Text="Profile" Clicked="ClickedUserProfile" />
     </ContentPage.ToolbarItems>
+    <ScrollView>
+           <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="300" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16.66*" />
+            <ColumnDefinition Width="16.66*" />
+            <ColumnDefinition Width="16.66*" />
+        </Grid.ColumnDefinitions>
 
-    <StackLayout>
-
-
-        <Button x:Name="loginButton"  HorizontalOptions="Center" Text="Log In" Clicked="ClickedLogin"/>
-
-        <Image x:Name="homepage" HorizontalOptions="Center"/>
-
-    </StackLayout>
-
+        <Image Source="ptydlogo.jpg"
+                WidthRequest="100"
+                HeightRequest="100"
+                HorizontalOptions="Start"
+                Margin="40,0,0,0"
+               Grid.Column="0"
+               Grid.Row="0"
+        />
+       <Button x:Name="loginButton"
+               HorizontalOptions="Center"
+               Text="Log In"
+               Clicked="ClickedLogin"
+               Grid.Column="1"
+               Grid.Row=" 0"
+               HeightRequest="40"
+               VerticalOptions="Center"
+       />
+       <Button x:Name="viewMenu"
+               HorizontalOptions="Center"
+               Text="Menu"
+               Clicked="ClickedMenu"
+               Grid.Column="2"
+               Grid.Row=" 0"
+               HeightRequest="40"
+               VerticalOptions="Center"
+       />
+       <Image x:Name="homepage"
+              HorizontalOptions="Center"
+              Grid.Column="0"
+              Grid.Row="1"
+              Grid.ColumnSpan="3"/>
+    </Grid>
+</ScrollView>
 </ContentPage>

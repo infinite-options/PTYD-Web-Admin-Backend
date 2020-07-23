@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Remove="ViewModel\Subscribe\AddOnChoices.xaml.cs" />
     <Compile Remove="ViewModel\Login\Shipping.xaml.cs" />
+    <Compile Remove="Model\Meals\MealSchedule.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
