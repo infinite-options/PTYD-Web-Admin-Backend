@@ -1502,7 +1502,7 @@ class OIDisplay extends Component {
                       <tr>
                         <th>Week Affected</th>
                         <th>Total Needed</th>
-                        <th>Measure Name</th>
+                        <th>Recipe Unit</th>
                         <th>Ingredient Description</th>
                         <th>Package Size</th>
                         <th>Ingredient Measure</th>
@@ -1524,7 +1524,7 @@ class OIDisplay extends Component {
                         <tr>
                           <td>{meal.week_affected}</td>
                           <td>{meal.total_needed}</td>
-                          <td>{meal.measure_name}</td>
+                          <td>{meal.recipe_unit}</td>
                           <td>{meal.ingredient_desc}</td>
                           <td>{meal.package_size}</td>
                           <td>{meal.ingredient_measure}</td>
