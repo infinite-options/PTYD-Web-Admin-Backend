@@ -5343,6 +5343,7 @@ class TemplateApi(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
 class MenuCreation(Resource):
     global RDS_PW
     
@@ -6095,8 +6096,23 @@ class PurchaseIdMeals(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            disconnect(conn)            
-            
+            disconnect(conn)
+
+class AccountList(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            items = execute(""" select * from ptyd_accounts;""", 'get', conn)
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 # Define API routes
 # Customer page
@@ -6165,6 +6181,8 @@ api.add_resource(Edit_Menu, '/api/v2/Edit_Menu')
 api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
+
+api.add_resource(AccountList,'/api/v2/AccountList')
 
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
