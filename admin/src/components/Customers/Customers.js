@@ -3,10 +3,10 @@ import { Typography, Link, Breadcrumbs, InputBase, Grid } from "@material-ui/cor
 import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 
-import CustomerInfo from "./CustomerInfo";
+import Payments from "./Payments";
 import AllPayments from "./AllPayments";
 import LatestActivity from "./LatestActivity";
-import Graph from "../Homepage/mapGraph";
+// import Graph from "../Homepage/mapGraph";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -104,7 +104,7 @@ export default function Customers(props) {
         {searchID && (
             <Grid container>
                 <Grid item xs="2">
-                    <CustomerInfo searchID={searchID} PURCHASE_API_URL={props.PURCHASE_API_URL} />
+                    <Payments searchID={searchID} PURCHASE_API_URL={props.PURCHASE_API_URL} />
                 </Grid>
                 <Grid item xs="10">
                     <AllPayments searchID={searchID} ALLPAYMENTS_API_URL={props.ALLPAYMENTS_API_URL} />

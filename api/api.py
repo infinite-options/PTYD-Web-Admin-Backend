@@ -1376,10 +1376,10 @@ class Checkout(Resource):
                         \'""" + paymentId + """\',
                         \'""" + data['user_uid'] + """\',
                         \'TRUE\',
-                        \'""" + data['is_gift'] + """\',
+                        \'""" + str(data['is_gift']).upper() + """\',
                         """ + couponID + """,
-                        \'""" + str(amount_due) + """\',
-                        \'""" + str(amount_paid) + """\',
+                        \'""" + str(round(amount_due,2)) + """\',
+                        \'""" + str(round(amount_paid,2)) + """\',
                         \'""" + purchaseId + """\',
                         \'""" + getNow() + """\',
                         \'STRIPE\',
@@ -2396,10 +2396,6 @@ class ChargeSubscribers(Resource):
                     payment_query = getPaymentQuery(card_data, couponID, total_charge, total_charge, paymentId, stripe_charge_id, eachPayment['purchase_id'])
                     print("payment_query: ", payment_query)
                     items.append(execute(payment_query, 'post', conn))
-
-                    #update the recurring in the old payment
-                    res= execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(eachPayment['payment_id']), 'post', conn)
-                    items.append(res)
                     # New snapshot
                     # Only write to snapshot if it is a renew subscription
                     if subscription_charge > 0 and stripe_charge_id is not None:
@@ -2439,6 +2435,10 @@ class ChargeSubscribers(Resource):
                                                 s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
 
                         items.append(execute(query, 'post', conn))
+                        # update the recurring in the old payment
+                        res = execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(
+                            eachPayment['payment_id']), 'post', conn)
+                        items.append(res)
                 # else:  # only charge for the addon
                 #     print("no it's not")
                 #     print("addon_charge: ", addon_charge)

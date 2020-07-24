@@ -10,7 +10,6 @@ class LatestActivity extends React.Component {
             loaded: false,
             data: [],
         };
-        console.log('Latest activity props',this.props);
     }
 
     componentDidMount() {
@@ -21,8 +20,26 @@ class LatestActivity extends React.Component {
                 curComponent.setState({
                     loaded: true,
                     data: res.data.result.result,
-                },() => {
-                    console.log("latest activity api",curComponent.state.data);
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.searchID !== prevProps.searchID) {
+            this.fetchData();
+        }
+    }
+
+    fetchData = () => {
+        let curComponent = this;
+        axios
+            .get(`${this.props.LATESTACTIVITY_API_URL}/${this.props.searchID}`)
+            .then(function (res) {
+                curComponent.setState({
+                    data: res.data.result.result,
                 })
             })
             .catch(function (error) {

@@ -36,6 +36,7 @@ const App = props => {
     //facebook pixel goes here
     ReactPixel.init("342011940130879");
     ReactPixel.pageView();
+    // window.fbq("track", "ViewContent");
     // eslint-disable-next-line
   }, []);
 
