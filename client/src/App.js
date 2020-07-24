@@ -30,7 +30,7 @@ const App = props => {
 
   useEffect(() => {
     onLoad();
-    ReactGA.initialize("UA-173037172-1");
+    ReactGA.initialize("UA-173249175-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
 
     //facebook pixel goes here

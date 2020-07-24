@@ -974,7 +974,7 @@ class EditMeals extends Component {
                     <thead>
                       <tr>
                         <th colSpan="2">Select Meal To Edit</th>
-                        <th colSpan="3">{this.editMealDropdown()}</th>
+                        <th colSpan="3">{this.editMealCombo()}</th>
                       </tr>
                     </thead>
                     <thead>
@@ -1288,6 +1288,25 @@ class EditMeals extends Component {
       tempdate.push(<MenuItem value={i}>{this.state.mealkeys[i]}</MenuItem>);
     }
     return <FormControl>{newMealInput}</FormControl>;
+  };
+
+  editMealCombo = () => {
+    let tempMeal = [];
+    for (let i = 0; i < this.state.mealData.length; i++) {
+      tempMeal.push({ title: this.state.mealData[i].meal_name });
+    }
+    return (
+      <Autocomplete
+        id="combo-box-demo"
+        value={this.state.mealData[this.state.selIndex].meal_name}
+        options={tempMeal}
+        getOptionLabel={(option) => option.title}
+        style={{ width: 300 }}
+        renderInput={(params) => (
+          <TextField {...params} label="Meal Name" variant="outlined" />
+        )}
+      />
+    );
   };
 
   editMealDropdown = () => {
