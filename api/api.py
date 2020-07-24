@@ -4070,7 +4070,7 @@ class All_Meals_No_Date(Resource):
                                                                         menu_category
                                     ;""", 'get', conn)
 
-            # generated all of the menu dates available
+            # generated all of the menu dates available    
             '''            
             menuDates = []
             for index in range(len(items['result'])):
@@ -5018,14 +5018,45 @@ class Edit_Meal(Resource):
                                                 meal_fat = \'""" + str(meal_fat) + """\',
                                                 meal_sat  = \'""" + str(meal_sat) + """\'
                                                 where
-                                                meal_id = \'""" + str(mealId) + """\';""", 'post', conn)
-
+                                                meal_id = \'""" + str(mealId) + """\';""", 'post', conn)                                            
             print("meal_updated...")
-
+            
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            disconnect(conn)
+            disconnect(conn) 
+
+#class Add_New_Measure_Unit(Resource):       
+#    def post(self):
+#        response = {}
+#        items = {}
+#        try:
+#            conn = connect()
+#            data = request.get_json(force=True)
+#
+#            measure_name = data['measure_name']
+#
+#            measure_unitIdQuery = execute("""CALL get_new_measure_unit_id();""", 'get', conn)
+#            measure_unitId = measure_unitIdQuery ['result'][0]['new_id']
+#            items['new_ingredient_insert'] = execute(""" INSERT INTO ptyd_measure_unit 
+#                                                        (
+#                                                        measure_unit_id,measure_name
+#                                                        ) 
+#                                                        VALUES 
+#                                                        (
+#                                                        \'""" + str(measure_unitId) + """\',
+#                                                        \'""" + str(measure_name) + """\'
+#                                                        );
+#                                                        """, 'post', conn)
+#            
+#            response['message'] = 'Request successful.'
+#            response['result'] = items
+#
+#            return response, 200
+#        except:
+#            raise BadRequest('Request failed, please try again later.')
+#        finally:
+#            disconnect(conn)
 
         #class Add_New_Measure_Unit(Resource):
 #    def post(self):
@@ -5833,8 +5864,8 @@ class PurchaseIdMeals(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            disconnect(conn)
-
+            disconnect(conn)    
+            
 class Add_Unit_Conversion(Resource):
     def post(self):
         response = {}
@@ -5845,7 +5876,6 @@ class Add_Unit_Conversion(Resource):
             data = request.get_json(force=True)
             print("data collected...")
             print(data)
-
             type = data['type']
             recipe_unit = data['recipe_unit']
             conversion_ratio = data['conversion_ratio']
