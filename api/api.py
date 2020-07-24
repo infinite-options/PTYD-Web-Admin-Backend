@@ -1411,19 +1411,19 @@ class Checkout(Resource):
         if frequency == 'Weekly':
             dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
             dates['billingDate'] = (
-                thurs + timedelta(days=7)).strftime("%Y-%m-%d")
+                    thurs + timedelta(days=7)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '1'
         elif frequency == '2 Week Pre-Pay':
             dates['endDate'] = (thurs + timedelta(days=11)
                                 ).strftime("%Y-%m-%d")
             dates['billingDate'] = (
-                thurs + timedelta(days=14)).strftime("%Y-%m-%d")
+                    thurs + timedelta(days=14)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '2'
         elif frequency == '4 Week Pre-Pay':
             dates['endDate'] = (thurs + timedelta(days=25)
                                 ).strftime("%Y-%m-%d")
             dates['billingDate'] = (
-                thurs + timedelta(days=28)).strftime("%Y-%m-%d")
+                    thurs + timedelta(days=28)).strftime("%Y-%m-%d")
             dates['weeksRemaining'] = '4'
 
         return dates
@@ -1645,10 +1645,10 @@ class Checkout(Resource):
                 try:
                     card_token = stripe.Token.create(card=card_dict)
                     stripe_charge = stripe.Charge.create(
-                                            amount=int(round(charge*100, 0)),
-                                            currency="usd",
-                                            source=card_token,
-                                            description="Charge customer %s for %s" %(data['delivery_first_name'] + " " + data['delivery_last_name'], data['item'] ))
+                        amount=int(round(charge*100, 0)),
+                        currency="usd",
+                        source=card_token,
+                        description="Charge customer %s for %s" %(data['delivery_first_name'] + " " + data['delivery_last_name'], data['item'] ))
 
                 except stripe.error.CardError as e:
                     # Since it's a decline, stripe.error.CardError will be caught
@@ -2045,17 +2045,17 @@ class ChargeSubscribers(Resource):
         if frequency == 1:
             dates['endDate'] = (thurs + timedelta(days=4)).strftime("%Y-%m-%d")
             dates['billingDate'] = (
-                thurs + timedelta(days=7)).strftime("%Y-%m-%d")
+                    thurs + timedelta(days=7)).strftime("%Y-%m-%d")
         elif frequency == 2:
             dates['endDate'] = (thurs + timedelta(days=11)
                                 ).strftime("%Y-%m-%d")
             dates['billingDate'] = (
-                thurs + timedelta(days=14)).strftime("%Y-%m-%d")
+                    thurs + timedelta(days=14)).strftime("%Y-%m-%d")
         elif frequency == 4:
             dates['endDate'] = (thurs + timedelta(days=25)
                                 ).strftime("%Y-%m-%d")
             dates['billingDate'] = (
-                thurs + timedelta(days=28)).strftime("%Y-%m-%d")
+                    thurs + timedelta(days=28)).strftime("%Y-%m-%d")
 
         return dates
 
@@ -3072,7 +3072,7 @@ class Cancel_SubscriptionNow(Resource):
             execute(""" CALL `ptyd`.`user_cancel_now_update_snapshot`( \'""" + snapshotId +
                     """\' , \'""" + getNow() + """\', \'""" + purchase_id + """\');""", 'post', conn)
             execute("""UPDATE `ptyd`.`ptyd_purchases` SET `purchase_status` = 'CANCELLED' WHERE (`purchase_id` = '\'""" +
-                purchase_id + """\');""", 'post', conn)
+                    purchase_id + """\');""", 'post', conn)
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -3487,7 +3487,7 @@ class Coupon (Resource):
         finally:
             disconnect(conn)
 class UpdateDeliveryAddress(
-        Resource):  # we do not need this if we consider updating subcription as deleting the old one and
+    Resource):  # we do not need this if we consider updating subcription as deleting the old one and
     # buy the new subcription
     def patch(self):
         response = {}
@@ -4676,9 +4676,9 @@ class DisplaySaturdays(Resource):
                                             SET Tax_Rate = \'""" + str(Tax_Rate) + """\'
                                             WHERE Saturday >= \'""" + str(Saturday) + """\';
                                             """, 'post', conn)
-                                            
+
             print("meal_plan_updated...")
-            
+
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -4754,12 +4754,12 @@ class MealCreation(Resource):
             data = request.get_json(force=True)
 
             # Post JSON needs to be in this format
-#           data = {
-#               'meal_id': '700-000001',
-#               'ingredient_id': '110-000002',
-#               'ingredient_qty': 3,
-#               'measure_id': '130-000004'
-#           }
+            #           data = {
+            #               'meal_id': '700-000001',
+            #               'ingredient_id': '110-000002',
+            #               'ingredient_qty': 3,
+            #               'measure_id': '130-000004'
+            #           }
 
             query = """
                 INSERT INTO ptyd_recipes (
@@ -4887,7 +4887,7 @@ class Add_New_Ingredient(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-class Get_All_Units(Resource):       
+class Get_All_Units(Resource):
 
     def get(self):
         response = {}
@@ -4978,14 +4978,14 @@ class Edit_Meal(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-    
+
     def patch(self):
         response = {}
         items = {}
         try:
             conn = connect()
             data = request.get_json(force=True)
-           
+
             mealId = data['mealId']
             meal_category = data['meal_category']
             meal_name = data['meal_name']
@@ -5018,8 +5018,7 @@ class Edit_Meal(Resource):
                                                 meal_fat = \'""" + str(meal_fat) + """\',
                                                 meal_sat  = \'""" + str(meal_sat) + """\'
                                                 where
-                                                meal_id = \'""" + str(mealId) + """\';""", 'post', conn)
-                                            
+                                                meal_id = \'""" + str(mealId) + """\';""", 'post', conn)                                            
             print("meal_updated...")
             
         except:
@@ -5059,6 +5058,38 @@ class Edit_Meal(Resource):
 #        finally:
 #            disconnect(conn)
 
+        #class Add_New_Measure_Unit(Resource):
+#    def post(self):
+#        response = {}
+#        items = {}
+#        try:
+#            conn = connect()
+#            data = request.get_json(force=True)
+#
+#            measure_name = data['measure_name']
+#
+#            measure_unitIdQuery = execute("""CALL get_new_measure_unit_id();""", 'get', conn)
+#            measure_unitId = measure_unitIdQuery ['result'][0]['new_id']
+#            items['new_ingredient_insert'] = execute(""" INSERT INTO ptyd_measure_unit
+#                                                        (
+#                                                        measure_unit_id,measure_name
+#                                                        )
+#                                                        VALUES
+#                                                        (
+#                                                        \'""" + str(measure_unitId) + """\',
+#                                                        \'""" + str(measure_name) + """\'
+#                                                        );
+#                                                        """, 'post', conn)
+#
+#            response['message'] = 'Request successful.'
+#            response['result'] = items
+#
+#            return response, 200
+#        except:
+#            raise BadRequest('Request failed, please try again later.')
+#        finally:
+#            disconnect(conn)
+
 class TemplateApi(Resource):
     def get(self):
         response = {}
@@ -5081,8 +5112,8 @@ class TemplateApi(Resource):
             disconnect(conn)
 class MenuCreation(Resource):
     global RDS_PW
-    
-    #----------------- 
+
+    #-----------------
     # POST for 1. pulling up the menu dates available. 2. Populating the menu type and meal if there is an existing one. 3. providing a list of meals and their
     # average sold per posting
     # ----------------
@@ -5094,52 +5125,52 @@ class MenuCreation(Resource):
             conn = connect()
 
             items = execute(
-                    """ SELECT 
-                        menu_date,
-                        menu_type,
-                        meal_category,
-                        meal_cat,
-                        menu_category,
-                        default_meal,
-                        meal_name
-                        FROM 
-                        ptyd_menu
-                        JOIN ptyd_meals ON menu_meal_id=meal_id
-                        ORDER BY menu_date DESC ;""", 'get', conn)
+                """ SELECT 
+                    menu_date,
+                    menu_type,
+                    meal_category,
+                    meal_cat,
+                    menu_category,
+                    default_meal,
+                    meal_name
+                    FROM 
+                    ptyd_menu
+                    JOIN ptyd_meals ON menu_meal_id=meal_id
+                    ORDER BY menu_date DESC ;""", 'get', conn)
 
-            # generated all of the menu dates available                
+            # generated all of the menu dates available
             menuDates = []
             for index in range(len(items['result'])):
                 placeHolder = items['result'][index]['menu_date']
                 menuDates.append(placeHolder)
-            
+
             # formated the menu dates into a list
             menuDates = list( dict.fromkeys(menuDates) )
 
-            
+
 
             d ={}
             for index in range(len(menuDates)):
                 key = menuDates[index]
                 d[key] = 'value'
-            
-            
+
+
 
             for index in range(len(menuDates)):
-                
-                
+
+
 
                 menuInfo =[]
                 for index2 in range(len(items['result'])):
                     tempDict = {}
                     if (items['result'][index2]['menu_date'] == menuDates[index]):
-                        
+
                         key1 = "Menu_Type"
                         key2 = "Meal_Name"
                         key3 = "Meal_Cat"
                         key4 = "Menu_Category"
                         key5 = "Default_Meal"
-                        
+
                         menuType = items['result'][index2]['menu_type']
                         mealNames = items['result'][index2]['meal_name']
                         mealCat = items['result'][index2]['meal_cat']
@@ -5151,48 +5182,48 @@ class MenuCreation(Resource):
                         tempDict[key3] = mealCat
                         tempDict[key4] = menuCategory
                         tempDict[key5] = defaultMeal
-                        
+
                         menuInfo.append(tempDict)
 
-                
+
                 d[menuDates[index]] = menuInfo
 
-            
+
             items = execute(
-                        """ SELECT C.meal_id, C.meal_category, C.meal_name, IFNULL(B.total_sold,0) AS total_sold, IFNULL(A.times_posted,0) AS times_posted, IFNULL(total_sold/times_posted,0) AS "Avg Sales/Posting"
-                            FROM 
-                                (SELECT 
-                                    menu_meal_id,
-                                    count(menu_meal_id) AS times_posted
-                                FROM 
-                                    ptyd_menu
-                                GROUP BY menu_meal_id) AS A
-                            JOIN 
-                            (SELECT
-                                meal_selected,
-                                
-                                meal_name AS Meal_Name,
-                                count(n) as total_sold from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
-                            FROM 
-                                ptyd_meals_selected 
-                            JOIN
-                                numbers
-                            ON char_length(meal_selection)
-                                - char_length(replace(meal_selection, ';', ''))
-                                >= n - 1) sub1
-                            JOIN 
-                                ptyd_meals
-                            ON sub1.meal_selected=meal_id
-                            GROUP BY sub1.meal_selected ) AS B
-                            ON
-                                B.meal_selected = A.menu_meal_id
-                            RIGHT JOIN 
-                                ptyd_meals C 
-                            ON A.menu_meal_id = C. meal_id;
-                        """, 'get', conn)
-            
+                """ SELECT C.meal_id, C.meal_category, C.meal_name, IFNULL(B.total_sold,0) AS total_sold, IFNULL(A.times_posted,0) AS times_posted, IFNULL(total_sold/times_posted,0) AS "Avg Sales/Posting"
+                    FROM 
+                        (SELECT 
+                            menu_meal_id,
+                            count(menu_meal_id) AS times_posted
+                        FROM 
+                            ptyd_menu
+                        GROUP BY menu_meal_id) AS A
+                    JOIN 
+                    (SELECT
+                        meal_selected,
+                        
+                        meal_name AS Meal_Name,
+                        count(n) as total_sold from (select delivery_day, week_affected, substring_index(substring_index(meal_selection,';',n),';',-1) as meal_selected,n
+                    FROM 
+                        ptyd_meals_selected 
+                    JOIN
+                        numbers
+                    ON char_length(meal_selection)
+                        - char_length(replace(meal_selection, ';', ''))
+                        >= n - 1) sub1
+                    JOIN 
+                        ptyd_meals
+                    ON sub1.meal_selected=meal_id
+                    GROUP BY sub1.meal_selected ) AS B
+                    ON
+                        B.meal_selected = A.menu_meal_id
+                    RIGHT JOIN 
+                        ptyd_meals C 
+                    ON A.menu_meal_id = C. meal_id;
+                """, 'get', conn)
+
             #creating list of meal categories to isolate unique values
-            
+
             mealCat = []
             mealAvg = []
             mealNames = []
@@ -5211,14 +5242,14 @@ class MenuCreation(Resource):
                 mealPostings.append(placeHolder)
 
 
-            
-            
+
+
 
             #mealNames = list( dict.fromkeys(mealNames) )
-          
+
             # initializing empty dictionary with the meal categories as keys
             mealList =[]
-            
+
             for index in range(len(mealNames)):
                 tempDict = {}
 
@@ -5233,24 +5264,24 @@ class MenuCreation(Resource):
                 tempDict[key3] = str(mealPostings[index])
                 tempDict[key4] = str(mealTotalSold[index])
                 mealList.append(tempDict)
-                
 
-            
-           #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
+
+
+            #iterating through all of the meal options and sorting the meal name and average sales into the meal category dictionary with values as lists
 
             d2 = {}
 
             for index in range(len(mealCat)):
                 key = mealCat[index]
                 d2[key] = "value"
-            
+
             print("TEST -------------------")
             print(d2)
             for index in range(len(mealCat)):
                 tempList = []
-                
+
                 for index2 in range(len(items['result'])):
-                    
+
                     if (items['result'][index2]['meal_category'] == mealCat[index]):
                         tempDict = {}
                         mealName = items['result'][index2]['meal_name']
@@ -5272,13 +5303,13 @@ class MenuCreation(Resource):
                 print(tempList)
                 d2[mealCat[index]] = tempList
 
-                        
+
 
             print("TEST -------------")
             print(d2)
 
             response['message'] = 'successful'
-            
+
             # response['menu_dates'] = menuDates
             response['menus'] = d
             response['result'] = d2
@@ -5309,17 +5340,17 @@ class MenuCreation(Resource):
             i = 0
             for eachitem in data['menu']:
                 menu_category = menu[i]['Menu_Category']
-                menu_type = menu[i]['Menu_Type'] 
+                menu_type = menu[i]['Menu_Type']
                 meal_cat = menu[i]['Meal_Cat']
-                meal_name = menu[i]['Meal_Name'] 
-                default_meal = menu[i]['Default_Meal'] 
-                
+                meal_name = menu[i]['Meal_Name']
+                default_meal = menu[i]['Default_Meal']
+
                 print(menu_category)
                 print(menu_type)
                 print(meal_cat)
                 print(meal_name)
                 print(default_meal)
-                
+
                 items['menu_insert'] = execute(""" insert into ptyd_menu 
                                                     values 
                                                     (\'""" + str(menu_date) + """\',\'""" + str(menu_category) + """\',
@@ -5344,7 +5375,7 @@ class Add_Coupon(Resource):
             data = request.get_json(force=True)
             print("data collected...")
             print(data)
-            
+
             coupon_id = data['coupon_id']
             active = data['active']
             discount_percent = data['discount_percent']
@@ -5379,7 +5410,7 @@ class Add_Coupon(Resource):
         finally:
             disconnect(conn)
 
-class CouponsAPI(Resource):       
+class CouponsAPI(Resource):
 
     def get(self):
         response = {}
@@ -5416,7 +5447,7 @@ class CouponsAPI(Resource):
         try:
             conn = connect()
             data = request.get_json(force=True)
-           
+
             coupon_id = data['coupon_id']
             active = data['active']
             discount_percent = data['discount_percent']
@@ -5443,9 +5474,9 @@ class CouponsAPI(Resource):
                                                     recurring = \'""" + str(recurring) + """\',
                                                     email = \'""" + str(email) + """\'
                                                 where coupon_id = \'""" + str(coupon_id) + """\';""", 'post', conn)
-                                            
+
             print("coupon_updated...")
-            
+
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -5461,7 +5492,7 @@ class CouponsAPI(Resource):
             data = request.get_json(force=True)
             print("data collected...")
             print(data)
-            
+
             coupon_id = data['coupon_id']
             active = data['active']
             discount_percent = data['discount_percent']
@@ -5510,7 +5541,7 @@ class Add_Meal_plan(Resource):
             print("meal_Plan_id called..")
             mealPlanId = meal_planIdQuery['result'][0]['new_id']
             print("new_meal_plan_id created...")
-            
+
             meal_plan_desc = data['meal_plan_desc']
             payment_frequency = data['payment_frequency']
             photo_URL = data['photo_URL']
@@ -5541,7 +5572,7 @@ class Add_Meal_plan(Resource):
         finally:
             disconnect(conn)
 
-class MealPlansAPI(Resource):       
+class MealPlansAPI(Resource):
 
     def get(self):
         response = {}
@@ -5569,7 +5600,7 @@ class MealPlansAPI(Resource):
         try:
             conn = connect()
             data = request.get_json(force=True)
-           
+
             meal_plan_id = data['meal_plan_id']
             meal_plan_desc = data['meal_plan_desc']
             payment_frequency = data['payment_frequency']
@@ -5595,9 +5626,9 @@ class MealPlansAPI(Resource):
                                                     meal_plan_price = \'""" + str(meal_plan_price) + """\',
                                                     meal_shipping = \'""" + str(meal_shipping) + """\'
                                                 where meal_plan_id = \'""" + str(meal_plan_id) + """\';""", 'post', conn)
-                                            
+
             print("meal_plan_updated...")
-            
+
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
@@ -5649,7 +5680,7 @@ class Edit_Menu(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
-    
+
     def post(self):
         response = {}
         items = {}
@@ -5670,17 +5701,17 @@ class Edit_Menu(Resource):
             i = 0
             for eachitem in data['menu']:
                 menu_category = menu[i]['menu_category']
-                menu_type = menu[i]['menu_type'] 
+                menu_type = menu[i]['menu_type']
                 meal_cat = menu[i]['meal_cat']
-                meal_name = menu[i]['meal_name'] 
-                default_meal = menu[i]['default_meal'] 
-                
+                meal_name = menu[i]['meal_name']
+                default_meal = menu[i]['default_meal']
+
                 print(menu_category)
                 print(menu_type)
                 print(meal_cat)
                 print(meal_name)
                 print(default_meal)
-                
+
                 items['menu_insert'] = execute(""" insert into ptyd_menu 
                                                     values 
                                                     (\'""" + str(menu_date) + """\',\'""" + str(menu_category) + """\',
@@ -5701,7 +5732,7 @@ class Latest_activity(Resource):
         items = {}
         try:
             conn = connect()
-            
+
             items = execute(
                 """ select acc.*,pur.*,mp.meal_plan_desc,
                         pay.*
@@ -5738,7 +5769,7 @@ class All_Payments(Resource):
         items = {}
         try:
             conn = connect()
-            
+
             items = execute(
                 """ select acc.*,pur.*,mp.meal_plan_desc,
                         pay.*
@@ -5769,7 +5800,7 @@ class PurchaseIdMeals(Resource):
         items = {}
         try:
             conn = connect()
-            
+
             items = execute(
                 """ 
                 # QUERY 4:  FINDS MEAL SELECTION BY ALL DATES INCLUDING NON-SELECTIONS
@@ -5845,7 +5876,6 @@ class Add_Unit_Conversion(Resource):
             data = request.get_json(force=True)
             print("data collected...")
             print(data)
-            
             type = data['type']
             recipe_unit = data['recipe_unit']
             conversion_ratio = data['conversion_ratio']
