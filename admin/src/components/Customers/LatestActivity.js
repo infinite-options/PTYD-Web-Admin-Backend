@@ -10,6 +10,7 @@ class LatestActivity extends React.Component {
             loaded: false,
             data: [],
         };
+        console.log(props)
     }
 
     componentDidMount() {
@@ -56,7 +57,7 @@ class LatestActivity extends React.Component {
             <MaterialTable
         title="Latest Activity"
         columns={[
-                { title: 'User', field: 'user_uid' },
+        { title: 'User', field: 'user_uid' },
         { title: 'Email', field: 'user_email'},
         { title: 'First Name', field: 'first_name'},
         { title: 'Last Name', field: 'last_name'},
