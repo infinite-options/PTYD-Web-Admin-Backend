@@ -2037,14 +2037,6 @@ class ChargeSubscribers(Resource):
     def getDates(self, frequency, thurs):
         dates = {}
 
-        # CHARGE SUBSCRIBER TEST CASES
-        #       thurs = date(2020, 4, 23)
-        #       thurs = date(2020, 4, 30)
-        #       thurs = date(2020, 5, 7)
-        #       thurs = date(2020, 5, 14)
-        #       thurs = date(2020, 5, 21)
-        #       thurs = date(2020, 5, 28)
-
         # Set start date to Saturday after thurs
         dates['startDate'] = (thurs + timedelta(days=2)).strftime("%Y-%m-%d")
 
@@ -2229,45 +2221,6 @@ class ChargeSubscribers(Resource):
 
                 return query
 
-            # def charge_query(NewPaymentID, paymentID, amount, recurring):
-            #     recur = 'TRUE' if recurring else 'FALSE'
-            #     query = """ INSERT INTO ptyd_payments
-            #                 (
-            #                     payment_id,
-            #                     buyer_id,
-            #                     recurring,
-            #                     gift,
-            #                     coupon_id,
-            #                     amount_due,
-            #                     amount_paid,
-            #                     purchase_id,
-            #                     payment_time_stamp,
-            #                     payment_type,
-            #                     cc_num,
-            #                     cc_exp_date,
-            #                     cc_cvv,
-            #                     billing_zip
-            #                 )
-            #                 SELECT
-            #                     \'""" + NewPaymentID + """\' AS payment_id,
-            #                     buyer_id, '""" + recur + """' ,
-            #                     gift,
-            #                     coupon_id, """ + str(amount) + """,
-            #                     """ + str(amount) + """,
-            #                     purchase_id,
-            #                     \'""" + getNow() + """\',
-            #                     \'STRIPE\',
-            #                     cc_num,
-            #                     cc_exp_date,
-            #                     cc_cvv,
-            #                     billing_zip
-            #                 FROM
-            #                     ptyd_payments
-            #                 WHERE
-            #                     payment_id = \'""" + paymentID + """\'
-            #                 ;"""
-            #     return query
-
             nextSat = paramDate + timedelta(days=2)
             print("nextSat: ", nextSat)
             nextSat_str = nextSat.strftime("%Y-%m-%d")
@@ -2288,10 +2241,6 @@ class ChargeSubscribers(Resource):
 
                     print("subcription_charge: ", subscription_charge)
                 # check for the addon for the next week
-                # paramDate is Thursday
-                # nextSat = paramDate + timedelta(days=2)
-                # print("nextSat: ", nextSat)
-                # nextSat_str = nextSat.strftime("%Y-%m-%d")
                 addon_query = """SELECT * FROM ptyd_addons_selected
                                     WHERE selection_time = (SELECT MAX(selection_time) FROM ptyd_addons_selected
                                                                 WHERE purchase_id = '""" + eachPayment['purchase_id'] + """'
@@ -2333,8 +2282,6 @@ class ChargeSubscribers(Resource):
                     coupon_check = Coupon.get(couponID, coupon_email)
                     print("coupon_check: ", coupon_check)
                     #need some code to apply coupon
-
-
                 if total_charge > 0:
                     card_data['cc_exp_month'] = card_data['cc_exp_date'].split('-')[1]
                     card_data['cc_exp_year'] = card_data['cc_exp_date'].split('-')[0]
@@ -2360,35 +2307,6 @@ class ChargeSubscribers(Resource):
                         # Since it's a decline, stripe.error.CardError will be caught
                         response['message'] = e.error.message
                         return response, 400
-                        # if addon_charge > 0:  # write this addon into database without stripe info
-                        #     try:
-                        #         temp_query = query_template(
-                        #             newPaymentId, eachPayment['payment_id'], addon_charge)
-                        #         print("ther")
-                        #         res = execute(temp_query, 'post', conn)
-                        #         print("after write addon into database:  line 2159", res)
-                        #         newPaymentId = get_new_paymentID()
-                        #         temp_query = query_template(
-                        #             newPaymentId, eachPayment['payment_id'], subscription_charge)
-                        #         res = execute(temp_query, 'post', conn)
-                        #         print(
-                        #             "after write subscription into database:  line 2163", res)
-                        #         # write total charge into database with strip info
-                        #         newPaymentId = get_new_paymentID()
-                        #         chargeQuery = charge_query(
-                        #             newPaymentId, eachPayment['payment_id'], subscription_charge + addon_charge, True)
-                        #         res = execute(chargeQuery, 'post', conn)
-                        #         print(
-                        #             "after write total charge into database line 2207: ", res)
-                        #     except:
-                        #         return "Internal server Error", 500
-                        # else:
-                        #     print("charging")
-                        #     chargeQuery = charge_query(newPaymentId, eachPayment['payment_id'],
-                        #                                subscription_charge, True)
-                        #     res = execute(chargeQuery, 'post', conn)
-                        #     print(
-                        #         "after write total charge without addon into database line 2215: ", res)
                     #write charge into payment table
 
                     paymentId = get_new_paymentID()
@@ -2439,22 +2357,11 @@ class ChargeSubscribers(Resource):
                         res = execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(
                             eachPayment['payment_id']), 'post', conn)
                         items.append(res)
-                # else:  # only charge for the addon
-                #     print("no it's not")
-                #     print("addon_charge: ", addon_charge)
-                #     if addon_charge > 0:
-                #         chargeQuery = charge_query(
-                #             get_new_paymentID(), eachPayment['payment_id'], addon_charge, False)
-                #         res = execute(chargeQuery, 'post', conn)
-                #         print("after execute charge_query: ", res)
 
             response['message'] = 'POST request successful.'
 
             # For debugging
             response['items'] = items
-            #           print(items)
-            #           print(json.dumps(response, indent=1))
-
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -2489,82 +2396,6 @@ class MealSelection(Resource):
         items = {}
         try:
             conn = connect()
-
-            #           queries = ["""
-            #               SELECT latest_active.week_affected
-            #                   , latest_sel.meal_selection
-            #                   , latest_sel.delivery_day
-            #               FROM (
-            #                   # LATEST ACTIVE SUBSCRIPTIONS BY WEEK WITH MEALS PURCHASED
-            #                   SELECT active.*
-            #                       ,pur_plans.num_meals
-            #                   FROM (
-            #                       SELECT snap1.*
-            #                           , snap2.latest_snapshot
-            #                       FROM ptyd_snapshots AS snap1
-            #                       INNER JOIN (
-            #                           SELECT *, MAX(snapshot_timestamp) AS latest_snapshot
-            #                           FROM ptyd_snapshots
-            #                           GROUP BY purchase_id
-            #                               , week_affected)
-            #                           AS snap2
-            #                       ON snap1.purchase_id = snap2.purchase_id
-            #                           AND snap1.week_affected = snap2.week_affected
-            #                           AND snap1.snapshot_timestamp = snap2.latest_snapshot)
-            #                       AS active
-            #                   LEFT JOIN (
-            #                       SELECT pur.*
-            #                       , plans.num_meals
-            #                       FROM ptyd.ptyd_purchases pur
-            #                       LEFT JOIN ptyd_meal_plans plans
-            #                       ON pur.meal_plan_id = plans.meal_plan_id)
-            #                       AS pur_plans
-            #                   ON active.purchase_id = pur_plans.purchase_id)
-            #                   AS latest_active
-            #               LEFT JOIN (
-            #                   SELECT ms1.*
-            #                       , ms2.latest_selection
-            #                   FROM ptyd_meals_selected AS ms1
-            #                   INNER JOIN (
-            #                       SELECT *, MAX(selection_time) AS latest_selection
-            #                       FROM ptyd_meals_selected
-            #                       GROUP BY purchase_id
-            #                           , week_affected)
-            #                       AS ms2
-            #                   ON ms1.purchase_id = ms2.purchase_id
-            #                       AND ms1.week_affected = ms2.week_affected
-            #                       AND ms1.selection_time = ms2.latest_selection)
-            #                   AS latest_sel
-            #               ON latest_active.purchase_id = latest_sel.purchase_id
-            #                   AND latest_active.week_affected = latest_sel.week_affected
-            #               WHERE
-            #                   latest_active.purchase_id = \'""" + purchaseId + """\'
-            #               ;""", """
-            #               SELECT
-            #                   ms1.purchase_id
-            #                   , ms1.week_affected
-            #                   , ms1.meal_selection
-            #
-            #               FROM ptyd_addons_selected AS ms1
-            #               INNER JOIN (
-            #                   SELECT
-            #                       purchase_id
-            #                       , week_affected
-            #                       , meal_selection
-            #                       , MAX(selection_time) AS latest_selection
-            #                   FROM ptyd_addons_selected
-            #                   GROUP BY purchase_id
-            #                       , week_affected
-            #               ) as ms2
-            #               ON
-            #                   ms1.purchase_id = ms2.purchase_id
-            #               AND
-            #                   ms1.week_affected = ms2.week_affected
-            #               AND
-            #                   ms1.selection_time = ms2.latest_selection
-            #               WHERE
-            #                   ms1.purchase_id = \'""" + purchaseId + """\'
-            #               ;"""]
 
             queries = ["""
                 # WORKING AND VERIFIED  
@@ -2960,162 +2791,6 @@ class CheckEmail(Resource):
         finally:
             disconnect(conn)
 
-
-'''
-class MealSelection(Resource):
-    def readQuery(self, items):
-        for item in items:
-            item['meals_selected'] = {}
-            if item['meal_selection'] == 'SKIP':
-                continue
-            if item['meal_selection'] == 'SURPRISE':
-                continue
-            if item['meal_selection'] == None:
-                continue
-            selectedMeals = item['meal_selection'].split(';')
-            for selectedMeal in selectedMeals:
-                if selectedMeal in item['meals_selected']:
-                    item['meals_selected'][selectedMeal] += 1
-                else:
-                    item['meals_selected'][selectedMeal] = 1
-        return items
-    def get(self, purchaseId):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            queries = ["""
-                SELECT
-                    ms1.week_affected,
-                    ms1.meal_selection,
-                    ms1.selection_time,
-                    ms1.delivery_day
-                FROM ptyd_meals_selected AS ms1
-                INNER JOIN (
-                    SELECT
-                        week_affected,
-                        MAX(selection_time) AS latest_selection
-                    FROM ptyd_meals_selected
-                    GROUP BY week_affected
-                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
-                WHERE
-                purchase_id = \'""" + purchaseId + "\';", """
-                SELECT
-                    ms1.week_affected,
-                    ms1.meal_selection,
-                    ms1.selection_time
-                FROM ptyd_addons_selected AS ms1
-                INNER JOIN (
-                    SELECT
-                        week_affected,
-                        MAX(selection_time) AS latest_selection
-                    FROM ptyd_addons_selected
-                    GROUP BY week_affected
-                ) ms2 ON ms1.week_affected = ms2.week_affected AND selection_time = latest_selection
-                WHERE
-                purchase_id = \'""" + purchaseId + "\';"]
-            meals = execute(queries[0], 'get', conn)
-            addons = execute(queries[1], 'get', conn)
-            items['Meals'] = self.readQuery(meals['result'])
-            items['Addons'] = self.readQuery(addons['result'])
-            response['message'] = 'Request successful.'
-            response['result'] = items
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-    def formatMealSelection(self, mealSelection):
-        mealSelectionString = ""
-        for mealId in mealSelection:
-            for mealCount in range(mealSelection[mealId]):
-                mealSelectionString += mealId + ";"
-        # Remove last semicolon
-        return mealSelectionString[:-1]
-    def postQuery(self, purchaseId, data):
-        selectionTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        if data['is_addons'] == True:
-            mealSelection = self.formatMealSelection(data['addon_quantities'])
-            query = """
-                INSERT INTO ptyd_addons_selected
-                (
-                    purchase_id,
-                    selection_time,
-                    week_affected,
-                    meal_selection
-                )
-                VALUES
-                (
-                    \'""" + purchaseId + """\',
-                    \'""" + selectionTime + """\',
-                    \'""" + data['week_affected'] + """\',
-                    \'""" + mealSelection + "\');"
-        else:
-            # Handle SKIP request
-            if data['delivery_day'] == 'SKIP':
-                mealSelection = 'SKIP'
-            # Handle default meal selection
-            elif data['default_selected'] is True:
-                mealSelection = 'SURPRISE'
-            # Handle custom meal selection
-            else:
-                mealSelection = self.formatMealSelection(data['meal_quantities'])
-            query = """
-                INSERT INTO ptyd_meals_selected
-                (
-                    purchase_id,
-                    selection_time,
-                    week_affected,
-                    meal_selection,
-                    delivery_day
-                )
-                VALUES
-                (
-                    \'""" + purchaseId + """\',
-                    \'""" + selectionTime + """\',
-                    \'""" + data['week_affected'] + """\',
-                    \'""" + mealSelection + """\',
-                    \'""" + data['delivery_day'] + "\');"
-        return query
-    # HTTP method POST
-    def post(self, purchaseId):
-        response = {}
-        items = []
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-            print("Received:", data)
-            queries = [
-                """ SELECT purchase_id
-                    FROM ptyd_purchases
-                    WHERE purchase_id = \'""" + purchaseId + "\';"]
-            # Retrieve purchase ID
-            getPurchaseId = execute(queries[0], 'get', conn)
-            # Handle successful purchase ID query
-            if getPurchaseId['code'] == 280:
-                if not len(getPurchaseId['result']) > 0:
-                    response['message'] = 'Recipient has no active purchase_id.'
-                    response['error'] = getPurchaseId
-                    print("Error:", response['message'])
-                    # 400: Client side bad request
-                    return response, 400
-            # Handle unsuccessful purchase ID query
-            else:
-                response['message'] = 'Could not retrieve purchase_id.'
-                response['error'] = getPurchaseId
-                print("Error:", response['message'])
-                # 500: Internal server error
-                return response, 500
-#               print("purchase_id:", purchaseId)
-            queries.append(self.postQuery(purchaseId, data))
-            execute(queries[1], 'post', conn)
-            response['message'] = 'Request successful.'
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
-'''
 
 class CustomerInfo2(Resource):
 
@@ -6246,6 +5921,22 @@ class Add_Unit_Conversion(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+class AccountList(Resource):
+    def get(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            items = execute(""" select * from ptyd_accounts;""", 'get', conn)
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 
 # Define API routes
 # Customer page
@@ -6315,6 +6006,7 @@ api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
 api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
+api.add_resource(AccountList,'/api/v2/AccountList')
 
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
