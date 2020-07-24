@@ -7,10 +7,9 @@ class Jobs extends Component {
       <section class="content-section">
         <div class="container font2">
           <center>
-            <CardDeck style={{ marginLeft: "90px" }}>
+            <CardDeck style={{ margin:"40px 0" }}>
               <Card
                 style={{
-                  maxWidth: "20rem",
                   boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                 }}
               >
@@ -50,7 +49,6 @@ class Jobs extends Component {
               </Card>
               <Card
                 style={{
-                  maxWidth: "20rem",
                   boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                 }}
               >
@@ -88,7 +86,6 @@ class Jobs extends Component {
               </Card>{" "}
               <Card
                 style={{
-                  maxWidth: "20rem",
                   boxShadow: "0px 5px 32px 4px rgba(0,0,0,0.3)"
                 }}
               >
@@ -126,7 +123,6 @@ class Jobs extends Component {
               </Card>
             </CardDeck>
 
-            <br />
           </center>
         </div>
       </section>
