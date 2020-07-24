@@ -61,9 +61,11 @@ class EditCreateMeal extends Component {
       brandNewUnit: "Cup",
       supportNewRecipe: false,
       mealNameRedirected: "",
-      unit1: "Cup",
-      unit2: "liter",
-      conversionRatio: 0.236,
+      unit1: "kg",
+      unit2: "None",
+      conversionRatio: 1,
+      unitType: ["Mass", "Volume", "Length"],
+      selUnitType: 0,
     };
   }
   async componentWillMount() {
@@ -140,11 +142,11 @@ class EditCreateMeal extends Component {
       console.log(api2.result.result);
 
       for (let idx = 0; idx < api2.result.result.length; idx++) {
-        console.log(api2.result.result[idx].measure_name);
-        if (!unit.includes(api2.result.result[idx].measure_name)) {
-          unit.push(api2.result.result[idx].measure_name);
+        console.log(api2.result.result[idx].recipe_unit);
+        if (!unit.includes(api2.result.result[idx].recipe_unit)) {
+          unit.push(api2.result.result[idx].recipe_unit);
           mapIngrUnitMeasureIdLocal.set(
-            api2.result.result[idx].measure_name,
+            api2.result.result[idx].recipe_unit,
             api2.result.result[idx].measure_unit_id
           );
         }
@@ -487,8 +489,8 @@ class EditCreateMeal extends Component {
   saveNewUnit = (e) => {
     e.preventDefault();
     var unitData = {
-      measure_id: "NewUnitId",
-      measure_name: this.state.newUnitName,
+      measure_unit_id: "NewUnitId",
+      recipe_unit: this.state.newUnitName,
     };
 
     console.log(unitData);
@@ -532,8 +534,8 @@ class EditCreateMeal extends Component {
     if (this.state.unit2 === "cm") myType = "length";
 
     var unitData = {
-      unit1: this.state.unit1,
-      unit2: this.state.unit2,
+      recipe_unit : this.state.unit2,
+      common_unit : this.state.unit1,
       conversion_ratio: this.state.conversionRatio,
       type: myType,
     };
@@ -675,19 +677,23 @@ class EditCreateMeal extends Component {
 
   unit1Dropdown = () => {
     let tempUnit = [];
-    let unit = this.state.allUnits;
+    let unit = this.state.unitType;
     for (let j = 0; j < unit.length; j++) {
-      tempUnit.push(<MenuItem value={unit[j]}>{unit[j]}</MenuItem>);
+      tempUnit.push(<MenuItem value={j}>{unit[j]}</MenuItem>);
     }
     return (
       <FormControl>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={this.state.unit1}
+          value={this.state.selUnitType}
           onChange={(e) => {
+            let tempUnit1 = "kg";
+            if (e.target.value == 1) tempUnit1 = "L";
+            if (e.target.value == 2) tempUnit1 = "cm";
             this.setState({
-              unit1: e.target.value,
+              unit1: tempUnit1,
+              selUnitType: e.target.value,
             });
           }}
           // style={{ color: "white" }}
@@ -1123,31 +1129,11 @@ class EditCreateMeal extends Component {
                     {/* variant="dark" */}
                     <thead>
                       <tr>
+                        <th>Type</th>
                         <th>New Unit Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>{displayrowunit}</tbody>
-                  </Table>
-                </Col>
-                <Col></Col>
-              </Row>
-            </div>
-          </Grid>
-          <Divider />
-          <Grid item xs={12}>
-            <div style={{ margin: "1%" }}>
-              <WhiteTextTypography color="blue" variant="h5" gutterBottom>
-                Unit Conversion
-              </WhiteTextTypography>
-              <Row>
-                <Col>
-                  <Table striped bordered hover>
-                    {/* variant="dark" */}
-                    <thead>
-                      <tr>
-                        <th>From Unit</th>
-                        <th>To Unit</th>
+                        <th></th>
                         <th>Conversion Ratio</th>
+                        <th>Base Unit</th>
                       </tr>
                     </thead>
                     <tbody>{displayrowconversion}</tbody>
@@ -1298,14 +1284,29 @@ class EditCreateMeal extends Component {
     return (
       <tr>
         <td>{this.unit1Dropdown()}</td>
-        <td>{this.unit2Dropdown()}</td>
         <td>
-          <input
+          <TextField
+            autoFocus
+            required
+            id="outlined-required"
+            variant="outlined"
+            type="text"
+            value={this.state.unit2}
+            onChange={(e) => {
+              this.setState({
+                unit2: e.target.value,
+              });
+            }}
+          />
+        </td>
+        <td>
+        {"="}
+        </td>
+        <td>
+          <TextField
+            id="outlined-number"
             type="number"
-            step="0.01"
-            min="0"
-            max="1000000"
-            className="form-control"
+            variant="outlined"
             value={this.state.conversionRatio}
             onChange={(e) => {
               this.setState({
@@ -1315,8 +1316,17 @@ class EditCreateMeal extends Component {
           />
         </td>
         <td>
+        <TextField
+          required
+          id="outlined-required"
+          defaultValue="Hello World"
+          value={this.state.unit1}
+          variant="outlined"
+        />
+        </td>
+        <td>
           <Button variant="primary" onClick={this.saveUnitConversion}>
-            Save Conversion
+            Save
           </Button>
         </td>
       </tr>
