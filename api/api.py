@@ -4174,15 +4174,15 @@ class All_Ingredients(Resource):
                                 -- meals_ordered.total,
                                 -- SUM(rec.recipe_ingredient_qty),
                                 SUM(meals_ordered.total * rec.recipe_ingredient_qty) AS total_needed,
-                                unit.measure_name,
+                                unit.recipe_unit,
                                 ing.ingredient_desc,
                                 ing.package_size,
                                 ing.ingredient_measure,
-                                mc.conversion_ratio,
-                                ROUND(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size,2) AS need_qty,
+                                unit.conversion_ratio,
+                                ROUND(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size,2) AS need_qty,
                                 inv.inventory_qty,
-                                if(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty < 0,0,
-                                CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty)) AS buy_qty       
+                                if(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size - inv.inventory_qty < 0,0,
+                                CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size - inv.inventory_qty)) AS buy_qty       
                             FROM (# QUERY 11
                                 SELECT 
                                     week_affected,
@@ -4388,9 +4388,9 @@ class All_Ingredients(Resource):
                                     , meal_selected)
                                 AS meals_ordered
                             LEFT JOIN ptyd.ptyd_recipes rec ON meals_ordered.meal_selected = rec.recipe_meal_id
-                            JOIN ptyd.ptyd_measure_unit unit ON rec.recipe_measure_id = unit.measure_unit_id
+                            JOIN ptyd.ptyd_conversion_units unit ON rec.recipe_measure_id = unit.measure_unit_id
                             LEFT JOIN ptyd.ptyd_ingredients ing ON rec.recipe_ingredient_id = ing.ingredient_id
-                            LEFT JOIN ptyd.ptyd_measure_conversion mc ON rec.recipe_measure_id = mc.from_measure_unit_id AND ing.ingredient_measure_id = mc.to_measure_unit_id
+                            #LEFT JOIN ptyd.ptyd_measure_conversion mc ON rec.recipe_measure_id = mc.from_measure_unit_id AND ing.ingredient_measure_id = mc.to_measure_unit_id
                             LEFT JOIN ptyd.ptyd_inventory inv ON rec.recipe_ingredient_id = inv.inventory_ingredient_id
                             where meals_ordered.week_affected = \'""" + date + """\'
                             GROUP BY rec.recipe_ingredient_id,
@@ -4497,7 +4497,7 @@ class MealCreation(Resource):
                     ON
                     ingredient_id = recipe_ingredient_id
                     left JOIN
-                    ptyd_measure_unit
+                    ptyd_conversion_units
                     ON                     
                     recipe_measure_id = measure_unit_id 
                     order by recipe_meal_id;"""
@@ -4622,8 +4622,8 @@ class Add_New_Ingredient(Resource):
                                                                 ) 
                                                                 SELECT \'""" + str(ingredientId) + """\', \'""" + str(ingredient_desc) + """\',
                                                                 \'""" + str(package_size) + """\',\'""" + str(ingredient_measure_id) + """\',
-                                                                \'""" + str(ingredient_cost) + """\', mu.measure_name 
-                                                                FROM ptyd_measure_unit mu
+                                                                \'""" + str(ingredient_cost) + """\', mu.recipe_unit 
+                                                                FROM ptyd_conversion_units mu
                                                                 WHERE measure_unit_id=\'""" + str(ingredient_measure_id) + """\';
                                                                 """, 'post', conn)
 
@@ -4665,7 +4665,7 @@ class Get_All_Units(Resource):
             items = execute(""" SELECT
                                 *
                                 FROM
-                                ptyd_measure_unit;""", 'get', conn)
+                                ptyd_conversion_units;""", 'get', conn)
 
             response['message'] = 'Request successful.'
             response['result'] = items
@@ -4794,37 +4794,37 @@ class Edit_Meal(Resource):
         finally:
             disconnect(conn) 
 
-class Add_New_Measure_Unit(Resource):       
-    def post(self):
-        response = {}
-        items = {}
-        try:
-            conn = connect()
-            data = request.get_json(force=True)
-
-            measure_name = data['measure_name']
-
-            measure_unitIdQuery = execute("""CALL get_new_measure_unit_id();""", 'get', conn)
-            measure_unitId = measure_unitIdQuery ['result'][0]['new_id']
-            items['new_ingredient_insert'] = execute(""" INSERT INTO ptyd_measure_unit 
-                                                        (
-                                                        measure_unit_id,measure_name
-                                                        ) 
-                                                        VALUES 
-                                                        (
-                                                        \'""" + str(measure_unitId) + """\',
-                                                        \'""" + str(measure_name) + """\'
-                                                        );
-                                                        """, 'post', conn)
-            
-            response['message'] = 'Request successful.'
-            response['result'] = items
-
-            return response, 200
-        except:
-            raise BadRequest('Request failed, please try again later.')
-        finally:
-            disconnect(conn)
+#class Add_New_Measure_Unit(Resource):       
+#    def post(self):
+#        response = {}
+#        items = {}
+#        try:
+#            conn = connect()
+#            data = request.get_json(force=True)
+#
+#            measure_name = data['measure_name']
+#
+#            measure_unitIdQuery = execute("""CALL get_new_measure_unit_id();""", 'get', conn)
+#            measure_unitId = measure_unitIdQuery ['result'][0]['new_id']
+#            items['new_ingredient_insert'] = execute(""" INSERT INTO ptyd_measure_unit 
+#                                                        (
+#                                                        measure_unit_id,measure_name
+#                                                        ) 
+#                                                        VALUES 
+#                                                        (
+#                                                        \'""" + str(measure_unitId) + """\',
+#                                                        \'""" + str(measure_name) + """\'
+#                                                        );
+#                                                        """, 'post', conn)
+#            
+#            response['message'] = 'Request successful.'
+#            response['result'] = items
+#
+#            return response, 200
+#        except:
+#            raise BadRequest('Request failed, please try again later.')
+#        finally:
+#            disconnect(conn)
 
 class TemplateApi(Resource):
     def get(self):
@@ -5614,15 +5614,19 @@ class Add_Unit_Conversion(Resource):
             print(data)
             
             type = data['type']
-            unit1 = data['unit1']
+            recipe_unit = data['recipe_unit']
             conversion_ratio = data['conversion_ratio']
-            unit2 = data['unit2']
+            common_unit = data['common_unit']
 
+            unitIdQuery = execute(
+                """CALL get_new_measure_unit_id();""", 'get', conn)
+            unitId = unitIdQuery['result'][0]['new_id']
             print("Items read...")
-            items['new_coupon_insert'] = execute("""insert into ptyd_conversion_units
+            items['new_unit_conversion_insert'] = execute("""insert into ptyd_conversion_units
                                                     values
-                                                    (\'""" + str(type) + """\',\'""" + str(unit1) + """\',
-                                                    \'""" + conversion_ratio + """\',\'""" + str(unit2) + """\')
+                                                    (\'""" + str(unitId) + """\',\'""" + str(type) + """\',
+                                                    \'""" + str(recipe_unit) + """\',\'""" + conversion_ratio + """\',
+                                                    \'""" + str(common_unit) + """\')
                                                     ;""", 'post', conn)
 
             print("Unit_conversion_inserted...")
@@ -5678,7 +5682,7 @@ api.add_resource(ChargeSubscribers, '/api/v2/chargesubscribers',
 # ---------- Admin page -----------------------------
 api.add_resource(DisplaySaturdays, '/api/v2/saturdays')
 api.add_resource(MealCreation, '/api/v2/mealcreation')
-api.add_resource(Add_New_Measure_Unit, '/api/v2/Add_New_Measure_Unit')
+#api.add_resource(Add_New_Measure_Unit, '/api/v2/Add_New_Measure_Unit')
 api.add_resource(All_Meals, '/api/v2/All_Meals')
 api.add_resource(All_Ingredients, '/api/v2/All_Ingredients')
 api.add_resource(Add_New_Ingredient, '/api/v2/Add_New_Ingredient')
