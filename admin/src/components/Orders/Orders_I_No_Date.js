@@ -16,6 +16,10 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import axios from "axios";
 
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+
 class OIDisplay extends Component {
   constructor(props) {
     super(props);
@@ -45,6 +49,12 @@ class OIDisplay extends Component {
         recurring: "FLASE",
         email: "None",
       },
+      mapDateToOrders: new Map(),
+      mapDateToIngr: new Map(),
+      dateOrders: [],
+      dateIngrs: [],
+      selOrderDate: 0,
+      selIngrDate: 0,
     };
   }
 
@@ -57,31 +67,114 @@ class OIDisplay extends Component {
     const api2 = await res2.json();
     const ingredients = api2.result.result;
 
+    let mapDateToOrders = new Map();
+    let mapDateToIngr = new Map();
+    let dateOrders = [];
+    let dateIngrs = [];
+
+    for (let idx = 0; idx < orders.length; idx++) {
+      if (!dateOrders.includes(orders[idx].menu_date))
+        dateOrders.push(orders[idx].menu_date);
+    }
+    for (let idx = 0; idx < ingredients.length; idx++) {
+      if (!dateIngrs.includes(ingredients[idx].week_affected))
+        dateIngrs.push(ingredients[idx].week_affected);
+    }
+
+    //console.log(dateOrders);
+
+    for (let i = 0; i < dateOrders.length; i++) {
+      for (let j = 0; j < orders.length; j++) {
+        if (orders[j].menu_date == dateOrders[i]) {
+          if (mapDateToOrders.has(dateOrders[i])) {
+            let tempArray = mapDateToOrders.get(dateOrders[i]);
+            tempArray.push(orders[j]);
+            mapDateToOrders.set(dateOrders[i], tempArray);
+          } else {
+            let tempArray = [];
+            tempArray.push(orders[j]);
+            mapDateToOrders.set(dateOrders[i], tempArray);
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < dateIngrs.length; i++) {
+      for (let j = 0; j < ingredients.length; j++) {
+        if (ingredients[j].week_affected == dateIngrs[i]) {
+          if (mapDateToIngr.has(dateIngrs[i])) {
+            let tempArray = mapDateToIngr.get(dateIngrs[i]);
+            tempArray.push(ingredients[j]);
+            mapDateToIngr.set(dateIngrs[i], tempArray);
+          } else {
+            let tempArray = [];
+            tempArray.push(ingredients[j]);
+            mapDateToIngr.set(dateIngrs[i], tempArray);
+          }
+        }
+      }
+    }
+
+    //console.log(mapDateToOrders);
+    //console.log(mapDateToIngr);
+
     this.setState({
       orders: orders,
       ingredients: ingredients,
+      mapDateToIngr: mapDateToIngr,
+      mapDateToOrders: mapDateToOrders,
+      dateOrders: dateOrders,
+      dateIngrs: dateIngrs,
     });
-
-    /*
-    const res1 = await fetch(this.props.API_URL_MEALPLANS);
-    const api1 = await res1.json();
-    const mealPlans = api1.result.result;
-
-    const res2 = await fetch(this.props.API_URL_COUPONS);
-    const api2 = await res2.json();
-    const coupons = api2.result.result;
-
-    const res4 = await fetch(this.props.API_URL_TAXRATE);
-    const api4 = await res4.json();
-    const taxrate = api4.result.result;
-
-    this.setState({
-      mealPlans: mealPlans,
-      coupons: coupons,
-      taxrate: taxrate,
-    });
-    */
   }
+
+  orderDateDropdown = () => {
+    let tempMeal = [];
+    for (let i = 0; i < this.state.dateOrders.length; i++) {
+      tempMeal.push(<MenuItem value={i}>{this.state.dateOrders[i]}</MenuItem>);
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.selOrderDate}
+          onChange={this.handleOrderDateChange}
+        >
+          {tempMeal}
+        </Select>
+      </FormControl>
+    );
+  };
+
+  ingrDateDropdown = () => {
+    let tempMeal = [];
+    for (let i = 0; i < this.state.dateIngrs.length; i++) {
+      tempMeal.push(<MenuItem value={i}>{this.state.dateIngrs[i]}</MenuItem>);
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.selIngrDate}
+          onChange={this.handleIngrDateChange}
+        >
+          {tempMeal}
+        </Select>
+      </FormControl>
+    );
+  };
+
+  handleOrderDateChange = (event) => {
+    console.log(event.target.value);
+    this.setState({ selOrderDate: event.target.value });
+  };
+
+  handleIngrDateChange = (event) => {
+    console.log(event.target.value);
+    this.setState({ selIngrDate: event.target.value });
+  };
 
   addDefaultSrc = (ev) => {
     ev.target.src =
@@ -309,6 +402,7 @@ class OIDisplay extends Component {
           </Link>
           <Typography color="textPrimary">Orders</Typography>
         </Breadcrumbs>
+        {this.orderDateDropdown()}
         {this.orders_function()}
 
         <br />
@@ -322,6 +416,7 @@ class OIDisplay extends Component {
           </Link>
           <Typography color="textPrimary">Ingredients</Typography>
         </Breadcrumbs>
+        {this.ingrDateDropdown()}
         {this.ingredients_function()}
         <br />
         <br />
@@ -1309,123 +1404,133 @@ class OIDisplay extends Component {
   };
 
   orders_function = () => {
-    return (
-      <Row>
-        <Col>
-          <Card
-            style={{
-              width: "100%",
-              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
-              height: "auto",
-            }}
-          >
-            <Card.Body>
-              <div className="vertical-menu">
-                <Table striped bordered hover>
-                  <thead style={{ overflow: "scroll" }}>
-                    <tr>
-                      <th>Menu Date</th>
-                      <th>Menu Category</th>
-                      <th>Meal Category</th>
-                      <th>Menu Type</th>
-                      <th>Meal Category</th>
-                      <th>Meal ID</th>
-                      <th>Meal Name</th>
-                      <th>Default Meal</th>
-                      <th>Extra Meal Price</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-
-                  <tbody
-                    className="vertical-menu"
-                    style={{
-                      height: "300px",
-                      overflow: "scroll",
-                    }}
-                  >
-                    {this.state.orders.map((meal, index) => (
-                      <tr>
-                        <td>{meal.menu_date}</td>
-                        <td>{meal.menu_category}</td>
-                        <td>{meal.meal_category}</td>
-                        <td>{meal.menu_type}</td>
-                        <td>{meal.meal_cat}</td>
-                        <td>{meal.meal_id}</td>
-                        <td>{meal.meal_name}</td>
-                        <td>{meal.default_meal}</td>
-                        <td>{meal.extra_meal_price}</td>
-                        <td>{meal.total}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+    var currDateOrders = this.state.mapDateToOrders.get(
+      this.state.dateOrders[this.state.selOrderDate]
     );
+    if (currDateOrders) {
+      return (
+        <Row>
+          <Col>
+            <Card
+              style={{
+                width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
+                height: "auto",
+              }}
+            >
+              <Card.Body>
+                <div className="vertical-menu">
+                  <Table striped bordered hover>
+                    <thead style={{ overflow: "scroll" }}>
+                      <tr>
+                        <th>Menu Date</th>
+                        <th>Menu Category</th>
+                        <th>Meal Category</th>
+                        <th>Menu Type</th>
+                        <th>Meal Category</th>
+                        <th>Meal ID</th>
+                        <th>Meal Name</th>
+                        <th>Default Meal</th>
+                        <th>Extra Meal Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+
+                    <tbody
+                      className="vertical-menu"
+                      style={{
+                        height: "300px",
+                        overflow: "scroll",
+                      }}
+                    >
+                      {currDateOrders.map((meal, index) => (
+                        <tr>
+                          <td>{meal.menu_date}</td>
+                          <td>{meal.menu_category}</td>
+                          <td>{meal.meal_category}</td>
+                          <td>{meal.menu_type}</td>
+                          <td>{meal.meal_cat}</td>
+                          <td>{meal.meal_id}</td>
+                          <td>{meal.meal_name}</td>
+                          <td>{meal.default_meal}</td>
+                          <td>{meal.extra_meal_price}</td>
+                          <td>{meal.total}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      );
+    }
   };
 
   ingredients_function = () => {
-    return (
-      <Row>
-        <Col>
-          <Card
-            style={{
-              width: "100%",
-              boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
-              height: "auto",
-            }}
-          >
-            <Card.Body>
-              <div className="vertical-menu">
-                <Table striped bordered hover>
-                  <thead style={{ overflow: "scroll" }}>
-                    <tr>
-                      <th>Week Affected</th>
-                      <th>Total Needed</th>
-                      <th>Measure Name</th>
-                      <th>Ingredient Description</th>
-                      <th>Package Size</th>
-                      <th>Ingredient Measure</th>
-                      <th>Coversion Ratio</th>
-                      <th>Need Quantity</th>
-                      <th>Inverntory Quantity</th>
-                      <th>Buy Quantity</th>
-                    </tr>
-                  </thead>
-
-                  <tbody
-                    className="vertical-menu"
-                    style={{
-                      height: "300px",
-                      overflow: "scroll",
-                    }}
-                  >
-                    {this.state.ingredients.map((meal, index) => (
-                      <tr>
-                        <td>{meal.week_affected}</td>
-                        <td>{meal.total_needed}</td>
-                        <td>{meal.measure_name}</td>
-                        <td>{meal.ingredient_desc}</td>
-                        <td>{meal.package_size}</td>
-                        <td>{meal.ingredient_measure}</td>
-                        <td>{meal.conversion_ratio}</td>
-                        <td>{meal.need_qty}</td>
-                        <td>{meal.inventory_qty}</td>
-                        <td>{meal.buy_qty}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+    var currdateIngrs = this.state.mapDateToIngr.get(
+      this.state.dateIngrs[this.state.selIngrDate]
     );
+    if (currdateIngrs) {
+      return (
+        <Row>
+          <Col>
+            <Card
+              style={{
+                width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
+                height: "auto",
+              }}
+            >
+              <Card.Body>
+                <div className="vertical-menu">
+                  <Table striped bordered hover>
+                    <thead style={{ overflow: "scroll" }}>
+                      <tr>
+                        <th>Week Affected</th>
+                        <th>Total Needed</th>
+                        <th>Measure Name</th>
+                        <th>Ingredient Description</th>
+                        <th>Package Size</th>
+                        <th>Ingredient Measure</th>
+                        <th>Coversion Ratio</th>
+                        <th>Need Quantity</th>
+                        <th>Inverntory Quantity</th>
+                        <th>Buy Quantity</th>
+                      </tr>
+                    </thead>
+
+                    <tbody
+                      className="vertical-menu"
+                      style={{
+                        height: "300px",
+                        overflow: "scroll",
+                      }}
+                    >
+                      {currdateIngrs.map((meal, index) => (
+                        <tr>
+                          <td>{meal.week_affected}</td>
+                          <td>{meal.total_needed}</td>
+                          <td>{meal.measure_name}</td>
+                          <td>{meal.ingredient_desc}</td>
+                          <td>{meal.package_size}</td>
+                          <td>{meal.ingredient_measure}</td>
+                          <td>{meal.conversion_ratio}</td>
+                          <td>{meal.need_qty}</td>
+                          <td>{meal.inventory_qty}</td>
+                          <td>{meal.buy_qty}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      );
+    }
   };
 }
 export default OIDisplay;

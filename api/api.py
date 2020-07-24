@@ -4391,10 +4391,69 @@ class All_Meals_No_Date(Resource):
                                                                         menu_category
                                     ;""", 'get', conn)
 
+            # generated all of the menu dates available    
+            '''            
+            menuDates = []
+            for index in range(len(items['result'])):
+                placeHolder = items['result'][index]['week_affected']
+                menuDates.append(placeHolder)
+            
+            # formated the menu dates into a list
+            menuDates = list(dict.fromkeys(menuDates) )
+
+    
+            d ={}
+            for index in range(len(menuDates)):
+                key = menuDates[index]
+                d[key] = 'value'
+            
+            print(d)
+            for index in range(len(menuDates)):
+                
+                menuInfo =[]
+                for index2 in range(len(items['result'])):
+                    tempDict = {}
+                    if (items['result'][index2]['week_affected'] == menuDates[index]):
+                        
+                        key1 = "menu_date"
+                        key2 = "menu_category"
+                        key3 = "meal_category"
+                        key4 = "menu_type"
+                        key5 = "meal_cat"
+                        key6 = "meal_id"
+                        key7 = "meal_name"
+                        key8 = "default_meal"
+                        key9 = "extra_meal_price"
+                        key10 = "total"
+
+                        tempDict[key1] = items['result'][index2]['menu_date']
+                        tempDict[key2] = items['result'][index2]['menu_category']
+                        tempDict[key3] = items['result'][index2]['meal_category']
+                        tempDict[key4] = items['result'][index2]['menu_type']
+                        tempDict[key5] = items['result'][index2]['menu_cat']
+                        tempDict[key6] = items['result'][index2]['meal_id']
+                        tempDict[key7] = items['result'][index2]['meal_name']
+                        tempDict[key8] = items['result'][index2]['default_meal']
+                        tempDict[key9] = items['result'][index2]['extra_meal_price']
+                        tempDict[key10] = items['result'][index2]['total']
+                        menuInfo.append(tempDict)
+
+                
+                d[menuDates[index]] = menuInfo
+
+
+
+      
+            #response['message'] = 'successful'
+            #response['result'] = d
+            print("--------------------------RAGS")
+            print("--------------------------RAGS")
+            print("--------------------------RAGS")
+            #print(mealsbydata)
+            print(d)
+            '''
             response['message'] = 'successful'
             response['result'] = items
-            #print(items)
-
             return response, 200
         except:
             raise BadRequest('Request failed, please try again later.')
@@ -5160,10 +5219,14 @@ class Get_All_Units(Resource):
             conn = connect()
 
             items = execute(""" SELECT
-                                *
+                               *
                                 FROM
                                 ptyd_measure_unit;""", 'get', conn)
-
+            #items = execute(""" SELECT
+                                #unit1
+                                #FROM
+                                #ptyd_coversion_units;""", 'get', conn)
+    
             response['message'] = 'Request successful.'
             response['result'] = items
 
@@ -6095,7 +6158,37 @@ class PurchaseIdMeals(Resource):
         except:
             raise BadRequest('Request failed, please try again later.')
         finally:
-            disconnect(conn)            
+            disconnect(conn)    
+
+class Add_Unit_Conversion(Resource):
+    def post(self):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            print("connection done...")
+            data = request.get_json(force=True)
+            print("data collected...")
+            print(data)
+            
+            type = data['type']
+            unit1 = data['unit1']
+            conversion_ratio = data['conversion_ratio']
+            unit2 = data['unit2']
+
+            print("Items read...")
+            items['new_coupon_insert'] = execute("""insert into ptyd_conversion_units
+                                                    values
+                                                    (\'""" + str(type) + """\',\'""" + str(unit1) + """\',
+                                                    \'""" + conversion_ratio + """\',\'""" + str(unit2) + """\')
+                                                    ;""", 'post', conn)
+
+            print("Unit_conversion_inserted...")
+
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
             
 
 # Define API routes
@@ -6165,6 +6258,7 @@ api.add_resource(Edit_Menu, '/api/v2/Edit_Menu')
 api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
+api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
 
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
