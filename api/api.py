@@ -6315,10 +6315,7 @@ api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
 api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
