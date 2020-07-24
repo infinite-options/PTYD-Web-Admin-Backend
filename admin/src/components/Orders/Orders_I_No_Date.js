@@ -52,9 +52,7 @@ class OIDisplay extends Component {
       mapDateToOrders: new Map(),
       mapDateToIngr: new Map(),
       dateOrders: [],
-      dateIngrs: [],
       selOrderDate: 0,
-      selIngrDate: 0,
     };
   }
 
@@ -70,15 +68,10 @@ class OIDisplay extends Component {
     let mapDateToOrders = new Map();
     let mapDateToIngr = new Map();
     let dateOrders = [];
-    let dateIngrs = [];
 
     for (let idx = 0; idx < orders.length; idx++) {
       if (!dateOrders.includes(orders[idx].menu_date))
         dateOrders.push(orders[idx].menu_date);
-    }
-    for (let idx = 0; idx < ingredients.length; idx++) {
-      if (!dateIngrs.includes(ingredients[idx].week_affected))
-        dateIngrs.push(ingredients[idx].week_affected);
     }
 
     //console.log(dateOrders);
@@ -99,24 +92,21 @@ class OIDisplay extends Component {
       }
     }
 
-    for (let i = 0; i < dateIngrs.length; i++) {
+    for (let i = 0; i < dateOrders.length; i++) {
       for (let j = 0; j < ingredients.length; j++) {
-        if (ingredients[j].week_affected == dateIngrs[i]) {
-          if (mapDateToIngr.has(dateIngrs[i])) {
-            let tempArray = mapDateToIngr.get(dateIngrs[i]);
+        if (ingredients[j].week_affected == dateOrders[i]) {
+          if (mapDateToIngr.has(dateOrders[i])) {
+            let tempArray = mapDateToIngr.get(dateOrders[i]);
             tempArray.push(ingredients[j]);
-            mapDateToIngr.set(dateIngrs[i], tempArray);
+            mapDateToIngr.set(dateOrders[i], tempArray);
           } else {
             let tempArray = [];
             tempArray.push(ingredients[j]);
-            mapDateToIngr.set(dateIngrs[i], tempArray);
+            mapDateToIngr.set(dateOrders[i], tempArray);
           }
         }
       }
     }
-
-    //console.log(mapDateToOrders);
-    //console.log(mapDateToIngr);
 
     this.setState({
       orders: orders,
@@ -124,7 +114,6 @@ class OIDisplay extends Component {
       mapDateToIngr: mapDateToIngr,
       mapDateToOrders: mapDateToOrders,
       dateOrders: dateOrders,
-      dateIngrs: dateIngrs,
     });
   }
 
@@ -140,25 +129,6 @@ class OIDisplay extends Component {
           id="demo-simple-select"
           value={this.state.selOrderDate}
           onChange={this.handleOrderDateChange}
-        >
-          {tempMeal}
-        </Select>
-      </FormControl>
-    );
-  };
-
-  ingrDateDropdown = () => {
-    let tempMeal = [];
-    for (let i = 0; i < this.state.dateIngrs.length; i++) {
-      tempMeal.push(<MenuItem value={i}>{this.state.dateIngrs[i]}</MenuItem>);
-    }
-    return (
-      <FormControl>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={this.state.selIngrDate}
-          onChange={this.handleIngrDateChange}
         >
           {tempMeal}
         </Select>
@@ -416,7 +386,6 @@ class OIDisplay extends Component {
           </Link>
           <Typography color="textPrimary">Ingredients</Typography>
         </Breadcrumbs>
-        {this.ingrDateDropdown()}
         {this.ingredients_function()}
         <br />
         <br />
@@ -1465,12 +1434,55 @@ class OIDisplay extends Component {
           </Col>
         </Row>
       );
+    } else {
+      return (
+        <Row>
+          <Col>
+            <Card
+              style={{
+                width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
+                height: "auto",
+              }}
+            >
+              <Card.Body>
+                <div className="vertical-menu">
+                  <Table striped bordered hover>
+                    <thead style={{ overflow: "scroll" }}>
+                      <tr>
+                        <th>Menu Date</th>
+                        <th>Menu Category</th>
+                        <th>Meal Category</th>
+                        <th>Menu Type</th>
+                        <th>Meal Category</th>
+                        <th>Meal ID</th>
+                        <th>Meal Name</th>
+                        <th>Default Meal</th>
+                        <th>Extra Meal Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+
+                    <tbody
+                      className="vertical-menu"
+                      style={{
+                        height: "300px",
+                        overflow: "scroll",
+                      }}
+                    ></tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      );
     }
   };
 
   ingredients_function = () => {
     var currdateIngrs = this.state.mapDateToIngr.get(
-      this.state.dateIngrs[this.state.selIngrDate]
+      this.state.dateOrders[this.state.selOrderDate]
     );
     if (currdateIngrs) {
       return (
@@ -1523,6 +1535,49 @@ class OIDisplay extends Component {
                         </tr>
                       ))}
                     </tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      );
+    } else {
+      return (
+        <Row>
+          <Col>
+            <Card
+              style={{
+                width: "100%",
+                boxShadow: "0px 5px 10px 4px rgba(0,0,0,0.2)",
+                height: "auto",
+              }}
+            >
+              <Card.Body>
+                <div className="vertical-menu">
+                  <Table striped bordered hover>
+                    <thead style={{ overflow: "scroll" }}>
+                      <tr>
+                        <th>Week Affected</th>
+                        <th>Total Needed</th>
+                        <th>Measure Name</th>
+                        <th>Ingredient Description</th>
+                        <th>Package Size</th>
+                        <th>Ingredient Measure</th>
+                        <th>Coversion Ratio</th>
+                        <th>Need Quantity</th>
+                        <th>Inverntory Quantity</th>
+                        <th>Buy Quantity</th>
+                      </tr>
+                    </thead>
+
+                    <tbody
+                      className="vertical-menu"
+                      style={{
+                        height: "300px",
+                        overflow: "scroll",
+                      }}
+                    ></tbody>
                   </Table>
                 </div>
               </Card.Body>
