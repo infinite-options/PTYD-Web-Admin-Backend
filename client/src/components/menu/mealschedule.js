@@ -167,7 +167,7 @@ export default class MealSchedule extends Component {
   };
   ChangeCurrentAddonCharge = total => {
     this.setState({addonCharge: total});
-    console.log("changeCurrentAddon Charge in mealschedule is called");
+    // console.log("changeCurrentAddon Charge in mealschedule is called");
   };
 
   SetError = err => {
