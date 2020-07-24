@@ -155,30 +155,16 @@ function App() {
             &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/settings">Plans & Coupons</Nav.Link>
             &nbsp;&nbsp;&nbsp;
-            <NavDropdown title="Orders" id="collasible-nav-dropdown">
-              <NavDropdown.Item
-                href="/orders"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  backgroundColor: "white",
-                }}
-              >
-                Orders Table
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                href="/ingredients"
-                style={{
-                  color: "black",
-                  fontWeight: "bold",
-                  backgroundColor: "honeydew",
-                }}
-              >
-                Ingredients Table
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Nav.Link href="/orders">Orders & Ingredients</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/oidisplay">Orders & Ingredients Display</Nav.Link>
             &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers">Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="https://analytics.google.com/analytics/web/template?uid=7z9gTb-ERXGnQUcJiZ2Tzg">
+              Google Analytics
+            </Nav.Link>
+            <Nav.Link href="/googleAnlytics">GA2</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
             <Nav.Link>
               <Badge
                 // badgeContent={42}

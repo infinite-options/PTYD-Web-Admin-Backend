@@ -6,6 +6,6 @@ BASE_DIR="$(cd "$(dirname "$0" )" && pwd )"
 EC2_KEY_DIR=$BASE_DIR"/ptyd-0510.pem"
 
 # ec2-54-183-61-181.us-west-1.compute.amazonaws.com from Public DNS (IPv4)
-EC2_ENDPOINT="ec2-user@ec2-54-183-61-181.us-west-1.compute.amazonaws.com"
+EC2_ENDPOINT="ec2-user@ec2-13-52-178-27.us-west-1.compute.amazonaws.com"
 
 ssh -i $EC2_KEY_DIR $EC2_ENDPOINT

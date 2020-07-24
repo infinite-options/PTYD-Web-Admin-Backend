@@ -974,7 +974,13 @@ class EditMeals extends Component {
                     <thead>
                       <tr>
                         <th colSpan="2">Select Meal To Edit</th>
-                        <th colSpan="3">{this.editMealDropdown()}</th>
+                        <th colSpan="3">{this.editMealCombo()}</th>
+                      </tr>
+                    </thead>
+                    <thead>
+                      <tr>
+                        <th colSpan="2">Current Selection</th>
+                        <th colSpan="3">{this.state.mealData[this.state.selIndex].meal_name}</th>
                       </tr>
                     </thead>
                     <thead>
@@ -1288,6 +1294,67 @@ class EditMeals extends Component {
       tempdate.push(<MenuItem value={i}>{this.state.mealkeys[i]}</MenuItem>);
     }
     return <FormControl>{newMealInput}</FormControl>;
+  };
+
+  handleMealChangeCombo = (event, v) => {
+    console.log(event.target.value);
+    console.log(v);
+    var key = 0;
+
+    if (v != null) {
+      for (let i = 0; i < this.state.mealData.length; i++) {
+        if (v.title === this.state.mealData[i].meal_name) {
+          key = i;
+          break;
+        }
+      }
+      console.log(key);
+
+      this.setState({ selIndex: key }, () => {
+        localStorage.setItem("selIndex", this.state.selIndex);
+      });
+      var selectedMeal = this.state.mealData[key];
+      //console.log("new hint");
+      //console.log(selectedMeal.meal_hint);
+      this.setState({
+        MealName: selectedMeal.meal_name,
+        MealDesc: selectedMeal.meal_desc,
+        MealCategory: selectedMeal.meal_category,
+        MealHint: selectedMeal.meal_hint,
+        MealPhotoURL: selectedMeal.meal_photo_URL,
+        ExtraMealPrice: selectedMeal.extra_meal_price,
+        MealCalories: selectedMeal.meal_calories,
+        MealProtein: selectedMeal.meal_protein,
+        MealCarbs: selectedMeal.meal_carbs,
+        MealFiber: selectedMeal.meal_fiber,
+        MealSugar: selectedMeal.meal_sugar,
+        MealFat: selectedMeal.meal_fat,
+        MealSat: selectedMeal.meal_sat,
+      });
+    }
+  };
+
+  editMealCombo = () => {
+    let tempMeal = [];
+    for (let i = 0; i < this.state.mealData.length; i++) {
+      tempMeal.push({ title: this.state.mealData[i].meal_name });
+    }
+    return (
+      <Autocomplete
+        id="combo-box-demo"
+        onChange={(e, v) => {
+          console.log(v);
+          this.handleMealChangeCombo(e, v);
+        }}
+        //value={this.state.mealData[this.state.selIndex].meal_name}
+        options={tempMeal}
+        getOptionLabel={(option) => option.title}
+        style={{ width: 300 }}
+        renderInput={(params) => (
+          <TextField {...params} label="Meal Name" variant="outlined" />
+        )}
+      />
+    );
   };
 
   editMealDropdown = () => {

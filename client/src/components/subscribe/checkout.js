@@ -3,7 +3,8 @@ import React, {Component, Fragment} from "react";
 import {Button, Form, Row, Col, Container} from "react-bootstrap";
 import TruckIcon from "../../img/prepTruckIcon.png";
 import ErrorHandle from "../ErrorHandle";
-
+import ReactGA from "react-ga";
+import ReactPixel from "react-facebook-pixel";
 import crypto from "crypto";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -56,7 +57,7 @@ class Checkout extends Component {
         total: 0
       },
       discount: {percent: 0, amount: 0, shipping: 0},
-
+      tax_rate: this.props.location.state.tax_rate,
       coupon_disable: false
     };
 
@@ -259,6 +260,17 @@ class Checkout extends Component {
   }
   async checkout(event) {
     event.preventDefault();
+    //Google analytics is tracking button clicking
+    ReactGA.event({
+      category: "Button",
+      action: "Checkout 'button' clicked"
+    });
+    //Facebook Pixel is tracking button clicking
+    let data = {
+      value: this.state.will_charge.total_charge,
+      currency: "USD"
+    };
+    ReactPixel.track("Purchase", data);
     this.state.salt = await crypto
       .createHash("sha512")
       .update(this.state.password + this.state.password_salt)
