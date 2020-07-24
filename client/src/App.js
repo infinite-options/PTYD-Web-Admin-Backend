@@ -247,11 +247,13 @@ const App = (props) => {
 
         <div class="row justify-content-md-center">
           <footer className="font2">
+          <hr/>
+
             <div className="row footer-container">
-              <div className="col">
+              <div className="col-md-2">
                 <div className="center-content">
                   <a className="navbar-brand" href="/">
-                    <img src={logo} alt="Logo" className="logo"></img>
+                    <img src={logo} alt="Logo" className="logo"/>
                   </a>
                   <div className="logo-austin-houston">
                     <p className="font9">AUSTIN &</p>
@@ -260,7 +262,7 @@ const App = (props) => {
                 </div>
               </div>
 
-              <div className="col">
+              <div className="col" id="margin-mobile">
                 <Nav defaultActiveKey="/" className="flex-column">
                   <Nav.Link id="green" disabled>
                     Order
@@ -339,7 +341,7 @@ const App = (props) => {
                 </Nav>
               </div>
 
-              <div className="col">
+              <div className="col" id="margin-mobile">
                 <Nav defaultActiveKey="/" className="flex-column">
                   <Nav.Link id="green" disabled>
                     Questions & Contact
@@ -393,7 +395,7 @@ const App = (props) => {
                 </Nav>
               </div>
 
-              <div className="col-md-3 flex-column">
+              <div className="col-md-3 flex-column" id="margin-mobile">
                 <Nav defaultActiveKey="/">
                   <Nav.Link id="green" disabled>
                     Follow Us:

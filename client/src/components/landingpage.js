@@ -223,7 +223,7 @@ class Landing extends Component {
           <MenuCarousel className='carousel-space' />
         </div>
 
-        <div className='container center-content menu-next-week-button-container'>
+        <div className='container center-content menu-next-week-button-container visibility-hidden-mobile'>
           <a
             // type='button'
             href='/menunextweek'
@@ -233,31 +233,31 @@ class Landing extends Component {
           </a>
         </div>
 
-        <div className='container font2 container_space'>
+        <div className='container font2 container_space visibility-hidden-mobile'>
           <h3 className='community-title'>What Our Community is Saying...</h3>
 
           <CommunityCarousel />
         </div>
 
-        {/* <div className='container'>
+        <div className='container'>
           <div className='try-us-today-button-container'>
             <a
-              // type='button'
               href='/selectmealplan'
               className='btn1 btn1-primary start_button'
             >
               TRY US TODAY
             </a>
           </div>
-        </div> */}
+        </div>
 
-        {/* <div className='container container_space'>
+        <div className='container container_space visibility-hidden-mobile'>
           <div className='container_space center-content'>
             <QuoteCarousel />
           </div>
-        </div> */}
+        </div>
 
         <div className='container'>
+          <div className='mobile-center'>
           <Grid>
             <center>
               <div className='bottom_header'>
@@ -288,7 +288,7 @@ class Landing extends Component {
                   </Cell>
                 </Grid>
                 <Grid className='awards'>
-                  <Cell hidePhone col={3} align='middle'></Cell>
+                  <Cell className='visibility-hidden-mobile' hidePhone col={3} align='middle'></Cell>
                   <Cell col={3} align='middle'>
                     <img src={LOGOAU40} alt='au40' />
                     <div className='award-text'>
@@ -303,11 +303,12 @@ class Landing extends Component {
                       <p>FAVE Sustainable Business</p>
                     </div>
                   </Cell>
-                  <Cell hidePhone col={3} align='middle'></Cell>
+                  <Cell className='visibility-hidden-mobile' hidePhone col={3} align='middle'></Cell>
                 </Grid>
               </div>
             </center>
           </Grid>
+          </div>
         </div>
         
       </div>
