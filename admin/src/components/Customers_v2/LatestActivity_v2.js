@@ -49,10 +49,10 @@ class LatestActivity extends React.Component {
 
     render() {
         if(!this.state.loaded) {
-            return <Typography variant="body1" style={{ margin: '30px 30px' }} > Loading Latest Activity </Typography>
+            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Latest Activity </Typography>
         }
         return (
-            <div style={{ margin: '30px 30px' }}>
+            <div style={{ margin: '30px 0' }}>
                 <MaterialTable
                     title="Latest Activity"
                     columns={[

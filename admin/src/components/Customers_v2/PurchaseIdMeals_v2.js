@@ -51,10 +51,10 @@ class PurchaseIdMeals extends React.Component {
 
     render() {
         if(!this.state.loaded) {
-            return <Typography variant="body1" style={{ margin: '30px 30px' }} > Loading Purchase ID Meals </Typography>
+            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Purchase ID Meals </Typography>
         }
         return (
-            <div style={{ margin: "30px 30px" }}>
+            <div style={{ margin: "30px 0" }}>
                 <Paper style={
                 {   maxWidth: 'fit-content',
                     maxWidth: '-moz-fit-content',
@@ -68,22 +68,12 @@ class PurchaseIdMeals extends React.Component {
                 <MaterialTable
                     title="Purchase Id Meals"
                     columns={[
-                        { title: 'Email', field: 'user_email'},
-                        { title: 'Phone', field: 'phone_number'},
-                        { title: 'Purchase ID', field: 'purchase_id'},
-                        { title: 'Purchase Status', field: 'purchase_status'},
                         { title: 'Meal Plan ID', field: 'meal_plan_id'},
                         { title: 'Delivery First Name', field: 'delivery_first_name'},
                         { title: 'Delivery Last Name', field: 'delivery_last_name'},
                         { title: 'Delivery Phone', field: 'delivery_phone'},
                         { title: 'Meal Plan Description', field: 'meal_plan_desc'},
-                        { title: 'Payment ID', field: 'payment_id'},
-                        { title: 'Recurring', field: 'recurring'},
-                        { title: 'Coupon', field: 'coupon_id'},
-                        { title: 'Amount Due', field: 'amount_due'},
-                        { title: 'Amount Paid', field: 'amount_paid'},
-                        { title: 'Time Paid', field: 'payment_time_stamp'},
-                        { title: 'Credit Card', field: 'cc_num'}
+                        { title: 'Meal Plan Selection', field: 'meal_selection'},
                     ]}
                     data={this.state.data}
                     style={{ margin: "10px 0" }}
