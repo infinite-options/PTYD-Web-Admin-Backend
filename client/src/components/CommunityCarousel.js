@@ -51,7 +51,26 @@ export default class CommunityCarousel extends Component {
       slidesToShow: 3,
       slidesToScroll: 3,
       autoplay: false,
-      arrows: false
+      arrows: false,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+            // initialSlide: 2
+          }
+        }
+      ]
     };
     return (
       <div>

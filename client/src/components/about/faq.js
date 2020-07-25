@@ -174,6 +174,7 @@ class Faq extends Component {
             </Accordion.Collapse>
           </Card>
         </Accordion>
+        <br/><br/>
       </div>
     );
   }
