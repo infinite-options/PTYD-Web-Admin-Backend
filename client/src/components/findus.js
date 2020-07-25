@@ -11,7 +11,7 @@ class Findus extends Component {
     return (
       <section class="content-section">
         <div class="container font2">
-          {" "}
+          <br/>
           <Grid>
             <Cell col={4}>
               {" "}

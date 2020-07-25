@@ -38,7 +38,7 @@
 }
 
 p {
-  font-family: "montserrat";
+  font-family: "montserrat", sans-serif;
 }
 
 h2,
@@ -46,11 +46,11 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "oswald" !important;
+  font-family: "oswald", sans-serif !important;
 }
 
 h1 {
-  font-family: brandongrotw01-lightregular !important;
+  font-family: brandongrotw01-lightregular, sans-serif !important;
 }
 
 a {
@@ -92,7 +92,7 @@ a {
   display:flex;
 }
 
-@media only screen and (max-width: 990px) {
+@media only screen and (max-width: 991px) {
   .navigation-link {
     margin: 10px 35px 0 35px;
   }
@@ -193,12 +193,12 @@ a {
 }
 
 .title-image-container {
+  /*text color*/
   color: white;
-  /* margin-top: -40px; */
 }
 .title-image {
-  width: 100%;
-  height: 800px;
+  max-width: 100%;
+  height: auto;
   object-fit: cover;
 }
 
@@ -308,17 +308,25 @@ a {
   color: #4d4d4d;
   margin: 50px 0 0 20px;
 }
+
+#left-padding-reusable {
+  margin-left: -35px;
+}
+#left-padding-organic {
+  margin-left: -35px;
+}
+
 .four-items-subtitle {
   font-size: 27px;
   /* font-family: oswald; */
 }
 .eat-better-now-button-container {
   margin-left: 30px;
+  max-height: 50px;
 }
 
 .img-2-carrot {
-  width: 100%;
-  height: 80%;
+  height: auto;
   margin: 80px 0 0 -30px;
   object-fit: cover;
 }
@@ -386,7 +394,6 @@ a {
   text-align: center;
   font-weight: bold;
   font-size: 37px;
-  /* color: #617221; */
   color: var(--green);
   letter-spacing: 0.25em;
 }
@@ -521,8 +528,158 @@ a {
   font-size: 12px !important;
   letter-spacing: 0.05em;
 }
-.award-text {
-  margin-top: -25px;
+
+@media only screen and (max-width: 767px) {
+  .navigation-start {
+    padding-left: 50px;
+  }
+  .navbar-brand {
+    margin-left: 10px;
+  }
+  #logoutButton {
+    margin: 30px 180px 30px 0;
+  }
+
+  .content-section .landing {
+    max-width: 320px !important;
+  }
+  #footer-margin-mobile {
+    margin-left: 10px;
+  }
+
+  .title-image-container {
+    height: 500px;
+    width: auto;
+    margin: 0 0 0 0!important;
+    padding: 0 0 0 0!important;
+    object-fit: cover;
+  }
+  .title-image-container img {
+    height: 500px;
+    width: auto;
+    object-fit: cover;
+  }
+  .top-left h1 {
+    font-size:45px;
+    font-weight: bold;
+    line-height: 50px;
+    padding: 0 0 0 0px;
+    letter-spacing: .01em;
+  }
+  .top-left {
+    margin-top: -55px;
+  }
+  .bottom-left {
+    padding: 0 0 0 2px;
+    /* margin-top: 100px; */
+  }
+  .plant-based-text {
+    margin-bottom: 30px !important;
+  }
+  .plant-based-text h1 {
+    font-size: 20px !important;
+    font-weight: bold;
+    letter-spacing: .05em;
+    line-height: 10px;
+  }
+  .home_subtitle {
+    margin-bottom: 60px !important;
+  }
+  .bottom-left {
+    margin-bottom: -10px;
+  }
+  .zero-waste-cell {
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+  }
+  .zero-waste {
+    width: auto;
+    letter-spacing: 0.1em;
+    font-size: 26px;
+  }
+  .zero-waste-subtext {
+    margin-left: 0px;
+  }
+  .box-shadow-top, .box-shadow-bottom {
+    width: auto !important;
+  }
+
+  #left-padding-reusable {
+    margin-left: 8px;
+  }
+  #left-padding-organic {
+    margin-left: 8px;
+  }
+  .img-2-carrot {
+    max-width: 300px !important;
+    margin: 0!important;
+  }
+
+  .container_space {
+    margin-top: 40px!important;
+  }
+
+  /* delivered weekly */
+  .background {
+    width: auto !important;
+    object-fit: cover;
+  }
+  .delivered-title {
+    letter-spacing: .15em!important;
+    font-size: 28px!important;
+    line-height:16px!important;
+  }
+  .delivered-title2 {
+    font-size: 22px!important;
+  }
+  .delivered-padding {
+    padding: 25px 0;
+  }
+  .delivered-titles-container {
+    padding-top: 15px!important;
+    padding-bottom: 0px!important;
+  }
+  .delivered-weekly-container {
+    width: auto !important;
+    height: auto!important;
+    padding-bottom: 20px;
+  }
+  .delivered-weekly-container2 {
+    padding-bottom: 0!important;
+    margin-bottom: 0!important;
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+  }
+  .delivered-weekly-bullets-container {
+    padding-left: 0px !important;
+  }
+  .delivered-bullets-text {
+    margin: 5px!important;
+    font-size: 14px!important;
+  }
+  hr.three {
+    width: auto!important;
+    margin: 10px auto;
+    border: none;
+  }
+  .pause-anytime {
+    padding: 0!important;
+  }
+
+  .try-us-today-button-container {
+    text-align: center;
+    margin: 50px 0 0 0;
+  }
+
+  .visibility-hidden-mobile {
+    visibility: hidden!important;
+    display: none;
+  }
+
+  .mobile-center {
+    padding-left: 60px;
+    text-align: center;
+  }
 }
 
 .top-right {

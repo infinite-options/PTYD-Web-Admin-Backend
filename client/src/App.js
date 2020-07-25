@@ -1,18 +1,7 @@
-import React, {useEffect, useState, Fragment} from "react";
-// import {Header, Content, Grid, Cell} from "react-mdl";
-import {Button, Navbar, Col} from "react-bootstrap";
-// import {Navigation, Drawer,Layout, Row,  } from "react-mdl";
-// import {Link} from "react-router-dom";
-
+import React, { useEffect, useState, Fragment } from "react";
+import { Button, Navbar, Col, Nav, Form, NavDropdown } from "react-bootstrap";
 import "./App.css";
-// import "bootstrap/dist/css/bootstrap.min.css";
-
 import Main from "./components/main";
-
-import Nav from "react-bootstrap/Nav";
-// import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import Cookies from "js-cookie";
 
 import logo from "./img/LOGO-homepage.png";
@@ -251,8 +240,9 @@ const App = props => {
 
       <div className='row justify-content-md-center'>
         <footer className=' font2'>
+          <hr/>
           <div className='row footer-container'>
-            <div className='col'>
+            <div className='col-md-2'>
               <div className='center-content'>
                 <a className='navbar-brand' href='/'>
                   <img src={logo} alt='Logo' className='logo'></img>
@@ -265,7 +255,7 @@ const App = props => {
             </div>
 
             <div className='col'>
-              <Nav defaultActiveKey='/' className='flex-column'>
+              <Nav defaultActiveKey='/' className='flex-column' id="footer-margin-mobile">
                 <Nav.Link id='green' disabled>
                   Order
                 </Nav.Link>
@@ -300,7 +290,7 @@ const App = props => {
               </Nav>
             </div>
 
-            <div className='col-2'>
+            <div className='col'>
               <Nav defaultActiveKey='/' className='flex-column'>
                 <Nav.Link id='green' disabled>
                   Company
@@ -343,7 +333,7 @@ const App = props => {
               </Nav>
             </div>
 
-            <div className='col'>
+            <div className='col' id="footer-margin-mobile">
               <Nav defaultActiveKey='/' className='flex-column'>
                 <Nav.Link id='green' disabled>
                   Questions & Contact
@@ -396,7 +386,7 @@ const App = props => {
               </Nav>
             </div>
 
-            <div className='col-md-3 flex-column'>
+            <div className='col-md-3 flex-column' id="footer-margin-mobile">
               <Nav defaultActiveKey='/'>
                 <Nav.Link id='green' disabled>
                   Follow Us:
