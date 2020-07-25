@@ -73,7 +73,7 @@ class PurchaseIdMeals extends React.Component {
                         { title: 'Delivery Phone', field: 'delivery_phone'},
                         { title: 'Delivery Address', field: 'delivery_address'},
                         { title: 'Delivery Address Unit', field: 'delivery_address_unit'},
-                        { title: 'Delivery City', field: 'delivery_address_city'},
+                        { title: 'Delivery City', field: 'delivery_city'},
                         { title: 'Delivery ZIP', field: 'delivery_zip'},
                         { title: 'Meal Plan Description', field: 'meal_plan_desc'},
                         { title: 'Saturday', field: 'Saturday' },
