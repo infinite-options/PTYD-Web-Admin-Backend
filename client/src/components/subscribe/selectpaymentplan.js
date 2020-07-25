@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {Card, CardDeck, Row, Col, Container} from "react-bootstrap";
 import {Grid, Cell} from "react-mdl";
 import IMG9 from "../../img/creditCard.png";
-import {Link} from "react-router-dom";
+import axios from "axios";
+// import {Link} from "react-router-dom";
 
 class SelectPaymentPlan extends Component {
   constructor(props) {
@@ -11,16 +12,34 @@ class SelectPaymentPlan extends Component {
   }
 
   async componentDidMount() {
-    console.log("selectpaymentplan: ", this.props.API_URL);
     this.setState({obj: this.props.objectIndex});
     this.setState({meals: this.props.meals});
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
+    console.log(api);
     const plans = api.result[this.state.obj].result;
     //  const plans = plansData.Plans;
     this.setState({paymentPlans: plans});
-    //  const otherPlans = plansData.OtherPaymentPlans;
-    //  this.setState( {otherPlans: otherPlans} );
+    //calling tax_rate api
+    let today = new Date();
+    let mm =
+      today.getMonth() + 1 >= 10
+        ? today.getMonth() + 1
+        : "0" + (today.getMonth() + 1);
+    let dd = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
+    let yyyy = today.getFullYear();
+    axios
+      .get(`${this.props.TAX_RATE_URL}`, {
+        params: {affected_date: `${yyyy}-${mm}-${dd}`}
+      })
+      .then(res => {
+        if (res.data.result !== undefined) {
+          let rate = parseFloat(
+            (parseFloat(res.data.result.tax_rate) / 100).toFixed(2)
+          );
+          this.setState({tax_rate: rate, shipping: 15}); // should get shipping from databse too.
+        }
+      });
   }
 
   render() {
@@ -84,38 +103,42 @@ class SelectPaymentPlan extends Component {
                         ${paymentPlan.meal_weekly_price.toFixed(2)} /week
                       </Card.Title>
                       <Card.Text style={{fontSize: "13px", color: "#888785"}}>
-                        Sales tax of 8.25% will be added
+                        Sales tax of {(this.state.tax_rate * 100).toFixed(2)}%
+                        will be added
                       </Card.Text>
-                      <Link
-                        style={{fontFamily: "Kalam", color: "white"}}
-                        to={{
-                          pathname: "/checkout",
-                          item: {
-                            name: `${
-                              paymentPlan.meal_plan_desc
-                            } Subscription - $${paymentPlan.meal_plan_price.toFixed(
-                              2
-                            )}`,
-                            total: paymentPlan.meal_plan_price.toFixed(2)
-                          }
+
+                      <button
+                        type='button'
+                        className='btn2 btn2-primary font2'
+                        style={{
+                          marginTop: "10px",
+                          paddingLeft: "30px",
+                          paddingRight: "30px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                          color: "white",
+                          fontSize: "15px"
+                        }}
+                        onClick={() => {
+                          this.props.history.push({
+                            pathname: "/checkout",
+                            state: {
+                              item: {
+                                name: `${
+                                  paymentPlan.meal_plan_desc
+                                } Subscription - $${paymentPlan.meal_plan_price.toFixed(
+                                  2
+                                )}`,
+                                total: paymentPlan.meal_plan_price.toFixed(2)
+                              },
+                              tax_rate: this.state.tax_rate,
+                              shipping: this.state.shipping
+                            }
+                          });
                         }}
                       >
-                        <button
-                          type='button'
-                          className='btn2 btn2-primary font2'
-                          style={{
-                            marginTop: "10px",
-                            paddingLeft: "30px",
-                            paddingRight: "30px",
-                            paddingTop: "5px",
-                            paddingBottom: "5px",
-                            color: "white",
-                            fontSize: "15px"
-                          }}
-                        >
-                          CHECKOUT
-                        </button>
-                      </Link>
+                        CHECKOUT
+                      </button>
                       <img
                         className='img-fluid'
                         src={IMG9}

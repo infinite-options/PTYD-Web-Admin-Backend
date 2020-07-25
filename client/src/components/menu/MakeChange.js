@@ -39,8 +39,8 @@ export default class MakeChange extends Component {
         price: this.props.currentPurchase.meal_plan_price,
         amount_paid: 0
       },
-      tax_rate: 0.0825, //these info should be taken from database instead of hard coded
-      shipping: 15,
+      tax_rate: this.props.tax_rate, //these info should be taken from database instead of hard coded
+      shipping: this.props.shipping,
       loading: false,
       creditCard: {
         cc_num: this.props.currentPurchase.cc_num,
@@ -186,7 +186,7 @@ export default class MakeChange extends Component {
         //success => reload the current page
         this.props.history.push("/mealschedule");
         window.location.reload(false);
-        this.setState({loading: false});
+        // this.setState({loading: false});
       })
       .catch(err => {
         console.log(err);
@@ -201,7 +201,34 @@ export default class MakeChange extends Component {
         this.ShowHideErrorModal();
       });
   };
+  handleChangeSubcription = async e => {
+    e.persist();
 
+    let paymentPlans = this.state.paymentPlans;
+    let res = await axios.get(`${this.props.REFUND_URL}`, {
+      params: {
+        purchase_id: this.state.currentPurchase.purchase_id
+      }
+    });
+    let paid = res.data.refund_amount;
+    console.log(paid);
+    this.setState(prevState => ({
+      updateMealPlan: {
+        ...prevState.updateMealPlan,
+        meal_plan_id: paymentPlans[e.target.value].meal_plan_id,
+        name: paymentPlans[e.target.value].meal_plan_desc,
+        price: paymentPlans[e.target.value].meal_plan_price,
+        amount_paid: parseFloat(
+          (
+            parseFloat(paymentPlans[e.target.value].meal_plan_price) *
+              (1 + this.state.tax_rate) +
+            this.state.shipping -
+            paid
+          ).toFixed(2)
+        )
+      }
+    }));
+  };
   UpdateChangingSubcription = async () => {
     this.setState({loading: true});
     // update changing subcription
@@ -246,7 +273,7 @@ export default class MakeChange extends Component {
 
       this.props.history.push("/mealschedule");
       window.location.reload("false");
-      this.setState({loading: false});
+      // this.setState({loading: false});
     } catch (err) {
       this.setState({
         errorMessage: err,
@@ -320,35 +347,7 @@ export default class MakeChange extends Component {
                         <Form.Control
                           as='select'
                           name='subscription'
-                          onChange={e => {
-                            e.persist();
-                            let paymentPlans = this.state.paymentPlans;
-                            let paid =
-                              parseFloat(
-                                this.state.currentPurchase.meal_plan_price
-                              ) *
-                                (1 + this.state.tax_rate) +
-                              this.state.shipping;
-                            this.setState(prevState => ({
-                              updateMealPlan: {
-                                ...prevState.updateMealPlan,
-                                meal_plan_id:
-                                  paymentPlans[e.target.value].meal_plan_id,
-                                name:
-                                  paymentPlans[e.target.value].meal_plan_desc,
-                                price:
-                                  paymentPlans[e.target.value].meal_plan_price,
-                                amount_paid: (
-                                  parseFloat(
-                                    paymentPlans[e.target.value].meal_plan_price
-                                  ) *
-                                    (1 + this.state.tax_rate) +
-                                  this.state.shipping -
-                                  paid
-                                ).toFixed(2)
-                              }
-                            }));
-                          }}
+                          onChange={this.handleChangeSubcription}
                         >
                           <option>Choose...</option>
                           {/* drop down meal plans goes here */}

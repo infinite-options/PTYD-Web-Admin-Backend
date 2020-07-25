@@ -25,6 +25,10 @@ export default class MealSchedule extends Component {
       //handle addonCharge for AccountInfo component
       addonCharge: 0,
 
+      //tax rate and shipping fee
+      tax_rate: 0,
+      shipping: 0,
+
       //handle error
       error: null
     };
@@ -91,7 +95,6 @@ export default class MealSchedule extends Component {
         params: {startdate: this.props.match.params.startdate}
       })
       .then(res => {
-        // console.log("res: ", res);
         if (res.data !== undefined && res.data.result !== undefined) {
           if (res.data.result.length > 0) {
             this.setState({purchases: res.data.result});
@@ -100,7 +103,6 @@ export default class MealSchedule extends Component {
             // frist time the page is loaded
             this.setState({
               currentPurchase: res.data.result[0]
-              // addonCharge: res.data.result[0].total_charge
             });
           } else {
             this.setState({error: "There are no subscribed purchases."});
@@ -122,14 +124,32 @@ export default class MealSchedule extends Component {
       .get(`${this.props.PLANS_URL}`)
       .then(res => {
         let data = res.data;
-        // console.log(data.result);
         if (data !== undefined && data.result !== undefined) {
-          // console.log("here");
           this.setState({mealPlans: data.result});
         }
       })
       .catch(err => {
         console.log("error happened when calling plans_url: ", err);
+      });
+    // calling TaxRateAPI
+    let today = new Date();
+    let mm =
+      today.getMonth() + 1 >= 10
+        ? today.getMonth() + 1
+        : "0" + (today.getMonth() + 1);
+    let dd = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
+    let yyyy = today.getFullYear();
+    axios
+      .get(`${this.props.TAX_RATE_URL}`, {
+        params: {affected_date: `${yyyy}-${mm}-${dd}`}
+      })
+      .then(res => {
+        if (res.data.result !== undefined) {
+          let rate = parseFloat(
+            (parseFloat(res.data.result.tax_rate) / 100).toFixed(2)
+          );
+          this.setState({tax_rate: rate, shipping: 15}); // should get shipping from databse too.
+        }
       });
   };
 
@@ -147,7 +167,7 @@ export default class MealSchedule extends Component {
   };
   ChangeCurrentAddonCharge = total => {
     this.setState({addonCharge: total});
-    console.log("changeCurrentAddon Charge in mealschedule is called");
+    // console.log("changeCurrentAddon Charge in mealschedule is called");
   };
 
   SetError = err => {
@@ -197,7 +217,10 @@ export default class MealSchedule extends Component {
                   CHANGE_SUBCRIPTION_URL={this.props.CHANGE_SUBCRIPTION_URL}
                   UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
                   UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
+                  REFUND_URL={this.props.REFUND_URL}
                   user_uid={this.state.userID}
+                  tax_rate={this.state.tax_rate}
+                  shipping={this.state.shipping}
                 />
               )}
 

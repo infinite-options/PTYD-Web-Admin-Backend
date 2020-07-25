@@ -24,6 +24,7 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
+import { MdStayPrimaryLandscape } from "react-icons/md";
 //const [value, setValue] = React.useState(null);
 const filter = createFilterOptions();
 //const [erro, setErro] = useState(null);
@@ -60,6 +61,11 @@ class EditCreateMeal extends Component {
       brandNewUnit: "Cup",
       supportNewRecipe: false,
       mealNameRedirected: "",
+      unit1: "kg",
+      unit2: "None",
+      conversionRatio: 1,
+      unitType: ["Mass", "Volume", "Length"],
+      selUnitType: 0,
     };
   }
   async componentWillMount() {
@@ -136,11 +142,11 @@ class EditCreateMeal extends Component {
       console.log(api2.result.result);
 
       for (let idx = 0; idx < api2.result.result.length; idx++) {
-        console.log(api2.result.result[idx].measure_name);
-        if (!unit.includes(api2.result.result[idx].measure_name)) {
-          unit.push(api2.result.result[idx].measure_name);
+        console.log(api2.result.result[idx].recipe_unit);
+        if (!unit.includes(api2.result.result[idx].recipe_unit)) {
+          unit.push(api2.result.result[idx].recipe_unit);
           mapIngrUnitMeasureIdLocal.set(
-            api2.result.result[idx].measure_name,
+            api2.result.result[idx].recipe_unit,
             api2.result.result[idx].measure_unit_id
           );
         }
@@ -483,8 +489,8 @@ class EditCreateMeal extends Component {
   saveNewUnit = (e) => {
     e.preventDefault();
     var unitData = {
-      measure_id: "NewUnitId",
-      measure_name: this.state.newUnitName,
+      measure_unit_id: "NewUnitId",
+      recipe_unit: this.state.newUnitName,
     };
 
     console.log(unitData);
@@ -512,6 +518,53 @@ class EditCreateMeal extends Component {
           //setErro(err.response.data.result);
           //window.location.reload(false);
           console.log("API ADD_NEW_UNIT POST Failed");
+        } else if (typeof err === "string") {
+          //setErro(err);
+          console.log(err);
+        }
+        //setLoading(false);
+      });
+  };
+
+  saveUnitConversion = (e) => {
+    e.preventDefault();
+
+    var myType = "mass";
+    if (this.state.unit2 === "liter") myType = "volume";
+    if (this.state.unit2 === "cm") myType = "length";
+
+    var unitData = {
+      recipe_unit : this.state.unit2,
+      common_unit : this.state.unit1,
+      conversion_ratio: this.state.conversionRatio,
+      type: myType,
+    };
+
+    console.log(unitData);
+    axios
+      .post(this.props.API_URL_SAVEUNITCONVERSION, unitData)
+      .then((res) => {
+        if (res.status === 200) {
+          // if success
+          // if (res.data !== undefined && res.data !== null) {// if success
+          //   // this should not be here. this will allows login without add username and password in database
+          //   document.cookie = `logigit nStatus: Hello ${res.data.first_name}! , user_uid: ${res.data.user_uid}  , `;
+          // }
+
+          // props.history.push("/selectmealplan"); //this should be disable and waiting until email has been confirmed
+
+          // window.location.reload(false);
+          //props.history.push("/signupwaiting");
+          //setLoading(false);
+          console.log("API ADD CONVERSION POST WORKED");
+          window.location.reload(true);
+        }
+      })
+      .catch((err) => {
+        if (err.response !== undefined) {
+          //setErro(err.response.data.result);
+          //window.location.reload(false);
+          console.log("API ADD CONVERSION POST Failed");
         } else if (typeof err === "string") {
           //setErro(err);
           console.log(err);
@@ -613,6 +666,61 @@ class EditCreateMeal extends Component {
           value={this.state.brandNewUnit}
           onChange={(e) => {
             this.handleChange3brandnew(e.target.value);
+          }}
+          // style={{ color: "white" }}
+        >
+          {tempUnit}
+        </Select>
+      </FormControl>
+    );
+  };
+
+  unit1Dropdown = () => {
+    let tempUnit = [];
+    let unit = this.state.unitType;
+    for (let j = 0; j < unit.length; j++) {
+      tempUnit.push(<MenuItem value={j}>{unit[j]}</MenuItem>);
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.selUnitType}
+          onChange={(e) => {
+            let tempUnit1 = "kg";
+            if (e.target.value == 1) tempUnit1 = "L";
+            if (e.target.value == 2) tempUnit1 = "cm";
+            this.setState({
+              unit1: tempUnit1,
+              selUnitType: e.target.value,
+            });
+          }}
+          // style={{ color: "white" }}
+        >
+          {tempUnit}
+        </Select>
+      </FormControl>
+    );
+  };
+
+  unit2Dropdown = () => {
+    let tempUnit = [];
+    let unit = this.state.allUnits;
+    for (let j = 0; j < unit.length; j++) {
+      if (unit[j] === "kg" || unit[j] === "liter" || unit[j] === "cm")
+        tempUnit.push(<MenuItem value={unit[j]}>{unit[j]}</MenuItem>);
+    }
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.unit2}
+          onChange={(e) => {
+            this.setState({
+              unit2: e.target.value,
+            });
           }}
           // style={{ color: "white" }}
         >
@@ -908,6 +1016,7 @@ class EditCreateMeal extends Component {
   render() {
     let displayrows = [];
     let displayrowsingr = [];
+    let displayrowconversion = [];
     let displayrowunit = [];
     let enterMeal = this.state.mealidkey[this.state.selection];
     if (enterMeal == null) {
@@ -937,6 +1046,7 @@ class EditCreateMeal extends Component {
       displayrows.push(this.addRowTemplate());
     }
     displayrowsingr.push(this.addFirstIngrRow());
+    displayrowconversion.push(this.addRowConversion());
     displayrowunit.push(this.addUnitRow());
 
     return (
@@ -1019,10 +1129,14 @@ class EditCreateMeal extends Component {
                     {/* variant="dark" */}
                     <thead>
                       <tr>
+                        <th>Type</th>
                         <th>New Unit Name</th>
+                        <th></th>
+                        <th>Conversion Ratio</th>
+                        <th>Base Unit</th>
                       </tr>
                     </thead>
-                    <tbody>{displayrowunit}</tbody>
+                    <tbody>{displayrowconversion}</tbody>
                   </Table>
                 </Col>
                 <Col></Col>
@@ -1160,6 +1274,59 @@ class EditCreateMeal extends Component {
         <td>
           <Button variant="primary" onClick={this.saveNewUnit}>
             Save Unit
+          </Button>
+        </td>
+      </tr>
+    );
+  };
+
+  addRowConversion = () => {
+    return (
+      <tr>
+        <td>{this.unit1Dropdown()}</td>
+        <td>
+          <TextField
+            autoFocus
+            required
+            id="outlined-required"
+            variant="outlined"
+            type="text"
+            value={this.state.unit2}
+            onChange={(e) => {
+              this.setState({
+                unit2: e.target.value,
+              });
+            }}
+          />
+        </td>
+        <td>
+        {"="}
+        </td>
+        <td>
+          <TextField
+            id="outlined-number"
+            type="number"
+            variant="outlined"
+            value={this.state.conversionRatio}
+            onChange={(e) => {
+              this.setState({
+                conversionRatio: e.target.value,
+              });
+            }}
+          />
+        </td>
+        <td>
+        <TextField
+          required
+          id="outlined-required"
+          defaultValue="Hello World"
+          value={this.state.unit1}
+          variant="outlined"
+        />
+        </td>
+        <td>
+          <Button variant="primary" onClick={this.saveUnitConversion}>
+            Save
           </Button>
         </td>
       </tr>

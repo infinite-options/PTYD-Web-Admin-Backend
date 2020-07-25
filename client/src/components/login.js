@@ -6,14 +6,14 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import {Container} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+// import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 // import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import crypto from "crypto";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
-
+import ReactGA from "react-ga";
 import {getIp, getBrowser} from "../functions/getClientInfo";
 
 export default function Login(props) {
@@ -316,6 +316,10 @@ export default function Login(props) {
 
   function checkLogin() {
     // let t = [];
+    ReactGA.event({
+      category: "Log In",
+      action: "User is logging in"
+    });
     setLoading(true);
     grabLoginInfoForUser(email, password)
       .then(res => {

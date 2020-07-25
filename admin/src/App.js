@@ -110,24 +110,62 @@ function App() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto" style={{ marginLeft: "3%" }}>
-            <NavDropdown title="Do It Yourself" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/createMenu">
-                Create Menus
+            <NavDropdown title="Meals & Menus" id="collasible-nav-dropdown">
+              <NavDropdown.Item
+                href="/createMenu"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "white",
+                }}
+              >
+                Create / Edit Menus
               </NavDropdown.Item>
-              <NavDropdown.Item href="/editMealDesc">
+              <NavDropdown.Item
+                href="/editMealDesc"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "honeydew",
+                }}
+              >
                 Edit Meals
               </NavDropdown.Item>
-              <NavDropdown.Item href="/createMeal">
+              <NavDropdown.Item
+                href="/createMeal"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "white",
+                }}
+              >
                 Create Meals
               </NavDropdown.Item>
-              <NavDropdown.Item href="/editMeal">
+              <NavDropdown.Item
+                href="/editMeal"
+                style={{
+                  color: "black",
+                  fontWeight: "bold",
+                  backgroundColor: "honeydew",
+                }}
+              >
                 Edit Meal Recipes
               </NavDropdown.Item>
             </NavDropdown>
             &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/settings">Settings</Nav.Link>&nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/orders">Orders</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/settings">Plans & Coupons</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/orders">Orders & Ingredients</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/oidisplay">Orders & Ingredients Display</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers">Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="/customers2">Customers v2</Nav.Link>&nbsp;&nbsp;&nbsp;
+            <Nav.Link href="https://analytics.google.com/analytics/web/template?uid=7z9gTb-ERXGnQUcJiZ2Tzg">
+              Google Analytics
+            </Nav.Link>
+            <Nav.Link href="/googleAnlytics">GA2</Nav.Link>
+            &nbsp;&nbsp;&nbsp;
             <Nav.Link>
               <Badge
                 // badgeContent={42}
