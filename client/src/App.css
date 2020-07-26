@@ -529,6 +529,17 @@ a {
   letter-spacing: 0.05em;
 }
 
+@media only screen and (max-width: 990px) {
+  .login-hello {
+    margin-left: -165px;
+    margin-top: -16px;
+  }
+  #logoutButton {
+    margin: 20px 0 10px 10px;
+    float: left;
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .navigation-start {
     padding-left: 50px;
@@ -536,8 +547,12 @@ a {
   .navbar-brand {
     margin-left: 10px;
   }
+  .login-hello {
+    margin-left: -216px;
+  }
   #logoutButton {
-    margin: 30px 180px 30px 0;
+    margin: 20px 0 10px -40px;
+    float:left;
   }
 
   .content-section .landing {
