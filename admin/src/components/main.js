@@ -11,13 +11,13 @@ import CreateMenu from "./Create-Menu/create-menu";
 import Orders from "./Orders/Orders";
 import Ingredients from "./Orders/Ingredients";
 import Customers from "./Customers/Customers";
+import Customers2 from "./Customers_v2/Customers_v2";
 import EditMeals from "./Edit-Meal/edit-meals";
 import Settings from "./Settings/Settings";
 import googleAnalytics from "./Homepage/googleAnalytics";
 import OIDisplay from "./Orders/Orders_I_No_Date";
 const DEV_URL =
   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
-
 //const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
@@ -137,6 +137,17 @@ const Main = ({ appProps }) => (
         LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
       }}
     />
+      <AppliedRoute
+          exact
+          path="/customers2"
+          component={Customers2}
+          appProps={{
+              API_URL: `${DEV_URL}`,
+              ACCOUNTLIST_API_URL: `${DEV_URL}AccountList`,
+              LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
+              PURCHASE_MEAL_API_URL: `${DEV_URL}PurchaseIdMeals`,
+          }}
+      />
     <AppliedRoute
       exact
       path="/googleAnalytics"

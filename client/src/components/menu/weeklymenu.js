@@ -57,13 +57,12 @@ class WeeklyMenu extends Component {
             STRAIGHT TO YOUR DOOR
           </p>
           <hr/>
-        </div>
 
-        <div 
+          <div 
           //grid of items plus margins/center
           // id='menu-container'
           style={{
-            margin: "0 200px",
+            // margin: "0 200px",
             textAlign:"center",
           }}>
           <div 
@@ -117,6 +116,9 @@ class WeeklyMenu extends Component {
               )}
           </div>
         </div>
+        </div>
+
+        
 
       </main>
     );

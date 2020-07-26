@@ -290,55 +290,65 @@ class Ourstory extends Component {
             <br />
             <h5 class='font1'>A special thanks to these “team members” too!</h5>
             <br />
-            <Grid className='sponsors'>
-              <Cell col={3} align='middle'>
-                <img src={LOGOJBG} alt='jbg' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOFOX7} alt='fox7austin' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOCURCUMA} alt='curcuma' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOYELLOWBIRD} alt='yellowbird' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOFRONKS} alt='fronks' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOBOULDIN} alt='bouldin' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOCREDO} alt='credo' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOSIETE} alt='siete' />
-              </Cell>
-            </Grid>
+            
+
+            <div className='container'>
+              <div className='mobile-center'>
+              <Grid>
+                <center>
+                  <div className='bottom_header'>
+                    <Grid className='sponsors'>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOJBG} alt='jbg' />
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOFOX7} alt='fox7austin' />
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOCURCUMA} alt='curcuma' />
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOYELLOWBIRD} alt='yellowbird' />
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOFRONKS} alt='fronks' />
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOBOULDIN} alt='bouldin' />
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOCREDO} alt='credo' />
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOSIETE} alt='siete' />
+                      </Cell>
+                    </Grid>
+                    <Grid className='awards'>
+                      <Cell className='visibility-hidden-mobile' hidePhone col={3} align='middle'></Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOAU40} alt='au40' />
+                        <div className='award-text'>
+                          <p>Austin Under 40 2020 Finalist</p>
+                          <p>Culinary Arts, Events, and Hospitality</p>
+                        </div>
+                      </Cell>
+                      <Cell col={3} align='middle'>
+                        <img src={LOGOFAVE} alt='fave' style={{paddingTop: "48px"}}/>
+                        <div className='award-text' style={{paddingTop: "40px"}}>
+                          <p>FAVE 2019 Winner</p>
+                          <p>FAVE Sustainable Business</p>
+                        </div>
+                      </Cell>
+                      <Cell className='visibility-hidden-mobile' hidePhone col={3} align='middle'></Cell>
+                    </Grid>
+                  </div>
+                </center>
+              </Grid>
+              </div>
+            </div>
+            
             <br />
-            <Grid className='awards'>
-              <Cell col={3} align='middle'></Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOAU40} alt='au40' />
-              </Cell>
-              <Cell col={3} align='middle'>
-                <img src={LOGOFAVE} alt='fave' />
-              </Cell>
-              <Cell col={3} align='middle'></Cell>
-              <Cell col={3} align='middle'></Cell>
-              <Cell col={3} align='middle'>
-                <p class='font2'>Austin Under 40 2020 Finalist</p>
-                <p class='font2'>Culinary Arts, Events, and Hospitality</p>
-              </Cell>
-              <Cell col={3} align='middle'>
-                <p class='font2'>FAVE 2019 Winner</p>
-                <p class='font2'>FAVE Sustainable Business</p>
-              </Cell>
-              <Cell col={3} align='middle'></Cell>
-            </Grid>
-            <br />
-            <br />
+            
           </center>
         </div>
       </div>
