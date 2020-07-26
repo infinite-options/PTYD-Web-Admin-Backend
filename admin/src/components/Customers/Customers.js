@@ -23,11 +23,15 @@ class Customers extends React.Component {
             .then(function(res) {
                 let data = res.data.result.result;
                 data.sort(function compareFunction(a,b) {
-                    let result = (a.first_name).localeCompare(b.first_name);
+                    let result = (a.first_name.trim()).localeCompare(b.first_name.trim());
                     if(result !== 0) {
                         return result;
                     }
-                    result = (a.last_name).localeCompare(b.last_name);
+                    result = (a.last_name.trim()).localeCompare(b.last_name.trim());
+                    if(result !== 0) {
+                        return result;
+                    }
+                    result = a.user_uid.localeCompare(b.user_uid);
                     return result;
                 })
                 curComponent.setState({
@@ -86,6 +90,7 @@ class Customers extends React.Component {
                 padding: '2px 4px',
                 display: 'flex',
                 alignItems: 'center',
+                width: '350px'
             }}>
                 <Typography variant='body1'> &nbsp;&nbsp;User&nbsp;&nbsp;&nbsp;&nbsp; </Typography>
                 <Select

@@ -19,7 +19,6 @@ class AllPayments extends React.Component {
         axios
             .get(`${this.props.ALLPAYMENTS_API_URL}/${this.props.userID}`)
             .then(function (res) {
-                console.log(res);
                 curComponent.setState({
                     loaded: true,
                     data: res.data.result.result,
