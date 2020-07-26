@@ -23,11 +23,11 @@ class Customers extends React.Component {
             .then(function(res) {
                 let data = res.data.result.result;
                 data.sort(function compareFunction(a,b) {
-                    let result = (a.first_name).localeCompare(b.first_name);
+                    let result = (a.first_name.trim()).localeCompare(b.first_name.trim());
                     if(result !== 0) {
                         return result;
                     }
-                    result = (a.last_name).localeCompare(b.last_name);
+                    result = (a.last_name.trim()).localeCompare(b.last_name.trim());
                     if(result !== 0) {
                         return result;
                     }
