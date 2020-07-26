@@ -13,8 +13,11 @@ import Ingredients from "./Orders/Ingredients";
 import Customers from "./Customers/Customers";
 import EditMeals from "./Edit-Meal/edit-meals";
 import Settings from "./Settings/Settings";
+import googleAnalytics from "./Homepage/googleAnalytics";
+import OIDisplay from "./Orders/Orders_I_No_Date";
 const DEV_URL =
   "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/";
+
 //const DEV_URL = "http://localhost:2000/api/v2/";
 
 const Main = ({ appProps }) => (
@@ -64,6 +67,7 @@ const Main = ({ appProps }) => (
         API_URL_ADDINGREDIENT: `${DEV_URL}Add_New_Ingredient`,
         API_URL_GETUNITS: `${DEV_URL}GetUnits`,
         API_URL_ADDUNIT: `${DEV_URL}Add_New_Measure_Unit`,
+        API_URL_SAVEUNITCONVERSION: `${DEV_URL}Add_Unit_Conversion`,
       }}
     />
     <AppliedRoute
@@ -129,6 +133,27 @@ const Main = ({ appProps }) => (
       appProps={{
         API_URL: `${DEV_URL}`,
         PURCHASE_API_URL: `${DEV_URL}accountpurchases`,
+        ALLPAYMENTS_API_URL: `${DEV_URL}All_Payments`,
+        LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
+      }}
+    />
+    <AppliedRoute
+      exact
+      path="/googleAnalytics"
+      component={googleAnalytics}
+      appProps={{
+        API_URL: `${DEV_URL}`,
+        PURCHASE_API_URL: `${DEV_URL}accountpurchases`,
+      }}
+    />
+    <AppliedRoute
+      exact
+      path="/oidisplay"
+      component={OIDisplay}
+      appProps={{
+        API_URL: `${DEV_URL}`,
+        INGREDIENTS_API_URL: `${DEV_URL}All_Ingredients_No_Date`,
+        ORDERS_API_URL: `${DEV_URL}All_Meals_No_Date`,
       }}
     />
   </Switch>

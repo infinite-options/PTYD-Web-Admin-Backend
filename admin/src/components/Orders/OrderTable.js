@@ -325,7 +325,7 @@ export default function OrderTable(props) {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 15));
     setPage(0);
   };
 

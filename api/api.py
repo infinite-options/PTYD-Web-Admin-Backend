@@ -2357,6 +2357,14 @@ class ChargeSubscribers(Resource):
                         res = execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(
                             eachPayment['payment_id']), 'post', conn)
                         items.append(res)
+                # else:  # only charge for the addon
+                #     print("no it's not")
+                #     print("addon_charge: ", addon_charge)
+                #     if addon_charge > 0:
+                #         chargeQuery = charge_query(
+                #             get_new_paymentID(), eachPayment['payment_id'], addon_charge, False)
+                #         res = execute(chargeQuery, 'post', conn)
+                #         print("after execute charge_query: ", res)
 
             response['message'] = 'POST request successful.'
 
@@ -3845,7 +3853,7 @@ class All_Meals_No_Date(Resource):
                                     allmeals.*,
                                     meals_ordered.total
                                     FROM (# QUERY 8
-                                    SELECT
+                                    SELECT 
                                         menu_date,
                                         menu_category,
                                         meal_category,
@@ -3860,7 +3868,7 @@ class All_Meals_No_Date(Resource):
                                         ON menu.menu_meal_id = meals.meal_id )
                                         AS allmeals
                                 LEFT JOIN   (# QUERY 9
-                                    SELECT
+                                    SELECT 
                                         week_affected,
                                         meal_selected,
                                         meal_name,
@@ -3890,7 +3898,7 @@ class All_Meals_No_Date(Resource):
                                                         ELSE act_meal.meal_selection
                                                     END AS meal_selection
                                                 FROM (# QUERY 6
-                                                    SELECT
+                                                    SELECT 
                                                         sel_meals.*,
                                                         CASE
                                                             WHEN (sel_meals.delivery_day IS NULL AND sel_meals.delivery_default_day IS NULL ) THEN  "Sunday"
@@ -3902,13 +3910,13 @@ class All_Meals_No_Date(Resource):
                                                         plans.meal_plan_price,
                                                         def_meals.*
                                                     FROM (# QUERY 4
-                                                        SELECT
+                                                        SELECT 
                                                             act_pur.*,
                                                             act_meal.selection_time,
                                                             act_meal.meal_selection,
                                                             act_meal.delivery_day
                                                         FROM (
-                                                            SELECT *
+                                                            SELECT * 
                                                             FROM ptyd.ptyd_purchases pur
                                                             JOIN ptyd.ptyd_saturdays sat
                                                             WHERE pur.purchase_status = "ACTIVE"
@@ -3918,7 +3926,7 @@ class All_Meals_No_Date(Resource):
                                                                -- AND sat.Saturday > pur.start_date)
                                                                 AND DATE_ADD(sat.Saturday, INTERVAL 0 DAY) > DATE_ADD(pur.start_date, INTERVAL 2 DAY))
                                                             AS act_pur
-                                                        LEFT JOIN (# QUERY 1
+                                                        LEFT JOIN (# QUERY 1 
                                                             SELECT
                                                                 ms1.purchase_id
                                                                 , ms1.selection_time
@@ -3936,9 +3944,9 @@ class All_Meals_No_Date(Resource):
                                                                 FROM ptyd.ptyd_meals_selected
                                                                 GROUP BY purchase_id
                                                                     , week_affected)
-                                                                AS ms2
-                                                            ON ms1.purchase_id = ms2.purchase_id
-                                                                AND ms1.week_affected = ms2.week_affected
+                                                                AS ms2 
+                                                            ON ms1.purchase_id = ms2.purchase_id 
+                                                                AND ms1.week_affected = ms2.week_affected 
                                                                 AND ms1.selection_time = ms2.latest_selection
                                                             ORDER BY purchase_id
                                                                 , week_affected)
@@ -3956,7 +3964,7 @@ class All_Meals_No_Date(Resource):
                                                                     ,MID(dm.default_meals, 17,10),";"
                                                                     ,MID(dm.default_meals, 31,10),";"
                                                                     ,MID(dm.default_meals, 45,10),";"
-                                                                    ,MID(dm.default_meals, 59,10))
+                                                                    ,MID(dm.default_meals, 59,10)) 
                                                                     as def_5_meal
                                                             , CONCAT(MID(dm.default_meals,  3,10),";"
                                                                     ,MID(dm.default_meals,  3,10),";"
@@ -3967,7 +3975,7 @@ class All_Meals_No_Date(Resource):
                                                                     ,MID(dm.default_meals, 45,10),";"
                                                                     ,MID(dm.default_meals, 45,10),";"
                                                                     ,MID(dm.default_meals, 59,10),";"
-                                                                    ,MID(dm.default_meals, 59,10))
+                                                                    ,MID(dm.default_meals, 59,10)) 
                                                                     as def_10_meal
                                                             , CONCAT(MID(dm.default_meals,  3,10),";"
                                                                     ,MID(dm.default_meals,  3,10),";"
@@ -3983,7 +3991,7 @@ class All_Meals_No_Date(Resource):
                                                                     ,MID(dm.default_meals, 45,10),";"
                                                                     ,MID(dm.default_meals, 59,10),";"
                                                                     ,MID(dm.default_meals, 59,10),";"
-                                                                    ,MID(dm.default_meals, 59,10))
+                                                                    ,MID(dm.default_meals, 59,10)) 
                                                                     as def_15_meal
                                                             , CONCAT(MID(dm.default_meals,  3,10),";"
                                                                     ,MID(dm.default_meals,  3,10),";"
@@ -4004,15 +4012,15 @@ class All_Meals_No_Date(Resource):
                                                                     ,MID(dm.default_meals, 59,10),";"
                                                                     ,MID(dm.default_meals, 59,10),";"
                                                                     ,MID(dm.default_meals, 59,10),";"
-                                                                    ,MID(dm.default_meals, 59,10))
+                                                                    ,MID(dm.default_meals, 59,10)) 
                                                                     as def_20_meal
                                                         FROM (
                                                             SELECT defaultmeal.menu_date
                                                                 , defaultmeal.menu_category
                                                                 , defaultmeal.menu_type
                                                                 , defaultmeal.meal_cat
-                                                                , JSON_ARRAYAGG(menu_meal_id) as "default_meals"
-                                                               
+                                                                , JSON_ARRAYAGG(menu_meal_id) as "default_meals" 
+                                                                
                                                             FROM (
                                                                 SELECT * FROM ptyd.ptyd_menu menu
                                                                 WHERE default_meal = "TRUE")
@@ -4043,9 +4051,9 @@ class All_Meals_No_Date(Resource):
                                                     FROM ptyd.ptyd_addons_selected
                                                     GROUP BY purchase_id
                                                         , week_affected
-                                                ) as ms2
-                                                ON ms1.purchase_id = ms2.purchase_id
-                                                    AND ms1.week_affected = ms2.week_affected
+                                                ) as ms2 
+                                                ON ms1.purchase_id = ms2.purchase_id 
+                                                    AND ms1.week_affected = ms2.week_affected 
                                                     AND ms1.selection_time = ms2.latest_selection
                                                 ORDER BY purchase_id
                                                     , week_affected)
@@ -4065,7 +4073,7 @@ class All_Meals_No_Date(Resource):
                                                                         AS meals_ordered
                                         ON allmeals.menu_date = meals_ordered.week_affected
                                                                             AND allmeals.meal_id = meals_ordered.meal_selected
-                                                                    ORDER BY
+                                                                    ORDER BY 
                                                                         menu_date,
                                                                         menu_category
                                     ;""", 'get', conn)
@@ -4410,17 +4418,17 @@ class All_Ingredients_No_Date(Resource):
                                 -- meals_ordered.total,
                                 -- SUM(rec.recipe_ingredient_qty),
                                 SUM(meals_ordered.total * rec.recipe_ingredient_qty) AS total_needed,
-                                unit.recipe_unit,
+                                unit.measure_name,
                                 ing.ingredient_desc,
                                 ing.package_size,
                                 ing.ingredient_measure,
-                                unit.conversion_ratio,
-                                ROUND(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size,2) AS need_qty,
+                                mc.conversion_ratio,
+                                ROUND(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size,2) AS need_qty,
                                 inv.inventory_qty,
-                                if(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size - inv.inventory_qty < 0,0,
-                                CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size - inv.inventory_qty)) AS buy_qty      
+                                if(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty < 0,0,
+                                CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty)) AS buy_qty       
                             FROM (# QUERY 11
-                                SELECT
+                                SELECT 
                                     week_affected,
                                     meal_selected,
                                     meal_name,
@@ -4450,7 +4458,7 @@ class All_Ingredients_No_Date(Resource):
                                                     ELSE act_meal.meal_selection
                                                 END AS meal_selection
                                             FROM (# QUERY 6
-                                                SELECT
+                                                SELECT 
                                                     sel_meals.*,
                                                     CASE
                                                         WHEN (sel_meals.delivery_day IS NULL AND sel_meals.delivery_default_day IS NULL ) THEN  "Sunday"
@@ -4462,13 +4470,13 @@ class All_Ingredients_No_Date(Resource):
                                                     plans.meal_plan_price,
                                                     def_meals.*
                                                 FROM (# QUERY 4
-                                                    SELECT
+                                                    SELECT 
                                                         act_pur.*,
                                                         act_meal.selection_time,
                                                         act_meal.meal_selection,
                                                         act_meal.delivery_day
                                                     FROM (
-                                                        SELECT *
+                                                        SELECT * 
                                                         FROM ptyd.ptyd_purchases pur
                                                         JOIN ptyd.ptyd_saturdays sat
                                                         WHERE pur.purchase_status = "ACTIVE"
@@ -4478,7 +4486,7 @@ class All_Ingredients_No_Date(Resource):
                                                            -- AND sat.Saturday > pur.start_date)
                                                             AND DATE_ADD(sat.Saturday, INTERVAL 0 DAY) > DATE_ADD(pur.start_date, INTERVAL 2 DAY))
                                                         AS act_pur
-                                                    LEFT JOIN (# QUERY 1
+                                                    LEFT JOIN (# QUERY 1 
                                                         SELECT
                                                             ms1.purchase_id
                                                             , ms1.selection_time
@@ -4496,9 +4504,9 @@ class All_Ingredients_No_Date(Resource):
                                                             FROM ptyd.ptyd_meals_selected
                                                             GROUP BY purchase_id
                                                                 , week_affected)
-                                                            AS ms2
-                                                        ON ms1.purchase_id = ms2.purchase_id
-                                                            AND ms1.week_affected = ms2.week_affected
+                                                            AS ms2 
+                                                        ON ms1.purchase_id = ms2.purchase_id 
+                                                            AND ms1.week_affected = ms2.week_affected 
                                                             AND ms1.selection_time = ms2.latest_selection
                                                         ORDER BY purchase_id
                                                             , week_affected)
@@ -4516,7 +4524,7 @@ class All_Ingredients_No_Date(Resource):
                                                                 ,MID(dm.default_meals, 17,10),";"
                                                                 ,MID(dm.default_meals, 31,10),";"
                                                                 ,MID(dm.default_meals, 45,10),";"
-                                                                ,MID(dm.default_meals, 59,10))
+                                                                ,MID(dm.default_meals, 59,10)) 
                                                                 as def_5_meal
                                                         , CONCAT(MID(dm.default_meals,  3,10),";"
                                                                 ,MID(dm.default_meals,  3,10),";"
@@ -4527,7 +4535,7 @@ class All_Ingredients_No_Date(Resource):
                                                                 ,MID(dm.default_meals, 45,10),";"
                                                                 ,MID(dm.default_meals, 45,10),";"
                                                                 ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10))
+                                                                ,MID(dm.default_meals, 59,10)) 
                                                                 as def_10_meal
                                                         , CONCAT(MID(dm.default_meals,  3,10),";"
                                                                 ,MID(dm.default_meals,  3,10),";"
@@ -4543,7 +4551,7 @@ class All_Ingredients_No_Date(Resource):
                                                                 ,MID(dm.default_meals, 45,10),";"
                                                                 ,MID(dm.default_meals, 59,10),";"
                                                                 ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10))
+                                                                ,MID(dm.default_meals, 59,10)) 
                                                                 as def_15_meal
                                                         , CONCAT(MID(dm.default_meals,  3,10),";"
                                                                 ,MID(dm.default_meals,  3,10),";"
@@ -4564,15 +4572,15 @@ class All_Ingredients_No_Date(Resource):
                                                                 ,MID(dm.default_meals, 59,10),";"
                                                                 ,MID(dm.default_meals, 59,10),";"
                                                                 ,MID(dm.default_meals, 59,10),";"
-                                                                ,MID(dm.default_meals, 59,10))
+                                                                ,MID(dm.default_meals, 59,10)) 
                                                                 as def_20_meal
                                                     FROM (
                                                         SELECT defaultmeal.menu_date
                                                             , defaultmeal.menu_category
                                                             , defaultmeal.menu_type
                                                             , defaultmeal.meal_cat
-                                                            , JSON_ARRAYAGG(menu_meal_id) as "default_meals"
-                                                           
+                                                            , JSON_ARRAYAGG(menu_meal_id) as "default_meals" 
+                                                            
                                                         FROM (
                                                             SELECT * FROM ptyd.ptyd_menu menu
                                                             WHERE default_meal = "TRUE")
@@ -5866,6 +5874,7 @@ class PurchaseIdMeals(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)    
+
             
 class Add_Unit_Conversion(Resource):
     def post(self):
@@ -5984,6 +5993,7 @@ api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
 api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
+
 api.add_resource(AccountList,'/api/v2/AccountList')
 
 '''

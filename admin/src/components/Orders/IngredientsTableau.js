@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -10,8 +10,34 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { MdError } from "react-icons/md";
 import axios from "axios";
 import useFetch from "../hooks/useFetch";
+import ReactDOM from "react-dom";
+import tableau from "tableau-api";
 
-const override = css`
+class Ingredients extends Component {
+  componentDidMount() {
+    this.initViz();
+  }
+  initViz() {
+    const vizUrl =
+      "https://public.tableau.com/views/Ingredients_15948613340460/Dashboard1?:language=en&:display_count=y&:origin=viz_share_link";
+    const vizContainer = this.vizContainer;
+    let viz = new window.tableau.Viz(vizContainer, vizUrl);
+  }
+  render() {
+    return (
+      <div style={{ margin: "0%" }}>
+        <div
+          ref={(div) => {
+            this.vizContainer = div;
+          }}
+        ></div>
+      </div>
+    );
+  }
+}
+export default Ingredients;
+
+/*const override = css`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,6 +82,7 @@ export default function Orders(props) {
     props.API_URL + `All_Ingredients?date=${date}`,
     date
   );
+  console.log(ingredient.data);
 
   const handleChange = (event) => {
     setDate(event.target.value);
@@ -95,4 +122,6 @@ export default function Orders(props) {
       {ingredient.data && <IngredientTable data={ingredient.data} />}
     </div>
   );
+  
 }
+*/

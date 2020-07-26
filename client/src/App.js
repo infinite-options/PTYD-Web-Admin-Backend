@@ -30,12 +30,13 @@ const App = props => {
 
   useEffect(() => {
     onLoad();
-    ReactGA.initialize("UA-173037172-1");
+    ReactGA.initialize("UA-173249175-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
 
     //facebook pixel goes here
     ReactPixel.init("342011940130879");
     ReactPixel.pageView();
+    // window.fbq("track", "ViewContent");
     // eslint-disable-next-line
   }, []);
 
