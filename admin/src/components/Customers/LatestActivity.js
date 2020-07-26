@@ -10,7 +10,6 @@ class LatestActivity extends React.Component {
             loaded: false,
             data: [],
         };
-        console.log(props)
     }
 
     componentDidMount() {
@@ -50,37 +49,37 @@ class LatestActivity extends React.Component {
 
     render() {
         if(!this.state.loaded) {
-            return <Typography variant="body1"> Loading Latest Activity </Typography>
+            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Latest Activity </Typography>
         }
         return (
-            <div>
-            <MaterialTable
-        title="Latest Activity"
-        columns={[
-        { title: 'User', field: 'user_uid' },
-        { title: 'Email', field: 'user_email'},
-        { title: 'First Name', field: 'first_name'},
-        { title: 'Last Name', field: 'last_name'},
-        { title: 'Phone', field: 'phone_number'},
-        { title: 'Purchase ID', field: 'purchase_id'},
-        { title: 'Purchase Status', field: 'purchase_status'},
-        { title: 'Meal Plan ID', field: 'meal_plan_id'},
-        { title: 'Delivery First Name', field: 'delivery_first_name'},
-        { title: 'Delivery Last Name', field: 'delivery_last_name'},
-        { title: 'Delivery Phone', field: 'delivery_phone'},
-        { title: 'Meal Plan Description', field: 'meal_plan_desc'},
-        { title: 'Payment ID', field: 'payment_id'},
-        { title: 'Recurring', field: 'recurring'},
-        { title: 'Coupon', field: 'coupon_id'},
-        { title: 'Amount Due', field: 'amount_due'},
-        { title: 'Amount Paid', field: 'amount_paid'},
-        { title: 'Time Paid', field: 'payment_time_stamp'},
-        { title: 'Credit Card', field: 'cc_num'}
-    ]}
-        data={this.state.data}
-        />
-        </div>
-    )
+            <div style={{ margin: '30px 0' }}>
+                <MaterialTable
+                    title="Latest Activity"
+                    columns={[
+                        { title: 'Email', field: 'user_email'},
+                        { title: 'Phone', field: 'phone_number'},
+                        { title: 'Purchase ID', field: 'purchase_id'},
+                        { title: 'Purchase Status', field: 'purchase_status'},
+                        { title: 'Meal Plan ID', field: 'meal_plan_id'},
+                        { title: 'Delivery First Name', field: 'delivery_first_name'},
+                        { title: 'Delivery Last Name', field: 'delivery_last_name'},
+                        { title: 'Delivery Phone', field: 'delivery_phone'},
+                        { title: 'Meal Plan Description', field: 'meal_plan_desc'},
+                        { title: 'Payment ID', field: 'payment_id'},
+                        { title: 'Recurring', field: 'recurring'},
+                        { title: 'Coupon', field: 'coupon_id'},
+                        { title: 'Amount Due', field: 'amount_due'},
+                        { title: 'Amount Paid', field: 'amount_paid'},
+                        { title: 'Time Paid', field: 'payment_time_stamp'},
+                        { title: 'Credit Card', field: 'cc_num'}
+                    ]}
+                    data={this.state.data}
+                    onRowClick={(event,row) => {
+                        this.props.selectPurchaseId(row.purchase_id);
+                    }}
+                />
+            </div>
+        )
     }
 }
 
