@@ -28,6 +28,10 @@ class Customers extends React.Component {
                         return result;
                     }
                     result = (a.last_name).localeCompare(b.last_name);
+                    if(result !== 0) {
+                        return result;
+                    }
+                    result = a.user_uid.localeCompare(b.user_uid);
                     return result;
                 })
                 curComponent.setState({
@@ -86,6 +90,7 @@ class Customers extends React.Component {
                 padding: '2px 4px',
                 display: 'flex',
                 alignItems: 'center',
+                width: '350px'
             }}>
                 <Typography variant='body1'> &nbsp;&nbsp;User&nbsp;&nbsp;&nbsp;&nbsp; </Typography>
                 <Select
