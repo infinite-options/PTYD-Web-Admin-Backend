@@ -5,6 +5,7 @@
              Title="Menu">
 <ContentPage.Content>
 		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
+
             VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True" SelectionMode="None" >
 			<ListView.ItemTemplate>
 				<DataTemplate>

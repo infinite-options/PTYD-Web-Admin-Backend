@@ -6,6 +6,7 @@
 	<dict>
 		<key>output-files</key>
 		<array>
+<<<<<<< HEAD
 			<string>/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon20x20@2x.png</string>
 			<string>/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon20x20@3x.png</string>
 			<string>/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon29x29@2x.png</string>
@@ -25,6 +26,27 @@
 			<string>/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon83.5x83.5@2x~ipad.png</string>
 			<string>/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/Assets.car</string>
 			<string>/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/partial-info.plist</string>
+=======
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon20x20@2x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon20x20@3x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon29x29@2x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon29x29@3x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon40x40@2x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon40x40@3x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon60x60@2x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon60x60@3x.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon20x20~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon20x20@2x~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon29x29~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon29x29@2x~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon40x40~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon40x40@2x~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon76x76~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon76x76@2x~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/AppIcon83.5x83.5@2x~ipad.png</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/bundle/Assets.car</string>
+			<string>/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Debug/actool/partial-info.plist</string>
+>>>>>>> 27dde5119a4900f069ab7f8a87a52be53c43baf0
 		</array>
 	</dict>
 </dict>

@@ -177,7 +177,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             }
             else
                 SubscriptionPicker.SelectedIndex = mealPlanNoTEST;
-            
+
             mealPlanNo = MealPlanNumbers[mealPlanNoTEST];
             getPosted(mealPlanNoTEST);
             BindingContext = this;
@@ -195,9 +195,9 @@ namespace InfiniteMeals.ViewModel.MealSelect
             HeaderLabel.Text = allSubscriptions[SubscriptionPicker.SelectedIndex];
             mealPlanNo = MealPlanNumbers[SubscriptionPicker.SelectedIndex];
             System.Diagnostics.Debug.WriteLine("Setting: " + mealPlanNo);
-            
+
             getPosted(SubscriptionPicker.SelectedIndex);
-            System.Diagnostics.Debug.WriteLine("Setting Done "+ mealPlanNo);
+            System.Diagnostics.Debug.WriteLine("Setting Done " + mealPlanNo);
 
         }
 
@@ -587,11 +587,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private async void ClickedAddOn(object sender, EventArgs e)
         {
             Button b = (Button)sender;
-            if(b.ClassId.Equals("AddonButton") && SkipButton.BackgroundColor.Equals(Color.FromHex(green)))
+            if (b.ClassId.Equals("AddonButton") && SkipButton.BackgroundColor.Equals(Color.FromHex(green)))
             {
                 await Task.FromResult(0);
             }
-            else if(b.ClassId.Equals("AddonButton2") && SkipButton2.BackgroundColor.Equals(Color.FromHex(green)))
+            else if (b.ClassId.Equals("AddonButton2") && SkipButton2.BackgroundColor.Equals(Color.FromHex(green)))
             {
                 await Task.FromResult(0);
             }
@@ -613,10 +613,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
             }
             else
             {
-            setWeekNum(sender, e);
-            AddOnChoices ac = new AddOnChoices();
-            ac.BindingContext = this;
-            await Navigation.PushAsync(ac);
+                setWeekNum(sender, e);
+                AddOnChoices ac = new AddOnChoices();
+                ac.BindingContext = this;
+                await Navigation.PushAsync(ac);
             }
         }
 
@@ -1087,7 +1087,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     weekNumber = 6;
                     break;
             }
-            System.Diagnostics.Debug.WriteLine("Setting Week" + b.Text + " " +weekNumber);
+            System.Diagnostics.Debug.WriteLine("Setting Week" + b.Text + " " + weekNumber);
 
         }
 

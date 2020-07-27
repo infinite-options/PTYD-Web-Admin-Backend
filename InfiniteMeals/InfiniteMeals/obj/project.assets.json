@@ -962,13 +962,11 @@
         "lib/wpa81/GalaSoft.MvvmLight.pdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.XML",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.dll",
-        "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.dll.mdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.pdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Platform.XML",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Platform.dll",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.XML",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.dll",
-        "lib/xamarin.ios10/GalaSoft.MvvmLight.dll.mdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.pdb",
         "mvvmlightlibs.5.4.1.1.nupkg.sha512",
         "mvvmlightlibs.nuspec"
@@ -2060,11 +2058,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "projectName": "InfiniteMeals",
-      "projectPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
+      "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Kristina/.config/NuGet/NuGet.Config"
@@ -2163,6 +2161,12 @@
     }
   },
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    },
     {
       "code": "NU1701",
       "level": "Warning",

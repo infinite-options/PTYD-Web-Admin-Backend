@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "B/cfAvX5jMPyab0yH+sk2hk2tsGnOE5jI3tYzRc7xT09fXzx9OKulHM0Ao3UJ9r2B1MWAqS2+omZzF25AAvHCA==",
+  "dgSpecHash": "KQLYlPUH0FX4dJohXNBR6ZHcz4qTY4PE/E+dwjG8tjqlCMmqdpfc09FscUyFwuze+5FJ08bRcWaLuOU5Ds/3BQ==",
   "success": true,
-  "projectFilePath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+  "projectFilePath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
   "expectedPackageFiles": [
     "/Users/Kristina/.nuget/packages/awssdk.cognitoidentity/3.3.101.96/awssdk.cognitoidentity.3.3.101.96.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/awssdk.core/3.3.107.10/awssdk.core.3.3.107.10.nupkg.sha512",
@@ -38,6 +38,12 @@
     "/Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/xamarin.forms.maps.4.6.0.847.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    },
     {
       "code": "NU1603",
       "level": "Warning",

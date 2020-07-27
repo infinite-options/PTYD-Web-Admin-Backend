@@ -1737,6 +1737,9 @@
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GenerateJavaStubs.stamp
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GeneratePackageManagerJava.stamp
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_ResolveLibraryProjectImports.stamp
+<<<<<<< HEAD
+=======
+>>>>>>> 27dde5119a4900f069ab7f8a87a52be53c43baf0
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/bin/Debug/InfiniteMeals.Android.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/bin/Debug/InfiniteMeals.Android.pdb
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/bin/Debug/com.companyname.infinitemeals.apk
@@ -1818,8 +1821,6 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/homepage.jpg
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/lasagna.jpeg
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/mashers.jpg
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/nacho.jpg
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/oats.jpg
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/borscht.jpg
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/shippingstatus.png
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/paymentstatus.png
@@ -2989,3 +2990,16 @@
 /Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/lentilsalad.jpeg
 /Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/tempeh.jpeg
 /Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/thaicurry.jpeg
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/ptydlogo.jpg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/meal5.jpg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/meal10.jpg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/meal20.jpg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/meal15.jpg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/cobbsalad.jpeg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/rainbowsalad.jpeg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/cacaooats.jpeg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/thaicurry.jpeg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/lentilsalad.jpeg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/tempeh.jpeg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/bibimbap.jpeg
