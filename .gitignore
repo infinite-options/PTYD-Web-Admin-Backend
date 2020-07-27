@@ -10,6 +10,7 @@ yarn.lock
 env
 venv
 .vscode
+.idea
 .DS_Store
 sample.py
 *.DS_Store
