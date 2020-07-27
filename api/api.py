@@ -5866,10 +5866,6 @@ class PurchaseIdMeals(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)    
-<<<<<<< HEAD
-
-=======
->>>>>>> master
             
 class Add_Unit_Conversion(Resource):
     def post(self):
