@@ -28,6 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\Montserrat-Thin.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\BarlowCondensed-Bold.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -68,10 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModel\Steppers\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Fonts\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ViewModel\Subscribe\AddOnChoices.xaml.cs" />
     <Compile Remove="ViewModel\Login\Shipping.xaml.cs" />
+    <Compile Remove="Model\Meals\MealSchedule.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -103,8 +111,10 @@
     <Compile Update="ViewModel\Subscribe\PaymentOptionPage.xaml.cs">
       <DependentUpon>PaymentOptionPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="ViewModel\Subscribe\SubscribePage.xaml.cs">
-      <DependentUpon>SubscribePage.xaml</DependentUpon>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Fonts\Montserrat-Thin.ttf" />
+    <None Remove="Resources\Fonts\Montserrat-Regular.ttf" />
+    <None Remove="Resources\Fonts\BarlowCondensed-Bold.ttf" />
   </ItemGroup>
 </Project>

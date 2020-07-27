@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "siyQ//I0UN3g8u6XP43zeni253VnQrQcgzBSgMf2nbmTwNsBBwQEAsi76jR5+XlDaIxDQiYLQZiBPAwMW1CKXw==",
+  "dgSpecHash": "B/cfAvX5jMPyab0yH+sk2hk2tsGnOE5jI3tYzRc7xT09fXzx9OKulHM0Ao3UJ9r2B1MWAqS2+omZzF25AAvHCA==",
   "success": true,
-  "projectFilePath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+  "projectFilePath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
   "expectedPackageFiles": [
     "/Users/Kristina/.nuget/packages/awssdk.cognitoidentity/3.3.101.96/awssdk.cognitoidentity.3.3.101.96.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/awssdk.core/3.3.107.10/awssdk.core.3.3.107.10.nupkg.sha512",

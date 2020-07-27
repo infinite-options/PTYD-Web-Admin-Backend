@@ -49,6 +49,9 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public static List<MealScheduleSaves.MealScheduleSavedColors> mss = new List<MealScheduleSaves.MealScheduleSavedColors>();
         MealChoices mc = (MealChoices)FormatterServices.GetUninitializedObject(typeof(MealChoices));
         private static string userID;
+        private static string mealPlanNo;
+        private static int mealPlanNoTEST;
+
 
         public MealSchedule()
         {
@@ -57,14 +60,40 @@ namespace InfiniteMeals.ViewModel.MealSelect
             ToolbarItem totalBar = new ToolbarItem
             {
                 Text = "Profile",
-                IconImageSource = ImageSource.FromFile("oats.jpg"),
                 Order = ToolbarItemOrder.Secondary,
                 Priority = 0,
             };
             ToolbarItem totalBar2 = new ToolbarItem
             {
                 Text = "Log Out",
-                IconImageSource = ImageSource.FromFile("oats.jpg"),
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 0,
+            };
+            this.ToolbarItems.Add(totalBar);
+            this.ToolbarItems.Add(totalBar2);
+
+            userID = mc.getUserAcct();
+
+            // Function Calls
+            getZipcode();
+            getDates();
+            subscriptionPicker();
+            BindingContext = this;
+        }
+
+        public MealSchedule(int i)
+        {
+            InitializeComponent();
+            // Toolbar
+            ToolbarItem totalBar = new ToolbarItem
+            {
+                Text = "Profile",
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 0,
+            };
+            ToolbarItem totalBar2 = new ToolbarItem
+            {
+                Text = "Log Out",
                 Order = ToolbarItemOrder.Secondary,
                 Priority = 0,
             };
@@ -84,7 +113,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
         {
             nullPicker.SetValue(IsVisibleProperty, false);
             WebClient client = new WebClient();
-            //MealChoices mc = new MealChoices();
             // Get user zipcodes
             var userZipCodes = client.DownloadString(acctUrl + userID);
             var userZipObj = JsonConvert.DeserializeObject<UserInformation>(userZipCodes);
@@ -139,19 +167,37 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     SubscriptionPicker.Items.Add(allSubscriptions[subNum]);
                 }
             }
-            SubscriptionPicker.SelectedIndex = 0;
-            getPosted(SubscriptionPicker.SelectedIndex);
+
+            SubscriptionPicker.SelectedIndex = mealPlanNoTEST;
+            System.Diagnostics.Debug.WriteLine("MealPlanNo Test Value:" + mealPlanNoTEST);
+
+            if (mealPlanNoTEST <= 0)
+            {
+                SubscriptionPicker.SelectedIndex = 0;
+            }
+            else
+                SubscriptionPicker.SelectedIndex = mealPlanNoTEST;
+            
+            mealPlanNo = MealPlanNumbers[mealPlanNoTEST];
+            getPosted(mealPlanNoTEST);
             BindingContext = this;
+
         }
 
         private void SubscriptionPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             Picker p = (Picker)sender;
             nullPicker.SetValue(IsVisibleProperty, false);
+            mealPlanNoTEST = SubscriptionPicker.SelectedIndex;
+
             SubscriptionPicker.Title = subscriptionLabel;
             numMeals = maxMealsList[SubscriptionPicker.SelectedIndex];
             HeaderLabel.Text = allSubscriptions[SubscriptionPicker.SelectedIndex];
+            mealPlanNo = MealPlanNumbers[SubscriptionPicker.SelectedIndex];
+            System.Diagnostics.Debug.WriteLine("Setting: " + mealPlanNo);
+            
             getPosted(SubscriptionPicker.SelectedIndex);
+            System.Diagnostics.Debug.WriteLine("Setting Done "+ mealPlanNo);
 
         }
 
@@ -907,7 +953,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
             }
         }
 
-
         public List<DateTimeOffset> getWeekList()
         {
             return weekAffectedList;
@@ -1055,7 +1100,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
         {
             return numMeals;
         }
-
 
         public async void postSkipData(object sender, EventArgs e)
         {
@@ -1581,8 +1625,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
         {
             return MealPlanLists[SubscriptionPicker.SelectedIndex];
         }
+
+        public void setPlanNum()
+        {
+            mealPlanNo = MealPlanNumbers[SubscriptionPicker.SelectedIndex];
+        }
+
         public string getPlanNumPicked()
         {
+            setPlanNum();
+            System.Diagnostics.Debug.WriteLine("Plan number picked" + MealPlanNumbers[SubscriptionPicker.SelectedIndex]);
             return MealPlanNumbers[SubscriptionPicker.SelectedIndex];
         }
     }

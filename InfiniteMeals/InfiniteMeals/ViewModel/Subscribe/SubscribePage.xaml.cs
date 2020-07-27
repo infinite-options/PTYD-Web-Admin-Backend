@@ -23,10 +23,10 @@ namespace InfiniteMeals.ViewModel.Subscribe
         public SubscribePage()
         {
             InitializeComponent();
-            mealimage.Source = ImageSource.FromFile("mealplan.jpg");
-            mealimage1.Source = ImageSource.FromFile("mealplan.jpg");
-            mealimage2.Source = ImageSource.FromFile("mealplan.jpg");
-            mealimage3.Source = ImageSource.FromFile("mealplan.jpg");
+            mealimage.Source = ImageSource.FromFile("meal5.jpg");
+            mealimage1.Source = ImageSource.FromFile("meal10.jpg");
+            mealimage2.Source = ImageSource.FromFile("meal15.jpg");
+            mealimage3.Source = ImageSource.FromFile("meal20.jpg");
         }
 
         private async void ClickedSignUp(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
             FiveMealPaymentOptionPage fiveMealPlan = new FiveMealPaymentOptionPage();
             fiveMealPlan.BindingContext = MealPlan.FiveMeals;
             Label mealPlanLabel = (Label)fiveMealPlan.FindByName("mealPlan");
-            mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.FiveMeals);            
+            mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.FiveMeals);
             await Navigation.PushAsync(fiveMealPlan);
         }
 
@@ -75,7 +75,8 @@ namespace InfiniteMeals.ViewModel.Subscribe
         }
 
         // handles when the 20 meal plan button is clicked
-        private async void Clicked20mealssubscription(object sender, EventArgs e) {
+        private async void Clicked20mealssubscription(object sender, EventArgs e)
+        {
 
             PaymentOptionPage twentyMealPlan = new PaymentOptionPage();
             twentyMealPlan.BindingContext = MealPlan.TwentyMeals;

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:InfiniteMeals"
+             x:Class="InfiniteMeals.MainPage"
+             NavigationPage.HasNavigationBar="false">
+
+<ScrollView>
+        <StackLayout Orientation="Vertical" BackgroundColor="Transparent">
+             <Grid Margin="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                 <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="*"/>
+                     <ColumnDefinition Width="*"/>
+                     <ColumnDefinition Width="*"/>
+                 </Grid.ColumnDefinitions>
+              <Image Source="ptydlogo.jpg"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    HorizontalOptions="Start"
+                    Margin="20,20,0,0"
+                    Grid.Column="0"
+                     Grid.ColumnSpan="2"/>
+            
+            <Button x:Name="loginButton"
+                    Text="Log In"
+                    FontSize="Small"
+                    FontFamily="CapsRegular"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    HeightRequest="40"
+                    Margin="0,20,0,0"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="Center"
+                    Grid.Column="3"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="0"
+                    Clicked="ClickedLogin"/>
+
+             <Button x:Name="profileButton"
+                    Text="Profile"
+                     HeightRequest="40"
+                    FontSize="Small"
+                    FontFamily="CapsRegular"
+                    TextColor="Black"
+                    Margin="0,20,0,0"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="Center"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    IsVisible="false"
+                    Clicked="ClickedUserProfile"/>
+
+              <Button x:Name= "subscribe"
+                    HeightRequest="40"
+                    WidthRequest="180"
+                    Text="Subscribe"
+                    TextColor="Black"
+                    Margin="0,-30,0,0"
+                    FontFamily="CapsRegular"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Clicked="ClickedSubscribe"/>
+
+             <Button x:Name= "viewMenu"
+                    HeightRequest="40"
+                    Text="Menu"
+                    TextColor="Black"
+                    FontFamily="CapsRegular"
+                    Margin="0,-30,0,0"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    Clicked="ClickedMenu"/>
+
+             <Button x:Name="msButton"
+                    Text="Meal Schedule"
+                    FontSize="Small"
+                    FontFamily="CapsRegular"
+                    TextColor="Black"
+                     IsVisible="false"
+                    Margin="0,-30,0,0"
+                    BackgroundColor="Transparent"
+                    HeightRequest="40"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    Grid.Column="3"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="2"
+                    Grid.RowSpan="2"
+                    Clicked="ClickedMealSchedule"/>
+
+
+            <Button x:Name="signupButton"
+                    IsVisible="true"
+                    Text="Not a member? Sign up"
+                    FontSize="Micro"
+                    FontFamily="CapsRegular"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    HeightRequest="30"
+                    Margin="0,-100,0,0"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="1"
+                    Clicked="ClickedSignup"
+                    />
+
+                </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+               <Image x:Name="homepage"
+                      Source="homepage.jpg"
+                      Margin="0,-120,0,0"
+                      WidthRequest="300"
+                      HeightRequest="300"
+                      Aspect="AspectFill"
+                      Grid.Row="1"
+                      Grid.RowSpan="6"
+                      Grid.ColumnSpan="4"
+                      Grid.Column="0"/>
+
+                <Label Text="LOCAL"
+                       FontSize="Large"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       FontFamily="CapsRegular"
+                       HorizontalOptions="Start"
+                       VerticalTextAlignment="Start"
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       Margin="20,0,0,0"
+                       Grid.ColumnSpan="2" />
+                <Label Text="ORGANIC"
+                       FontSize="Large"
+                        FontAttributes="Bold"
+                       FontFamily="CapsRegular"
+                       TextColor="White"
+                       HorizontalOptions="Start"
+                       VerticalTextAlignment="Start"
+                       Grid.Column="0"
+                       Grid.Row="2"
+                       Margin="20,0,0,0"
+                       Grid.ColumnSpan="2" />
+                <Label Text="RESPONSIBLE"
+                       FontAttributes="Bold"
+                       FontSize="Large"
+                       TextColor="White"
+                       FontFamily="CapsRegular"
+                       HorizontalOptions="Start"
+                       VerticalTextAlignment="Start"
+                       Grid.Column="0"
+                       Grid.Row="3"
+                       Margin="20,0,0,0"
+                       Grid.ColumnSpan="3" />
+                <Label
+                    Text ="Plant-based, ready to eat meals delivered to your doorstep."
+                    FontSize="Micro"
+                    FontFamily="CapsRegular"
+                    TextColor="White"
+                    Grid.Row="4"
+                    Margin="20,0,0,0"
+                    HorizontalOptions="Start"
+                    HorizontalTextAlignment="Start"
+                    Grid.ColumnSpan="2"
+                />
+                <Button
+                    Text="GET STARTED"
+                    Grid.Row="5"
+                    HeightRequest="30"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Grid.ColumnSpan="2"
+                    Grid.Column="0"
+                    Margin="-50,0,0,0"
+                    FontFamily="CapsRegular"
+                    FontSize="Micro"
+                    BackgroundColor="Orange"
+                    TextColor="White"
+                    CornerRadius="50"
+                    Clicked="ClickedSubscribe"
+                />
+               <Label
+                    Text ="THE ONLY ZERO WASTE MEAL DELIVERY SERVICE"
+                    FontFamily="Barlow"
+                    FontSize="Large"
+                    TextColor="Black"
+                    Grid.Row="7"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
+                />
+
+                <Label
+                    Text ="Choose your meals"
+                    FontFamily="Barlow"
+                    TextColor="Green"
+                    Grid.Row="8"
+                    Margin="-30,0,0,0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Center"
+                />
+                <Label
+                    Text ="Weekly Delivery"
+                    FontFamily="Barlow"
+                    TextColor="Green"
+                    Grid.Row="8"
+                    Margin="-100,0,0,0"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="1"
+                    HorizontalOptions="Center"
+                />
+                <Label
+                    Text ="Return Your Jars"
+                    FontFamily="Barlow"
+                    TextColor="Green"
+                    Margin="-30,0,0,0"
+                    Grid.Row="8"
+                    Grid.Column="3"
+                    Grid.ColumnSpan="1"
+                    HorizontalOptions="Start"
+                />
+                <Label
+                    Text ="FRESH MENU EVERY WEEK"
+                    FontFamily="Barlow"
+                    TextColor="Green"
+                    Margin="-30,0,0,0"
+                    Grid.Row="9"
+                    FontSize="Title"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    HorizontalOptions="Center"
+                />
+                </Grid>
+                <CarouselView x:Name="TheCarousel" PeekAreaInsets="100" Margin="0,0,0,-300">
+                    <CarouselView.ItemsSource >
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>"*/InfiniteMeals.Android/Resources/drawable/bibimbap.jpeg "</x:String>
+                            <x:String>"*/InfiniteMeals.Android/Resources/drawable/cobbsalad.jpeg"</x:String>
+                            <x:String>"*/InfiniteMeals.Android/Resources/drawable/cacaooats.jpeg"</x:String>
+                            <x:String>"*/InfiniteMeals.Android/Resources/drawable/lentilsalad.jpeg "</x:String>
+                            <x:String>"*/InfiniteMeals.Android/Resources/drawable/thaicurry.jpeg"</x:String>
+                            <x:String>"*/InfiniteMeals.Android/Resources/drawable/tempeh.jpeg"</x:String>
+                        </x:Array>
+                    </CarouselView.ItemsSource>
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                <Image Source="{Binding .}" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+            </StackLayout>
+    </ScrollView>
+</ContentPage>
