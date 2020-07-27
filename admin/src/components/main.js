@@ -137,32 +137,18 @@ const Main = ({ appProps }) => (
         LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
       }}
     />
-<<<<<<< HEAD
     <AppliedRoute
       exact
       path="/customers2"
-      component={Customers2}
+      component={Customers}
       appProps={{
         API_URL: `${DEV_URL}`,
         ACCOUNTLIST_API_URL: `${DEV_URL}AccountList`,
         LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
         PURCHASE_MEAL_API_URL: `${DEV_URL}PurchaseIdMeals`,
+        ALLPAYMENTS_API_URL: `${DEV_URL}All_Payments`,
       }}
     />
-=======
-      <AppliedRoute
-          exact
-          path="/customers2"
-          component={Customers}
-          appProps={{
-              API_URL: `${DEV_URL}`,
-              ACCOUNTLIST_API_URL: `${DEV_URL}AccountList`,
-              LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
-              PURCHASE_MEAL_API_URL: `${DEV_URL}PurchaseIdMeals`,
-              ALLPAYMENTS_API_URL: `${DEV_URL}All_Payments`,
-          }}
-      />
->>>>>>> 2914de538d2ba8309ff0f2945c59cb102a16d131
     <AppliedRoute
       exact
       path="/googleAnalytics"
