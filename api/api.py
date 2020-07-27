@@ -4155,18 +4155,19 @@ class All_Ingredients(Resource):
 
             items = execute("""SELECT
                                 meals_ordered.week_affected,
-                                -- meals_ordered.total,
-                                -- SUM(rec.recipe_ingredient_qty),
-                                SUM(meals_ordered.total * rec.recipe_ingredient_qty) AS total_needed,
-                                unit.measure_name,
+                                meals_ordered.total,
+                                sum(rec.recipe_ingredient_qty),
+                                (meals_ordered.total * sum(rec.recipe_ingredient_qty)) AS total_needed,
+                                unit.recipe_unit,
                                 ing.ingredient_desc,
                                 ing.package_size,
-                                ing.ingredient_measure,
-                                mc.conversion_ratio,
-                                ROUND(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size,2) AS need_qty,
+                                ing.package_measure,
+                                (select unit.conversion_ratio from ptyd_conversion_units unit where unit.measure_unit_id = rec.recipe_measure_id) as ratio1,
+                                (select unit.conversion_ratio from ptyd_conversion_units unit where unit.measure_unit_id = ing.package_unit) as ratio2,
+                                ROUND( (meals_ordered.total * sum(rec.recipe_ingredient_qty)) * unit.conversion_ratio / ing.package_size * (1/(select unit.conversion_ratio from ptyd_conversion_units unit where unit.measure_unit_id = ing.package_unit)),2) AS need_qty,
                                 inv.inventory_qty,
-                                if(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty < 0,0,
-                                CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * mc.conversion_ratio / ing.package_size - inv.inventory_qty)) AS buy_qty       
+                                if(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size - inv.inventory_qty < 0,0,
+                                CEILING(SUM(meals_ordered.total * rec.recipe_ingredient_qty) * unit.conversion_ratio / ing.package_size - inv.inventory_qty)) AS buy_qty       
                             FROM (# QUERY 11
                                 SELECT 
                                     week_affected,
@@ -4372,11 +4373,11 @@ class All_Ingredients(Resource):
                                     , meal_selected)
                                 AS meals_ordered
                             LEFT JOIN ptyd.ptyd_recipes rec ON meals_ordered.meal_selected = rec.recipe_meal_id
-                            JOIN ptyd.ptyd_measure_unit unit ON rec.recipe_measure_id = unit.measure_unit_id
+                            JOIN ptyd.ptyd_conversion_units unit ON rec.recipe_measure_id = unit.measure_unit_id
                             LEFT JOIN ptyd.ptyd_ingredients ing ON rec.recipe_ingredient_id = ing.ingredient_id
-                            LEFT JOIN ptyd.ptyd_measure_conversion mc ON rec.recipe_measure_id = mc.from_measure_unit_id AND ing.ingredient_measure_id = mc.to_measure_unit_id
+                            #LEFT JOIN ptyd.ptyd_measure_conversion mc ON rec.recipe_measure_id = mc.from_measure_unit_id AND ing.ingredient_measure_id = mc.to_measure_unit_id
                             LEFT JOIN ptyd.ptyd_inventory inv ON rec.recipe_ingredient_id = inv.inventory_ingredient_id
-                            where meals_ordered.week_affected = \'""" + date + """\'
+                            #and inv.inventory_measure_id = unit.measure_unit_id
                             GROUP BY rec.recipe_ingredient_id,
                                 meals_ordered.week_affected
                             ORDER BY meals_ordered.week_affected,
@@ -5865,6 +5866,10 @@ class PurchaseIdMeals(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)    
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
             
 class Add_Unit_Conversion(Resource):
     def post(self):
@@ -5983,6 +5988,7 @@ api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
 api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
+
 api.add_resource(AccountList,'/api/v2/AccountList')
 
 '''
