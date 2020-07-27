@@ -1566,7 +1566,8 @@ class OIDisplay extends Component {
                         <th>Ingredient Description</th>
                         <th>Package Size</th>
                         <th>Package Measure</th>
-                        <th>Coversion Ratio</th>
+                        <th>Coversion Ratio1</th>
+                        <th>Coversion Ratio2</th>
                         <th>Need Quantity</th>
                         <th>Inverntory Quantity</th>
                         <th>Buy Quantity</th>
