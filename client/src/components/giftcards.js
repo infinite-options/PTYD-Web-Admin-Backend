@@ -26,18 +26,19 @@ class Giftcards extends Component {
             style={{
               fontSize: "21px",
               textShadow: "2px 2px 4px #FFEFB0",
-              lineHeight: "35px",
-              paddingLeft: "200px"
+              // lineHeight: "30px",
+              paddingLeft: "160px"
             }}
           >
             <button
               type="button"
-              class="btn1 btn1-primary font4"
-              style={{ marginTop: "25px", color: "white" }}
+              class="btn1 btn1-primary font2"
+              style={{ marginTop: "-40px", color: "white" }}
             >
               Shop Now
             </button>
           </div>
+          <br/><br/>
         </div>
       </center>
     );

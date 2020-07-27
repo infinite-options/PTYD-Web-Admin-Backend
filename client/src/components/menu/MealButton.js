@@ -931,7 +931,7 @@ export default class MealButton extends Component {
               Sunday
               <div>{weekMenu.Sunday}</div>
             </Button>
-            &nbsp;
+            {/* &nbsp; */}
             {!this.state.mondayButton.isDisabled && (
               <Button
                 variant='outline-dark'
@@ -945,7 +945,7 @@ export default class MealButton extends Component {
                 <div>{weekMenu.Monday}</div>
               </Button>
             )}
-            &nbsp;
+            {/* &nbsp; */}
             <Button
               disabled={skipButton.isDisabled}
               variant='outline-dark'
@@ -955,6 +955,7 @@ export default class MealButton extends Component {
               Skip This Week
             </Button>
           </div>
+          {/* &nbsp; */}
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button
             disabled={selectButton.isDisabled}
@@ -964,7 +965,7 @@ export default class MealButton extends Component {
           >
             Select Meal
           </Button>
-          &nbsp;
+          {/* &nbsp; */}
           <Button
             disabled={surpriseButton.isDisabled}
             variant='outline-dark'
@@ -975,7 +976,7 @@ export default class MealButton extends Component {
           >
             Surprise Me!
           </Button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
           <Button
             disabled={addonButton.isDisabled}
             variant='outline-dark'

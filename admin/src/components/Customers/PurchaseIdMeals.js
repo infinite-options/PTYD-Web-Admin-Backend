@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { InputBase, Paper, Typography } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import MaterialTable from 'material-table';
 
 class PurchaseIdMeals extends React.Component {
@@ -18,7 +18,6 @@ class PurchaseIdMeals extends React.Component {
         axios
             .get(`${this.props.PURCHASE_MEAL_API_URL}/${this.props.purchaseID}`)
             .then(function (res) {
-                console.log(res);
                 curComponent.setState({
                     loaded: true,
                     data: res.data.result.result,
@@ -56,8 +55,7 @@ class PurchaseIdMeals extends React.Component {
         return (
             <div style={{ margin: "30px 0" }}>
                 <Paper style={
-                {   maxWidth: 'fit-content',
-                    maxWidth: '-moz-fit-content',
+                {   maxWidth: 'max-content',
                     padding: '2px 4px',
                     display: 'flex',
                     alignItems: 'center',}
@@ -68,14 +66,50 @@ class PurchaseIdMeals extends React.Component {
                 <MaterialTable
                     title="Purchase Id Meals"
                     columns={[
-                        { title: 'Meal Plan ID', field: 'meal_plan_id'},
-                        { title: 'Delivery First Name', field: 'delivery_first_name'},
-                        { title: 'Delivery Last Name', field: 'delivery_last_name'},
-                        { title: 'Delivery Phone', field: 'delivery_phone'},
-                        { title: 'Meal Plan Description', field: 'meal_plan_desc'},
-                        { title: 'Meal Plan Selection', field: 'meal_selection'},
+                        {   title: 'Delivery First Name',
+                            field: 'delivery_first_name',
+                            width: 90,
+                        },
+                        {   title: 'Delivery Last Name',
+                            field: 'delivery_last_name',
+                            width: 90,
+                        },
+                        {   title: 'Delivery Phone',
+                            field: 'delivery_phone',
+                        },
+                        {   title: 'Delivery Address',
+                            field: 'delivery_address',
+                            width: 120,
+                        },
+                        {   title: 'Delivery Address Unit',
+                            field: 'delivery_address_unit',
+                        },
+                        {   title: 'Delivery City',
+                            field: 'delivery_city',
+                        },
+                        {   title: 'Delivery ZIP',
+                            field: 'delivery_zip',
+                            width: 90,
+                        },
+                        {   title: 'Meal Plan Description',
+                            field: 'meal_plan_desc',
+                            width: 240,
+                        },
+                        {   title: 'Saturday',
+                            field: 'Saturday',
+                        },
+                        {   title: 'Delivery Day',
+                            field: 'delivery_day',
+                        },
+                        {   title: 'Meal Plan Selection',
+                            field: 'meal_selection',
+                            width: 300, 
+                        },
                     ]}
                     data={this.state.data}
+                    options={{
+                        tableLayout: 'fixed',
+                    }}
                     style={{ margin: "10px 0" }}
                 />
             </div>

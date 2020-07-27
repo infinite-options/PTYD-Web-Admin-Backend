@@ -10,8 +10,8 @@ import CreateNewMeal from "./Edit-Meal/create-new-meals";
 import CreateMenu from "./Create-Menu/create-menu";
 import Orders from "./Orders/Orders";
 import Ingredients from "./Orders/Ingredients";
+import CustomersOld from "./CustomersOld/Customers";
 import Customers from "./Customers/Customers";
-import Customers2 from "./Customers_v2/Customers_v2";
 import EditMeals from "./Edit-Meal/edit-meals";
 import Settings from "./Settings/Settings";
 import googleAnalytics from "./Homepage/googleAnalytics";
@@ -129,7 +129,7 @@ const Main = ({ appProps }) => (
     <AppliedRoute
       exact
       path="/customers"
-      component={Customers}
+      component={CustomersOld}
       appProps={{
         API_URL: `${DEV_URL}`,
         PURCHASE_API_URL: `${DEV_URL}accountpurchases`,
@@ -137,6 +137,7 @@ const Main = ({ appProps }) => (
         LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
       }}
     />
+<<<<<<< HEAD
     <AppliedRoute
       exact
       path="/customers2"
@@ -148,6 +149,20 @@ const Main = ({ appProps }) => (
         PURCHASE_MEAL_API_URL: `${DEV_URL}PurchaseIdMeals`,
       }}
     />
+=======
+      <AppliedRoute
+          exact
+          path="/customers2"
+          component={Customers}
+          appProps={{
+              API_URL: `${DEV_URL}`,
+              ACCOUNTLIST_API_URL: `${DEV_URL}AccountList`,
+              LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
+              PURCHASE_MEAL_API_URL: `${DEV_URL}PurchaseIdMeals`,
+              ALLPAYMENTS_API_URL: `${DEV_URL}All_Payments`,
+          }}
+      />
+>>>>>>> 2914de538d2ba8309ff0f2945c59cb102a16d131
     <AppliedRoute
       exact
       path="/googleAnalytics"
