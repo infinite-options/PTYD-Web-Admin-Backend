@@ -59,8 +59,14 @@
     <EmbeddedResource Update="ViewModel\Dbvm\Dbvm.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Login\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Login\ResetPasswordPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Profile\ChangePasswordPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -70,6 +76,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Subscribe\PaymentOptionPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Subscribe\SubscribePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +106,6 @@
     <Compile Update="ViewModel\Checkout\SummaryPage.xaml.cs">
       <DependentUpon>SummaryPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="ViewModel\Login\LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
-    </Compile>
     <Compile Update="ViewModel\SignUp\SignUpPage.xaml.cs">
       <DependentUpon>SignUpPage.xaml</DependentUpon>
     </Compile>
@@ -108,9 +114,6 @@
     </Compile>
     <Compile Update="ViewModel\Subscribe\PaymentOptionPage.xaml.cs">
       <DependentUpon>PaymentOptionPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="ViewModel\Subscribe\SubscribePage.xaml.cs">
-      <DependentUpon>SubscribePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

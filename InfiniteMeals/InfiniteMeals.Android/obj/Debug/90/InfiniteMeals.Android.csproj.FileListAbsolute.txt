@@ -563,8 +563,6 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Androi
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\homepage.jpg
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\lasagna.jpeg
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\mashers.jpg
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\nacho.jpg
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\oats.jpg
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\borscht.jpg
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\shippingstatus.png
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\paymentstatus.png
@@ -1103,3 +1101,15 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Androi
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GenerateJavaStubs.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\stamp\_ResolveLibraryProjectImports.stamp
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\bibimbap.jpeg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\cacaooats.jpeg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\cobbsalad.jpeg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\lentilsalad.jpeg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\meal5.jpg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\meal10.jpg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\meal15.jpg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\meal20.jpg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\ptydlogo.jpg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\rainbowsalad.jpeg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\tempeh.jpeg
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Debug\90\res\drawable\thaicurry.jpeg

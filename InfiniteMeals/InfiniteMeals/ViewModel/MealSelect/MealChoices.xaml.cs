@@ -47,45 +47,48 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public IList<Meal> AllMeals { get; private set; }
         public IList<Meal> MealSelectionList { get; private set; }
         public Dictionary<string, int?> mealQtyDict = new Dictionary<string, int?>();
-        public static Label quantity;
+        public Label quantity;
+        public static List<DateTimeOffset> weekAffectedDates = new List<DateTimeOffset>();
 
         // Week 1
-        public static MealGroup mealGroup = new MealGroup() { LongName = "Meals", ShortName = "m" };
-        public static MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public static MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+        public MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 2
-        public static MealGroup mealGroup2 = new MealGroup() { LongName = "Meals", ShortName = "m" };
-        public static MealGroup seasonalMealGroup2 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public static MealGroup smoothieGroup2 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup2 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup seasonalMealGroup2 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+        public MealGroup smoothieGroup2 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 3
-        public static MealGroup mealGroup3 = new MealGroup() { LongName = "Meals", ShortName = "m" };
-        public static MealGroup seasonalMealGroup3 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public static MealGroup smoothieGroup3 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup3 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup seasonalMealGroup3 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+        public MealGroup smoothieGroup3 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 4
-        public static MealGroup mealGroup4 = new MealGroup() { LongName = "Meals", ShortName = "m" };
-        public static MealGroup seasonalMealGroup4 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public static MealGroup smoothieGroup4 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup4 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup seasonalMealGroup4 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+        public MealGroup smoothieGroup4 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 5
-        public static MealGroup mealGroup5 = new MealGroup() { LongName = "Meals", ShortName = "m" };
-        public static MealGroup seasonalMealGroup5 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public static MealGroup smoothieGroup5 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup5 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup seasonalMealGroup5 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+        public MealGroup smoothieGroup5 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 6
-        public static MealGroup mealGroup6 = new MealGroup() { LongName = "Meals", ShortName = "m" };
-        public static MealGroup seasonalMealGroup6 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public static MealGroup smoothieGroup6 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup6 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup seasonalMealGroup6 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
+        public MealGroup smoothieGroup6 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         private string userID;
         public static string infoImg = "info.jpg";
         public static string green = "#8FBC8F";
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
+        private static string mealSelectionUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/";
         private static string mealsUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals";
         private static string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/";
+        private long mealsSelectedHere;
 
         public MealChoices()
         {
@@ -98,17 +101,23 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public string getUserAcct()
         {
             var table = App.Database.GetLastItem();
-            System.Diagnostics.Debug.WriteLine("user id here " + table.UserUid);
             userID = table.UserUid;
             return table.UserUid;
         }
 
         public void getData()
         {
-            MealSchedule ms = new MealSchedule();
-            long mealsAllowed = ms.getMaxMeals();
+            Dictionary<string, long> quantityDictionary = new Dictionary<string, long>();
 
+            int testHolder = 0;
+            MealSchedule ms = new MealSchedule(testHolder);
+            long mealsAllowed = ms.getMaxMeals();
             int weekNumber = ms.getNum();
+            var saveNav = new Button
+            {
+                Text = "Save"
+            };
+
 
             // Normal Meals
             List<String> MenuForWeek1Names = new List<String>();
@@ -153,6 +162,38 @@ namespace InfiniteMeals.ViewModel.MealSelect
             var content = client.DownloadString(mealsUrl);
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
+            // User PID
+            string planNum = ms.getPlanNumPicked();
+            var userContent = client.DownloadString(mealSelectionUrl + planNum);
+            System.Diagnostics.Debug.WriteLine("right here" + mealSelectionUrl + planNum);
+
+            var userObj = JsonConvert.DeserializeObject<GetPostedMeals>(userContent);
+            List<PostedMeals> descList = new List<PostedMeals>();
+
+            for (int i = 0; i < userObj.Result.Meals.Length; i++)
+            {
+                descList.Add(userObj.Result.Meals[i]);
+            }
+
+            descList.Sort((x, y) => DateTimeOffset.Compare(x.WeekAffected, y.WeekAffected));
+
+
+            for (int i = 0; i < userObj.Result.Meals.Length; i++)
+            {
+                foreach (var item in userObj.Result.Meals[i].MealsSelected)
+                {
+                    if (quantityDictionary.ContainsKey(item.Key))
+                    {
+                        quantityDictionary.Remove(item.Key);
+                        quantityDictionary.Add(item.Key, item.Value);
+                        mealsSelectedHere -= item.Value;
+                        mealsSelectedHere += item.Value;
+                    }
+                    else
+                        quantityDictionary.Add(item.Key, item.Value);
+                }
+            }
+
             if (weekNumber == 1)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek1.Meals.Weekly.Menu.Length;
@@ -161,6 +202,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 var jsonObjectSeasonal = obj.Result.MenuForWeek1.Meals.Seasonal;
                 var jsonObjectSmoothieLength = obj.Result.MenuForWeek1.Meals.Smoothies.Menu.Length;
                 var jsonObjectSmoothie = obj.Result.MenuForWeek1.Meals.Smoothies;
+
 
                 for (int placeHolder = 0; placeHolder < jsonObjectLength; placeHolder++)
                 {
@@ -182,6 +224,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         MenuForWeek1Image.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObject.Menu[placeHolder].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObject.Menu[placeHolder].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
@@ -189,11 +241,14 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObject.Menu[placeHolder].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
 
-                    if(mealGroup.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
+                    System.Diagnostics.Debug.WriteLine("Holder: " + holder.id + " " + holder.name + " " + holder.qty);
+                    mealsSelectedHere += holder.qty;
+
+                    if (mealGroup.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
                     {
                         mealGroup.Remove(mealGroup.Where(x => x.id == jsonObject.Menu[placeHolder].MealId).Single());
                         mealGroup.Add(holder);
@@ -221,6 +276,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SeasMenuForWeek1Image.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSeasonal.Menu[placeHolderSeas].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
@@ -228,9 +293,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+
+                    mealsSelectedHere += holder.qty;
+
 
                     if (seasonalMealGroup.Any(x => x.id == jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
                     {
@@ -260,6 +328,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SmoothiesImage.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSmoothie.Menu[smooth].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSmoothie.Menu[smooth].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[smooth].MealId,
@@ -267,9 +345,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSmoothie.Menu[smooth].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+
+                    mealsSelectedHere += holder.qty;
 
                     if (smoothieGroup.Any(x => x.id == jsonObjectSmoothie.Menu[smooth].MealId))
                     {
@@ -282,7 +362,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         smoothieGroup.Add(holder);
                     }
                 }
-
                 grouped.Add(mealGroup);
                 grouped.Add(seasonalMealGroup);
                 grouped.Add(smoothieGroup);
@@ -316,6 +395,17 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         MenuForWeek1Image.Add(imageMeal);
                     }
 
+                    // Testing here! 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObject.Menu[placeHolder].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObject.Menu[placeHolder].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
@@ -323,9 +413,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObject.Menu[placeHolder].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (mealGroup2.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
                     {
@@ -355,6 +446,15 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SeasMenuForWeek1Image.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSeasonal.Menu[placeHolderSeas].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
                     Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
@@ -362,9 +462,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
+
 
                     if (seasonalMealGroup.Any(x => x.id == jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
                     {
@@ -394,6 +496,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SmoothiesImage.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSmoothie.Menu[smooth].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSmoothie.Menu[smooth].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[smooth].MealId,
@@ -401,9 +513,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSmoothie.Menu[smooth].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (smoothieGroup2.Any(x => x.id == jsonObjectSmoothie.Menu[smooth].MealId))
                     {
@@ -450,6 +563,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
                         MenuForWeek1Image.Add(imageMeal);
                     }
+
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObject.Menu[placeHolder].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObject.Menu[placeHolder].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
+
                     Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
@@ -457,9 +582,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObject.Menu[placeHolder].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (mealGroup3.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
                     {
@@ -489,6 +615,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SeasMenuForWeek1Image.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSeasonal.Menu[placeHolderSeas].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
@@ -496,9 +632,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (seasonalMealGroup3.Any(x => x.id == jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
                     {
@@ -528,6 +665,17 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SmoothiesImage.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSmoothie.Menu[smooth].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSmoothie.Menu[smooth].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[smooth].MealId,
@@ -535,9 +683,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSmoothie.Menu[smooth].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (smoothieGroup3.Any(x => x.id == jsonObjectSmoothie.Menu[smooth].MealId))
                     {
@@ -583,6 +732,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
                         MenuForWeek1Image.Add(imageMeal);
                     }
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObject.Menu[placeHolder].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObject.Menu[placeHolder].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
 
                     Meal holder = new Meal
                     {
@@ -591,9 +750,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObject.Menu[placeHolder].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (mealGroup4.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
                     {
@@ -622,6 +782,15 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObjectSeasonal.Menu[placeHolderSeas].MealPhotoUrl.ToString();
                         SeasMenuForWeek1Image.Add(imageMeal);
                     }
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSeasonal.Menu[placeHolderSeas].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
 
                     Meal holder = new Meal
                     {
@@ -630,9 +799,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (seasonalMealGroup4.Any(x => x.id == jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
                     {
@@ -662,6 +832,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SmoothiesImage.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSmoothie.Menu[smooth].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSmoothie.Menu[smooth].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[smooth].MealId,
@@ -669,9 +849,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSmoothie.Menu[smooth].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (smoothieGroup4.Any(x => x.id == jsonObjectSmoothie.Menu[smooth].MealId))
                     {
@@ -718,6 +899,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         MenuForWeek1Image.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObject.Menu[placeHolder].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObject.Menu[placeHolder].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObject.Menu[placeHolder].MealId,
@@ -725,9 +916,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObject.Menu[placeHolder].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (mealGroup5.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
                     {
@@ -757,6 +949,17 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SeasMenuForWeek1Image.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSeasonal.Menu[placeHolderSeas].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
@@ -764,9 +967,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (seasonalMealGroup5.Any(x => x.id == jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
                     {
@@ -796,6 +1000,17 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SmoothiesImage.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSmoothie.Menu[smooth].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSmoothie.Menu[smooth].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[smooth].MealId,
@@ -803,9 +1018,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSmoothie.Menu[smooth].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (smoothieGroup5.Any(x => x.id == jsonObjectSmoothie.Menu[smooth].MealId))
                     {
@@ -851,6 +1067,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
                         MenuForWeek1Image.Add(imageMeal);
                     }
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObject.Menu[placeHolder].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObject.Menu[placeHolder].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
 
                     Meal holder = new Meal
                     {
@@ -859,9 +1085,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObject.Menu[placeHolder].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (mealGroup.Any(x => x.id == jsonObject.Menu[placeHolder].MealId))
                     {
@@ -891,6 +1118,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SeasMenuForWeek1Image.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSeasonal.Menu[placeHolderSeas].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSeasonal.Menu[placeHolderSeas].MealId,
@@ -898,9 +1135,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSeasonal.Menu[placeHolderSeas].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (seasonalMealGroup6.Any(x => x.id == jsonObjectSeasonal.Menu[placeHolderSeas].MealId))
                     {
@@ -930,6 +1168,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         SmoothiesImage.Add(imageMeal);
                     }
 
+                    int quantityHolder;
+                    if (quantityDictionary.ContainsKey(jsonObjectSmoothie.Menu[smooth].MealId))
+                    {
+                        quantityHolder = (int)quantityDictionary[jsonObjectSmoothie.Menu[smooth].MealId];
+                    }
+                    else
+                    {
+                        quantityHolder = 0;
+                    }
+
                     Meal holder = new Meal
                     {
                         id = jsonObjectSmoothie.Menu[smooth].MealId,
@@ -937,9 +1185,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         description = jsonObjectSmoothie.Menu[smooth].MealDesc,
                         imageUrl = imageMeal,
                         infoUrl = infoImg,
-                        qty = 0,
+                        qty = quantityHolder,
                         is_addon = "false",
                     };
+                    mealsSelectedHere += holder.qty;
 
                     if (smoothieGroup6.Any(x => x.id == jsonObjectSmoothie.Menu[smooth].MealId))
                     {
@@ -959,6 +1208,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             }
 
+            System.Diagnostics.Debug.WriteLine("Numbers -> " + mealsSelectedHere + " " + mealsAllowed);
+
+            if (mealsSelectedHere.Equals(mealsAllowed))
+            {
+                saveNav.BackgroundColor = Color.FromHex(green);
+            }
+
             var surpriseNav = new Button
             {
                 Text = "Surprise"
@@ -974,79 +1230,61 @@ namespace InfiniteMeals.ViewModel.MealSelect
             skipNav.Clicked += ClickedSkip;
             skipNav.BackgroundColor = Color.FromHex(def);
 
-            var saveNav = new Button
-            {
-                Text = "Save"
-            };
-
-            if(weekNumber == 1 && totalMealsSelected == mealsAllowed)
-            {
-                saveNav.BackgroundColor = Color.FromHex(green);
-                saveNav.Clicked += returnBack;
-            }
-            else if(weekNumber == 2 && totalMealsSelected2 == mealsAllowed)
-            {
-                saveNav.BackgroundColor = Color.FromHex(green);
-                saveNav.Clicked += returnBack;
-
-
-            }
-            else if (weekNumber == 3 && totalMealsSelected3 == mealsAllowed)
-            {
-                saveNav.BackgroundColor = Color.FromHex(green);
-                saveNav.Clicked += returnBack;
-
-
-            }
-            else if (weekNumber == 4 && totalMealsSelected4 == mealsAllowed)
-            {
-                saveNav.BackgroundColor = Color.FromHex(green);
-                saveNav.Clicked += returnBack;
-
-
-            }
-            else if (weekNumber == 5 && totalMealsSelected5 == mealsAllowed)
-            {
-                saveNav.BackgroundColor = Color.FromHex(green);
-                saveNav.Clicked += returnBack;
-
-
-            }
-            else if (weekNumber == 6 && totalMealsSelected6 == mealsAllowed)
-            {
-                saveNav.BackgroundColor = Color.FromHex(green);
-                saveNav.Clicked += returnBack;
-            }
-            else
-            {
-                saveNav.BackgroundColor = Color.FromHex(def);
-            }
-
             var totalMeals = new Label();
 
-            switch(weekNumber)
+            switch (weekNumber)
             {
                 case 1:
-                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected));
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - mealsSelectedHere + totalMealsSelected));
+                    if (mealsAllowed - mealsSelectedHere + totalMealsSelected == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += returnBack;
+                    }
                     break;
                 case 2:
-                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected2));
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - mealsSelectedHere + totalMealsSelected2));
+                    if (mealsAllowed - mealsSelectedHere + totalMealsSelected2 == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += returnBack;
+                    }
                     break;
                 case 3:
-                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected3));
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - mealsSelectedHere + totalMealsSelected3));
+                    if (mealsAllowed - mealsSelectedHere + totalMealsSelected3 == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += returnBack;
+                    }
                     break;
                 case 4:
-                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected4));
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - mealsSelectedHere + totalMealsSelected4));
+                    if (mealsAllowed - mealsSelectedHere + totalMealsSelected4 == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += returnBack;
+                    }
                     break;
                 case 5:
-                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected5));
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - mealsSelectedHere + totalMealsSelected5));
+                    if (mealsAllowed - mealsSelectedHere + totalMealsSelected5 == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += returnBack;
+                    }
                     break;
                 case 6:
-                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected6));
+                    totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - mealsSelectedHere + totalMealsSelected6));
+                    if (mealsAllowed - mealsSelectedHere + totalMealsSelected6 == 0)
+                    {
+                        saveNav.BackgroundColor = Color.FromHex(green);
+                        saveNav.Clicked += returnBack;
+                    }
                     break;
                 default:
                     break;
-            }   
+            }
 
             Grid sl = new Grid();
 
@@ -1063,23 +1301,23 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             lstView.Header = sl;
 
-            if(weekNumber == 1)
+            if (weekNumber == 1)
             {
                 lstView.ItemsSource = grouped;
             }
-            else if(weekNumber == 2)
+            else if (weekNumber == 2)
             {
                 lstView.ItemsSource = grouped2;
             }
-            else if(weekNumber == 3)
+            else if (weekNumber == 3)
             {
                 lstView.ItemsSource = grouped3;
             }
-            else if(weekNumber == 4)
+            else if (weekNumber == 4)
             {
                 lstView.ItemsSource = grouped4;
             }
-            else if(weekNumber == 5)
+            else if (weekNumber == 5)
             {
                 lstView.ItemsSource = grouped5;
             }
@@ -1099,7 +1337,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 {
                     HeightRequest = 100,
                     VerticalOptions = LayoutOptions.FillAndExpand,
-                    
+
                 };
                 var nameLabel = new Label
                 {
@@ -1116,16 +1354,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
                 imgLabel.Margin = new Thickness(10, 0, 0, 10);
-
-                /*
-                quantity = new Label
-                {
-                    WidthRequest = 20,
-                    HeightRequest = 20,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center
-                };
-                */
 
                 var infoButton = new ImageButton
                 {
@@ -1144,7 +1372,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                 var steppers = new Stepper
                 {
-                    Maximum = mealsAllowed,
                     Increment = 1,
                     HeightRequest = 50,
                     Scale = 0.5,
@@ -1152,18 +1379,17 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     VerticalOptions = LayoutOptions.Center,
                 };
 
-
-
-
                 steppers.Margin = new Thickness(40, 0, 0, 0);
                 steppers.ValueChanged += (sender, e) =>
                 {
                     Stepper stepper = sender as Stepper;
                     var model = stepper.BindingContext as Meal;
+
                     int stepperVal = (int)stepper.Value;
 
                     if (weekNumber == 1)
                     {
+
                         if (stepperVal > model.qty)
                         {
                             model.qty = (int)steppers.Value;
@@ -1199,7 +1425,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             mealQtyDict.Add(model.id, model.qty);
                         }
                         totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected));
-                        if (mealsAllowed - totalMealsSelected == 0)
+                        if (mealsAllowed - totalMealsSelected - mealsSelectedHere == 0)
                         {
                             saveNav.BackgroundColor = Color.FromHex(green);
                             saveNav.Clicked += postData;
@@ -1211,6 +1437,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     }
                     else if (weekNumber == 2)
                     {
+
                         if (stepperVal > model.qty)
                         {
                             model.qty = (int)steppers.Value;
@@ -1245,7 +1472,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             }
                             mealQtyDict.Add(model.id, model.qty);
                         }
-                        totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected2));
+                        totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected2 - 1));
                         if (mealsAllowed - totalMealsSelected2 == 0)
                         {
                             saveNav.BackgroundColor = Color.FromHex(green);
@@ -1292,7 +1519,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             }
                             mealQtyDict.Add(model.id, model.qty);
                         }
-                        totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected3));
+                        //totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected3));
                         if (mealsAllowed - totalMealsSelected3 == 0)
                         {
                             saveNav.BackgroundColor = Color.FromHex(green);
@@ -1339,7 +1566,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             }
                             mealQtyDict.Add(model.id, model.qty);
                         }
-                        totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected4));
+                        // totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected4));
                         if (mealsAllowed - totalMealsSelected4 == 0)
                         {
                             saveNav.BackgroundColor = Color.FromHex(green);
@@ -1386,7 +1613,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             }
                             mealQtyDict.Add(model.id, model.qty);
                         }
-                        totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected5));
+                        //totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected5));
                         if (mealsAllowed - totalMealsSelected5 == 0)
                         {
                             saveNav.BackgroundColor = Color.FromHex(green);
@@ -1433,7 +1660,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             }
                             mealQtyDict.Add(model.id, model.qty);
                         }
-                        totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected6));
+                        //totalMeals.Text = string.Format("Please Select {0} Meals", (mealsAllowed - totalMealsSelected6));
                         if (mealsAllowed - totalMealsSelected6 == 0)
                         {
                             saveNav.BackgroundColor = Color.FromHex(green);
@@ -1472,13 +1699,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grid.Children.Add(steppers, 3, 1);
                 steppers.SetValue(Grid.ColumnSpanProperty, 3);
                 grid.Children.Add(quantity, 5, 0);
-                
+
 
                 return new ViewCell { View = grid, Height = 100 };
             });
 
             Content = lstView;
             BindingContext = this;
+        }
+
+        private void SaveNav_Clicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public async void postData(object sender, EventArgs e)
@@ -1693,7 +1925,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton");
                     Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton");
                     Button add1 = (Button)mealSchedulePage.FindByName("AddonButton");
-                   
+
                     skip1.BackgroundColor = Color.FromHex(green);
                     sel1.BackgroundColor = Color.FromHex(def);
                     sun1.BackgroundColor = Color.FromHex(def);

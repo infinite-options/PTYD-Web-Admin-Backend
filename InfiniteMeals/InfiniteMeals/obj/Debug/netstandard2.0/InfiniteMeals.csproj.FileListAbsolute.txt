@@ -6,7 +6,6 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.Properties.Resources.resources
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\InfiniteMeals.csproj.GenerateResource.cache
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\App.xaml.g.cs
-C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Tests\CardTestCase.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\Tests\Test.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\About\HowItWorksPage.xaml.g.cs
@@ -19,9 +18,11 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\De
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Dbvm\Dbvm.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Login\LoginPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Login\ResetPasswordPage.xaml.g.cs
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MainPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\AddOnChoices.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\MealChoices.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\MealSchedule.xaml.g.cs
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\MenuView.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\MealSelect\SelectMealOptions.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Profile\ChangePasswordPage.xaml.g.cs
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals\obj\Debug\netstandard2.0\ViewModel\Profile\UserProfile.xaml.g.cs
