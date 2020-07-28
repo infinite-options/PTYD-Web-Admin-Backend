@@ -41,7 +41,7 @@ class WeeklyMenu extends Component {
           <hr/>
           <div
             class="row justify-content-md-center"
-            Style="margin-top:-10px; margin-bottom:-10px;"
+            Style="margin-top:-10px; margin-bottom:-10px;display:block;text-align:center"
           >
             <ul class="navbar-nav">
               <li class="nav-item font3">
@@ -59,14 +59,8 @@ class WeeklyMenu extends Component {
           <hr/>
 
           <div 
-          //grid of items plus margins/center
-          // id='menu-container'
-          style={{
-            // margin: "0 200px",
-            textAlign:"center",
-          }}>
+            style={{textAlign:"center"}}>
           <div 
-            //grid of items
             style={{
               display:"grid",
               gridTemplateColumns:"1fr 1fr 1fr",
@@ -75,10 +69,7 @@ class WeeklyMenu extends Component {
             {Object.keys(this.state.meals).map(key =>
                 this.state.meals[key].Menu.map(meal => (
                 <div key={meal.meal_plan_id}
-                  //each item plus padding
-                  style={{
-                    margin: "30px",
-                  }}
+                  style={{margin: "30px"}}
                 >
                   <img
                     src={meal.meal_photo_url === null ? defaultMeal : meal.meal_photo_url}
@@ -92,7 +83,6 @@ class WeeklyMenu extends Component {
                   />
                   <div>
                     <div
-                      //meal titles (to show)
                       style={{
                         wordWrap:"break-word",
                         color: "grey",
