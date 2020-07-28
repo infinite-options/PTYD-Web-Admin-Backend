@@ -1507,9 +1507,11 @@ class OIDisplay extends Component {
                         <th>Package Size</th>
                         <th>Package Measure</th>
                         <th>Coversion Ratio1</th>
+                        <th>Recipe Type</th>
                         <th>Coversion Ratio2</th>
+                        <th>Measure Type</th>
                         <th>Need Quantity</th>
-                        <th>Inverntory Quantity</th>
+                        <th>Inventory Quantity</th>
                         <th>Buy Quantity</th>
                       </tr>
                     </thead>
@@ -1530,7 +1532,9 @@ class OIDisplay extends Component {
                           <td>{meal.package_size}</td>
                           <td>{meal.package_measure}</td>
                           <td>{meal.ratio1}</td>
+                          <td>{meal.recipe_type}</td>
                           <td>{meal.ratio2}</td>
+                          <td>{meal.measure_type}</td>
                           <td>{meal.need_qty}</td>
                           <td>{meal.inventory_qty}</td>
                           <td>{meal.buy_qty}</td>
@@ -1567,9 +1571,11 @@ class OIDisplay extends Component {
                         <th>Package Size</th>
                         <th>Package Measure</th>
                         <th>Coversion Ratio1</th>
+                        <th>Recipe Type</th>
                         <th>Coversion Ratio2</th>
+                        <th>Measure Type</th>
                         <th>Need Quantity</th>
-                        <th>Inverntory Quantity</th>
+                        <th>Inventory Quantity</th>
                         <th>Buy Quantity</th>
                       </tr>
                     </thead>
