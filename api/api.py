@@ -5139,7 +5139,7 @@ class MenuCreation(Resource):
                     FROM 
                     ptyd_menu
                     JOIN ptyd_meals ON menu_meal_id=meal_id
-                    ORDER BY menu_date DESC ;""", 'get', conn)
+                    ORDER BY menu_date DESC, menu_category asc ;""", 'get', conn)
 
             # generated all of the menu dates available
             menuDates = []
@@ -5868,10 +5868,6 @@ class PurchaseIdMeals(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)    
-<<<<<<< HEAD
-
-=======
->>>>>>> master
             
 class Add_Unit_Conversion(Resource):
     def post(self):
