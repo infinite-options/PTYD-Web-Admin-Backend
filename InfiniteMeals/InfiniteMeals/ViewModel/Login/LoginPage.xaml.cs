@@ -16,11 +16,6 @@ using System.Threading.Tasks;
 using InfiniteMeals.Model.Database;
 using System.Windows.Input;
 
-using System.Diagnostics;
-using Plugin.FacebookClient;
-using Plugin.FacebookClient.Abstractions;
-using SocialMediaAuthentication.Models;
-using SocialMediaAuthentication.Views;
 namespace InfiniteMeals.ViewModel.Login
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]

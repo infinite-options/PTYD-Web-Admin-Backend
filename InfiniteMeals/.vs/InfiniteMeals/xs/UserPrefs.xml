@@ -1,32 +1,21 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
-  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/Login/LoginPage.xaml">
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android PreferredExecutionTarget="Android.Pixel_2_API_29" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MenuView.xaml">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/Login/LoginPage.xaml.cs" Line="33" Column="35" />
-      <File FileName="InfiniteMeals/ViewModel/Login/LoginPage.xaml" Line="35" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs" Line="1641" Column="2" />
+      <File FileName="InfiniteMeals/ViewModel/Login/LoginPage.xaml.cs" Line="18" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MenuView.xaml" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="InfiniteMeals" expanded="True">
             <Node name="InfiniteMeals" expanded="True">
-              <Node name="Model" expanded="True">
-                <Node name="Database" expanded="True" />
-              </Node>
               <Node name="ViewModel" expanded="True">
-                <Node name="Login" expanded="True">
-                  <Node name="LoginPage.xaml" expanded="True" selected="True" />
-                </Node>
                 <Node name="MealSelect" expanded="True">
-                  <Node name="MenuView.xaml" expanded="True" />
-                </Node>
-                <Node name="Subscribe" expanded="True">
-                  <Node name="FiveMealPaymentOptionPage.xaml" expanded="True" />
-                  <Node name="PaymentOptionPage.xaml" expanded="True" />
-                  <Node name="SubscribePage.xaml" expanded="True" />
+                  <Node name="MenuView.xaml" selected="True" />
                 </Node>
               </Node>
-              <Node name="App.xaml" expanded="True" />
             </Node>
           </Node>
         </State>

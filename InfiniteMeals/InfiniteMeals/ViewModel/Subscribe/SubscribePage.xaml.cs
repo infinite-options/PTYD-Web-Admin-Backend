@@ -33,7 +33,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
             var content = client.DownloadString(textUrl);
             var obj = JsonConvert.DeserializeObject<SubscriptionPlans>(content);
 
-            for(int i = 0; i < obj.Result.MealPlans.Result.Length; i++)
+            for (int i = 0; i < obj.Result.MealPlans.Result.Length; i++)
             {
                 payments.Add(String.Format("Starting at {0:0.00} per meal", obj.Result.MealPlans.Result[i].MealPlanPricePerMeal));
             }
