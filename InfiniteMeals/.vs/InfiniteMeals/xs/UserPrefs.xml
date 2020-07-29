@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/Login/LoginPage.xaml">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="93" Column="13" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs" Line="625" Column="21" />
+      <File FileName="InfiniteMeals/ViewModel/Login/LoginPage.xaml.cs" Line="33" Column="35" />
+      <File FileName="InfiniteMeals/ViewModel/Login/LoginPage.xaml" Line="35" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -12,21 +12,18 @@
             <Node name="InfiniteMeals" expanded="True">
               <Node name="Model" expanded="True">
                 <Node name="Database" expanded="True" />
-                <Node name="Login" expanded="True" />
               </Node>
               <Node name="ViewModel" expanded="True">
                 <Node name="Login" expanded="True">
-                  <Node name="LoginPage.xaml" expanded="True" />
-                  <Node name="ResetPasswordPage.xaml" expanded="True" />
+                  <Node name="LoginPage.xaml" expanded="True" selected="True" />
                 </Node>
                 <Node name="MealSelect" expanded="True">
-                  <Node name="MealChoices.xaml" expanded="True" />
-                  <Node name="MealSchedule.xaml" expanded="True">
-                    <Node name="MealSchedule.xaml.cs" selected="True" />
-                  </Node>
+                  <Node name="MenuView.xaml" expanded="True" />
                 </Node>
-                <Node name="Profile" expanded="True">
-                  <Node name="UserProfile.xaml" expanded="True" />
+                <Node name="Subscribe" expanded="True">
+                  <Node name="FiveMealPaymentOptionPage.xaml" expanded="True" />
+                  <Node name="PaymentOptionPage.xaml" expanded="True" />
+                  <Node name="SubscribePage.xaml" expanded="True" />
                 </Node>
               </Node>
               <Node name="App.xaml" expanded="True" />

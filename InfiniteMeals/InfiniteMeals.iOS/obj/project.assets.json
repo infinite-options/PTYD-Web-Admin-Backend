@@ -160,6 +160,18 @@
           "lib/portable-Xamarin.iOS+Xamarin.Mac/PCLStorage.dll": {}
         }
       },
+      "Plugin.FacebookClient/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.iOS": "5.12.0"
+        },
+        "compile": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
+        }
+      },
       "Rg.Plugins.Popup/2.0.0.3": {
         "type": "package",
         "dependencies": {
@@ -356,6 +368,92 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
+      "Xamarin.Facebook.CoreKit.iOS/5.12.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0",
+          "Xamarin.Facebook.LoginKit.iOS": "5.12.0",
+          "Xamarin.Facebook.MarketingKit.iOS": "5.11.1",
+          "Xamarin.Facebook.PlacesKit.iOS": "5.12.0",
+          "Xamarin.Facebook.ShareKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "System.Drawing.Common.dll",
+          "Xamarin.iOS"
+        ]
+      },
+      "Xamarin.Facebook.LoginKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.MarketingKit.iOS/5.11.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.PlacesKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.ShareKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        }
+      },
       "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
@@ -502,6 +600,7 @@
           "MvvmLightLibs": "5.4.1.1",
           "MySqlConnector": "0.69.3",
           "Newtonsoft.Json": "12.0.3",
+          "Plugin.FacebookClient": "2.2.1",
           "Rg.Plugins.Popup": "2.0.0.3",
           "Stripe.net": "37.15.1",
           "Xamarin.Essentials": "1.5.3.2",
@@ -674,6 +773,18 @@
         "runtime": {
           "lib/portable-Xamarin.iOS+Xamarin.Mac/PCLStorage.Abstractions.dll": {},
           "lib/portable-Xamarin.iOS+Xamarin.Mac/PCLStorage.dll": {}
+        }
+      },
+      "Plugin.FacebookClient/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.iOS": "5.12.0"
+        },
+        "compile": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
         }
       },
       "Rg.Plugins.Popup/2.0.0.3": {
@@ -860,6 +971,92 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
+      "Xamarin.Facebook.CoreKit.iOS/5.12.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0",
+          "Xamarin.Facebook.LoginKit.iOS": "5.12.0",
+          "Xamarin.Facebook.MarketingKit.iOS": "5.11.1",
+          "Xamarin.Facebook.PlacesKit.iOS": "5.12.0",
+          "Xamarin.Facebook.ShareKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "System.Drawing.Common.dll",
+          "Xamarin.iOS"
+        ]
+      },
+      "Xamarin.Facebook.LoginKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.MarketingKit.iOS/5.11.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.PlacesKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.ShareKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        }
+      },
       "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
@@ -1006,6 +1203,7 @@
           "MvvmLightLibs": "5.4.1.1",
           "MySqlConnector": "0.69.3",
           "Newtonsoft.Json": "12.0.3",
+          "Plugin.FacebookClient": "2.2.1",
           "Rg.Plugins.Popup": "2.0.0.3",
           "Stripe.net": "37.15.1",
           "Xamarin.Essentials": "1.5.3.2",
@@ -1180,6 +1378,18 @@
           "lib/portable-Xamarin.iOS+Xamarin.Mac/PCLStorage.dll": {}
         }
       },
+      "Plugin.FacebookClient/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.iOS": "5.12.0"
+        },
+        "compile": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
+        }
+      },
       "Rg.Plugins.Popup/2.0.0.3": {
         "type": "package",
         "dependencies": {
@@ -1364,6 +1574,92 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
+      "Xamarin.Facebook.CoreKit.iOS/5.12.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0",
+          "Xamarin.Facebook.LoginKit.iOS": "5.12.0",
+          "Xamarin.Facebook.MarketingKit.iOS": "5.11.1",
+          "Xamarin.Facebook.PlacesKit.iOS": "5.12.0",
+          "Xamarin.Facebook.ShareKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "System.Drawing.Common.dll",
+          "Xamarin.iOS"
+        ]
+      },
+      "Xamarin.Facebook.LoginKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.MarketingKit.iOS/5.11.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.PlacesKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.ShareKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        }
+      },
       "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
@@ -1510,6 +1806,7 @@
           "MvvmLightLibs": "5.4.1.1",
           "MySqlConnector": "0.69.3",
           "Newtonsoft.Json": "12.0.3",
+          "Plugin.FacebookClient": "2.2.1",
           "Rg.Plugins.Popup": "2.0.0.3",
           "Stripe.net": "37.15.1",
           "Xamarin.Essentials": "1.5.3.2",
@@ -1684,6 +1981,18 @@
           "lib/portable-Xamarin.iOS+Xamarin.Mac/PCLStorage.dll": {}
         }
       },
+      "Plugin.FacebookClient/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.iOS": "5.12.0"
+        },
+        "compile": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Plugin.FacebookClient.dll": {}
+        }
+      },
       "Rg.Plugins.Popup/2.0.0.3": {
         "type": "package",
         "dependencies": {
@@ -1868,6 +2177,92 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
+      "Xamarin.Facebook.CoreKit.iOS/5.12.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.CoreKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0",
+          "Xamarin.Facebook.LoginKit.iOS": "5.12.0",
+          "Xamarin.Facebook.MarketingKit.iOS": "5.11.1",
+          "Xamarin.Facebook.PlacesKit.iOS": "5.12.0",
+          "Xamarin.Facebook.ShareKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "System.Drawing.Common.dll",
+          "Xamarin.iOS"
+        ]
+      },
+      "Xamarin.Facebook.LoginKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.LoginKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.MarketingKit.iOS/5.11.1": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.MarketingKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.PlacesKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.PlacesKit.dll": {}
+        }
+      },
+      "Xamarin.Facebook.ShareKit.iOS/5.12.0": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Facebook.CoreKit.iOS": "5.12.0"
+        },
+        "frameworkAssemblies": [
+          "Xamarin.iOS"
+        ],
+        "compile": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinios10/Facebook.ShareKit.dll": {}
+        }
+      },
       "Xamarin.Forms/4.6.0.847": {
         "type": "package",
         "compile": {
@@ -2014,6 +2409,7 @@
           "MvvmLightLibs": "5.4.1.1",
           "MySqlConnector": "0.69.3",
           "Newtonsoft.Json": "12.0.3",
+          "Plugin.FacebookClient": "2.2.1",
           "Rg.Plugins.Popup": "2.0.0.3",
           "Stripe.net": "37.15.1",
           "Xamarin.Essentials": "1.5.3.2",
@@ -2679,6 +3075,25 @@
         "pclstorage.nuspec"
       ]
     },
+    "Plugin.FacebookClient/2.2.1": {
+      "sha512": "OR3mhx8WrNzFkeoPQghpbNC2lR0lpAApWvtm3HB8s5JQVh00bHRoXXLoWklxMeVzjCqyx3qWHEjRdVzbwayrKg==",
+      "type": "package",
+      "path": "plugin.facebookclient/2.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/monoandroid90/Plugin.FacebookClient.dll",
+        "lib/monoandroid90/Plugin.FacebookClient.xml",
+        "lib/netstandard1.0/Plugin.FacebookClient.dll",
+        "lib/netstandard1.0/Plugin.FacebookClient.xml",
+        "lib/netstandard2.0/Plugin.FacebookClient.dll",
+        "lib/netstandard2.0/Plugin.FacebookClient.xml",
+        "lib/xamarinios10/Plugin.FacebookClient.dll",
+        "lib/xamarinios10/Plugin.FacebookClient.xml",
+        "plugin.facebookclient.2.2.1.nupkg.sha512",
+        "plugin.facebookclient.nuspec"
+      ]
+    },
     "Rg.Plugins.Popup/2.0.0.3": {
       "sha512": "/lrKxxsdaF9T+YEnVDaUMj0angdRyvpngSmX8veY/QYhSjT4x3guJTsL8O8D4egDf7MI5McnmMAsst0tkN1LOA==",
       "type": "package",
@@ -3097,6 +3512,83 @@
         "xamarin.essentials.nuspec"
       ]
     },
+    "Xamarin.Facebook.CoreKit.iOS/5.12.0": {
+      "sha512": "LT8OjXPC1cC9ISz/pI2CAhYT864SmGgPdORQOIdoscCAUezZRXLBzVGsK7QCqOcd5GIQEJ/z1J+mwEyIqwCg0w==",
+      "type": "package",
+      "path": "xamarin.facebook.corekit.ios/5.12.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "lib/xamarinios10/Facebook.CoreKit.dll",
+        "xamarin.facebook.corekit.ios.5.12.0.nupkg.sha512",
+        "xamarin.facebook.corekit.ios.nuspec"
+      ]
+    },
+    "Xamarin.Facebook.iOS/5.12.0": {
+      "sha512": "gMzbW9o3t+R1R7e85H4XtlFhNfVhxbeHwCwQNGIY5HXyD18WHYuRmwhqYTp5FDRl2A6z3JJFAH2tYqA9RmY69w==",
+      "type": "package",
+      "path": "xamarin.facebook.ios/5.12.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "xamarin.facebook.ios.5.12.0.nupkg.sha512",
+        "xamarin.facebook.ios.nuspec"
+      ]
+    },
+    "Xamarin.Facebook.LoginKit.iOS/5.12.0": {
+      "sha512": "b5ckNeoBRTsqmG4HB3TIcmDQMGhMnd4RsqqK1EyGH6J/6U22rycembpoNjitXhOEbfDm9tZCLan+gnaZi7+vag==",
+      "type": "package",
+      "path": "xamarin.facebook.loginkit.ios/5.12.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "lib/xamarinios10/Facebook.LoginKit.dll",
+        "xamarin.facebook.loginkit.ios.5.12.0.nupkg.sha512",
+        "xamarin.facebook.loginkit.ios.nuspec"
+      ]
+    },
+    "Xamarin.Facebook.MarketingKit.iOS/5.11.1": {
+      "sha512": "1D3lde7943vIyju/82pN0/rWhX2tkcbTwpL+cHANcQZzYkd657KOyEDZ+2GmzeIEzCOC4Sq9XB3s/45Mfe2yrg==",
+      "type": "package",
+      "path": "xamarin.facebook.marketingkit.ios/5.11.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "lib/xamarinios10/Facebook.MarketingKit.dll",
+        "xamarin.facebook.marketingkit.ios.5.11.1.nupkg.sha512",
+        "xamarin.facebook.marketingkit.ios.nuspec"
+      ]
+    },
+    "Xamarin.Facebook.PlacesKit.iOS/5.12.0": {
+      "sha512": "pzv5dhnWbvn0Br5MTPx+/RMIOQmZ/PUlqpq19FmL2AgpPzX2aEVHKrq3RdLTq34rxim6ZoFtU6TyXsQva7JaMA==",
+      "type": "package",
+      "path": "xamarin.facebook.placeskit.ios/5.12.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "lib/xamarinios10/Facebook.PlacesKit.dll",
+        "xamarin.facebook.placeskit.ios.5.12.0.nupkg.sha512",
+        "xamarin.facebook.placeskit.ios.nuspec"
+      ]
+    },
+    "Xamarin.Facebook.ShareKit.iOS/5.12.0": {
+      "sha512": "lbsDM0WZ4HZpXT4v9n4Fe9JJDN4yzdzpnEc+BGaIdAd4xQ/M9M9I4ddqcl1SPicPdM1obkq6wnkfrK4xegDCVQ==",
+      "type": "package",
+      "path": "xamarin.facebook.sharekit.ios/5.12.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "lib/xamarinios10/Facebook.ShareKit.dll",
+        "xamarin.facebook.sharekit.ios.5.12.0.nupkg.sha512",
+        "xamarin.facebook.sharekit.ios.nuspec"
+      ]
+    },
     "Xamarin.Forms/4.6.0.847": {
       "sha512": "xUUgs1/xDdS9I/oN2UkdRwd/YToqg0qhwIK8yvyJJ2Xbhsc1ssV4/DUICdjuwCttzeiAcrhILqD+0BQhifUfxw==",
       "type": "package",
@@ -3473,11 +3965,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
       "projectName": "InfiniteMeals.iOS",
-      "projectPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+      "projectPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/",
+      "outputPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
@@ -3492,8 +3984,8 @@
       "frameworks": {
         "xamarinios10": {
           "projectReferences": {
-            "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
-              "projectPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
+            "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+              "projectPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
             }
           }
         }

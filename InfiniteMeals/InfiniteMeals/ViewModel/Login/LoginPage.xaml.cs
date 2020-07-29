@@ -16,6 +16,11 @@ using System.Threading.Tasks;
 using InfiniteMeals.Model.Database;
 using System.Windows.Input;
 
+using System.Diagnostics;
+using Plugin.FacebookClient;
+using Plugin.FacebookClient.Abstractions;
+using SocialMediaAuthentication.Models;
+using SocialMediaAuthentication.Views;
 namespace InfiniteMeals.ViewModel.Login
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -23,12 +28,12 @@ namespace InfiniteMeals.ViewModel.Login
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
         public HttpClient client = new HttpClient(); // client to handle all api calls
-        
 
         public LoginPage() {
             InitializeComponent();
-
         }
+
+
 
         // handles when the login button is clicked
         private async void ClickedLogin(object sender, EventArgs e) {

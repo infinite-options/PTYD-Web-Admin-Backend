@@ -9,23 +9,23 @@
 
         <StackLayout HorizontalOptions="CenterAndExpand" Padding="5">
 
-            <Label x:Name="mealPlan"  TextColor="Black" HorizontalOptions="Center" FontSize="Medium"/>
-
+            <Label Text="5 Meal Plan" Margin="0,0,0,40" x:Name="mealPlan"  TextColor="Black" HorizontalOptions="Center" FontSize="24" FontFamily="CapsRegular"/>
 
             <Grid ColumnSpacing="8" HorizontalOptions="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40*" />
+                    <ColumnDefinition Width="40*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
+                    <RowDefinition Height="150" />
+                    <RowDefinition Height="150" />
                 </Grid.RowDefinitions>
 
-                <ImageButton x:Name="mealimage" HorizontalOptions="CenterAndExpand" Grid.Row="0" Clicked="WeekPaymentPlanClicked"/>
-                <Label Text="week to week" Grid.Row="0" HorizontalOptions="Start" VerticalOptions="Center"/>
-                <ImageButton x:Name="mealimage1"  HorizontalOptions="CenterAndExpand" Grid.Row="1" Clicked="FourWeekPaymentPlanClicked"/>
-                <Label Text="4 week prepay" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <ImageButton x:Name="mealimage" HorizontalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" Clicked="WeekPaymentPlanClicked"/>
+                <Label Text="week To week" FontFamily= "CapsRegular" Grid.Row="0" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <ImageButton x:Name="mealimage1"  HorizontalOptions="CenterAndExpand" Grid.Row="1" Grid.Column="0" Clicked="FourWeekPaymentPlanClicked"/>
+                <Label Text="4 Week Prepay" FontFamily= "CapsRegular" Grid.Row="1" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
 
             </Grid>
         </StackLayout>
