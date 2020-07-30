@@ -188,7 +188,7 @@ const App = props => {
                     <div>
                       <a
                         href='/selectmealplan'
-                        className='top-btn1 top-btn1-primary font5'
+                        className='nav-get-started top-btn1 top-btn1-primary font5'
                       >
                         Get Started
                       </a>

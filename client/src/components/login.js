@@ -425,7 +425,6 @@ export default function Login(props) {
           </Row>
 
           <div className='row'>
-            {/* <Col></Col> */}
             <Container
               className='justify-content-center bg-white font2 w-20'
               style={{
@@ -522,6 +521,7 @@ export default function Login(props) {
                   Don't have an account?
                 </p>
                 <a
+                  id='signupButton'
                   href='/signup'
                   style={{
                     border: "2px solid #469b47",

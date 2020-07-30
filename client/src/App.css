@@ -538,6 +538,18 @@ a {
     margin: 20px 0 10px 10px;
     float: left;
   }
+  .nav-get-started {
+    text-align:left;
+    margin-left: -24px;
+  }
+  #loginButton {
+    float:left;
+    margin: 10px -24px;
+  }
+  .navigation-link {
+    margin: 10px 35px 0 0px;
+  }
+
   .top-left h1 {
     font-size:45px;
     line-height: 50px;
@@ -640,6 +652,21 @@ a {
   #logoutButton {
     margin: 20px 0 10px -40px;
     float:left;
+  }
+  .nav-get-started {
+    text-align:left;
+    margin-left: -40px;
+  }
+  #loginButton {
+    float:left;
+    margin-left: -40px;
+  }
+  #signupButton {
+    width: 300px!important;
+    padding: 8px 20px!important;
+  }
+  .navigation-link {
+    margin: 10px 35px 0 35px;
   }
 
   .content-section .landing {
@@ -754,6 +781,9 @@ a {
     padding-left: 60px;
     text-align: center;
   }
+
+  /* weekly/next menu */
+  
 }
 
 .top-right {
