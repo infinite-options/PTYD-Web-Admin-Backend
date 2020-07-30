@@ -2200,7 +2200,8 @@ class ChargeSubscribers(Resource):
                                 cc_exp_date,
                                 cc_cvv,
                                 billing_zip,
-                                stripe_charge_id
+                                stripe_charge_id,
+                                isAddon
                             )
                             VALUES (
                                 \'""" + paymentId + """\',
@@ -2217,7 +2218,8 @@ class ChargeSubscribers(Resource):
                                 \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                                 \'""" + data['cc_cvv'] + """\',
                                 \'""" + data['billing_zip'] + """\',
-                                """ + stripe_charge_id + """);"""
+                                """ + stripe_charge_id + """,
+                                \'""" + data['isAddon'] + """\';"""
 
                 return query
 
@@ -2311,6 +2313,7 @@ class ChargeSubscribers(Resource):
 
                     paymentId = get_new_paymentID()
                     card_data['recurring'] = 'TRUE' if subscription_charge > 0 else 'FALSE'
+                    card_data['isAddon'] = 'TRUE' if addon_charge > 0 else 'FALSE'
                     payment_query = getPaymentQuery(card_data, couponID, total_charge, total_charge, paymentId, stripe_charge_id, eachPayment['purchase_id'])
                     print("payment_query: ", payment_query)
                     items.append(execute(payment_query, 'post', conn))
