@@ -6131,6 +6131,21 @@ class AccountList(Resource):
         finally:
             disconnect(conn)
 
+class DeliveryInfo(Resource):
+    def get(self, purchase_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            items = execute("""select * from purchases where purchase_id = \'""" + str(purchase_id) + """\';""", 'get', conn)
+            response['message'] = 'Request successful.'
+            response['result'] = items
+
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 # Define API routes
 # Customer page
@@ -6200,7 +6215,7 @@ api.add_resource(Latest_activity, '/api/v2/Latest_activity/<string:user_id>')
 api.add_resource(All_Payments, '/api/v2/All_Payments/<string:user_id>')
 api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>')
 api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
-
+api.add_resource(DeliveryInfo,'/api/v2/DeliveryInfo/<string:purchase_id>')
 api.add_resource(AccountList,'/api/v2/AccountList')
 
 '''
