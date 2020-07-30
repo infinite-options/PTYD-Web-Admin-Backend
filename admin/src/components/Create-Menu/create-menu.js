@@ -60,11 +60,17 @@ class CreateMenu extends Component {
         meal_type_map[kms[j].Meal_Name] = category_name;
       }
     }
+
+    var today = new Date();
+
+    console.log(today);
     // console.log("tanny ", categorykey);
     for (let key of Object.keys(createMenu)) {
       //
-      tempkeys.push(key);
+      var mydate = new Date(key);
+      if (mydate >= today) tempkeys.push(key);
     }
+
     // tempkeys = tempkeys.reverse();
     let x = tempkeys[0];
     let len = createMenu[x].length;
