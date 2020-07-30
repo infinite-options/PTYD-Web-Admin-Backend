@@ -3,19 +3,19 @@ import axios from "axios";
 import { Typography } from "@material-ui/core";
 import MaterialTable from 'material-table';
 
-class LatestActivity extends React.Component {
+class AllPayments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loaded: false,
             data: [],
-        };
+        }
     }
 
     componentDidMount() {
         let curComponent = this;
         axios
-            .get(`${this.props.LATESTACTIVITY_API_URL}/${this.props.searchID}`)
+            .get(`${this.props.ALLPAYMENTS_API_URL}/${this.props.searchID}`)
             .then(function (res) {
                 curComponent.setState({
                     loaded: true,
@@ -36,7 +36,7 @@ class LatestActivity extends React.Component {
     fetchData = () => {
         let curComponent = this;
         axios
-            .get(`${this.props.LATESTACTIVITY_API_URL}/${this.props.searchID}`)
+            .get(`${this.props.ALLPAYMENTS_API_URL}/${this.props.searchID}`)
             .then(function (res) {
                 curComponent.setState({
                     data: res.data.result.result,
@@ -49,14 +49,17 @@ class LatestActivity extends React.Component {
 
     render() {
         if(!this.state.loaded) {
-            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Latest Activity </Typography>
+            return <Typography variant="body1"> Loading All Payments </Typography>
         }
         return (
-            <div style={{ margin: '30px 0' }}>
+            <div>
                 <MaterialTable
-                    title="Latest Activity"
+                    title="All Payments"
                     columns={[
+                        { title: 'User', field: 'user_uid' },
                         { title: 'Email', field: 'user_email'},
+                        { title: 'First Name', field: 'first_name'},
+                        { title: 'Last Name', field: 'last_name'},
                         { title: 'Phone', field: 'phone_number'},
                         { title: 'Purchase ID', field: 'purchase_id'},
                         { title: 'Purchase Status', field: 'purchase_status'},
@@ -74,13 +77,10 @@ class LatestActivity extends React.Component {
                         { title: 'Credit Card', field: 'cc_num'}
                     ]}
                     data={this.state.data}
-                    onRowClick={(event,row) => {
-                        this.props.selectPurchaseId(row.purchase_id);
-                    }}
                 />
             </div>
         )
     }
 }
 
-export default LatestActivity;
+export default AllPayments;
