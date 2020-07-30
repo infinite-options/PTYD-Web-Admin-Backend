@@ -64,7 +64,7 @@ class PurchaseIdMeals extends React.Component {
                 </Paper>
 
                 <MaterialTable
-                    title="Purchase Id Meals"
+                    title="Weekly Meal Selections"
                     columns={[
                         {   title: 'Delivery First Name',
                             field: 'delivery_first_name',
@@ -91,6 +91,10 @@ class PurchaseIdMeals extends React.Component {
                             field: 'delivery_zip',
                             width: 90,
                         },
+                        {
+                            title: 'Delivery Instructions',
+                            field: 'delivery_instructions',
+                        },
                         {   title: 'Meal Plan Description',
                             field: 'meal_plan_desc',
                             width: 240,
@@ -102,7 +106,7 @@ class PurchaseIdMeals extends React.Component {
                             field: 'delivery_day',
                         },
                         {   title: 'Meal Plan Selection',
-                            field: 'meal_selection',
+                            field: 'meal_name',
                             width: 300, 
                         },
                     ]}
