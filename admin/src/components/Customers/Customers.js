@@ -3,6 +3,7 @@ import axios from "axios";
 import {Breadcrumbs, InputLabel, Link, MenuItem, Paper, Select, Typography} from "@material-ui/core";
 
 import LatestActivity from "./LatestActivity";
+import Delivery from "./Delivery";
 import PurchaseIdMeals from "./PurchaseIdMeals";
 import AllPayments from "./AllPayments";
 
@@ -67,6 +68,18 @@ class Customers extends React.Component {
                     {
                     this.state.purchase !== '' && (
                         <div>
+                             <Paper style={
+                            {   maxWidth: 'max-content',
+                                padding: '2px 4px',
+                                display: 'flex',
+                                alignItems: 'center',}
+                            }>
+                                <Typography variant="body1"> Purchase Id: {this.state.purchase} </Typography>
+                            </Paper>
+                            <Delivery
+                                purchaseID={this.state.purchase}
+                                DELIVERY_API_URL={this.props.DELIVERY_API_URL}
+                            />
                             <PurchaseIdMeals
                                 purchaseID={this.state.purchase}
                                 PURCHASE_MEAL_API_URL={this.props.PURCHASE_MEAL_API_URL}
