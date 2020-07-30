@@ -155,9 +155,7 @@ function App() {
             &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/settings">Plans & Coupons</Nav.Link>
             &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/orders">Orders & Ingredients</Nav.Link>
-            &nbsp;&nbsp;&nbsp;
-            <Nav.Link href="/oidisplay">Orders & Ingredients Display</Nav.Link>
+            <Nav.Link href="/oidisplay">Orders & Ingredients</Nav.Link>
             &nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers">Customers</Nav.Link>&nbsp;&nbsp;&nbsp;
             <Nav.Link href="/customers2">Customers v2</Nav.Link>&nbsp;&nbsp;&nbsp;
