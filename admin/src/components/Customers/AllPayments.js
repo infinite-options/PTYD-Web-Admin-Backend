@@ -54,11 +54,14 @@ class AllPayments extends React.Component {
                     title="All Payments"
                     columns={[
                         { title: 'Payment Id', field: 'payment_id'},
+                        { title: 'Meal Plan Description', field: 'meal_plan_desc'},
                         { title: 'Recurring', field: 'recurring'},
                         { title: 'Amount due', field: 'amount_due'},
                         { title: 'Amount paid', field: 'amount_paid'},
                         { title: 'Payment time stamp', field: 'payment_time_stamp'},
                         { title: 'Pay type', field: 'payment_type'},
+                        { title: 'Addon', field: 'isAddon'},
+                        { title: 'Last Payment', field: 'previous_payment'},
                     ]}
                     data={this.state.view}
                 />
