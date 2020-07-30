@@ -145,6 +145,7 @@ const Main = ({ appProps }) => (
         API_URL: `${DEV_URL}`,
         ACCOUNTLIST_API_URL: `${DEV_URL}AccountList`,
         LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
+        DELIVERY_API_URL: `${DEV_URL}DeliveryInfo`,
         PURCHASE_MEAL_API_URL: `${DEV_URL}PurchaseIdMeals`,
         ALLPAYMENTS_API_URL: `${DEV_URL}All_Payments`,
       }}

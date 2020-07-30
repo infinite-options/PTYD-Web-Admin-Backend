@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Paper, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import MaterialTable from 'material-table';
 
 class PurchaseIdMeals extends React.Component {
@@ -50,54 +50,45 @@ class PurchaseIdMeals extends React.Component {
 
     render() {
         if(!this.state.loaded) {
-            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Purchase ID Meals </Typography>
+            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Weekly Meal Selections </Typography>
         }
         return (
             <div style={{ margin: "30px 0" }}>
-                <Paper style={
-                {   maxWidth: 'max-content',
-                    padding: '2px 4px',
-                    display: 'flex',
-                    alignItems: 'center',}
-                }>
-                    <Typography variant="body1"> Purchase Id: {this.props.purchaseID} </Typography>
-                </Paper>
-
                 <MaterialTable
                     title="Weekly Meal Selections"
                     columns={[
-                        {   title: 'Delivery First Name',
-                            field: 'delivery_first_name',
-                            width: 90,
-                        },
-                        {   title: 'Delivery Last Name',
-                            field: 'delivery_last_name',
-                            width: 90,
-                        },
-                        {   title: 'Delivery Phone',
-                            field: 'delivery_phone',
-                        },
-                        {   title: 'Delivery Address',
-                            field: 'delivery_address',
-                            width: 120,
-                        },
-                        {   title: 'Delivery Address Unit',
-                            field: 'delivery_address_unit',
-                        },
-                        {   title: 'Delivery City',
-                            field: 'delivery_city',
-                        },
-                        {   title: 'Delivery ZIP',
-                            field: 'delivery_zip',
-                            width: 90,
-                        },
-                        {
-                            title: 'Delivery Instructions',
-                            field: 'delivery_instructions',
-                        },
+                        // {   title: 'Delivery First Name',
+                        //     field: 'delivery_first_name',
+                        //     width: 90,
+                        // },
+                        // {   title: 'Delivery Last Name',
+                        //     field: 'delivery_last_name',
+                        //     width: 90,
+                        // },
+                        // {   title: 'Delivery Phone',
+                        //     field: 'delivery_phone',
+                        // },
+                        // {   title: 'Delivery Address',
+                        //     field: 'delivery_address',
+                        //     width: 120,
+                        // },
+                        // {   title: 'Delivery Address Unit',
+                        //     field: 'delivery_address_unit',
+                        // },
+                        // {   title: 'Delivery City',
+                        //     field: 'delivery_city',
+                        // },
+                        // {   title: 'Delivery ZIP',
+                        //     field: 'delivery_zip',
+                        //     width: 90,
+                        // },
+                        // {
+                        //     title: 'Delivery Instructions',
+                        //     field: 'delivery_instructions',
+                        // },
                         {   title: 'Meal Plan Description',
                             field: 'meal_plan_desc',
-                            width: 240,
+                            // width: 240,
                         },
                         {   title: 'Saturday',
                             field: 'Saturday',
@@ -107,12 +98,12 @@ class PurchaseIdMeals extends React.Component {
                         },
                         {   title: 'Meal Plan Selection',
                             field: 'meal_name',
-                            width: 300, 
+                            // width: 300, 
                         },
                     ]}
                     data={this.state.data}
                     options={{
-                        tableLayout: 'fixed',
+                        // tableLayout: 'fixed',
                     }}
                     style={{ margin: "10px 0" }}
                 />
