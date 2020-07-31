@@ -126,7 +126,7 @@ const Main = ({ appProps }) => (
         DISPLAY_SAT_API_URL: `${DEV_URL}saturdays`,
       }}
     />
-    <AppliedRoute
+    {/* <AppliedRoute
       exact
       path="/customers"
       component={CustomersOld}
@@ -136,10 +136,10 @@ const Main = ({ appProps }) => (
         ALLPAYMENTS_API_URL: `${DEV_URL}All_Payments`,
         LATESTACTIVITY_API_URL: `${DEV_URL}Latest_activity`,
       }}
-    />
+    /> */}
     <AppliedRoute
       exact
-      path="/customers2"
+      path="/customers"
       component={Customers}
       appProps={{
         API_URL: `${DEV_URL}`,
