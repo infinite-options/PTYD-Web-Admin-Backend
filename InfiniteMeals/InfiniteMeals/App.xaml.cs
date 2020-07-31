@@ -6,8 +6,6 @@ using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-
-
 namespace InfiniteMeals {
     public partial class App : Application {
 

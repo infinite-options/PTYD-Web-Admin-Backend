@@ -152,6 +152,15 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "Plugin.FacebookClient/2.2.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.FacebookClient.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.FacebookClient.dll": {}
+        }
+      },
       "Rg.Plugins.Popup/2.0.0.3": {
         "type": "package",
         "dependencies": {
@@ -1162,6 +1171,25 @@
         "packageIcon.png"
       ]
     },
+    "Plugin.FacebookClient/2.2.1": {
+      "sha512": "OR3mhx8WrNzFkeoPQghpbNC2lR0lpAApWvtm3HB8s5JQVh00bHRoXXLoWklxMeVzjCqyx3qWHEjRdVzbwayrKg==",
+      "type": "package",
+      "path": "plugin.facebookclient/2.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/monoandroid90/Plugin.FacebookClient.dll",
+        "lib/monoandroid90/Plugin.FacebookClient.xml",
+        "lib/netstandard1.0/Plugin.FacebookClient.dll",
+        "lib/netstandard1.0/Plugin.FacebookClient.xml",
+        "lib/netstandard2.0/Plugin.FacebookClient.dll",
+        "lib/netstandard2.0/Plugin.FacebookClient.xml",
+        "lib/xamarinios10/Plugin.FacebookClient.dll",
+        "lib/xamarinios10/Plugin.FacebookClient.xml",
+        "plugin.facebookclient.2.2.1.nupkg.sha512",
+        "plugin.facebookclient.nuspec"
+      ]
+    },
     "Rg.Plugins.Popup/2.0.0.3": {
       "sha512": "/lrKxxsdaF9T+YEnVDaUMj0angdRyvpngSmX8veY/QYhSjT4x3guJTsL8O8D4egDf7MI5McnmMAsst0tkN1LOA==",
       "type": "package",
@@ -2046,6 +2074,7 @@
       "MySqlConnector >= 0.69.3",
       "NETStandard.Library >= 2.0.3",
       "Newtonsoft.Json >= 12.0.3",
+      "Plugin.FacebookClient >= 2.2.1",
       "Rg.Plugins.Popup >= 2.0.0.3",
       "Stripe.net >= 37.15.1",
       "Xamarin.Essentials >= 1.5.3.2",
@@ -2060,11 +2089,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "projectName": "InfiniteMeals",
-      "projectPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
+      "outputPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Kristina/.config/NuGet/NuGet.Config"
@@ -2123,6 +2152,10 @@
             "target": "Package",
             "version": "[12.0.3, )"
           },
+          "Plugin.FacebookClient": {
+            "target": "Package",
+            "version": "[2.2.1, )"
+          },
           "Rg.Plugins.Popup": {
             "target": "Package",
             "version": "[2.0.0.3, )"
@@ -2158,7 +2191,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.302/RuntimeIdentifierGraph.json"
       }
     }
   },
