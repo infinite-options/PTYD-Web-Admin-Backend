@@ -1871,12 +1871,15 @@
         "lib/SL5/System.Windows.Interactivity.dll",
         "lib/monoandroid1/GalaSoft.MvvmLight.Extras.XML",
         "lib/monoandroid1/GalaSoft.MvvmLight.Extras.dll",
+        "lib/monoandroid1/GalaSoft.MvvmLight.Extras.dll.mdb",
         "lib/monoandroid1/GalaSoft.MvvmLight.Extras.pdb",
         "lib/monoandroid1/GalaSoft.MvvmLight.Platform.XML",
         "lib/monoandroid1/GalaSoft.MvvmLight.Platform.dll",
+        "lib/monoandroid1/GalaSoft.MvvmLight.Platform.dll.mdb",
         "lib/monoandroid1/GalaSoft.MvvmLight.Platform.pdb",
         "lib/monoandroid1/GalaSoft.MvvmLight.XML",
         "lib/monoandroid1/GalaSoft.MvvmLight.dll",
+        "lib/monoandroid1/GalaSoft.MvvmLight.dll.mdb",
         "lib/monoandroid1/GalaSoft.MvvmLight.pdb",
         "lib/net35/GalaSoft.MvvmLight.Extras.dll",
         "lib/net35/GalaSoft.MvvmLight.Extras.pdb",
@@ -3880,11 +3883,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
       "projectName": "InfiniteMeals.Android",
-      "projectPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
+      "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/",
+      "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
@@ -3899,8 +3902,8 @@
       "frameworks": {
         "monoandroid90": {
           "projectReferences": {
-            "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
-              "projectPath": "/Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
+            "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+              "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
             }
           }
         }
@@ -3954,6 +3957,12 @@
     }
   },
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    },
     {
       "code": "NU1603",
       "level": "Warning",

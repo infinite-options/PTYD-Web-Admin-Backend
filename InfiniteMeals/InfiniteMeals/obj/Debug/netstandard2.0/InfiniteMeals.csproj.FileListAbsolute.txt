@@ -72,6 +72,11 @@ C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/De
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ref/InfiniteMeals.dll
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.pdb
 /Users/Kristina/Desktop/newmerge/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csprojAssemblyReference.cache
+<<<<<<< HEAD
+=======
+>>>>>>> 27dde5119a4900f069ab7f8a87a52be53c43baf0
+>>>>>>> 6e3db41df7d0e4c0cb14830393e8f3eb9038b835
+>>>>>>> 0b23d9de280e4a2cfdf03425457378a8d8eec1ba
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.deps.json
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/ref/InfiniteMeals.dll
@@ -80,7 +85,6 @@ C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/De
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.Properties.Resources.resources
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csproj.GenerateResource.cache
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/App.xaml.g.cs
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/MainPage.xaml.g.cs
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/Tests/CardTestCase.xaml.g.cs
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/Tests/Test.xaml.g.cs
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ViewModel/Checkout/CheckoutLoginPage.xaml.g.cs
@@ -148,3 +152,5 @@ C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/De
 /Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ref/InfiniteMeals.dll
 /Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.pdb
 /Users/Kristina/Desktop/mergedptyd1/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csprojAssemblyReference.cache
+>>>>>>> 587cc99d562bebaec6b6120b5b5ad80127d068a1
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ViewModel/MainPage.xaml.g.cs
