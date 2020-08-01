@@ -23,7 +23,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
     public partial class MealSchedule : ContentPage
     {
         int ctr = 2;
-        private static int weekNumber;
+        public int weekNumber;
         private static bool disabled = false;
         public ListView lstView = new ListView { HasUnevenRows = true };
         public Button sundayButton = new Button();
@@ -668,7 +668,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 {
                     setWeekNum(sender, e);
                     System.Diagnostics.Debug.WriteLine("About to move to MC " + getNum());
-                    MealChoices mc = new MealChoices();
+                    string currentMealPlanId = getPlanNumPicked(); // getPlanNumPicked returns the plan
+                    System.Diagnostics.Debug.WriteLine("selected meal plan: " + currentMealPlanId);
+                    System.Diagnostics.Debug.WriteLine("week num: " + weekNumber);
+                    foreach(var u in weekAffectedList) { // weekAffectedList[weekNumber -1] returns the date
+                        System.Diagnostics.Debug.WriteLine("week affected item: " + u);
+                    }
+                    MealChoices mc = new MealChoices(this);
                     mc.BindingContext = this;
                     await Navigation.PushAsync(mc);
                 }
