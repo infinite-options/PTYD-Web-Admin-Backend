@@ -5,6 +5,7 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/AWSSDK.DynamoDBv2.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/AWSSDK.SecurityToken.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/CommonServiceLocator.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Microsoft.Bcl.AsyncInterfaces.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/System.Net.Http.Extensions.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/System.Net.Http.Primitives.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/GalaSoft.MvvmLight.Extras.dll
@@ -17,11 +18,27 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/PCLCrypto.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/PCLStorage.Abstractions.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/PCLStorage.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Plugin.FacebookClient.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Rg.Plugins.Popup.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Rg.Plugins.Popup.pdb
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/SQLite-net.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/SQLitePCLRaw.batteries_v2.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/SQLitePCLRaw.nativelibrary.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/SQLitePCLRaw.core.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/SQLitePCLRaw.provider.dynamic_cdecl.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Stripe.net.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Stripe.net.pdb
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/System.Configuration.ConfigurationManager.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/System.Runtime.CompilerServices.Unsafe.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/System.Security.Permissions.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Validation.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Essentials.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Essentials.pdb
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Facebook.CoreKit.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Facebook.LoginKit.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Facebook.MarketingKit.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Facebook.PlacesKit.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Facebook.ShareKit.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Forms.Core.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Forms.Core.pdb
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Forms.Platform.dll
@@ -67,12 +84,12 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Forms.Platform.iOS.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/InfiniteMeals.pdb
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Forms.Platform.iOS.pdb
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/ibtool/_BundleResourceWithLogicalName.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/actool/_PartialAppManifest.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/actool/_BundleResourceWithLogicalName.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/coremlc/_PartialAppManifest.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/coremlc/_BundleResourceWithLogicalName.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/optimized/
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.5/ibtool/_BundleResourceWithLogicalName.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.5/actool/_PartialAppManifest.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.5/actool/_BundleResourceWithLogicalName.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.5/coremlc/_PartialAppManifest.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.5/coremlc/_BundleResourceWithLogicalName.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.5/optimized/
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/InfiniteMeals.iOS.csprojAssemblyReference.cache
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/InfiniteMeals.iOS.csproj.CoreCompileInputs.cache
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/XamlC.stamp

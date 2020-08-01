@@ -1,42 +1,19 @@
 ﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
-  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/Checkout/CheckoutLoginPage.xaml">
-    <Files>
-      <File FileName="InfiniteMeals/ViewModel/Checkout/CheckoutLoginPage.xaml" Line="11" Column="75" />
-    </Files>
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.EC90D2DF-EC8D-446E-8006-8D968A26312E" />
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android PreferredExecutionTarget="Android.Pixel_2_API_29" />
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="InfiniteMeals" expanded="True">
-            <Node name="InfiniteMeals" expanded="True">
-              <Node name="ViewModel" expanded="True">
-                <Node name="Checkout" expanded="True">
-                  <Node name="CheckoutLoginPage.xaml" expanded="True" selected="True" />
-                </Node>
-                <Node name="Login" expanded="True">
-                  <Node name="LoginPage.xaml" expanded="True" />
-                </Node>
-                <Node name="MealSelect" expanded="True" />
-                <Node name="Subscribe" expanded="True">
-                  <Node name="PaymentOptionPage.xaml" expanded="True" />
-                  <Node name="SubscribePage.xaml" expanded="True" />
-                </Node>
-                <Node name="MainPage.xaml" expanded="True" />
-              </Node>
-              <Node name="App.xaml" expanded="True" />
-            </Node>
-            <Node name="InfiniteMeals.Android" expanded="True">
-              <Node name="Resources" expanded="True">
-                <Node name="drawable" expanded="True" />
-              </Node>
-            </Node>
+            <Node name="InfiniteMeals.Android" selected="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
