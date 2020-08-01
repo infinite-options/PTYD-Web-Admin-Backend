@@ -36,32 +36,32 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public IList<Meal> Smoothies { get; private set; }
 
         // Week 1
-        public MealGroup mealGroup = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup mealGroup = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
         public MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
         public MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 2
-        public MealGroup mealGroup2 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup mealGroup2 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
         public MealGroup seasonalMealGroup2 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
         public MealGroup smoothieGroup2 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 3
-        public MealGroup mealGroup3 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup mealGroup3 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
         public MealGroup seasonalMealGroup3 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
         public MealGroup smoothieGroup3 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 4
-        public MealGroup mealGroup4 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup mealGroup4 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
         public MealGroup seasonalMealGroup4 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
         public MealGroup smoothieGroup4 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 5
-        public MealGroup mealGroup5 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup mealGroup5 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
         public MealGroup seasonalMealGroup5 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
         public MealGroup smoothieGroup5 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
         // Week 6
-        public MealGroup mealGroup6 = new MealGroup() { LongName = "Meals", ShortName = "m" };
+        public MealGroup mealGroup6 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
         public MealGroup seasonalMealGroup6 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
         public MealGroup smoothieGroup6 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
 
@@ -294,7 +294,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 lstView.ItemsSource = grouped2;
             }
 
-            Button switchWeek = new Button();
+            Button switchWeek = new Button
+            {
+                FontFamily = "CapsRegular",
+                FontSize = 20,
+                BackgroundColor = Color.Transparent,
+            };
+
             if(weekNumber == 1)
             {
                 switchWeek.Clicked += NextWeekMenu;
@@ -318,44 +324,32 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 var grid = new Grid
                 {
                     VerticalOptions = LayoutOptions.FillAndExpand,
-                    HeightRequest = 260,
+                    HeightRequest = 150,
                 };
                 var nameLabel = new Label
                 {
                     FontAttributes = FontAttributes.Bold,
                     HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalOptions = LayoutOptions.Center,
                     FontSize = 16,
                 };
                 var imgLabel = new Image
                 {
                     WidthRequest = 150,
-                    HeightRequest = 200,
+                    HeightRequest = 150,
                     Aspect = Aspect.AspectFill,
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
                 };
-                imgLabel.Margin = new Thickness(0, 20, 0, 0);
-                var description = new Label
-                {
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    FontSize = 8,
-                };
-                description.Margin = new Thickness(20, -30, 20, 0);
-
+                imgLabel.Margin = new Thickness(10, 10, 10, 10);
                 nameLabel.SetBinding(Label.TextProperty, "name");
                 imgLabel.SetBinding(Image.SourceProperty, "imageUrl");
-                description.SetBinding(Label.TextProperty, "description");
+                nameLabel.FontFamily = "CapsRegular";
 
                 grid.Children.Add(imgLabel, 0, 0);
-                imgLabel.SetValue(Grid.RowSpanProperty, 4);
-                imgLabel.SetValue(Grid.ColumnSpanProperty, 4);
-                grid.Children.Add(nameLabel, 0, 4);
-                nameLabel.SetValue(Grid.RowSpanProperty, 1);
-                nameLabel.SetValue(Grid.ColumnSpanProperty, 4);
-                grid.Children.Add(description, 0, 6);
-                description.SetValue(Grid.ColumnSpanProperty, 4);
-                description.SetValue(Grid.RowSpanProperty, 2);
-
+                imgLabel.SetValue(Grid.RowSpanProperty, 2);
+                grid.Children.Add(nameLabel, 1, 0);
+                nameLabel.SetValue(Grid.RowSpanProperty, 2);
 
 
                 return new ViewCell { View = grid };
@@ -364,7 +358,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
             Content = lstView;
             BindingContext = this;
         }
-
        public void NextWeekMenu (object sender, EventArgs e)
         {
             weekNumber = 2;

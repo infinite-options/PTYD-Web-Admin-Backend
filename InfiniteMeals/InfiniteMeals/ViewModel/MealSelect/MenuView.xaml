@@ -4,35 +4,24 @@
              x:Class="InfiniteMeals.ViewModel.MealSelect.MenuView"
              Title="Menu">
 <ContentPage.Content>
-		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
-
+		<ListView x:Name ="lstView" IsGroupingEnabled="false" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
             VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True" SelectionMode="None" >
 			<ListView.ItemTemplate>
 				<DataTemplate>
                     <ViewCell>
                         <Grid>
                              <Grid.RowDefinitions>
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="20" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-
-                            <ColumnDefinition Width="*" />
-
-                            <ColumnDefinition Width="*" />
-
                         </Grid.ColumnDefinitions>
-                            <Label Text="{Binding name}"></Label>
-                            <Image Source="{Binding imageUrl}" Grid.RowSpan="2"></Image>
-                            <Label Text="{Binding description}"></Label>
+                            <Label Text="{Binding name}"
+                                   FontFamily="CapsRegular"
+                                   FontSize="Body"/>
+
+                            <Image Source="{Binding imageUrl}"  Grid.RowSpan="2"></Image>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

@@ -19,39 +19,49 @@ using System.Windows.Input;
 namespace InfiniteMeals.ViewModel.Login
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage {
+    public partial class LoginPage : ContentPage
+    {
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
         public HttpClient client = new HttpClient(); // client to handle all api calls
-        
-
-        public LoginPage() {
+        public LoginPage()
+        {
             InitializeComponent();
-
         }
 
+
+
         // handles when the login button is clicked
-        private async void ClickedLogin(object sender, EventArgs e) {
-            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text)) { // check if all fields are filled out
+        private async void ClickedLogin(object sender, EventArgs e)
+        {
+            LoginButton.IsEnabled = false;
+            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text))
+            { // check if all fields are filled out
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
             }
-            else {
+            else
+            {
 
                 var accountSalt = await retrieveAccountSalt(this.loginEmail.Text); // retrieve user's account salt
                 System.Diagnostics.Debug.WriteLine("account salt: " + accountSalt.result[0]);
-                if (accountSalt != null && accountSalt.result.Count != 0) { // make sure the account salt exists 
+                if (accountSalt != null && accountSalt.result.Count != 0)
+                { // make sure the account salt exists 
                     var loginAttempt = await login(this.loginEmail.Text, this.loginPassword.Text, accountSalt);
                     System.Diagnostics.Debug.WriteLine("login attempt: " + loginAttempt.GetType());
-                    if (loginAttempt != null && loginAttempt.Message != "Request failed, wrong password.") { // make sure the login attempt was successful
+                    if (loginAttempt != null && loginAttempt.Message != "Request failed, wrong password.")
+                    { // make sure the login attempt was successful
                         captureLoginSession(loginAttempt);
                         await Navigation.PopAsync();
 
                     }
-                    else {
+                    else
+                    {
                         await DisplayAlert("Error", "Wrong password was entered", "OK");
+                        LoginButton.IsEnabled = true;
                     }
                 }
-                else {
+                else
+                {
                     await DisplayAlert("Error", "An account with that email does not exist", "OK");
                 }
 
@@ -65,10 +75,13 @@ namespace InfiniteMeals.ViewModel.Login
         {
             const string deviceBrowserType = "Mobile";
             var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
-            if (deviceIpAddress != null) {
-                try {
+            if (deviceIpAddress != null)
+            {
+                try
+                {
 
-                    LoginPost loginPostContent = new LoginPost() { // object that contains ip address and browser type; will be converted into a json object 
+                    LoginPost loginPostContent = new LoginPost()
+                    { // object that contains ip address and browser type; will be converted into a json object 
                         ipAddress = deviceIpAddress.ToString(),
                         browserType = deviceBrowserType
                     };
@@ -86,50 +99,59 @@ namespace InfiniteMeals.ViewModel.Login
                     var response = await client.PostAsync(loginURL + userEmail + "/" + hashedPassword, httpContent); // try to post to database
 
 
-                    if (response.Content != null) { // post was successful
+                    if (response.Content != null)
+                    { // post was successful
                         var responseContent = await response.Content.ReadAsStringAsync();
 
                         var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
                         return loginResponse;
 
                     }
-                } 
-                catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     System.Diagnostics.Debug.WriteLine("Exception message: " + e.Message);
                     return null;
-                  
+
                 }
 
 
             }
             return null;
-            
+
         }
 
         // uses account salt api to retrieve the user's account salt
         // account salt is used to find the user's hashed password
-        public async Task<AccountSalt> retrieveAccountSalt(string userEmail) {
-            try {
+        public async Task<AccountSalt> retrieveAccountSalt(string userEmail)
+        {
+            try
+            {
                 var content = await client.GetStringAsync(accountSaltURL + userEmail); // get the requested account salt
                 var accountSalt = JsonConvert.DeserializeObject<AccountSalt>(content);
                 System.Diagnostics.Debug.WriteLine("account salt good");
                 return accountSalt;
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-         
+
             }
             return null;
         }
 
         // navigates the user to the sign up page
-        private async void SignUpClicked(object sender, EventArgs e) {
+        private async void SignUpClicked(object sender, EventArgs e)
+        {
             await Navigation.PushAsync(new SignUpPage());
         }
 
 
-        public async void captureLoginSession(LoginResponse loginResponse) {
+        public async void captureLoginSession(LoginResponse loginResponse)
+        {
 
-            var userSessionInformation = new UserLoginSession { // object to send into local database
+            var userSessionInformation = new UserLoginSession
+            { // object to send into local database
                 UserUid = loginResponse.Result.Result[0].UserUid,
                 FirstName = loginResponse.Result.Result[0].FirstName,
                 SessionId = loginResponse.LoginAttemptLog.SessionId,

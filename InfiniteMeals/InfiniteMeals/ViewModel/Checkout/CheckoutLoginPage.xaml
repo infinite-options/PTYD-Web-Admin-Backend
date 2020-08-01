@@ -8,19 +8,19 @@
     <ContentPage.Content>
 
 
-        <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
+        <StackLayout VerticalOptions="CenterAndExpand" Padding="5" Margin= "50,0,50,0" >
 
-            <Label Text="Login" TextColor="Black" HorizontalOptions="Center" FontSize="Medium"/>
+            <Label FontFamily="CapsRegular" Text="Login" TextColor="Black" HorizontalOptions="Center" FontSize="Title" Margin="0,0,0,40" />
             <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
-                <Entry x:Name="loginEmail" Placeholder="Email" TextColor="Black"></Entry>
-                <Entry x:Name="loginPassword" Placeholder="Password"  IsPassword="True"></Entry>
+                <Entry x:Name="loginEmail" FontFamily="CapsRegular" Placeholder="Email" TextColor="Black"></Entry>
+                <Entry x:Name="loginPassword" FontFamily="CapsRegular" Placeholder="Password"  IsPassword="True"></Entry>
 
-                <Button Text="Login" x:Name="Login" Clicked="ClickedLogin"></Button>
+                <Button Text="Login" x:Name="Login" FontFamily="CapsRegular" BackgroundColor = "Green" CornerRadius="50" TextColor="White" Clicked="ClickedLogin"></Button>
             </StackLayout>
 
             <StackLayout VerticalOptions="EndAndExpand"  HorizontalOptions="Center">
-                <Label Text="Don't have an account?" TextColor="Black" VerticalOptions="End"/>
-                <Button Text="Sign Up" Clicked="SignUpClicked"/>
+                <Label FontFamily = "CapsRegular"  Text="Don't have an account?" TextColor="Black" VerticalOptions="End"/>
+                <Button FontFamily = "CapsRegular" BackgroundColor="Orange" CornerRadius="50" Text="Sign Up" Clicked="SignUpClicked"/>
 
             </StackLayout>
         </StackLayout>

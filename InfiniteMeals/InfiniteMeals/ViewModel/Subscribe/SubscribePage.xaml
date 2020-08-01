@@ -7,7 +7,7 @@
              x:Class="InfiniteMeals.ViewModel.Subscribe.SubscribePage" Title="Subscribe">
 
     <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Menu" Clicked="ClickedMealSchedule"/>
+        <ToolbarItem Text="Menu" Clicked="ClickedMenuView"/>
         <ToolbarItem Text="User Profile" Clicked="ClickedUserProfile" />
     </ContentPage.ToolbarItems>
 
@@ -30,14 +30,11 @@
                     <ColumnDefinition Width="16.66*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
+                    <RowDefinition Height="150" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="150" />
+                    <RowDefinition Height="40" />
+
                 </Grid.RowDefinitions>
 
                 <ImageButton x:Name="mealimage"
@@ -47,33 +44,64 @@
                              Grid.Column="0"
                              Clicked="Clicked5mealssubscription"/>
                 <Label
-                    Grid.Row="0"
-                    Grid.Column="1"
+                    x:Name="Meals5Label"
+                    Grid.Row="1"
+                    Grid.Column="0"
                     FontFamily="CapsRegular"
-                    FontSize="Body"
-                    Text="Perfect meal-prep rescue for your work week &#10;&#10;Starting at $10.75 per meal"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
+                    FontSize="Small"
                     />
 
 
                 <ImageButton x:Name="mealimage1"
                              HorizontalOptions="CenterAndExpand"
-                             Grid.Row="1"
-                             Grid.Column="0"
+                             Grid.Row="0"
+                             Grid.Column="1"
                              Clicked="Clicked10mealssubscription"/>
+
+                <Label
+                    x:Name="Meals10Label"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    FontFamily="CapsRegular"
+                    FontSize="Small"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    />
+
 
                 <ImageButton x:Name="mealimage2"
                                 HorizontalOptions="CenterAndExpand"
                                 Grid.Column="0"
                                 Grid.Row="2"
                                 Clicked="Clicked15mealssubscription"/>
+
+                <Label
+                    x:Name="Meals15Label"
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    FontFamily="CapsRegular"
+                    FontSize="Small"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    />
+
                 <ImageButton x:Name="mealimage3"
                              HorizontalOptions="CenterAndExpand"
-                             Grid.Column="0"
-                             Grid.Row="3"
+                             Grid.Column="1"
+                             Grid.Row="2"
                              Clicked="Clicked20mealssubscription"/>
 
+                <Label
+                    x:Name="Meals20Label"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    FontFamily="CapsRegular"
+                    FontSize="Small"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    />
      
                 </Grid>
             </ScrollView>

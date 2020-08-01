@@ -11,8 +11,9 @@ using InfiniteMeals.ViewModel.MealSelect;
 using InfiniteMeals.ViewModel.Profile;
 using InfiniteMeals.Model.Subscribe;
 using InfiniteMeals.ViewModel.SignUp;
-
-
+using System.Net;
+using Newtonsoft.Json;
+using InfiniteMeals.Model.Database;
 
 namespace InfiniteMeals.ViewModel.Subscribe
 {
@@ -20,13 +21,32 @@ namespace InfiniteMeals.ViewModel.Subscribe
     // prompts the user to select a meal plan
     public partial class SubscribePage : ContentPage
     {
+        private static string textUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/plans";
+        private static List<string> payments = new List<string>();
+        private static List<string> paymentText = new List<string>();
+
         public SubscribePage()
         {
             InitializeComponent();
-            mealimage.Source = ImageSource.FromFile("meal5.jpg");
-            mealimage1.Source = ImageSource.FromFile("meal10.jpg");
-            mealimage2.Source = ImageSource.FromFile("meal15.jpg");
-            mealimage3.Source = ImageSource.FromFile("meal20.jpg");
+
+            WebClient client = new WebClient();
+            var content = client.DownloadString(textUrl);
+            var obj = JsonConvert.DeserializeObject<SubscriptionPlans>(content);
+
+            for (int i = 0; i < obj.Result.MealPlans.Result.Length; i++)
+            {
+                payments.Add(String.Format("Starting at {0:0.00} per meal", obj.Result.MealPlans.Result[i].MealPlanPricePerMeal));
+            }
+
+            Meals5Label.Text = payments[0];
+            Meals10Label.Text = payments[1];
+            Meals15Label.Text = payments[2];
+            Meals20Label.Text = payments[3];
+
+            mealimage.Source = ImageSource.FromFile("meal5.jpeg");
+            mealimage1.Source = ImageSource.FromFile("meal10.jpeg");
+            mealimage2.Source = ImageSource.FromFile("meal15.jpeg");
+            mealimage3.Source = ImageSource.FromFile("meal20.jpeg");
         }
 
         private async void ClickedSignUp(object sender, EventArgs e)
@@ -34,9 +54,9 @@ namespace InfiniteMeals.ViewModel.Subscribe
             await Navigation.PushAsync(new SignUpPage());
         }
 
-        private async void ClickedMealSchedule(object sender, EventArgs e)
+        private async void ClickedMenuView(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MealSchedule());
+            await Navigation.PushAsync(new MenuView());
         }
 
         private async void ClickedUserProfile(object sender, EventArgs e)
