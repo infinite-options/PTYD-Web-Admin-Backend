@@ -80,7 +80,8 @@ const App = props => {
 
   let stuff = !isAuthenticating && (
     <div>
-      <div className='row justify-content-center text-nowrap'>
+      <div className='row d-flex justify-content-center text-nowrap'>
+        
         <Navbar collapseOnSelect expand='lg'>
           <Navbar.Brand href='/'>
             <a className='navbar-brand' href='/'>
@@ -93,6 +94,7 @@ const App = props => {
           </Navbar.Brand>
 
           <Navbar.Toggle
+            style={{margin:'auto'}}
             aria-controls='responsive-navbar-nav'
           />
           <Navbar.Collapse id='responsive-navbar-nav'>

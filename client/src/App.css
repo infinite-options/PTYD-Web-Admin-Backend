@@ -637,6 +637,11 @@ a {
     padding-left: 0px;
     text-align: center;
   }
+
+  /* weekly/next menu */
+  .mobile-menu-display-none {
+    display:none;
+  }
 }
 
 @media only screen and (max-width: 767px) {
@@ -781,9 +786,16 @@ a {
     padding-left: 60px;
     text-align: center;
   }
-
-  /* weekly/next menu */
-  
+  .mobile-weekly-menu {
+    width: 320px!important;
+  }
+  .mobile-weekly-menu-grid {
+    grid-template-columns:repeat(1, 1fr)!important;
+    margin: 0!important;
+  }
+  .mobile-weekly-menu-object {
+    margin: 10px!important;
+  }
 }
 
 .top-right {
