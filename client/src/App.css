@@ -57,15 +57,15 @@ a {
   font-family: montserrat;
 }
 
-/* font */
 .font1,
 .font5 {
   font-family: brandongrotw01-lightregular, sans-serif;
 }
-/* text font */
+/*text font*/
 .font2 {
   font-family: "montserrat", sans-serif;
 }
+/*header font*/
 .font6 {
   font-family: "Oswald", sans-serif;
 }

@@ -304,13 +304,13 @@ export default class MakeChange extends Component {
                 <div className='d-flex'>
                   <Modal.Title
                     id='contained-modal-title-vcenter'
-                    className='has-text-info'
+                    className='has-text-info font6'
                   >
                     Edit Profile
                   </Modal.Title>
                   {this.props.searchCookie4LoggedInBy === "direct" && (
                     <Button
-                      className='ml-2'
+                      className='ml-2 font2'
                       onClick={this.ShowHideChangePasswordModal}
                     >
                       Change Password
@@ -319,7 +319,7 @@ export default class MakeChange extends Component {
                 </div>
               </Modal.Header>
               <Modal.Body>
-                <div className='scrollMenu-profile'>
+                <div className='scrollMenu-profile font2'>
                   <h5 style={{marginTop: "0"}}>Subscription Details</h5>
                   <Form>
                     <Form.Row>
@@ -597,6 +597,7 @@ export default class MakeChange extends Component {
                   }
                 >
                   <Button
+                    className='font2'
                     variant='danger'
                     type='submit'
                     style={{float: "left"}}
@@ -606,13 +607,14 @@ export default class MakeChange extends Component {
                   </Button>
                 </OverlayTrigger>{" "}
                 <Button
+                  className='font2'
                   variant='success'
                   type='submit'
                   onClick={this.ShowHideSaveModal}
                 >
                   Save Changes
                 </Button>
-                <Button variant='light' onClick={this.props.ChangeAccountInfo}>
+                <Button className='font2' variant='light' onClick={this.props.ChangeAccountInfo}>
                   Close
                 </Button>
               </Modal.Footer>
