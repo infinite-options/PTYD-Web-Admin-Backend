@@ -12,7 +12,7 @@ class Customers extends React.Component {
         super(props);
         this.state = {
             userList: [],
-            user: '',
+            user: '_NoUser',
             purchase: '',
         }
     }
@@ -38,7 +38,7 @@ class Customers extends React.Component {
                 let storedUser = localStorage.getItem('user');
                 curComponent.setState({
                     userList: data,
-                    user: (storedUser ? storedUser : ''),
+                    user: (storedUser ? storedUser : '_NoUser'),
                 });
             })
             .catch(function(error) {
@@ -67,7 +67,7 @@ class Customers extends React.Component {
                     <Typography color="textPrimary">Customers</Typography>
                 </Breadcrumbs>
                 { this.userListDropDwon() }
-                { this.state.user !== '' && (
+                { (this.state.user !== '' && this.state.user !== '_NoUser') && (
                 <div>
                     <LatestActivity
                         searchID={this.state.user}
@@ -122,7 +122,7 @@ class Customers extends React.Component {
                         width: "100%",
                     }}
                 >
-                    <MenuItem value=""> Select a Customer </MenuItem>
+                    <MenuItem value="_NoUser"> Select a Customer </MenuItem>
                     {
                         this.state.userList.map(user => (
                             <MenuItem value={user.user_uid}> {user.first_name} {user.last_name} {user.user_uid} </MenuItem>
