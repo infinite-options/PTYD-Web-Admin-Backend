@@ -57,6 +57,37 @@ a {
   font-family: montserrat;
 }
 
+/* font */
+.font1,
+.font5 {
+  font-family: brandongrotw01-lightregular, sans-serif;
+}
+/* text font */
+.font2 {
+  font-family: "montserrat", sans-serif;
+}
+.font6 {
+  font-family: "Oswald", sans-serif;
+}
+
+.font9 {
+  font-size: 11px;
+  line-height: 0.8em;
+  text-align: center;
+  letter-spacing: 0.25em;
+  color: #e38b19;
+  font-weight: bold;
+  margin-top: -8px;
+}
+.logo-austin-houston {
+  margin-top: 10px;
+}
+
+.scrollMenu-profile {
+  overflow: auto;
+  height: 450px;
+}
+
 .btn.focus,
 .btn:focus {
   outline: 0;
@@ -635,7 +666,6 @@ a {
     display:block!important;
     width: 300px;
     margin:auto;
-    /* margin-left: 20px; */
   }
 }
 
@@ -1070,37 +1100,6 @@ hr.four {
 
 .feedback_marginTop {
   margin-top: 40px;
-}
-
-/* font */
-.font1,
-.font5 {
-  font-family: brandongrotw01-lightregular, sans-serif;
-}
-/* text font */
-.font2 {
-  font-family: "montserrat", sans-serif;
-}
-.font6 {
-  font-family: "Oswald", sans-serif;
-}
-
-.font9 {
-  font-size: 11px;
-  line-height: 0.8em;
-  text-align: center;
-  letter-spacing: 0.25em;
-  color: #e38b19;
-  font-weight: bold;
-  margin-top: -8px;
-}
-.logo-austin-houston {
-  margin-top: 10px;
-}
-
-.scrollMenu-profile {
-  overflow: auto;
-  height: 450px;
 }
 
 /* subscription page */
