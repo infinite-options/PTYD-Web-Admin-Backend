@@ -80,10 +80,10 @@ const App = props => {
 
   let stuff = !isAuthenticating && (
     <div>
-      <div className='row justify-content-center text-nowrap'>
+      <div className='row d-flex justify-content-center text-nowrap'>
+        
         <Navbar collapseOnSelect expand='lg'>
           <Navbar.Brand href='/'>
-            {/* <div className="navigation-logo-container"> */}
             <a className='navbar-brand' href='/'>
               <img src={logo} alt='Logo' className='logo' />
             </a>
@@ -91,17 +91,14 @@ const App = props => {
               <p className='font9'>AUSTIN &</p>
               <p className='font9'>HOUSTON</p>
             </div>
-            {/* </div> */}
           </Navbar.Brand>
 
           <Navbar.Toggle
+            style={{margin:'auto'}}
             aria-controls='responsive-navbar-nav'
-            // class="justify-content-md-end"
           />
           <Navbar.Collapse id='responsive-navbar-nav'>
             <Nav
-              // className="mr-auto"
-              // className="navbar fixed-top justify-content-center font2 navigation-container"
               activeKey='/home'
             >
               <Nav.Item className='navigation-link'>
@@ -193,7 +190,7 @@ const App = props => {
                     <div>
                       <a
                         href='/selectmealplan'
-                        className='top-btn1 top-btn1-primary font5'
+                        className='nav-get-started top-btn1 top-btn1-primary font5'
                       >
                         Get Started
                       </a>
@@ -224,8 +221,6 @@ const App = props => {
       </div>
 
       <div className='row justify-content-center'>
-        {/* <Content className="content-container"> */}
-        {/* <div className="page-content" /> */}
 
         <Main
           appProps={{
@@ -235,7 +230,6 @@ const App = props => {
             user_uid
           }}
         />
-        {/* </Content> */}
       </div>
 
       <div className='row justify-content-md-center'>

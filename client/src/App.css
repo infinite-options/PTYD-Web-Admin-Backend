@@ -57,6 +57,37 @@ a {
   font-family: montserrat;
 }
 
+.font1,
+.font5 {
+  font-family: brandongrotw01-lightregular, sans-serif;
+}
+/*text font*/
+.font2 {
+  font-family: "montserrat", sans-serif;
+}
+/*header font*/
+.font6 {
+  font-family: "Oswald", sans-serif;
+}
+
+.font9 {
+  font-size: 11px;
+  line-height: 0.8em;
+  text-align: center;
+  letter-spacing: 0.25em;
+  color: #e38b19;
+  font-weight: bold;
+  margin-top: -8px;
+}
+.logo-austin-houston {
+  margin-top: 10px;
+}
+
+.scrollMenu-profile {
+  overflow: auto;
+  height: 450px;
+}
+
 .btn.focus,
 .btn:focus {
   outline: 0;
@@ -70,11 +101,6 @@ a {
   background: white;
 }
 
-/* .navigation-logo-container {
-  text-align: center;
-  margin: 10px 30px 0 0;
-} */
-
 .logo {
   height: 60px;
   object-fit: cover;
@@ -83,12 +109,10 @@ a {
 .black-link,
 .black-link a {
   color:var(--black)!important;
-  /* align-self:flex-end; */
 }
 
 .navigation-link {
   margin: 50px 35px 0 35px;
-  /* vertical-align:text-bottom; */
   display:flex;
 }
 
@@ -138,7 +162,6 @@ a {
 }
 
 .footer-container {
-  /* padding-top: 20px; */
   margin-bottom: 20px;
 }
 
@@ -272,13 +295,11 @@ a {
   padding: 0;
 }
 .zero-waste-subtext {
-  /* text-align: center; */
   margin-left: 65px;
 }
 .zero-waste-cell {
   padding: 0 20px 0 20px;
   display: inline-block;
-  /* text-align: center; */
 }
 .zero-waste-subtitle {
   color: var(--green);
@@ -318,7 +339,6 @@ a {
 
 .four-items-subtitle {
   font-size: 27px;
-  /* font-family: oswald; */
 }
 .eat-better-now-button-container {
   margin-left: 30px;
@@ -538,6 +558,18 @@ a {
     margin: 20px 0 10px 10px;
     float: left;
   }
+  .nav-get-started {
+    text-align:left;
+    margin-left: -24px;
+  }
+  #loginButton {
+    float:left;
+    margin: 10px -24px;
+  }
+  .navigation-link {
+    margin: 10px 35px 0 0px;
+  }
+
   .top-left h1 {
     font-size:45px;
     line-height: 50px;
@@ -625,6 +657,16 @@ a {
     padding-left: 0px;
     text-align: center;
   }
+
+  /* weekly/next menu */
+  .mobile-menu-display-none {
+    display:none;
+  }
+  .no-display-desktop {
+    display:block!important;
+    width: 300px;
+    margin:auto;
+  }
 }
 
 @media only screen and (max-width: 767px) {
@@ -640,6 +682,21 @@ a {
   #logoutButton {
     margin: 20px 0 10px -40px;
     float:left;
+  }
+  .nav-get-started {
+    text-align:left;
+    margin-left: -40px;
+  }
+  #loginButton {
+    float:left;
+    margin-left: -40px;
+  }
+  #signupButton {
+    width: 300px!important;
+    padding: 8px 20px!important;
+  }
+  .navigation-link {
+    margin: 10px 35px 0 35px;
   }
 
   .content-section .landing {
@@ -754,6 +811,24 @@ a {
     padding-left: 60px;
     text-align: center;
   }
+  .mobile-weekly-menu {
+    width: 320px!important;
+  }
+  .mobile-weekly-menu-grid {
+    grid-template-columns:repeat(1, 1fr)!important;
+    margin: 0!important;
+  }
+  .mobile-weekly-menu-object {
+    margin: 10px!important;
+  }
+  .mobile-left {
+    width: 345px!important;
+    left: 12px;
+  }
+}
+
+.no-display-desktop {
+  display:none;
 }
 
 .top-right {
@@ -823,12 +898,6 @@ a {
 .override-form-control {
   color: #181818;
 }
-
-/* br {
-  display: block;
-  margin: 100px 100px;
-  line-height: 22px;
-} */
 
 .required-red {
   color: red;
@@ -1037,45 +1106,6 @@ hr.four {
   margin-top: 40px;
 }
 
-/* font */
-
-.font1,
-.font5 {
-  font-family: brandongrotw01-lightregular, sans-serif;
-}
-/* text font */
-.font2 {
-  font-family: "montserrat", sans-serif;
-}
-/* .font3 {
-  font-family: "Cousine", monospace;
-} */
-/* button */
-/* .font4 {
-  font-family: "Heebo", sans-serif;
-} */
-.font6 {
-  font-family: "Oswald", sans-serif;
-}
-
-.font9 {
-  font-size: 11px;
-  line-height: 0.8em;
-  text-align: center;
-  letter-spacing: 0.25em;
-  color: #e38b19;
-  font-weight: bold;
-  margin-top: -8px;
-}
-.logo-austin-houston {
-  margin-top: 10px;
-}
-
-.scrollMenu-profile {
-  overflow: auto;
-  height: 450px;
-}
-
 /* subscription page */
 .borderr {
   border-style: solid !important;
@@ -1094,13 +1124,6 @@ hr.four {
 .rcorner_color {
   background-color: #427c42;
 }
-/* #meal-sub-parent {
-  display: table;
-}
-#meal-sub-child {
-  display: table-cell;
-  vertical-align: middle;
-} */
 
 .border_card_subcribe {
   padding: 0px !important;

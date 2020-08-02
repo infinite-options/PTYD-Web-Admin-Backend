@@ -22,7 +22,6 @@ class WeeklyMenu extends Component {
     this.setState({ currentWeek: this.props.objectIndex });
     const res = await fetch(this.props.API_URL);
     const api = await res.json();
-    // console.log(api)
     const sundayDate = api.result[this.state.currentWeek].Sunday;
     const mondayDate = api.result[this.state.currentWeek].Monday;
     const deliveryDates = sundayDate + " & " + mondayDate;
@@ -33,7 +32,7 @@ class WeeklyMenu extends Component {
   render() {
     return (
       <main>
-        <div class="container text-center">
+        <div class="container text-center mobile-weekly-menu">
           <h3 class="font1">{this.props.header_label}</h3>
           <h5 class="font3" Style="margin-top:-10px;">
             {this.state.dates}
@@ -41,7 +40,7 @@ class WeeklyMenu extends Component {
           <hr/>
           <div
             class="row justify-content-md-center"
-            Style="margin-top:-10px; margin-bottom:-10px;"
+            Style="margin-top:-10px; margin-bottom:-10px;display:block;text-align:center"
           >
             <ul class="navbar-nav">
               <li class="nav-item font3">
@@ -59,26 +58,22 @@ class WeeklyMenu extends Component {
           <hr/>
 
           <div 
-          //grid of items plus margins/center
-          // id='menu-container'
-          style={{
-            // margin: "0 200px",
-            textAlign:"center",
-          }}>
+            style={{textAlign:"center"}}>
           <div 
-            //grid of items
+            className='mobile-weekly-menu-grid'
             style={{
               display:"grid",
-              gridTemplateColumns:"1fr 1fr 1fr",
+              gridTemplateColumns:"repeat(3, 1fr)",
+              // gridTemplateRows:"300px 300px"
+              gridTemplateRows:"repeat(2, auto)"
             }}
           >
             {Object.keys(this.state.meals).map(key =>
                 this.state.meals[key].Menu.map(meal => (
-                <div key={meal.meal_plan_id}
-                  //each item plus padding
-                  style={{
-                    margin: "30px",
-                  }}
+                <div 
+                  className='mobile-weekly-menu-object'
+                  key={meal.meal_plan_id}
+                  style={{margin: "30px"}}
                 >
                   <img
                     src={meal.meal_photo_url === null ? defaultMeal : meal.meal_photo_url}
@@ -92,7 +87,6 @@ class WeeklyMenu extends Component {
                   />
                   <div>
                     <div
-                      //meal titles (to show)
                       style={{
                         wordWrap:"break-word",
                         color: "grey",
@@ -100,14 +94,14 @@ class WeeklyMenu extends Component {
                       }}
                     >
                       <h4>{meal.meal_name}</h4>
-                      <p>
+                      <p className='mobile-menu-display-none'>
                         Cal {meal.meal_calories}, Prot {meal.protein}, Carb{" "}
                         {meal.meal_carbs}, Sug {meal.meal_sugar}, Fat{" "}
                         {meal.meal_fat}, Sat {meal.meal_sat}
                       </p>
 
-                      <p>Ingredients:</p>
-                      <p>{meal.meal_desc}</p>
+                      <p className='mobile-menu-display-none'>Ingredients:</p>
+                      <p className='mobile-menu-display-none'>{meal.meal_desc}</p>
 
                     </div>
                   </div>
@@ -117,8 +111,6 @@ class WeeklyMenu extends Component {
           </div>
         </div>
         </div>
-
-        
 
       </main>
     );
