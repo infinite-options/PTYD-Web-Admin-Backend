@@ -631,6 +631,12 @@ a {
   .mobile-menu-display-none {
     display:none;
   }
+  .no-display-desktop {
+    display:block!important;
+    width: 300px;
+    margin:auto;
+    /* margin-left: 20px; */
+  }
 }
 
 @media only screen and (max-width: 767px) {
@@ -785,6 +791,10 @@ a {
   .mobile-weekly-menu-object {
     margin: 10px!important;
   }
+}
+
+.no-display-desktop {
+  display:none;
 }
 
 .top-right {
