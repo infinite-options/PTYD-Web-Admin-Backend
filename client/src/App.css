@@ -821,6 +821,10 @@ a {
   .mobile-weekly-menu-object {
     margin: 10px!important;
   }
+  .mobile-left {
+    width: 345px!important;
+    left: 12px;
+  }
 }
 
 .no-display-desktop {

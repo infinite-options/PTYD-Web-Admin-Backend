@@ -239,7 +239,7 @@ export default class MealSchedule extends Component {
           <Cell col={8}>
             {/* run a loop to create 6 week's buttons */}
             {this.state.error === null ? (
-              <div className='container container_space'>
+              <div className='container container_space mobile-left'>
                 {sixWeekMenu.map(element => (
                   <MealButtons
                     key={element[0]}
@@ -319,6 +319,7 @@ export default class MealSchedule extends Component {
               addonCharge={this.state.addonCharge}
             />
           </div>
+          <br/>
 
         </Grid>
       </div>
