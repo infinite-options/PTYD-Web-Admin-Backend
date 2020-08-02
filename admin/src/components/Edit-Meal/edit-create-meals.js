@@ -534,8 +534,8 @@ class EditCreateMeal extends Component {
     if (this.state.unit2 === "cm") myType = "length";
 
     var unitData = {
-      recipe_unit : this.state.unit2,
-      common_unit : this.state.unit1,
+      recipe_unit: this.state.unit2,
+      common_unit: this.state.unit1,
       conversion_ratio: this.state.conversionRatio,
       type: myType,
     };
@@ -1105,9 +1105,9 @@ class EditCreateMeal extends Component {
                     <thead>
                       <tr>
                         <th>Ingredient</th>
-                        <th>Quantity</th>
-                        <th>Units</th>
-                        <th>Price Per Unit</th>
+                        <th>Package Size</th>
+                        <th>Package Unit</th>
+                        <th>Package Cost</th>
                       </tr>
                     </thead>
                     <tbody>{displayrowsingr}</tbody>
@@ -1299,9 +1299,7 @@ class EditCreateMeal extends Component {
             }}
           />
         </td>
-        <td>
-        {"="}
-        </td>
+        <td>{"="}</td>
         <td>
           <TextField
             id="outlined-number"
@@ -1316,13 +1314,13 @@ class EditCreateMeal extends Component {
           />
         </td>
         <td>
-        <TextField
-          required
-          id="outlined-required"
-          defaultValue="Hello World"
-          value={this.state.unit1}
-          variant="outlined"
-        />
+          <TextField
+            required
+            id="outlined-required"
+            defaultValue="Hello World"
+            value={this.state.unit1}
+            variant="outlined"
+          />
         </td>
         <td>
           <Button variant="primary" onClick={this.saveUnitConversion}>

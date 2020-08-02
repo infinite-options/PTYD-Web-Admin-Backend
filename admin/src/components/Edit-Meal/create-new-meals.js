@@ -39,6 +39,7 @@ class CreateNewMeal extends Component {
       details: [],
       mealidkey: [],
       allIngr: [],
+      allMeals: [],
       selection: 0,
       showAdd: false,
       allUnits: [],
@@ -71,8 +72,8 @@ class CreateNewMeal extends Component {
     };
   }
   async componentWillMount() {
-    //const res = await fetch(this.props.API_URL_CREATEMEAL);
-    //const api = await res.json();
+    const res = await fetch(this.props.API_URL_CREATEMEAL);
+    const api = await res.json();
     const res1 = await fetch(this.props.API_URL_ADDINGREDIENT);
     const api1 = await res1.json();
     const res2 = await fetch(this.props.API_URL_GETUNITS);
@@ -83,28 +84,19 @@ class CreateNewMeal extends Component {
     let ingrs = [];
     let unit = [];
     let ingrArr = [];
+    let allMeals = [];
     let mapIngrNameToIngrIdLocal = new Map();
     let mapIngrUnitMeasureIdLocal = new Map();
 
-    let dummyEntry = {
-      NewMealId: {
-        meal_name: "Create New Meal",
-        ingredients: [
-          {
-            name: "New Ingredient",
-            qty: 1,
-            units: "Cup",
-            ingredient_id: "NewIngrId",
-            measure_id: "130-000005",
-          },
-        ],
-      },
-    };
+  
 
     const createMeal = {
-      ...dummyEntry,
-      //...api.result,
+      ...api.result,
     };
+
+    for (var key in createMeal) {
+      allMeals.push(createMeal[key]["meal_name"]);
+    }
 
     if (api1.result.result != null) {
       console.log(api1.result.result);
@@ -161,6 +153,7 @@ class CreateNewMeal extends Component {
     this.setState({
       mealkeys: tempkeys,
       createMeal,
+      allMeals: allMeals,
       mealidkey: mealid,
       allIngr: ingrs,
       allUnits: unit,
@@ -410,6 +403,31 @@ class CreateNewMeal extends Component {
     this.setState({
       newMealName: e.target.value,
     });
+  };
+
+  setNewMealName2 = (newValue) => {
+    let currIngrNew = this.state.newMealName;
+    if (newValue) {
+      console.log("Changing State");
+      console.log(newValue);
+      console.log("Before");
+      console.log(currIngrNew);
+      if (newValue.inputValue) {
+        currIngrNew = newValue.inputValue;
+      } else {
+        currIngrNew = newValue.title;
+      }
+      console.log("After");
+      console.log(currIngrNew);
+      //Add
+      this.setState({
+        newMealName : currIngrNew,
+      });
+    } else {
+      this.setState({
+        newMealName : "New Meal",
+      });
+    }
   };
 
   saveNewEntry = () => {
@@ -986,7 +1004,7 @@ class CreateNewMeal extends Component {
                     <thead>
                       <tr>
                         <th colSpan="2">New Meal</th>
-                        <th colSpan="3">{this.dateDropdown()}</th>
+                        <th colSpan="3">{this.newMealDropdown()}</th>
                       </tr>
                     </thead>
                     <thead>
@@ -1261,6 +1279,69 @@ class CreateNewMeal extends Component {
           </Button>
         </td>
       </tr>
+    );
+  };
+
+  newMealDropdown = () => {
+    let tempmeal = [];
+    let ingrs = this.state.allMeals;
+    for (let i = 0; i < ingrs.length; i++) {
+      tempmeal.push({ title: ingrs[i] });
+    }
+
+    return (
+      <Autocomplete
+        defaultValue={this.state.newMealName}
+        value={this.state.newMealName}
+        onChange={(e, v) => {
+          console.log(v);
+          this.setNewMealName2(v);
+        }}
+       
+        filterOptions={(options, params) => {
+          console.log("filterOptions");
+          console.log(options);
+          console.log(params);
+          const filtered = filter(options, params);
+          console.log(filtered);
+
+          // Suggest the creation of a new value
+          if (params.inputValue !== "" && params.inputValue) {
+            filtered.push({
+              inputValue: params.inputValue,
+              title: `Add "${params.inputValue}"`,
+            });
+          }
+
+          return filtered;
+        }}
+        selectOnFocus
+        clearOnBlur
+        handleHomeEndKeys
+        id="Add New or Select"
+        options={tempmeal}
+        getOptionDisabled={(option) => this.state.allMeals.includes(option.title)}
+        getOptionLabel={(option) => {
+          // Value selected with enter, right from the input
+          //console.log("getOptionLabel");
+          //console.log(option);
+          if (typeof option === "string") {
+            return option;
+          }
+          // Add "xxx" option created dynamically
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          // Regular option
+          return option.title;
+        }}
+        renderOption={(option) => option.title}
+        style={{ width: 300 }}
+        freeSolo
+        renderInput={(params) => (
+          <TextField {...params} label="Add New Meal" variant="outlined" />
+        )}
+      />
     );
   };
 

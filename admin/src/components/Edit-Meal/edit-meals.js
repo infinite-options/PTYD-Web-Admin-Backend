@@ -980,7 +980,9 @@ class EditMeals extends Component {
                     <thead>
                       <tr>
                         <th colSpan="2">Current Selection</th>
-                        <th colSpan="3">{this.state.mealData[this.state.selIndex].meal_name}</th>
+                        <th colSpan="3">
+                          {this.state.mealData[this.state.selIndex].meal_name}
+                        </th>
                       </tr>
                     </thead>
                     <thead>
@@ -1012,11 +1014,15 @@ class EditMeals extends Component {
                       <tr>
                         <th colSpan="2">Meal Hint</th>
                         <th colSpan="3">
-                          <Input
-                            placeholder={this.state.MealHint}
+                          <TextField
+                            id="filled-multiline-flexible"
+                            multiline
+                            fullWidth
+                            margin="normal"
+                            rowsMax={2}
                             value={this.state.MealHint}
-                            inputProps={{ "aria-label": "description" }}
                             onChange={this.handleMealHint}
+                            variant="filled"
                           />
                         </th>
                       </tr>
