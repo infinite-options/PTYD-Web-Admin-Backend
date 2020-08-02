@@ -612,7 +612,7 @@ class Checkout extends Component {
                   </Form.Row>
                 </Form>
               </Col>
-              <Col style={{marginTop: "-50px"}}>
+              <Col>
                 <h5>Delivery Address</h5>
                 <Form>
                   <Form.Row>
