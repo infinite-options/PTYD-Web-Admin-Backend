@@ -229,11 +229,12 @@ export default class MealSchedule extends Component {
                 addonCharge={this.state.addonCharge}
               />
             </div>
-          </Cell>{" "}
+          </Cell>
+          
           <Cell col={8}>
             {/* run a loop to create 6 week's buttons */}
             {this.state.error === null ? (
-              <div className='container'>
+              <div className='container container_space'>
                 {sixWeekMenu.map(element => (
                   <MealButtons
                     key={element[0]}
