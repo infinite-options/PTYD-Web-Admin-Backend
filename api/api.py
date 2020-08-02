@@ -5823,7 +5823,7 @@ class PurchaseIdMeals(Resource):
                                 mp.meal_plan_desc,
                                 act_meal.selection_time,
                                 act_meal.meal_selection,
-                                act_meal.delivery_day
+                                IFNULL(act_meal.delivery_day, "Sunday")
                             FROM (
                                 SELECT * 
                                 FROM ptyd.ptyd_purchases pur
