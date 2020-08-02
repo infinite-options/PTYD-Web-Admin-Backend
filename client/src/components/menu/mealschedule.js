@@ -192,46 +192,47 @@ export default class MealSchedule extends Component {
                 />
               </Row>
 
-              <Row className='mb-1'>
-                <Button
-                  onClick={this.ChangeAccountInfo}
-                  size='lg'
-                  block
-                  disabled={!this.state.currentPurchase.purchase_id}
-                >
-                  Change Account Info
-                </Button>
-              </Row>
-
-
               <div className='visibility-hidden-mobile'>
-              {this.state.showHideMakeChange && (
-                <MakeChange
-                  searchCookie4LoggedInBy={this.searchCookie4LoggedInBy(
-                    "loginStatus"
-                  )}
-                  ChangeAccountInfo={this.ChangeAccountInfo}
-                  currentPurchase={this.state.currentPurchase}
-                  purchases={this.state.purchases}
-                  mealPlans={this.state.mealPlans}
-                  history={this.props.history}
-                  DEV_URL={this.props.DEV_URL}
-                  DELETE_URL={this.props.DELETE_URL}
-                  CHANGE_SUBCRIPTION_URL={this.props.CHANGE_SUBCRIPTION_URL}
-                  UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
-                  UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
-                  REFUND_URL={this.props.REFUND_URL}
-                  user_uid={this.state.userID}
-                  tax_rate={this.state.tax_rate}
-                  shipping={this.state.shipping}
-                />
-              )}
 
-              <AccountInfo
-                currentPurchase={this.state.currentPurchase}
-                addonCharge={this.state.addonCharge}
-              />
+                <Row className='mb-1'>
+                  <Button
+                    onClick={this.ChangeAccountInfo}
+                    size='lg'
+                    block
+                    disabled={!this.state.currentPurchase.purchase_id}
+                  >
+                    Change Account Info
+                  </Button>
+                </Row>
+                
+                {this.state.showHideMakeChange && (
+                  <MakeChange
+                    searchCookie4LoggedInBy={this.searchCookie4LoggedInBy(
+                      "loginStatus"
+                    )}
+                    ChangeAccountInfo={this.ChangeAccountInfo}
+                    currentPurchase={this.state.currentPurchase}
+                    purchases={this.state.purchases}
+                    mealPlans={this.state.mealPlans}
+                    history={this.props.history}
+                    DEV_URL={this.props.DEV_URL}
+                    DELETE_URL={this.props.DELETE_URL}
+                    CHANGE_SUBCRIPTION_URL={this.props.CHANGE_SUBCRIPTION_URL}
+                    UPDATE_ADDRESS_URL={this.props.UPDATE_ADDRESS_URL}
+                    UPDATE_PAYMENT_URL={this.props.UPDATE_PAYMENT_URL}
+                    REFUND_URL={this.props.REFUND_URL}
+                    user_uid={this.state.userID}
+                    tax_rate={this.state.tax_rate}
+                    shipping={this.state.shipping}
+                  />
+                )}
+
+                <AccountInfo
+                  currentPurchase={this.state.currentPurchase}
+                  addonCharge={this.state.addonCharge}
+                />
               </div>
+
             </div>
           </Cell>
           
@@ -273,9 +274,24 @@ export default class MealSchedule extends Component {
               </div>
             )}
           </Cell>
-          
+
           {/* mobile: display subscription details at page end */}
-          <div className='box no-display-desktop'>
+
+          <div className='no-display-desktop' style={{width:"270px"}}>
+            <Row className='mb-1'>
+              <Button
+                onClick={this.ChangeAccountInfo}
+                size='lg'
+                block
+                disabled={!this.state.currentPurchase.purchase_id}
+              >
+                Change Account Info
+              </Button>
+            </Row>
+          </div>
+
+          <div className='box no-display-desktop' style={{paddingTop:"0"}}>
+
             {this.state.showHideMakeChange && (
               <MakeChange
                 searchCookie4LoggedInBy={this.searchCookie4LoggedInBy(
