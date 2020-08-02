@@ -3,6 +3,7 @@ import axios from "axios";
 import {Breadcrumbs, InputLabel, Link, MenuItem, Paper, Select, Typography} from "@material-ui/core";
 
 import LatestActivity from "./LatestActivity";
+import Delivery from "./Delivery";
 import PurchaseIdMeals from "./PurchaseIdMeals";
 import AllPayments from "./AllPayments";
 
@@ -34,9 +35,11 @@ class Customers extends React.Component {
                     result = a.user_uid.localeCompare(b.user_uid);
                     return result;
                 })
+                let storedUser = localStorage.getItem('user');
                 curComponent.setState({
                     userList: data,
-                })
+                    user: (storedUser ? storedUser : ''),
+                });
             })
             .catch(function(error) {
                 console.log(error);
@@ -47,6 +50,13 @@ class Customers extends React.Component {
         this.setState({
             purchase: purchaseId
         })
+    }
+
+    setUserId = (event) => {
+        this.setState({
+            user: event.target.value,
+        });
+        localStorage.setItem('user',event.target.value)
     }
 
     render() {
@@ -67,6 +77,18 @@ class Customers extends React.Component {
                     {
                     this.state.purchase !== '' && (
                         <div>
+                             <Paper style={
+                            {   maxWidth: 'max-content',
+                                padding: '2px 4px',
+                                display: 'flex',
+                                alignItems: 'center',}
+                            }>
+                                <Typography variant="body1"> Purchase Id: {this.state.purchase} </Typography>
+                            </Paper>
+                            <Delivery
+                                purchaseID={this.state.purchase}
+                                DELIVERY_API_URL={this.props.DELIVERY_API_URL}
+                            />
                             <PurchaseIdMeals
                                 purchaseID={this.state.purchase}
                                 PURCHASE_MEAL_API_URL={this.props.PURCHASE_MEAL_API_URL}
@@ -95,12 +117,7 @@ class Customers extends React.Component {
                 <Typography variant='body1'> &nbsp;&nbsp;User&nbsp;&nbsp;&nbsp;&nbsp; </Typography>
                 <Select
                     value={this.state.user}
-                    onChange={(event) => {
-                        this.setState({
-                            user: event.target.value,
-                            purchase: '',
-                        })
-                    }}
+                    onChange={this.setUserId}
                     style={{
                         width: "100%",
                     }}

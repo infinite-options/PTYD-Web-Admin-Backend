@@ -17,6 +17,7 @@ class CreateMenu extends Component {
       details: [],
       selection: 0,
       showAdd: false,
+      pastDateMeal: false,
       selectionOfDropMenu: [], //remembering Meal selection dropdown
 
       /**
@@ -41,6 +42,8 @@ class CreateMenu extends Component {
     const avg = api.result;
 
     let tempkeys = []; //dates
+    let pastkeys = [];
+    let futurekeys = [];
     let mealMap = {}; //meal to int
     let categorykey = []; //["Entree", "Breakfast", "Salad",...]
     let mealToAvgPostMap = {};
@@ -68,10 +71,12 @@ class CreateMenu extends Component {
     for (let key of Object.keys(createMenu)) {
       //
       var mydate = new Date(key);
-      if (mydate >= today) tempkeys.push(key);
+      if (mydate >= today) futurekeys.push(key);
+      else pastkeys.push(key);
     }
 
     // tempkeys = tempkeys.reverse();
+    tempkeys = [...futurekeys, ...pastkeys];
     let x = tempkeys[0];
     let len = createMenu[x].length;
     let tempSelectionOfDropMenu = new Array(len).fill(0);
@@ -82,6 +87,11 @@ class CreateMenu extends Component {
     }
     // let temp_newMealName = avg[categorykey[0]];
     // console.log("rtempkeys", avg[categorykey[0]][0].Avg_Sales_Posting);
+    if (pastkeys.includes(x)) {
+      this.setState({
+        pastDateMeal: true,
+      });
+    }
 
     this.setState(
       {
@@ -94,6 +104,7 @@ class CreateMenu extends Component {
         categorykey, //[Soup, Breakfast, Entree, ...]
         addingSelection: 0,
         mealToAvgPostMap,
+        pastkeys,
         // newMealName: temp_newMealName
       },
       () => {
@@ -111,6 +122,15 @@ class CreateMenu extends Component {
     let initArr = this.state.createMenu[x];
     for (let i = 0; i < len; i++) {
       tempSelectionOfDropMenu[i] = this.state.mealMap[initArr[i]["Meal_Name"]];
+    }
+    if (this.state.pastkeys.includes(x)) {
+      this.setState({
+        pastDateMeal: true,
+      });
+    } else {
+      this.setState({
+        pastDateMeal: false,
+      });
     }
 
     this.setState({
@@ -146,12 +166,21 @@ class CreateMenu extends Component {
       return <div></div>;
     }
     for (let i = 0; i < arr.length; i++) {
-      let tempelement = (
+      let tempelement = this.state.pastDateMeal ? (
+        <tr>
+          <td>{arr[i].Menu_Type}</td>
+          <td>{arr[i].Meal_Name}</td>
+          <td>{arr[i].Meal_Cat}</td>
+          <td>{arr[i].Menu_Category}</td>
+          <td>{arr[i].Default_Meal}</td>
+        </tr>
+      ) : (
         <tr>
           <td>{arr[i].Menu_Type}</td>
           <td>{this.mealDropdown(arr[i].Meal_Name, i)}</td>
           <td>{arr[i].Meal_Cat}</td>
           <td>{arr[i].Menu_Category}</td>
+          <td>{arr[i].Default_Meal}</td>
         </tr>
       );
       displayrows.push(tempelement);
@@ -181,18 +210,23 @@ class CreateMenu extends Component {
                   <th>Meal</th>
                   <th>Meal Category</th>
                   <th>Menu Category</th>
+                  <th>Default Meal</th>
                 </tr>
               </thead>
               <tbody>{displayrows}</tbody>
               {this.state.addShow ? this.addRowTemplate() : <div></div>}
             </Table>
-            <Button
-              variant="success"
-              className="float-right"
-              onClick={this.postMenuForThisDate}
-            >
-              Save
-            </Button>
+            {this.state.pastDateMeal ? (
+              <div></div>
+            ) : (
+              <Button
+                variant="success"
+                className="float-right"
+                onClick={this.postMenuForThisDate}
+              >
+                Save
+              </Button>
+            )}
           </Col>
           <Col></Col>
         </Row>
