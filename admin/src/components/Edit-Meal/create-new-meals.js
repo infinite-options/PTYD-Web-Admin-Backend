@@ -13,6 +13,11 @@ import TextField from "@material-ui/core/TextField";
 import { SingleSelect, ColorSelect } from "react-select-material-ui";
 import ReactSelectMaterialUi from "react-select-material-ui";
 import axios from "axios";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import Autocomplete, {
   createFilterOptions,
@@ -87,8 +92,6 @@ class CreateNewMeal extends Component {
     let allMeals = [];
     let mapIngrNameToIngrIdLocal = new Map();
     let mapIngrUnitMeasureIdLocal = new Map();
-
-  
 
     const createMeal = {
       ...api.result,
@@ -420,14 +423,24 @@ class CreateNewMeal extends Component {
       console.log("After");
       console.log(currIngrNew);
       //Add
-      this.setState({
-        newMealName : currIngrNew,
+      this.setState({ newMealName: currIngrNew }, () => {
+        if (this.state.allMeals.includes(currIngrNew))
+          this.setState({
+            openMealDialog: true,
+          });
       });
     } else {
       this.setState({
-        newMealName : "New Meal",
+        newMealName: "New Meal",
       });
     }
+  };
+
+  closeMealDialog = (e) => {
+    this.setState({
+      openMealDialog : false,
+      newMealName: "New Meal",
+    });
   };
 
   saveNewEntry = () => {
@@ -1166,6 +1179,24 @@ class CreateNewMeal extends Component {
           </Grid>
           <Divider />
         </Grid>
+        <Dialog
+          open={this.state.openMealDialog}
+          onClose={this.closeMealDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Warning!"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Meal {this.state.newMealName} already exists!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeMealDialog} color="primary" autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -1297,7 +1328,6 @@ class CreateNewMeal extends Component {
           console.log(v);
           this.setNewMealName2(v);
         }}
-       
         filterOptions={(options, params) => {
           console.log("filterOptions");
           console.log(options);
@@ -1320,7 +1350,9 @@ class CreateNewMeal extends Component {
         handleHomeEndKeys
         id="Add New or Select"
         options={tempmeal}
-        getOptionDisabled={(option) => this.state.allMeals.includes(option.title)}
+        getOptionDisabled={(option) =>
+          this.state.allMeals.includes(option.title)
+        }
         getOptionLabel={(option) => {
           // Value selected with enter, right from the input
           //console.log("getOptionLabel");

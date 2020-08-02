@@ -13,6 +13,11 @@ import TextField from "@material-ui/core/TextField";
 import { SingleSelect, ColorSelect } from "react-select-material-ui";
 import ReactSelectMaterialUi from "react-select-material-ui";
 import axios from "axios";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import Autocomplete, {
   createFilterOptions,
@@ -54,7 +59,7 @@ class EditCreateMeal extends Component {
       mapIngrNameToIngrId: new Map(),
       mapIngrUnitMeasureId: new Map(),
       newMealName: "New Meal",
-      brandNewIngr: "New Ingredient Name",
+      brandNewIngr: "New Ingredient",
       newUnitName: "None",
       brandNewQty: 1,
       brandNewIngrPrice: 5,
@@ -66,6 +71,8 @@ class EditCreateMeal extends Component {
       conversionRatio: 1,
       unitType: ["Mass", "Volume", "Length"],
       selUnitType: 0,
+      openIngrDialog: false,
+      openUnitDialog: false,
     };
   }
   async componentWillMount() {
@@ -190,6 +197,208 @@ class EditCreateMeal extends Component {
       mapIngrUnitMeasureId: mapIngrUnitMeasureIdLocal,
     });
   }
+
+  setNewIngrName = (newValue) => {
+    let currIngrNew = this.state.brandNewIngr;
+    if (newValue) {
+      console.log("Changing State");
+      console.log(newValue);
+      console.log("Before");
+      console.log(currIngrNew);
+      if (newValue.inputValue) {
+        currIngrNew = newValue.inputValue;
+      } else {
+        currIngrNew = newValue.title;
+      }
+      console.log("After");
+      console.log(currIngrNew);
+      //Add
+      this.setState({ brandNewIngr: currIngrNew }, () => {
+        if (this.state.allIngr.includes(currIngrNew))
+          this.setState({
+            openIngrDialog: true,
+          });
+      });
+    } else {
+      this.setState({
+        brandNewIngr: "New Ingredient",
+      });
+    }
+  };
+
+  closeIngrDialog = (e) => {
+    this.setState({
+      openIngrDialog : false,
+      brandNewIngr: "New Ingredient",
+    });
+  };
+  closeUnitDialog = (e) => {
+    this.setState({
+      openUnitDialog : false,
+      unit2: "None",
+    });
+  };
+
+
+  bNewIngrDropdown = () => {
+    let tempmeal = [];
+    let ingrs = this.state.allIngr;
+    for (let i = 0; i < ingrs.length; i++) {
+      tempmeal.push({ title: ingrs[i] });
+    }
+
+    return (
+      <Autocomplete
+        defaultValue={this.state.brandNewIngr}
+        value={this.state.brandNewIngr}
+        onChange={(e, v) => {
+          console.log(v);
+          this.setNewIngrName(v);
+        }}
+        filterOptions={(options, params) => {
+          console.log("filterOptions");
+          console.log(options);
+          console.log(params);
+          const filtered = filter(options, params);
+          console.log(filtered);
+
+          // Suggest the creation of a new value
+          if (params.inputValue !== "" && params.inputValue) {
+            filtered.push({
+              inputValue: params.inputValue,
+              title: `Add "${params.inputValue}"`,
+            });
+          }
+
+          return filtered;
+        }}
+        selectOnFocus
+        clearOnBlur
+        handleHomeEndKeys
+        id="Add New or Select"
+        options={tempmeal}
+        getOptionDisabled={(option) =>
+          this.state.allIngr.includes(option.title)
+        }
+        getOptionLabel={(option) => {
+          // Value selected with enter, right from the input
+          //console.log("getOptionLabel");
+          //console.log(option);
+          if (typeof option === "string") {
+            return option;
+          }
+          // Add "xxx" option created dynamically
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          // Regular option
+          return option.title;
+        }}
+        renderOption={(option) => option.title}
+        style={{ width: 300 }}
+        freeSolo
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Add New Ingredient"
+            variant="outlined"
+          />
+        )}
+      />
+    );
+  };
+
+  setNewUnitName = (newValue) => {
+    let currIngrNew = this.state.unit2;
+    if (newValue) {
+      console.log("Changing State");
+      console.log(newValue);
+      console.log("Before");
+      console.log(currIngrNew);
+      if (newValue.inputValue) {
+        currIngrNew = newValue.inputValue;
+      } else {
+        currIngrNew = newValue.title;
+      }
+      console.log("After");
+      console.log(currIngrNew);
+      //Add
+      this.setState({ unit2: currIngrNew }, () => {
+        if (this.state.allUnits.includes(currIngrNew))
+          this.setState({
+            openUnitDialog: true,
+          });
+      });
+    } else {
+      this.setState({
+        unit2: "None",
+      });
+    }
+  };
+
+  bNewUnitDropdown = () => {
+    let tempmeal = [];
+    let ingrs = this.state.allUnits;
+    for (let i = 0; i < ingrs.length; i++) {
+      tempmeal.push({ title: ingrs[i] });
+    }
+
+    return (
+      <Autocomplete
+        defaultValue={this.state.unit2}
+        value={this.state.unit2}
+        onChange={(e, v) => {
+          console.log(v);
+          this.setNewUnitName(v);
+        }}
+        filterOptions={(options, params) => {
+          console.log("filterOptions");
+          console.log(options);
+          console.log(params);
+          const filtered = filter(options, params);
+          console.log(filtered);
+
+          // Suggest the creation of a new value
+          if (params.inputValue !== "" && params.inputValue) {
+            filtered.push({
+              inputValue: params.inputValue,
+              title: `Add "${params.inputValue}"`,
+            });
+          }
+
+          return filtered;
+        }}
+        selectOnFocus
+        clearOnBlur
+        handleHomeEndKeys
+        id="Add New or Select"
+        options={tempmeal}
+        getOptionDisabled={(option) =>
+          this.state.allUnits.includes(option.title)
+        }
+        getOptionLabel={(option) => {
+          // Value selected with enter, right from the input
+          //console.log("getOptionLabel");
+          //console.log(option);
+          if (typeof option === "string") {
+            return option;
+          }
+          // Add "xxx" option created dynamically
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          // Regular option
+          return option.title;
+        }}
+        renderOption={(option) => option.title}
+        style={{ width: 300 }}
+        freeSolo
+        renderInput={(params) => (
+          <TextField {...params} label="Add New Unit" variant="outlined" />
+        )}
+      />
+    );
+  };
 
   handleBNewIngrName = (event) => {
     this.setState({ brandNewIngr: event.target.value });
@@ -1144,6 +1353,42 @@ class EditCreateMeal extends Component {
             </div>
           </Grid>
         </Grid>
+        <Dialog
+          open={this.state.openIngrDialog}
+          onClose={this.closeIngrDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Warning!"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Ingredeint {this.state.brandNewIngr} already exists!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeIngrDialog} color="primary" autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.openUnitDialog}
+          onClose={this.closeUnitDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Warning!"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Unit {this.state.unit2} already exists!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeUnitDialog} color="primary" autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -1221,13 +1466,7 @@ class EditCreateMeal extends Component {
   addFirstIngrRow = () => {
     return (
       <tr>
-        <td>
-          <input
-            type="text"
-            value={this.state.brandNewIngr}
-            onChange={this.handleBNewIngrName}
-          />
-        </td>
+        <td>{this.bNewIngrDropdown()}</td>
         <td>
           <input
             type="number"
@@ -1284,21 +1523,7 @@ class EditCreateMeal extends Component {
     return (
       <tr>
         <td>{this.unit1Dropdown()}</td>
-        <td>
-          <TextField
-            autoFocus
-            required
-            id="outlined-required"
-            variant="outlined"
-            type="text"
-            value={this.state.unit2}
-            onChange={(e) => {
-              this.setState({
-                unit2: e.target.value,
-              });
-            }}
-          />
-        </td>
+        <td>{this.bNewUnitDropdown()}</td>
         <td>{"="}</td>
         <td>
           <TextField
