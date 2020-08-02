@@ -35,9 +35,11 @@ class Customers extends React.Component {
                     result = a.user_uid.localeCompare(b.user_uid);
                     return result;
                 })
+                let storedUser = localStorage.getItem('user');
                 curComponent.setState({
                     userList: data,
-                })
+                    user: (storedUser ? storedUser : ''),
+                });
             })
             .catch(function(error) {
                 console.log(error);
@@ -48,6 +50,13 @@ class Customers extends React.Component {
         this.setState({
             purchase: purchaseId
         })
+    }
+
+    setUserId = (event) => {
+        this.setState({
+            user: event.target.value,
+        });
+        localStorage.setItem('user',event.target.value)
     }
 
     render() {
@@ -108,12 +117,7 @@ class Customers extends React.Component {
                 <Typography variant='body1'> &nbsp;&nbsp;User&nbsp;&nbsp;&nbsp;&nbsp; </Typography>
                 <Select
                     value={this.state.user}
-                    onChange={(event) => {
-                        this.setState({
-                            user: event.target.value,
-                            purchase: '',
-                        })
-                    }}
+                    onChange={this.setUserId}
                     style={{
                         width: "100%",
                     }}

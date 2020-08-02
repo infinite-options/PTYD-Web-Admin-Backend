@@ -86,6 +86,8 @@ class Delivery extends React.Component {
                     data={this.state.data}
                     options={{
                         tableLayout: 'auto',
+                        pageSize: 1,
+                        pageSizeOptions: [1,3],
                     }}
                     style={{ margin: "10px 0" }}
                 />
