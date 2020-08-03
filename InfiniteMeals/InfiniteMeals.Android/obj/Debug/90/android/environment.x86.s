@@ -2,8 +2,8 @@
 	.section	.rodata.env.str.1,"aMS",@progbits,1
 	.type	.L.env.str.1, @object
 .L.env.str.1:
-	.asciz	"com.companyname.infinitemeals"
-	.size	.L.env.str.1, 30
+	.asciz	"com.infiniteoptions.PrepToYourDoor"
+	.size	.L.env.str.1, 35
 	.section	.data.application_config,"aw",@progbits
 	.type	application_config, @object
 	.p2align	2
@@ -71,7 +71,7 @@ mono_aot_mode_name:
 	.section	.rodata.env.str.8,"aMS",@progbits,1
 	.type	.L.env.str.8, @object
 .L.env.str.8:
-	.asciz	"7d469709-0225-4f2f-869b-579efeae2a8d"
+	.asciz	"30257e20-e7ed-4051-9a50-4f9066ac3b72"
 	.size	.L.env.str.8, 37
 	.section	.rodata.env.str.9,"aMS",@progbits,1
 	.type	.L.env.str.9, @object

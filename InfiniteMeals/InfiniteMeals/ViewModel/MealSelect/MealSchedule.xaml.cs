@@ -47,7 +47,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private List<String> AllSaturdays = new List<String>();
         private List<String> AllMondays = new List<String>();
         public static List<MealScheduleSaves.MealScheduleSavedColors> mss = new List<MealScheduleSaves.MealScheduleSavedColors>();
-        MealChoices mc = (MealChoices)FormatterServices.GetUninitializedObject(typeof(MealChoices));
         private static string userID;
         private static string mealPlanNo;
         private static int mealPlanNoTEST;
@@ -72,7 +71,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             this.ToolbarItems.Add(totalBar);
             this.ToolbarItems.Add(totalBar2);
 
-            userID = mc.getUserAcct();
+            userID = App.Database.GetLastItem().UserUid;
 
             // Function Calls
             getZipcode();
@@ -100,7 +99,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             this.ToolbarItems.Add(totalBar);
             this.ToolbarItems.Add(totalBar2);
 
-            userID = mc.getUserAcct();
+            userID = App.Database.GetLastItem().UserUid;
 
             // Function Calls
             getZipcode();
