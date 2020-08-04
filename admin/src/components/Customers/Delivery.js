@@ -15,17 +15,23 @@ class Delivery extends React.Component {
 
     componentDidMount() {
         let curComponent = this;
-        axios
-            .get(`${this.props.DELIVERY_API_URL}/${this.props.purchaseID}`)
-            .then(function (res) {
-                curComponent.setState({
-                    loaded: true,
-                    data: res.data.result.result,
+        if(this.props.purchaseID === '') {
+            curComponent.setState({
+                loaded: true,
+            })
+        } else {
+            axios
+                .get(`${this.props.DELIVERY_API_URL}/${this.props.purchaseID}`)
+                .then(function (res) {
+                    curComponent.setState({
+                        loaded: true,
+                        data: res.data.result.result,
+                    })
                 })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -37,7 +43,7 @@ class Delivery extends React.Component {
     fetchData = () => {
         let curComponent = this;
         axios
-            .get(`${this.props.PURCHASE_MEAL_API_URL}/${this.props.purchaseID}`)
+            .get(`${this.props.DELIVERY_API_URL}/${this.props.purchaseID}`)
             .then(function (res) {
                 curComponent.setState({
                     data: res.data.result.result,
@@ -50,11 +56,11 @@ class Delivery extends React.Component {
 
     render() {
         if(!this.state.loaded) {
-            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Delivery Info </Typography>
+            return <Typography variant="h6"> Loading Delivery Info </Typography>
         }
         return (
-            <div style={{ margin: "30px 0" }}>
-                <MaterialTable
+            <div style={{ margin: "15px 0" }}>
+                {/* <MaterialTable
                     title="Delivery Information"
                     columns={[
                         {   title: 'Delivery First Name',
@@ -90,9 +96,35 @@ class Delivery extends React.Component {
                         pageSizeOptions: [1,3],
                     }}
                     style={{ margin: "10px 0" }}
-                />
+                /> */}
+                <Typography variant="h5"> Delivery Info </Typography>
+                {this.deliveryInfo()}
             </div>
         );
+    }
+
+    deliveryInfo = () => {
+        if(this.props.purchaseID === '') {
+            return (
+                <Typography variant="body1"> Select Purchase to see delivery information </Typography>
+            )
+        }
+        let deliveryData = this.state.data[0];
+        if(!deliveryData) {
+            return ( <Typography variant="body1"> No Delivery Information </Typography> );
+        }
+        return (
+        <div>
+            <Typography variant="h6"> Contact Information </Typography>
+            <Typography variant="body1"> Name: {deliveryData.delivery_first_name} {deliveryData.delivery_last_name} </Typography>
+            <Typography variant="body1"> Phone: {deliveryData.delivery_first_phone} </Typography>
+            <Typography variant="h6"> Address </Typography>
+            <Typography variant="body1"> {deliveryData.delivery_address}  {deliveryData.delivery_address_unit} </Typography>
+            <Typography variant="body1"> {deliveryData.delivery_city} {deliveryData.delivery_state} {deliveryData.delivery_zip} </Typography>
+            <Typography variant="h6"> Instructions </Typography>
+            <Typography variant="body1"> {deliveryData.delivery_instructions} </Typography>
+        </div>
+        )
     }
 };
 

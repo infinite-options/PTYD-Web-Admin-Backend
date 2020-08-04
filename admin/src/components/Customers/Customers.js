@@ -1,18 +1,20 @@
 import React from "react";
 import axios from "axios";
-import {Breadcrumbs, InputLabel, Link, MenuItem, Paper, Select, Typography} from "@material-ui/core";
+import {Breadcrumbs, Grid, Link, MenuItem, Paper, Select, Typography} from "@material-ui/core";
 
 import LatestActivity from "./LatestActivity";
 import Delivery from "./Delivery";
 import PurchaseIdMeals from "./PurchaseIdMeals";
 import AllPayments from "./AllPayments";
 
+let noUser = '_NoUser';
+
 class Customers extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             userList: [],
-            user: '_NoUser',
+            user: noUser,
             purchase: '',
         }
     }
@@ -38,7 +40,7 @@ class Customers extends React.Component {
                 let storedUser = localStorage.getItem('user');
                 curComponent.setState({
                     userList: data,
-                    user: (storedUser ? storedUser : '_NoUser'),
+                    user: (storedUser ? storedUser : noUser),
                 });
             })
             .catch(function(error) {
@@ -66,53 +68,61 @@ class Customers extends React.Component {
                     <Link color="inherit">Admin Site</Link>
                     <Typography color="textPrimary">Customers</Typography>
                 </Breadcrumbs>
-                { this.userListDropDwon() }
-                { (this.state.user !== '' && this.state.user !== '_NoUser') && (
-                <div>
-                    <LatestActivity
-                        searchID={this.state.user}
-                        LATESTACTIVITY_API_URL={this.props.LATESTACTIVITY_API_URL}
-                        selectPurchaseId={this.selectPurchaseId}
-                    />
-                    {
-                    this.state.purchase !== '' && (
-                        <div>
-                             <Paper style={
-                            {   maxWidth: 'max-content',
-                                padding: '2px 4px',
-                                display: 'flex',
-                                alignItems: 'center',}
-                            }>
-                                <Typography variant="body1"> Purchase Id: {this.state.purchase} </Typography>
-                            </Paper>
-                            <Delivery
-                                purchaseID={this.state.purchase}
-                                DELIVERY_API_URL={this.props.DELIVERY_API_URL}
-                            />
+                <Grid container>
+                    <Grid item xs={12} md={6}>
+                        { this.userListDropDown() }
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        { this.showPurchaseId() }
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <LatestActivity
+                            searchID={this.state.user}
+                            noUser={noUser}
+                            LATESTACTIVITY_API_URL={this.props.LATESTACTIVITY_API_URL}
+                            selectPurchaseId={this.selectPurchaseId}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={2}>
+                        <Delivery
+                            purchaseID={this.state.purchase}
+                            DELIVERY_API_URL={this.props.DELIVERY_API_URL}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={10}>
+                    <Grid container>
+                        <Grid item xs={12}>
                             <PurchaseIdMeals
                                 purchaseID={this.state.purchase}
                                 PURCHASE_MEAL_API_URL={this.props.PURCHASE_MEAL_API_URL}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
                             <AllPayments
                                 userID={this.state.user}
+                                noUser={noUser}
                                 purchaseID={this.state.purchase}
                                 ALLPAYMENTS_API_URL={this.props.ALLPAYMENTS_API_URL}
-                            />
-                        </div>
-                    )}
-                </div>
-                )}
+                            /> 
+                        </Grid>
+                    </Grid>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
 
-    userListDropDwon = () => {
+    userListDropDown = () => {
         return (
             <Paper style={{
                 padding: '2px 4px',
+                margin: '5px 0',
                 display: 'flex',
                 alignItems: 'center',
-                width: '350px'
+                maxWidth: '350px',
+                height: '40px'
             }}>
                 <Typography variant='body1'> &nbsp;&nbsp;User&nbsp;&nbsp;&nbsp;&nbsp; </Typography>
                 <Select
@@ -122,13 +132,28 @@ class Customers extends React.Component {
                         width: "100%",
                     }}
                 >
-                    <MenuItem value="_NoUser"> Select a Customer </MenuItem>
+                    <MenuItem value={noUser}> Select a Customer </MenuItem>
                     {
                         this.state.userList.map(user => (
-                            <MenuItem value={user.user_uid}> {user.first_name} {user.last_name} {user.user_uid} </MenuItem>
+                            <MenuItem value={user.user_uid} key={user.user_uid}> {user.first_name} {user.last_name} {user.user_uid} </MenuItem>
                         ))
                     }
                 </Select>
+            </Paper>
+        )
+    }
+
+    showPurchaseId = () => {
+        return (
+            <Paper style={{   
+                padding: '2px 4px',
+                margin: '5px 0',
+                display: 'flex',
+                alignItems: 'center',
+                maxWidth: '350px',
+                height: '40px'
+            }}>
+                <Typography variant="body1"> Purchase Id: {this.state.purchase ? this.state.purchase : 'No Purchases selected'} </Typography>
             </Paper>
         )
     }

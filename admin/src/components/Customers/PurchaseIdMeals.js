@@ -15,17 +15,23 @@ class PurchaseIdMeals extends React.Component {
 
     componentDidMount() {
         let curComponent = this;
-        axios
-            .get(`${this.props.PURCHASE_MEAL_API_URL}/${this.props.purchaseID}`)
-            .then(function (res) {
-                curComponent.setState({
-                    loaded: true,
-                    data: res.data.result.result,
+        if(this.props.purchaseID === '') {
+            curComponent.setState({
+                loaded: true,
+            })
+        } else {
+            axios
+                .get(`${this.props.PURCHASE_MEAL_API_URL}/${this.props.purchaseID}`)
+                .then(function (res) {
+                    curComponent.setState({
+                        loaded: true,
+                        data: res.data.result.result,
+                    })
                 })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -50,45 +56,15 @@ class PurchaseIdMeals extends React.Component {
 
     render() {
         if(!this.state.loaded) {
-            return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Weekly Meal Selections </Typography>
+            return <Typography variant="body1" style={{ margin: '15px 0' }} > Loading Weekly Meal Selections </Typography>
         }
         return (
-            <div style={{ margin: "30px 0" }}>
+            <div style={{ margin: "15px 0" }}>
                 <MaterialTable
                     title="Weekly Meal Selections"
                     columns={[
-                        // {   title: 'Delivery First Name',
-                        //     field: 'delivery_first_name',
-                        //     width: 90,
-                        // },
-                        // {   title: 'Delivery Last Name',
-                        //     field: 'delivery_last_name',
-                        //     width: 90,
-                        // },
-                        // {   title: 'Delivery Phone',
-                        //     field: 'delivery_phone',
-                        // },
-                        // {   title: 'Delivery Address',
-                        //     field: 'delivery_address',
-                        //     width: 120,
-                        // },
-                        // {   title: 'Delivery Address Unit',
-                        //     field: 'delivery_address_unit',
-                        // },
-                        // {   title: 'Delivery City',
-                        //     field: 'delivery_city',
-                        // },
-                        // {   title: 'Delivery ZIP',
-                        //     field: 'delivery_zip',
-                        //     width: 90,
-                        // },
-                        // {
-                        //     title: 'Delivery Instructions',
-                        //     field: 'delivery_instructions',
-                        // },
                         {   title: 'Meal Plan Description',
                             field: 'meal_plan_desc',
-                            // width: 240,
                         },
                         {   title: 'Saturday',
                             field: 'Saturday',
@@ -98,14 +74,31 @@ class PurchaseIdMeals extends React.Component {
                         },
                         {   title: 'Meal Plan Selection',
                             field: 'meal_name',
-                            // width: 300, 
                         },
                     ]}
                     data={this.state.data}
                     options={{
-                        // tableLayout: 'fixed',
+                        cellStyle: {
+                            lineHeight: 1.2,
+                            padding: 5,
+                        },
+                        headerStyle: {
+                            lineHeight: 1.2,
+                            padding: 5,
+                        },
+                        maxBodyHeight: 160,
+                        pageSize: 5,
+                        pageSizeOptions: [5],
                     }}
-                    style={{ margin: "10px 0" }}
+                    components={{
+                        Toolbar: props => (
+                            <div style={{
+                                padding: '10px 0 0 15px'
+                            }}>
+                                <Typography variant="h6"> {props.title} </Typography>
+                            </div>
+                        ),
+                    }}
                 />
             </div>
         );
