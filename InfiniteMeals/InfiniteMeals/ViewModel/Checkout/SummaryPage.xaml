@@ -36,6 +36,7 @@
                     <RowDefinition/>    <!-- estimated tax + estimated tax cost-->
                     <RowDefinition/>    <!-- total cost -->
                     <RowDefinition/>
+                    <RowDefinition Height="1.85*"/>
                 </Grid.RowDefinitions>
 
                 <!-- order summary header-->
@@ -43,11 +44,9 @@
 
                 <!-- meal plan + payment option + cost -->
                 <StackLayout Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" Padding="10,0,0,0">
-                    <Label x:Name="mealPlan" Grid.Row="1" TextColor="Black"/>
-                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="-" TextColor="Black"/>
-                    <Label x:Name="paymentOption" Grid.Row="1" HorizontalOptions="End" TextColor="Black"/>
+                    <Label x:Name="fullPlan" Grid.Row="1" TextColor="Black"/>
                 </StackLayout>
-                <Label Grid.Column="1" Grid.Row="1" Text="{Binding shippingInformation.subscriptionPlan.cost, StringFormat='${0:F2}'}" TextColor="Black" HorizontalOptions="End"/>
+                <Label x:Name="totalCostLabel" Grid.Column="1" Grid.Row="1" Text="{Binding shippingInformation.subscriptionPlan.cost, StringFormat='${0:F2}'}" TextColor="Black" HorizontalOptions="End"/>
 
                 <!-- estimated shipping + estimated shipping cost -->
                 <Label Grid.Row="2" Text="Estimated Shipping" TextColor="Black" Padding="10,0,0,0"/>
@@ -63,6 +62,12 @@
                 <Label Grid.Row="4" Text="Total: " FontAttributes="Bold" TextColor="Black" Padding="10,0,0,0"/>
                 <Label x:Name="totalCost" Grid.Column="1" Grid.Row="4" FontAttributes="Bold" TextColor="Black" HorizontalOptions="End"/>
 
+                <!-- coupon -->
+                <StackLayout Grid.Row="5" Grid.ColumnSpan="2"  Orientation="Horizontal" Padding="10,0,0,0">
+                    <Label Grid.Row="5" Text="Coupon" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                    <Entry x:Name="couponEntry"  Grid.Row="5" Placeholder="Enter coupon" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+                    <Button x:Name="couponButton"  Grid.Row="5" Text="Apply" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Clicked="couponButtonClicked"/>
+                </StackLayout>
             </Grid>
 
 
@@ -157,16 +162,16 @@
 
                 <!-- expiration date -->
                 <StackLayout Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Padding="10,0,0,0">
-                    <Label Grid.Column="0" Grid.Row="3"  Text="Expiration Date: " TextColor="Black"/>
+                    <Label Grid.Column="0" Grid.Row="3"  Text="Exp Date: " TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="3" Text="{Binding paymentInformation.expirationMonth}" TextColor="Black"/>
                     <Label Grid.Column="0" Grid.Row="3" Text="/" TextColor="Black" />
                     <Label Grid.Column="0" Grid.Row="3" Text="{Binding paymentInformation.expirationYear}" TextColor="Black"/>
                 </StackLayout>
 
                 <!-- cvv -->
-                <StackLayout Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Padding="10,0,0,0">
-                    <Label Grid.Column="0" Grid.Row="4"  Text="CVV: " TextColor="Black"/>
-                    <Label Grid.Column="0" Grid.Row="4" Text="{Binding paymentInformation.cvv}" TextColor="Black"/>
+                <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" Padding="10,0,0,0">
+                    <Label Grid.Column="1" Grid.Row="1"  Text="CVV: " TextColor="Black"/>
+                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding paymentInformation.cvv}" TextColor="Black"/>
                 </StackLayout>
 
             </Grid>

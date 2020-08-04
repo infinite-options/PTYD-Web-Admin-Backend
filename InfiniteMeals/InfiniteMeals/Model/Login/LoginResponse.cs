@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 namespace InfiniteMeals.Model.Login {
 
     // contains information received after sending a login post to the database
+    // link: https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/email/password
     public partial class LoginResponse {
         [JsonProperty("message")]
         public string Message { get; set; }

@@ -19,8 +19,8 @@ namespace InfiniteMeals.ViewModel.Subscribe {
         public FiveMealPaymentOptionPage() {
             InitializeComponent();
 
-            mealimage.Source = ImageSource.FromFile("mealplan.jpg");
-            mealimage1.Source = ImageSource.FromFile("mealplan.jpg");
+            mealimage.Source = ImageSource.FromFile("subscription.jpg");
+            mealimage1.Source = ImageSource.FromFile("subscription.jpg");
         }
 
         // handles when the weekly payment button is clicked

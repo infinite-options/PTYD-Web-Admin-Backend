@@ -27,8 +27,22 @@ namespace InfiniteMeals.ViewModel.Login
         public LoginPage()
         {
             InitializeComponent();
+            InterfaceFormat();
         }
 
+        public void InterfaceFormat()
+        {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                LoginButton.CornerRadius = 15;
+                SignUpButton.CornerRadius = 15;
+            }
+            else if (Device.RuntimePlatform == Device.Android)
+            {
+                LoginButton.CornerRadius = 50;
+                SignUpButton.CornerRadius = 50;
+            }
+        }
 
 
         // handles when the login button is clicked

@@ -12,33 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Prevent Parcelable objects from being removed or renamed.
--keep class android.support.v4.media.** implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
-
-# Prevent Parcelable objects from being removed or renamed.
--keep class android.support.mediacompat.** implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
--keep class android.support.v4.media.Audio* implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
--keep class android.support.v4.media.MediaBrowserCompatUtils* implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
--keep class android.support.v4.media.MediaBrowserProtocol* implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
--keep class android.support.v4.media.MediaBrowserService* implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
--keep class android.support.v4.media.Volume* implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
--keep class android.support.v4.media.app.** implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
--keep class android.support.v4.media.session.MediaButton* implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
+# Keep a field in transition that is used to keep a reference to weakly-referenced object
+-keepclassmembers class android.support.transition.ChangeBounds$* extends android.animation.AnimatorListenerAdapter {
+  android.support.transition.ChangeBounds$ViewBounds mViewBounds;
 }

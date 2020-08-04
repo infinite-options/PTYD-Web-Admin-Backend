@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "21X22BEEJrPRzlvFc2t/l/T54BKv20mWCiiO8iTP9O77t/Ei0eL9O9AMveWZfL8ttTQbrVKbxNmvcPzBCUeF4w==",
+  "dgSpecHash": "lm/gjZMqiKWVrYfivNGc+txMpevEoGGt677nat/LFGW0vLKnTZsIDP9BoNBxRHlMFQq20FPQRzhoABjct2INuQ==",
   "success": true,
-  "projectFilePath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+  "projectFilePath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
   "expectedPackageFiles": [
     "/Users/Kristina/.nuget/packages/awssdk.cognitoidentity/3.3.101.96/awssdk.cognitoidentity.3.3.101.96.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/awssdk.core/3.3.107.10/awssdk.core.3.3.107.10.nupkg.sha512",
@@ -17,7 +17,6 @@
     "/Users/Kristina/.nuget/packages/mysqlconnector/0.69.3/mysqlconnector.0.69.3.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/plugin.facebookclient/2.2.1/plugin.facebookclient.2.2.1.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/rg.plugins.popup/2.0.0.3/rg.plugins.popup.2.0.0.3.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/sqlite-net-pcl/1.7.335/sqlite-net-pcl.1.7.335.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/sqlitepclraw.bundle_green/2.0.3/sqlitepclraw.bundle_green.2.0.3.nupkg.sha512",
@@ -36,16 +35,10 @@
     "/Users/Kristina/.nuget/packages/system.security.principal.windows/4.5.0/system.security.principal.windows.4.5.0.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/system.threading.tasks.extensions/4.5.2/system.threading.tasks.extensions.4.5.2.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/xamarin.essentials/1.5.3.2/xamarin.essentials.1.5.3.2.nupkg.sha512",
-    "/Users/Kristina/.nuget/packages/xamarin.forms/4.6.0.847/xamarin.forms.4.6.0.847.nupkg.sha512",
+    "/Users/Kristina/.nuget/packages/xamarin.forms/4.7.0.1239/xamarin.forms.4.7.0.1239.nupkg.sha512",
     "/Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/xamarin.forms.maps.4.6.0.847.nupkg.sha512"
   ],
   "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    },
     {
       "code": "NU1701",
       "level": "Warning",

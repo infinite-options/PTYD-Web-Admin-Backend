@@ -34,7 +34,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
                 }
                 else { // successful checkout, take user to home page
                     System.Diagnostics.Debug.WriteLine("successful checkout");
-                    await Navigation.PopToRootAsync(); 
+                    await Navigation.PopToRootAsync();
                     await DisplayAlert("Payment Confirmed", "Go to menu to select your meals!", "OK"); // display a confirmation
 
                 }

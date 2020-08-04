@@ -15,6 +15,7 @@ using InfiniteMeals.ViewModel.MealSelect;
 using System.Runtime.Serialization;
 using InfiniteMeals.Model.Meals;
 using Xamarin.Forms.Internals;
+using InfiniteMeals.ViewModel.Profile;
 
 namespace InfiniteMeals.ViewModel.MealSelect
 {
@@ -23,7 +24,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
     public partial class MealSchedule : ContentPage
     {
         int ctr = 2;
-        private static int weekNumber;
+        public int weekNumber;
         private static bool disabled = false;
         public ListView lstView = new ListView { HasUnevenRows = true };
         public Button sundayButton = new Button();
@@ -63,6 +64,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 Order = ToolbarItemOrder.Secondary,
                 Priority = 0,
             };
+            totalBar.Clicked += ClickedUserProfile;
             ToolbarItem totalBar2 = new ToolbarItem
             {
                 Text = "Log Out",
@@ -668,7 +670,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 {
                     setWeekNum(sender, e);
                     System.Diagnostics.Debug.WriteLine("About to move to MC " + getNum());
-                    MealChoices mc = new MealChoices();
+                    string currentMealPlanId = getPlanNumPicked(); // getPlanNumPicked returns the plan
+                    System.Diagnostics.Debug.WriteLine("selected meal plan: " + currentMealPlanId);
+                    System.Diagnostics.Debug.WriteLine("week num: " + weekNumber);
+                    foreach(var u in weekAffectedList) { // weekAffectedList[weekNumber -1] returns the date
+                        System.Diagnostics.Debug.WriteLine("week affected item: " + u);
+                    }
+                    MealChoices mc = new MealChoices(this);
                     mc.BindingContext = this;
                     await Navigation.PushAsync(mc);
                 }
@@ -1636,6 +1644,21 @@ namespace InfiniteMeals.ViewModel.MealSelect
             setPlanNum();
             System.Diagnostics.Debug.WriteLine("Plan number picked" + MealPlanNumbers[SubscriptionPicker.SelectedIndex]);
             return MealPlanNumbers[SubscriptionPicker.SelectedIndex];
+        }
+
+        private async void ClickedUserProfile(object sender, EventArgs e)
+        {
+            if (!App.LoggedIn)
+            {
+                await DisplayAlert("Error", "You are currently not logged in", "OK");
+            }
+            else
+            {
+                UserProfile userProfile = new UserProfile();
+                UserLoginSession currentUserInfo = App.Database.GetLastItem();
+                userProfile.BindingContext = currentUserInfo;
+                await Navigation.PushAsync(userProfile);
+            }
         }
     }
 }

@@ -36,34 +36,34 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public IList<Meal> Smoothies { get; private set; }
 
         // Week 1
-        public MealGroup mealGroup = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
-        public MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup = new MealGroup() { LongName = "Weekly Specials"};
+        public MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals" };
+        public MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies" };
 
         // Week 2
-        public MealGroup mealGroup2 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
-        public MealGroup seasonalMealGroup2 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public MealGroup smoothieGroup2 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup2 = new MealGroup() { LongName = "Weekly Specials" };
+        public MealGroup seasonalMealGroup2 = new MealGroup() { LongName = "Seasonal Meals" };
+        public MealGroup smoothieGroup2 = new MealGroup() { LongName = "Smoothies" };
 
         // Week 3
-        public MealGroup mealGroup3 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
-        public MealGroup seasonalMealGroup3 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public MealGroup smoothieGroup3 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup3 = new MealGroup() { LongName = "Weekly Specials" };
+        public MealGroup seasonalMealGroup3 = new MealGroup() { LongName = "Seasonal Meals" };
+        public MealGroup smoothieGroup3 = new MealGroup() { LongName = "Smoothies" };
 
         // Week 4
-        public MealGroup mealGroup4 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
-        public MealGroup seasonalMealGroup4 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public MealGroup smoothieGroup4 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup4 = new MealGroup() { LongName = "Weekly Specials" };
+        public MealGroup seasonalMealGroup4 = new MealGroup() { LongName = "Seasonal Meals" };
+        public MealGroup smoothieGroup4 = new MealGroup() { LongName = "Smoothies"};
 
         // Week 5
-        public MealGroup mealGroup5 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
-        public MealGroup seasonalMealGroup5 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public MealGroup smoothieGroup5 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup5 = new MealGroup() { LongName = "Weekly Specials" };
+        public MealGroup seasonalMealGroup5 = new MealGroup() { LongName = "Seasonal Meals" };
+        public MealGroup smoothieGroup5 = new MealGroup() { LongName = "Smoothies" };
 
         // Week 6
-        public MealGroup mealGroup6 = new MealGroup() { LongName = "Weekly Specials", ShortName = "m" };
-        public MealGroup seasonalMealGroup6 = new MealGroup() { LongName = "Seasonal Meals", ShortName = "sm" };
-        public MealGroup smoothieGroup6 = new MealGroup() { LongName = "Smoothies", ShortName = "s" };
+        public MealGroup mealGroup6 = new MealGroup() { LongName = "Weekly Specials" };
+        public MealGroup seasonalMealGroup6 = new MealGroup() { LongName = "Seasonal Meals" };
+        public MealGroup smoothieGroup6 = new MealGroup() { LongName = "Smoothies" };
 
         private static string mealsUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals";
         public static string infoImg = "info.jpg";
@@ -318,7 +318,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
             lstView.Header = headingGrid;
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
-            lstView.GroupShortNameBinding = new Binding("ShortName");
             lstView.ItemTemplate = new DataTemplate(() =>
             {
                 var grid = new Grid

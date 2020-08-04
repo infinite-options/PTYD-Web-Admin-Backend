@@ -58,7 +58,7 @@ namespace InfiniteMeals.Model.Checkout {
         [JsonProperty("cc_exp_year")]
         public string ccExpYear { get; set; }
 
-        [JsonProperty("salt")]
+        [JsonProperty("salt")] // hashed password 
         public string salt { get; set; }
 
         [JsonProperty("is_gift")]

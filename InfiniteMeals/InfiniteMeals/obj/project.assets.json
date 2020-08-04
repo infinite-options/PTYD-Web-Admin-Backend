@@ -152,15 +152,6 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
-      "Plugin.FacebookClient/2.2.1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Plugin.FacebookClient.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Plugin.FacebookClient.dll": {}
-        }
-      },
       "Rg.Plugins.Popup/2.0.0.3": {
         "type": "package",
         "dependencies": {
@@ -437,7 +428,7 @@
           "lib/netstandard2.0/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.6.0.847": {
+      "Xamarin.Forms/4.7.0.1239": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Xamarin.Forms.Core.dll": {},
@@ -971,11 +962,13 @@
         "lib/wpa81/GalaSoft.MvvmLight.pdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.XML",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.dll",
+        "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.dll.mdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Extras.pdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Platform.XML",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.Platform.dll",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.XML",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.dll",
+        "lib/xamarin.ios10/GalaSoft.MvvmLight.dll.mdb",
         "lib/xamarin.ios10/GalaSoft.MvvmLight.pdb",
         "mvvmlightlibs.5.4.1.1.nupkg.sha512",
         "mvvmlightlibs.nuspec"
@@ -1167,25 +1160,6 @@
         "newtonsoft.json.12.0.3.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
-      ]
-    },
-    "Plugin.FacebookClient/2.2.1": {
-      "sha512": "OR3mhx8WrNzFkeoPQghpbNC2lR0lpAApWvtm3HB8s5JQVh00bHRoXXLoWklxMeVzjCqyx3qWHEjRdVzbwayrKg==",
-      "type": "package",
-      "path": "plugin.facebookclient/2.2.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/monoandroid90/Plugin.FacebookClient.dll",
-        "lib/monoandroid90/Plugin.FacebookClient.xml",
-        "lib/netstandard1.0/Plugin.FacebookClient.dll",
-        "lib/netstandard1.0/Plugin.FacebookClient.xml",
-        "lib/netstandard2.0/Plugin.FacebookClient.dll",
-        "lib/netstandard2.0/Plugin.FacebookClient.xml",
-        "lib/xamarinios10/Plugin.FacebookClient.dll",
-        "lib/xamarinios10/Plugin.FacebookClient.xml",
-        "plugin.facebookclient.2.2.1.nupkg.sha512",
-        "plugin.facebookclient.nuspec"
       ]
     },
     "Rg.Plugins.Popup/2.0.0.3": {
@@ -1712,13 +1686,14 @@
         "xamarin.essentials.nuspec"
       ]
     },
-    "Xamarin.Forms/4.6.0.847": {
-      "sha512": "xUUgs1/xDdS9I/oN2UkdRwd/YToqg0qhwIK8yvyJJ2Xbhsc1ssV4/DUICdjuwCttzeiAcrhILqD+0BQhifUfxw==",
+    "Xamarin.Forms/4.7.0.1239": {
+      "sha512": "vGtrCFHo/eEIDPk0yHsktW1xl4rt+KbTab2ciPbsU7tlI5x88aspH9IJlfybh5ejCFhRYYpNr8+uB9vX08bsuA==",
       "type": "package",
-      "path": "xamarin.forms/4.6.0.847",
+      "path": "xamarin.forms/4.7.0.1239",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "Assets/xamarin_128x128.png",
         "build/MonoAndroid10/proguard.cfg",
         "build/XCODE10/Xamarin.Forms.Platform.iOS.dll",
         "build/XCODE10/Xamarin.Forms.Platform.iOS.pdb",
@@ -1798,8 +1773,8 @@
         "lib/MonoAndroid10.0/ja/Xamarin.Forms.Xaml.xml",
         "lib/MonoAndroid10.0/ko/Xamarin.Forms.Core.xml",
         "lib/MonoAndroid10.0/ko/Xamarin.Forms.Xaml.xml",
-        "lib/MonoAndroid10.0/pt-br/Xamarin.Forms.Core.xml",
-        "lib/MonoAndroid10.0/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid10.0/pt-BR/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid10.0/pt-BR/Xamarin.Forms.Xaml.xml",
         "lib/MonoAndroid10.0/ru/Xamarin.Forms.Core.xml",
         "lib/MonoAndroid10.0/ru/Xamarin.Forms.Xaml.xml",
         "lib/MonoAndroid10.0/zh-Hans/Xamarin.Forms.Core.xml",
@@ -1831,8 +1806,8 @@
         "lib/MonoAndroid90/ja/Xamarin.Forms.Xaml.xml",
         "lib/MonoAndroid90/ko/Xamarin.Forms.Core.xml",
         "lib/MonoAndroid90/ko/Xamarin.Forms.Xaml.xml",
-        "lib/MonoAndroid90/pt-br/Xamarin.Forms.Core.xml",
-        "lib/MonoAndroid90/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/pt-BR/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/pt-BR/Xamarin.Forms.Xaml.xml",
         "lib/MonoAndroid90/ru/Xamarin.Forms.Core.xml",
         "lib/MonoAndroid90/ru/Xamarin.Forms.Xaml.xml",
         "lib/MonoAndroid90/zh-Hans/Xamarin.Forms.Core.xml",
@@ -1886,9 +1861,9 @@
         "lib/Xamarin.iOS10/nb/Xamarin.Forms.Platform.iOS.resources.dll",
         "lib/Xamarin.iOS10/nl/Xamarin.Forms.Platform.iOS.resources.dll",
         "lib/Xamarin.iOS10/pl/Xamarin.Forms.Platform.iOS.resources.dll",
-        "lib/Xamarin.iOS10/pt-br/Xamarin.Forms.Core.xml",
-        "lib/Xamarin.iOS10/pt-br/Xamarin.Forms.Platform.iOS.resources.dll",
-        "lib/Xamarin.iOS10/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/pt-BR/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/pt-BR/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/pt-BR/Xamarin.Forms.Xaml.xml",
         "lib/Xamarin.iOS10/pt/Xamarin.Forms.Platform.iOS.resources.dll",
         "lib/Xamarin.iOS10/ro/Xamarin.Forms.Platform.iOS.resources.dll",
         "lib/Xamarin.iOS10/ru/Xamarin.Forms.Core.xml",
@@ -1937,8 +1912,8 @@
         "lib/netstandard2.0/ja/Xamarin.Forms.Xaml.xml",
         "lib/netstandard2.0/ko/Xamarin.Forms.Core.xml",
         "lib/netstandard2.0/ko/Xamarin.Forms.Xaml.xml",
-        "lib/netstandard2.0/pt-br/Xamarin.Forms.Core.xml",
-        "lib/netstandard2.0/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/pt-BR/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/pt-BR/Xamarin.Forms.Xaml.xml",
         "lib/netstandard2.0/ru/Xamarin.Forms.Core.xml",
         "lib/netstandard2.0/ru/Xamarin.Forms.Xaml.xml",
         "lib/netstandard2.0/zh-Hans/Xamarin.Forms.Core.xml",
@@ -2021,7 +1996,7 @@
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.dll",
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.pdb",
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.xml",
-        "xamarin.forms.4.6.0.847.nupkg.sha512",
+        "xamarin.forms.4.7.0.1239.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
     },
@@ -2072,11 +2047,10 @@
       "MySqlConnector >= 0.69.3",
       "NETStandard.Library >= 2.0.3",
       "Newtonsoft.Json >= 12.0.3",
-      "Plugin.FacebookClient >= 2.2.1",
       "Rg.Plugins.Popup >= 2.0.0.3",
       "Stripe.net >= 37.15.1",
       "Xamarin.Essentials >= 1.5.3.2",
-      "Xamarin.Forms >= 4.6.0.847",
+      "Xamarin.Forms >= 4.7.0.1239",
       "Xamarin.Forms.Maps >= 4.6.0.847",
       "sqlite-net-pcl >= 1.7.335"
     ]
@@ -2087,11 +2061,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "projectName": "InfiniteMeals",
-      "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+      "projectPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
+      "outputPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Kristina/.config/NuGet/NuGet.Config"
@@ -2150,10 +2124,6 @@
             "target": "Package",
             "version": "[12.0.3, )"
           },
-          "Plugin.FacebookClient": {
-            "target": "Package",
-            "version": "[2.2.1, )"
-          },
           "Rg.Plugins.Popup": {
             "target": "Package",
             "version": "[2.0.0.3, )"
@@ -2168,7 +2138,7 @@
           },
           "Xamarin.Forms": {
             "target": "Package",
-            "version": "[4.6.0.847, )"
+            "version": "[4.7.0.1239, )"
           },
           "Xamarin.Forms.Maps": {
             "target": "Package",
@@ -2194,12 +2164,6 @@
     }
   },
   "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    },
     {
       "code": "NU1701",
       "level": "Warning",

@@ -32,10 +32,18 @@ namespace InfiniteMeals.ViewModel.Subscribe
             WebClient client = new WebClient();
             var content = client.DownloadString(textUrl);
             var obj = JsonConvert.DeserializeObject<SubscriptionPlans>(content);
-
+            var mealNum = 0;
             for (int i = 0; i < obj.Result.MealPlans.Result.Length; i++)
             {
-                payments.Add(String.Format("Starting at {0:0.00} per meal", obj.Result.MealPlans.Result[i].MealPlanPricePerMeal));
+                if (i == 0)
+                    mealNum = 5;
+                else if (i == 1)
+                    mealNum = 10;
+                else if (i == 2)
+                    mealNum = 15;
+                else
+                    mealNum = 20;
+                payments.Add(String.Format("\t\t{0} Meal Plan \n Starting at {0:0.00} per meal", mealNum, obj.Result.MealPlans.Result[i].MealPlanPricePerMeal));
             }
 
             Meals5Label.Text = payments[0];
@@ -43,10 +51,10 @@ namespace InfiniteMeals.ViewModel.Subscribe
             Meals15Label.Text = payments[2];
             Meals20Label.Text = payments[3];
 
-            mealimage.Source = ImageSource.FromFile("meal5.jpeg");
-            mealimage1.Source = ImageSource.FromFile("meal10.jpeg");
-            mealimage2.Source = ImageSource.FromFile("meal15.jpeg");
-            mealimage3.Source = ImageSource.FromFile("meal20.jpeg");
+            mealimage.Source = ImageSource.FromFile("subscription.jpg");
+            mealimage1.Source = ImageSource.FromFile("subscription.jpg");
+            mealimage2.Source = ImageSource.FromFile("subscription.jpg");
+            mealimage3.Source = ImageSource.FromFile("subscription.jpg");
         }
 
         private async void ClickedSignUp(object sender, EventArgs e)
@@ -61,7 +69,17 @@ namespace InfiniteMeals.ViewModel.Subscribe
 
         private async void ClickedUserProfile(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new UserProfile());
+            if (!App.LoggedIn)
+            {
+                await DisplayAlert("Error", "You are currently not logged in", "OK");
+            }
+            else
+            {
+                UserProfile userProfile = new UserProfile();
+                UserLoginSession currentUserInfo = App.Database.GetLastItem();
+                userProfile.BindingContext = currentUserInfo;
+                await Navigation.PushAsync(userProfile);
+            }
         }
 
         // handles when the 5 meal plan button is clicked

@@ -84,9 +84,6 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\drawable\SubscribePage.xaml.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' ">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -110,67 +107,13 @@
     <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\drawable\info.jpg">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\defaultmeal.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ptydlogo.jpg">
+    <AndroidResource Include="Resources\drawable\borscht.jpg" />
+    <AndroidResource Include="Resources\drawable\homepage.jpg" />
+    <AndroidResource Include="Resources\drawable\ptydlogo.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\cobbsalad.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\rainbowsalad.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\cacaooats.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\thaicurry.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\lentilsalad.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\tempeh.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\bibimbap.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\homepage.jpg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\meal15.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\meal5.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\meal10.jpeg">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\meal20.jpeg">
+    <AndroidResource Include="Resources\drawable\subscription.jpg">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -182,31 +125,64 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\mealplan.jpg" />
+    <AndroidResource Include="Resources\drawable\cacaooats.jpeg" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\lasagna.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\mashers.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\borscht.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\shippingStatus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\paymentStatus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\summaryStatus.png" />
+    <AndroidResource Include="Resources\drawable\checkboxSelected.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\checkboxUnselected.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\checkboxSelected.png" />
+    <AndroidResource Include="Resources\drawable\cobbsalad.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\defaultmeal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\info.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\lasagna.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\lentilsalad.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\mashers.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\meal5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\meal10.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\meal15.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\meal20.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\mealplan.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\paymentStatus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\rainbowsalad.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\shippingStatus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\summaryStatus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\tempeh.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\thaicurry.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

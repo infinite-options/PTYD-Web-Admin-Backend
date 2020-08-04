@@ -54,27 +54,27 @@ namespace InfiniteMeals.Model.Database {
 
     }
 
-    public partial class MenuForWeek1 { // access like class
+    public partial class MenuForWeek1 : WeekMenu { // access like class
         [JsonProperty("SaturdayDate")]
-        public DateTimeOffset SaturdayDate { get; set; }
+        public override DateTimeOffset SaturdayDate { get; set; }
 
         [JsonProperty("SundayDate")]
-        public DateTimeOffset SundayDate { get; set; }
+        public override DateTimeOffset SundayDate { get; set; }
 
         [JsonProperty("Sunday")]
-        public string Sunday { get; set; }
+        public override string Sunday { get; set; }
 
         [JsonProperty("Monday")]
-        public string Monday { get; set; }
+        public override string Monday { get; set; }
 
         [JsonProperty("Meals")]
-        public Meals Meals { get; set; }
+        public override Meals Meals { get; set; }
 
         [JsonProperty("Addons")]
-        public Addons Addons { get; set; }
+        public override Addons Addons { get; set; }
 
         [JsonProperty("MealQuantities")]
-        public Dictionary<string, long> MealQuantities { get; set; }
+        public override Dictionary<string, long> MealQuantities { get; set; }
 
         [JsonProperty("AddonPrice")]
         public MenuForWeek1AddonPrice AddonPrice { get; set; }
@@ -198,27 +198,27 @@ namespace InfiniteMeals.Model.Database {
         public SmoothiesClass Smoothies { get; set; }
     }
 
-    public partial class MenuForWeek2 { // access like class
+    public partial class MenuForWeek2 : WeekMenu { // access like class
         [JsonProperty("SaturdayDate")]
-        public DateTimeOffset SaturdayDate { get; set; }
+        public override DateTimeOffset SaturdayDate { get; set; }
 
         [JsonProperty("SundayDate")]
-        public DateTimeOffset SundayDate { get; set; }
+        public override DateTimeOffset SundayDate { get; set; }
 
         [JsonProperty("Sunday")]
-        public string Sunday { get; set; }
+        public override string Sunday { get; set; }
 
         [JsonProperty("Monday")]
-        public string Monday { get; set; }
+        public override string Monday { get; set; }
 
         [JsonProperty("Meals")]
-        public Meals Meals { get; set; }
+        public override Meals Meals { get; set; }
 
         [JsonProperty("Addons")]
-        public Addons Addons { get; set; }
+        public override Addons Addons { get; set; }
 
         [JsonProperty("MealQuantities")]
-        public Dictionary<string, long> MealQuantities { get; set; }
+        public override Dictionary<string, long> MealQuantities { get; set; }
 
         [JsonProperty("AddonPrice")]
         public MenuForWeek2AddonPrice AddonPrice { get; set; }
@@ -262,27 +262,27 @@ namespace InfiniteMeals.Model.Database {
         public string The700000076 { get; set; }
     }
 
-    public partial class MenuForWeek3 { // access like class
+    public partial class MenuForWeek3 : WeekMenu { // access like class
         [JsonProperty("SaturdayDate")]
-        public DateTimeOffset SaturdayDate { get; set; }
+        public override DateTimeOffset SaturdayDate { get; set; }
 
         [JsonProperty("SundayDate")]
-        public DateTimeOffset SundayDate { get; set; }
+        public override DateTimeOffset SundayDate { get; set; }
 
         [JsonProperty("Sunday")]
-        public string Sunday { get; set; }
+        public override string Sunday { get; set; }
 
         [JsonProperty("Monday")]
-        public string Monday { get; set; }
+        public override string Monday { get; set; }
 
         [JsonProperty("Meals")]
-        public Meals Meals { get; set; }
+        public override Meals Meals { get; set; }
 
         [JsonProperty("Addons")]
-        public Addons Addons { get; set; }
+        public override Addons Addons { get; set; }
 
         [JsonProperty("MealQuantities")]
-        public Dictionary<string, long> MealQuantities { get; set; }
+        public override Dictionary<string, long> MealQuantities { get; set; }
 
         [JsonProperty("AddonPrice")]
         public MenuForWeek3AddonPrice AddonPrice { get; set; }
@@ -326,27 +326,27 @@ namespace InfiniteMeals.Model.Database {
         public string The700000077 { get; set; }
     }
 
-    public partial class MenuForWeek4 { // access like class
+    public partial class MenuForWeek4 : WeekMenu { // access like class
         [JsonProperty("SaturdayDate")]
-        public DateTimeOffset SaturdayDate { get; set; }
+        public override DateTimeOffset SaturdayDate { get; set; }
 
         [JsonProperty("SundayDate")]
-        public DateTimeOffset SundayDate { get; set; }
+        public override DateTimeOffset SundayDate { get; set; }
 
         [JsonProperty("Sunday")]
-        public string Sunday { get; set; }
+        public override string Sunday { get; set; }
 
         [JsonProperty("Monday")]
-        public string Monday { get; set; }
+        public override string Monday { get; set; }
 
         [JsonProperty("Meals")]
-        public Meals Meals { get; set; }
+        public override Meals Meals { get; set; }
 
         [JsonProperty("Addons")]
-        public Addons Addons { get; set; }
+        public override Addons Addons { get; set; }
 
         [JsonProperty("MealQuantities")]
-        public Dictionary<string, long> MealQuantities { get; set; }
+        public override Dictionary<string, long> MealQuantities { get; set; }
 
         [JsonProperty("AddonPrice")]
         public MenuForWeek4AddonPrice AddonPrice { get; set; }
@@ -390,27 +390,27 @@ namespace InfiniteMeals.Model.Database {
         public string The700000078 { get; set; }
     }
 
-    public partial class MenuForWeek5 { // access like class
+    public partial class MenuForWeek5 : WeekMenu { // access like class
         [JsonProperty("SaturdayDate")]
-        public DateTimeOffset SaturdayDate { get; set; }
+        public override DateTimeOffset SaturdayDate { get; set; }
 
         [JsonProperty("SundayDate")]
-        public DateTimeOffset SundayDate { get; set; }
+        public override DateTimeOffset SundayDate { get; set; }
 
         [JsonProperty("Sunday")]
-        public string Sunday { get; set; }
+        public override string Sunday { get; set; }
 
         [JsonProperty("Monday")]
-        public string Monday { get; set; }
+        public override string Monday { get; set; }
 
         [JsonProperty("Meals")]
-        public Meals Meals { get; set; }
+        public override Meals Meals { get; set; }
 
         [JsonProperty("Addons")]
-        public Addons Addons { get; set; }
+        public override Addons Addons { get; set; }
 
         [JsonProperty("MealQuantities")]
-        public Dictionary<string, long> MealQuantities { get; set; }
+        public override Dictionary<string, long> MealQuantities { get; set; }
 
         [JsonProperty("AddonPrice")]
         public MenuForWeek5AddonPrice AddonPrice { get; set; }
@@ -454,27 +454,27 @@ namespace InfiniteMeals.Model.Database {
         public string The700000079 { get; set; }
     }
 
-    public partial class MenuForWeek6 { // access like class
+    public partial class MenuForWeek6 : WeekMenu { // access like class
         [JsonProperty("SaturdayDate")]
-        public DateTimeOffset SaturdayDate { get; set; }
+        public override DateTimeOffset SaturdayDate { get; set; }
 
         [JsonProperty("SundayDate")]
-        public DateTimeOffset SundayDate { get; set; }
+        public override DateTimeOffset SundayDate { get; set; }
 
         [JsonProperty("Sunday")]
-        public string Sunday { get; set; }
+        public override string Sunday { get; set; }
 
         [JsonProperty("Monday")]
-        public string Monday { get; set; }
+        public override string Monday { get; set; }
 
         [JsonProperty("Meals")]
-        public Meals Meals { get; set; }
+        public override Meals Meals { get; set; }
 
         [JsonProperty("Addons")]
-        public Addons Addons { get; set; }
+        public override Addons Addons { get; set; }
 
         [JsonProperty("MealQuantities")]
-        public Dictionary<string, long> MealQuantities { get; set; }
+        public override Dictionary<string, long> MealQuantities { get; set; }
 
         [JsonProperty("AddonPrice")]
         public MenuForWeek6AddonPrice AddonPrice { get; set; }
@@ -747,4 +747,33 @@ namespace InfiniteMeals.Model.Database {
         [JsonProperty("monday_available")]
         public bool MondayAvailable { get; set; }
     }
+
+    public partial class WeekMenu {
+
+        [JsonProperty("SaturdayDate")]
+        public virtual DateTimeOffset SaturdayDate { get; set; }
+
+        [JsonProperty("SundayDate")]
+        public virtual DateTimeOffset SundayDate { get; set; }
+
+        [JsonProperty("Sunday")]
+        public virtual string Sunday { get; set; }
+
+        [JsonProperty("Monday")]
+        public virtual string Monday { get; set; }
+
+        [JsonProperty("Meals")]
+        public virtual Meals Meals { get; set; }
+
+        [JsonProperty("Addons")]
+        public virtual Addons Addons { get; set; }
+
+        [JsonProperty("MealQuantities")]
+        public virtual Dictionary<string, long> MealQuantities { get; set; }
+
+
+    }
 }
+
+
+    

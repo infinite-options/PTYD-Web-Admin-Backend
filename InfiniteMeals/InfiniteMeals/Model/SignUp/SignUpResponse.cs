@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 namespace InfiniteMeals.Model.SignUp {
     public class SignUpResponse {
 
+        // response from api when user signs up
+        // link: https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/signup
+
         [JsonProperty("message")]
         public string Message { get; set; }
 

@@ -4,7 +4,7 @@
              x:Class="InfiniteMeals.ViewModel.MealSelect.MenuView"
              Title="Menu">
 <ContentPage.Content>
-		<ListView x:Name ="lstView" IsGroupingEnabled="false" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
+		<ListView x:Name ="lstView" IsGroupingEnabled="false" GroupDisplayBinding="{Binding LongName}"
             VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True" SelectionMode="None" >
 			<ListView.ItemTemplate>
 				<DataTemplate>

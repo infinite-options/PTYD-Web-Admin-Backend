@@ -8,7 +8,7 @@ using InfiniteMeals.Model.Subscribe;
 
 namespace InfiniteMeals.Model.Checkout {
 
-    // contains information about user's payment during checkout
+    // contains information about user's payment info during checkout
     class PaymentInformation : INotifyPropertyChanged {
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

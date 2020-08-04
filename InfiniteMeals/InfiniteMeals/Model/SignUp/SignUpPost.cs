@@ -4,6 +4,9 @@ using System.Text;
 using Newtonsoft.Json;
 
 namespace InfiniteMeals.Model.SignUp {
+
+    // object to send to database when user attempts to sign up 
+    // link: https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/signup
     public class SignUpPost {
         [JsonProperty("Email")]
         public string Email { get; set; }

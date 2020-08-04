@@ -1,12 +1,28 @@
-﻿<Properties StartupConfiguration="{C0BAFAF9-F538-446E-8C1F-ABB077504C2B}|Default">
-  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.EC90D2DF-EC8D-446E-8006-8D968A26312E" />
-  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android PreferredExecutionTarget="Android.Pixel_2_API_29" />
-  <MonoDevelop.Ide.Workbench>
+﻿<Properties StartupConfiguration="{4A1488E6-C3E8-4112-B8D0-262553CFF68E}|Default">
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.iOS Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.iOS.HideInfoBar="True" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.2E588563-8B9F-4F78-9D12-C10AA077FE21" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.iOS.HideInfoBar="True" />
+  <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs">
+    <Files>
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml" Line="17" Column="47" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="1012" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="371" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="InfiniteMeals" expanded="True">
-            <Node name="InfiniteMeals.Android" selected="True" />
+            <Node name="InfiniteMeals" expanded="True">
+              <Node name="ViewModel" expanded="True">
+                <Node name="MealSelect" expanded="True">
+                  <Node name="AddOnChoices.xaml" expanded="True">
+                    <Node name="AddOnChoices.xaml.cs" selected="True" />
+                  </Node>
+                  <Node name="MealChoices.xaml" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+            <Node name="InfiniteMeals.iOS" expanded="True" />
           </Node>
         </State>
       </Pad>

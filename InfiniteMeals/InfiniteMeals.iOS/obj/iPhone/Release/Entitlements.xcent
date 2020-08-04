@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beta-reports-active</key>
+	<true/>
+	<key>application-identifier</key>
+	<string>8V66NC2T37.com.infiniteoptions.PrepToYourDoor</string>
+	<key>get-task-allow</key>
+	<false/>
+	<key>com.apple.developer.team-identifier</key>
+	<string>8V66NC2T37</string>
+	<key>aps-environment</key>
+	<string>production</string>
+</dict>
+</plist>

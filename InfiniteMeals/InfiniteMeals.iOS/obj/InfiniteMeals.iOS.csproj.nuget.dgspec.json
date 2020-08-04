@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj": {}
+    "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj": {}
   },
   "projects": {
-    "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj": {
+    "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+        "projectUniqueName": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
         "projectName": "InfiniteMeals.iOS",
-        "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
+        "projectPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/InfiniteMeals.iOS.csproj",
         "packagesPath": "/Users/Kristina/.nuget/packages/",
-        "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/",
+        "outputPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/obj/",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
@@ -26,8 +26,8 @@
         "frameworks": {
           "xamarinios10": {
             "projectReferences": {
-              "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
-                "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
+              "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+                "projectPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
               }
             }
           }
@@ -91,14 +91,14 @@
         }
       }
     },
-    "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+    "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+        "projectUniqueName": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
         "projectName": "InfiniteMeals",
-        "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
+        "projectPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj",
         "packagesPath": "/Users/Kristina/.nuget/packages/",
-        "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/",
+        "outputPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Kristina/.config/NuGet/NuGet.Config"
@@ -157,10 +157,6 @@
               "target": "Package",
               "version": "[12.0.3, )"
             },
-            "Plugin.FacebookClient": {
-              "target": "Package",
-              "version": "[2.2.1, )"
-            },
             "Rg.Plugins.Popup": {
               "target": "Package",
               "version": "[2.0.0.3, )"
@@ -175,7 +171,7 @@
             },
             "Xamarin.Forms": {
               "target": "Package",
-              "version": "[4.6.0.847, )"
+              "version": "[4.7.0.1239, )"
             },
             "Xamarin.Forms.Maps": {
               "target": "Package",

@@ -4,7 +4,6 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             NavigationPage.HasNavigationBar="false"
              x:Class="InfiniteMeals.ViewModel.Login.LoginPage">
 
     <ContentPage.Content>
@@ -16,7 +15,7 @@
             <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
                 <Entry x:Name="loginEmail" FontFamily="CapsRegular"  Placeholder="Email" TextColor="Black"></Entry>
                 <Entry x:Name="loginPassword" FontFamily="CapsRegular" Placeholder="Password"  IsPassword="True"></Entry>
-                <Button x:Name="LoginButton" FontFamily="CapsRegular" BackgroundColor = "Green" Text="Login" CornerRadius="50" TextColor="White" Clicked="ClickedLogin"/>
+                <Button x:Name="LoginButton" FontFamily="CapsRegular" BackgroundColor = "Green" Text="Login" TextColor="White" Clicked="ClickedLogin"/>
                 <Label x:Name="forgotPasswordLabel"
                        Text="Forgot Password?"
                        FontSize="Medium"
@@ -31,7 +30,7 @@
 
             <StackLayout VerticalOptions="EndAndExpand"  HorizontalOptions="Center" Margin="0,50,0,0">
                 <Label FontFamily = "CapsRegular" Text="Don't have an account?" TextColor="Black" VerticalOptions="End"/>
-                <Button FontFamily= "CapsRegular" BackgroundColor="Orange" CornerRadius="50" Text="Sign Up" Clicked="SignUpClicked"/>
+                <Button x:Name= "SignUpButton" FontFamily= "CapsRegular" BackgroundColor="Orange" Text="Sign Up" Clicked="SignUpClicked"/>
 
             </StackLayout>
         </StackLayout>

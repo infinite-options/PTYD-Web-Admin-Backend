@@ -32,29 +32,29 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private static ObservableCollection<MealGroup> grouped6 { get; set; }
 
         // Week 1
-        public static MealGroup addAddOnGroup = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
-        public static MealGroup addMealGroup = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
-        public static MealGroup addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        public static MealGroup addAddOnGroup = new MealGroup() { LongName = "Add Ons"};
+        public static MealGroup addMealGroup = new MealGroup() { LongName = "Additional Meals" };
+        public static MealGroup addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies"};
         // Week 2
-        public static MealGroup addAddOnGroup2 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
-        public static MealGroup addMealGroup2 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
-        public static MealGroup addSmoothieGroup2 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        public static MealGroup addAddOnGroup2 = new MealGroup() { LongName = "Add Ons"};
+        public static MealGroup addMealGroup2 = new MealGroup() { LongName = "Additional Meals"};
+        public static MealGroup addSmoothieGroup2 = new MealGroup() { LongName = "Additional Smoothies"};
         // Week 3
-        public static MealGroup addAddOnGroup3 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
-        public static MealGroup addMealGroup3 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
-        public static MealGroup addSmoothieGroup3 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        public static MealGroup addAddOnGroup3 = new MealGroup() { LongName = "Add Ons"};
+        public static MealGroup addMealGroup3 = new MealGroup() { LongName = "Additional Meals"};
+        public static MealGroup addSmoothieGroup3 = new MealGroup() { LongName = "Additional Smoothies"};
         // Week 4
-        public static MealGroup addAddOnGroup4 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
-        public static MealGroup addMealGroup4 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
-        public static MealGroup addSmoothieGroup4 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        public static MealGroup addAddOnGroup4 = new MealGroup() { LongName = "Add Ons"};
+        public static MealGroup addMealGroup4 = new MealGroup() { LongName = "Additional Meals"};
+        public static MealGroup addSmoothieGroup4 = new MealGroup() { LongName = "Additional Smoothies"};
         // Week 5
-        public static MealGroup addAddOnGroup5 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
-        public static MealGroup addMealGroup5 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
-        public static MealGroup addSmoothieGroup5 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        public static MealGroup addAddOnGroup5 = new MealGroup() { LongName = "Add Ons"};
+        public static MealGroup addMealGroup5 = new MealGroup() { LongName = "Additional Meals"};
+        public static MealGroup addSmoothieGroup5 = new MealGroup() { LongName = "Additional Smoothies"};
         // Week 6
-        public static MealGroup addAddOnGroup6 = new MealGroup() { LongName = "Add Ons", ShortName = "am" };
-        public static MealGroup addMealGroup6 = new MealGroup() { LongName = "Additional Meals", ShortName = "asm" };
-        public static MealGroup addSmoothieGroup6 = new MealGroup() { LongName = "Additional Smoothies", ShortName = "as" };
+        public static MealGroup addAddOnGroup6 = new MealGroup() { LongName = "Add Ons"};
+        public static MealGroup addMealGroup6 = new MealGroup() { LongName = "Additional Meals"};
+        public static MealGroup addSmoothieGroup6 = new MealGroup() { LongName = "Additional Smoothies"};
 
         String infoImg = "info.jpg";
         public double subTotal;
@@ -1009,7 +1009,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
             lstView.SelectionMode = ListViewSelectionMode.None;
             lstView.IsGroupingEnabled = true;
             lstView.GroupDisplayBinding = new Binding("LongName");
-            lstView.GroupShortNameBinding = new Binding("ShortName");
 
             lstView.ItemTemplate = new DataTemplate(() =>
             {
