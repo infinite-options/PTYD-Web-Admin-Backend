@@ -14,17 +14,23 @@ class LatestActivity extends React.Component {
 
     componentDidMount() {
         let curComponent = this;
-        axios
-            .get(`${this.props.LATESTACTIVITY_API_URL}/${this.props.searchID}`)
-            .then(function (res) {
-                curComponent.setState({
-                    loaded: true,
-                    data: res.data.result.result,
+        if(this.props.searchID === '' || this.props.searchID === this.props.noUser) {
+            curComponent.setState({
+                loaded: true,
+            })
+        } else {
+            axios
+                .get(`${this.props.LATESTACTIVITY_API_URL}/${this.props.searchID}`)
+                .then(function (res) {
+                    curComponent.setState({
+                        loaded: true,
+                        data: res.data.result.result,
+                    })
                 })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -48,11 +54,14 @@ class LatestActivity extends React.Component {
     }
 
     render() {
+        // if(this.props.searchID === '' || this.props.searchID === this.props.noUser) {
+        //     return <Typography variant="body1" style={{ margin: '30px 0' }} > Select user to get their latest activity </Typography>
+        // }
         if(!this.state.loaded) {
             return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Latest Activity </Typography>
         }
         return (
-            <div style={{ margin: '30px 0' }}>
+            <div style={{ margin: '15px 0' }}>
                 <MaterialTable
                     title="Latest Activity"
                     columns={[
@@ -110,8 +119,25 @@ class LatestActivity extends React.Component {
                         this.props.selectPurchaseId(row.purchase_id);
                     }}
                     options={{
+                        cellStyle: {
+                            lineHeight: 1.2,
+                            padding: 5,
+                        },
+                        headerStyle: {
+                            lineHeight: 1.2,
+                            padding: 5,
+                        },
                         pageSize: 3,
                         pageSizeOptions: [3,6,9],
+                    }}
+                    components={{
+                        Toolbar: props => (
+                            <div style={{
+                                padding: '10px 0 0 15px'
+                            }}>
+                                <Typography variant="h6"> {props.title} </Typography>
+                            </div>
+                        ),
                     }}
                 />
             </div>
