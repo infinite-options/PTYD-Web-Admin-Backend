@@ -32,7 +32,15 @@ namespace InfiniteMeals
             {
                 this.loginButton.Text = "Log out";
             }
-            //homepage.Source = ImageSource.FromFile("homepage.jpg");
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                getStartedButton.CornerRadius = 15;
+            }
+            else if (Device.RuntimePlatform == Device.Android)
+            {
+                getStartedButton.CornerRadius = 50;
+            }
         }
 
         private async void ClickedLogin(object sender, EventArgs e)

@@ -53,17 +53,11 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
             try {
 
-                string fullItemName; // stores full item name for api to parse
-                if(orderInformation.shippingInformation.subscriptionPlan.paymentOption.Equals(PaymentOption.TwoWeek) || 
-                    orderInformation.shippingInformation.subscriptionPlan.paymentOption.Equals(PaymentOption.TwoWeek)) {
-                    fullItemName = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + "  - " +  
-                    PaymentOptionExtension.paymentOptionToString(orderInformation.shippingInformation.subscriptionPlan.paymentOption) + " - " + 
-                    orderInformation.shippingInformation.subscriptionPlan.cost.ToString();
-                } else {
-                    fullItemName = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + " - " +
+
+                string fullItemName = MealPlanExtension.mealPlanToString(orderInformation.shippingInformation.subscriptionPlan.mealPlan) + " - " +
                     PaymentOptionExtension.paymentOptionToString(orderInformation.shippingInformation.subscriptionPlan.paymentOption) + " - " +
-                    orderInformation.shippingInformation.subscriptionPlan.cost.ToString();
-                }
+                    orderInformation.shippingInformation.subscriptionPlan.cost.ToString(); ; // stores full item name for api to parse
+                
 
                 var content = await client.GetStringAsync(accountSaltURL + App.Database.GetLastItem().Email); // get the requested account salt
                 var obj = JsonConvert.DeserializeObject<AccountSalt>(content); // convert account salt into an object; obj[0] has the account salt

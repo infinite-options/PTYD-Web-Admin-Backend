@@ -19,7 +19,7 @@
                      <ColumnDefinition Width="*"/>
                      <ColumnDefinition Width="*"/>
                  </Grid.ColumnDefinitions>
-              <Image Source="ptydlogo.jpg"
+              <Image Source="ptydlogo.png"
                     WidthRequest="100"
                     HeightRequest="100"
                     HorizontalOptions="Start"
@@ -195,6 +195,7 @@
                     Grid.ColumnSpan="2"
                 />
                 <Button
+                    x:Name="getStartedButton"
                     Text="GET STARTED"
                     Grid.Row="5"
                     HeightRequest="30"
@@ -207,7 +208,6 @@
                     FontSize="Micro"
                     BackgroundColor="Orange"
                     TextColor="White"
-                    CornerRadius="50"
                     Clicked="ClickedSubscribe"
                 />
                <Label
@@ -264,9 +264,11 @@
                     HorizontalOptions="Center"
                 />
                 </Grid>
-                <CarouselView x:Name="TheCarousel" PeekAreaInsets="100" Margin="0,0,0,-300">
+                <CarouselView x:Name="TheCarousel" PeekAreaInsets="100">
                     <CarouselView.ItemsSource >
                         <x:Array Type="{x:Type x:String}">
+                            <x:String>"/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/Resources/tempeh.jpg 
+"</x:String>
                             <x:String>"*/InfiniteMeals.Android/Resources/drawable/bibimbap.jpeg "</x:String>
                             <x:String>"*/InfiniteMeals.Android/Resources/drawable/cobbsalad.jpeg"</x:String>
                             <x:String>"*/InfiniteMeals.Android/Resources/drawable/cacaooats.jpeg"</x:String>
