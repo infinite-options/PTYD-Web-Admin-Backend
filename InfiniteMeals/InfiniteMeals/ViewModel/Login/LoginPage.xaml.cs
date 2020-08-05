@@ -35,15 +35,16 @@ namespace InfiniteMeals.ViewModel.Login
         private async void ClickedLogin(object sender, EventArgs e)
         {
             LoginButton.IsEnabled = false;
-            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text))
+            if (String.IsNullOrEmpty(this.loginEmail.Text) || String.IsNullOrEmpty(this.loginPassword.Text))
             { // check if all fields are filled out
-                await DisplayAlert("Error", "Please fill in all fields", "OK");
+                await DisplayAlert("Empty Field(s)", "Please fill in all fields", "OK");
+                LoginButton.IsEnabled = true;
             }
             else
             {
 
                 var accountSalt = await retrieveAccountSalt(this.loginEmail.Text); // retrieve user's account salt
-                System.Diagnostics.Debug.WriteLine("account salt: " + accountSalt.result[0]);
+                System.Diagnostics.Debug.WriteLine("account salt count: " + accountSalt.result.Count);
                 if (accountSalt != null && accountSalt.result.Count != 0)
                 { // make sure the account salt exists 
                     var loginAttempt = await login(this.loginEmail.Text, this.loginPassword.Text, accountSalt);
@@ -130,15 +131,16 @@ namespace InfiniteMeals.ViewModel.Login
             {
                 var content = await client.GetStringAsync(accountSaltURL + userEmail); // get the requested account salt
                 var accountSalt = JsonConvert.DeserializeObject<AccountSalt>(content);
-                System.Diagnostics.Debug.WriteLine("account salt good");
+                
                 return accountSalt;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
 
             }
-            return null;
+
         }
 
         // navigates the user to the sign up page

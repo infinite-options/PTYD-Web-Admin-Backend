@@ -6,10 +6,6 @@
              mc:Ignorable="d"
              x:Class="InfiniteMeals.ViewModel.Subscribe.SubscribePage" Title="Subscribe">
 
-    <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Menu" Clicked="ClickedMenuView"/>
-        <ToolbarItem Text="User Profile" Clicked="ClickedUserProfile" />
-    </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
 
