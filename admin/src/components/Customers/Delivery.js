@@ -123,7 +123,14 @@ class Delivery extends React.Component {
                     className={classes.noteInput}
                 />
                 <Button> Save </Button>
-                <Button> Clear </Button>
+                <Button
+                onClick={(event) => {
+                    this.setState({
+                        currentNote: '',
+                    })
+                }}>
+                    Clear
+                </Button>
             </Paper>
         </div>
         )
