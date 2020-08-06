@@ -2,6 +2,18 @@ import React from "react";
 import axios from "axios";
 import { Typography } from "@material-ui/core";
 import MaterialTable from 'material-table';
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+    root: {
+        margin: '15px 0',
+    },
+    
+    title: {
+        color: '#469b47',
+    },
+
+  });
 
 class LatestActivity extends React.Component {
     constructor(props) {
@@ -54,14 +66,12 @@ class LatestActivity extends React.Component {
     }
 
     render() {
-        // if(this.props.searchID === '' || this.props.searchID === this.props.noUser) {
-        //     return <Typography variant="body1" style={{ margin: '30px 0' }} > Select user to get their latest activity </Typography>
-        // }
         if(!this.state.loaded) {
             return <Typography variant="body1" style={{ margin: '30px 0' }} > Loading Latest Activity </Typography>
         }
+        const { classes } = this.props;
         return (
-            <div style={{ margin: '15px 0' }}>
+            <div className={classes.root}>
                 <MaterialTable
                     title="Latest Activity"
                     columns={[
@@ -149,7 +159,9 @@ class LatestActivity extends React.Component {
                             <div style={{
                                 padding: '10px 0 0 15px'
                             }}>
-                                <Typography variant="h6"> {props.title} </Typography>
+                                <Typography variant="h5" className={classes.title}>
+                                    {props.title}
+                                </Typography>
                             </div>
                         ),
                     }}
@@ -159,4 +171,4 @@ class LatestActivity extends React.Component {
     }
 }
 
-export default LatestActivity;
+export default withStyles(styles,{withTheme:true})(LatestActivity);
