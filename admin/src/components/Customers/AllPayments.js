@@ -2,6 +2,18 @@ import React from 'react';
 import axios from 'axios';
 import { Typography } from "@material-ui/core";
 import MaterialTable from 'material-table';
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+    root: {
+        margin: '15px 0',
+    },
+    
+    title: {
+        color: '#469b47',
+    },
+
+  });
 
 class AllPayments extends React.Component {
 
@@ -77,8 +89,9 @@ class AllPayments extends React.Component {
         if(!this.state.loaded) {
             return <Typography variant="body1" style={{ margin: '15px 0' }} > Loading All payments </Typography>
         }
+        const { classes } = this.props;
         return (
-            <div style={{ margin: "15px 0" }}>
+            <div className={classes.root}>
                 <MaterialTable
                     title="All Payments"
                     columns={[
@@ -120,16 +133,17 @@ class AllPayments extends React.Component {
                             lineHeight: 1.2,
                             padding: 5,
                         },
-                        maxBodyHeight: 120,
-                        pageSize: 3,
-                        pageSizeOptions: [3],
+                        pageSize: 5,
+                        pageSizeOptions: [5,15,25],
                     }}
                     components={{
                         Toolbar: props => (
                             <div style={{
                                 padding: '10px 0 0 15px'
                             }}>
-                                <Typography variant="h6"> {props.title} </Typography>
+                                <Typography variant="h5" className={classes.title}>
+                                    {props.title}
+                                </Typography>
                             </div>
                         ),
                     }}
@@ -140,4 +154,4 @@ class AllPayments extends React.Component {
 
 }
 
-export default AllPayments;
+export default withStyles(styles,{withTheme:true})(AllPayments);

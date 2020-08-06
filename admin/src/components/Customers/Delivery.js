@@ -8,6 +8,10 @@ const styles = theme => ({
       
     },
     
+    title: {
+        color: '#469b47',
+    },
+
     sectionHead: {
         marginTop: '12px'
     },
@@ -81,9 +85,10 @@ class Delivery extends React.Component {
         if(!this.state.loaded) {
             return <Typography variant="h6"> Loading Delivery Info </Typography>
         }
+        const { classes } = this.props;
         return (
             <div style={{ margin: "5px 0" }}>
-                <Typography variant="h5"> Delivery Info </Typography>
+                <Typography variant="h5" className={classes.title}> Delivery Info </Typography>
                 {this.deliveryInfo()}
             </div>
         );
