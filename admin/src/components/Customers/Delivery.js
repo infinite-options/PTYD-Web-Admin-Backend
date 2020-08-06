@@ -1,7 +1,29 @@
 import React from 'react';
 import axios from 'axios';
-import { Typography } from "@material-ui/core";
-import MaterialTable from 'material-table';
+import { Button, Paper, Typography, TextField } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+    root: {
+      
+    },
+    
+    sectionHead: {
+        marginTop: '12px'
+    },
+
+    noteArea: {
+        minHeight: '80px',
+        padding: '15px',
+        marginRight: '15px'
+    },
+
+    noteInput: {
+        width: '100%',
+        minHeight: '80px',
+    }
+
+  });
 
 class Delivery extends React.Component {
 
@@ -10,6 +32,7 @@ class Delivery extends React.Component {
         this.state = {
             loaded: false,
             data: [],
+            currentNote: '',
         }
     }
 
@@ -59,44 +82,7 @@ class Delivery extends React.Component {
             return <Typography variant="h6"> Loading Delivery Info </Typography>
         }
         return (
-            <div style={{ margin: "15px 0" }}>
-                {/* <MaterialTable
-                    title="Delivery Information"
-                    columns={[
-                        {   title: 'Delivery First Name',
-                            field: 'delivery_first_name',
-                        },
-                        {   title: 'Delivery Last Name',
-                            field: 'delivery_last_name',
-                        },
-                        {   title: 'Delivery Phone',
-                            field: 'delivery_phone',
-                        },
-                        {   title: 'Delivery Address',
-                            field: 'delivery_address',
-                        },
-                        {   title: 'Delivery Address Unit',
-                            field: 'delivery_address_unit',
-                        },
-                        {   title: 'Delivery City',
-                            field: 'delivery_city',
-                        },
-                        {   title: 'Delivery ZIP',
-                            field: 'delivery_zip',
-                        },
-                        {
-                            title: 'Delivery Instructions',
-                            field: 'delivery_instructions',
-                        },
-                    ]}
-                    data={this.state.data}
-                    options={{
-                        tableLayout: 'auto',
-                        pageSize: 1,
-                        pageSizeOptions: [1,3],
-                    }}
-                    style={{ margin: "10px 0" }}
-                /> */}
+            <div style={{ margin: "5px 0" }}>
                 <Typography variant="h5"> Delivery Info </Typography>
                 {this.deliveryInfo()}
             </div>
@@ -104,6 +90,7 @@ class Delivery extends React.Component {
     }
 
     deliveryInfo = () => {
+        const { classes } = this.props;
         if(this.props.purchaseID === '') {
             return (
                 <Typography variant="body1"> Select Purchase to see delivery information </Typography>
@@ -114,18 +101,33 @@ class Delivery extends React.Component {
             return ( <Typography variant="body1"> No Delivery Information </Typography> );
         }
         return (
-        <div>
+        <div className={classes.root}>
             <Typography variant="h6"> Contact Information </Typography>
             <Typography variant="body1"> Name: {deliveryData.delivery_first_name} {deliveryData.delivery_last_name} </Typography>
-            <Typography variant="body1"> Phone: {deliveryData.delivery_first_phone} </Typography>
-            <Typography variant="h6"> Address </Typography>
+            <Typography variant="body1"> Phone: {deliveryData.delivery_phone} </Typography>
+            <Typography variant="h6" className={classes.sectionHead}> Address </Typography>
             <Typography variant="body1"> {deliveryData.delivery_address}  {deliveryData.delivery_address_unit} </Typography>
             <Typography variant="body1"> {deliveryData.delivery_city} {deliveryData.delivery_state} {deliveryData.delivery_zip} </Typography>
-            <Typography variant="h6"> Instructions </Typography>
+            <Typography variant="h6" className={classes.sectionHead}> Instructions </Typography>
             <Typography variant="body1"> {deliveryData.delivery_instructions} </Typography>
+            <Typography variant="h6" className={classes.sectionHead}> Notes </Typography>
+            <Paper className={classes.noteArea}>
+                <TextField
+                    multiline
+                    value={this.state.currentNote}
+                    onChange={(event) => {
+                        this.setState({
+                            currentNote: event.target.value,
+                        })
+                    }}
+                    className={classes.noteInput}
+                />
+                <Button> Save </Button>
+                <Button> Clear </Button>
+            </Paper>
         </div>
         )
     }
 };
 
-export default Delivery;
+export default withStyles(styles,{withTheme:true})(Delivery);

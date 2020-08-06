@@ -57,6 +57,7 @@ class Customers extends React.Component {
     setUserId = (event) => {
         this.setState({
             user: event.target.value,
+            purchase: '',
         });
         localStorage.setItem('user',event.target.value)
     }
@@ -68,14 +69,7 @@ class Customers extends React.Component {
                     <Link color="inherit">Admin Site</Link>
                     <Typography color="textPrimary">Customers</Typography>
                 </Breadcrumbs>
-                <Grid container>
-                    <Grid item xs={12} md={6}>
-                        { this.userListDropDown() }
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        { this.showPurchaseId() }
-                    </Grid>
-                </Grid>
+                { this.userListDropDown() }
                 <Grid container>
                     <Grid item xs={12}>
                         <LatestActivity
@@ -86,6 +80,7 @@ class Customers extends React.Component {
                         />
                     </Grid>
                     <Grid item xs={12} sm={2}>
+                        { this.showPurchaseId() }
                         <Delivery
                             purchaseID={this.state.purchase}
                             DELIVERY_API_URL={this.props.DELIVERY_API_URL}
@@ -147,10 +142,10 @@ class Customers extends React.Component {
         return (
             <Paper style={{   
                 padding: '2px 4px',
-                margin: '5px 0',
+                margin: '15px 15px 0 0',
                 display: 'flex',
                 alignItems: 'center',
-                maxWidth: '350px',
+                maxWidth: '250px',
                 height: '40px'
             }}>
                 <Typography variant="body1"> Purchase Id: {this.state.purchase ? this.state.purchase : 'No Purchases selected'} </Typography>

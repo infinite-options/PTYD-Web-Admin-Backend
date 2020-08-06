@@ -75,7 +75,21 @@ class LatestActivity extends React.Component {
                             field: 'purchase_id'
                         },
                         {   title: 'Purchase Status',
-                            field: 'purchase_status'
+                            field: 'purchase_status',
+                            render: row => {
+                                switch(row.purchase_status) {
+                                    case 'ACTIVE':
+                                        return <div style={{
+                                            color: '#4d922f'
+                                        }}> Active </div>
+                                    case 'CANCELLED':
+                                        return <div style={{
+                                            color: '#ff0000'
+                                        }}> Cancelled </div>
+                                    default:
+                                        return <div> Unspecified value </div>
+                                }
+                            }
                         },
                         {   title: 'Meal Plan ID',
                             field: 'meal_plan_id'
