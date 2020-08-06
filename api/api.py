@@ -1080,7 +1080,8 @@ class AccountPurchases(Resource):
                             week_affected
                 ) addon
                 ON snap_purchase_id = addon.purchase_id
-                WHERE buyer_id = \'""" + buyerId + """\'
+                WHERE buyer_id = \'""" + buyerId + """\' 
+                AND pay.cc_num <> 'NULL'
                 GROUP BY snap.payment_id;""",
                        "   SELECT * FROM ptyd_monday_zipcodes;"]
 
