@@ -1370,6 +1370,7 @@ class Checkout(Resource):
                         cc_exp_date,
                         cc_cvv,
                         billing_zip,
+                        isAddon,
                         stripe_charge_id
                     )
                     VALUES (
@@ -1387,6 +1388,7 @@ class Checkout(Resource):
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + """\',
+                        \'""" + data['isAddon'] + """\',
                         """ + stripe_charge_id + """);"""
 
         return query
@@ -1710,7 +1712,7 @@ class Checkout(Resource):
                                 WHERE coupon_id = """ + coupon_id + ";"
                     res = execute(coupon_query, 'post', conn)
                     paymentId = get_new_paymentID()
-
+                    data['isAddon'] = "FALSE"
                     payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
                 reply['payment'] = execute(payment_query, 'post', conn)
                 if reply['payment']['code'] != 281:
@@ -3462,7 +3464,7 @@ class Coupon (Resource):
                     today = datetime.today()
                     if (today <= expire_date):
                         if (result.get('limits') > result.get('num_used')):
-                            if (result.get('email') is None): # this coupon can apply for everyone
+                            if (result.get('email') is None or result.get('email') == ""): # this coupon can apply for everyone
                                 response['message'] = "OK"
                                 response['result'] = result
                             else: # compare the email in result with apply_email to make sure we have a right customer
