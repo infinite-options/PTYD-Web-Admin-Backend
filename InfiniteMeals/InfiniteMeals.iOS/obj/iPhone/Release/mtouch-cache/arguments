@@ -1,7 +1,7 @@
 # Version: 13.18.3.2 (d16-6-xcode11.6): ce0cc74a3
 /Library/Frameworks/Xamarin.iOS.framework/Versions/13.18.3.2/lib/mtouch/mtouch.exe \
-	--cache=/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/mtouch-cache \
-	--dev=/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/bin/iPhone/Release/InfiniteMeals.iOS.app \
+	--cache=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/mtouch-cache \
+	--dev=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhone/Release/InfiniteMeals.iOS.app \
 	--executable=InfiniteMeals.iOS \
 	--sgen-conc \
 	--linksdkonly \
@@ -11,9 +11,9 @@
 	--aot-options=-O=-float32 \
 	--http-message-handler=NSUrlSessionHandler \
 	--abi=arm64 \
-	--symbollist=/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/mtouch-symbols.list \
+	--symbollist=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/mtouch-symbols.list \
 	--dsym=no \
-	-r=/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/bin/Release/netstandard2.0/InfiniteMeals.dll \
+	-r=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Release/netstandard2.0/InfiniteMeals.dll \
 	-r=/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/mscorlib.dll \
 	-r=/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/OpenTK-1.0.dll \
 	-r=/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/System.Core.dll \
@@ -233,9 +233,9 @@
 	-r=/Users/Kristina/.nuget/packages/xamarin.forms/4.6.0.847/lib/Xamarin.iOS10/zh-Hant/Xamarin.Forms.Platform.iOS.resources.dll \
 	-r=/Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/lib/Xamarin.iOS10/Xamarin.Forms.Maps.dll \
 	-r=/Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/lib/Xamarin.iOS10/Xamarin.Forms.Maps.iOS.dll \
-	-r=/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/bin/Release/netstandard2.0/InfiniteMeals.dll \
+	-r=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Release/netstandard2.0/InfiniteMeals.dll \
 	-r=/Users/Kristina/.nuget/packages/xamarin.forms/4.6.0.847/buildTransitive/XCODE11/Xamarin.Forms.Platform.iOS.dll \
 	'--target-framework=Xamarin.iOS,v1.0' \
-	--root-assembly=/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/bin/iPhone/Release/InfiniteMeals.iOS.exe \
-	@/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/response-file.rsp \
+	--root-assembly=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhone/Release/InfiniteMeals.iOS.exe \
+	@/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/response-file.rsp \
 	--optimize=experimental-xforms-product-type \

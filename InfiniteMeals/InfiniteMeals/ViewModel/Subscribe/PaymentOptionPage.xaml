@@ -7,10 +7,8 @@
              x:Class="InfiniteMeals.ViewModel.Subscribe.PaymentOptionPage">
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout HorizontalOptions="CenterAndExpand" Padding="5">
+            <StackLayout HorizontalOptions="Center" Padding="5">
             <Label x:Name="mealPlan" FontFamily="CapsRegular" Margin="0,0,0,40"  TextColor="Black" HorizontalOptions="Center" FontSize="24"/>
-
-
             <Grid ColumnSpacing="8" HorizontalOptions="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40*" />
@@ -18,54 +16,129 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="150" />
-                    <RowDefinition Height="150" />
-                    <RowDefinition Height="150" />
+                    <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
 
                 <ImageButton x:Name="mealimage"
-                             VerticalOptions="Center"
-                             HorizontalOptions="Center"
-                             Grid.Row="0"
-                             Grid.Column="0"
-                             Clicked="WeekPaymentPlanClicked"/>
-                <Label Text="week to week"
+                        WidthRequest="175"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Grid.Row="0"
+                        Grid.RowSpan = "5"
+                        Grid.Column="0"
+                        Clicked="WeekPaymentPlanClicked"/>
+                <Label Text="Weekly"
                        VerticalOptions="Center"
                        FontFamily="CapsRegular"
                        FontSize="Body"
                        Grid.Row="0"
                        Grid.Column="1"
                        HorizontalOptions="Center" />
+
+                <Label x:Name="weekPerMealLabel"
+                       FontFamily= "CapsRegular"
+                       TextColor="LightSlateGray"
+                       FontSize="Small"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+
+                <Label x:Name="weekToWeekLabel"
+                       FontFamily="CapsRegular"
+                       FontSize="Body"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center" />
+
+                <Button BackgroundColor="Green"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Text="Checkout"
+                        TextColor="White"
+                        Clicked="WeekPaymentPlanClicked"/>
+                <Image Source="creditcards.png"
+                       Margin="10,0,10,40"
+                       Grid.Row="4"
+                       Grid.Column="1"
+                       HeightRequest="20"/>
+                <Label Text= "Sales tax of 15.00% will be added to all plans" FontFamily= "CapsRegular" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"   FontSize="Micro" TextColor="LightSlateGray"  HorizontalOptions="Center" VerticalOptions="Center"/>
+
+
                 <ImageButton x:Name="mealimage1"
+                             WidthRequest="175"
                              VerticalOptions="Center"
                              Grid.Column="0"
                              HorizontalOptions="Center"
-                             Grid.Row="1"
+                             Grid.Row="6"
+                             Grid.RowSpan = "5"
                              Clicked="TwoWeekPaymentPlanClicked"/>
+
                 <Label Text="2 week prepay"
                        VerticalOptions="Center"
                        FontFamily="CapsRegular"
                        FontSize="Body"
                        Grid.Column="1"
-                       Grid.Row="1"
+                       Grid.Row="6"
                        HorizontalOptions="Center" />
+                <Label x:Name="twoWeekPerMealLabel"
+                       FontFamily= "CapsRegular"
+                       TextColor="LightSlateGray"
+                       FontSize="Small"
+                       Grid.Row="7"
+                       Grid.Column="1"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+                <Label x:Name="twoWeekPrepayLabel"
+                       VerticalOptions="Center"
+                       FontFamily="CapsRegular"
+                       FontSize="Body"
+                       Grid.Row="8"
+                       Grid.Column="1"
+                       HorizontalOptions="End" />
+                <Button BackgroundColor="Green" Clicked="TwoWeekPaymentPlanClicked" Grid.Row="9" Grid.Column="1" Text="Checkout" TextColor="White"/>
+                <Image Source="creditcards.png" Margin="10,0,10,40" Grid.Row="10" Grid.Column="1" HeightRequest="20"/>
+                <Label Text= "Sales tax of 15.00% will be added to all plans" FontFamily= "CapsRegular" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2"   FontSize="Micro" TextColor="LightSlateGray"  HorizontalOptions="Center" VerticalOptions="Center"/>
+
 
                 <ImageButton x:Name="mealimage2"
+                             WidthRequest="175"
                              VerticalOptions="Center"
                              Grid.Column="0"
                              HorizontalOptions="Center"
-                             Grid.Row="2"
+                             Grid.Row="12"
+                             Grid.RowSpan = "5"
                              Clicked="FourWeekPaymentPlanClicked"/>
                 <Label Text="4 week prepay"
                        VerticalOptions="Center"
                        FontFamily="CapsRegular"
                        FontSize="Body"
                        Grid.Column="1"
-                       Grid.Row="2"
+                       Grid.Row="12"
                        HorizontalOptions="Center" />
+                 <Label x:Name="fourWeekPerMealLabel"
+                       FontFamily= "CapsRegular"
+                       TextColor="LightSlateGray"
+                       FontSize="Small"
+                       Grid.Row="13"
+                       Grid.Column="1"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+                <Label x:Name="fourWeekPrepayLabel"
+                       VerticalOptions="End"
+                       FontFamily="CapsRegular"
+                       FontSize="Body"
+                       Grid.Row="14"
+                       Grid.Column="1"
+                       HorizontalOptions="End" />
+                <Button BackgroundColor="Green" Clicked="FourWeekPaymentPlanClicked" Grid.Row="15" Grid.Column="1" Text="Checkout" TextColor="White"/>
+                <Image Source="creditcards.png" Margin="10,0,10,40" Grid.Row="16
+                       " Grid.Column="1" HeightRequest="20"/>
+                <Label Text= "Sales tax of 15.00% will be added to all plans" FontFamily= "CapsRegular" Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="2"   FontSize="Micro" TextColor="LightSlateGray"  HorizontalOptions="Center" VerticalOptions="Center"/>
 
             </Grid>
-                </StackLayout>
-        </ScrollView>
+            </StackLayout>
+</ScrollView>
     </ContentPage.Content>
 </ContentPage>

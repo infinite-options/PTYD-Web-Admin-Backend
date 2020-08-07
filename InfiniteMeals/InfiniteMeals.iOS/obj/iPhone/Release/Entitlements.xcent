@@ -12,5 +12,9 @@
 	<string>8V66NC2T37</string>
 	<key>aps-environment</key>
 	<string>production</string>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>8V66NC2T37.com.infiniteoptions.PrepToYourDoor</string>
+	</array>
 </dict>
 </plist>

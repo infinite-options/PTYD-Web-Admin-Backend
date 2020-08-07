@@ -143,7 +143,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     return;
                 } else {
                     postData();
-                    ClickedSave();
+                    //ClickedSave();
                 }
             };
 
@@ -533,6 +533,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             }
         }
 
+        /*
         public void getData(MealSchedule mealSchedule)
         {
             Dictionary<string, long> quantityDictionary = new Dictionary<string, long>();
@@ -2257,11 +2258,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             Content = lstView;
             //BindingContext = this;
         }
-
-        private void SaveNav_Clicked(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        */
 
         public async void postData(object sender, EventArgs e)
         {

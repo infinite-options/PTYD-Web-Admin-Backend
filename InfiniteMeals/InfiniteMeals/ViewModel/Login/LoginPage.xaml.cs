@@ -77,6 +77,8 @@ namespace InfiniteMeals.ViewModel.Login
                 else
                 {
                     await DisplayAlert("Error", "An account with that email does not exist", "OK");
+                    LoginButton.IsEnabled = true;
+
                 }
 
             }

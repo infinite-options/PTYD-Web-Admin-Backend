@@ -1,4 +1,4 @@
-/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/InfiniteMeals.iOS.exe
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/InfiniteMeals.iOS.exe
 /Library/Frameworks/Xamarin.iOS.framework/Versions/13.18.3.2/lib/mono/Xamarin.iOS/mscorlib.dll
 /Library/Frameworks/Xamarin.iOS.framework/Versions/13.18.3.2/lib/mono/Xamarin.iOS/../../64bits/Xamarin.iOS.dll
 /Library/Frameworks/Xamarin.iOS.framework/Versions/13.18.3.2/lib/mono/Xamarin.iOS/System.dll
@@ -25,7 +25,7 @@
 /Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/lib/Xamarin.iOS10/Xamarin.Forms.Maps.iOS.dll
 /Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/lib/Xamarin.iOS10/Xamarin.Forms.Maps.dll
 /Users/Kristina/.nuget/packages/rg.plugins.popup/2.0.0.3/lib/xamarinios10/Rg.Plugins.Popup.dll
-/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.dll
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.dll
 /Users/Kristina/.nuget/packages/xamarin.forms/4.6.0.847/lib/Xamarin.iOS10/Xamarin.Forms.Xaml.dll
 /Users/Kristina/.nuget/packages/newtonsoft.json/12.0.3/lib/netstandard2.0/Newtonsoft.Json.dll
 /Users/Kristina/.nuget/packages/sqlite-net-pcl/1.7.335/lib/netstandard2.0/SQLite-net.dll

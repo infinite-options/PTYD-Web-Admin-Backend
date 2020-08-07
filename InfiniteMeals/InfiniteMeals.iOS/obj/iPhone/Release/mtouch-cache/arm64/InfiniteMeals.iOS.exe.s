@@ -371,7 +371,7 @@ runtime_version:
 .section __TEXT, __const
 	.align 2
 assembly_guid:
-	.asciz "90E5DE2F-5B05-40EC-B8F6-37BFDFAAEFA8"
+	.asciz "56AC5D24-14A8-4762-B9FF-513A1F17B9DA"
 .section __TEXT, __const
 	.align 2
 assembly_name:
@@ -465,7 +465,7 @@ _mono_aot_file_info:
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 230,194,232,177,166,170,45,28,79,255,65,167,19,127,116,19
+	.byte 226,145,15,142,34,80,32,102,88,29,146,60,161,88,136,44
 	.globl _mono_aot_module_InfiniteMeals_iOS_info
 	.align 3
 _mono_aot_module_InfiniteMeals_iOS_info:

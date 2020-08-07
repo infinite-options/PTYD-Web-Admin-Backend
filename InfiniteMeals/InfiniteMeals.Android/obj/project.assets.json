@@ -3549,11 +3549,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
+      "projectUniqueName": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
       "projectName": "InfiniteMeals.Android",
-      "projectPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
+      "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/InfiniteMeals.Android.csproj",
       "packagesPath": "/Users/Kristina/.nuget/packages/",
-      "outputPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.Android/obj/",
+      "outputPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
@@ -3568,8 +3568,8 @@
       "frameworks": {
         "monoandroid90": {
           "projectReferences": {
-            "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
-              "projectPath": "/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
+            "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj": {
+              "projectPath": "/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/InfiniteMeals.csproj"
             }
           }
         }

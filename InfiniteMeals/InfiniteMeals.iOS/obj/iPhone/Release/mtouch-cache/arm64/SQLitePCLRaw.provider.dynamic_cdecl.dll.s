@@ -48908,7 +48908,7 @@ _mono_aot_file_info:
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 130,81,203,128,104,22,12,240,137,252,184,245,93,175,105,215
+	.byte 131,201,68,67,250,224,249,124,171,16,61,64,135,21,208,173
 	.globl _mono_aot_module_SQLitePCLRaw_provider_dynamic_cdecl_info
 	.align 3
 _mono_aot_module_SQLitePCLRaw_provider_dynamic_cdecl_info:

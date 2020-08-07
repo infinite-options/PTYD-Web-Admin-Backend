@@ -134,6 +134,79 @@ namespace InfiniteMeals.ViewModel.Subscribe {
             
         }
 
-        
+        public async Task<double> getWeeklyMealPlanCost(SubscriptionPlan subscriptionPlan)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var content = await client.GetStringAsync(mealPlanAPI);
+                var obj = JsonConvert.DeserializeObject<MealPlanInformation>(content);
+
+                // check the five meal payment plans for a match
+                foreach (Result result in obj.result.FiveMealPaymentPlans.result)
+                {
+                    if (result.meal_plan_id.Equals(subscriptionPlan.id))
+                    {
+                        System.Diagnostics.Debug.WriteLine(result.meal_weekly_price);
+                        return result.meal_weekly_price;
+
+                    }
+                }
+
+                // check the ten meal payment plans for a match
+                foreach (Result result in obj.result.TenMealPaymentPlans.result)
+                {
+                    if (result.meal_plan_id.Equals(subscriptionPlan.id))
+                    {
+                        System.Diagnostics.Debug.WriteLine(result.meal_weekly_price);
+                        return result.meal_weekly_price;
+
+                    }
+                }
+
+                // check the fifteen meal payment plans for a match
+                foreach (Result result in obj.result.FifteenMealPaymentPlans.result)
+                {
+                    if (result.meal_plan_id.Equals(subscriptionPlan.id))
+                    {
+                        System.Diagnostics.Debug.WriteLine(result.meal_weekly_price);
+                        return result.meal_weekly_price;
+
+                    }
+                }
+
+                // check the twenty meal payment plans for a match
+                foreach (Result result in obj.result.TwentyMealPaymentPlans.result)
+                {
+                    if (result.meal_plan_id.Equals(subscriptionPlan.id))
+                    {
+                        System.Diagnostics.Debug.WriteLine(result.meal_weekly_price);
+                        return result.meal_weekly_price;
+
+                    }
+                }
+
+                return -1; // result isn't found, return -1
+
+            }
+            catch (ArgumentNullException e)
+            { // handles exception for null subscription plan
+                await DisplayAlert("Error", e.Message, "OK");
+                return -1;
+            }
+            catch (HttpRequestException e)
+            { // handles exception for network connectivity
+                await DisplayAlert("Error", e.Message, "OK");
+                return -1;
+            }
+            catch (TaskCanceledException e)
+            { // handles exception for timeout
+                await DisplayAlert("Error", e.Message, "OK");
+                return -1;
+            }
+
+        }
+
+
     }
 }
