@@ -29,7 +29,7 @@ namespace InfiniteMeals.ViewModel.SignUp {
         public SignUpPage() {
             
             InitializeComponent();
-
+            checkPlatform();
         }
 
         private async void ClickedSignUp(object sender, EventArgs e) {
@@ -344,6 +344,18 @@ namespace InfiniteMeals.ViewModel.SignUp {
             mainPage.updateLoginButton(); // update login button 
             await Navigation.PopToRootAsync();
             await DisplayAlert("Success", "Your account was created", "OK");
+        }
+
+        private void checkPlatform()
+        {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                signUpButton.CornerRadius = 20;
+            }
+            else if (Device.RuntimePlatform == Device.Android)
+            {
+                signUpButton.CornerRadius = 50;
+            }
         }
 
         

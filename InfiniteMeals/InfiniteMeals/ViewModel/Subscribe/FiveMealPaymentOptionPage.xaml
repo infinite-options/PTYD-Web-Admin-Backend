@@ -9,7 +9,7 @@
 
         <StackLayout HorizontalOptions="CenterAndExpand" Padding="5">
 
-            <Label Text="5 Meal Plan" Margin="0,0,0,40" x:Name="mealPlan"  TextColor="Black" HorizontalOptions="Center" FontSize="24" FontFamily="CapsRegular"/>
+            <Label Text="5 Meal Plan" Margin="0,20,0,20" x:Name="mealPlan"  TextColor="Black" HorizontalOptions="Center" FontSize="24" FontFamily="CapsRegular"/>
 
             <Grid ColumnSpacing="8" HorizontalOptions="Center">
                 <Grid.ColumnDefinitions>
@@ -18,14 +18,24 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="150" />
-                    <RowDefinition Height="150" />
+                    <RowDefinition Height="100" />
                 </Grid.RowDefinitions>
 
-                <ImageButton x:Name="mealimage" HorizontalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" Clicked="WeekPaymentPlanClicked"/>
-                <Label Text="week To week" FontFamily= "CapsRegular" Grid.Row="0" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
-                <ImageButton x:Name="mealimage1"  HorizontalOptions="CenterAndExpand" Grid.Row="1" Grid.Column="0" Clicked="FourWeekPaymentPlanClicked"/>
-                <Label Text="4 Week Prepay" FontFamily= "CapsRegular" Grid.Row="1" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <ImageButton x:Name="mealimage" WidthRequest="175" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0" Grid.RowSpan = "5" Clicked="WeekPaymentPlanClicked"/>
+                <Label Text="Weekly" FontFamily= "CapsRegular" FontSize="Body" FontAttributes="Bold" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label x:Name="weekPerMealLabel" FontFamily= "CapsRegular" TextColor="LightSlateGray" FontSize="Small" Grid.Row="1" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label x:Name="weekLabel" FontFamily= "CapsRegular" FontSize="Small" Grid.Row="2" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Button BackgroundColor="Green" Grid.Row="3" Grid.Column="1" Text="Checkout" TextColor="White"/>
+                <Image Source="creditcards.png" Margin="10,0,10,0" Grid.Row="4" Grid.Column="1" HeightRequest="20"/>
+                <Label Text= "Sales tax of 15.00% will be added to all plans" Grid.Row="5" Grid.Column = "0" Grid.ColumnSpan = "2" FontFamily= "CapsRegular"   FontSize="Micro" TextColor="LightSlateGray"  HorizontalOptions="Center" VerticalOptions="End"/>
+
+                <ImageButton x:Name="mealimage1" WidthRequest="175" HorizontalOptions="Center" Grid.Row="6" Grid.Column="0" Grid.RowSpan = "5" Clicked="FourWeekPaymentPlanClicked"/>
+                <Label Text="4 Week Prepay" FontFamily= "CapsRegular" FontSize="Body" FontAttributes="Bold" Grid.Row="6" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label x:Name="fourPerMealLabel" FontFamily= "CapsRegular" TextColor="LightSlateGray" FontSize="Small"  Grid.Row="7" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label x:Name="fourWeekPrepayLabel" FontFamily= "CapsRegular"   FontSize="Small" Grid.Row="8" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Button BackgroundColor="Green" Grid.Row="9" Grid.Column="1" Text="Checkout" TextColor="White"/>
+                <Image Source="creditcards.png" Margin="10,0,10,0" Grid.Row="10" Grid.Column="1" HeightRequest="20" />
+                <Label Text= "Sales tax of 15.00% will be added to all plans" Grid.Row="11" Grid.Column = "0" Grid.ColumnSpan = "2" FontFamily= "CapsRegular"   FontSize="Micro" TextColor="LightSlateGray"  HorizontalOptions="Center" VerticalOptions="End"/>
 
             </Grid>
         </StackLayout>

@@ -26,14 +26,16 @@
                     <ColumnDefinition Width="16.66*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="150" />
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="150" />
-                    <RowDefinition Height="40" />
+                    <RowDefinition Height="0.4*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.4*" />
+                    <RowDefinition Height="0.1*" />
+
 
                 </Grid.RowDefinitions>
 
                 <ImageButton x:Name="mealimage"
+                             WidthRequest="150"
                              VerticalOptions="Start"
                              HorizontalOptions="CenterAndExpand"
                              Grid.Row="0"
@@ -51,6 +53,7 @@
 
 
                 <ImageButton x:Name="mealimage1"
+                             WidthRequest="150"
                              HorizontalOptions="CenterAndExpand"
                              Grid.Row="0"
                              Grid.Column="1"
@@ -68,6 +71,7 @@
 
 
                 <ImageButton x:Name="mealimage2"
+                             WidthRequest="150"
                                 HorizontalOptions="CenterAndExpand"
                                 Grid.Column="0"
                                 Grid.Row="2"
@@ -84,6 +88,7 @@
                     />
 
                 <ImageButton x:Name="mealimage3"
+                             WidthRequest="150"
                              HorizontalOptions="CenterAndExpand"
                              Grid.Column="1"
                              Grid.Row="2"

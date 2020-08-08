@@ -13872,19 +13872,22 @@ namespace InfiniteMeals.Droid
 			public const int shippingStatus = 2131165335;
 			
 			// aapt resource value: 0x7F070098
-			public const int summaryStatus = 2131165336;
+			public const int subscription = 2131165336;
 			
 			// aapt resource value: 0x7F070099
-			public const int tempeh = 2131165337;
+			public const int summaryStatus = 2131165337;
 			
 			// aapt resource value: 0x7F07009A
-			public const int thaicurry = 2131165338;
+			public const int tempeh = 2131165338;
 			
 			// aapt resource value: 0x7F07009B
-			public const int tooltip_frame_dark = 2131165339;
+			public const int thaicurry = 2131165339;
 			
 			// aapt resource value: 0x7F07009C
-			public const int tooltip_frame_light = 2131165340;
+			public const int tooltip_frame_dark = 2131165340;
+			
+			// aapt resource value: 0x7F07009D
+			public const int tooltip_frame_light = 2131165341;
 			
 			static Drawable()
 			{

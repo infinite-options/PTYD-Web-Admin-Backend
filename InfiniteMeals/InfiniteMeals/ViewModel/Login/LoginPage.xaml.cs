@@ -7,8 +7,8 @@ using System.Security.Cryptography;
 
 using Newtonsoft.Json;
 using Xamarin.Forms;
-using Xamarin.Essentials;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 using InfiniteMeals.Model.Login;
 using InfiniteMeals.ViewModel.SignUp;
@@ -25,13 +25,26 @@ namespace InfiniteMeals.ViewModel.Login
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
         public HttpClient client = new HttpClient(); // client to handle all api calls
-        
         public LoginPage()
         {
             InitializeComponent();
-            versionNumber.Text = "Version: " +  VersionTracking.CurrentVersion;
+            InterfaceFormat();
+            versionNumber.Text = "Version: " + VersionTracking.CurrentVersion;
         }
 
+        public void InterfaceFormat()
+        {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                LoginButton.CornerRadius = 15;
+                SignUpButton.CornerRadius = 15;
+            }
+            else if (Device.RuntimePlatform == Device.Android)
+            {
+                LoginButton.CornerRadius = 50;
+                SignUpButton.CornerRadius = 50;
+            }
+        }
 
 
         // handles when the login button is clicked
@@ -40,7 +53,7 @@ namespace InfiniteMeals.ViewModel.Login
             LoginButton.IsEnabled = false;
             if (String.IsNullOrEmpty(this.loginEmail.Text) || String.IsNullOrEmpty(this.loginPassword.Text))
             { // check if all fields are filled out
-                await DisplayAlert("Empty Field(s)", "Please fill in all fields", "OK");
+                await DisplayAlert("Error", "Please fill in all fields", "OK");
                 LoginButton.IsEnabled = true;
             }
             else
@@ -68,6 +81,7 @@ namespace InfiniteMeals.ViewModel.Login
                 {
                     await DisplayAlert("Error", "An account with that email does not exist", "OK");
                     LoginButton.IsEnabled = true;
+
                 }
 
             }
@@ -79,8 +93,7 @@ namespace InfiniteMeals.ViewModel.Login
         public async Task<LoginResponse> login(string userEmail, string userPassword, AccountSalt accountSalt)
         {
             const string deviceBrowserType = "Mobile";
-
-            //var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
+            // var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
 
             var deviceIpAddress = "0.0.0.0";
             if (deviceIpAddress != null)
@@ -137,16 +150,15 @@ namespace InfiniteMeals.ViewModel.Login
             {
                 var content = await client.GetStringAsync(accountSaltURL + userEmail); // get the requested account salt
                 var accountSalt = JsonConvert.DeserializeObject<AccountSalt>(content);
-                
+                System.Diagnostics.Debug.WriteLine("account salt good");
                 return accountSalt;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return null;
 
             }
-
+            return null;
         }
 
         // navigates the user to the sign up page

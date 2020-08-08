@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InfiniteMeals.ViewModel.MealSelect.MealChoices"
+             NavigationPage.HasBackButton="False"
              Title="Select Meals">
 <ContentPage.Content>
-		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}"
+		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}"
             VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HasUnevenRows="True" >
 			<ListView.ItemTemplate>
 				<DataTemplate>
@@ -31,3 +32,166 @@
 		</ListView>
 	</ContentPage.Content>
 </ContentPage>
+<!--
+    <StackLayout>
+        <Label Text="Meals" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
+        <ListView
+          ItemsSource="{Binding Meals}"
+          HasUnevenRows="true"
+          Margin="20"
+          ItemSelected="OnListViewItemSelected"
+          ItemTapped="OnListViewItemTapped">
+        <ListView.ItemTemplate>
+        <DataTemplate>
+            <ViewCell>
+                <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.RowSpan="1"
+                           Source="{Binding imageUrl}"
+                           Aspect="AspectFill"
+                           HeightRequest="60"
+                           WidthRequest="60" />
+                    <Label Grid.Column="1"
+                           Text="{Binding name}"
+                           FontAttributes="Bold"/>
+                    <ImageButton Grid.Column="0"
+                           Grid.Row="1"
+                           Source="{Binding infoUrl}"
+                           Aspect="AspectFill"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
+                           HeightRequest="20"
+                           WidthRequest="20"/>
+                     <Stepper x:Name="_stepper"
+                              Grid.Column="2"
+                             Value="0"
+                             Maximum="10"
+                             Increment="1"
+                              />
+                    <Label Grid.Column="2"
+                           Grid.Row="1"
+                           Text="{Binding Source={x:Reference _stepper}, Path=Value, StringFormat='Quantity: {0:F0}'}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand" />
+                    </Grid>
+            </ViewCell>
+             </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+        <Label Text="Seasonal Meals" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
+         <ListView
+         ItemsSource="{Binding SeasonalMeals}"
+         Margin="20"
+          HasUnevenRows="true"
+          ItemSelected="OnListViewItemSelected"
+          ItemTapped="OnListViewItemTapped">
+            <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.RowSpan="1"
+                           Source="{Binding imageUrl}"
+                           Aspect="AspectFill" />
+
+                    <Label Grid.Column="1"
+                           Text="{Binding name}"
+                           FontAttributes="Bold"/>
+                    <ImageButton Grid.Column="0"
+                           Grid.Row="1"
+                           Source="{Binding infoUrl}"
+                           Aspect="AspectFill"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
+                           HeightRequest="20"
+                           WidthRequest="20"/>
+                    <Stepper x:Name="_stepper"
+                              Grid.Column="2"
+                             Value="0"
+                             Maximum="10"
+                             Increment="1"
+                              />
+                    <Label Grid.Column="2"
+                           Grid.Row="1"
+                           Text="{Binding Source={x:Reference _stepper}, Path=Value, StringFormat='Quantity: {0:F0}'}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Label Text="Smoothies" FontSize ="24" Margin="20" TextColor="Black" HorizontalOptions="Center"/>
+         <ListView
+         ItemsSource="{Binding Smoothies}"
+         Margin="20"
+          HasUnevenRows="true"
+          ItemSelected="OnListViewItemSelected"
+          ItemTapped="OnListViewItemTapped">
+            <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.RowSpan="1"
+                           Source="{Binding imageUrl}"
+                           Aspect="AspectFill"
+                           HeightRequest="60"
+                           WidthRequest="60" />
+
+                    <Label Grid.Column="1"
+                           Text="{Binding name}"
+                           FontAttributes="Bold"/>
+                    <ImageButton Grid.Column="0"
+                           Grid.Row="1"
+                           Source="{Binding infoUrl}"
+                           Aspect="AspectFill"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
+                           HeightRequest="20"
+                           WidthRequest="20"/>
+                    <Stepper x:Name="_stepper"
+                              Grid.Column="2"
+                             Value="0"
+                             Maximum="10"
+                             Increment="1"
+                              />
+                    <Label Grid.Column="2"
+                           Grid.Row="1"
+                           Text="{Binding Source={x:Reference _stepper}, Path=Value, StringFormat='Quantity: {0:F0}'}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
+-->
