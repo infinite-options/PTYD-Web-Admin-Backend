@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 
 using Newtonsoft.Json;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 using Xamarin.Forms.Xaml;
 
 using InfiniteMeals.Model.Login;
@@ -24,9 +25,11 @@ namespace InfiniteMeals.ViewModel.Login
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
         public HttpClient client = new HttpClient(); // client to handle all api calls
+        
         public LoginPage()
         {
             InitializeComponent();
+            versionNumber.Text = "Version: " +  VersionTracking.CurrentVersion;
         }
 
 
@@ -76,7 +79,10 @@ namespace InfiniteMeals.ViewModel.Login
         public async Task<LoginResponse> login(string userEmail, string userPassword, AccountSalt accountSalt)
         {
             const string deviceBrowserType = "Mobile";
-            var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
+
+            //var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
+
+            var deviceIpAddress = "0.0.0.0";
             if (deviceIpAddress != null)
             {
                 try

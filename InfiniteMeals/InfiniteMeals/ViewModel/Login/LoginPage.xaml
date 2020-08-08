@@ -10,9 +10,9 @@
     <ContentPage.Content>
 
 
-            <StackLayout VerticalOptions="CenterAndExpand" Padding="5" Margin="50,0,50,0">
-
-            <Label Text="Login" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Center" FontSize="Title" Margin="0,0,0,40"/>
+            <StackLayout VerticalOptions="FillAndExpand" Padding="5" Margin="50,0,50,0">
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label Text="Login" FontFamily="CapsRegular" TextColor="Black" HorizontalOptions="Center" FontSize="Title" Margin="0,0,0,40"/>
             <StackLayout VerticalOptions="CenterAndExpand" Padding="5">
                 <Entry x:Name="loginEmail" FontFamily="CapsRegular"  Placeholder="Email" TextColor="Black"></Entry>
                 <Entry x:Name="loginPassword" FontFamily="CapsRegular" Placeholder="Password"  IsPassword="True"></Entry>
@@ -34,8 +34,15 @@
                 <Button FontFamily= "CapsRegular" BackgroundColor="Orange" CornerRadius="50" Text="Sign Up" Clicked="SignUpClicked"/>
 
             </StackLayout>
-        </StackLayout>
+            </StackLayout>
 
+            <StackLayout Orientation="Horizontal" VerticalOptions="End" Margin="0, 0, 0, 30">
+                <Label x:Name="versionNumber" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" FontSize="Medium" TextColor="Black" FontAttributes="Bold" />
+            </StackLayout>
+
+        </StackLayout>
+        
+ 
 
 
     </ContentPage.Content>
