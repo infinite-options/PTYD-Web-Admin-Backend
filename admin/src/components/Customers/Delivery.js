@@ -72,9 +72,26 @@ class Delivery extends React.Component {
         axios
             .get(`${this.props.DELIVERY_API_URL}/${this.props.purchaseID}`)
             .then(function (res) {
+                let info = res.data.result.result[0];
                 curComponent.setState({
-                    data: res.data.result.result,
+                    data: info,
+                    currentNote: info.admin_notes,
                 })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+
+
+    saveNote = () => {
+        console.log('save button pushed');
+        axios
+            .post(`${this.props.NOTE_API_URL}/${this.props.purchaseID}`, {
+                note: this.state.currentNote,
+            })
+            .then(function(res) {
+                console.log(res);
             })
             .catch(function (error) {
                 console.log(error);
@@ -101,7 +118,7 @@ class Delivery extends React.Component {
                 <Typography variant="body1"> Select Purchase to see delivery information </Typography>
             )
         }
-        let deliveryData = this.state.data[0];
+        let deliveryData = this.state.data;
         if(!deliveryData) {
             return ( <Typography variant="body1"> No Delivery Information </Typography> );
         }
@@ -127,7 +144,11 @@ class Delivery extends React.Component {
                     }}
                     className={classes.noteInput}
                 />
-                <Button> Save </Button>
+                <Button
+                    onClick={this.saveNote}
+                >
+                    Save
+                </Button>
                 <Button
                 onClick={(event) => {
                     this.setState({
