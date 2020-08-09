@@ -1389,8 +1389,9 @@ class Checkout(Resource):
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + """\',
-                        \'""" + data['isAddon'] + """\',
+                        'FALSE',
                         """ + stripe_charge_id + """);"""
+        print("before return")
 
         return query
 
@@ -1592,6 +1593,7 @@ class Checkout(Resource):
                         """ + str(delivery_coord['longitude']) + """,
                         """ + str(delivery_coord['latitude']) + """
                     );"""
+            print("passed purchase query")
             snapshot_query = """ INSERT INTO ptyd_snapshots
                     (
                         snapshot_id
@@ -1618,16 +1620,22 @@ class Checkout(Resource):
                         , """ + dates['weeksRemaining'] + """
                         , \'""" + dates['startDate'] + "\');"
             # Validate credit card
+            print("passed snapshot query")
             if data['cc_num'][0:12] == "XXXXXXXXXXXX":
                 last_four_digits = data['cc_num'][12:]
-                select_card_query = """SELECT cc_num FROM ptyd_payments p1
-                                                    WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp) FROM 
-                                                        (SELECT * FROM ptyd_payments p2
+                select_card_query = """SELECT cc_num FROM (SELECT * 
+                                                            FROM ptyd_payments
                                                             WHERE buyer_id = '""" + data['user_uid'] + """'
                                                             AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
                                                             AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
-                                                            AND cc_cvv = '""" + data['cc_cvv'] + """') AS p)
-                                                    AND cc_num IS NOT NULL;"""
+                                                            AND cc_cvv = '""" + data['cc_cvv'] + """') AS p
+                                        WHERE payment_time_stamp = (SELECT MAX(payment_time_stamp)
+                                                                        FROM ptyd_payments
+                                                                        WHERE buyer_id = '""" + data['user_uid'] + """'
+                                                                        AND RIGHT(cc_num, 4) = '""" + last_four_digits + """'
+                                                                        AND cc_exp_date = '""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01'
+                                                                        AND cc_cvv = '""" + data['cc_cvv'] + """')
+                                        AND cc_num IS NOT NULL;"""
                 card_selected = execute(select_card_query, 'get', conn)
                 if not card_selected['result']:
                     response['message'] = "Credit card info is incorrect."
@@ -1635,16 +1643,19 @@ class Checkout(Resource):
                 # update data['cc_num'] to write to database
                 data['cc_num'] = card_selected['result'][0].get('cc_num')
             #checking for coupon and preparing for stripe charge
+
             coupon_id = data.get('coupon_id')
             if coupon_id == "" or coupon_id is None:
-                charge = data['total_charge']
+                charge = round(float(data['total_charge']),2)
             else:
-                charge = round(data['total_charge'] - data['total_discount'], 2)
+                charge = round(float(data['total_charge']) - float(data['total_discount']), 2)
             # create a stripe charge and make sure that charge is successful before writing it into database
             # we should use Idempotent key to prevent sending multiple payment requests due to connection fail.
+
             try:
                 #create a token for stripe
                 card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
+                print(card_dict)
                 try:
                     card_token = stripe.Token.create(card=card_dict)
                     stripe_charge = stripe.Charge.create(
@@ -1652,7 +1663,7 @@ class Checkout(Resource):
                         currency="usd",
                         source=card_token,
                         description="Charge customer %s for %s" %(data['delivery_first_name'] + " " + data['delivery_last_name'], data['item'] ))
-
+                    print(stripe_charge)
                 except stripe.error.CardError as e:
                     # Since it's a decline, stripe.error.CardError will be caught
                     response['message'] = e.error.message
@@ -1660,6 +1671,7 @@ class Checkout(Resource):
                 # write everything into payment table
                 if coupon_id == "" or coupon_id is None:
                     payment_query = self.getPaymentQuery(data, 'NULL', charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
+                    
                 elif coupon_id != "" and coupon_id is not None:
                     coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
                     temp_query = """ INSERT INTO ptyd_payments
@@ -1709,6 +1721,7 @@ class Checkout(Resource):
                                         \'""" + getNow() + """\');"""
                     res = execute(temp_query, 'post', conn)
                     # update coupon table
+                    
                     coupon_query = """UPDATE ptyd_coupons SET num_used = num_used + 1 
                                 WHERE coupon_id = """ + coupon_id + ";"
                     res = execute(coupon_query, 'post', conn)
@@ -6148,7 +6161,7 @@ class DeliveryInfo(Resource):
         items = {}
         try:
             conn = connect()
-            items = execute("""select * from pytd_purchases where purchase_id = \'""" + str(purchase_id) + """\';""", 'get', conn)
+            items = execute("""select * from ptyd_purchases where purchase_id = \'""" + str(purchase_id) + """\';""", 'get', conn)
             response['message'] = 'Request successful.'
             response['result'] = items
 
