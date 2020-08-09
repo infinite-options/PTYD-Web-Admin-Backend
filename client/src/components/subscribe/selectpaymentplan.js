@@ -58,22 +58,27 @@ class SelectPaymentPlan extends Component {
               <a className='number-of-meals' href='/5-meals-subscription'>
                 5 MEALS
               </a>
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; 
+              {/* &nbsp; &nbsp; */}
               <a className='number-of-meals' href='/10-meals-subscription'>
                 10 MEALS{" "}
               </a>{" "}
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; 
+              {/* &nbsp; &nbsp; */}
               <a className='number-of-meals' href='/15-meals-subscription'>
                 15 MEALS{" "}
               </a>{" "}
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; 
+              {/* &nbsp; &nbsp; */}
               <a className='number-of-meals' href='/20-meals-subscription'>
                 20 MEALS{" "}
               </a>
             </div>
             <hr className='three' />
-            <div className='justify-content-center'>
-              <CardDeck className='d-flex justify-content-center'>
+            {/* <div className='justify-content-center'> */}
+              <CardDeck 
+              // className='d-flex justify-content-center'
+              >
                 {this.state.paymentPlans.map(paymentPlan => (
                   <Card.Body
                     key={paymentPlan.meal_plan_id}
@@ -151,7 +156,7 @@ class SelectPaymentPlan extends Component {
                   </Card.Body>
                 ))}
               </CardDeck>
-            </div>
+            {/* </div> */}
             <hr className='mt-5' />
             <h3 className='font1 feedback_marginTop' style={{color: "#196F3D"}}>
               Our Customers Say
