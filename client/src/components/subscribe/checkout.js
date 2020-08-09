@@ -166,15 +166,16 @@ class Checkout extends Component {
           this.setState({purchase: purApi.result[len - 1]});
           console.log("purchase: ", this.state.purchase);
           //parse purchase cc exp date into month and year
-          const parsedValues = purApi.result[len - 1].cc_exp_date.split("-");
-          this.setState(prevState => ({
-            purchase: {
-              ...prevState.purchase,
-              cc_exp_month: parsedValues[1],
-              cc_exp_year: parsedValues[0]
-            }
-          }));
-
+          if (purApi.result[len - 1].cc_exp_date !== null) {
+            const parsedValues = purApi.result[len - 1].cc_exp_date.split("-");
+            this.setState(prevState => ({
+              purchase: {
+                ...prevState.purchase,
+                cc_exp_month: parsedValues[1],
+                cc_exp_year: parsedValues[0]
+              }
+            }));
+          }
           // let len = purApi.result.length;
           // this.setState({purchase: purApi.result[len - 1]});
           // if (this.state.purchase.cc_num !== undefined) {
@@ -417,6 +418,7 @@ class Checkout extends Component {
 
   applyCoupon = event => {
     event.preventDefault();
+    this.setState({coupon_error: null});
     console.log("this.state.coupon: ", this.state.coupon);
     // send a form to the API
     if (this.state.coupon !== null) {
