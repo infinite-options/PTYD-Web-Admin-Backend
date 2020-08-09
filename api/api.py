@@ -1391,8 +1391,6 @@ class Checkout(Resource):
                         \'""" + data['billing_zip'] + """\',
                         'FALSE',
                         """ + stripe_charge_id + """);"""
-        print("before return")
-
         return query
 
     def getDates(self, frequency):
@@ -1593,7 +1591,7 @@ class Checkout(Resource):
                         """ + str(delivery_coord['longitude']) + """,
                         """ + str(delivery_coord['latitude']) + """
                     );"""
-            print("passed purchase query")
+
             snapshot_query = """ INSERT INTO ptyd_snapshots
                     (
                         snapshot_id
@@ -1619,8 +1617,7 @@ class Checkout(Resource):
                         , \'""" + dates['billingDate'] + """\'
                         , """ + dates['weeksRemaining'] + """
                         , \'""" + dates['startDate'] + "\');"
-            # Validate credit card
-            print("passed snapshot query")
+            # Validate credit cardpassed purchase query
             if data['cc_num'][0:12] == "XXXXXXXXXXXX":
                 last_four_digits = data['cc_num'][12:]
                 select_card_query = """SELECT cc_num FROM (SELECT * 
@@ -1655,7 +1652,6 @@ class Checkout(Resource):
             try:
                 #create a token for stripe
                 card_dict = {"number": data['cc_num'], "exp_month": int(data['cc_exp_month']),"exp_year": int(data['cc_exp_year']),"cvc": data['cc_cvv'],}
-                print(card_dict)
                 try:
                     card_token = stripe.Token.create(card=card_dict)
                     stripe_charge = stripe.Charge.create(
@@ -1663,7 +1659,6 @@ class Checkout(Resource):
                         currency="usd",
                         source=card_token,
                         description="Charge customer %s for %s" %(data['delivery_first_name'] + " " + data['delivery_last_name'], data['item'] ))
-                    print(stripe_charge)
                 except stripe.error.CardError as e:
                     # Since it's a decline, stripe.error.CardError will be caught
                     response['message'] = e.error.message
@@ -1695,7 +1690,6 @@ class Checkout(Resource):
                                     \'""" + purchaseId + """\',
                                     \'""" + getNow() + """\');"""
                     res = execute(temp_query, 'post', conn)
-                    print("after execute temp query 1: ", res)
 
                     paymentId = get_new_paymentID()
                     temp_query = """ INSERT INTO ptyd_payments
@@ -1726,7 +1720,6 @@ class Checkout(Resource):
                                 WHERE coupon_id = """ + coupon_id + ";"
                     res = execute(coupon_query, 'post', conn)
                     paymentId = get_new_paymentID()
-                    data['isAddon'] = "FALSE"
                     payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
                 reply['payment'] = execute(payment_query, 'post', conn)
                 if reply['payment']['code'] != 281:
