@@ -1389,7 +1389,7 @@ class Checkout(Resource):
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + """\',
-                        'FALSE',
+                        \'""" + data['isAddon'] + """\',
                         """ + stripe_charge_id + """);"""
         print("before return")
 
