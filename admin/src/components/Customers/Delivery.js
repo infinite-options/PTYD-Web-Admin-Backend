@@ -72,8 +72,10 @@ class Delivery extends React.Component {
         axios
             .get(`${this.props.DELIVERY_API_URL}/${this.props.purchaseID}`)
             .then(function (res) {
+                let info = res.data.result.result[0];
                 curComponent.setState({
-                    data: res.data.result.result,
+                    data: info,
+                    currentNote: info.admin_notes,
                 })
             })
             .catch(function (error) {
@@ -116,7 +118,7 @@ class Delivery extends React.Component {
                 <Typography variant="body1"> Select Purchase to see delivery information </Typography>
             )
         }
-        let deliveryData = this.state.data[0];
+        let deliveryData = this.state.data;
         if(!deliveryData) {
             return ( <Typography variant="body1"> No Delivery Information </Typography> );
         }
