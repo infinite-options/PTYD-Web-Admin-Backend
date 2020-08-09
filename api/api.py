@@ -1389,7 +1389,7 @@ class Checkout(Resource):
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + """\',
-                        \'""" + data['isAddon'] + """\',
+                        'FALSE',
                         """ + stripe_charge_id + """);"""
         return query
 
@@ -1666,7 +1666,7 @@ class Checkout(Resource):
                 # write everything into payment table
                 if coupon_id == "" or coupon_id is None:
                     payment_query = self.getPaymentQuery(data, 'NULL', charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
-                    
+                
                 elif coupon_id != "" and coupon_id is not None:
                     coupon_id = "'" + coupon_id + "'"  # need this to solve the add NULL to sql database
                     temp_query = """ INSERT INTO ptyd_payments
