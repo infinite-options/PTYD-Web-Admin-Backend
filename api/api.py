@@ -6155,6 +6155,29 @@ class DeliveryInfo(Resource):
         finally:
             disconnect(conn)
 
+class SavePurchaseNote(Resource):
+    def post(self, purchase_id):
+        response = {}
+        items = {}
+        try:
+            conn = connect()
+            print('connection done')
+            data = request.get_json(force=True)
+            print('data',data)
+            updatedNote = data['note']
+            print('note',updatedNote)
+            items = execute(
+                '''
+                    UPDATE  ptyd_purchases
+                    SET admin_notes = \'''' + str(updatedNote) + '''\'
+                    WHERE purchase_id = \'''' + str(purchase_id) + '''\';
+                '''
+            ,'post',conn)
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+
 # Define API routes
 # Customer page
 api.add_resource(Meals, '/api/v2/meals', '/api/v2/meals/<string:startDate>')
@@ -6225,6 +6248,8 @@ api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>'
 api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
 api.add_resource(DeliveryInfo,'/api/v2/DeliveryInfo/<string:purchase_id>')
 api.add_resource(AccountList,'/api/v2/AccountList')
+
+api.add_resource(SavePurchaseNote,'/api/v2/SavePurchaseNote/<string:purchase_id>')
 
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')

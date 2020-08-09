@@ -84,6 +84,7 @@ class Customers extends React.Component {
                         <Delivery
                             purchaseID={this.state.purchase}
                             DELIVERY_API_URL={this.props.DELIVERY_API_URL}
+                            NOTE_API_URL={this.props.NOTE_API_URL}
                         />
                     </Grid>
                     <Grid item xs={12} sm={10}>

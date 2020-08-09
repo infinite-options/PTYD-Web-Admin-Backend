@@ -81,6 +81,21 @@ class Delivery extends React.Component {
             })
     }
 
+
+    saveNote = () => {
+        console.log('save button pushed');
+        axios
+            .post(`${this.props.NOTE_API_URL}/${this.props.purchaseID}`, {
+                note: this.state.currentNote,
+            })
+            .then(function(res) {
+                console.log(res);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+
     render() {
         if(!this.state.loaded) {
             return <Typography variant="h6"> Loading Delivery Info </Typography>
@@ -127,7 +142,11 @@ class Delivery extends React.Component {
                     }}
                     className={classes.noteInput}
                 />
-                <Button> Save </Button>
+                <Button
+                    onClick={this.saveNote}
+                >
+                    Save
+                </Button>
                 <Button
                 onClick={(event) => {
                     this.setState({
