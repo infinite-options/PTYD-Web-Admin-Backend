@@ -1080,7 +1080,8 @@ class AccountPurchases(Resource):
                             week_affected
                 ) addon
                 ON snap_purchase_id = addon.purchase_id
-                WHERE buyer_id = \'""" + buyerId + """\'
+                WHERE buyer_id = \'""" + buyerId + """\' 
+                AND pay.cc_num <> 'NULL'
                 GROUP BY snap.payment_id;""",
                        "   SELECT * FROM ptyd_monday_zipcodes;"]
 
@@ -1370,6 +1371,7 @@ class Checkout(Resource):
                         cc_exp_date,
                         cc_cvv,
                         billing_zip,
+                        isAddon,
                         stripe_charge_id
                     )
                     VALUES (
@@ -1387,6 +1389,7 @@ class Checkout(Resource):
                         \'""" + data['cc_exp_year'] + "-" + data['cc_exp_month'] + """-01\',
                         \'""" + data['cc_cvv'] + """\',
                         \'""" + data['billing_zip'] + """\',
+                        \'""" + data['isAddon'] + """\',
                         """ + stripe_charge_id + """);"""
 
         return query
@@ -1710,7 +1713,7 @@ class Checkout(Resource):
                                 WHERE coupon_id = """ + coupon_id + ";"
                     res = execute(coupon_query, 'post', conn)
                     paymentId = get_new_paymentID()
-
+                    data['isAddon'] = "FALSE"
                     payment_query = self.getPaymentQuery(data, coupon_id, charge, charge, paymentId, stripe_charge.get('id'), purchaseId)
                 reply['payment'] = execute(payment_query, 'post', conn)
                 if reply['payment']['code'] != 281:
@@ -3462,7 +3465,7 @@ class Coupon (Resource):
                     today = datetime.today()
                     if (today <= expire_date):
                         if (result.get('limits') > result.get('num_used')):
-                            if (result.get('email') is None): # this coupon can apply for everyone
+                            if (result.get('email') is None or result.get('email') == ""): # this coupon can apply for everyone
                                 response['message'] = "OK"
                                 response['result'] = result
                             else: # compare the email in result with apply_email to make sure we have a right customer
@@ -6145,7 +6148,7 @@ class DeliveryInfo(Resource):
         items = {}
         try:
             conn = connect()
-            items = execute("""select * from purchases where purchase_id = \'""" + str(purchase_id) + """\';""", 'get', conn)
+            items = execute("""select * from pytd_purchases where purchase_id = \'""" + str(purchase_id) + """\';""", 'get', conn)
             response['message'] = 'Request successful.'
             response['result'] = items
 
@@ -6161,11 +6164,8 @@ class SavePurchaseNote(Resource):
         items = {}
         try:
             conn = connect()
-            print('connection done')
             data = request.get_json(force=True)
-            print('data',data)
             updatedNote = data['note']
-            print('note',updatedNote)
             items = execute(
                 '''
                     UPDATE  ptyd_purchases
@@ -6177,6 +6177,10 @@ class SavePurchaseNote(Resource):
             raise BadRequest('Request failed, please try again later.')
         finally:
             disconnect(conn)
+
+
+
+
 
 # Define API routes
 # Customer page
@@ -6248,9 +6252,7 @@ api.add_resource(PurchaseIdMeals, '/api/v2/PurchaseIdMeals/<string:purchase_id>'
 api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
 api.add_resource(DeliveryInfo,'/api/v2/DeliveryInfo/<string:purchase_id>')
 api.add_resource(AccountList,'/api/v2/AccountList')
-
 api.add_resource(SavePurchaseNote,'/api/v2/SavePurchaseNote/<string:purchase_id>')
-
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')
