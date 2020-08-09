@@ -6148,7 +6148,7 @@ class DeliveryInfo(Resource):
         items = {}
         try:
             conn = connect()
-            items = execute("""select * from purchases where purchase_id = \'""" + str(purchase_id) + """\';""", 'get', conn)
+            items = execute("""select * from pytd_purchases where purchase_id = \'""" + str(purchase_id) + """\';""", 'get', conn)
             response['message'] = 'Request successful.'
             response['result'] = items
 
