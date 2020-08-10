@@ -70,7 +70,7 @@ class Selectmealplan extends Component {
 
                   <Card.Body
                     className={
-                      "borderr border_card_subcribe" +
+                      "borderr border_card_subcribe mealsCard" +
                       (mealPlan.num_meals === 10 ? " card_color" : "")
                     }
                   >
@@ -139,7 +139,6 @@ class Selectmealplan extends Component {
                     <Card.Footer className='text-muted justify-content-center'>
                       {mealPlan.plan_footer}
                     </Card.Footer>
-                    {/* </div> */}
                   </Card.Body>
                 </Card>
               ))}

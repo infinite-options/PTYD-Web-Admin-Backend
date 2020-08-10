@@ -59,30 +59,25 @@ class SelectPaymentPlan extends Component {
                 5 MEALS
               </a>
               &nbsp; &nbsp; &nbsp; &nbsp; 
-              {/* &nbsp; &nbsp; */}
               <a className='number-of-meals' href='/10-meals-subscription'>
                 10 MEALS{" "}
               </a>{" "}
               &nbsp; &nbsp; &nbsp; &nbsp; 
-              {/* &nbsp; &nbsp; */}
               <a className='number-of-meals' href='/15-meals-subscription'>
                 15 MEALS{" "}
               </a>{" "}
               &nbsp; &nbsp; &nbsp; &nbsp; 
-              {/* &nbsp; &nbsp; */}
               <a className='number-of-meals' href='/20-meals-subscription'>
                 20 MEALS{" "}
               </a>
             </div>
             <hr className='three' />
-            {/* <div className='justify-content-center'> */}
-              <CardDeck 
-              // className='d-flex justify-content-center'
-              >
+            <Row className='d-flex justify-content-center'>
+              <CardDeck>
                 {this.state.paymentPlans.map(paymentPlan => (
                   <Card.Body
                     key={paymentPlan.meal_plan_id}
-                    className='borderr border_card_subcribe paymentCard '
+                    className='borderr border_card_subcribe paymentCard'
                   >
                     <Card.Header className='p-0 position-relative background_black'>
                       <Card.Img
@@ -153,10 +148,11 @@ class SelectPaymentPlan extends Component {
                         }}
                       />
                     </Card.Body>
-                  </Card.Body>
+                  </Card.Body> 
                 ))}
               </CardDeck>
-            {/* </div> */}
+            </Row>
+
             <hr className='mt-5' />
             <h3 className='font1 feedback_marginTop' style={{color: "#196F3D"}}>
               Our Customers Say
