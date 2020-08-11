@@ -21,7 +21,7 @@ Ldebug_info_begin:
 	.short 2
 	.long 0
 	.byte 8,1
-	.asciz "Mono AOT Compiler 6.12.0 (2020-02/165f4b03417 Wed Apr  8 09:02:28 EDT 2020)"
+	.asciz "Mono AOT Compiler 6.12.0 (2020-02/83105ba2246 Tue Jun 23 15:12:26 EDT 2020)"
 	.asciz "System.ServiceModel.Internals.dll"
 	.asciz ""
 
@@ -18313,7 +18313,7 @@ runtime_version:
 .section __TEXT, __const
 	.align 2
 assembly_guid:
-	.asciz "BD6D448A-39BB-4873-869B-7E5F3AAC5D19"
+	.asciz "CDD0A533-46C4-4C92-A537-583F81956EAF"
 .section __TEXT, __const
 	.align 2
 assembly_name:
@@ -18407,7 +18407,7 @@ _mono_aot_file_info:
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 251,112,217,208,96,87,203,65,52,129,207,240,100,17,247,164
+	.byte 185,147,204,19,238,66,174,246,176,141,63,131,240,87,115,231
 	.globl _mono_aot_module_System_ServiceModel_Internals_info
 	.align 3
 _mono_aot_module_System_ServiceModel_Internals_info:

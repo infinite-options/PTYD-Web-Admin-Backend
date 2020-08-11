@@ -21,7 +21,7 @@ Ldebug_info_begin:
 	.short 2
 	.long 0
 	.byte 8,1
-	.asciz "Mono AOT Compiler 6.12.0 (2020-02/165f4b03417 Wed Apr  8 09:02:28 EDT 2020)"
+	.asciz "Mono AOT Compiler 6.12.0 (2020-02/83105ba2246 Tue Jun 23 15:12:26 EDT 2020)"
 	.asciz "Xamarin.Forms.Xaml.dll"
 	.asciz ""
 
@@ -73580,7 +73580,7 @@ ldr x15, [x16, #936]
 adrp x16, mono_aot_Xamarin_Forms_Xaml_got@PAGE+4096
 add x16, x16, mono_aot_Xamarin_Forms_Xaml_got@PAGEOFF
 ldr x0, [x16, #2232]
-.word 0xd2802a61
+.word 0xd2802921
 bl _p_89
 bl _p_560
 bl _p_29
@@ -77872,7 +77872,7 @@ ldr x2, [x16, #16]
 adrp x16, mono_aot_Xamarin_Forms_Xaml_got@PAGE+4096
 add x16, x16, mono_aot_Xamarin_Forms_Xaml_got@PAGEOFF
 ldr x0, [x16, #2232]
-.word 0xd2802a61
+.word 0xd2802921
 bl _p_89
 bl _p_560
 bl _p_29
@@ -92601,7 +92601,7 @@ _mono_aot_file_info:
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 69,17,61,114,201,240,240,6,193,208,118,68,156,105,40,212
+	.byte 45,209,10,216,20,130,223,143,196,156,201,161,108,46,80,69
 	.globl _mono_aot_module_Xamarin_Forms_Xaml_info
 	.align 3
 _mono_aot_module_Xamarin_Forms_Xaml_info:

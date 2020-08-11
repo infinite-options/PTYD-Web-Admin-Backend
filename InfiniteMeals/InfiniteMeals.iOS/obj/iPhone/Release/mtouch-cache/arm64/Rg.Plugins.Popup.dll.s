@@ -21,7 +21,7 @@ Ldebug_info_begin:
 	.short 2
 	.long 0
 	.byte 8,1
-	.asciz "Mono AOT Compiler 6.12.0 (2020-02/165f4b03417 Wed Apr  8 09:02:28 EDT 2020)"
+	.asciz "Mono AOT Compiler 6.12.0 (2020-02/83105ba2246 Tue Jun 23 15:12:26 EDT 2020)"
 	.asciz "Rg.Plugins.Popup.dll"
 	.asciz ""
 
@@ -711,7 +711,7 @@ bl _p_16
 .word 0xd2800001
 .word 0xf90023a2
 .word 0xf9400042
-.word 0xf9422c50
+.word 0xf9423850
 .word 0xd63f0200
 .word 0xf94023a1
 .loc 2 57 0
@@ -1102,7 +1102,7 @@ bl _p_34
 .loc 2 131 0
 .word 0xaa1903e0
 .word 0xf9400321
-.word 0xf941b030
+.word 0xf941c030
 .word 0xd63f0200
 .loc 2 132 0
 .word 0xf9400bb9
@@ -1199,7 +1199,7 @@ Rg_Plugins_Popup_IOS_Renderers_PopupPageRenderer_OnKeyboardAnimated:
 .loc 2 164 0
 .word 0xaa1a03e0
 .word 0xf9400341
-.word 0xf941b030
+.word 0xf941c030
 .word 0xd63f0200
 .loc 2 165 0
 .word 0xf9400bba
@@ -1330,7 +1330,7 @@ bl _p_41
 .word 0xf9401001
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf941ec30
+.word 0xf941fc30
 .word 0xd63f0200
 .word 0x14000003
 .loc 3 42 0
@@ -1375,7 +1375,7 @@ bl _p_41
 .word 0xf9401001
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf941e430
+.word 0xf941f430
 .word 0xd63f0200
 .word 0x14000003
 .loc 3 51 0
@@ -1438,7 +1438,7 @@ ldr x15, [x16, #384]
 .word 0xaa0003e1
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf941dc30
+.word 0xf941ec30
 .word 0xd63f0200
 .word 0x53001c00
 .word 0x910003bf
@@ -1494,7 +1494,7 @@ ldr x15, [x16, #384]
 .word 0xaa0003e1
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf941e030
+.word 0xf941f030
 .word 0xd63f0200
 .word 0x910003bf
 .word 0xa8c27bfd
@@ -1531,7 +1531,7 @@ bl _p_41
 .word 0xf9401001
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf941c430
+.word 0xf941d430
 .word 0xd63f0200
 .word 0x53001c00
 .word 0x14000004
@@ -1580,7 +1580,7 @@ bl _p_41
 .word 0xaa0203e0
 .word 0xf9400fa1
 .word 0xf9400042
-.word 0xf941c050
+.word 0xf941d050
 .word 0xd63f0200
 .word 0x53001c00
 .word 0x14000005
@@ -1632,7 +1632,7 @@ bl _p_47
 .word 0x14000005
 .word 0xaa1a03e0
 .word 0xf9400341
-.word 0xf941b030
+.word 0xf941c030
 .word 0xd63f0200
 .loc 3 99 0
 .word 0xf9400bba
@@ -2150,7 +2150,7 @@ ldr x15, [x16, #408]
 .word 0xaa0003e1
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf9421030
+.word 0xf9421c30
 .word 0xd63f0200
 .loc 5 107 0
 .word 0xaa1903e0
@@ -2220,7 +2220,7 @@ ldr x15, [x16, #408]
 .word 0xaa0003e1
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf9421030
+.word 0xf9421c30
 .word 0xd63f0200
 .loc 5 115 0
 .word 0xaa1903e0
@@ -2446,7 +2446,7 @@ ldr x15, [x16, #408]
 .word 0xaa0003e1
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf9421030
+.word 0xf9421c30
 .word 0xd63f0200
 .loc 6 39 0
 .word 0xaa1803e0
@@ -2516,7 +2516,7 @@ ldr x15, [x16, #408]
 .word 0xaa0003e1
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf9421030
+.word 0xf9421c30
 .word 0xd63f0200
 .loc 6 46 0
 .word 0xaa1803e0
@@ -2636,7 +2636,7 @@ bl _p_68
 .word 0xf900c3a0
 .word 0xaa1903e0
 .word 0xf9400321
-.word 0xf941a830
+.word 0xf941ac30
 .word 0xd63f0200
 .word 0xf940c3be
 .word 0xfd0003c0
@@ -2702,7 +2702,7 @@ bl _p_68
 .word 0xf900c3a0
 .word 0xaa0103e0
 .word 0xf9400021
-.word 0xf941a830
+.word 0xf941ac30
 .word 0xd63f0200
 .word 0xf940c3be
 .word 0xfd0003c0
@@ -10623,7 +10623,7 @@ bl _p_181
 .loc 2 151 0
 .word 0xaa1903e0
 .word 0xf9400321
-.word 0xf941b030
+.word 0xf941c030
 .word 0xd63f0200
 .word 0x14000015
 .word 0xf90043a0
@@ -10908,7 +10908,7 @@ bl _p_197
 .word 0xaa0003e1
 .word 0xaa1803e0
 .word 0xf9400302
-.word 0xf941bc50
+.word 0xf941c850
 .word 0xd63f0200
 .loc 5 55 0
 
@@ -10966,7 +10966,7 @@ bl _p_197
 .word 0xf940cfa2
 .word 0xaa0203e0
 .word 0xf9400042
-.word 0xf941bc50
+.word 0xf941c850
 .word 0xd63f0200
 .loc 5 57 0
 bl _p_191
@@ -11040,7 +11040,7 @@ bl _p_203
 .word 0xfd4037a2
 .word 0xfd403ba3
 .word 0xf9400301
-.word 0xf941a430
+.word 0xf941a830
 .word 0xd63f0200
 .loc 5 63 0
 .word 0xaa1803e0
@@ -11603,7 +11603,7 @@ bl _p_186
 .word 0xaa0203e0
 .word 0xd2800021
 .word 0xf9400042
-.word 0xf9419450
+.word 0xf9419850
 .word 0xd63f0200
 .loc 5 85 0
 .word 0xaa1903e0
@@ -32478,13 +32478,13 @@ _mono_aot_file_info:
 	.quad unbox_trampoline_addresses
 
 	.long 338,5976,409,494,25,98,387000831,0
-	.long 17860,128,8,8,8,9,8388607,0
-	.long 4,25,27384,0,0,9512,8984,7208
+	.long 17904,128,8,8,8,9,8388607,0
+	.long 4,25,27424,0,0,9512,8984,7208
 	.long 0,8168,8880,7704,0,5552,704,9504
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 65,181,1,223,211,28,242,90,217,251,212,39,148,254,32,153
+	.byte 160,102,120,137,13,60,8,78,161,43,222,191,205,166,0,198
 	.globl _mono_aot_module_Rg_Plugins_Popup_info
 	.align 3
 _mono_aot_module_Rg_Plugins_Popup_info:

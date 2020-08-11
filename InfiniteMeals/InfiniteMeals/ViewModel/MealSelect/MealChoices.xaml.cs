@@ -89,7 +89,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public MealGroup smoothieGroup6 = new MealGroup() { LongName = "Smoothies"};
 
         private string userID;
-        public static string infoImg = "info.jpg";
+        public static string infoImg = "info.jpeg";
         public static string green = "#8FBC8F";
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
@@ -143,7 +143,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     return;
                 } else {
                     postData();
-                    //ClickedSave();
+                    ClickedSave();
                 }
             };
 
@@ -2369,7 +2369,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             if(mealsSelected.Count == 0) {
                 colorToReturn = Color.FromHex(def);
-                ClickedSave();
             } else {
                 string mealSelectInfoJson = JsonConvert.SerializeObject(mealSelectInfoTosend);
 
@@ -2384,8 +2383,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
                 colorToReturn = Color.FromHex(green);
-
-                ClickedSave();
             }
         }
 
@@ -2685,12 +2682,16 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
         private async void ClickedSave()
         {
-            MealSchedule ms = new MealSchedule();
-            int weekNumber = ms.getNum();
+            int i = 0;
+            //MealSchedule ms = new MealSchedule(i);
+            //System.Diagnostics.Debug.WriteLine("Made it here ");
+
+            int weekNumber = this.currentMealSchedule.weekNumber;
             if (weekNumber == 1)
             {
                 if (this.BindingContext != null)
                 {
+                    System.Diagnostics.Debug.WriteLine("week number");
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton");
                     selectMealButton.BackgroundColor = Color.FromHex(green);

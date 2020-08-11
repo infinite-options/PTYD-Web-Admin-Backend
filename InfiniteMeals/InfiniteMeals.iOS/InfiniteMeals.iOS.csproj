@@ -150,5 +150,24 @@
     <BundleResource Include="Resources\checkboxUnselected.png" />
     <BundleResource Include="Resources\checkboxSelected.png" />
     <BundleResource Include="Resources\creditcards.png" />
+    <BundleResource Include="Resources\fave.png" />
+    <BundleResource Include="Resources\austin.png" />
+    <BundleResource Include="Resources\siete.png" />
+    <BundleResource Include="Resources\credo.jpeg" />
+    <BundleResource Include="Resources\bouldin.jpeg" />
+    <BundleResource Include="Resources\fronks.png" />
+    <BundleResource Include="Resources\yellowbird.png" />
+    <BundleResource Include="Resources\curcuma.jpeg" />
+    <BundleResource Include="Resources\fox.jpeg" />
+    <BundleResource Include="Resources\jbg.png" />
+    <BundleResource Include="Resources\carrot.jpg" />
+    <BundleResource Include="Resources\tempeh.jpeg" />
+    <BundleResource Include="Resources\cobbsalad.jpeg" />
+    <BundleResource Include="Resources\caesarsalad.jpeg" />
+    <BundleResource Include="Resources\cacaooats.jpeg" />
+    <BundleResource Include="Resources\buffalo.jpeg" />
+    <BundleResource Include="Resources\buddha.jpeg" />
+    <BundleResource Include="Resources\bibimbap.jpeg" />
+    <BundleResource Include="Resources\info.jpeg" />
   </ItemGroup>
 </Project>

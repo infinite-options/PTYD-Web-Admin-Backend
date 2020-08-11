@@ -15,7 +15,7 @@ androidsdkpath=/users/kristina/library/android/sdk/
 androidndkpath=
 javasdkpath=/users/kristina/library/developer/xamarin/jdk/microsoft_dist_openjdk_1.8.0.25/
 androidsequencepointsmode=normal
-xamarinandroidversion=10.3.1-4
+xamarinandroidversion=11.0.0-3
 monosymbolarchive=true
 androiduselatestplatformsdk=false
 targetframeworkversion=v9.0
@@ -26,3 +26,5 @@ androidincludedebugsymbols=false
 androidpackagenamingpolicy=lowercasecrc64
 _nugetassetstimestamp=637320886850190453
 typemapkind=mvid
+androidsupportedabis=armeabi-v7a
+arm64-v8a

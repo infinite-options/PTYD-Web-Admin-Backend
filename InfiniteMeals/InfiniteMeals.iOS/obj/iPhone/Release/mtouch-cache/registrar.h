@@ -8,6 +8,7 @@
 #include <objc/message.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <SafariServices/SafariServices.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <MapKit/MapKit.h>
 #import <GLKit/GLKit.h>
@@ -17,17 +18,21 @@
 #import <WebKit/WebKit.h>
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AuthenticationServices/AuthenticationServices.h>
 #import <CoreGraphics/CoreGraphics.h>
 
 @class UIApplicationDelegate;
 @class Xamarin_Forms_Platform_iOS_FormsApplicationDelegate;
 @class AppDelegate;
+@class SFSafariViewControllerDelegate;
 @class GLKViewDelegate;
+@class CLLocationManagerDelegate;
 @class CAAnimationDelegate;
 @class WKNavigationDelegate;
 @class WKUIDelegate;
 @class UIKit_UIControlEventProxy;
 @class UIActionSheetDelegate;
+@class UIActivityItemSource;
 @class UICollectionViewDelegateFlowLayout;
 @class UIGestureRecognizerDelegate;
 @class UINavigationControllerDelegate;
@@ -223,6 +228,13 @@
 @class RgPopupPlatformRenderer;
 @class RgPopupWindow;
 @class Rg_Plugins_Popup_IOS_Renderers_PopupPageRenderer;
+@class Xamarin_Essentials_SingleLocationListener;
+@class Xamarin_Essentials_ShareActivityItemSource;
+@class Xamarin_Essentials_AuthManager;
+@class Xamarin_Essentials_WebAuthenticator_NativeSFSafariViewControllerDelegate;
+@class Xamarin_Essentials_WebAuthenticator_ContextProvider;
+@class OpenTK_Platform_iPhoneOS_CADisplayLinkTimeSource;
+@class OpenTK_Platform_iPhoneOS_iPhoneOSGameView;
 
 @interface UIApplicationDelegate : NSObject<UIApplicationDelegate> {
 }
@@ -256,7 +268,17 @@
 	-(id) init;
 @end
 
+@interface SFSafariViewControllerDelegate : NSObject<SFSafariViewControllerDelegate> {
+}
+	-(id) init;
+@end
+
 @interface GLKViewDelegate : NSObject<GLKViewDelegate> {
+}
+	-(id) init;
+@end
+
+@interface CLLocationManagerDelegate : NSObject<CLLocationManagerDelegate> {
 }
 	-(id) init;
 @end
@@ -277,6 +299,11 @@
 @end
 
 @interface UIActionSheetDelegate : NSObject<UIActionSheetDelegate> {
+}
+	-(id) init;
+@end
+
+@interface UIActivityItemSource : NSObject<UIActivityItemSource> {
 }
 	-(id) init;
 @end
@@ -1221,6 +1248,20 @@
 	-(void) viewWillDisappear:(BOOL)p0;
 	-(void) viewDidLayoutSubviews;
 	-(id) init;
+@end
+
+@interface OpenTK_Platform_iPhoneOS_iPhoneOSGameView : UIView {
+}
+	-(void) release;
+	-(id) retain;
+	-(uint32_t) xamarinGetGCHandle;
+	-(void) xamarinSetGCHandle: (uint32_t) gchandle;
+	+(Class) layerClass;
+	-(void) layoutSubviews;
+	-(void) willMoveToWindow:(UIWindow *)p0;
+	-(BOOL) conformsToProtocol:(void *)p0;
+	-(id) initWithCoder:(NSCoder *)p0;
+	-(id) initWithFrame:(CGRect)p0;
 @end
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Xamarin.Forms;
+using Xamarin.Essentials;
 
 using InfiniteMeals.ViewModel.Login;
 using InfiniteMeals.ViewModel.MealSelect;
@@ -23,6 +24,9 @@ namespace InfiniteMeals
         public MainPage()
         {
             InitializeComponent();
+            var currentVersion = VersionTracking.CurrentVersion;
+
+            System.Diagnostics.Debug.WriteLine("version number: " + currentVersion);
             System.Diagnostics.Debug.WriteLine("logged in: " + App.LoggedIn);
             if (!App.LoggedIn)
             {
@@ -36,10 +40,14 @@ namespace InfiniteMeals
             if (Device.RuntimePlatform == Device.iOS)
             {
                 getStartedButton.CornerRadius = 15;
+                EatBetterButton.CornerRadius = 15;
+                //TheCarousel.IsVisible = false;
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
                 getStartedButton.CornerRadius = 50;
+                EatBetterButton.CornerRadius = 50;
+                //TheCarousel.IsVisible = true;
             }
         }
 

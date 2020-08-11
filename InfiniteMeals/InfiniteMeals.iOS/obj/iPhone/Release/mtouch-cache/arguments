@@ -1,15 +1,17 @@
-# Version: 13.18.3.2 (d16-6-xcode11.6): ce0cc74a3
-/Library/Frameworks/Xamarin.iOS.framework/Versions/13.18.3.2/lib/mtouch/mtouch.exe \
+# Version: 13.20.2.2 (d16-7): 817b6f72a
+/Library/Frameworks/Xamarin.iOS.framework/Versions/13.20.2.2/lib/mtouch/mtouch.exe \
+	--sgen-conc \
+	'/target-framework:Xamarin.iOS,Version=v1.0' \
+	--http-message-handler=NSUrlSessionHandler \
 	--cache=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/mtouch-cache \
+	--root-assembly=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhone/Release/InfiniteMeals.iOS.exe \
+	--sdkroot=/Applications/Xcode.app/Contents/Developer \
 	--dev=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhone/Release/InfiniteMeals.iOS.app \
 	--executable=InfiniteMeals.iOS \
-	--sgen-conc \
 	--linksdkonly \
-	--sdkroot=/Applications/Xcode.app/Contents/Developer \
 	--sdk=13.6 \
 	--targetver=8.0 \
 	--aot-options=-O=-float32 \
-	--http-message-handler=NSUrlSessionHandler \
 	--abi=arm64 \
 	--symbollist=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/mtouch-symbols.list \
 	--dsym=no \
@@ -235,7 +237,5 @@
 	-r=/Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/lib/Xamarin.iOS10/Xamarin.Forms.Maps.iOS.dll \
 	-r=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Release/netstandard2.0/InfiniteMeals.dll \
 	-r=/Users/Kristina/.nuget/packages/xamarin.forms/4.6.0.847/buildTransitive/XCODE11/Xamarin.Forms.Platform.iOS.dll \
-	'--target-framework=Xamarin.iOS,v1.0' \
-	--root-assembly=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhone/Release/InfiniteMeals.iOS.exe \
 	@/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/response-file.rsp \
 	--optimize=experimental-xforms-product-type \

@@ -21,7 +21,7 @@ Ldebug_info_begin:
 	.short 2
 	.long 0
 	.byte 8,1
-	.asciz "Mono AOT Compiler 6.12.0 (2020-02/165f4b03417 Wed Apr  8 09:02:28 EDT 2020)"
+	.asciz "Mono AOT Compiler 6.12.0 (2020-02/83105ba2246 Tue Jun 23 15:12:26 EDT 2020)"
 	.asciz "Xamarin.Forms.Maps.iOS.dll"
 	.asciz ""
 
@@ -982,7 +982,7 @@ ldr x15, [x16, #416]
 bl _p_24
 .word 0xaa1703e0
 .word 0xf94002e1
-.word 0xf9421030
+.word 0xf9421c30
 .word 0xd63f0200
 .word 0xf9407b21
 .word 0xaa1703e0
@@ -2994,7 +2994,7 @@ bl _p_86
 .word 0xaa1903e0
 .word 0xaa1a03e1
 .word 0xf9400322
-.word 0xf942ec50
+.word 0xf942f850
 .word 0xd63f0200
 .word 0xaa0003fa
 .word 0x3940031e
@@ -5396,19 +5396,19 @@ ldr x1, [x16, #1208]
 .word 0xaa1903e0
 .word 0xaa1703e1
 .word 0xf9400322
-.word 0xf942e050
+.word 0xf942ec50
 .word 0xd63f0200
 .word 0x1400000e
 .word 0xaa1903e0
 .word 0xaa1703e1
 .word 0xf9400322
-.word 0xf942dc50
+.word 0xf942e850
 .word 0xd63f0200
 .word 0x14000008
 .word 0xaa1903e0
 .word 0xaa1a03e1
 .word 0xf9400322
-.word 0xf942d850
+.word 0xf942e450
 .word 0xd63f0200
 .word 0x14000002
 .word 0xd2800000
@@ -11229,7 +11229,7 @@ bl _p_179
 adrp x16, mono_aot_Xamarin_Forms_Maps_iOS_got@PAGE+0
 add x16, x16, mono_aot_Xamarin_Forms_Maps_iOS_got@PAGEOFF
 ldr x0, [x16, #1736]
-.word 0xd28031a1
+.word 0xd2803061
 bl _p_169
 bl _p_170
 bl _p_158
@@ -12409,7 +12409,7 @@ bl _p_190
 adrp x16, mono_aot_Xamarin_Forms_Maps_iOS_got@PAGE+0
 add x16, x16, mono_aot_Xamarin_Forms_Maps_iOS_got@PAGEOFF
 ldr x0, [x16, #1736]
-.word 0xd28031a1
+.word 0xd2803061
 bl _p_169
 bl _p_170
 bl _p_158
@@ -32786,7 +32786,7 @@ _mono_aot_file_info:
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 250,57,177,247,127,160,144,214,238,240,213,51,59,207,176,183
+	.byte 125,103,224,129,140,89,31,34,153,107,243,33,64,71,192,120
 	.globl _mono_aot_module_Xamarin_Forms_Maps_iOS_info
 	.align 3
 _mono_aot_module_Xamarin_Forms_Maps_iOS_info:

@@ -198,6 +198,7 @@
                     x:Name="getStartedButton"
                     Text="GET STARTED"
                     Grid.Row="5"
+                    Padding="5"
                     HeightRequest="30"
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
@@ -223,53 +224,158 @@
                 />
 
                 <Label
-                    Text ="Choose your meals"
+                    Text ="CHOOSE YOUR MEALS"
+                    Margin="20,0,0,0"
                     FontFamily="Barlow"
                     TextColor="Green"
+                    FontSize="Title"
                     Grid.Row="8"
-                    Margin="-30,0,0,0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                />
+                <Label
+                    Text ="Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery."
+                    Margin="0,0,20,0"
+                    FontFamily="CapsRegular"
+                    TextColor="Black"
+                    FontSize="Small"
+                    Grid.Row="8"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                />
+                <Label
+                    Text ="WEEKLY DELIVERY"
+                    Margin="20,0,0,0"
+                    FontFamily="Barlow"
+                    TextColor="Green"
+                    FontSize="Title"
+                    Grid.Row="9"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                />
+                <Label
+                    Text="Seamless non-contact delivery in Austin and Houston"
+                    Margin="0,0,20,0"
+                    FontFamily="CapsRegular"
+                    FontSize="Small"
+                    TextColor="Black"
+                    Grid.Row="9"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                />
+
+                <Label
+                    Text ="RETURN YOUR JARS"
+                    Margin="20,0,0,0"
+                    FontFamily="Barlow"
+                    FontSize="Title"
+                    TextColor="Green"
+                    Grid.Row="10"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                />
+
+                <Label
+                    Text ="Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery."
+                    Margin="0,0,20,0"
+                    FontFamily="CapsRegular"
+                    FontSize="Small"
+                    TextColor="Black"
+                    Grid.Row="10"
+                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                />
+
+                <Label
+                    Text="LOCAL FARMS"
+                    FontFamily="CapsRegular"
+                    FontSize="Body"
+                    Grid.Row="12"
+                    Grid.ColumnSpan="2"
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    />
+
+               <Label
+                    Text="REUSABLE PACKAGING"
+                    FontFamily="CapsRegular"
+                    FontSize="Body"
+                    Grid.Row="12"
+                    Grid.Column="2"
+                   Grid.ColumnSpan="2"
+                   VerticalOptions="Center"
+                    HorizontalOptions="Start"
+
+                    />
+                <Label
+                    Text="ZERO WASTE"
+                    FontFamily="CapsRegular"
+                    FontSize="Body"
+                    Grid.Row="13"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     HorizontalOptions="Center"
-                />
-                <Label
-                    Text ="Weekly Delivery"
-                    FontFamily="Barlow"
-                    TextColor="Green"
-                    Grid.Row="8"
-                    Margin="-100,0,0,0"
+                    VerticalOptions="Center"
+                    />
+
+               <Label
+                    Text="ORGANIC PRODUCE"
+                    FontFamily="CapsRegular"
+                    FontSize="Body"
+                    Grid.Row="13"
+                    Grid.ColumnSpan="2"
                     Grid.Column="2"
-                    Grid.ColumnSpan="1"
-                    HorizontalOptions="Center"
-                />
-                <Label
-                    Text ="Return Your Jars"
-                    FontFamily="Barlow"
-                    TextColor="Green"
-                    Margin="-30,0,0,0"
-                    Grid.Row="8"
-                    Grid.Column="3"
-                    Grid.ColumnSpan="1"
                     HorizontalOptions="Start"
+                   VerticalOptions="Center"
+               />
+              <Button
+                  x:Name="EatBetterButton"
+                    Text="EAT BETTER NOW"
+                    Grid.Row="14"
+                    HeightRequest="30"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Start"
+                    Grid.Column="2"
+                  Padding="5"
+                    Margin="-50,0,0,0"
+                    FontFamily="CapsRegular"
+                    FontSize="Micro"
+                    BackgroundColor="Orange"
+                    TextColor="White"
+                    Clicked="ClickedSubscribe"
                 />
-                <Label
-                    Text ="FRESH MENU EVERY WEEK"
+
+            <Label
+                Text="FRESH MENU EVERY WEEK"
+                Grid.Row="15"
+                Margin="0,0,0,0"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
                     FontFamily="Barlow"
-                    TextColor="Green"
-                    Margin="-30,0,0,0"
-                    Grid.Row="9"
                     FontSize="Title"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="4"
+                TextColor="Green"
                     HorizontalOptions="Center"
-                />
-                </Grid>
-                <CarouselView x:Name="TheCarousel" PeekAreaInsets="100">
+                   VerticalOptions="Center"
+               />
+            </Grid>
+            <!--
+                <CarouselView x:Name="TheCarousel" PeekAreaInsets="100" Margin="0,0,0,-400">
                     <CarouselView.ItemsSource >
                         <x:Array Type="{x:Type x:String}">
-                            <x:String>"/Users/Kristina/Desktop/seanmerged/InfiniteMeals/InfiniteMeals.iOS/Resources/tempeh.jpg 
-"</x:String>
-                            <x:String>"*/InfiniteMeals.Android/Resources/drawable/bibimbap.jpeg "</x:String>
                             <x:String>"*/InfiniteMeals.Android/Resources/drawable/cobbsalad.jpeg"</x:String>
                             <x:String>"*/InfiniteMeals.Android/Resources/drawable/cacaooats.jpeg"</x:String>
                             <x:String>"*/InfiniteMeals.Android/Resources/drawable/lentilsalad.jpeg "</x:String>
@@ -285,6 +391,71 @@
                         </DataTemplate>
                     </CarouselView.ItemTemplate>
                 </CarouselView>
+            -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                 <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="*"/>
+                     <ColumnDefinition Width="*"/>
+                     <ColumnDefinition Width="*"/>
+                 </Grid.ColumnDefinitions>
+
+                <Image
+                    Source="jbg.png"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HeightRequest="100"/>
+                <Image
+                    Source="fox.jpeg"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HeightRequest="100"/>
+                <Image
+                    Source="curcuma.jpeg"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    HeightRequest="100"/>
+                <Image
+                    Source="yellowbird.png"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    HeightRequest="100"/>
+                <Image
+                    Source="fronks.png"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HeightRequest="100"/>
+                <Image
+                    Source="bouldin.jpeg"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    HeightRequest="100"/>
+                <Image
+                    Source="credo.jpeg"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    HeightRequest="100"/>
+                <Image
+                    Source="siete.png"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HeightRequest="100"/>
+                <Image
+                    Source="austin.png"
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    HeightRequest="100"/>
+                <Image
+                    Source="fave.png"
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    HeightRequest="100"/>
+            </Grid>
             </StackLayout>
     </ScrollView>
 </ContentPage>

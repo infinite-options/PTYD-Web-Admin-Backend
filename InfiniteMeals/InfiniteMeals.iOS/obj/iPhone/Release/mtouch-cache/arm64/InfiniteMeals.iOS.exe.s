@@ -21,7 +21,7 @@ Ldebug_info_begin:
 	.short 2
 	.long 0
 	.byte 8,1
-	.asciz "Mono AOT Compiler 6.12.0 (2020-02/165f4b03417 Wed Apr  8 09:02:28 EDT 2020)"
+	.asciz "Mono AOT Compiler 6.12.0 (2020-02/83105ba2246 Tue Jun 23 15:12:26 EDT 2020)"
 	.asciz "InfiniteMeals.iOS.exe"
 	.asciz ""
 
@@ -371,7 +371,7 @@ runtime_version:
 .section __TEXT, __const
 	.align 2
 assembly_guid:
-	.asciz "56AC5D24-14A8-4762-B9FF-513A1F17B9DA"
+	.asciz "D5CD33C2-7AED-4E66-9990-9A496DBDAE2F"
 .section __TEXT, __const
 	.align 2
 assembly_name:
@@ -465,7 +465,7 @@ _mono_aot_file_info:
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 226,145,15,142,34,80,32,102,88,29,146,60,161,88,136,44
+	.byte 197,233,149,109,129,66,71,111,30,121,40,94,28,138,59,171
 	.globl _mono_aot_module_InfiniteMeals_iOS_info
 	.align 3
 _mono_aot_module_InfiniteMeals_iOS_info:

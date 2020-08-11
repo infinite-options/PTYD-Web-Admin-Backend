@@ -1,14 +1,16 @@
-"--cache=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/mtouch-cache"
-"--sim=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/InfiniteMeals.iOS.app"
---executable=InfiniteMeals.iOS
 --debug
 --sgen-conc
---nolink
+/target-framework:Xamarin.iOS,Version=v1.0
+--http-message-handler=NSUrlSessionHandler
+"--cache=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/mtouch-cache"
+--root-assembly=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/InfiniteMeals.iOS.exe
 --sdkroot=/Applications/Xcode.app/Contents/Developer
+"--sim=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/InfiniteMeals.iOS.app"
+--executable=InfiniteMeals.iOS
+--nolink
 --sdk=13.6
 --targetver=8.0
 --aot-options=-O=-float32
---http-message-handler=NSUrlSessionHandler
 --abi=x86_64
 "--symbollist=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/mtouch-symbols.list"
 --dsym=no
@@ -234,5 +236,3 @@
 -r=/Users/Kristina/.nuget/packages/xamarin.forms.maps/4.6.0.847/lib/Xamarin.iOS10/Xamarin.Forms.Maps.iOS.dll
 -r=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/bin/Debug/netstandard2.0/InfiniteMeals.dll
 -r=/Users/Kristina/.nuget/packages/xamarin.forms/4.6.0.847/buildTransitive/XCODE11/Xamarin.Forms.Platform.iOS.dll
---target-framework=Xamarin.iOS,v1.0
---root-assembly=/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/InfiniteMeals.iOS.exe

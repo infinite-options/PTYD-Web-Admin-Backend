@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 using InfiniteMeals.Model.Login;
 using InfiniteMeals.ViewModel.SignUp;
@@ -28,6 +29,7 @@ namespace InfiniteMeals.ViewModel.Login
         {
             InitializeComponent();
             InterfaceFormat();
+            versionNumber.Text = "Version: " + VersionTracking.CurrentVersion;
         }
 
         public void InterfaceFormat()
@@ -49,15 +51,16 @@ namespace InfiniteMeals.ViewModel.Login
         private async void ClickedLogin(object sender, EventArgs e)
         {
             LoginButton.IsEnabled = false;
-            if (String.IsNullOrEmpty(this.loginEmail.Text) && String.IsNullOrEmpty(this.loginPassword.Text))
+            if (String.IsNullOrEmpty(this.loginEmail.Text) || String.IsNullOrEmpty(this.loginPassword.Text))
             { // check if all fields are filled out
                 await DisplayAlert("Error", "Please fill in all fields", "OK");
+                LoginButton.IsEnabled = true;
             }
             else
             {
 
                 var accountSalt = await retrieveAccountSalt(this.loginEmail.Text); // retrieve user's account salt
-                System.Diagnostics.Debug.WriteLine("account salt: " + accountSalt.result[0]);
+                System.Diagnostics.Debug.WriteLine("account salt count: " + accountSalt.result.Count);
                 if (accountSalt != null && accountSalt.result.Count != 0)
                 { // make sure the account salt exists 
                     var loginAttempt = await login(this.loginEmail.Text, this.loginPassword.Text, accountSalt);
@@ -90,7 +93,9 @@ namespace InfiniteMeals.ViewModel.Login
         public async Task<LoginResponse> login(string userEmail, string userPassword, AccountSalt accountSalt)
         {
             const string deviceBrowserType = "Mobile";
-            var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
+            // var deviceIpAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
+
+            var deviceIpAddress = "0.0.0.0";
             if (deviceIpAddress != null)
             {
                 try
