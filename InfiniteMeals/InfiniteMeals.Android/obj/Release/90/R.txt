@@ -1059,11 +1059,12 @@ int drawable paymentstatus 0x7f07009a
 int drawable ptydlogo 0x7f07009b
 int drawable rainbowsalad 0x7f07009c
 int drawable shippingstatus 0x7f07009d
-int drawable summarystatus 0x7f07009e
-int drawable tempeh 0x7f07009f
-int drawable thaicurry 0x7f0700a0
-int drawable tooltip_frame_dark 0x7f0700a1
-int drawable tooltip_frame_light 0x7f0700a2
+int drawable subscription 0x7f07009e
+int drawable summarystatus 0x7f07009f
+int drawable tempeh 0x7f0700a0
+int drawable thaicurry 0x7f0700a1
+int drawable tooltip_frame_dark 0x7f0700a2
+int drawable tooltip_frame_light 0x7f0700a3
 int id ALT 0x7f080000
 int id CTRL 0x7f080001
 int id FUNCTION 0x7f080002

@@ -120,6 +120,5 @@ namespace InfiniteMeals.ViewModel.Subscribe {
 
         }
 
-
     }
 }

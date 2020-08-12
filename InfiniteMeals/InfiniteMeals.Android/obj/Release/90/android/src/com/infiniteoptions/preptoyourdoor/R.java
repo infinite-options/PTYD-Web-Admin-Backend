@@ -4810,11 +4810,12 @@ public final class R {
     public static final int ptydlogo=0x7f07009b;
     public static final int rainbowsalad=0x7f07009c;
     public static final int shippingstatus=0x7f07009d;
-    public static final int summarystatus=0x7f07009e;
-    public static final int tempeh=0x7f07009f;
-    public static final int thaicurry=0x7f0700a0;
-    public static final int tooltip_frame_dark=0x7f0700a1;
-    public static final int tooltip_frame_light=0x7f0700a2;
+    public static final int subscription=0x7f07009e;
+    public static final int summarystatus=0x7f07009f;
+    public static final int tempeh=0x7f0700a0;
+    public static final int thaicurry=0x7f0700a1;
+    public static final int tooltip_frame_dark=0x7f0700a2;
+    public static final int tooltip_frame_light=0x7f0700a3;
   }
   public static final class id {
     public static final int ALT=0x7f080000;

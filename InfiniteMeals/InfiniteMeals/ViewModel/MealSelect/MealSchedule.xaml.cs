@@ -24,12 +24,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
     {
         int ctr = 2;
         public int weekNumber;
-        private static bool disabled = false;
+        private bool disabled = false;
         public ListView lstView = new ListView { HasUnevenRows = true };
         public Button sundayButton = new Button();
-        public static List<String> purchaseIdList = new List<String>();
+        public List<String> purchaseIdList = new List<String>();
         private List<DateTimeOffset> weekAffectedList = new List<DateTimeOffset>();
-        private static string[] deliveryDayArray = { "Sunday", "Sunday", "Sunday", "Sunday", "Sunday", "Sunday" };
+        private string[] deliveryDayArray = { "Sunday", "Sunday", "Sunday", "Sunday", "Sunday", "Sunday" };
         public static string green = "#FF8FBC8F";
         public static string def = "#FFF5F5F5";
         public static string yellow = "#FFE573";
@@ -38,8 +38,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private List<string> allSubscriptions = new List<string>();
         private List<long> maxMealsList = new List<long>();
         private string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/";
-        public static List<string> MealPlanLists = new List<string>();    // List of all Urls for mealplans
-        public static List<string> MealPlanNumbers = new List<string>();    // List of all NUMBERS for mealplans
+        public List<string> MealPlanLists = new List<string>();    // List of all Urls for mealplans
+        public  List<string> MealPlanNumbers = new List<string>();    // List of all NUMBERS for mealplans
         private static Dictionary<string, Dictionary<string, string>> savedMenu = new Dictionary<string, Dictionary<string, string>>();
         private static Dictionary<string, string> save = new Dictionary<string, string>();
         private static Dictionary<string, string> values = new Dictionary<string, string>();

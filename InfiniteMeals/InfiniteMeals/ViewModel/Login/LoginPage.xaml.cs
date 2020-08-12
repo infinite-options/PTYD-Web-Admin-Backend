@@ -179,7 +179,9 @@ namespace InfiniteMeals.ViewModel.Login
                 LoginId = loginResponse.LoginAttemptLog.LoginId,
                 Email = loginResponse.Result.Result[0].UserEmail
             };
+            
             await App.Database.SaveItemAsync(userSessionInformation); // send login session to local database
+            System.Diagnostics.Debug.WriteLine("user logged in: " + App.Database.GetLastItem().Email);
             App.setLoggedIn(true);
             MainPage mainPage = (MainPage)Navigation.NavigationStack[0];
             mainPage.updateLoginButton();

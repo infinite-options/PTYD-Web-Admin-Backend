@@ -37,32 +37,32 @@
 	.section	.rodata.map_aname.6,"aMS",%progbits,1
 	.type	.L.map_aname.6, %object
 .L.map_aname.6:
-	.asciz	"Xamarin.Android.Support.v7.RecyclerView"
-	.size	.L.map_aname.6, 40
+	.asciz	"InfiniteMeals.Android"
+	.size	.L.map_aname.6, 22
 
 	.section	.rodata.map_aname.7,"aMS",%progbits,1
 	.type	.L.map_aname.7, %object
 .L.map_aname.7:
-	.asciz	"Xamarin.Android.Arch.Lifecycle.LiveData.Core"
-	.size	.L.map_aname.7, 45
+	.asciz	"Xamarin.Android.Support.v7.RecyclerView"
+	.size	.L.map_aname.7, 40
 
 	.section	.rodata.map_aname.8,"aMS",%progbits,1
 	.type	.L.map_aname.8, %object
 .L.map_aname.8:
-	.asciz	"Xamarin.Forms.Maps.Android"
-	.size	.L.map_aname.8, 27
+	.asciz	"Xamarin.Android.Arch.Lifecycle.LiveData.Core"
+	.size	.L.map_aname.8, 45
 
 	.section	.rodata.map_aname.9,"aMS",%progbits,1
 	.type	.L.map_aname.9, %object
 .L.map_aname.9:
-	.asciz	"Xamarin.GooglePlayServices.Basement"
-	.size	.L.map_aname.9, 36
+	.asciz	"Xamarin.Forms.Maps.Android"
+	.size	.L.map_aname.9, 27
 
 	.section	.rodata.map_aname.10,"aMS",%progbits,1
 	.type	.L.map_aname.10, %object
 .L.map_aname.10:
-	.asciz	"InfiniteMeals.Android"
-	.size	.L.map_aname.10, 22
+	.asciz	"Xamarin.GooglePlayServices.Basement"
+	.size	.L.map_aname.10, 36
 
 	.section	.rodata.map_aname.11,"aMS",%progbits,1
 	.type	.L.map_aname.11, %object

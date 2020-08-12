@@ -514,3 +514,4 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Androi
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Release\90\stamp\_GenerateJavaStubs.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Release\90\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Release\90\stamp\_ResolveLibraryProjectImports.stamp
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.Android\obj\Release\90\res\drawable\subscription.jpg
