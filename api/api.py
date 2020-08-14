@@ -2310,6 +2310,7 @@ class ChargeSubscribers(Resource):
                                                     stripe_charge_id, eachPayment['purchase_id'])
                     print("payment_query: ", payment_query)
                     items.append(execute(payment_query, 'post', conn))
+                    response['message'] = "Addon Charged Successful."
                 # to be careful here. We're assuming that user has chosen recurring == True then we'll charge them every
                 # thursday. What will happen if recurring == false and they still choosing ADD LOCAL TREATS. Should
                 # we charge them or not, because those addons have written into the database and it will be delivered.
@@ -2418,14 +2419,12 @@ class ChargeSubscribers(Resource):
                             res = execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(
                                 eachPayment['payment_id']), 'post', conn)
                             items.append(res)
+                    response['message'] = "Renew Subscription successful." if addon_charge == 0 else "Renew Subscription and Addons charged successful."
                 elif (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == 'FALSE'): # if recurring is false, turn current purchase's status to CANCELED
                     purchase_update_query = """UPDATE ptyd_purchases SET purchase_status = 'CANCELLED'
                                             WHERE purchase_id = '"""+ eachPayment['purchase_id'] + """';"""
                     purchase_update = execute(purchase_update_query, 'post', conn)
                     items.append(purchase_update)
-
-            response['message'] = 'Renew purchases successful.'
-
             # For debugging
             response['items'] = items
             return response, 200
