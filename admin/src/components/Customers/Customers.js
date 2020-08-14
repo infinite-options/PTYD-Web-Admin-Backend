@@ -131,7 +131,7 @@ class Customers extends React.Component {
                     <MenuItem value={noUser}> Select a Customer </MenuItem>
                     {
                         this.state.userList.map(user => (
-                            <MenuItem value={user.user_uid} key={user.user_uid}> {user.first_name} {user.last_name} {user.user_uid} </MenuItem>
+                            <MenuItem value={user.user_uid} key={user.user_uid}> {user.first_name}&nbsp;{user.last_name} {user.user_uid} </MenuItem>
                         ))
                     }
                 </Select>
