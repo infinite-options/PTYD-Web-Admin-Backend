@@ -2089,7 +2089,7 @@ class ChargeSubscribers(Resource):
             raise BadRequest('Request failed, bad affectedDate parameter.')
 
         try:
-            print(paramDate)
+
             conn = connect()
             query = """
                 SELECT
@@ -2234,13 +2234,13 @@ class ChargeSubscribers(Resource):
                 return query
 
             nextSat = paramDate + timedelta(days=2)
-            print("nextSat: ", nextSat)
+
             nextSat_str = nextSat.strftime("%Y-%m-%d")
             tax_rate_query = """SELECT tax_rate FROM ptyd_saturdays WHERE Saturday = '{}'""".format(nextSat_str)
             tax_rate = round(float(execute(tax_rate_query, 'get', conn)['result'][0]['tax_rate'])/100, 2)
             shipping = 15
             for eachPayment in Payments['result']:
-                print("each payment: ", eachPayment)
+
                 subscription_charge = 0
                 addon_charge = 0
                 #check for addon first
@@ -2256,9 +2256,9 @@ class ChargeSubscribers(Resource):
                 price = {}
                 for item in price_result:
                     price[item['meal_id']] = item['extra_meal_price']
-                print("addon query: ", addon_query)
+
                 addon_result = execute(addon_query, "get", conn).get('result')
-                print("addon_result: ", addon_result)
+
 
                 if addon_result:
                     meal_selected = addon_result[0].get(
@@ -2275,15 +2275,14 @@ class ChargeSubscribers(Resource):
                     if card_res['code'] != 280:
                         response['message'] = 'Cannot charge by using Stripe'
                         return response, 500
-                    print("card_res: ", card_res)
+
                     card_data = card_res['result'][0]
                     card_data['cc_exp_month'] = card_data['cc_exp_date'].split('-')[1]
                     card_data['cc_exp_year'] = card_data['cc_exp_date'].split('-')[0]
-                    print("card_data: ", card_data)
+
                     # Charge by stripe
                     card_dict = {"number": card_data['cc_num'], "exp_month": int(card_data['cc_exp_month']),
                                  "exp_year": int(card_data['cc_exp_year']), "cvc": card_data['cc_cvv'], }
-                    print("card dict: ", card_dict)
                     stripe_charge_id = None
                     try:
                         card_token = stripe.Token.create(card=card_dict)
@@ -2294,8 +2293,6 @@ class ChargeSubscribers(Resource):
                             source=card_token,
                             description=msg)
 
-                        print("charge success: ", stripe_charge)
-                        print("charge_id: ", stripe_charge.get('id'))
                         stripe_charge_id = stripe_charge.get('id')
                     except stripe.error.CardError as e:
                         # Since it's a decline, stripe.error.CardError will be caught
@@ -2308,23 +2305,15 @@ class ChargeSubscribers(Resource):
                     card_data['isAddon'] = 'TRUE'
                     payment_query = getPaymentQuery(card_data, None, total_charge, total_charge, paymentId,
                                                     stripe_charge_id, eachPayment['purchase_id'])
-                    print("payment_query: ", payment_query)
                     items.append(execute(payment_query, 'post', conn))
                     response['message'] = "Addon Charged Successful."
                 # to be careful here. We're assuming that user has chosen recurring == True then we'll charge them every
                 # thursday. What will happen if recurring == false and they still choosing ADD LOCAL TREATS. Should
                 # we charge them or not, because those addons have written into the database and it will be delivered.
                 elif (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == "TRUE"):
-                    print("tax_rate: ", tax_rate)
-                    print("meal_price: ", eachPayment['meal_plan_price'])
                     subscription_charge = float(eachPayment['meal_plan_price']) * (1 + tax_rate) + shipping
-
-                    print("subcription_charge: ", subscription_charge)
                     # check for the addon for the next week
-
-
                     # start to write to the database
-
                     newPaymentId = get_new_paymentID()
                     total_charge = round(addon_charge + subscription_charge, 2)
                     #collect info from payment table
@@ -2335,22 +2324,20 @@ class ChargeSubscribers(Resource):
                     if card_res['code'] != 280:
                         response['message'] = 'Cannot charge by using Stripe'
                         return response, 500
-                    print("card_res: ", card_res)
                     card_data = card_res['result'][0]
 
                     #check for coupon and update total charge
                     if card_data['coupon_id'] is not None:
                         coupon_check = Coupon.get(couponID, coupon_email)
-                        print("coupon_check: ", coupon_check)
+
                         #need some code to apply coupon
                     if total_charge > 0:
                         card_data['cc_exp_month'] = card_data['cc_exp_date'].split('-')[1]
                         card_data['cc_exp_year'] = card_data['cc_exp_date'].split('-')[0]
-                        print("card_data: ", card_data)
+
                         # Charge by stripe
                         card_dict = {"number": card_data['cc_num'], "exp_month": int(card_data['cc_exp_month']),
                                      "exp_year": int(card_data['cc_exp_year']), "cvc": card_data['cc_cvv'], }
-                        print("card dict: ", card_dict)
                         stripe_charge_id = None
                         try:
                             card_token = stripe.Token.create(card=card_dict)
@@ -2361,8 +2348,6 @@ class ChargeSubscribers(Resource):
                                 source=card_token,
                                 description=msg)
 
-                            print("charge success: ", stripe_charge)
-                            print("charge_id: ", stripe_charge.get('id'))
                             stripe_charge_id = stripe_charge.get('id')
                         except stripe.error.CardError as e:
                             # Since it's a decline, stripe.error.CardError will be caught
@@ -2374,16 +2359,16 @@ class ChargeSubscribers(Resource):
                         card_data['recurring'] = 'TRUE'
                         card_data['isAddon'] = 'TRUE' if addon_charge > 0 else 'FALSE'
                         payment_query = getPaymentQuery(card_data, couponID, total_charge, total_charge, paymentId, stripe_charge_id, eachPayment['purchase_id'])
-                        print("payment_query: ", payment_query)
+
                         items.append(execute(payment_query, 'post', conn))
                         # New snapshot
                         # Only write to snapshot if it is a renew subscription
                         if subscription_charge > 0 and stripe_charge_id is not None:
                             newSnapshotId = get_new_snapshotID()
-                            print("Passed newSnapshotID")
+
                             dates = self.getDates(
                                 eachPayment['subscription_weeks'], paramDate)
-                            print("passed dates")
+
                             query = """
                                                 INSERT INTO ptyd_snapshots
                                                 (

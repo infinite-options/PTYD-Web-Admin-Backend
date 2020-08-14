@@ -193,7 +193,6 @@ export default class MealSchedule extends Component {
               </Row>
 
               <div className='visibility-hidden-mobile'>
-
                 <Row className='mb-1'>
                   <Button
                     onClick={this.ChangeAccountInfo}
@@ -204,7 +203,7 @@ export default class MealSchedule extends Component {
                     Change Account Info
                   </Button>
                 </Row>
-                
+
                 {this.state.showHideMakeChange && (
                   <MakeChange
                     searchCookie4LoggedInBy={this.searchCookie4LoggedInBy(
@@ -230,12 +229,13 @@ export default class MealSchedule extends Component {
                 <AccountInfo
                   currentPurchase={this.state.currentPurchase}
                   addonCharge={this.state.addonCharge}
+                  tax_rate={this.state.tax_rate}
+                  shipping={this.state.shipping}
                 />
               </div>
-
             </div>
           </Cell>
-          
+
           <Cell col={8}>
             {/* run a loop to create 6 week's buttons */}
             {this.state.error === null ? (
@@ -277,7 +277,7 @@ export default class MealSchedule extends Component {
 
           {/* mobile: display subscription details at page end */}
 
-          <div className='no-display-desktop' style={{width:"270px"}}>
+          <div className='no-display-desktop' style={{width: "270px"}}>
             <Row className='mb-1'>
               <Button
                 onClick={this.ChangeAccountInfo}
@@ -290,8 +290,7 @@ export default class MealSchedule extends Component {
             </Row>
           </div>
 
-          <div className='box no-display-desktop' style={{paddingTop:"0"}}>
-
+          <div className='box no-display-desktop' style={{paddingTop: "0"}}>
             {this.state.showHideMakeChange && (
               <MakeChange
                 searchCookie4LoggedInBy={this.searchCookie4LoggedInBy(
@@ -319,8 +318,7 @@ export default class MealSchedule extends Component {
               addonCharge={this.state.addonCharge}
             />
           </div>
-          <br/>
-
+          <br />
         </Grid>
       </div>
     );

@@ -23,7 +23,13 @@ export default class AccountInfo extends Component {
         <p>My Subscription: {current.meal_plan_desc}</p>
         <p>Payment Plan: {current.payment_frequency}</p>
         <p>Paid Weeks Remaining: {current.paid_weeks_remaining}</p>
-        <p>Next Charge: {parseFloat(current.meal_plan_price).toFixed(2)}</p>
+        <p>
+          Next Charge:{" "}
+          {(
+            parseFloat(current.meal_plan_price) * (1 + this.props.tax_rate) +
+            this.props.shipping
+          ).toFixed(2)}
+        </p>
         <p>Next Charge Date: {current.next_charge_date}</p>
         <p>
           Next Addon Charge: {parseFloat(this.props.addonCharge).toFixed(2)}
@@ -34,8 +40,10 @@ export default class AccountInfo extends Component {
         <p>Credit Card: {current.cc_num} </p>
         <p>Expiration Date: {current.cc_exp_date}</p>
         <p>CVV: {current.cc_cvv}</p>
-        <h4>Delivery Details</h4> 
-        <p>Name: {current.delivery_first_name} {current.delivery_last_name}</p>
+        <h4>Delivery Details</h4>
+        <p>
+          Name: {current.delivery_first_name} {current.delivery_last_name}
+        </p>
         <p>Address: {current.delivery_address} </p>
         <p>Unit: {current.delivery_address_unit}</p>
         <p>
