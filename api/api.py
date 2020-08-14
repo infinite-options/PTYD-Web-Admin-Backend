@@ -2228,7 +2228,7 @@ class ChargeSubscribers(Resource):
                                 \'""" + data['cc_cvv'] + """\',
                                 \'""" + data['billing_zip'] + """\',
                                 """ + stripe_charge_id + """,
-                                \'""" + data['isAddon'] + """\';"""
+                                \'""" + data['isAddon'] + """\');"""
 
                 return query
 
@@ -2242,21 +2242,13 @@ class ChargeSubscribers(Resource):
                 print("each payment: ", eachPayment)
                 subscription_charge = 0
                 addon_charge = 0
-                # to be careful here. We're assuming that user has chosen recurring == True then we'll charge them every
-                # thursday. What will happen if recurring == false and they still choosing ADD LOCAL TREATS. Should
-                # we charge them or not, because those addons have written into the database and it will be delivered.
-                if (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == "TRUE"):
-                    print("tax_rate: ", tax_rate)
-                    print("meal_price: ", eachPayment['meal_plan_price'])
-                    subscription_charge = float(eachPayment['meal_plan_price']) * (1 + tax_rate) + shipping
-
-                    print("subcription_charge: ", subscription_charge)
-                # check for the addon for the next week
+                #check for addon first
                 addon_query = """SELECT * FROM ptyd_addons_selected
-                                    WHERE selection_time = (SELECT MAX(selection_time) FROM ptyd_addons_selected
-                                                                WHERE purchase_id = '""" + eachPayment['purchase_id'] + """'
-                                                                AND week_affected = '""" + nextSat_str + """')
-                                    AND meal_selection <> '';"""
+                                                        WHERE selection_time = (SELECT MAX(selection_time) FROM ptyd_addons_selected
+                                                                                    WHERE purchase_id = '""" + \
+                              eachPayment['purchase_id'] + """'
+                                                                                    AND week_affected = '""" + nextSat_str + """')
+                                                        AND meal_selection <> '';"""
                 price_query = """SELECT meal_id, extra_meal_price FROM ptyd_meals;"""
                 price_result = execute(price_query, "get", conn).get("result")
 
@@ -2270,30 +2262,20 @@ class ChargeSubscribers(Resource):
                 if addon_result:
                     meal_selected = addon_result[0].get(
                         'meal_selection').split(";")
-                    if (len(meal_selected) > 0 and meal_selected[0] !=""):
+                    if (len(meal_selected) > 0 and meal_selected[0] != ""):
                         for id in meal_selected:
                             addon_charge += float(price.get(id))
-                # start to write to the database
-
-                newPaymentId = get_new_paymentID()
-                total_charge = round(addon_charge + subscription_charge, 2)
-                #collect info from payment table
-                couponID = None
-                card_query = """SELECT buyer_id as user_uid, coupon_id, gift as is_gift, cc_num, cc_exp_date, cc_cvv, billing_zip FROM ptyd_payments
-                                    WHERE payment_id = '{}'""".format(eachPayment['payment_id'])
-                card_res = execute(card_query, 'get', conn)
-                if card_res['code'] != 280:
-                    response['message'] = 'Cannot charge by using Stripe'
-                    return response, 500
-                print("card_res: ", card_res)
-                card_data = card_res['result'][0]
-
-                #check for coupon and update total charge
-                if card_data['coupon_id'] is not None:
-                    coupon_check = Coupon.get(couponID, coupon_email)
-                    print("coupon_check: ", coupon_check)
-                    #need some code to apply coupon
-                if total_charge > 0:
+                if (eachPayment['weeks_remaining'] != 0 and addon_charge > 0):
+                    newPaymentId = get_new_paymentID()
+                    total_charge = round(addon_charge,2)
+                    card_query = """SELECT buyer_id as user_uid, coupon_id, gift as is_gift, cc_num, cc_exp_date, cc_cvv, billing_zip FROM ptyd_payments
+                                                            WHERE payment_id = '{}'""".format(eachPayment['payment_id'])
+                    card_res = execute(card_query, 'get', conn)
+                    if card_res['code'] != 280:
+                        response['message'] = 'Cannot charge by using Stripe'
+                        return response, 500
+                    print("card_res: ", card_res)
+                    card_data = card_res['result'][0]
                     card_data['cc_exp_month'] = card_data['cc_exp_date'].split('-')[1]
                     card_data['cc_exp_year'] = card_data['cc_exp_date'].split('-')[0]
                     print("card_data: ", card_data)
@@ -2304,7 +2286,7 @@ class ChargeSubscribers(Resource):
                     stripe_charge_id = None
                     try:
                         card_token = stripe.Token.create(card=card_dict)
-                        msg = "Charged for renew subcription." if subscription_charge > 0 else "Charged for addons"
+                        msg = "Charged for addons"
                         stripe_charge = stripe.Charge.create(
                             amount=int(round(total_charge * 100, 0)),
                             currency="usd",
@@ -2318,59 +2300,130 @@ class ChargeSubscribers(Resource):
                         # Since it's a decline, stripe.error.CardError will be caught
                         response['message'] = e.error.message
                         return response, 400
-                    #write charge into payment table
+                    # write charge into payment table
 
                     paymentId = get_new_paymentID()
-                    card_data['recurring'] = 'TRUE' if subscription_charge > 0 else 'FALSE'
-                    card_data['isAddon'] = 'TRUE' if addon_charge > 0 else 'FALSE'
-                    payment_query = getPaymentQuery(card_data, couponID, total_charge, total_charge, paymentId, stripe_charge_id, eachPayment['purchase_id'])
+                    card_data['recurring'] = 'FALSE'
+                    card_data['isAddon'] = 'TRUE'
+                    payment_query = getPaymentQuery(card_data, None, total_charge, total_charge, paymentId,
+                                                    stripe_charge_id, eachPayment['purchase_id'])
                     print("payment_query: ", payment_query)
                     items.append(execute(payment_query, 'post', conn))
-                    # New snapshot
-                    # Only write to snapshot if it is a renew subscription
-                    if subscription_charge > 0 and stripe_charge_id is not None:
-                        newSnapshotId = get_new_snapshotID()
-                        print("Passed newSnapshotID")
-                        dates = self.getDates(
-                            eachPayment['subscription_weeks'], paramDate)
-                        print("passed dates")
-                        query = """
-                                            INSERT INTO ptyd_snapshots
-                                            (
-                                                snapshot_id
-                                                , snapshot_timestamp
-                                                , purchase_id
-                                                , payment_id
-                                                , delivery_start_date
-                                                , subscription_weeks
-                                                , delivery_end_date
-                                                , next_billing_date
-                                                , weeks_remaining
-                                                , week_affected
-                                            )
-                                            SELECT
-                                                \'""" + newSnapshotId + """\' AS snapshot_id
-                                                , \'""" + getNow() + """\' AS snapshot_timestamp
-                                                , s1.purchase_id
-                                                , \'""" + newPaymentId + """\' AS payment_id
-                                                , \'""" + dates['startDate'] + """\'
-                                                , subscription_weeks
-                                                , \'""" + dates['endDate'] + """\'
-                                                , \'""" + dates['billingDate'] + """\'
-                                                , subscription_weeks
-                                                , \'""" + dates['startDate'] + """\'
-                                            FROM
-                                                ptyd_snapshots s1
-                                            WHERE
-                                                s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
+                # to be careful here. We're assuming that user has chosen recurring == True then we'll charge them every
+                # thursday. What will happen if recurring == false and they still choosing ADD LOCAL TREATS. Should
+                # we charge them or not, because those addons have written into the database and it will be delivered.
+                elif (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == "TRUE"):
+                    print("tax_rate: ", tax_rate)
+                    print("meal_price: ", eachPayment['meal_plan_price'])
+                    subscription_charge = float(eachPayment['meal_plan_price']) * (1 + tax_rate) + shipping
 
-                        items.append(execute(query, 'post', conn))
-                        # update the recurring in the old payment
-                        res = execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(
-                            eachPayment['payment_id']), 'post', conn)
-                        items.append(res)
+                    print("subcription_charge: ", subscription_charge)
+                    # check for the addon for the next week
 
-            response['message'] = 'POST request successful.'
+
+                    # start to write to the database
+
+                    newPaymentId = get_new_paymentID()
+                    total_charge = round(addon_charge + subscription_charge, 2)
+                    #collect info from payment table
+                    couponID = None
+                    card_query = """SELECT buyer_id as user_uid, coupon_id, gift as is_gift, cc_num, cc_exp_date, cc_cvv, billing_zip FROM ptyd_payments
+                                        WHERE payment_id = '{}'""".format(eachPayment['payment_id'])
+                    card_res = execute(card_query, 'get', conn)
+                    if card_res['code'] != 280:
+                        response['message'] = 'Cannot charge by using Stripe'
+                        return response, 500
+                    print("card_res: ", card_res)
+                    card_data = card_res['result'][0]
+
+                    #check for coupon and update total charge
+                    if card_data['coupon_id'] is not None:
+                        coupon_check = Coupon.get(couponID, coupon_email)
+                        print("coupon_check: ", coupon_check)
+                        #need some code to apply coupon
+                    if total_charge > 0:
+                        card_data['cc_exp_month'] = card_data['cc_exp_date'].split('-')[1]
+                        card_data['cc_exp_year'] = card_data['cc_exp_date'].split('-')[0]
+                        print("card_data: ", card_data)
+                        # Charge by stripe
+                        card_dict = {"number": card_data['cc_num'], "exp_month": int(card_data['cc_exp_month']),
+                                     "exp_year": int(card_data['cc_exp_year']), "cvc": card_data['cc_cvv'], }
+                        print("card dict: ", card_dict)
+                        stripe_charge_id = None
+                        try:
+                            card_token = stripe.Token.create(card=card_dict)
+                            msg = "Charged for renew subscription."
+                            stripe_charge = stripe.Charge.create(
+                                amount=int(round(total_charge * 100, 0)),
+                                currency="usd",
+                                source=card_token,
+                                description=msg)
+
+                            print("charge success: ", stripe_charge)
+                            print("charge_id: ", stripe_charge.get('id'))
+                            stripe_charge_id = stripe_charge.get('id')
+                        except stripe.error.CardError as e:
+                            # Since it's a decline, stripe.error.CardError will be caught
+                            response['message'] = e.error.message
+                            return response, 400
+                        #write charge into payment table
+
+                        paymentId = get_new_paymentID()
+                        card_data['recurring'] = 'TRUE'
+                        card_data['isAddon'] = 'TRUE' if addon_charge > 0 else 'FALSE'
+                        payment_query = getPaymentQuery(card_data, couponID, total_charge, total_charge, paymentId, stripe_charge_id, eachPayment['purchase_id'])
+                        print("payment_query: ", payment_query)
+                        items.append(execute(payment_query, 'post', conn))
+                        # New snapshot
+                        # Only write to snapshot if it is a renew subscription
+                        if subscription_charge > 0 and stripe_charge_id is not None:
+                            newSnapshotId = get_new_snapshotID()
+                            print("Passed newSnapshotID")
+                            dates = self.getDates(
+                                eachPayment['subscription_weeks'], paramDate)
+                            print("passed dates")
+                            query = """
+                                                INSERT INTO ptyd_snapshots
+                                                (
+                                                    snapshot_id
+                                                    , snapshot_timestamp
+                                                    , purchase_id
+                                                    , payment_id
+                                                    , delivery_start_date
+                                                    , subscription_weeks
+                                                    , delivery_end_date
+                                                    , next_billing_date
+                                                    , weeks_remaining
+                                                    , week_affected
+                                                )
+                                                SELECT
+                                                    \'""" + newSnapshotId + """\' AS snapshot_id
+                                                    , \'""" + getNow() + """\' AS snapshot_timestamp
+                                                    , s1.purchase_id
+                                                    , \'""" + newPaymentId + """\' AS payment_id
+                                                    , \'""" + dates['startDate'] + """\'
+                                                    , subscription_weeks
+                                                    , \'""" + dates['endDate'] + """\'
+                                                    , \'""" + dates['billingDate'] + """\'
+                                                    , subscription_weeks
+                                                    , \'""" + dates['startDate'] + """\'
+                                                FROM
+                                                    ptyd_snapshots s1
+                                                WHERE
+                                                    s1.snapshot_id = \'""" + eachPayment['snapshot_id'] + "\';"
+
+                            items.append(execute(query, 'post', conn))
+                            # update the recurring in the old payment
+                            res = execute("""UPDATE ptyd_payments SET recurring = 'FALSE' WHERE payment_id = '{}'""".format(
+                                eachPayment['payment_id']), 'post', conn)
+                            items.append(res)
+                elif (eachPayment['weeks_remaining'] == 0 and eachPayment['recurring'] == 'FALSE'): # if recurring is false, turn current purchase's status to CANCELED
+                    purchase_update_query = """UPDATE ptyd_purchases SET purchase_status = 'CANCELLED'
+                                            WHERE purchase_id = '"""+ eachPayment['purchase_id'] + """';"""
+                    purchase_update = execute(purchase_update_query, 'post', conn)
+                    items.append(purchase_update)
+
+            response['message'] = 'Renew purchases successful.'
 
             # For debugging
             response['items'] = items
