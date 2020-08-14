@@ -5926,7 +5926,7 @@ class PurchaseIdMeals(Resource):
                                 COUNT(num) AS total
                             FROM (
                                 SELECT *
-                                    , substring_index(substring_index(meal_selection,';',n),';',-1) AS meal_selected
+                                    , substring_index(substring_index(combined_selection,';',n),';',-1) AS meal_selected
                                     , n AS num
                                 FROM (# QUERY 8
                                     SELECT meals.*,
@@ -6115,7 +6115,7 @@ class PurchaseIdMeals(Resource):
                                     GROUP BY meals.purchase_id,
                                         meals.week_affected)
                                     AS combined
-                            JOIN numbers ON char_length(meal_selection) - char_length(replace(meal_selection, ';', '')) >= n - 1)
+                            JOIN numbers ON char_length(combined_selection) - char_length(replace(combined_selection, ';', '')) >= n - 1)
                                 AS sub
                             LEFT JOIN ptyd.ptyd_meals meals ON sub.meal_selected = meals.meal_id
                             GROUP BY purchase_id
