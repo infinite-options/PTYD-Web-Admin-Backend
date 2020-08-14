@@ -2042,6 +2042,7 @@ class UpdatePurchases(Resource):
 
 
 # Call this API from another source every Thursday at midnight
+# this part need to be re-organized into multiple functions in order to reduce duplicated codes.
 class ChargeSubscribers(Resource):
     def getDates(self, frequency, thurs):
         dates = {}
