@@ -5879,7 +5879,8 @@ class PurchaseIdMeals(Resource):
                                     -- AND sat.Saturday < "2020-09-01"
                                     AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
                                     AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
-                                    AND sat.Saturday > pur.start_date)
+                                    AND ADDDATE(sat.Saturday,0) > ADDDATE(pur.start_date, 2))
+                                    -- AND sat.Saturday > pur.start_date)
                                 AS act_pur
                             LEFT JOIN (# QUERY 1 
                                 SELECT
@@ -5974,7 +5975,8 @@ class PurchaseIdMeals(Resource):
                                                         -- AND sat.Saturday < "2020-09-01"
                                                         AND sat.Saturday > DATE_ADD(CURDATE(), INTERVAL -16 DAY)
                                                         AND sat.Saturday < DATE_ADD(CURDATE(), INTERVAL 40 DAY)
-                                                        AND sat.Saturday > pur.start_date)
+                                                        AND ADDDATE(sat.Saturday,0) > ADDDATE(pur.start_date, 2))
+                                                       -- AND sat.Saturday > pur.start_date)
                                                     AS act_pur
                                                 LEFT JOIN (# QUERY 1 
                                                     SELECT
