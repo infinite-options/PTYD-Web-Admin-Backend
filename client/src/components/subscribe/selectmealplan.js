@@ -54,12 +54,12 @@ class Selectmealplan extends Component {
               <p>STRAIGHT TO YOUR DOOR</p>
             </article>
             
-            <CardDeck>
+            <CardDeck className='meals-deck'>
               {this.state.mealPlans.map((mealPlan, key) => (
                 <Card key={key}
                   className='p-0 border-0 w-auto shadow-none'>
                   {mealPlan.num_meals === 10 ? (
-                    <div className='rcorners d-flex rcorner_color'>
+                    <div className='rcorners d-flex rcorner_color mobile-popular-margin'>
                       <h5 className='align-self-center mx-auto'>
                         MOST POPULAR
                       </h5>
@@ -67,7 +67,7 @@ class Selectmealplan extends Component {
                   ) : (
                     <div className='rcorners d-flex'>
                       <p className='align-self-center mx-auto'></p>
-                      <h5 className='align-self-center mx-auto' style={{textDecoration:'none', textShadow:'none'}}>
+                      <h5 className='align-self-center mx-auto mobile-card-top' style={{textShadow:'none'}}>
                         &nbsp;
                       </h5>
                     </div>

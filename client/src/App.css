@@ -1049,10 +1049,9 @@ hr.four {
     margin:auto;
   }
 
-  .mealsCard {
-    height: auto;
-    /* min-width: 250px; */
-    /* padding-left: 20px; */
+  .meals-deck {
+    display: grid!important;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))!important;
   }
 }
 
@@ -1213,5 +1212,21 @@ hr.four {
   .mobile-left {
     width: 345px!important;
     left: 12px;
+  }
+
+  .meals-deck {
+    display: grid!important;
+    grid-template-columns: repeat(1, minmax(250px, 1fr))!important;
+  }
+  .mobile-popular-margin {
+    margin: 20px 20px 0 20px;
+
+  }
+  .mealsCard {
+    margin: 0 20px;
+  }
+  .mobile-card-top {
+    visibility: hidden!important;
+    display: none;
   }
 }
