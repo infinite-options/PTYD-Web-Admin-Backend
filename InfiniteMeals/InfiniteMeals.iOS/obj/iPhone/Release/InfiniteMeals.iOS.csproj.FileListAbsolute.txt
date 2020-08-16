@@ -189,3 +189,6 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/optimized/fronks.png
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/optimized/yellowbird.png
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/optimized/jbg.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/optimized/shippingStatus.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/optimized/summaryStatus.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhone/Release/optimized/paymentStatus.png

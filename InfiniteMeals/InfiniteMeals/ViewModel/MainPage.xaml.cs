@@ -11,6 +11,9 @@ using InfiniteMeals.Model.Database;
 using System.Windows.Input;
 using InfiniteMeals.ViewModel.SignUp;
 using System.Collections.Generic;
+using System.Net;
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace InfiniteMeals
 {
@@ -18,8 +21,10 @@ namespace InfiniteMeals
     // main page or home page of the app
     public partial class MainPage : ContentPage
     {
-
+        private string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/";
         public ICommand ForgotPasswordCommand => new Command(onForgotPassword);
+        private static string userID;
+        MealChoices mc = (MealChoices)FormatterServices.GetUninitializedObject(typeof(MealChoices));
 
         public MainPage()
         {
@@ -78,7 +83,23 @@ namespace InfiniteMeals
 
         private async void ClickedMealSchedule(object sender, EventArgs e)
         {
+            /*
+            WebClient client = new WebClient();
+            userID = mc.getUserAcct();
+            var userZipCodes = client.DownloadString(acctUrl + userID);
+            var userZipObj = JsonConvert.DeserializeObject<UserInformation>(userZipCodes);
+            var numSubscriptions = userZipObj.Result.Length;
             await Navigation.PushAsync(new MealSchedule());
+
+            if (numSubscriptions == 0)
+            {
+                await DisplayAlert("You don't have any meal plans", "Please subscribe to a meal plan on the homepage first.", "OK");
+            }
+            else
+            {*/
+                await Navigation.PushAsync(new MealSchedule());
+           // }
+
         }
 
         private async void ClickedUserProfile(object sender, EventArgs e)

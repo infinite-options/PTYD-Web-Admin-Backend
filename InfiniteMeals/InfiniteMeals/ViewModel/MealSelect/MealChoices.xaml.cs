@@ -90,7 +90,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
         private string userID;
         public static string infoImg = "info.jpeg";
-        public static string green = "#8FBC8F";
+        public static string green = "#427c43";
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
         private static string mealSelectionUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/";
@@ -482,8 +482,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 nameLabel.SetValue(Grid.RowSpanProperty, 2);
                 nameLabel.SetValue(Grid.ColumnSpanProperty, 2);
                 grid.Children.Add(infoButton, 4, 0);
-                grid.Children.Add(decrementMealQuantityButton, 3, 1);
-                grid.Children.Add(incrementMealQuantityButton, 4, 1);
+                grid.Children.Add(decrementMealQuantityButton, 4, 1);
+                grid.Children.Add(incrementMealQuantityButton, 5, 1);
                 // grid.Children.Add(steppers, 3, 1);
                 //steppers.SetValue(Grid.ColumnSpanProperty, 3);
                 grid.Children.Add(quantity, 5, 0);
@@ -2543,10 +2543,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     skip1.BackgroundColor = Color.FromHex(green);
                     sel1.BackgroundColor = Color.FromHex(def);
-                    sun1.BackgroundColor = Color.FromHex(def);
-                    mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
                     add1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    sel1.IsEnabled = false;
+                    surp1.IsEnabled = false ;
+                    add1.IsEnabled = false ;
                     ms.postRemoveAddData(skip1, e);
                     ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton"), e);
 
@@ -2567,10 +2570,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     skip1.BackgroundColor = Color.FromHex(green);
                     sel1.BackgroundColor = Color.FromHex(def);
-                    sun1.BackgroundColor = Color.FromHex(def);
-                    mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
                     add1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    sel1.IsEnabled = false;
+                    surp1.IsEnabled = false;
+                    add1.IsEnabled = false;
                     ms.postRemoveAddData(skip1, e);
                     ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton2"), e);
 
@@ -2591,10 +2597,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     skip1.BackgroundColor = Color.FromHex(green);
                     sel1.BackgroundColor = Color.FromHex(def);
-                    sun1.BackgroundColor = Color.FromHex(def);
-                    mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
                     add1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    sel1.IsEnabled = false;
+                    surp1.IsEnabled = false;
+                    add1.IsEnabled = false;
                     ms.postRemoveAddData(skip1, e);
 
                     ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton3"), e);
@@ -2617,10 +2626,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     skip1.BackgroundColor = Color.FromHex(green);
                     sel1.BackgroundColor = Color.FromHex(def);
-                    sun1.BackgroundColor = Color.FromHex(def);
-                    mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
                     add1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    sel1.IsEnabled = false;
+                    surp1.IsEnabled = false;
+                    add1.IsEnabled = false;
                     ms.postRemoveAddData(skip1, e);
 
                     ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton4"), e);
@@ -2642,10 +2654,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     skip1.BackgroundColor = Color.FromHex(green);
                     sel1.BackgroundColor = Color.FromHex(def);
-                    sun1.BackgroundColor = Color.FromHex(def);
-                    mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
                     add1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    sel1.IsEnabled = false;
+                    surp1.IsEnabled = false;
+                    add1.IsEnabled = false;
                     ms.postRemoveAddData(skip1, e);
 
                     ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton5"), e);
@@ -2667,10 +2682,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
                     skip1.BackgroundColor = Color.FromHex(green);
                     sel1.BackgroundColor = Color.FromHex(def);
-                    sun1.BackgroundColor = Color.FromHex(def);
-                    mon1.BackgroundColor = Color.FromHex(def);
                     surp1.BackgroundColor = Color.FromHex(def);
                     add1.BackgroundColor = Color.FromHex(def);
+                    sun1.BackgroundColor = Color.FromHex(def);
+                    mon1.BackgroundColor = Color.FromHex(def);
+                    sel1.IsEnabled = false;
+                    surp1.IsEnabled = false;
+                    add1.IsEnabled = false;
                     ms.postRemoveAddData(skip1, e);
 
                     ms.postSkipData((Button)mealSchedulePage.FindByName("SkipButton6"), e);

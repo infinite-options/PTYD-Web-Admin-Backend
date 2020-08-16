@@ -11,6 +11,8 @@ using Xamarin.Essentials;
 using System.Net;
 using InfiniteMeals.Model.Subscribe;
 using InfiniteMeals.Model.Checkout;
+using Newtonsoft.Json;
+using InfiniteMeals.Model.Database;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -18,13 +20,39 @@ namespace InfiniteMeals.ViewModel.Checkout {
     // first step in checkout process
     // prompts user to enter delivery information
     public partial class DeliveryPage : ContentPage {
+        private string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/";
+        private static string userID;
 
         public DeliveryPage() {
             InitializeComponent();
+            preloadDeliveryInfo();
         }
 
+        // Preloads Existing Entries to Text Fields
+        private void preloadDeliveryInfo()
+        {
+            WebClient client = new WebClient();
+            // Get user zipcodes
+            var table = App.Database.GetLastItem();
+            userID = table.UserUid;
+            var userInfo = client.DownloadString(acctUrl + userID);
+            var userInfoObj = JsonConvert.DeserializeObject<UserInformation>(userInfo);
+
+            this.firstNameEntry.Text = userInfoObj.Result[0].DeliveryFirstName;
+            this.lastNameEntry.Text = userInfoObj.Result[0].DeliveryLastName;
+            // Phone
+            this.addressOneEntry.Text = userInfoObj.Result[0].DeliveryAddress;
+            this.addressTwoEntry.Text = userInfoObj.Result[0].DeliveryAddressUnit;
+            this.zipCodeEntry.Text = userInfoObj.Result[0].DeliveryZip.ToString();
+            this.cityEntry.Text = userInfoObj.Result[0].DeliveryCity;
+            this.stateEntry.Text = userInfoObj.Result[0].DeliveryState;
+
+        }
+
+
         // clicked continue button event handler
-        private async void ContinueToPaymentClicked(object sender, EventArgs e) { 
+        private async void ContinueToPaymentClicked(object sender, EventArgs e) {
+
             if (String.IsNullOrEmpty(this.firstNameEntry.Text) || String.IsNullOrEmpty(this.lastNameEntry.Text) || String.IsNullOrEmpty(this.addressOneEntry.Text) || String.IsNullOrEmpty(this.zipCodeEntry.Text) ||
                String.IsNullOrEmpty(this.cityEntry.Text) || String.IsNullOrEmpty(this.stateEntry.Text)) { // checks that all fields are filled out
                 await DisplayAlert("Error: Empty Field(s)", "Please fill all fields", "OK");

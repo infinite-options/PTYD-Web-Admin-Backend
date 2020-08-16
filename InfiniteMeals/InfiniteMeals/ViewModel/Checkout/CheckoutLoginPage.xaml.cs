@@ -31,7 +31,21 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
         public CheckoutLoginPage() {
             InitializeComponent();
-            
+            checkPlatform();
+        }
+
+        private void checkPlatform()
+        {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                LoginButton.CornerRadius = 15;
+                SignUpButton.CornerRadius = 15;
+            }
+            else if (Device.RuntimePlatform == Device.Android)
+            {
+                LoginButton.CornerRadius = 50;
+                SignUpButton.CornerRadius = 50;
+            }
         }
 
         // handles when the login button is clicked

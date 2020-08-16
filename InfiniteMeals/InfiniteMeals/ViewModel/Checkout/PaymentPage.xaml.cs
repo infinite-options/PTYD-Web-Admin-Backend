@@ -7,7 +7,9 @@ using Xamarin.Forms.Xaml;
 using InfiniteMeals.Model.Checkout;
 using InfiniteMeals.Utilities.Converters;
 using InfiniteMeals.Model.Subscribe;
-
+using System.Net;
+using InfiniteMeals.Model.Database;
+using Newtonsoft.Json;
 
 namespace InfiniteMeals.ViewModel.Checkout {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,10 +17,29 @@ namespace InfiniteMeals.ViewModel.Checkout {
     // second step in checkout process
     // prompts user to fill out delivery instructions and payment info
     public partial class PaymentPage : ContentPage {
+
+        private string acctUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountpurchases/";
+        private static string userID;
+
         public PaymentPage() {
             InitializeComponent();
-
+            preloadDeliveryInfo();
             
+        }
+
+        // Preloads Existing Entries to Text Fields
+        private void preloadDeliveryInfo()
+        {
+            WebClient client = new WebClient();
+            // Get user zipcodes
+            var table = App.Database.GetLastItem();
+            userID = table.UserUid;
+            var userInfo = client.DownloadString(acctUrl + userID);
+            var userInfoObj = JsonConvert.DeserializeObject<UserInformation>(userInfo);
+
+            this.deliveryInstructionsEditor.Text = userInfoObj.Result[0].DeliveryInstructions;
+            this.cardNumberEntry.Text = userInfoObj.Result[0].CcNum;
+            this.cvvEntry.Text = userInfoObj.Result[0].CcCvv.ToString();
         }
 
         // event handler for clicking continue to summary button

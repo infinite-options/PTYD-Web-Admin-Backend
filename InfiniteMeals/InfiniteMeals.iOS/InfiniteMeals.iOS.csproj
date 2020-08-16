@@ -169,5 +169,8 @@
     <BundleResource Include="Resources\buddha.jpeg" />
     <BundleResource Include="Resources\bibimbap.jpeg" />
     <BundleResource Include="Resources\info.jpeg" />
+    <BundleResource Include="Resources\shippingStatus.png" />
+    <BundleResource Include="Resources\summaryStatus.png" />
+    <BundleResource Include="Resources\paymentStatus.png" />
   </ItemGroup>
 </Project>

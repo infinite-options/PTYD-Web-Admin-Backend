@@ -1794,6 +1794,7 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/homepage.jpg
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/ptydlogo.png
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/subscription.jpg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/info.jpeg
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/cacaooats.jpeg
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/checkboxselected.png
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/checkboxunselected.png

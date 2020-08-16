@@ -16,6 +16,7 @@ using System.Runtime.Serialization;
 using InfiniteMeals.Model.Meals;
 using Xamarin.Forms.Internals;
 using InfiniteMeals.ViewModel.Profile;
+using InfiniteMeals.ViewModel.Subscribe;
 
 namespace InfiniteMeals.ViewModel.MealSelect
 {
@@ -31,9 +32,9 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public static List<String> purchaseIdList = new List<String>();
         private List<DateTimeOffset> weekAffectedList = new List<DateTimeOffset>();
         private static string[] deliveryDayArray = { "Sunday", "Sunday", "Sunday", "Sunday", "Sunday", "Sunday" };
-        public static string green = "#FF8FBC8F";
+        public static string green = "#427c43";
         public static string def = "#FFF5F5F5";
-        public static string yellow = "#FFE573";
+        public static string yellow = "#ce790d";
         public static string subscriptionLabel = "Your Subscriptions";
         private static long numMeals;
         private List<string> allSubscriptions = new List<string>();
@@ -78,6 +79,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             userID = mc.getUserAcct();
 
             // Function Calls
+
             getZipcode();
             getDates();
             subscriptionPicker();
@@ -118,19 +120,56 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
         public void checkInitialStatus()
         {
+            foreach(var btn in ButtonStack.Children)
+            {
+                Button b = (Button)btn;
+                if (!b.BackgroundColor.Equals(Color.FromHex(def)))
+                {
+                    b.TextColor = Color.White;
+                }
+                else
+                {
+                    b.TextColor = Color.Black;
+                }
+            }
             if (SkipButton.BackgroundColor.Equals(Color.FromHex(green)))
+            {
                 AddonButton.IsEnabled = false;
+                SelectButton.IsEnabled = false;
+                SurpriseButton.IsEnabled = false;
+            }
             if (SkipButton2.BackgroundColor.Equals(Color.FromHex(green)))
+            {
                 AddonButton2.IsEnabled = false;
+                SelectButton2.IsEnabled = false;
+                SurpriseButton2.IsEnabled = false;
+            }
             if (SkipButton3.BackgroundColor.Equals(Color.FromHex(green)))
+            {
                 AddonButton3.IsEnabled = false;
+                SelectButton3.IsEnabled = false;
+                SurpriseButton3.IsEnabled = false;
+            }
             if (SkipButton4.BackgroundColor.Equals(Color.FromHex(green)))
+            {
                 AddonButton4.IsEnabled = false;
+                SelectButton4.IsEnabled = false;
+                SurpriseButton4.IsEnabled = false;
+            }
             if (SkipButton5.BackgroundColor.Equals(Color.FromHex(green)))
+            {
                 AddonButton5.IsEnabled = false;
+                SelectButton5.IsEnabled = false;
+                SurpriseButton5.IsEnabled = false;
+            }
             if (SkipButton6.BackgroundColor.Equals(Color.FromHex(green)))
+            {
                 AddonButton6.IsEnabled = false;
+                SelectButton6.IsEnabled = false;
+                SurpriseButton6.IsEnabled = false;
+            }
         }
+
 
         private void getZipcode()
         {
@@ -313,6 +352,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             SelectButton.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             AddonButton.IsEnabled = false;
+                            SelectButton.IsEnabled = false;
+                            SurpriseButton.IsEnabled = false;
                             setWeekNum(sender, e);
                             ctr = 2;
                             postSkipData(sender, e);
@@ -326,6 +367,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             SelectButton2.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             AddonButton2.IsEnabled = false;
+                            SelectButton2.IsEnabled = false;
+                            SurpriseButton2.IsEnabled = false;
                             setWeekNum(sender, e);
                             postSkipData(sender, e);
                             saveColors(SubscriptionPicker);
@@ -339,7 +382,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             SelectButton3.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             AddonButton3.IsEnabled = false;
-
+                            SelectButton3.IsEnabled = false;
+                            SurpriseButton3.IsEnabled = false;
                             setWeekNum(sender, e);
                             postSkipData(sender, e);
                             saveColors(SubscriptionPicker);
@@ -353,7 +397,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             SelectButton4.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             AddonButton4.IsEnabled = false;
-
+                            SelectButton4.IsEnabled = false;
+                            SurpriseButton4.IsEnabled = false;
                             setWeekNum(sender, e);
                             postSkipData(sender, e);
                             saveColors(SubscriptionPicker);
@@ -367,7 +412,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             SelectButton5.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             AddonButton5.IsEnabled = false;
-
+                            SelectButton5.IsEnabled = false;
+                            SurpriseButton5.IsEnabled = false;
                             setWeekNum(sender, e);
                             postSkipData(sender, e);
                             saveColors(SubscriptionPicker);
@@ -381,7 +427,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             SelectButton6.BackgroundColor = Color.FromHex(def);
                             disabled = true;
                             AddonButton6.IsEnabled = false;
-
+                            SelectButton6.IsEnabled = false;
+                            SurpriseButton6.IsEnabled = false;
                             setWeekNum(sender, e);
                             postSkipData(sender, e);
                             saveColors(SubscriptionPicker);
@@ -401,6 +448,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton.IsEnabled = true;
+                                SelectButton.IsEnabled = true;
+                                SurpriseButton.IsEnabled = true;
+                                postSurpriseData(sender, e);
+                                SurpriseButton.BackgroundColor = Color.FromHex(green);
                                 SundayButton.BackgroundColor = Color.FromHex(def);
                                 SkipButton.BackgroundColor = Color.FromHex(def);
                                 disabled = false;
@@ -408,7 +459,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton2":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton2.IsEnabled = true;
-
+                                SelectButton2.IsEnabled = true;
+                                SurpriseButton2.IsEnabled = true;
+                                postSurpriseData(sender, e);
+                                SurpriseButton2.BackgroundColor = Color.FromHex(green);
                                 SundayButton2.BackgroundColor = Color.FromHex(def);
                                 SkipButton2.BackgroundColor = Color.FromHex(def);
                                 disabled = false;
@@ -416,6 +470,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton3":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton3.IsEnabled = true;
+                                SelectButton3.IsEnabled = true;
+                                SurpriseButton3.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton3.BackgroundColor = Color.FromHex(green);
 
                                 SundayButton3.BackgroundColor = Color.FromHex(def);
                                 SkipButton3.BackgroundColor = Color.FromHex(def);
@@ -424,6 +483,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton4":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton4.IsEnabled = true;
+                                SelectButton4.IsEnabled = true;
+                                SurpriseButton4.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton4.BackgroundColor = Color.FromHex(green);
 
                                 SundayButton4.BackgroundColor = Color.FromHex(def);
                                 SkipButton4.BackgroundColor = Color.FromHex(def);
@@ -432,6 +496,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton5":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton5.IsEnabled = true;
+                                SelectButton5.IsEnabled = true;
+                                SurpriseButton5.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton5.BackgroundColor = Color.FromHex(green);
 
                                 SundayButton5.BackgroundColor = Color.FromHex(def);
                                 SkipButton5.BackgroundColor = Color.FromHex(def);
@@ -440,7 +509,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton6":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton6.IsEnabled = true;
+                                SelectButton6.IsEnabled = true;
+                                SurpriseButton6.IsEnabled = true;
+                                postSurpriseData(sender, e);
 
+                                SurpriseButton6.BackgroundColor = Color.FromHex(green);
                                 SundayButton6.BackgroundColor = Color.FromHex(def);
                                 SkipButton6.BackgroundColor = Color.FromHex(def);
                                 disabled = false;
@@ -448,7 +521,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton.IsEnabled = true;
+                                SelectButton.IsEnabled = true;
+                                SurpriseButton.IsEnabled = true;
+                                postSurpriseData(sender, e);
 
+                                SurpriseButton.BackgroundColor = Color.FromHex(green);
                                 MondayButton.BackgroundColor = Color.FromHex(def);
                                 SkipButton.BackgroundColor = Color.FromHex(def);
                                 disabled = false;
@@ -456,6 +533,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton2":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton2.IsEnabled = true;
+                                SelectButton2.IsEnabled = true;
+                                SurpriseButton2.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton2.BackgroundColor = Color.FromHex(green);
 
                                 MondayButton2.BackgroundColor = Color.FromHex(def);
                                 SkipButton2.BackgroundColor = Color.FromHex(def);
@@ -464,6 +546,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton3":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton3.IsEnabled = true;
+                                SelectButton3.IsEnabled = true;
+                                SurpriseButton3.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton3.BackgroundColor = Color.FromHex(green);
 
                                 MondayButton3.BackgroundColor = Color.FromHex(def);
                                 SkipButton3.BackgroundColor = Color.FromHex(def);
@@ -472,6 +559,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton4":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton4.IsEnabled = true;
+                                SelectButton4.IsEnabled = true;
+                                SurpriseButton4.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton4.BackgroundColor = Color.FromHex(green);
 
                                 MondayButton4.BackgroundColor = Color.FromHex(def);
                                 SkipButton4.BackgroundColor = Color.FromHex(def);
@@ -480,6 +572,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton5":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton5.IsEnabled = true;
+                                SelectButton5.IsEnabled = true;
+                                SurpriseButton5.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton5.BackgroundColor = Color.FromHex(green);
 
                                 MondayButton5.BackgroundColor = Color.FromHex(def);
                                 SkipButton5.BackgroundColor = Color.FromHex(def);
@@ -488,6 +585,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton6":
                                 btn.BackgroundColor = Color.FromHex(green);
                                 AddonButton6.IsEnabled = true;
+                                SelectButton6.IsEnabled = true;
+                                SurpriseButton6.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton6.BackgroundColor = Color.FromHex(green);
 
                                 MondayButton6.BackgroundColor = Color.FromHex(def);
                                 SkipButton6.BackgroundColor = Color.FromHex(def);
@@ -506,7 +608,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton":
                                 SkipButton.BackgroundColor = Color.FromHex(def);
                                 AddonButton.IsEnabled = true;
+                                SelectButton.IsEnabled = true;
+                                SurpriseButton.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
+                                SurpriseButton.BackgroundColor = Color.FromHex(green);
                                 SundayButton.BackgroundColor = Color.FromHex(def);
                                 deliveryDayArray[0] = "Monday";
                                 saveColors(SubscriptionPicker);
@@ -514,7 +621,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton2":
                                 SkipButton2.BackgroundColor = Color.FromHex(def);
                                 AddonButton2.IsEnabled = true;
+                                SelectButton2.IsEnabled = true;
+                                SurpriseButton2.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
+                                SurpriseButton2.BackgroundColor = Color.FromHex(green);
                                 SundayButton2.BackgroundColor = Color.FromHex(def);
                                 deliveryDayArray[1] = "Monday";
                                 saveColors(SubscriptionPicker);
@@ -522,7 +634,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton3":
                                 SkipButton3.BackgroundColor = Color.FromHex(def);
                                 AddonButton3.IsEnabled = true;
+                                SelectButton3.IsEnabled = true;
+                                SurpriseButton3.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
+                                SurpriseButton3.BackgroundColor = Color.FromHex(green);
                                 SundayButton3.BackgroundColor = Color.FromHex(def);
                                 deliveryDayArray[2] = "Monday";
                                 saveColors(SubscriptionPicker);
@@ -530,7 +647,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton4":
                                 SkipButton4.BackgroundColor = Color.FromHex(def);
                                 AddonButton4.IsEnabled = true;
+                                SelectButton4.IsEnabled = true;
+                                SurpriseButton4.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
+                                SurpriseButton4.BackgroundColor = Color.FromHex(green);
                                 SundayButton4.BackgroundColor = Color.FromHex(def);
                                 deliveryDayArray[3] = "Monday";
                                 saveColors(SubscriptionPicker);
@@ -538,7 +660,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton5":
                                 SkipButton5.BackgroundColor = Color.FromHex(def);
                                 AddonButton5.IsEnabled = true;
+                                SelectButton5.IsEnabled = true;
+                                SurpriseButton5.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
+                                SurpriseButton5.BackgroundColor = Color.FromHex(green);
+
                                 SundayButton5.BackgroundColor = Color.FromHex(def);
                                 saveColors(SubscriptionPicker);
 
@@ -547,6 +675,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "MonButton6":
                                 SkipButton6.BackgroundColor = Color.FromHex(def);
                                 AddonButton6.IsEnabled = true;
+                                SelectButton6.IsEnabled = true;
+                                SurpriseButton6.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton6.BackgroundColor = Color.FromHex(green);
+
                                 btn.BackgroundColor = Color.FromHex(green);
                                 SundayButton6.BackgroundColor = Color.FromHex(def);
                                 deliveryDayArray[5] = "Monday";
@@ -554,6 +688,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton":
                                 SkipButton.BackgroundColor = Color.FromHex(def);
                                 AddonButton.IsEnabled = true;
+                                SelectButton.IsEnabled = true;
+                                SurpriseButton.IsEnabled = true;
+                                postSurpriseData(sender, e);
+
+                                SurpriseButton.BackgroundColor = Color.FromHex(green);
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
                                 MondayButton.BackgroundColor = Color.FromHex(def);
                                 saveColors(SubscriptionPicker);
@@ -563,6 +704,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton2":
                                 SkipButton2.BackgroundColor = Color.FromHex(def);
                                 AddonButton2.IsEnabled = true;
+                                SelectButton2.IsEnabled = true;
+                                SurpriseButton2.IsEnabled = true;
+                                SurpriseButton2.BackgroundColor = Color.FromHex(green);
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
                                 MondayButton2.BackgroundColor = Color.FromHex(def);
                                 saveColors(SubscriptionPicker);
@@ -572,6 +718,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton3":
                                 SkipButton3.BackgroundColor = Color.FromHex(def);
                                 AddonButton3.IsEnabled = true;
+                                SelectButton3.IsEnabled = true;
+                                SurpriseButton3.IsEnabled = true;
+                                SurpriseButton3.BackgroundColor = Color.FromHex(green);
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
                                 MondayButton3.BackgroundColor = Color.FromHex(def);
                                 saveColors(SubscriptionPicker);
@@ -582,6 +733,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton4":
                                 SkipButton4.BackgroundColor = Color.FromHex(def);
                                 AddonButton4.IsEnabled = true;
+                                SelectButton4.IsEnabled = true;
+                                SurpriseButton4.IsEnabled = true;
+                                SurpriseButton4.BackgroundColor = Color.FromHex(green);
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
                                 MondayButton4.BackgroundColor = Color.FromHex(def);
                                 saveColors(SubscriptionPicker);
@@ -591,6 +747,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton5":
                                 SkipButton5.BackgroundColor = Color.FromHex(def);
                                 AddonButton5.IsEnabled = true;
+                                SelectButton5.IsEnabled = true;
+                                SurpriseButton5.IsEnabled = true;
+                                SurpriseButton5.BackgroundColor = Color.FromHex(green);
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
                                 MondayButton5.BackgroundColor = Color.FromHex(def);
                                 saveColors(SubscriptionPicker);
@@ -600,6 +761,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                             case "SunButton6":
                                 SkipButton6.BackgroundColor = Color.FromHex(def);
                                 AddonButton6.IsEnabled = true;
+                                SelectButton6.IsEnabled = true;
+                                SurpriseButton6.IsEnabled = true;
+                                SurpriseButton6.BackgroundColor = Color.FromHex(green);
+                                postSurpriseData(sender, e);
+
                                 btn.BackgroundColor = Color.FromHex(green);
                                 MondayButton6.BackgroundColor = Color.FromHex(def);
                                 saveColors(SubscriptionPicker);
@@ -648,6 +814,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     }
                 }
             }
+
             setDDArr();
             setWeekNum(sender, e);
         }
@@ -655,98 +822,34 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private async void ClickedAddOn(object sender, EventArgs e)
         {
             Button b = (Button)sender;
-            if (b.ClassId.Equals("AddonButton") && SkipButton.BackgroundColor.Equals(Color.FromHex(green)))
-            {
-                System.Diagnostics.Debug.WriteLine("can't do that");
-                //await Task.FromResult(0);
-            }
-            else if (b.ClassId.Equals("AddonButton2") && SkipButton2.BackgroundColor.Equals(Color.FromHex(green)))
-            {
-                await Task.FromResult(0);
-            }
-            else if (b.ClassId.Equals("AddonButton3") && SkipButton3.BackgroundColor.Equals(Color.FromHex(green)))
-            {
-                await Task.FromResult(0);
-            }
-            else if (b.ClassId.Equals("AddonButton4") && SkipButton4.BackgroundColor.Equals(Color.FromHex(green)))
-            {
-                await Task.FromResult(0);
-            }
-            else if (b.ClassId.Equals("AddonButton5") && SkipButton5.BackgroundColor.Equals(Color.FromHex(green)))
-            {
-                await Task.FromResult(0);
-            }
-            else if (b.ClassId.Equals("AddonButton6") && SkipButton6.BackgroundColor.Equals(Color.FromHex(green)))
-            {
-                await Task.FromResult(0);
-            }
-            else
-            {
-                setWeekNum(sender, e);
-                AddOnChoices ac = new AddOnChoices();
-                ac.BindingContext = this;
-                await Navigation.PushAsync(ac);
-            }
+            setWeekNum(sender, e);
+            AddOnChoices ac = new AddOnChoices(this);
+            ac.BindingContext = this;
+            await Navigation.PushAsync(ac);
         }
 
         private async void ClickedSelectMeal(object sender, EventArgs e)
         {
             if (SubscriptionPicker.SelectedItem == null)
             {
-                nullPicker.TextColor = Color.FromHex("C21807");
+                nullPicker.TextColor = Color.Tomato;
                 nullPicker.SetValue(IsVisibleProperty, true);
 
             }
             else
             {
                 Button b = (Button)sender;
-                if (SkipButton.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals("SelectButton"))
-                {
-                    SelectButton.BackgroundColor.Equals(def);
-                    await Task.FromResult(0);
-
+                setWeekNum(sender, e);
+                System.Diagnostics.Debug.WriteLine("About to move to MC " + getNum());
+                string currentMealPlanId = getPlanNumPicked(); // getPlanNumPicked returns the plan
+                System.Diagnostics.Debug.WriteLine("selected meal plan: " + currentMealPlanId);
+                System.Diagnostics.Debug.WriteLine("week num: " + weekNumber);
+                foreach(var u in weekAffectedList) { // weekAffectedList[weekNumber -1] returns the date
+                    System.Diagnostics.Debug.WriteLine("week affected item: " + u);
                 }
-                else if (SkipButton2.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals("SelectButton2"))
-                {
-                    SelectButton2.BackgroundColor.Equals(def);
-                    await Task.FromResult(0);
-                }
-                else if (SkipButton3.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals("SelectButton3"))
-                {
-                    SelectButton3.BackgroundColor.Equals(def);
-                    await Task.FromResult(0);
-                }
-                else if (SkipButton4.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals("SelectButton4"))
-                {
-                    SelectButton4.BackgroundColor.Equals(def);
-                    await Task.FromResult(0);
-                }
-                else if (SkipButton5.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals("SelectButton5"))
-                {
-                    SelectButton5.BackgroundColor.Equals(def);
-                    await Task.FromResult(0);
-
-                }
-                else if (SkipButton6.BackgroundColor.Equals(Color.FromHex(green)) && b.ClassId.Equals("SelectButton6"))
-                {
-                    SelectButton6.BackgroundColor.Equals(def);
-                    await Task.FromResult(0);
-
-                }
-                else
-                {
-                    setWeekNum(sender, e);
-                    System.Diagnostics.Debug.WriteLine("About to move to MC " + getNum());
-                    string currentMealPlanId = getPlanNumPicked(); // getPlanNumPicked returns the plan
-                    System.Diagnostics.Debug.WriteLine("selected meal plan: " + currentMealPlanId);
-                    System.Diagnostics.Debug.WriteLine("week num: " + weekNumber);
-                    foreach(var u in weekAffectedList) { // weekAffectedList[weekNumber -1] returns the date
-                        System.Diagnostics.Debug.WriteLine("week affected item: " + u);
-                    }
-                    MealChoices mc = new MealChoices(this);
-                    mc.BindingContext = this;
-                    await Navigation.PushAsync(mc);
-                }
+                MealChoices mc = new MealChoices(this);
+                mc.BindingContext = this;
+                await Navigation.PushAsync(mc);
             }
         }
 
@@ -1162,8 +1265,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     weekNumber = 6;
                     break;
             }
-            System.Diagnostics.Debug.WriteLine("Setting Week" + b.Text + " " + weekNumber);
-
         }
 
         public int getNum()
@@ -1237,15 +1338,15 @@ namespace InfiniteMeals.ViewModel.MealSelect
             initPaymentID();
             int weekNumber;
             Button b = (Button)sender;
-            if (b.ClassId.Equals("SurpriseButton"))
+            if (b.ClassId.Equals("SurpriseButton") | b.ClassId.Equals("SunButton") | b.ClassId.Equals("MonButton"))
                 weekNumber = 1;
-            else if (b.ClassId.Equals("SurpriseButton2"))
+            else if (b.ClassId.Equals("SurpriseButton2")| b.ClassId.Equals("SunButton2") | b.ClassId.Equals("MonButton2"))
                 weekNumber = 2;
-            else if (b.ClassId.Equals("SurpriseButton3"))
+            else if (b.ClassId.Equals("SurpriseButton3") | b.ClassId.Equals("SunButton3") | b.ClassId.Equals("MonButton3"))
                 weekNumber = 3;
-            else if (b.ClassId.Equals("SurpriseButton4"))
+            else if (b.ClassId.Equals("SurpriseButton4") | b.ClassId.Equals("SunButton4") | b.ClassId.Equals("MonButton4"))
                 weekNumber = 4;
-            else if (b.ClassId.Equals("SurpriseButton5"))
+            else if (b.ClassId.Equals("SurpriseButton5") | b.ClassId.Equals("SunButton5") | b.ClassId.Equals("MonButton5"))
                 weekNumber = 5;
             else
                 weekNumber = 6;

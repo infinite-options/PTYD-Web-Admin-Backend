@@ -109,7 +109,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
 
             for (int i = 0; i < obj.Result.FiveMealPaymentPlans.Result.Length; i++)
             {
-                labelList[i].Text = String.Format("${0:0.00}/week", obj.Result.FiveMealPaymentPlans.Result[i].MealWeeklyPrice);
+                labelList[i].Text = String.Format("${0:0.00} / week", obj.Result.FiveMealPaymentPlans.Result[i].MealWeeklyPrice);
                 perMealLabels[i].Text = String.Format("${0:0.00} per meal", obj.Result.FiveMealPaymentPlans.Result[i].MealPlanPricePerMeal);
             }
 
@@ -140,6 +140,12 @@ namespace InfiniteMeals.ViewModel.Subscribe
             labelList.Add(weekLabel);
             labelList.Add(twoWeekLabel);
             labelList.Add(fourWeekLabel);
+            weekLabel.HorizontalOptions = LayoutOptions.Center;
+            twoWeekLabel.HorizontalOptions = LayoutOptions.Center;
+            fourWeekLabel.HorizontalOptions = LayoutOptions.Center;
+            weekLabel.VerticalTextAlignment = TextAlignment.Center;
+            twoWeekLabel.VerticalTextAlignment = TextAlignment.Center;
+            fourWeekLabel.VerticalTextAlignment = TextAlignment.Center;
 
             perMealLabels.Add(weekPerMealLabel);
             perMealLabels.Add(twoWeekPerMealLabel);
@@ -148,7 +154,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
 
             for (int i = 0; i < obj.Result.TenMealPaymentPlans.Result.Length; i++)
             {
-                labelList[i].Text = String.Format("${0:0.00}/week", obj.Result.TenMealPaymentPlans.Result[i].MealWeeklyPrice);
+                labelList[i].Text = String.Format("${0:0.00} / week", obj.Result.TenMealPaymentPlans.Result[i].MealWeeklyPrice);
                 perMealLabels[i].Text = String.Format("${0:0.00} per meal", obj.Result.TenMealPaymentPlans.Result[i].MealPlanPricePerMeal);
 
             }
@@ -184,6 +190,13 @@ namespace InfiniteMeals.ViewModel.Subscribe
             perMealLabels.Add(weekPerMealLabel);
             perMealLabels.Add(twoWeekPerMealLabel);
             perMealLabels.Add(fourWeekPerMealLabel);
+
+            weekLabel.HorizontalOptions = LayoutOptions.Center;
+            twoWeekLabel.HorizontalOptions = LayoutOptions.Center;
+            fourWeekLabel.HorizontalOptions = LayoutOptions.Center;
+            weekLabel.VerticalTextAlignment = TextAlignment.Center;
+            twoWeekLabel.VerticalTextAlignment = TextAlignment.Center;
+            fourWeekLabel.VerticalTextAlignment = TextAlignment.Center;
 
             for (int i = 0; i < obj.Result.FifteenMealPaymentPlans.Result.Length; i++)
             {
@@ -224,6 +237,13 @@ namespace InfiniteMeals.ViewModel.Subscribe
             perMealLabels.Add(weekPerMealLabel);
             perMealLabels.Add(twoWeekPerMealLabel);
             perMealLabels.Add(fourWeekPerMealLabel);
+
+            weekLabel.HorizontalOptions = LayoutOptions.Center;
+            twoWeekLabel.HorizontalOptions = LayoutOptions.Center;
+            fourWeekLabel.HorizontalOptions = LayoutOptions.Center;
+            weekLabel.VerticalTextAlignment = TextAlignment.Center;
+            twoWeekLabel.VerticalTextAlignment = TextAlignment.Center;
+            fourWeekLabel.VerticalTextAlignment = TextAlignment.Center;
             for (int i = 0; i < obj.Result.TwentyMealPaymentPlans.Result.Length; i++)
             {
                 labelList[i].Text = String.Format("${0:0.00}/week ", obj.Result.TwentyMealPaymentPlans.Result[i].MealWeeklyPrice);

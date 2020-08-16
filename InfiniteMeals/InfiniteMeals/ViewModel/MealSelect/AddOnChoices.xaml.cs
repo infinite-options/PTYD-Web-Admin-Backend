@@ -56,11 +56,17 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public static MealGroup addMealGroup6 = new MealGroup() { LongName = "Additional Meals"};
         public static MealGroup addSmoothieGroup6 = new MealGroup() { LongName = "Additional Smoothies"};
 
-        String infoImg = "info.jpg";
+        String infoImg = "info.jpeg";
         public double subTotal;
-        public static string yellow = "#FFE573";
+        public static string postUrl;
+        public static string pid;
+        public static int weekNumber;
+        public static List<DateTimeOffset> weekAffectedList;
+        public static string[] deliveryDayList;
+        public static string yellow = "#ce790d";
         public static string def = "#F5F5F5";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
+        public MealSchedule currentMealSchedule;
 
         public AddOnChoices()
         {
@@ -69,10 +75,22 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
         }
 
+        public AddOnChoices(MealSchedule mealSchedule)
+        {
+            InitializeComponent();
+            this.currentMealSchedule = mealSchedule;
+            getData();
+        }
+
         public void getData()
         {
-            MealSchedule ms = new MealSchedule();
-            int weekNumber = ms.getNum();
+            //MealSchedule ms = new MealSchedule();
+            MealSchedule ms = this.currentMealSchedule;
+            weekNumber = ms.getNum();
+            System.Diagnostics.Debug.WriteLine("HERE IS THE WEEK NUM" + weekNumber);
+
+
+
             // Normal Meals
             List<String> AddNames = new List<String>();
             List<String> AddDesc = new List<String>();
@@ -1159,7 +1177,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public async void postData(object sender, EventArgs e)
         {
             HttpClient client = new HttpClient();
-            MealSchedule ms = new MealSchedule();
+            MealSchedule ms = this.currentMealSchedule;
             int weekNumber = ms.getNum();
             string postUrl = ms.getPlanPicked();
             string pid = ms.getPlanNumPicked();
@@ -1171,9 +1189,13 @@ namespace InfiniteMeals.ViewModel.MealSelect
             emptyDict.Add("", 0);
 
             // If no changes
+            System.Diagnostics.Debug.WriteLine("TotalBar text: " + totalBar.Text + " " + mealQtyDict.Count + " " + weekNumber + " " + postUrl + " " +pid );
+
             if (mealQtyDict.Count == 0 && !totalBar.Text.Equals("Close"))
             {
-                BackToSchedule(sender, e);
+                System.Diagnostics.Debug.WriteLine("Pop Async");
+                //BackToSchedule(sender, e);
+                await Navigation.PopAsync();
             }
             // If no add ons
             else if (mealQtyDict.Count == 0)
@@ -1248,7 +1270,9 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     }
 
                 }
-                BackToSchedule(sender, e);
+                await Navigation.PopAsync();
+
+                //BackToSchedule(sender, e);
 
             }
             // If the add ons are not empty

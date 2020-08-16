@@ -29,6 +29,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
                 summaryPage.password = confirmPasswordEntry.Text;
                 System.Diagnostics.Debug.WriteLine("password entered");
                 if (await summaryPage.checkout() == HttpStatusCode.BadRequest) { // problem with api call
+                    System.Diagnostics.Debug.WriteLine("ERROR Here");
                     await Navigation.PopAsync();
                     await DisplayAlert("Error", "Purchase was not able to be completed", "OK");
                 }
