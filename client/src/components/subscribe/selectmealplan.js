@@ -53,9 +53,92 @@ class Selectmealplan extends Component {
               <p>LOCAL. ORGANIC. RESPONSIBLE.</p>
               <p>STRAIGHT TO YOUR DOOR</p>
             </article>
+
+            {/* <Row className='d-flex justify-content-center'>
+              <CardDeck>
+                {this.state.paymentPlans.map(paymentPlan => (
+                  <Card.Body
+                    key={paymentPlan.meal_plan_id}
+                    className='borderr border_card_subcribe paymentCard'
+                  >
+                    <Card.Header className='p-0 position-relative background_black'>
+                      <Card.Img
+                        className='blackM background_black'
+                        variant='top'
+                        src={paymentPlan.photo_URL}
+                      />
+                      <div className='d-flex card-img-overlay'>
+                        <span className='px-0 align-self-center mx-auto mealoption-center '>
+                          {paymentPlan.num_meals}
+                        </span>
+                      </div>
+                    </Card.Header>
+                    <Card.Body>
+                      <Card.Title>
+                        <b>{paymentPlan.payment_frequency.toUpperCase()}</b>
+                      </Card.Title>
+                      <Card.Text style={{fontSize: "15px", color: "#888785"}}>
+                        ${paymentPlan.meal_plan_price_per_meal.toFixed(2)} per
+                        meal
+                      </Card.Text>
+                      <Card.Title>
+                        ${paymentPlan.meal_weekly_price.toFixed(2)} /week
+                      </Card.Title>
+                      <Card.Text style={{fontSize: "13px", color: "#888785"}}>
+                        Sales tax of {(this.state.tax_rate * 100).toFixed(2)}%
+                        will be added
+                      </Card.Text>
+
+                      <button
+                        type='button'
+                        className='btn2 btn2-primary font2'
+                        style={{
+                          marginTop: "10px",
+                          paddingLeft: "30px",
+                          paddingRight: "30px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                          color: "white",
+                          fontSize: "15px"
+                        }}
+                        onClick={() => {
+                          this.props.history.push({
+                            pathname: "/checkout",
+                            state: {
+                              item: {
+                                name: `${
+                                  paymentPlan.meal_plan_desc
+                                } Subscription - $${paymentPlan.meal_plan_price.toFixed(
+                                  2
+                                )}`,
+                                total: paymentPlan.meal_plan_price.toFixed(2)
+                              },
+                              tax_rate: this.state.tax_rate,
+                              shipping: this.state.shipping
+                            }
+                          });
+                        }}
+                      >
+                        CHECKOUT
+                      </button>
+                      <img
+                        className='img-fluid'
+                        src={IMG9}
+                        alt=''
+                        style={{
+                          width: "90%"
+                        }}
+                      />
+                    </Card.Body>
+                  </Card.Body> 
+                ))}
+              </CardDeck>
+            </Row> */}
+            
             <CardDeck>
               {this.state.mealPlans.map((mealPlan, key) => (
-                <Card key={key} className='p-0 border-0 w-auto shadow-none'>
+                <Card key={key}
+                  className='p-0 border-0 w-auto shadow-none'>
                   {mealPlan.num_meals === 10 ? (
                     <div className='rcorners d-flex rcorner_color'>
                       <h5 className='align-self-center mx-auto'>
@@ -65,10 +148,13 @@ class Selectmealplan extends Component {
                   ) : (
                     <div className='rcorners d-flex'>
                       <p className='align-self-center mx-auto'></p>
+                      <h5 className='align-self-center mx-auto' style={{textDecoration:'none', textShadow:'none'}}>
+                        &nbsp;
+                      </h5>
                     </div>
                   )}
 
-                  <Card.Body
+                  <div
                     className={
                       "borderr border_card_subcribe mealsCard" +
                       (mealPlan.num_meals === 10 ? " card_color" : "")
@@ -139,7 +225,7 @@ class Selectmealplan extends Component {
                     <Card.Footer className='text-muted justify-content-center'>
                       {mealPlan.plan_footer}
                     </Card.Footer>
-                  </Card.Body>
+                  </div>
                 </Card>
               ))}
             </CardDeck>
