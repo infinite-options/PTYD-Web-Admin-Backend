@@ -549,284 +549,6 @@ a {
   letter-spacing: 0.05em;
 }
 
-@media only screen and (max-width: 990px) {
-  .login-hello {
-    margin-left: -165px;
-    margin-top: -16px;
-  }
-  #logoutButton {
-    margin: 20px 0 10px 10px;
-    float: left;
-  }
-  .nav-get-started {
-    text-align:left;
-    margin-left: -24px;
-  }
-  #loginButton {
-    float:left;
-    margin: 10px -24px;
-  }
-  .navigation-link {
-    margin: 10px 35px 0 0px;
-  }
-
-  .top-left h1 {
-    font-size:45px;
-    line-height: 50px;
-    padding: 0 0 0 0px;
-    letter-spacing: .01em;
-  }
-  .top-left {
-    margin-top: -55px;
-  }
-  .bottom-left {
-    padding: 0 0 0 2px;
-  }
-  .plant-based-text {
-    margin-bottom: 30px !important;
-  }
-  .plant-based-text h1 {
-    font-size: 20px !important;
-    letter-spacing: .05em;
-    line-height: 10px;
-  }
-  .home_subtitle {
-    margin-bottom: 60px !important;
-  }
-  .bottom-left {
-    margin-bottom: -10px;
-  }
-
-  .background {
-    width: auto !important;
-    object-fit: cover;
-  }
-  .delivered-title {
-    letter-spacing: .15em!important;
-    font-size: 28px!important;
-    line-height:16px!important;
-  }
-  .delivered-title2 {
-    font-size: 22px!important;
-  }
-  .delivered-padding {
-    padding: 25px 0;
-  }
-  .delivered-titles-container {
-    padding-top: 15px!important;
-    padding-bottom: 0px!important;
-  }
-  .delivered-weekly-container {
-    width: auto !important;
-    height: auto!important;
-    padding-bottom: 20px;
-  }
-  .delivered-weekly-container2 {
-    padding-bottom: 0!important;
-    margin-bottom: 0!important;
-    padding-left: 10px!important;
-    padding-right: 10px!important;
-  }
-  .delivered-weekly-bullets-container {
-    padding-left: 0px !important;
-  }
-  .delivered-bullets-text {
-    margin: 5px!important;
-    font-size: 14px!important;
-  }
-  hr.three {
-    width: auto!important;
-    margin: 10px auto;
-    border: none;
-  }
-  .pause-anytime {
-    padding: 0!important;
-  }
-
-  .try-us-today-button-container {
-    text-align: center;
-    margin: 50px 0 0 0;
-  }
-
-  .visibility-hidden-mobile {
-    visibility: hidden!important;
-    display: none;
-  }
-
-  .mobile-center {
-    padding-left: 0px;
-    text-align: center;
-  }
-
-  /* weekly/next menu */
-  .mobile-menu-display-none {
-    display:none;
-  }
-  .no-display-desktop {
-    display:block!important;
-    width: 300px;
-    margin:auto;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .navigation-start {
-    padding-left: 50px;
-  }
-  .navbar-brand {
-    margin-left: 10px;
-  }
-  .login-hello {
-    margin-left: -216px;
-  }
-  #logoutButton {
-    margin: 20px 0 10px -40px;
-    float:left;
-  }
-  .nav-get-started {
-    text-align:left;
-    margin-left: -40px;
-  }
-  #loginButton {
-    float:left;
-    margin-left: -40px;
-  }
-  #signupButton {
-    width: 300px!important;
-    padding: 8px 20px!important;
-  }
-  .navigation-link {
-    margin: 10px 35px 0 35px;
-  }
-
-  .content-section .landing {
-    max-width: 320px !important;
-  }
-  #footer-margin-mobile {
-    margin-left: 10px;
-  }
-
-  .title-image-container {
-    height: 500px;
-    width: auto;
-    margin: 0 0 0 0!important;
-    padding: 0 0 0 0!important;
-    object-fit: cover;
-  }
-  .title-image-container img {
-    height: 500px;
-    width: auto;
-    object-fit: cover;
-  }
-  .top-left h1 {
-    font-weight: bold;
-  }
-  .plant-based-text h1 {
-    font-weight: bold;
-  }
-  .zero-waste-cell {
-    margin-top: 0!important;
-    margin-bottom: 0!important;
-  }
-  .zero-waste {
-    width: auto;
-    letter-spacing: 0.1em;
-    font-size: 26px;
-  }
-  .zero-waste-subtext {
-    margin-left: 0px;
-  }
-  .box-shadow-top, .box-shadow-bottom {
-    width: auto !important;
-  }
-
-  #left-padding-reusable {
-    margin-left: 8px;
-  }
-  #left-padding-organic {
-    margin-left: 8px;
-  }
-  .img-2-carrot {
-    max-width: 300px !important;
-    margin: 0!important;
-  }
-
-  .container_space {
-    margin-top: 40px!important;
-  }
-
-  /* delivered weekly */
-  .background {
-    width: auto !important;
-    object-fit: cover;
-  }
-  .delivered-title {
-    letter-spacing: .15em!important;
-    font-size: 28px!important;
-    line-height:16px!important;
-  }
-  .delivered-title2 {
-    font-size: 22px!important;
-  }
-  .delivered-padding {
-    padding: 25px 0;
-  }
-  .delivered-titles-container {
-    padding-top: 15px!important;
-    padding-bottom: 0px!important;
-  }
-  .delivered-weekly-container {
-    width: auto !important;
-    height: auto!important;
-    padding-bottom: 20px;
-  }
-  .delivered-weekly-container2 {
-    padding-bottom: 0!important;
-    margin-bottom: 0!important;
-    padding-left: 10px!important;
-    padding-right: 10px!important;
-  }
-  .delivered-weekly-bullets-container {
-    padding-left: 0px !important;
-  }
-  .delivered-bullets-text {
-    margin: 5px!important;
-    font-size: 14px!important;
-  }
-  hr.three {
-    width: auto!important;
-    margin: 10px auto;
-    border: none;
-  }
-  .pause-anytime {
-    padding: 0!important;
-  }
-
-  .try-us-today-button-container {
-    text-align: center;
-    margin: 50px 0 0 0;
-  }
-
-  .mobile-center {
-    padding-left: 60px;
-    text-align: center;
-  }
-  .mobile-weekly-menu {
-    width: 320px!important;
-  }
-  .mobile-weekly-menu-grid {
-    grid-template-columns:repeat(1, 1fr)!important;
-    margin: 0!important;
-  }
-  .mobile-weekly-menu-object {
-    margin: 10px!important;
-  }
-  .mobile-left {
-    width: 345px!important;
-    left: 12px;
-  }
-}
-
 .no-display-desktop {
   display:none;
 }
@@ -1205,4 +927,306 @@ hr.four {
 }
 .w-20 {
   width: 20% !important;
+}
+
+
+@media only screen and (max-width: 990px) {
+  .login-hello {
+    margin-left: -165px;
+    margin-top: -16px;
+  }
+  #logoutButton {
+    margin: 20px 0 10px 10px;
+    float: left;
+  }
+  .nav-get-started {
+    text-align:left;
+    margin-left: -24px;
+  }
+  #loginButton {
+    float:left;
+    margin: 10px -24px;
+  }
+  .navigation-link {
+    margin: 10px 35px 0 0px;
+  }
+
+  .top-left h1 {
+    font-size:45px;
+    line-height: 50px;
+    padding: 0 0 0 0px;
+    letter-spacing: .01em;
+  }
+  .top-left {
+    margin-top: -55px;
+  }
+  .bottom-left {
+    padding: 0 0 0 2px;
+  }
+  .plant-based-text {
+    margin-bottom: 30px !important;
+  }
+  .plant-based-text h1 {
+    font-size: 20px !important;
+    letter-spacing: .05em;
+    line-height: 10px;
+  }
+  .home_subtitle {
+    margin-bottom: 60px !important;
+  }
+  .bottom-left {
+    margin-bottom: -10px;
+  }
+
+  .background {
+    width: auto !important;
+    object-fit: cover;
+  }
+  .delivered-title {
+    letter-spacing: .15em!important;
+    font-size: 28px!important;
+    line-height:16px!important;
+  }
+  .delivered-title2 {
+    font-size: 22px!important;
+  }
+  .delivered-padding {
+    padding: 25px 0;
+  }
+  .delivered-titles-container {
+    padding-top: 15px!important;
+    padding-bottom: 0px!important;
+  }
+  .delivered-weekly-container {
+    width: auto !important;
+    height: auto!important;
+    padding-bottom: 20px;
+  }
+  .delivered-weekly-container2 {
+    padding-bottom: 0!important;
+    margin-bottom: 0!important;
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+  }
+  .delivered-weekly-bullets-container {
+    padding-left: 0px !important;
+  }
+  .delivered-bullets-text {
+    margin: 5px!important;
+    font-size: 14px!important;
+  }
+  hr.three {
+    width: auto!important;
+    margin: 10px auto;
+    border: none;
+  }
+  .pause-anytime {
+    padding: 0!important;
+  }
+
+  .try-us-today-button-container {
+    text-align: center;
+    margin: 50px 0 0 0;
+  }
+
+  .visibility-hidden-mobile {
+    visibility: hidden!important;
+    display: none;
+  }
+
+  .mobile-center {
+    padding-left: 0px;
+    text-align: center;
+  }
+
+  /* weekly/next menu */
+  .mobile-menu-display-none {
+    display:none;
+  }
+  .no-display-desktop {
+    display:block!important;
+    width: 300px;
+    margin:auto;
+  }
+
+  .meals-deck {
+    display: grid!important;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))!important;
+  }
+}
+
+/* media */
+
+@media only screen and (max-width: 767px) {
+  .navigation-start {
+    padding-left: 50px;
+  }
+  .navbar-brand {
+    margin-left: 10px;
+  }
+  .login-hello {
+    margin-left: -216px;
+  }
+  #logoutButton {
+    margin: 20px 0 10px -40px;
+    float:left;
+  }
+  .nav-get-started {
+    text-align:left;
+    margin-left: -40px;
+  }
+  #loginButton {
+    float:left;
+    margin-left: -40px;
+  }
+  #signupButton {
+    width: 300px!important;
+    padding: 8px 20px!important;
+  }
+  .navigation-link {
+    margin: 10px 35px 0 35px;
+  }
+
+  .content-section .landing {
+    max-width: 320px !important;
+  }
+  #footer-margin-mobile {
+    margin-left: 10px;
+  }
+
+  .title-image-container {
+    height: 500px;
+    width: auto;
+    margin: 0 0 0 0!important;
+    padding: 0 0 0 0!important;
+    object-fit: cover;
+  }
+  .title-image-container img {
+    height: 500px;
+    width: auto;
+    object-fit: cover;
+  }
+  .top-left h1 {
+    font-weight: bold;
+  }
+  .plant-based-text h1 {
+    font-weight: bold;
+  }
+  .zero-waste-cell {
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+  }
+  .zero-waste {
+    width: auto;
+    letter-spacing: 0.1em;
+    font-size: 26px;
+  }
+  .zero-waste-subtext {
+    margin-left: 0px;
+  }
+  .box-shadow-top, .box-shadow-bottom {
+    width: auto !important;
+  }
+
+  #left-padding-reusable {
+    margin-left: 8px;
+  }
+  #left-padding-organic {
+    margin-left: 8px;
+  }
+  .img-2-carrot {
+    max-width: 300px !important;
+    margin: 0!important;
+  }
+
+  .container_space {
+    margin-top: 40px!important;
+  }
+
+  /* delivered weekly */
+  .background {
+    width: auto !important;
+    object-fit: cover;
+  }
+  .delivered-title {
+    letter-spacing: .15em!important;
+    font-size: 28px!important;
+    line-height:16px!important;
+  }
+  .delivered-title2 {
+    font-size: 22px!important;
+  }
+  .delivered-padding {
+    padding: 25px 0;
+  }
+  .delivered-titles-container {
+    padding-top: 15px!important;
+    padding-bottom: 0px!important;
+  }
+  .delivered-weekly-container {
+    width: auto !important;
+    height: auto!important;
+    padding-bottom: 20px;
+  }
+  .delivered-weekly-container2 {
+    padding-bottom: 0!important;
+    margin-bottom: 0!important;
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+  }
+  .delivered-weekly-bullets-container {
+    padding-left: 0px !important;
+  }
+  .delivered-bullets-text {
+    margin: 5px!important;
+    font-size: 14px!important;
+  }
+  hr.three {
+    width: auto!important;
+    margin: 10px auto;
+    border: none;
+  }
+  .pause-anytime {
+    padding: 0!important;
+  }
+
+  .try-us-today-button-container {
+    text-align: center;
+    margin: 50px 0 0 0;
+  }
+
+  .mobile-center {
+    padding-left: 60px;
+    text-align: center;
+  }
+  .mobile-weekly-menu {
+    width: 320px!important;
+  }
+  .mobile-weekly-menu-grid {
+    grid-template-columns:repeat(1, 1fr)!important;
+    margin: 0!important;
+  }
+  .mobile-weekly-menu-object {
+    margin: 10px!important;
+  }
+  .mobile-left {
+    width: 345px!important;
+    left: 12px;
+  }
+
+  .meals-deck {
+    display: grid!important;
+    grid-template-columns: repeat(1, minmax(250px, 1fr))!important;
+  }
+  .mobile-popular-margin {
+    margin: 20px 20px 0 20px;
+
+  }
+  .mealsCard {
+    margin: 0 20px;
+  }
+  .mobile-card-top {
+    visibility: hidden!important;
+    display: none;
+  }
 }

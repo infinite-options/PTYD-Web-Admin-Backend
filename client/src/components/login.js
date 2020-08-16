@@ -363,11 +363,11 @@ export default function Login(props) {
     <Fragment>
       {loading && (
         <div className='d-flex justify-content-center'>
-          <div className='loading'>
+          {/* <div className='loading'>
             <div className='spinner-border' role='status'>
               <span className='sr-only'>Loading...</span>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
       <main
