@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="InfiniteMeals.ViewModel.SignUp.SocialMediaSignUpPage">
+    <ContentPage.Content>
+        <Grid Padding="15,15,15,15">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <BoxView Grid.Row="0"/>
+            <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Social Media Sign Up" TextColor="Black" FontSize="Large" HorizontalOptions="Center"/>
+
+            <BoxView Grid.Row="1"/>
+            <Label Grid.Column="0" Grid.Row="1" Text="First Name" TextColor="Black" VerticalOptions="Start" FontAttributes="Bold"/>
+            <Entry x:Name="firstNameEntry" Grid.Column="0" Grid.Row="1" VerticalOptions="End"/>
+            <Label Grid.Column="1" Grid.Row="1" Text="Last Name" TextColor="Black" VerticalOptions="Start" FontAttributes="Bold"/>
+            <Entry x:Name="lastNameEntry" Grid.Column="1" Grid.Row="1" VerticalOptions="End"/>
+
+            <BoxView Grid.Row="2"/>
+            <Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Text="Email" TextColor="Black" VerticalOptions="Start" FontAttributes="Bold"/>
+            <Entry x:Name="emailEntry" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalOptions="End" Keyboard="Email"/>
+
+            <BoxView Grid.Row="3"/>
+            <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Text="Phone Number" TextColor="Black" VerticalOptions="Start" FontAttributes="Bold"/>
+            <Entry x:Name="phoneNumberEntry" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" VerticalOptions="End" Keyboard="Telephone"/>
+
+            <BoxView Grid.Row="4"/>
+            <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Text="Referral" TextColor="Black" VerticalOptions="Start" FontAttributes="Bold"/>
+            <Picker x:Name="referralPicker" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" VerticalOptions="End" Title="Referral">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Website</x:String>
+                        <x:String>Social Media</x:String>
+                        <x:String>Friend</x:String>
+                        <x:String>Event</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <BoxView Grid.Row="5"/>
+            <StackLayout Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+                <ImageButton x:Name="termsOfServiceButton" Source="checkboxUnselected" Grid.Row="5" Grid.ColumnSpan="1" WidthRequest="20" HeightRequest="20" Clicked="termsOfServiceButtonClicked"/>
+                <Label Text="Agree to Prep to Your Door" FontSize ="Small" TextColor="Black" VerticalOptions="Center"/>
+                <Label Text="Terms of Service" FontSize ="Small" TextColor="Black" FontAttributes="Bold" TextDecorations="Underline" VerticalOptions="Center"/>
+            </StackLayout>
+
+            <BoxView Grid.Row="6"/>
+            <StackLayout Grid.Row="6" Grid.ColumnSpan="2" Margin="0,-50,0,0" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+                <ImageButton x:Name="weeklyUpdatesButton" Source="checkboxUnselected" Grid.Row="6" Grid.ColumnSpan="1" WidthRequest="20" HeightRequest="20"  Clicked="weeklyUpdatesButtonClicked"/>
+                <Label Text="Sign me up for weekly updates" FontSize = "Small" TextColor="Black" VerticalOptions="Center"/>
+            </StackLayout>
+
+            <BoxView Grid.Row="7" Grid.ColumnSpan="2"/>
+            <Button x:Name="signUpButton" TextColor="White" BackgroundColor="Green" Grid.Row="7" Grid.ColumnSpan="2" Text="Sign Up" FontSize="Large" Clicked="ClickedSignUp"/>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

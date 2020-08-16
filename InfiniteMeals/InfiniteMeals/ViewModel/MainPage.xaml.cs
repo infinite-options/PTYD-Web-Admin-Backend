@@ -47,6 +47,7 @@ namespace InfiniteMeals
             }
         }
 
+        [Obsolete]
         private async void ClickedLogin(object sender, EventArgs e)
         {
             if (!App.LoggedIn)

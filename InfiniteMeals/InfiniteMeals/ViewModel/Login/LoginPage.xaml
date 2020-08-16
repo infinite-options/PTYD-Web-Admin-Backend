@@ -16,7 +16,9 @@
                 <Entry x:Name="loginEmail" FontFamily="CapsRegular"  Placeholder="Email" TextColor="Black"></Entry>
                 <Entry x:Name="loginPassword" FontFamily="CapsRegular" Placeholder="Password"  IsPassword="True"></Entry>
                 <Button x:Name="LoginButton" FontFamily="CapsRegular" BackgroundColor = "Green" Text="Login" TextColor="White" Clicked="ClickedLogin"/>
-                <Label x:Name="forgotPasswordLabel"
+                    <Button x:Name="googleLoginButton" FontFamily="CapsRegular" BackgroundColor="Blue" Text="Google Login" TextColor="White" Clicked="googleLoginButtonClicked"
+                        />
+                    <Label x:Name="forgotPasswordLabel"
                        Text="Forgot Password?"
                        FontSize="Medium"
                        VerticalOptions="Center"

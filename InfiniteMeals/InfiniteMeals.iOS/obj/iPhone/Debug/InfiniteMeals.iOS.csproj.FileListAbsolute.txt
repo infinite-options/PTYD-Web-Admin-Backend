@@ -94,3 +94,5 @@ C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.iOS\ob
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.iOS\obj\iPhone\Debug\InfiniteMeals.iOS.csproj.CopyComplete
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.iOS\obj\iPhone\Debug\InfiniteMeals.iOS.exe
 C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.iOS\obj\iPhone\Debug\InfiniteMeals.iOS.pdb
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.iOS\bin\iPhone\Debug\Xamarin.Auth.dll
+C:\Users\Sean\source\repos\Prep-To-Your-Door2\InfiniteMeals\InfiniteMeals.iOS\bin\iPhone\Debug\Xamarin.Auth.pdb

@@ -6,7 +6,16 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <application android:label="PTYD" android:name="android.app.Application" android:allowBackup="true" android:icon="@mipmap/icon" android:debuggable="true">
+  <application android:label="PTYD" android:name="android.app.Application" android:allowBackup="true" android:debuggable="true">
+    <activity android:label="CustomUrlSchemeInterceptorActivity" android:launchMode="singleTop" android:noHistory="true" android:name="crc6450dfc9365f4a0897.CustomUrlSchemeInterceptorActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:path="/oauth2redirect" />
+        <data android:scheme="com.googleusercontent.apps.333899878721-66umetvrt811gvqu9fn7odge1bq6or3d" />
+      </intent-filter>
+    </activity>
     <activity android:configChanges="orientation|screenSize" android:icon="@mipmap/icon" android:label="PTYD" android:theme="@style/MainTheme" android:name="crc6450dfc9365f4a0897.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -15,6 +24,11 @@
     </activity>
     <receiver android:name="crc640f1d6fd1ba796493.NetworkReachability_NetworkStatusChangeBroadcastReceiver" />
     <service android:name="crc64a98abb514ffad9f1.KeepAliveService" />
+    <activity android:label="Web Authenticator" android:name="crc64f98dd38067c0c88b.FormAuthenticatorActivity" />
+    <activity android:label="Web Authenticator" android:name="crc64f98dd38067c0c88b.WebAuthenticatorActivity" />
+    <activity android:label="@string/title_activity_webview" android:theme="@android:style/Theme.DeviceDefault" android:name="crc64f98dd38067c0c88b.WebViewActivity" />
+    <activity android:label="Web Authenticator Native Browser" android:launchMode="singleTop" android:name="crc64f98dd38067c0c88b.WebAuthenticatorNativeBrowserActivity" />
+    <receiver android:name="crc64f98dd38067c0c88b.CustomTabsActionsBroadcastReceiver" />
     <receiver android:enabled="true" android:exported="false" android:label="Essentials Battery Broadcast Receiver" android:name="crc64a0e0a82d0db9a07d.BatteryBroadcastReceiver" />
     <receiver android:enabled="true" android:exported="false" android:label="Essentials Energy Saver Broadcast Receiver" android:name="crc64a0e0a82d0db9a07d.EnergySaverBroadcastReceiver" />
     <receiver android:enabled="true" android:exported="false" android:label="Essentials Connectivity Broadcast Receiver" android:name="crc64a0e0a82d0db9a07d.ConnectivityBroadcastReceiver" />

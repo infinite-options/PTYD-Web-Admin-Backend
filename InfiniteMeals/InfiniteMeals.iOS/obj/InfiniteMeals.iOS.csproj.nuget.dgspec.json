@@ -70,6 +70,10 @@
               "target": "Package",
               "version": "[37.15.1, )"
             },
+            "Xamarin.Auth": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            },
             "Xamarin.Essentials": {
               "target": "Package",
               "version": "[1.5.3.2, )"
@@ -177,6 +181,10 @@
             "Stripe.net": {
               "target": "Package",
               "version": "[37.15.1, )"
+            },
+            "Xamarin.Auth": {
+              "target": "Package",
+              "version": "[1.7.0, )"
             },
             "Xamarin.Essentials": {
               "target": "Package",

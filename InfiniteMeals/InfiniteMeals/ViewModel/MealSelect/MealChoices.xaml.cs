@@ -18,7 +18,6 @@ using InfiniteMeals.Meals;
 using System.Net;
 using System.Runtime.Serialization;
 using InfiniteMeals.ViewModel.Login;
-using InfiniteMeals.Model.Login;
 using System.Text.RegularExpressions;
 
 namespace InfiniteMeals.ViewModel.MealSelect
