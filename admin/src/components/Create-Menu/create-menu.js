@@ -25,8 +25,6 @@ class CreateMenu extends Component {
        * selectionOfDropMenu[3] = 0
        *
        */
-
-      newMealCategory: "",
       newMeal: 0,
       newMeal2: 0,  
       newMealName: "",
@@ -228,33 +226,49 @@ class CreateMenu extends Component {
               <div></div>
             ) : (
               <div>
-                <Row>
-                  <Col>
                 <Button
                   variant="success"
                   className="float-right"
                   onClick={this.postMenuForThisDate}
+                  style={{
+                    marginRight: "15px",
+                  }}
                 >
                   Save
                 </Button>
-                </Col>
-                </Row>
-                {/* <Row>
-                  <Col>
-                <Button
-                  variant="success"
-                  className="float-right"
-                  onClick={() => {
-                    this.setState({ addShow: !this.state.addShow });
-                  }}
-                  style={{
-                    marginTop: "15px",
-                  }}
-                >
-                  {this.state.addShow ? "Cancel Add Meal" : "Add Meal"}
-                </Button>
-                </Col>
-                </Row> */}
+                  { this.state.addShow &&
+                    <Button
+                      variant="success"
+                      className="float-left"
+                      onClick={() => {
+                        // console.log("clicked on save");
+                        this.addNewRow();
+                      }}
+                      style={{
+                        marginRight: "15px",
+                      }}
+                    >
+                      Save New Menu Item
+                    </Button>
+                  }
+                    <Button
+                      variant="success"
+                      className="float-left"
+                      onClick={() => {
+                        this.setState({
+                          addShow: !this.state.addShow,
+                          // Default value African Peanut Soup
+                          newMeal: 0, //Category
+                          newMeal2: 0, //Meal
+                          newMealName: this.state.mealMap[0],
+                        });
+                      }}
+                      style={{
+                        marginRight: "15px",
+                      }}
+                    >
+                      {this.state.addShow ? "Cancel New Menu Item" : "Add Menu Item"}
+                    </Button>
               </div>
             )}
           </Col>
@@ -312,20 +326,11 @@ class CreateMenu extends Component {
   addRowTemplate = () => {
     return (
       <tr>
-        <td>{this.addMealDropdown()}</td>
+        <td> Local Treat </td>
         <td>{this.addMealDropdown2()}</td>
-        <td>{this.avgpost(this.state.newMealName)}</td>
-        <td>
-          <Button
-            variant="primary"
-            onClick={() => {
-              // console.log("clicked on save");
-              this.addNewRow();
-            }}
-          >
-            Save
-          </Button>
-        </td>
+        <td>{this.addMealDropdown()}</td>
+        <td> Test </td>
+        <td> True </td>
       </tr>
     );
   };
@@ -394,25 +399,31 @@ class CreateMenu extends Component {
 
   //Adds new row to the database array: createMenu
   addNewRow = () => {
-    let arr = this.state.selectionOfDropMenu;
-    let index = this.state.mealMap[this.state.newMealName];
-    arr.push(index);
+    let mealArr = this.state.selectionOfDropMenu;
+    let mealIndex = this.state.mealMap[this.state.newMealName];
+    mealArr.push(mealIndex);
+
+    let defaultMealArr = this.state.selectionOfDefaultMeal;
+    defaultMealArr.push("TRUE");
 
     let day = this.state.datekeys[this.state.selection]; //get the current date
     let newCreateMenu = this.state.createMenu;
     let mealArray = newCreateMenu[day];
 
     let element = {
-      Menu_Type: this.state.newMealCategory,
-      Meal_Name: this.state.mealMap[this.state.newMeal],
+      Menu_Type: "Local Treat",
+      Meal_Name: this.state.newMealName,
+      Meal_Cat: this.state.categorykey[this.state.newMeal],
+      Menu_Category: "Test",
+      Default_Meal: "TRUE",
     };
     mealArray.push(element);
 
     this.setState({
-      selectionOfDropMenu: arr,
+      selectionOfDropMenu: mealArr,
+      selectionOfDefaultMeal: defaultMealArr,
       CreateMenu: newCreateMenu,
       newMeal: 0,
-      newMealCategory: "",
     });
   };
 
