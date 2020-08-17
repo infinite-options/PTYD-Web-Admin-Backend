@@ -359,56 +359,16 @@ class CreateMenu extends Component {
   };
 
   //DropDown menu of all items for "addRowTemplate" function
-  addMealDropdown2 = () => {
-    let tempmeal = []; //Temporary holds the views to be printed to screen
-    
-    let specificCategory = this.state.categorykey[this.state.newMeal];
-    let specificMealArr = this.state.avg[specificCategory];
-
-    for (let i = 0; i < specificMealArr.length; i++) {
-      tempmeal.push(
-        <MenuItem value={i} key={i}>{specificMealArr[i].Meal_Name}</MenuItem>
-      );
-    }
-    //newMeal is just a integer starting at 0
-    return (
-      <FormControl>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={this.state.newMeal2}
-          onChange={(e) => {
-            this.setState({
-              newMeal2: e.target.value,
-              newMealName: specificMealArr[e.target.value].Meal_Name,
-            });
-          }}
-        >
-          {tempmeal}
-        </Select>
-      </FormControl>
-    );
-  };
-
-  // Attempt to show all meals when addon category selected; fail
   // addMealDropdown2 = () => {
   //   let tempmeal = []; //Temporary holds the views to be printed to screen
-  //   let specificCategory = this.state.newMealCategory;
-  //   let specificMealArr = []
-  //   if(this.state.newMealCategory !== "Add-On") {
-  //     specificMealArr = this.state.avg[specificCategory];
-  //     for (let i = 0; i < specificMealArr.length; i++) {
-  //       tempmeal.push(
-  //         <MenuItem value={i} key={i}>{specificMealArr[i].Meal_Name}</MenuItem>
-  //       );
-  //     }
-  //   } else {
-  //     specificMealArr = Object.keys(this.state.meal_type_map);
-  //     for (let i = 0; i < specificMealArr.length; i++) {
-  //       tempmeal.push(
-  //         <MenuItem value={i} key={i}>{specificMealArr[i]}</MenuItem>
-  //       );
-  //     }
+    
+  //   let specificCategory = this.state.categorykey[this.state.newMeal];
+  //   let specificMealArr = this.state.avg[specificCategory];
+
+  //   for (let i = 0; i < specificMealArr.length; i++) {
+  //     tempmeal.push(
+  //       <MenuItem value={i} key={i}>{specificMealArr[i].Meal_Name}</MenuItem>
+  //     );
   //   }
   //   //newMeal is just a integer starting at 0
   //   return (
@@ -429,6 +389,46 @@ class CreateMenu extends Component {
   //     </FormControl>
   //   );
   // };
+
+  // Attempt to show all meals when addon category selected; fail
+  addMealDropdown2 = () => {
+    let tempmeal = []; //Temporary holds the views to be printed to screen
+    let specificCategory = this.state.newMealCategory;
+    let specificMealArr = []
+    if(this.state.newMealCategory !== "Add-On") {
+      specificMealArr = this.state.avg[specificCategory];
+      for (let i = 0; i < specificMealArr.length; i++) {
+        tempmeal.push(
+          <MenuItem value={i} key={i}>{specificMealArr[i].Meal_Name}</MenuItem>
+        );
+      }
+    } else {
+      specificMealArr = Object.keys(this.state.meal_type_map);
+      for (let i = 0; i < specificMealArr.length; i++) {
+        tempmeal.push(
+          <MenuItem value={i} key={i}>{specificMealArr[i]}</MenuItem>
+        );
+      }
+    }
+    //newMeal is just a integer starting at 0
+    return (
+      <FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={this.state.newMeal2}
+          onChange={(e) => {
+            this.setState({
+              newMeal2: e.target.value,
+              newMealName: specificMealArr[e.target.value].Meal_Name,
+            });
+          }}
+        >
+          {tempmeal}
+        </Select>
+      </FormControl>
+    );
+  };
 
   addMealDefaultDropdown = () => {
     return (
@@ -505,8 +505,8 @@ class CreateMenu extends Component {
     let element = {
       Menu_Type: this.state.newMealType,
       Meal_Name: this.state.newMealName,
-      Meal_Cat: this.state.categorykey[this.state.newMeal],
-      Menu_Category: "Test",
+      Meal_Cat: this.state.newMealCategory,
+      Menu_Category: this.state.newMenuCategory,
       Default_Meal: this.state.newMealDefault,
     };
     mealArray.push(element);
