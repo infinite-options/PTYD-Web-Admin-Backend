@@ -6224,7 +6224,7 @@ class SavePurchaseNote(Resource):
         finally:
             disconnect(conn)
 
-class All_Meals_Types (Resource):
+class All_Meal_Types (Resource):
     def get(self):
         response = {}
         try:
@@ -6365,7 +6365,7 @@ api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
 api.add_resource(DeliveryInfo,'/api/v2/DeliveryInfo/<string:purchase_id>')
 api.add_resource(AccountList,'/api/v2/AccountList')
 api.add_resource(SavePurchaseNote,'/api/v2/SavePurchaseNote/<string:purchase_id>')
-api.add_resource(All_Meals_Types, '/api/v2/all_meals_types')
+api.add_resource(All_Meal_Types, '/api/v2/all_meal_types')
 api.add_resource(All_Menu_Categories, '/api/v2/all_menu_categories')
 api.add_resource(All_Meal_Categories, '/api/v2/all_meal_categories')
 '''
