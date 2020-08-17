@@ -265,6 +265,42 @@ namespace InfiniteMeals.ViewModel.Login
             presenter.Login(authenticator);
         }
 
+        // handler for when facebook login button is clicked
+        [Obsolete]
+        private void facebookLoginButtonClicked(object sender, EventArgs e) {
+            string clientId = null;
+            string redirectUri = null;
+
+            switch (Device.RuntimePlatform) {
+                case Device.iOS:
+                    clientId = SocialMediaLoginConstants.FacebookiOSClientId;
+                    redirectUri = SocialMediaLoginConstants.FacebookiOSRedirectUrl;
+                    break;
+
+                case Device.Android:
+                    clientId = SocialMediaLoginConstants.FacebookAndroidClientId;
+                    redirectUri = SocialMediaLoginConstants.FacebookAndroidRedirectUrl;
+                    break;
+            }
+
+            account = store.FindAccountsForService(SocialMediaLoginConstants.AppName).FirstOrDefault();
+
+            var authenticator = new OAuth2Authenticator(
+                clientId,
+                SocialMediaLoginConstants.FacebookScope,
+                new Uri(SocialMediaLoginConstants.FacebookAuthorizeUrl),
+                new Uri(SocialMediaLoginConstants.FacebookAccessTokenUrl),
+                null);
+
+            authenticator.Completed += OnAuthCompleted;
+            authenticator.Error += OnAuthError;
+
+            var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
+            presenter.Login(authenticator);
+
+            
+        }
+
         // function when the auth is completed without any errors
         [Obsolete]
         async void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e) {
@@ -273,9 +309,11 @@ namespace InfiniteMeals.ViewModel.Login
                 authenticator.Completed -= OnAuthCompleted;
                 authenticator.Error -= OnAuthError;
             }
-
+            Debug.WriteLine("starting authentication");
             if(e.IsAuthenticated) {
+                Debug.WriteLine("first authentication");
                 if(authenticator.AuthorizeUrl.Host == "www.facebook.com") {
+                    Debug.WriteLine("authenticated!!!");
                     FacebookEmail facebookEmail = null;
 
                     var json = await client.GetStringAsync($"https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,picture.type(large)&access_token=" + e.Account.Properties["access_token"]);
@@ -297,14 +335,36 @@ namespace InfiniteMeals.ViewModel.Login
                     Application.Current.Properties.Add("DisplayName", facebookEmail.Name);
                     Application.Current.Properties.Add("EmailAddress", facebookEmail.Email);
                     Application.Current.Properties.Add("ProfilePicture", facebookEmail.Picture.Data.Url);
+                    
+                    try {
+                        var socialAccountJson = await client.GetStringAsync(socialUrl + facebookEmail.Email); // get the user's account from the social accounts table
+                   
+                        SocialAccountResponse socialAccountResponse = JsonConvert.DeserializeObject<SocialAccountResponse>(socialAccountJson);
 
-                    await Navigation.PopAsync();
+                        if (socialAccountResponse.Result.Result.Length == 0) { // if the social account doesn't exist, navigate to social sign up page
+                            Debug.WriteLine("no social account found");
+                            string accessToken = e.Account.Properties["access_token"]; // access token retrieved from facebook
+                            // facebook doesn't provide refresh token!
+                            string socialMedia = "Facebook";
+                            SocialMediaSignUpPage socialSignUpPage = new SocialMediaSignUpPage(facebookEmail.First_Name, facebookEmail.Last_Name, facebookEmail.Email, socialMedia, accessToken, ""); // declare new social sign up page with user's name, email, and tokens
+
+                            await Navigation.PushAsync(socialSignUpPage);
+                        }
+                        else { // user's social account exists and login attempt is made
+                            Debug.WriteLine("social account found, logging in");
+                            LoginResponse socialLoginAttempt = await socialLogin(socialAccountResponse.Result.Result[0].UserUid);
+                            captureLoginSession(socialLoginAttempt);
+                            await Navigation.PopAsync(); // go back to home page
+
+                        }
+                    }
+                    catch (Exception ex) {
+                        System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+
                 } else {
                     User user = null;
 
-                    foreach(System.Collections.Generic.KeyValuePair<string, string> kvp in e.Account.Properties) {
-                        Debug.WriteLine(kvp.Key + " " + kvp.Value);
-                    }
                     // If the user is authenticated, request their basic user data from Google
                     // UserInfoUrl https://www.googleapis.com/oauth2/v2/userinfo
 
