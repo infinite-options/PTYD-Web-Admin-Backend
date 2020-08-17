@@ -118,7 +118,7 @@
 
 	/* 10: InfiniteMeals.dll */
 	/* uncompressed_file_size */
-	.long	1014272
+	.long	1020416
 	/* loaded */
 	.byte	0
 	/* data */

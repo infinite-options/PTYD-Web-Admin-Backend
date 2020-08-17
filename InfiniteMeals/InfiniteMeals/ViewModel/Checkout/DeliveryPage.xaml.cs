@@ -41,19 +41,66 @@ namespace InfiniteMeals.ViewModel.Checkout {
             this.firstNameEntry.Text = userInfoObj.Result[0].DeliveryFirstName;
             this.lastNameEntry.Text = userInfoObj.Result[0].DeliveryLastName;
             // Phone
+            string entirePhone = (string) userInfoObj.Result[0].DeliveryPhone.ToString();
+            this.firstPhoneNumberEntry.Text = entirePhone.Substring(0, 3);
+            this.middlePhoneNumberEntry.Text = entirePhone.Substring(3, 5);
+            this.lastPhoneNumberEntry.Text = entirePhone.Substring(6);
             this.addressOneEntry.Text = userInfoObj.Result[0].DeliveryAddress;
-            this.addressTwoEntry.Text = userInfoObj.Result[0].DeliveryAddressUnit;
             this.zipCodeEntry.Text = userInfoObj.Result[0].DeliveryZip.ToString();
             this.cityEntry.Text = userInfoObj.Result[0].DeliveryCity;
             this.stateEntry.Text = userInfoObj.Result[0].DeliveryState;
 
+            if (String.IsNullOrEmpty(firstNameEntry.Text))
+            {
+                this.firstNameWarning.IsVisible = true; // show warning if first name entry is empty
+            }
+            if (String.IsNullOrEmpty(lastNameEntry.Text))
+            {
+                this.lastNameWarning.IsVisible = true; // show warning if last name entry is empty
+            }
+            if (String.IsNullOrEmpty(firstPhoneNumberEntry.Text))
+            {
+                this.phoneNumberWarning.IsVisible = true; // show warning if last name entry is empty
+            }
+            if (String.IsNullOrEmpty(middlePhoneNumberEntry.Text))
+            {
+                this.phoneNumberWarning.IsVisible = true; // show warning if last name entry is empty
+            }
+            if (String.IsNullOrEmpty(lastPhoneNumberEntry.Text))
+            {
+                this.phoneNumberWarning.IsVisible = true; // show warning if last name entry is empty
+            }
+            if (String.IsNullOrEmpty(addressOneEntry.Text))
+            {
+                this.addressWarning.IsVisible = true; // show warning if last name entry is empty
+            }
+            if (String.IsNullOrEmpty(zipCodeEntry.Text))
+            {
+                this.zipCodeWarning.IsVisible = true; // show warning if last name entry is empty
+            }
+            if (String.IsNullOrEmpty(cityEntry.Text))
+            {
+                this.cityWarning.IsVisible = true; // show warning if last name entry is empty
+            }
+            if (String.IsNullOrEmpty(stateEntry.Text))
+            {
+                this.stateWarning.IsVisible = true; // show warning if last name entry is empty
+            }
         }
 
 
         // clicked continue button event handler
         private async void ContinueToPaymentClicked(object sender, EventArgs e) {
 
-            if (String.IsNullOrEmpty(this.firstNameEntry.Text) || String.IsNullOrEmpty(this.lastNameEntry.Text) || String.IsNullOrEmpty(this.addressOneEntry.Text) || String.IsNullOrEmpty(this.zipCodeEntry.Text) ||
+            if(firstNameWarning.IsVisible.Equals(true) || lastNameWarning.IsVisible.Equals(true) ||
+                phoneNumberWarning.IsVisible.Equals(true) || addressWarning.IsVisible.Equals(true) ||
+                zipCodeWarning.IsVisible.Equals(true) || cityWarning.IsVisible.Equals(true) ||
+                stateWarning.IsVisible.Equals(true))
+            {
+                await DisplayAlert("Error: Empty Field(s)", "Please fill all fields", "OK");
+            }
+
+            else if (String.IsNullOrEmpty(this.firstNameEntry.Text) || String.IsNullOrEmpty(this.lastNameEntry.Text) || String.IsNullOrEmpty(this.addressOneEntry.Text) || String.IsNullOrEmpty(this.zipCodeEntry.Text) ||
                String.IsNullOrEmpty(this.cityEntry.Text) || String.IsNullOrEmpty(this.stateEntry.Text)) { // checks that all fields are filled out
                 await DisplayAlert("Error: Empty Field(s)", "Please fill all fields", "OK");
             }

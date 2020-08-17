@@ -465,7 +465,7 @@ _mono_aot_file_info:
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
 	.long 0,0,0,0,0,0,0,0
-	.byte 151,135,253,122,202,132,211,148,34,210,34,154,65,248,9,167
+	.byte 132,225,19,96,141,26,142,216,197,243,92,252,208,223,86,77
 	.globl _mono_aot_module_InfiniteMeals_iOS_info
 	.align 3
 _mono_aot_module_InfiniteMeals_iOS_info:

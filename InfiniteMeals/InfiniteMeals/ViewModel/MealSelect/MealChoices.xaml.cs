@@ -92,6 +92,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public static string infoImg = "info.jpeg";
         public static string green = "#427c43";
         public static string def = "#F5F5F5";
+        public static string yellow = "#ce790d";
         public Color colorToReturn = Color.FromHex("#F5F5F5");
         private static string mealSelectionUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/mealselection/";
         private static string mealsUrl = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals";
@@ -464,10 +465,12 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 quantity = new Label {
                     FontSize = 15,
                     FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Start,
+                    HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
                     VerticalTextAlignment = TextAlignment.Center,
                     HorizontalTextAlignment = TextAlignment.Center
+                    
+                    
                 };
 
                 nameLabel.SetBinding(Label.TextProperty, "name");
@@ -484,8 +487,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grid.Children.Add(infoButton, 4, 0);
                 grid.Children.Add(decrementMealQuantityButton, 4, 1);
                 grid.Children.Add(incrementMealQuantityButton, 5, 1);
-                // grid.Children.Add(steppers, 3, 1);
-                //steppers.SetValue(Grid.ColumnSpanProperty, 3);
                 grid.Children.Add(quantity, 5, 0);
 
                 return new ViewCell { View = grid, Height = 100 };
@@ -2427,8 +2428,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button d = (Button)mealSchedulePage.FindByName("SurpriseButton");
 
                     skip1.BackgroundColor = Color.FromHex(def);
+                    skip1.TextColor = Color.Black;
                     a.BackgroundColor = Color.FromHex(def);
+                    a.TextColor = Color.Black;
                     d.BackgroundColor = Color.FromHex(green);
+                    d.TextColor = Color.White;
                     ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton"), e);
 
                 }
@@ -2444,8 +2448,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button d = (Button)mealSchedulePage.FindByName("SurpriseButton2");
 
                     skip1.BackgroundColor = Color.FromHex(def);
+                    skip1.TextColor = Color.Black;
                     a.BackgroundColor = Color.FromHex(def);
+                    a.TextColor = Color.Black;
                     d.BackgroundColor = Color.FromHex(green);
+                    d.TextColor = Color.White;
                     ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton2"), e);
 
                 }
@@ -2461,8 +2468,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button d = (Button)mealSchedulePage.FindByName("SurpriseButton3");
 
                     skip1.BackgroundColor = Color.FromHex(def);
+                    skip1.TextColor = Color.Black;
                     a.BackgroundColor = Color.FromHex(def);
+                    a.TextColor = Color.Black;
                     d.BackgroundColor = Color.FromHex(green);
+                    d.TextColor = Color.White;
                     ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton3"), e);
 
                 }
@@ -2478,8 +2488,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button d = (Button)mealSchedulePage.FindByName("SurpriseButton4");
 
                     skip1.BackgroundColor = Color.FromHex(def);
+                    skip1.TextColor = Color.Black;
                     a.BackgroundColor = Color.FromHex(def);
+                    a.TextColor = Color.Black;
                     d.BackgroundColor = Color.FromHex(green);
+                    d.TextColor = Color.White;
                     ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton4"), e);
 
                 }
@@ -2495,8 +2508,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button d = (Button)mealSchedulePage.FindByName("SurpriseButton5");
 
                     skip1.BackgroundColor = Color.FromHex(def);
+                    skip1.TextColor = Color.Black;
                     a.BackgroundColor = Color.FromHex(def);
+                    a.TextColor = Color.Black;
                     d.BackgroundColor = Color.FromHex(green);
+                    d.TextColor = Color.White;
                     ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton5"), e);
 
                 }
@@ -2513,8 +2529,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button d = (Button)mealSchedulePage.FindByName("SurpriseButton6");
 
                     skip1.BackgroundColor = Color.FromHex(def);
+                    skip1.TextColor = Color.Black;
                     a.BackgroundColor = Color.FromHex(def);
+                    a.TextColor = Color.Black;
                     d.BackgroundColor = Color.FromHex(green);
+                    d.TextColor = Color.White;
                     ms.postSurpriseData((Button)mealSchedulePage.FindByName("SurpriseButton6"), e);
 
                 }
@@ -2525,8 +2544,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private async void ClickedSkip(object sender, EventArgs e)
         {
             Button b = (Button)sender;
-            //MealSchedule ms = new MealSchedule();
-            //int weekNumber = ms.getNum();
             MealSchedule ms = this.currentMealSchedule;
             int weekNumber = this.currentMealSchedule.weekNumber;
             if (weekNumber == 1)
@@ -2540,13 +2557,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton");
                     Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton");
                     Button add1 = (Button)mealSchedulePage.FindByName("AddonButton");
-
-                    skip1.BackgroundColor = Color.FromHex(green);
+                    skip1.BackgroundColor = Color.FromHex(yellow);
+                    skip1.TextColor = Color.White;
                     sel1.BackgroundColor = Color.FromHex(def);
+                    sel1.TextColor = Color.Black;
                     surp1.BackgroundColor = Color.FromHex(def);
+                    surp1.TextColor = Color.Black;
                     add1.BackgroundColor = Color.FromHex(def);
+                    add1.TextColor = Color.Black;
                     sun1.BackgroundColor = Color.FromHex(def);
+                    sun1.TextColor = Color.Black;
                     mon1.BackgroundColor = Color.FromHex(def);
+                    mon1.TextColor = Color.Black;
                     sel1.IsEnabled = false;
                     surp1.IsEnabled = false ;
                     add1.IsEnabled = false ;
@@ -2568,12 +2590,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton2");
                     Button add1 = (Button)mealSchedulePage.FindByName("AddonButton2");
 
-                    skip1.BackgroundColor = Color.FromHex(green);
+                    skip1.BackgroundColor = Color.FromHex(yellow);
+                    skip1.TextColor = Color.White;
                     sel1.BackgroundColor = Color.FromHex(def);
+                    sel1.TextColor = Color.Black;
                     surp1.BackgroundColor = Color.FromHex(def);
+                    surp1.TextColor = Color.Black;
                     add1.BackgroundColor = Color.FromHex(def);
+                    add1.TextColor = Color.Black;
                     sun1.BackgroundColor = Color.FromHex(def);
+                    sun1.TextColor = Color.Black;
                     mon1.BackgroundColor = Color.FromHex(def);
+                    mon1.TextColor = Color.Black;
                     sel1.IsEnabled = false;
                     surp1.IsEnabled = false;
                     add1.IsEnabled = false;
@@ -2595,12 +2623,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton3");
                     Button add1 = (Button)mealSchedulePage.FindByName("AddonButton3");
 
-                    skip1.BackgroundColor = Color.FromHex(green);
+                    skip1.BackgroundColor = Color.FromHex(yellow);
+                    skip1.TextColor = Color.White;
                     sel1.BackgroundColor = Color.FromHex(def);
+                    sel1.TextColor = Color.Black;
                     surp1.BackgroundColor = Color.FromHex(def);
+                    surp1.TextColor = Color.Black;
                     add1.BackgroundColor = Color.FromHex(def);
+                    add1.TextColor = Color.Black;
                     sun1.BackgroundColor = Color.FromHex(def);
+                    sun1.TextColor = Color.Black;
                     mon1.BackgroundColor = Color.FromHex(def);
+                    mon1.TextColor = Color.Black;
                     sel1.IsEnabled = false;
                     surp1.IsEnabled = false;
                     add1.IsEnabled = false;
@@ -2623,13 +2657,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button mon1 = (Button)mealSchedulePage.FindByName("MondayButton4");
                     Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton4");
                     Button add1 = (Button)mealSchedulePage.FindByName("AddonButton4");
-
-                    skip1.BackgroundColor = Color.FromHex(green);
+                    skip1.BackgroundColor = Color.FromHex(yellow);
+                    skip1.TextColor = Color.White;
                     sel1.BackgroundColor = Color.FromHex(def);
+                    sel1.TextColor = Color.Black;
                     surp1.BackgroundColor = Color.FromHex(def);
+                    surp1.TextColor = Color.Black;
                     add1.BackgroundColor = Color.FromHex(def);
+                    add1.TextColor = Color.Black;
                     sun1.BackgroundColor = Color.FromHex(def);
+                    sun1.TextColor = Color.Black;
                     mon1.BackgroundColor = Color.FromHex(def);
+                    mon1.TextColor = Color.Black;
                     sel1.IsEnabled = false;
                     surp1.IsEnabled = false;
                     add1.IsEnabled = false;
@@ -2652,12 +2691,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton5");
                     Button add1 = (Button)mealSchedulePage.FindByName("AddonButton5");
 
-                    skip1.BackgroundColor = Color.FromHex(green);
+                    skip1.BackgroundColor = Color.FromHex(yellow);
+                    skip1.TextColor = Color.White;
                     sel1.BackgroundColor = Color.FromHex(def);
+                    sel1.TextColor = Color.Black;
                     surp1.BackgroundColor = Color.FromHex(def);
+                    surp1.TextColor = Color.Black;
                     add1.BackgroundColor = Color.FromHex(def);
+                    add1.TextColor = Color.Black;
                     sun1.BackgroundColor = Color.FromHex(def);
+                    sun1.TextColor = Color.Black;
                     mon1.BackgroundColor = Color.FromHex(def);
+                    mon1.TextColor = Color.Black;
                     sel1.IsEnabled = false;
                     surp1.IsEnabled = false;
                     add1.IsEnabled = false;
@@ -2680,12 +2725,18 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     Button surp1 = (Button)mealSchedulePage.FindByName("SurpriseButton6");
                     Button add1 = (Button)mealSchedulePage.FindByName("AddonButton6");
 
-                    skip1.BackgroundColor = Color.FromHex(green);
+                    skip1.BackgroundColor = Color.FromHex(yellow);
+                    skip1.TextColor = Color.White;
                     sel1.BackgroundColor = Color.FromHex(def);
+                    sel1.TextColor = Color.Black;
                     surp1.BackgroundColor = Color.FromHex(def);
+                    surp1.TextColor = Color.Black;
                     add1.BackgroundColor = Color.FromHex(def);
+                    add1.BackgroundColor = Color.Black;
                     sun1.BackgroundColor = Color.FromHex(def);
+                    sun1.TextColor = Color.Black;
                     mon1.BackgroundColor = Color.FromHex(def);
+                    mon1.TextColor = Color.Black;
                     sel1.IsEnabled = false;
                     surp1.IsEnabled = false;
                     add1.IsEnabled = false;
@@ -2713,8 +2764,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton");
                     selectMealButton.BackgroundColor = Color.FromHex(green);
+                    selectMealButton.TextColor = Color.White;
                     Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton");
                     surpriseButton.BackgroundColor = Color.FromHex(def);
+                    surpriseButton.TextColor = Color.Black;
                 }
             }
             else if (weekNumber == 2)
@@ -2724,8 +2777,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton2");
                     selectMealButton.BackgroundColor = Color.FromHex(green);
+                    selectMealButton.TextColor = Color.White;
                     Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton2");
                     surpriseButton.BackgroundColor = Color.FromHex(def);
+                    surpriseButton.TextColor = Color.Black;
                 }
             }
             else if (weekNumber == 3)
@@ -2735,8 +2790,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton3");
                     selectMealButton.BackgroundColor = Color.FromHex(green);
+                    selectMealButton.TextColor = Color.White;
                     Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton3");
                     surpriseButton.BackgroundColor = Color.FromHex(def);
+                    surpriseButton.TextColor = Color.Black;
                 }
             }
             else if (weekNumber == 4)
@@ -2746,8 +2803,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton4");
                     selectMealButton.BackgroundColor = Color.FromHex(green);
+                    selectMealButton.TextColor = Color.White;
                     Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton4");
                     surpriseButton.BackgroundColor = Color.FromHex(def);
+                    surpriseButton.TextColor = Color.Black;
                 }
             }
             else if (weekNumber == 5)
@@ -2757,8 +2816,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton5");
                     selectMealButton.BackgroundColor = Color.FromHex(green);
+                    selectMealButton.TextColor = Color.White;
                     Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton5");
                     surpriseButton.BackgroundColor = Color.FromHex(def);
+                    surpriseButton.TextColor = Color.Black;
                 }
             }
             else if (weekNumber == 6)
@@ -2768,8 +2829,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button selectMealButton = (Button)mealSchedulePage.FindByName("SelectButton6");
                     selectMealButton.BackgroundColor = Color.FromHex(green);
+                    selectMealButton.TextColor = Color.White;
                     Button surpriseButton = (Button)mealSchedulePage.FindByName("SurpriseButton6");
                     surpriseButton.BackgroundColor = Color.FromHex(def);
+                    surpriseButton.TextColor = Color.Black;
                 }
             }
             await Navigation.PopAsync();

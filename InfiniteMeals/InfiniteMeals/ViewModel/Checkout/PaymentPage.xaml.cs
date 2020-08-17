@@ -37,9 +37,39 @@ namespace InfiniteMeals.ViewModel.Checkout {
             var userInfo = client.DownloadString(acctUrl + userID);
             var userInfoObj = JsonConvert.DeserializeObject<UserInformation>(userInfo);
 
+            string expDate = (string) userInfoObj.Result[0].CcExpDate.ToString();
+
+            this.expirationYearEntry.Text = expDate.Substring(0, 4);
+            this.expirationMonthEntry.Text = expDate.Substring(5, 2);
+            this.cardholderNameEntry.Text = userInfoObj.Result[0].DeliveryFirstName + " " + userInfoObj.Result[0].DeliveryLastName;
             this.deliveryInstructionsEditor.Text = userInfoObj.Result[0].DeliveryInstructions;
             this.cardNumberEntry.Text = userInfoObj.Result[0].CcNum;
             this.cvvEntry.Text = userInfoObj.Result[0].CcCvv.ToString();
+
+            if (String.IsNullOrEmpty(cardholderNameEntry.Text))
+            {
+                this.cardholderNameWarning.IsVisible = true;
+            }
+            if (String.IsNullOrEmpty(deliveryInstructionsEditor.Text))
+            {
+                this.deliveryInstructionsWarning.IsVisible = true;
+            }
+            if (String.IsNullOrEmpty(cardNumberEntry.Text))
+            {
+                this.cardNumberMessage.IsVisible = true;
+            }
+            if (String.IsNullOrEmpty(cvvEntry.Text))
+            {
+                this.cvvWarning.IsVisible = true;
+            }
+            if (String.IsNullOrEmpty(expirationMonthEntry.Text))
+            {
+                this.expirationDateWarning.IsVisible = true;
+            }
+            if (String.IsNullOrEmpty(expirationYearEntry.Text))
+            {
+                this.expirationDateWarning.IsVisible = true;
+            }
         }
 
         // event handler for clicking continue to summary button

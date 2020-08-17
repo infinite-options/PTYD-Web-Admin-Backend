@@ -98,7 +98,7 @@
 
 	/* 10: InfiniteMeals.dll */
 	/* uncompressed_file_size */
-	.word	1014272
+	.word	1020416
 	/* loaded */
 	.byte	0
 	/* data */

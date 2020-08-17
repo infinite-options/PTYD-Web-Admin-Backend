@@ -1237,36 +1237,47 @@ namespace InfiniteMeals.ViewModel.MealSelect
                         MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                         Button test = (Button)mealSchedulePage.FindByName("AddonButton");
                         test.BackgroundColor = Color.FromHex(def);
+                        test.TextColor = Color.Black;
                     }
                     else if (weekNumber == 2)
                     {
                         MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                         Button test = (Button)mealSchedulePage.FindByName("AddonButton2");
                         test.BackgroundColor = Color.FromHex(def);
+                        test.TextColor = Color.Black;
+
                     }
                     else if (weekNumber == 3)
                     {
                         MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                         Button test = (Button)mealSchedulePage.FindByName("AddonButton3");
                         test.BackgroundColor = Color.FromHex(def);
+                        test.TextColor = Color.Black;
+
                     }
                     else if (weekNumber == 4)
                     {
                         MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                         Button test = (Button)mealSchedulePage.FindByName("AddonButton4");
                         test.BackgroundColor = Color.FromHex(def);
+                        test.TextColor = Color.Black;
+
                     }
                     else if (weekNumber == 5)
                     {
                         MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                         Button test = (Button)mealSchedulePage.FindByName("AddonButton5");
                         test.BackgroundColor = Color.FromHex(def);
+                        test.TextColor = Color.Black;
+
                     }
                     else if (weekNumber == 6)
                     {
                         MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                         Button test = (Button)mealSchedulePage.FindByName("AddonButton6");
                         test.BackgroundColor = Color.FromHex(def);
+                        test.TextColor = Color.Black;
+
                     }
 
                 }
@@ -1312,36 +1323,47 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button test = (Button)mealSchedulePage.FindByName("AddonButton");
                     test.BackgroundColor = Color.FromHex(yellow);
+                    test.TextColor = Color.White;
                 }
                 else if (weekNumber == 2)
                 {
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button test = (Button)mealSchedulePage.FindByName("AddonButton2");
                     test.BackgroundColor = Color.FromHex(yellow);
+                    test.TextColor = Color.White;
+
                 }
                 else if (weekNumber == 3)
                 {
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button test = (Button)mealSchedulePage.FindByName("AddonButton3");
                     test.BackgroundColor = Color.FromHex(yellow);
+                    test.TextColor = Color.White;
+
                 }
                 else if (weekNumber == 4)
                 {
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button test = (Button)mealSchedulePage.FindByName("AddonButton4");
                     test.BackgroundColor = Color.FromHex(yellow);
+                    test.TextColor = Color.White;
+
                 }
                 else if (weekNumber == 5)
                 {
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button test = (Button)mealSchedulePage.FindByName("AddonButton5");
                     test.BackgroundColor = Color.FromHex(yellow);
+                    test.TextColor = Color.White;
+
                 }
                 else if (weekNumber == 6)
                 {
                     MealSchedule mealSchedulePage = (MealSchedule)this.BindingContext;
                     Button test = (Button)mealSchedulePage.FindByName("AddonButton6");
                     test.BackgroundColor = Color.FromHex(yellow);
+                    test.TextColor = Color.White;
+
                 }
                 BackToSchedule(sender, e);
             }

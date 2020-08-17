@@ -83,22 +83,20 @@ namespace InfiniteMeals
 
         private async void ClickedMealSchedule(object sender, EventArgs e)
         {
-            /*
             WebClient client = new WebClient();
             userID = mc.getUserAcct();
             var userZipCodes = client.DownloadString(acctUrl + userID);
             var userZipObj = JsonConvert.DeserializeObject<UserInformation>(userZipCodes);
             var numSubscriptions = userZipObj.Result.Length;
-            await Navigation.PushAsync(new MealSchedule());
 
             if (numSubscriptions == 0)
             {
                 await DisplayAlert("You don't have any meal plans", "Please subscribe to a meal plan on the homepage first.", "OK");
             }
             else
-            {*/
+            {
                 await Navigation.PushAsync(new MealSchedule());
-           // }
+            }
 
         }
 

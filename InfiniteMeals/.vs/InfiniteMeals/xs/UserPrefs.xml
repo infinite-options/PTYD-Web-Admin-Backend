@@ -3,19 +3,26 @@
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
   <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/Checkout/PaymentPage.xaml.cs" Line="26" Column="35" />
-      <File FileName="InfiniteMeals/ViewModel/Checkout/SummaryPage.xaml.cs" Line="1" Column="1" />
-      <File FileName="InfiniteMeals/ViewModel/Checkout/DeliveryPage.xaml.cs" Line="23" Column="1" />
-      <File FileName="InfiniteMeals/Model/User/UserInformation.cs" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="428" Column="11" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="1068" Column="29" />
+      <File FileName="InfiniteMeals.iOS/Info.plist" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="InfiniteMeals" expanded="True">
             <Node name="InfiniteMeals" expanded="True">
+              <Node name="Model" expanded="True">
+                <Node name="User" expanded="True" />
+              </Node>
               <Node name="ViewModel" expanded="True">
                 <Node name="Checkout" expanded="True">
+                  <Node name="DeliveryPage.xaml" expanded="True" />
                   <Node name="PaymentPage.xaml" expanded="True" />
+                  <Node name="SummaryPage.xaml" expanded="True" />
+                </Node>
+                <Node name="Subscribe" expanded="True">
+                  <Node name="PaymentOptionPage.xaml" expanded="True" />
                 </Node>
               </Node>
             </Node>

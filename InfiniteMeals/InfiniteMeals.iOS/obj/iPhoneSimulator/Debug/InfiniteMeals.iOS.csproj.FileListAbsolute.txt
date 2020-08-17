@@ -171,28 +171,28 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Forms.Platform.iOS.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/InfiniteMeals.pdb
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/bin/iPhoneSimulator/Debug/Xamarin.Forms.Platform.iOS.pdb
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/actool/_PartialAppManifest.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/actool/_BundleResourceWithLogicalName.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/coremlc/_PartialAppManifest.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/coremlc/_BundleResourceWithLogicalName.items
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/defaultmeal.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/ptydlogo.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/checkboxUnselected.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/checkboxSelected.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/creditcards.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/fave.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/austin.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/siete.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/fronks.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/yellowbird.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/jbg.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/shippingStatus.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/summaryStatus.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/paymentStatus.png
-/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 8-13.6/optimized/
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/InfiniteMeals.iOS.csprojAssemblyReference.cache
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/InfiniteMeals.iOS.csproj.CoreCompileInputs.cache
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/XamlC.stamp
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/InfiniteMeals.iOS.csproj.CopyComplete
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/InfiniteMeals.iOS.exe
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/InfiniteMeals.iOS.pdb
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/actool/_PartialAppManifest.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/actool/_BundleResourceWithLogicalName.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/coremlc/_PartialAppManifest.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/coremlc/_BundleResourceWithLogicalName.items
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/defaultmeal.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/ptydlogo.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/checkboxUnselected.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/checkboxSelected.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/creditcards.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/fave.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/austin.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/siete.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/fronks.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/yellowbird.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/jbg.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/shippingStatus.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/summaryStatus.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/paymentStatus.png
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.iOS/obj/iPhoneSimulator/Debug/device-builds/iphone 11-13.6/optimized/
