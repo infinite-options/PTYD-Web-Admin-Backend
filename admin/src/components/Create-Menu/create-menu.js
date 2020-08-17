@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
+import { Breadcrumbs, Link, Typography, Select, FormControl, MenuItem } from "@material-ui/core";
 import { Table, Button, Row, Col } from "react-bootstrap";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 
@@ -14,20 +9,20 @@ class CreateMenu extends Component {
     super(props);
     this.state = {
       datekeys: [],
+      pastkeys: [],
       selection: 0,
       pastDateMeal: false,
       selectionOfDropMenu: [], //remembering Meal selection dropdown
       selectionOfDefaultMeal: [],
-      /**
-       * selectionOfDropMenu[0] = 8
-       * selectionOfDropMenu[1] = 0
-       * selectionOfDropMenu[2] = 0
-       * selectionOfDropMenu[3] = 0
-       *
-       */
-      newMeal: 0,
-      newMeal2: 0,  
-      newMealName: "",
+      mealTypes: [],
+      menuCategories: [],
+      mealCategories: [],
+      newMealCategory: 0, //New meal Category
+      newMeal2: 0, //New meal selected by index
+      newMealName: "", //Name of new meal selected
+      newMealType: "", //New meal type
+      newMenuCategory: "", //New meal category
+      newMealDefault: "FALSE", // New meal Default
       //add selection and
       addShow: false,
       avg: {},
@@ -39,8 +34,8 @@ class CreateMenu extends Component {
     };
   }
   async componentDidMount() {
-    const res = await fetch(this.props.API_URL_CREATEMENU);
-    const api = await res.json();
+    let res = await axios.get(this.props.API_URL_CREATEMENU);
+    let api = res.data;
     const createMenu = api.menus;
     const avg = api.result;
     let tempkeys = []; //dates
@@ -67,8 +62,6 @@ class CreateMenu extends Component {
     }
 
     var today = new Date();
-
-    console.log(today);
     // console.log("tanny ", categorykey);
     for (let key of Object.keys(createMenu)) {
       //
@@ -97,6 +90,18 @@ class CreateMenu extends Component {
       });
     }
 
+    res = await axios.get(this.props.API_URL_MEALTYPE);
+    api = res.data;
+    let mealType = api.result['menu_categories'];
+
+    res = await axios.get(this.props.API_URL_MENUCAT);
+    api = res.data;
+    let menuCat = api.result['meals_types']
+
+    res = await axios.get(this.props.API_URL_MEALCAT);
+    api = res.data;
+    let mealCat = api.result['meal_categories'];
+
     this.setState(
       {
         selectionOfDropMenu: tempSelectionOfDropMenu, //[1, 2 , 3, 21, 1, 2, ...]
@@ -107,14 +112,14 @@ class CreateMenu extends Component {
         mealMap, // maps meal -> int and int -> meal {"The Energizer": 0, 0: "The Energizer", ...}
         meal_type_map, // {"The Energizer": "Local Treat", "Detox Smoothie": "Local Treat", ...}
         categorykey, //[Soup, Breakfast, Entree, ...]
-        addingSelection: 0,
         mealToAvgPostMap,
         pastkeys,
-        // newMealName: temp_newMealName
-      },
-      () => {
-        // console.log("selection of drops ", this.state.selectionOfDropMenu);
-        // console.log("mememememememememem", this.state.selectionOfDropMenu);
+        mealTypes: mealType,
+        newMealType: mealType[0],
+        menuCategories: menuCat,
+        newMenuCategory: menuCat[0],
+        mealCategories: mealCat,
+        newMealCategory: mealCat[0],
       }
     );
   }
@@ -172,7 +177,7 @@ class CreateMenu extends Component {
     }
     for (let i = 0; i < arr.length; i++) {
       let tempelement = this.state.pastDateMeal ? (
-        <tr>
+        <tr key={i}>
           <td>{arr[i].Menu_Type}</td>
           <td>{arr[i].Meal_Name}</td>
           <td>{arr[i].Meal_Cat}</td>
@@ -180,7 +185,7 @@ class CreateMenu extends Component {
           <td>{arr[i].Default_Meal}</td>
         </tr>
       ) : (
-        <tr>
+        <tr key={i}>
           <td>{arr[i].Menu_Type}</td>
           <td>{this.mealDropdown(arr[i].Meal_Name, i)}</td>
           <td>{arr[i].Meal_Cat}</td>
@@ -220,7 +225,9 @@ class CreateMenu extends Component {
                 </tr>
               </thead>
               <tbody>{displayrows}</tbody>
-              {this.state.addShow ? this.addRowTemplate() : <div></div>}
+              <tfoot>
+                {this.state.addShow && this.addRowTemplate()}
+              </tfoot>
             </Table>
             {this.state.pastDateMeal ? (
               <div></div>
@@ -326,51 +333,41 @@ class CreateMenu extends Component {
   addRowTemplate = () => {
     return (
       <tr>
-        <td> Local Treat </td>
-        <td>{this.addMealDropdown2()}</td>
-        <td>{this.addMealDropdown()}</td>
-        <td> Test </td>
-        <td> True </td>
+        <td> {this.addMealTypeDropdown()} </td>
+        <td> {this.addMealDropdown2()}</td>
+        <td> {this.addMealDropdown()}</td>
+        <td> {this.addMealMenuCategoryDropdown()} </td>
+        <td> {this.addMealDefaultDropdown()}</td>
       </tr>
     );
   };
 
   //DropDown menu of all items for "addRowTemplate" function
   addMealDropdown = () => {
-    let tempmeal = [];
-    let keyArr = this.state.categorykey; //[Soup, Entree, BreakFast]
-    if (keyArr.length === 0) return <div></div>;
-    let defaultNewMeal = keyArr[0];
-    for (let i = 0; i < keyArr.length; i++) {
-      tempmeal.push(<MenuItem value={i}>{keyArr[i]}</MenuItem>);
-    }
-    //newMeal is just a integer starting at 0
     return (
-      <FormControl>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={this.state.newMeal}
-          onChange={(e) => {
-            this.setState({ newMeal: e.target.value, newMeal2: 0 });
-          }}
-        >
-          {tempmeal}
-        </Select>
-      </FormControl>
+      <Select
+        value={this.state.newMealCategory}
+        onChange={(e) => {
+          this.setState({ newMealCategory: e.target.value, newMeal2: 0 });
+        }}
+      >
+        {this.state.mealCategories.map(mealCat => (
+          <MenuItem value={mealCat} key={mealCat}> {mealCat} </MenuItem>
+        ))}
+      </Select>
     );
   };
 
   //DropDown menu of all items for "addRowTemplate" function
   addMealDropdown2 = () => {
     let tempmeal = []; //Temporary holds the views to be printed to screen
-
+    
     let specificCategory = this.state.categorykey[this.state.newMeal];
     let specificMealArr = this.state.avg[specificCategory];
 
     for (let i = 0; i < specificMealArr.length; i++) {
       tempmeal.push(
-        <MenuItem value={i}>{specificMealArr[i].Meal_Name}</MenuItem>
+        <MenuItem value={i} key={i}>{specificMealArr[i].Meal_Name}</MenuItem>
       );
     }
     //newMeal is just a integer starting at 0
@@ -392,6 +389,101 @@ class CreateMenu extends Component {
       </FormControl>
     );
   };
+
+  // Attempt to show all meals when addon category selected; fail
+  // addMealDropdown2 = () => {
+  //   let tempmeal = []; //Temporary holds the views to be printed to screen
+  //   let specificCategory = this.state.newMealCategory;
+  //   let specificMealArr = []
+  //   if(this.state.newMealCategory !== "Add-On") {
+  //     specificMealArr = this.state.avg[specificCategory];
+  //     for (let i = 0; i < specificMealArr.length; i++) {
+  //       tempmeal.push(
+  //         <MenuItem value={i} key={i}>{specificMealArr[i].Meal_Name}</MenuItem>
+  //       );
+  //     }
+  //   } else {
+  //     specificMealArr = Object.keys(this.state.meal_type_map);
+  //     for (let i = 0; i < specificMealArr.length; i++) {
+  //       tempmeal.push(
+  //         <MenuItem value={i} key={i}>{specificMealArr[i]}</MenuItem>
+  //       );
+  //     }
+  //   }
+  //   //newMeal is just a integer starting at 0
+  //   return (
+  //     <FormControl>
+  //       <Select
+  //         labelId="demo-simple-select-label"
+  //         id="demo-simple-select"
+  //         value={this.state.newMeal2}
+  //         onChange={(e) => {
+  //           this.setState({
+  //             newMeal2: e.target.value,
+  //             newMealName: specificMealArr[e.target.value].Meal_Name,
+  //           });
+  //         }}
+  //       >
+  //         {tempmeal}
+  //       </Select>
+  //     </FormControl>
+  //   );
+  // };
+
+  addMealDefaultDropdown = () => {
+    return (
+      <Select
+        value={this.state.newMealDefault}
+        onChange={(e) => {
+          this.setState({
+            newMealDefault: e.target.value,
+          })
+        }}
+      >
+        <MenuItem value="FALSE"> False </MenuItem>
+        <MenuItem value="TRUE"> True </MenuItem>
+      </Select>
+    );
+  }
+
+  addMealTypeDropdown = () => {
+    return (
+      <Select
+        value={this.state.newMealType}
+        onChange={(e) => {
+          this.setState({
+            newMealType: e.target.value,
+          })
+        }}
+        >
+          {
+            this.state.mealTypes.map(mealType => (
+              <MenuItem value={mealType} key={mealType}> {mealType} </MenuItem>
+            ))
+          }
+        </Select>
+    )
+  }
+
+  addMealMenuCategoryDropdown = () => {
+    return (
+      <Select
+        value={this.state.newMenuCategory}
+        onChange={(e) => {
+          this.setState({
+            newMealCategory: e.target.value,
+          })
+        }}
+      >
+        {
+          this.state.menuCategories.map(mealCategory => (
+            <MenuItem value={mealCategory} key={mealCategory}> {mealCategory} </MenuItem>
+          ))
+        }
+      </Select>
+    )
+  }
+
   avgpost = (mealName) => {
     let x = this.state.mealToAvgPostMap[mealName];
     return this.state.mealToAvgPostMap[mealName];
@@ -404,22 +496,23 @@ class CreateMenu extends Component {
     mealArr.push(mealIndex);
 
     let defaultMealArr = this.state.selectionOfDefaultMeal;
-    defaultMealArr.push("TRUE");
+    defaultMealArr.push(this.state.newMealDefault);
 
     let day = this.state.datekeys[this.state.selection]; //get the current date
     let newCreateMenu = this.state.createMenu;
     let mealArray = newCreateMenu[day];
 
     let element = {
-      Menu_Type: "Local Treat",
+      Menu_Type: this.state.newMealType,
       Meal_Name: this.state.newMealName,
       Meal_Cat: this.state.categorykey[this.state.newMeal],
       Menu_Category: "Test",
-      Default_Meal: "TRUE",
+      Default_Meal: this.state.newMealDefault,
     };
     mealArray.push(element);
 
     this.setState({
+      addShow: false,
       selectionOfDropMenu: mealArr,
       selectionOfDefaultMeal: defaultMealArr,
       CreateMenu: newCreateMenu,
@@ -430,7 +523,13 @@ class CreateMenu extends Component {
   dateDropdown = () => {
     let tempdate = [];
     for (let i = 0; i < this.state.datekeys.length; i++) {
-      tempdate.push(<MenuItem value={i}>{this.state.datekeys[i]}</MenuItem>);
+      tempdate.push(
+        <MenuItem
+          value={i}
+          key={i}
+        >
+          {this.state.datekeys[i]}
+        </MenuItem>);
     }
     return (
       <FormControl>
@@ -454,6 +553,7 @@ class CreateMenu extends Component {
       tempmeal.push(
         <MenuItem
           value={this.state.mealMap[this.state.avg[category][i]["Meal_Name"]]}
+          key={this.state.mealMap[this.state.avg[category][i]["Meal_Name"]]}
         >
           {this.state.avg[category][i]["Meal_Name"]}
         </MenuItem>
