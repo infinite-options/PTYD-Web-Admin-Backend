@@ -6224,8 +6224,74 @@ class SavePurchaseNote(Resource):
         finally:
             disconnect(conn)
 
+class All_Meal_Types (Resource):
+    def get(self):
+        response = {}
+        try:
+            conn = connect()
+            query = """SELECT DISTINCT menu_category
+                            FROM ptyd_menu
+                            ORDER BY menu_category;"""
+            res = execute(query, 'get', conn)
+            print(res)
+            if res['code'] != 280:
+                response['message'] = "Cannot get all Meals Types"
+                return response, 500
+            response['message'] = "Success"
+            result = {'meals_types': []}
+            for category in res['result']:
+                result['meals_types'] += category.values()
+            response['result'] = result
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
-
+class All_Menu_Categories (Resource):
+    def get(self):
+        response = {}
+        try:
+            conn = connect()
+            query = """SELECT DISTINCT menu_type
+                            FROM ptyd_menu
+                            ORDER BY menu_type"""
+            res = execute(query, 'get', conn)
+            if res['code'] != 280:
+                response['message'] = "Cannot get all Menu Categories"
+                return response, 500
+            response['message'] = "Success"
+            result = {'menu_categories': []}
+            for category in res['result']:
+                result['menu_categories'] += category.values()
+            response['result'] = result
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
+class All_Meal_Categories (Resource):
+    def get(self):
+        response = {}
+        try:
+            conn = connect()
+            query = """SELECT DISTINCT meal_cat
+                            FROM ptyd_menu
+                            ORDER BY meal_cat;"""
+            res = execute(query, 'get', conn)
+            if res['code'] != 280:
+                response['message'] = "Cannot get all Meals Categories"
+                return response, 500
+            response['message'] = "Success"
+            result = {'meal_categories':[]}
+            for category in res['result']:
+                result['meal_categories'] += category.values()
+            response['result'] = result
+            return response, 200
+        except:
+            raise BadRequest('Request failed, please try again later.')
+        finally:
+            disconnect(conn)
 
 
 # Define API routes
@@ -6299,6 +6365,9 @@ api.add_resource(Add_Unit_Conversion, '/api/v2/Add_Unit_Conversion')
 api.add_resource(DeliveryInfo,'/api/v2/DeliveryInfo/<string:purchase_id>')
 api.add_resource(AccountList,'/api/v2/AccountList')
 api.add_resource(SavePurchaseNote,'/api/v2/SavePurchaseNote/<string:purchase_id>')
+api.add_resource(All_Meal_Types, '/api/v2/all_meal_types')
+api.add_resource(All_Menu_Categories, '/api/v2/all_menu_categories')
+api.add_resource(All_Meal_Categories, '/api/v2/all_meal_categories')
 '''
 api.add_resource(EditMeals, '/api/v2/edit-meals')
 api.add_resource(UpdateRecipe, '/api/v2/update-recipe')

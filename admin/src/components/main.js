@@ -105,6 +105,9 @@ const Main = ({ appProps }) => (
       appProps={{
         appProps,
         API_URL_CREATEMENU: `${DEV_URL}create-menu`,
+        API_URL_MEALTYPE: `${DEV_URL}all_menu_categories`,
+        API_URL_MENUCAT: `${DEV_URL}all_meal_types`,
+        API_URL_MEALCAT: `${DEV_URL}all_meal_categories`,
       }}
     />
     <AppliedRoute
