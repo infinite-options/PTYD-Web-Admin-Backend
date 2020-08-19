@@ -421,7 +421,7 @@ class CreateMenu extends Component {
           onChange={(e) => {
             this.setState({
               newMeal2: e.target.value,
-              newMealName: specificMealArr[e.target.value].Meal_Name,
+              newMealName: specificMealArr[e.target.value],
             });
           }}
         >
