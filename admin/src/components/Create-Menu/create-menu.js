@@ -240,6 +240,7 @@ class CreateMenu extends Component {
                   style={{
                     marginRight: "15px",
                   }}
+                  disabled={this.state.addShow}
                 >
                   Save
                 </Button>
@@ -342,7 +343,7 @@ class CreateMenu extends Component {
     );
   };
 
-  //DropDown menu of all items for "addRowTemplate" function
+  //DropDown menu of all categories for "addRowTemplate" function
   addMealDropdown = () => {
     return (
       <Select
@@ -471,7 +472,7 @@ class CreateMenu extends Component {
         value={this.state.newMenuCategory}
         onChange={(e) => {
           this.setState({
-            newMealCategory: e.target.value,
+            newMenuCategory: e.target.value,
           })
         }}
       >
