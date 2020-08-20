@@ -36,7 +36,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
         public IList<Meal> Smoothies { get; private set; }
 
         // Week 1
-        public MealGroup mealGroup = new MealGroup() { LongName = "Weekly Specials"};
+        public MealGroup mealGroup = new MealGroup() { LongName = "Weekly Specials" };
         public MealGroup seasonalMealGroup = new MealGroup() { LongName = "Seasonal Meals" };
         public MealGroup smoothieGroup = new MealGroup() { LongName = "Smoothies" };
 
@@ -53,7 +53,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
         // Week 4
         public MealGroup mealGroup4 = new MealGroup() { LongName = "Weekly Specials" };
         public MealGroup seasonalMealGroup4 = new MealGroup() { LongName = "Seasonal Meals" };
-        public MealGroup smoothieGroup4 = new MealGroup() { LongName = "Smoothies"};
+        public MealGroup smoothieGroup4 = new MealGroup() { LongName = "Smoothies" };
 
         // Week 5
         public MealGroup mealGroup5 = new MealGroup() { LongName = "Weekly Specials" };
@@ -285,11 +285,11 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             }
 
-            if(weekNumber == 1)
+            if (weekNumber == 1)
             {
                 lstView.ItemsSource = grouped;
             }
-            else if(weekNumber == 2)
+            else if (weekNumber == 2)
             {
                 lstView.ItemsSource = grouped2;
             }
@@ -301,7 +301,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 BackgroundColor = Color.Transparent,
             };
 
-            if(weekNumber == 1)
+            if (weekNumber == 1)
             {
                 switchWeek.Clicked += NextWeekMenu;
                 switchWeek.Text = "Next Week";
@@ -357,7 +357,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             Content = lstView;
             BindingContext = this;
         }
-       public void NextWeekMenu (object sender, EventArgs e)
+        public void NextWeekMenu(object sender, EventArgs e)
         {
             weekNumber = 2;
             getMeals(weekNumber);

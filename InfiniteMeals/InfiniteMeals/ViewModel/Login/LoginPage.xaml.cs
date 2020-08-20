@@ -20,8 +20,7 @@ using System.Windows.Input;
 namespace InfiniteMeals.ViewModel.Login
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
-    {
+    public partial class LoginPage : ContentPage {
         const string accountSaltURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/accountsalt/"; // api to get account salt; need email at the end of link
         const string loginURL = "https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/account/"; // api to log in; need email + hashed password at the end of link
         public HttpClient client = new HttpClient(); // client to handle all api calls

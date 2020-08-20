@@ -73,7 +73,11 @@ mono_aot_mode_name:
 	.section	.rodata.env.str.8,"aMS",@progbits,1
 	.type	.L.env.str.8, @object
 .L.env.str.8:
+<<<<<<< HEAD
 	.asciz	"7d469709-0225-4f2f-869b-579efeae2a8d"
+=======
+	.asciz	"6d76c2d5-eac8-4b42-9524-06d421b05f5c"
+>>>>>>> origin/mobile_app_seanq
 	.size	.L.env.str.8, 37
 	.section	.rodata.env.str.9,"aMS",@progbits,1
 	.type	.L.env.str.9, @object

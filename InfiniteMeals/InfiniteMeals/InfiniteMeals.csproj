@@ -47,6 +47,12 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Checkout\CheckoutLoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\About\OurStoryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Checkout\CheckoutLoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Checkout\PaymentPage.xaml">
@@ -73,6 +79,9 @@
     <EmbeddedResource Update="ViewModel\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Profile\ChangePasswordPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\MealSelect\MenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -86,6 +95,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ViewModel\Subscribe\FiveMealPaymentOptionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ViewModel\Subscribe\SubscribePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -119,5 +131,13 @@
     <None Remove="Resources\Fonts\BarlowCondensed-Bold.ttf" />
     <None Remove="Resources\Fonts\Montserrat-Regular.ttf" />
     <None Remove="Resources\Fonts\Montserrat-Thin.ttf" />
+
+    <Compile Update="ViewModel\Subscribe\FiveMealPaymentOptionpage.xaml.cs">
+      <DependentUpon>FiveMealPaymentOptionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ViewModel\Subscribe\PaymentOptionPage.xaml.cs">
+      <DependentUpon>PaymentOptionPage.xaml</DependentUpon>
+    </Compile>
+
   </ItemGroup>
 </Project>

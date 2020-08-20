@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csprojAssemblyReference.cache
 C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.Properties.Resources.resources
 C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csproj.GenerateResource.cache
@@ -118,3 +119,5 @@ C:/Users/Sean/source/repos/Prep-To-Your-Door2/InfiniteMeals/InfiniteMeals/obj/De
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/ref/InfiniteMeals.dll
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.pdb
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals/obj/Debug/netstandard2.0/InfiniteMeals.csprojAssemblyReference.cache
+=======
+>>>>>>> origin/mobile_app_seanq

@@ -1,44 +1,27 @@
 ﻿<Properties StartupConfiguration="{4A1488E6-C3E8-4112-B8D0-262553CFF68E}|Default">
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.iOS Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.iOS.HideInfoBar="True" automaticSigning="False" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.2E588563-8B9F-4F78-9D12-C10AA077FE21" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.iOS.HideInfoBar="True" />
   <MonoDevelop.Ide.ItemProperties.InfiniteMeals.Android AndroidDesignerPreferredTheme="Theme.AppCompat.Light.NoActionBar" Xamarin.HotReload.UnhandledDeviceException.InfiniteMeals.Android.HideInfoBar="True" PreferredExecutionTarget="Android.Pixel_2_API_29" Xamarin.HotReload.DebuggerTimeoutException.InfiniteMeals.Android.HideInfoBar="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs">
     <Files>
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml.cs" Line="2253" Column="41" />
-      <File FileName="InfiniteMeals/ViewModel/Login/LoginPage.xaml.cs" Line="184" Column="54" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="481" Column="17" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="1231" Column="61" />
-      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealSchedule.xaml" Line="1" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/AddOnChoices.xaml.cs" Line="1490" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MenuView.xaml.cs" Line="374" Column="1" />
+      <File FileName="InfiniteMeals/ViewModel/MealSelect/MealChoices.xaml.cs" Line="2913" Column="2" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="InfiniteMeals" expanded="True">
             <Node name="InfiniteMeals" expanded="True">
-              <Node name="Model" expanded="True">
-                <Node name="Login" expanded="True" />
-              </Node>
               <Node name="ViewModel" expanded="True">
-                <Node name="Checkout" expanded="True">
-                  <Node name="DeliveryPage.xaml" expanded="True" />
-                  <Node name="PaymentPage.xaml" expanded="True" />
-                  <Node name="SummaryPage.xaml" expanded="True" />
-                </Node>
-                <Node name="Login" expanded="True">
-                  <Node name="LoginPage.xaml" expanded="True" />
-                </Node>
                 <Node name="MealSelect" expanded="True">
                   <Node name="AddOnChoices.xaml" expanded="True" />
-                  <Node name="MealChoices.xaml" expanded="True" />
-                  <Node name="MealSchedule.xaml" expanded="True" selected="True" />
+                  <Node name="MealChoices.xaml" expanded="True">
+                    <Node name="MealChoices.xaml.cs" selected="True" />
+                  </Node>
                   <Node name="MenuView.xaml" expanded="True" />
                 </Node>
-                <Node name="Subscribe" expanded="True">
-                  <Node name="PaymentOptionPage.xaml" expanded="True" />
-                </Node>
-                <Node name="MainPage.xaml" expanded="True" />
               </Node>
             </Node>
-            <Node name="InfiniteMeals.iOS" expanded="True" />
           </Node>
         </State>
       </Pad>

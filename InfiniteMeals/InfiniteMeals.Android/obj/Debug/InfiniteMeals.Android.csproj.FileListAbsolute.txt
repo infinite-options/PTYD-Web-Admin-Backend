@@ -2354,3 +2354,5 @@
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GenerateJavaStubs.stamp
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_GeneratePackageManagerJava.stamp
 /Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/stamp/_ResolveLibraryProjectImports.stamp
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/bibimbap.jpeg
+/Users/Kristina/Desktop/mergedptyd/Prep-To-Your-Door/InfiniteMeals/InfiniteMeals.Android/obj/Debug/res/drawable/ptydlogo.jpg

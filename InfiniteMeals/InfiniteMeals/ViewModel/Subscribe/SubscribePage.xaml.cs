@@ -28,7 +28,6 @@ namespace InfiniteMeals.ViewModel.Subscribe
         public SubscribePage()
         {
             InitializeComponent();
-
             WebClient client = new WebClient();
             var content = client.DownloadString(textUrl);
             var obj = JsonConvert.DeserializeObject<SubscriptionPlans>(content);
@@ -56,6 +55,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
             mealimage1.Source = ImageSource.FromFile("subscription.jpg");
             mealimage2.Source = ImageSource.FromFile("subscription.jpg");
             mealimage3.Source = ImageSource.FromFile("subscription.jpg");
+
         }
 
         private async void ClickedSignUp(object sender, EventArgs e)
@@ -90,8 +90,6 @@ namespace InfiniteMeals.ViewModel.Subscribe
             fiveMealPlan.BindingContext = MealPlan.FiveMeals;
             Label mealPlanLabel = (Label)fiveMealPlan.FindByName("mealPlan");
             mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.FiveMeals);
-
-
             List<double> weekPriceList = new List<double>();
             List<Label> labelList = new List<Label>();
             List<Label> perMealLabels = new List<Label>();
@@ -123,7 +121,6 @@ namespace InfiniteMeals.ViewModel.Subscribe
             tenMealPlan.BindingContext = MealPlan.TenMeals;
             Label mealPlanLabel = (Label)tenMealPlan.FindByName("mealPlan");
             mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.TenMeals);
-
             List<double> weekPriceList = new List<double>();
             List<Label> labelList = new List<Label>();
             List<Label> perMealLabels = new List<Label>();
@@ -223,7 +220,6 @@ namespace InfiniteMeals.ViewModel.Subscribe
             Label mealPlanLabel = (Label)twentyMealPlan.FindByName("mealPlan");
             mealPlanLabel.Text = MealPlanExtension.mealPlanToString(MealPlan.TwentyMeals);
 
-
             Label weekLabel = (Label)twentyMealPlan.FindByName("weekToWeekLabel");
             Label weekPerMealLabel = (Label)twentyMealPlan.FindByName("weekPerMealLabel");
             Label twoWeekLabel = (Label)twentyMealPlan.FindByName("twoWeekPrepayLabel");
@@ -250,6 +246,7 @@ namespace InfiniteMeals.ViewModel.Subscribe
                 perMealLabels[i].Text = String.Format("${0:0.00} per meal", obj.Result.TwentyMealPaymentPlans.Result[i].MealPlanPricePerMeal);
 
             }
+
             await Navigation.PushAsync(twentyMealPlan);
         }
 

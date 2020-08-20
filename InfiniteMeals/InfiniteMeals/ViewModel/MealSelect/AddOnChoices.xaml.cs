@@ -32,29 +32,29 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private static ObservableCollection<MealGroup> grouped6 { get; set; }
 
         // Week 1
-        public static MealGroup addAddOnGroup = new MealGroup() { LongName = "Add Ons"};
+        public static MealGroup addAddOnGroup = new MealGroup() { LongName = "Add Ons" };
         public static MealGroup addMealGroup = new MealGroup() { LongName = "Additional Meals" };
-        public static MealGroup addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies"};
+        public static MealGroup addSmoothieGroup = new MealGroup() { LongName = "Additional Smoothies" };
         // Week 2
-        public static MealGroup addAddOnGroup2 = new MealGroup() { LongName = "Add Ons"};
-        public static MealGroup addMealGroup2 = new MealGroup() { LongName = "Additional Meals"};
-        public static MealGroup addSmoothieGroup2 = new MealGroup() { LongName = "Additional Smoothies"};
+        public static MealGroup addAddOnGroup2 = new MealGroup() { LongName = "Add Ons" };
+        public static MealGroup addMealGroup2 = new MealGroup() { LongName = "Additional Meals" };
+        public static MealGroup addSmoothieGroup2 = new MealGroup() { LongName = "Additional Smoothies" };
         // Week 3
-        public static MealGroup addAddOnGroup3 = new MealGroup() { LongName = "Add Ons"};
-        public static MealGroup addMealGroup3 = new MealGroup() { LongName = "Additional Meals"};
-        public static MealGroup addSmoothieGroup3 = new MealGroup() { LongName = "Additional Smoothies"};
+        public static MealGroup addAddOnGroup3 = new MealGroup() { LongName = "Add Ons" };
+        public static MealGroup addMealGroup3 = new MealGroup() { LongName = "Additional Meals" };
+        public static MealGroup addSmoothieGroup3 = new MealGroup() { LongName = "Additional Smoothies" };
         // Week 4
-        public static MealGroup addAddOnGroup4 = new MealGroup() { LongName = "Add Ons"};
-        public static MealGroup addMealGroup4 = new MealGroup() { LongName = "Additional Meals"};
-        public static MealGroup addSmoothieGroup4 = new MealGroup() { LongName = "Additional Smoothies"};
+        public static MealGroup addAddOnGroup4 = new MealGroup() { LongName = "Add Ons" };
+        public static MealGroup addMealGroup4 = new MealGroup() { LongName = "Additional Meals" };
+        public static MealGroup addSmoothieGroup4 = new MealGroup() { LongName = "Additional Smoothies" };
         // Week 5
-        public static MealGroup addAddOnGroup5 = new MealGroup() { LongName = "Add Ons"};
-        public static MealGroup addMealGroup5 = new MealGroup() { LongName = "Additional Meals"};
-        public static MealGroup addSmoothieGroup5 = new MealGroup() { LongName = "Additional Smoothies"};
+        public static MealGroup addAddOnGroup5 = new MealGroup() { LongName = "Add Ons" };
+        public static MealGroup addMealGroup5 = new MealGroup() { LongName = "Additional Meals" };
+        public static MealGroup addSmoothieGroup5 = new MealGroup() { LongName = "Additional Smoothies" };
         // Week 6
-        public static MealGroup addAddOnGroup6 = new MealGroup() { LongName = "Add Ons"};
-        public static MealGroup addMealGroup6 = new MealGroup() { LongName = "Additional Meals"};
-        public static MealGroup addSmoothieGroup6 = new MealGroup() { LongName = "Additional Smoothies"};
+        public static MealGroup addAddOnGroup6 = new MealGroup() { LongName = "Add Ons" };
+        public static MealGroup addMealGroup6 = new MealGroup() { LongName = "Additional Meals" };
+        public static MealGroup addSmoothieGroup6 = new MealGroup() { LongName = "Additional Smoothies" };
 
         String infoImg = "info.jpeg";
         public double subTotal;
@@ -122,7 +122,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
 
             WebClient client = new WebClient();
-            var content =  client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
+            var content = client.DownloadString("https://uavi7wugua.execute-api.us-west-1.amazonaws.com/dev/api/v2/meals");
             var obj = JsonConvert.DeserializeObject<Data>(content);
 
             if (weekNumber == 1)
@@ -267,7 +267,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped.Add(addMealGroup);
                 grouped.Add(addSmoothieGroup);
             }
-            else if(weekNumber == 2)
+            else if (weekNumber == 2)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek2.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek2.Addons.AddonsAddons;
@@ -554,7 +554,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped3.Add(addMealGroup3);
                 grouped3.Add(addSmoothieGroup3);
             }
-            else if(weekNumber == 4)
+            else if (weekNumber == 4)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek4.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek4.Addons.AddonsAddons;
@@ -697,7 +697,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 grouped4.Add(addMealGroup4);
                 grouped4.Add(addSmoothieGroup4);
             }
-            else if(weekNumber == 5)
+            else if (weekNumber == 5)
             {
                 var jsonObjectLength = obj.Result.MenuForWeek5.Addons.AddonsAddons.Menu.Length;
                 var jsonObject = obj.Result.MenuForWeek5.Addons.AddonsAddons;
@@ -1029,45 +1029,45 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             lstView.ItemTemplate = new DataTemplate(() =>
             {
-            var grid = new Grid
-            {
-                HeightRequest = 100,
-                VerticalOptions = LayoutOptions.FillAndExpand
-            };
-            var nameLabel = new Label
-            {
-                FontAttributes = FontAttributes.Bold,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center
-            };
-            var costLabel = new Label
-            {
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center
-            };
-            var imgLabel = new Image
-            {
-                WidthRequest = 150,
-                HeightRequest = 75,
-                Aspect = Aspect.AspectFill,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand
-            };
-            imgLabel.Margin = new Thickness(10, 0, 0, 10);
-            var infoButton = new ImageButton
-            {
-                WidthRequest = 20,
-                HeightRequest = 20,
-                Aspect = Aspect.AspectFit,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-            };
-            infoButton.Clicked += (sender, e) =>
-            {
-                ImageButton stepper = sender as ImageButton;
-                var model = stepper.BindingContext as Meal;
-                DisplayAlert("Ingredients", model.description.ToString(), "OK");
-            };
+                var grid = new Grid
+                {
+                    HeightRequest = 100,
+                    VerticalOptions = LayoutOptions.FillAndExpand
+                };
+                var nameLabel = new Label
+                {
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var costLabel = new Label
+                {
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var imgLabel = new Image
+                {
+                    WidthRequest = 150,
+                    HeightRequest = 75,
+                    Aspect = Aspect.AspectFill,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+                imgLabel.Margin = new Thickness(10, 0, 0, 10);
+                var infoButton = new ImageButton
+                {
+                    WidthRequest = 20,
+                    HeightRequest = 20,
+                    Aspect = Aspect.AspectFit,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                };
+                infoButton.Clicked += (sender, e) =>
+                {
+                    ImageButton stepper = sender as ImageButton;
+                    var model = stepper.BindingContext as Meal;
+                    DisplayAlert("Ingredients", model.description.ToString(), "OK");
+                };
 
                 /*
             var steppers = new Stepper
@@ -1139,52 +1139,52 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 */
 
 
-            // Decrement Button
-            var decrementMealQuantityButton = new Button
-            {
-                Text = "-"
-            };
-
-            decrementMealQuantityButton.Clicked += (sender, e) => {
-                Button btn = sender as Button;
-                Meal meal = btn.BindingContext as Meal;
-                if (meal.qty == 0)
+                // Decrement Button
+                var decrementMealQuantityButton = new Button
                 {
-                    return;
-                }
-                meal.qty -= 1;
-                if (meal.qty == 0)
-                {
+                    Text = "-"
+                };
 
-                    if (mealQtyDict.ContainsKey(meal.id))
+                decrementMealQuantityButton.Clicked += (sender, e) => {
+                    Button btn = sender as Button;
+                    Meal meal = btn.BindingContext as Meal;
+                    if (meal.qty == 0)
                     {
-                        mealQtyDict.Remove(meal.id);
-                        System.Diagnostics.Debug.WriteLine(meal.id + " was removed");
+                        return;
                     }
-                }
-                else
-                {
-                    mealQtyDict[meal.id] = meal.qty;
-                }
+                    meal.qty -= 1;
+                    if (meal.qty == 0)
+                    {
 
-                subTotal -= meal.price;
-                meal.total = subTotal;
-                if (subTotal < 0)
-                {
-                    subTotal = 0.00;
+                        if (mealQtyDict.ContainsKey(meal.id))
+                        {
+                            mealQtyDict.Remove(meal.id);
+                            System.Diagnostics.Debug.WriteLine(meal.id + " was removed");
+                        }
+                    }
+                    else
+                    {
+                        mealQtyDict[meal.id] = meal.qty;
+                    }
+
+                    subTotal -= meal.price;
                     meal.total = subTotal;
-                }
+                    if (subTotal < 0)
+                    {
+                        subTotal = 0.00;
+                        meal.total = subTotal;
+                    }
 
-                if (subTotal == 0)
-                {
-                    totalBar.Text = "Close";
-                }
-                else
-                {
-                    totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
-                }
+                    if (subTotal == 0)
+                    {
+                        totalBar.Text = "Close";
+                    }
+                    else
+                    {
+                        totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
+                    }
 
-            };
+                };
 
 
                 // Increment Button
@@ -1278,7 +1278,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             emptyDict.Add("", 0);
 
             // If no changes
-            System.Diagnostics.Debug.WriteLine("TotalBar text: " + totalBar.Text + " " + mealQtyDict.Count + " " + weekNumber + " " + postUrl + " " +pid );
+            System.Diagnostics.Debug.WriteLine("TotalBar text: " + totalBar.Text + " " + mealQtyDict.Count + " " + weekNumber + " " + postUrl + " " + pid);
 
             if (mealQtyDict.Count == 0 && !totalBar.Text.Equals("Close"))
             {
@@ -1289,7 +1289,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             // If no add ons
             else if (mealQtyDict.Count == 0)
             {
-                System.Diagnostics.Debug.WriteLine("TotalBar text quantity 0" );
+                System.Diagnostics.Debug.WriteLine("TotalBar text quantity 0");
 
                 colorToReturn = Color.FromHex(def);
                 var mealSelectInfoToSend = new AddonInfo
@@ -1382,7 +1382,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
             {
                 System.Diagnostics.Debug.WriteLine("TotalBar text: multiple quantity");
 
-                foreach(var item in mealQtyDict)
+                foreach (var item in mealQtyDict)
                 {
                     System.Diagnostics.Debug.WriteLine("Dictionary: " + item.Key + item.Value);
 

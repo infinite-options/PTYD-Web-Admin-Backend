@@ -112,6 +112,7 @@ namespace InfiniteMeals.ViewModel.Checkout {
 
                 var response = await client.PostAsync(checkoutURL, httpContent); // try to post to database
                 System.Diagnostics.Debug.WriteLine("RESPONSE" + response);
+
                 return response.StatusCode;
             }
             catch (Exception ex) {
