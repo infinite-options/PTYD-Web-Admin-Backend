@@ -14,11 +14,6 @@ export default class MealButton extends Component {
       weekMenu: this.props.weekMenu, // get from meal schedule. this is 6 week menu
       totalAddonPrice: 0,
 
-
-      // disableAccountChanges = false,
-
-
-
       currentMealSelected: {}, //this will be fetched from api this.props.MEAL_SELECT_API_URL}/${purchaseId}
       currentAddonSelected: {},
       //some variable to control button
@@ -965,9 +960,7 @@ export default class MealButton extends Component {
             disabled={selectButton.isDisabled}
             variant='outline-dark'
             style={selectColor}
-            onClick={this.clickSelect 
-              // && () => this.props.handleDisableAcctChanges
-            }
+            onClick={this.clickSelect}
           >
             Select Meal
           </Button>
