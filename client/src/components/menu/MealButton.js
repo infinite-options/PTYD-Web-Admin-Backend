@@ -14,6 +14,11 @@ export default class MealButton extends Component {
       weekMenu: this.props.weekMenu, // get from meal schedule. this is 6 week menu
       totalAddonPrice: 0,
 
+
+      // disableAccountChanges = false,
+
+
+
       currentMealSelected: {}, //this will be fetched from api this.props.MEAL_SELECT_API_URL}/${purchaseId}
       currentAddonSelected: {},
       //some variable to control button
@@ -83,6 +88,7 @@ export default class MealButton extends Component {
       }
     }));
   };
+
   //helper function to get the current selected meal and addon for only current week
   getCurrentSelected = () => {
     //call the server to get new meal selected
@@ -405,6 +411,7 @@ export default class MealButton extends Component {
         showModal: true
       }
     }));
+    this.props.handleDisableAccountChanges();
   };
 
   setSurprise = () => {
@@ -931,7 +938,6 @@ export default class MealButton extends Component {
               Sunday
               <div>{weekMenu.Sunday}</div>
             </Button>
-            {/* &nbsp; */}
             {!this.state.mondayButton.isDisabled && (
               <Button
                 variant='outline-dark'
@@ -945,7 +951,6 @@ export default class MealButton extends Component {
                 <div>{weekMenu.Monday}</div>
               </Button>
             )}
-            {/* &nbsp; */}
             <Button
               disabled={skipButton.isDisabled}
               variant='outline-dark'
@@ -955,17 +960,17 @@ export default class MealButton extends Component {
               Skip This Week
             </Button>
           </div>
-          {/* &nbsp; */}
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button
             disabled={selectButton.isDisabled}
             variant='outline-dark'
             style={selectColor}
-            onClick={this.clickSelect}
+            onClick={this.clickSelect 
+              // && () => this.props.handleDisableAcctChanges
+            }
           >
             Select Meal
           </Button>
-          {/* &nbsp; */}
           <Button
             disabled={surpriseButton.isDisabled}
             variant='outline-dark'
@@ -976,7 +981,6 @@ export default class MealButton extends Component {
           >
             Surprise Me!
           </Button>
-          {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
           <Button
             disabled={addonButton.isDisabled}
             variant='outline-dark'
