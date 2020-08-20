@@ -21,6 +21,7 @@ export default class MealSchedule extends Component {
       userID: this.props.appProps.user_uid, // user ID
       firstname: this.searchCookie4Name("loginStatus"),
       showHideMakeChange: false,
+      disableAccountChanges: false,
 
       //handle addonCharge for AccountInfo component
       addonCharge: 0,
@@ -153,6 +154,19 @@ export default class MealSchedule extends Component {
       });
   };
 
+  // handleDisableAccountChanges = () => {
+  //   this.state.disableAccountChanges
+  //     ? this.setState({disableAccountChanges: false})
+  //     : this.setState({disableAccountChanges: true});
+  // }
+
+  disableAccountChanges = () => {
+    this.setState({disableAccountChanges: true})
+  }
+  reenableAccountChanges = () => {
+    this.setState({disableAccountChanges: false})
+  }
+
   ChangeAccountInfo = () => {
     this.state.showHideMakeChange
       ? this.setState({showHideMakeChange: false})
@@ -198,7 +212,7 @@ export default class MealSchedule extends Component {
                     onClick={this.ChangeAccountInfo}
                     size='lg'
                     block
-                    disabled={!this.state.currentPurchase.purchase_id}
+                    disabled={!this.state.currentPurchase.purchase_id || this.state.disableAccountChanges}
                   >
                     Change Account Info
                   </Button>
@@ -250,6 +264,9 @@ export default class MealSchedule extends Component {
                     ChangeCurrentAddonCharge={this.ChangeCurrentAddonCharge}
                     MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL} // using for update meal selected
                     SetError={this.SetError}
+                    // handleDisableAccountChanges={this.handleDisableAccountChanges}
+                    disableAccountChanges={this.disableAccountChanges}
+                    reenableAccountChanges={this.reenableAccountChanges}
                   />
                 ))}
               </div>

@@ -83,6 +83,7 @@ export default class MealButton extends Component {
       }
     }));
   };
+
   //helper function to get the current selected meal and addon for only current week
   getCurrentSelected = () => {
     //call the server to get new meal selected
@@ -363,6 +364,7 @@ export default class MealButton extends Component {
     // erase all addon and write a new line into addon_selected table
     // send a blank line for addon to the database;
     this.saveAddonAPI();
+    this.props.reenableAccountChanges();
   };
   setSelect = () => {
     this.setState(prevState => ({
@@ -405,6 +407,7 @@ export default class MealButton extends Component {
         showModal: true
       }
     }));
+    this.props.disableAccountChanges();
   };
 
   setSurprise = () => {
@@ -453,6 +456,7 @@ export default class MealButton extends Component {
     if (!first) {
       this.saveSelectMealAPI();
     }
+    this.props.reenableAccountChanges();
   };
   /* Addon button is clicked. All others button will inactive. until Agree to Pay is clicked */
   setAddon = () => {
@@ -514,6 +518,7 @@ export default class MealButton extends Component {
         isDisabled: true
       }
     }));
+    this.props.disableAccountChanges();
   };
 
   //helper function to create a new string for meal selection
@@ -578,6 +583,7 @@ export default class MealButton extends Component {
 
     // send request to save to serve
     this.saveSelectMealAPI();
+    this.props.reenableAccountChanges();
   };
   saveButtonAddOn = async () => {
     await this.setState(prevState => ({
@@ -624,6 +630,7 @@ export default class MealButton extends Component {
       console.log("calling changeCurrentCharge from MealButton");
       let totalAddonPrice = parseFloat(this.state.totalAddonPrice).toFixed(2);
       this.props.ChangeCurrentAddonCharge(totalAddonPrice);
+      this.props.reenableAccountChanges();
     }
 
     //Update local variable;
@@ -931,7 +938,6 @@ export default class MealButton extends Component {
               Sunday
               <div>{weekMenu.Sunday}</div>
             </Button>
-            {/* &nbsp; */}
             {!this.state.mondayButton.isDisabled && (
               <Button
                 variant='outline-dark'
@@ -945,7 +951,6 @@ export default class MealButton extends Component {
                 <div>{weekMenu.Monday}</div>
               </Button>
             )}
-            {/* &nbsp; */}
             <Button
               disabled={skipButton.isDisabled}
               variant='outline-dark'
@@ -955,7 +960,6 @@ export default class MealButton extends Component {
               Skip This Week
             </Button>
           </div>
-          {/* &nbsp; */}
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button
             disabled={selectButton.isDisabled}
@@ -965,7 +969,6 @@ export default class MealButton extends Component {
           >
             Select Meal
           </Button>
-          {/* &nbsp; */}
           <Button
             disabled={surpriseButton.isDisabled}
             variant='outline-dark'
@@ -976,7 +979,6 @@ export default class MealButton extends Component {
           >
             Surprise Me!
           </Button>
-          {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
           <Button
             disabled={addonButton.isDisabled}
             variant='outline-dark'
