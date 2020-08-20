@@ -16,11 +16,11 @@ AddonModal.propTypes = {
 export default function AddonModal(props) {
   const modalStyle = {
     position: "absolute",
-    top: "5%",
-    left: "10%",
+    top: "2%",
+    left: "-25%",
     zIndex: "50",
     height: "700px",
-    width: "600px"
+    width: "700px"
   };
   return (
     <Card style={modalStyle}>
