@@ -95,7 +95,9 @@ namespace InfiniteMeals
             }
             else
             {
-                await Navigation.PushAsync(new MealSchedule());
+                MealSchedule ms = new MealSchedule();
+                ms.BindingContext = this;
+                await Navigation.PushAsync(ms);
             }
 
         }

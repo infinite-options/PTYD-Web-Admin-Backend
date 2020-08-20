@@ -170,7 +170,7 @@ namespace InfiniteMeals.ViewModel.Login
 
         public async void captureLoginSession(LoginResponse loginResponse)
         {
-
+            System.Diagnostics.Debug.WriteLine("LOGIN: capturing here");
             var userSessionInformation = new UserLoginSession
             { // object to send into local database
                 UserUid = loginResponse.Result.Result[0].UserUid,

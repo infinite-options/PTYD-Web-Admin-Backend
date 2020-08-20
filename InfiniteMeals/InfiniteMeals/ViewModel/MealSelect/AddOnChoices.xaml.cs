@@ -150,7 +150,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
                     {
                         imageMeal = jsonObject.Menu[placeHolder].MealPhotoUrl.ToString();
                         AddImage.Add(imageMeal);
-
                     }
 
                     Meal holder = new Meal
@@ -1070,6 +1069,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 DisplayAlert("Ingredients", model.description.ToString(), "OK");
             };
 
+                /*
             var steppers = new Stepper
             {
                 Value = 0,
@@ -1081,7 +1081,7 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 VerticalOptions = LayoutOptions.Center,
 
             };
-            steppers.Margin = new Thickness(40, 0, 0, 0); ;
+            steppers.Margin = new Thickness(40, 0, 0, 0);
 
             steppers.ValueChanged += (sender, e) =>
             {
@@ -1136,18 +1136,105 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
             };
 
-                
+                */
+
+
+            // Decrement Button
+            var decrementMealQuantityButton = new Button
+            {
+                Text = "-"
+            };
+
+            decrementMealQuantityButton.Clicked += (sender, e) => {
+                Button btn = sender as Button;
+                Meal meal = btn.BindingContext as Meal;
+                if (meal.qty == 0)
+                {
+                    return;
+                }
+                meal.qty -= 1;
+                if (meal.qty == 0)
+                {
+
+                    if (mealQtyDict.ContainsKey(meal.id))
+                    {
+                        mealQtyDict.Remove(meal.id);
+                        System.Diagnostics.Debug.WriteLine(meal.id + " was removed");
+                    }
+                }
+                else
+                {
+                    mealQtyDict[meal.id] = meal.qty;
+                }
+
+                subTotal -= meal.price;
+                meal.total = subTotal;
+                if (subTotal < 0)
+                {
+                    subTotal = 0.00;
+                    meal.total = subTotal;
+                }
+
+                if (subTotal == 0)
+                {
+                    totalBar.Text = "Close";
+                }
+                else
+                {
+                    totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
+                }
+
+            };
+
+
+                // Increment Button
+                var incrementMealQuantityButton = new Button
+                {
+                    Text = "+"
+                };
+
+
+                incrementMealQuantityButton.Clicked += (sender, e) => {
+                    Button btn = sender as Button;
+                    Meal meal = btn.BindingContext as Meal;
+
+                    meal.qty += 1;
+                    //model.qty = (int)steppers.Value;
+                    subTotal += meal.price;
+                    meal.total = subTotal;
+
+                    if (!mealQtyDict.ContainsKey(meal.id))
+                    {
+                        mealQtyDict.Add(meal.id, meal.qty);
+                    }
+                    else
+                    {
+                        mealQtyDict[meal.id] = meal.qty;
+                    }
+
+                    if (subTotal == 0)
+                    {
+                        totalBar.Text = "Close";
+                    }
+                    else
+                    {
+                        totalBar.Text = string.Format("Agree to Pay: ${0:#,0.00}", subTotal);
+                    }
+                };
+
+
+                // Quantity Label 
                 quantity = new Label
                 {
                     FontSize = 15,
                     FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Start,
+                    HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
                     VerticalTextAlignment = TextAlignment.Center,
                     HorizontalTextAlignment = TextAlignment.Center,
 
                 };
-                
+
                 nameLabel.SetBinding(Label.TextProperty, "name");
                 costLabel.SetBinding(Label.TextProperty, "price");
                 quantity.SetBinding(Label.TextProperty, "qty");
@@ -1162,8 +1249,10 @@ namespace InfiniteMeals.ViewModel.MealSelect
                 nameLabel.SetValue(Grid.RowSpanProperty, 2);
                 nameLabel.SetValue(Grid.ColumnSpanProperty, 2);
                 grid.Children.Add(infoButton, 4, 0);
-                grid.Children.Add(steppers, 3, 1);
-                steppers.SetValue(Grid.ColumnSpanProperty, 3);
+                //grid.Children.Add(steppers, 3, 1);
+                //steppers.SetValue(Grid.ColumnSpanProperty, 3);
+                grid.Children.Add(decrementMealQuantityButton, 4, 1);
+                grid.Children.Add(incrementMealQuantityButton, 5, 1);
                 grid.Children.Add(quantity, 5, 0);
 
                 return new ViewCell { View = grid, Height = 100 };
@@ -1200,6 +1289,8 @@ namespace InfiniteMeals.ViewModel.MealSelect
             // If no add ons
             else if (mealQtyDict.Count == 0)
             {
+                System.Diagnostics.Debug.WriteLine("TotalBar text quantity 0" );
+
                 colorToReturn = Color.FromHex(def);
                 var mealSelectInfoToSend = new AddonInfo
                 {
@@ -1289,6 +1380,15 @@ namespace InfiniteMeals.ViewModel.MealSelect
             // If the add ons are not empty
             else
             {
+                System.Diagnostics.Debug.WriteLine("TotalBar text: multiple quantity");
+
+                foreach(var item in mealQtyDict)
+                {
+                    System.Diagnostics.Debug.WriteLine("Dictionary: " + item.Key + item.Value);
+
+                }
+
+
                 var mealSelectInfoToSend = new AddonInfo
                 {
                     PurchaseId = pid,                  // Constant for now

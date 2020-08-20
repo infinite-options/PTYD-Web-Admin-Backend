@@ -2414,8 +2414,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
 
         private async void ClickedSurprise(object sender, EventArgs e)
         {
-            //MealSchedule ms = new MealSchedule();
-            //int weekNumber = ms.getNum();
             MealSchedule ms = this.currentMealSchedule;
             int weekNumber = this.currentMealSchedule.weekNumber;
             if (weekNumber == 1)
@@ -2752,8 +2750,6 @@ namespace InfiniteMeals.ViewModel.MealSelect
         private async void ClickedSave()
         {
             int i = 0;
-            //MealSchedule ms = new MealSchedule(i);
-            //System.Diagnostics.Debug.WriteLine("Made it here ");
 
             int weekNumber = this.currentMealSchedule.weekNumber;
             if (weekNumber == 1)
