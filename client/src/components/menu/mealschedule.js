@@ -154,10 +154,17 @@ export default class MealSchedule extends Component {
       });
   };
 
-  handleDisableAccountChanges = () => {
-    this.state.disableAccountChanges
-      ? this.setState({disableAccountChanges: false})
-      : this.setState({disableAccountChanges: true});
+  // handleDisableAccountChanges = () => {
+  //   this.state.disableAccountChanges
+  //     ? this.setState({disableAccountChanges: false})
+  //     : this.setState({disableAccountChanges: true});
+  // }
+
+  disableAccountChanges = () => {
+    this.setState({disableAccountChanges: true})
+  }
+  reenableAccountChanges = () => {
+    this.setState({disableAccountChanges: false})
   }
 
   ChangeAccountInfo = () => {
@@ -257,7 +264,9 @@ export default class MealSchedule extends Component {
                     ChangeCurrentAddonCharge={this.ChangeCurrentAddonCharge}
                     MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL} // using for update meal selected
                     SetError={this.SetError}
-                    handleDisableAccountChanges={this.handleDisableAccountChanges}
+                    // handleDisableAccountChanges={this.handleDisableAccountChanges}
+                    disableAccountChanges={this.disableAccountChanges}
+                    reenableAccountChanges={this.reenableAccountChanges}
                   />
                 ))}
               </div>

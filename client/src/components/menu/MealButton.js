@@ -364,6 +364,7 @@ export default class MealButton extends Component {
     // erase all addon and write a new line into addon_selected table
     // send a blank line for addon to the database;
     this.saveAddonAPI();
+    this.props.reenableAccountChanges();
   };
   setSelect = () => {
     this.setState(prevState => ({
@@ -406,7 +407,7 @@ export default class MealButton extends Component {
         showModal: true
       }
     }));
-    this.props.handleDisableAccountChanges();
+    this.props.disableAccountChanges();
   };
 
   setSurprise = () => {
@@ -455,6 +456,7 @@ export default class MealButton extends Component {
     if (!first) {
       this.saveSelectMealAPI();
     }
+    this.props.reenableAccountChanges();
   };
   /* Addon button is clicked. All others button will inactive. until Agree to Pay is clicked */
   setAddon = () => {
@@ -516,6 +518,7 @@ export default class MealButton extends Component {
         isDisabled: true
       }
     }));
+    this.props.disableAccountChanges();
   };
 
   //helper function to create a new string for meal selection
@@ -580,6 +583,7 @@ export default class MealButton extends Component {
 
     // send request to save to serve
     this.saveSelectMealAPI();
+    this.props.reenableAccountChanges();
   };
   saveButtonAddOn = async () => {
     await this.setState(prevState => ({
@@ -626,6 +630,7 @@ export default class MealButton extends Component {
       console.log("calling changeCurrentCharge from MealButton");
       let totalAddonPrice = parseFloat(this.state.totalAddonPrice).toFixed(2);
       this.props.ChangeCurrentAddonCharge(totalAddonPrice);
+      this.props.reenableAccountChanges();
     }
 
     //Update local variable;
