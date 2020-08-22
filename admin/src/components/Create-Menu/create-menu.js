@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Breadcrumbs, Link, Typography, Select, FormControl, MenuItem } from "@material-ui/core";
+import { Breadcrumbs, IconButton, Link, Typography, Select, FormControl, MenuItem } from "@material-ui/core";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import TextField from "@material-ui/core/TextField";
+import DeleteIcon from '@material-ui/icons/Delete';
 import axios from "axios";
 
 class CreateMenu extends Component {
@@ -183,6 +184,15 @@ class CreateMenu extends Component {
           <td>{arr[i].Meal_Cat}</td>
           <td>{arr[i].Menu_Category}</td>
           <td>{arr[i].Default_Meal}</td>
+          <td>
+          <IconButton
+            variant="primary"
+            color="secondary"
+            disabled
+          >
+            <DeleteIcon />
+          </IconButton>
+          </td>
         </tr>
       ) : (
         <tr key={i}>
@@ -190,8 +200,18 @@ class CreateMenu extends Component {
           <td>{this.mealDropdown(arr[i].Meal_Name, i)}</td>
           <td>{arr[i].Meal_Cat}</td>
           <td>{arr[i].Menu_Category}</td>
-          {/* <td>{arr[i].Default_Meal}</td> */}
           <td> {this.defaultMealDropdown(i)} </td>
+          <td>
+          <IconButton
+            variant="primary"
+            color="secondary"
+            onClick={(e) => {
+              this.deleteMenuItem(i);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+          </td>
         </tr>
       );
       displayrows.push(tempelement);
@@ -222,6 +242,7 @@ class CreateMenu extends Component {
                   <th>Meal Category</th>
                   <th>Menu Category</th>
                   <th>Default Meal</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>{displayrows}</tbody>
@@ -283,6 +304,23 @@ class CreateMenu extends Component {
         </Row>
       </div>
     );
+  }
+
+  deleteMenuItem = (index) => {
+    let newCreateMenu = this.state.createMenu;
+    let day = this.state.datekeys[this.state.selection];
+    let menuForDay = newCreateMenu[day];
+    let defaultMealArr = this.state.selectionOfDefaultMeal;
+    let mealArr = this.state.selectionOfDropMenu;
+    let newMenuForDay = menuForDay.filter((elt,curIndex) => curIndex !== index);
+    let newDefaultMealArr  = defaultMealArr.filter((elt,curIndex) => curIndex !== index);
+    let newMealArr = mealArr.filter((elt,curIndex) => curIndex !== index);
+    newCreateMenu[day] = newMenuForDay;
+    this.setState({
+      createMenu: newCreateMenu,
+      selectionOfDropMenu: newMealArr,
+      selectionOfDefaultMeal: newDefaultMealArr,
+    })
   }
   /* Savung for later:
   */
@@ -403,6 +441,24 @@ class CreateMenu extends Component {
           <MenuItem value={i} key={i}>{specificMealArr[i].Meal_Name}</MenuItem>
         );
       }
+      //newMeal is just a integer starting at 0
+      return (
+        <FormControl>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={this.state.newMeal2}
+            onChange={(e) => {
+              this.setState({
+                newMeal2: e.target.value,
+                newMealName: specificMealArr[e.target.value].Meal_Name,
+              });
+            }}
+          >
+            {tempmeal}
+          </Select>
+        </FormControl>
+      );
     } else {
       specificMealArr = Object.keys(this.state.meal_type_map);
       for (let i = 0; i < specificMealArr.length; i++) {
@@ -410,25 +466,25 @@ class CreateMenu extends Component {
           <MenuItem value={i} key={i}>{specificMealArr[i]}</MenuItem>
         );
       }
+      //newMeal is just a integer starting at 0
+      return (
+        <FormControl>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={this.state.newMeal2}
+            onChange={(e) => {
+              this.setState({
+                newMeal2: e.target.value,
+                newMealName: specificMealArr[e.target.value],
+              });
+            }}
+          >
+            {tempmeal}
+          </Select>
+        </FormControl>
+      );
     }
-    //newMeal is just a integer starting at 0
-    return (
-      <FormControl>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={this.state.newMeal2}
-          onChange={(e) => {
-            this.setState({
-              newMeal2: e.target.value,
-              newMealName: specificMealArr[e.target.value],
-            });
-          }}
-        >
-          {tempmeal}
-        </Select>
-      </FormControl>
-    );
   };
 
   addMealDefaultDropdown = () => {
