@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Breadcrumbs, Link, Typography, Select, FormControl, MenuItem } from "@material-ui/core";
+import { Breadcrumbs, IconButton, Link, Typography, Select, FormControl, MenuItem } from "@material-ui/core";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import TextField from "@material-ui/core/TextField";
+import DeleteIcon from '@material-ui/icons/Delete';
 import axios from "axios";
 
 class CreateMenu extends Component {
@@ -183,6 +184,15 @@ class CreateMenu extends Component {
           <td>{arr[i].Meal_Cat}</td>
           <td>{arr[i].Menu_Category}</td>
           <td>{arr[i].Default_Meal}</td>
+          <td>
+          <IconButton
+            variant="primary"
+            color="secondary"
+            disabled
+          >
+            <DeleteIcon />
+          </IconButton>
+          </td>
         </tr>
       ) : (
         <tr key={i}>
@@ -190,8 +200,18 @@ class CreateMenu extends Component {
           <td>{this.mealDropdown(arr[i].Meal_Name, i)}</td>
           <td>{arr[i].Meal_Cat}</td>
           <td>{arr[i].Menu_Category}</td>
-          {/* <td>{arr[i].Default_Meal}</td> */}
           <td> {this.defaultMealDropdown(i)} </td>
+          <td>
+          <IconButton
+            variant="primary"
+            color="secondary"
+            onClick={(e) => {
+              this.deleteMenuItem(i);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+          </td>
         </tr>
       );
       displayrows.push(tempelement);
@@ -222,6 +242,7 @@ class CreateMenu extends Component {
                   <th>Meal Category</th>
                   <th>Menu Category</th>
                   <th>Default Meal</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>{displayrows}</tbody>
@@ -283,6 +304,23 @@ class CreateMenu extends Component {
         </Row>
       </div>
     );
+  }
+
+  deleteMenuItem = (index) => {
+    let newCreateMenu = this.state.createMenu;
+    let day = this.state.datekeys[this.state.selection];
+    let menuForDay = newCreateMenu[day];
+    let defaultMealArr = this.state.selectionOfDefaultMeal;
+    let mealArr = this.state.selectionOfDropMenu;
+    let newMenuForDay = menuForDay.filter((elt,curIndex) => curIndex !== index);
+    let newDefaultMealArr  = defaultMealArr.filter((elt,curIndex) => curIndex !== index);
+    let newMealArr = mealArr.filter((elt,curIndex) => curIndex !== index);
+    newCreateMenu[day] = newMenuForDay;
+    this.setState({
+      createMenu: newCreateMenu,
+      selectionOfDropMenu: newMealArr,
+      selectionOfDefaultMeal: newDefaultMealArr,
+    })
   }
   /* Savung for later:
   */
