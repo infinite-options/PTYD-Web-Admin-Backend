@@ -395,7 +395,7 @@ export default class MealButton extends Component {
       },
       addonButton: {
         ...prevState.addonButton,
-        isDisabled: false
+        isDisabled: true
       }
     }));
   };

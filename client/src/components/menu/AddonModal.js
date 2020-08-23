@@ -16,7 +16,7 @@ AddonModal.propTypes = {
 export default function AddonModal(props) {
   const modalStyle = {
     position: "absolute",
-    top: "2%",
+    top: "5%",
     left: "-25%",
     zIndex: "50",
     height: "700px",
