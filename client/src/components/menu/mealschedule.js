@@ -258,7 +258,6 @@ export default class MealSchedule extends Component {
                     ChangeCurrentAddonCharge={this.ChangeCurrentAddonCharge}
                     MEAL_SELECT_API_URL={this.props.MEAL_SELECT_API_URL} // using for update meal selected
                     SetError={this.SetError}
-                    // handleDisableAccountChanges={this.handleDisableAccountChanges}
                     disableAccountChanges={this.disableAccountChanges}
                     reenableAccountChanges={this.reenableAccountChanges}
                   />
