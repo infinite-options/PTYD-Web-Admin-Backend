@@ -4,6 +4,7 @@ import axios from "axios";
 
 import SelectMealModal from "./SelectMealModal";
 import AddonModal from "./AddonModal";
+import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 
 export default class MealButton extends Component {
   constructor(props) {
@@ -505,7 +506,6 @@ export default class MealButton extends Component {
       mondayButton: {
         ...prevState.mondayButton,
         isDisabled: true
-        // isDisabled:false
       },
       skipButton: {
         ...prevState.skipButton,
@@ -940,7 +940,9 @@ export default class MealButton extends Component {
               Sunday
               <div>{weekMenu.Sunday}</div>
             </Button>
-            {/* {!this.state.mondayButton.isDisabled && ( */}
+
+{/* fixed monday logic */}
+            {this.props.currentPurchase.monday_available && (
               <Button
                 variant='outline-dark'
                 disabled={mondayButton.isDisabled}
@@ -952,7 +954,25 @@ export default class MealButton extends Component {
                 Monday
                 <div>{weekMenu.Monday}</div>
               </Button>
-            {/* )} */}
+            )
+            }
+
+ {/* original */}
+            {/* {!this.state.mondayButton.isDisabled && (
+              <Button
+                variant='outline-dark'
+                // disabled={mondayButton.isDisabled}
+                onClick={() => {
+                  this.clickDay("monday", false);
+                }}
+                style={mondayColor}
+              >
+                Monday
+                <div>{weekMenu.Monday}</div>
+              </Button>
+            )
+            } */}
+
             <Button
               disabled={skipButton.isDisabled}
               variant='outline-dark'
