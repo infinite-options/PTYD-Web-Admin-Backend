@@ -941,7 +941,6 @@ export default class MealButton extends Component {
               <div>{weekMenu.Sunday}</div>
             </Button>
 
-{/* fixed monday logic */}
             {this.props.currentPurchase.monday_available && (
               <Button
                 variant='outline-dark'
@@ -954,24 +953,7 @@ export default class MealButton extends Component {
                 Monday
                 <div>{weekMenu.Monday}</div>
               </Button>
-            )
-            }
-
- {/* original */}
-            {/* {!this.state.mondayButton.isDisabled && (
-              <Button
-                variant='outline-dark'
-                // disabled={mondayButton.isDisabled}
-                onClick={() => {
-                  this.clickDay("monday", false);
-                }}
-                style={mondayColor}
-              >
-                Monday
-                <div>{weekMenu.Monday}</div>
-              </Button>
-            )
-            } */}
+            )}
 
             <Button
               disabled={skipButton.isDisabled}

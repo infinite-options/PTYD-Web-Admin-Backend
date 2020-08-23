@@ -553,12 +553,6 @@ a {
   display:none;
 }
 
-#no-display-monday {
-  /* display:none; */
-  visibility: hidden;
-  /* cursor:default; */
-}
-
 .top-right {
   position: absolute;
   top: 8px;
