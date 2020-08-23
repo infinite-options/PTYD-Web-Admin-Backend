@@ -781,7 +781,6 @@ hr.four {
 }
 
 .btn2-primary {
-  /* background-color: #427c42; */
   background-color: var(--green);
   opacity: 1;
 }
@@ -849,7 +848,6 @@ hr.four {
 
 .border_card_subcribe {
   padding: 0px !important;
-  /* border: 1px solid #b4b4b4; */
   box-shadow: 10px 0px 32px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -880,11 +878,6 @@ hr.four {
   border: 1px solid rgb(68, 68, 68);
   border-radius: 0px;
 }
-/* .mealsCard {
-  max-width: 20rem;
-  border: 1px solid rgb(68, 68, 68);
-  border-radius: 0px;
-} */
 .background_black {
   background-color: #181818 !important;
   border-radius: 0 !important;
@@ -929,6 +922,7 @@ hr.four {
   width: 20% !important;
 }
 
+/* smaller screens */
 
 @media only screen and (max-width: 990px) {
   .login-hello {
@@ -1054,8 +1048,6 @@ hr.four {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))!important;
   }
 }
-
-/* media */
 
 @media only screen and (max-width: 767px) {
   .navigation-start {

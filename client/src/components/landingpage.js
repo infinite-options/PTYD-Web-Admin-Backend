@@ -157,7 +157,6 @@ class Landing extends Component {
                 <img className='img-fluid img-2-carrot' src={IMG2} alt='img2' />
               </Cell>
               <a
-                // type='button'
                 href='/selectmealplan'
                 className='btn1 btn1-primary start_button eat-better-now-button-container'
               >
@@ -225,7 +224,6 @@ class Landing extends Component {
 
         <div className='container center-content menu-next-week-button-container visibility-hidden-mobile'>
           <a
-            // type='button'
             href='/menunextweek'
             className='btn1 btn1-primary start_button'
           >
@@ -316,64 +314,3 @@ class Landing extends Component {
   }
 }
 export default Landing;
-
-
-{/* <div className="row">
-      <div className="col-sm">
-        <h4 className='zero-waste-subtitle text-wrap'>CHOOSE YOUR MEALS</h4>
-        <p>Every Monday, we'll release a new menu. Order 5 to 20 meals for delivery.</p>
-      </div>
-      <div className="col-sm">
-        <h4 className='zero-waste-subtitle text-wrap'>WEEKLY DELIVERY</h4>
-        <p>Seamless non-contact delivery in Austin & Houston.</p>
-      </div>
-      <div className="col-sm">
-        <h4 className='zero-waste-subtitle text-wrap'>RETURN YOUR JARS</h4>
-        <p>Don't throw anything away! We will pick up your old bag and reusable mason jars with your next delivery.</p>
-      </div>
-    </div> */}
-
-
-  {/* <div className='container'>
-    <div className='row'>
-      
-      <div className='col-sm '>
-        <p className='four-items-subtitle'>LOCAL FARMS</p>
-        <p>
-          Our organic produce comes directly from small Texas
-          farms to the PTYD kitchen. No middle men or long
-          transit times. We provide the most nutrient rich
-          ingredients straight to your door.
-        </p>
-
-        <p className='four-items-subtitle'>ZERO WASTE</p>
-        <p>
-          Nearly 40% of all food grown in the United States is
-          thrown away. In our kitchen, all food scraps are
-          composted to make healthy organic soil.{" "}
-        </p>
-      </div>
-
-      <div className='col-sm '>
-        <p className='four-items-subtitle'>REUSABLE PACKAGING</p>
-        <p>
-          Did you know that every piece of plastic ever
-          produced, still exists today? Enjoy a plastic-free
-          experience with your PTYD deliveries.
-        </p>
-
-        <p className='four-items-subtitle'>ORGANIC PRODUCE</p>
-        <p>
-          Once upon a time, all food was organic. Healthy soil
-          means healthy nutrients and healthy bodies. We source
-          100% organic ingredients, so there's no pesticides,
-          herbicides or sprays in your food, ever.
-        </p>
-      </div>
-
-      <div className='col-sm'>
-        <img className='img-fluid img-2-carrot' src={IMG2} alt='img2' />
-      </div>
-      
-    </div>
-  </div> */}
