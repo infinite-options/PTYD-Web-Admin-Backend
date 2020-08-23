@@ -395,7 +395,7 @@ export default class MealButton extends Component {
       },
       addonButton: {
         ...prevState.addonButton,
-        isDisabled: false
+        isDisabled: true
       }
     }));
   };
@@ -468,6 +468,7 @@ export default class MealButton extends Component {
       mondayButton: {
         ...prevState.mondayButton,
         isDisabled: !this.props.currentPurchase.monday_available
+        // isDisabled: true
       },
       skipButton: {
         ...prevState.skipButton,
@@ -504,6 +505,7 @@ export default class MealButton extends Component {
       mondayButton: {
         ...prevState.mondayButton,
         isDisabled: true
+        // isDisabled:false
       },
       skipButton: {
         ...prevState.skipButton,
@@ -938,10 +940,10 @@ export default class MealButton extends Component {
               Sunday
               <div>{weekMenu.Sunday}</div>
             </Button>
-            {!this.state.mondayButton.isDisabled && (
+            {/* {!this.state.mondayButton.isDisabled && ( */}
               <Button
                 variant='outline-dark'
-                // disabled={mondayButton.isDisabled}
+                disabled={mondayButton.isDisabled}
                 onClick={() => {
                   this.clickDay("monday", false);
                 }}
@@ -950,7 +952,7 @@ export default class MealButton extends Component {
                 Monday
                 <div>{weekMenu.Monday}</div>
               </Button>
-            )}
+            {/* )} */}
             <Button
               disabled={skipButton.isDisabled}
               variant='outline-dark'

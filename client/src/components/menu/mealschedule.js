@@ -105,6 +105,7 @@ export default class MealSchedule extends Component {
             this.setState({
               currentPurchase: res.data.result[0]
             });
+            // console.log(this.state.currentPurchase)
           } else {
             this.setState({error: "There are no subscribed purchases."});
           }
