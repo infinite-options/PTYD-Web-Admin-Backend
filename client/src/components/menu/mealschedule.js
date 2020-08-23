@@ -154,12 +154,6 @@ export default class MealSchedule extends Component {
       });
   };
 
-  // handleDisableAccountChanges = () => {
-  //   this.state.disableAccountChanges
-  //     ? this.setState({disableAccountChanges: false})
-  //     : this.setState({disableAccountChanges: true});
-  // }
-
   disableAccountChanges = () => {
     this.setState({disableAccountChanges: true})
   }
