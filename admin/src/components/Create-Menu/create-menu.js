@@ -73,7 +73,11 @@ class CreateMenu extends Component {
 
     // tempkeys = tempkeys.reverse();
     tempkeys = [...futurekeys, ...pastkeys];
-    let x = tempkeys[0];
+    let storedDateIndex = localStorage.getItem('createMenuDate');
+    if(storedDateIndex === null) {
+      storedDateIndex = 0
+    }
+    let x = tempkeys[storedDateIndex];
     let len = createMenu[x].length;
     let tempSelectionOfDropMenu = new Array(len).fill(0);
     let tempSelectionOfDefaultMeal = new Array(len).fill("FALSE");
@@ -105,6 +109,7 @@ class CreateMenu extends Component {
 
     this.setState(
       {
+        selection: storedDateIndex,
         selectionOfDropMenu: tempSelectionOfDropMenu, //[1, 2 , 3, 21, 1, 2, ...]
         selectionOfDefaultMeal: tempSelectionOfDefaultMeal,
         datekeys: tempkeys, //list of dates ["2020-01-05",...]
@@ -130,9 +135,11 @@ class CreateMenu extends Component {
     let x = this.state.datekeys[event.target.value];
     let len = this.state.createMenu[x].length;
     let tempSelectionOfDropMenu = new Array(len).fill(0);
+    let tempSelectionOfDefaultMeal = new Array(len).fill("FALSE");
     let initArr = this.state.createMenu[x];
     for (let i = 0; i < len; i++) {
       tempSelectionOfDropMenu[i] = this.state.mealMap[initArr[i]["Meal_Name"]];
+      tempSelectionOfDefaultMeal[i] = initArr[i]["Default_Meal"];
     }
     if (this.state.pastkeys.includes(x)) {
       this.setState({
@@ -143,10 +150,11 @@ class CreateMenu extends Component {
         pastDateMeal: false,
       });
     }
-
+    localStorage.setItem('createMenuDate',event.target.value);
     this.setState({
       selection: event.target.value,
       selectionOfDropMenu: tempSelectionOfDropMenu,
+      selectionOfDefaultMeal: tempSelectionOfDefaultMeal,
     });
   };
 
@@ -307,20 +315,21 @@ class CreateMenu extends Component {
   }
 
   deleteMenuItem = (index) => {
-    let newCreateMenu = this.state.createMenu;
-    let day = this.state.datekeys[this.state.selection];
-    let menuForDay = newCreateMenu[day];
-    let defaultMealArr = this.state.selectionOfDefaultMeal;
-    let mealArr = this.state.selectionOfDropMenu;
-    let newMenuForDay = menuForDay.filter((elt,curIndex) => curIndex !== index);
-    let newDefaultMealArr  = defaultMealArr.filter((elt,curIndex) => curIndex !== index);
-    let newMealArr = mealArr.filter((elt,curIndex) => curIndex !== index);
-    newCreateMenu[day] = newMenuForDay;
-    this.setState({
-      createMenu: newCreateMenu,
-      selectionOfDropMenu: newMealArr,
-      selectionOfDefaultMeal: newDefaultMealArr,
-    })
+    if(window.confirm('Do you meant to delete menu item?')){                               
+      let newCreateMenu = this.state.createMenu;
+      let day = this.state.datekeys[this.state.selection];
+      let menuForDay = newCreateMenu[day];
+      let defaultMealArr = this.state.selectionOfDefaultMeal;
+      let mealArr = this.state.selectionOfDropMenu;
+      let newMenuForDay = menuForDay.filter((elt,curIndex) => curIndex !== index);
+      let newDefaultMealArr  = defaultMealArr.filter((elt,curIndex) => curIndex !== index);
+      let newMealArr = mealArr.filter((elt,curIndex) => curIndex !== index);
+      newCreateMenu[day] = newMenuForDay;
+      this.setState({
+        createMenu: newCreateMenu,
+        selectionOfDropMenu: newMealArr,
+        selectionOfDefaultMeal: newDefaultMealArr,
+    })}
   }
   /* Savung for later:
   */
@@ -334,7 +343,6 @@ class CreateMenu extends Component {
       menu: mealArray,
     };
 
-    console.log(menuData);
     axios
       .post(this.props.API_URL_CREATEMENU, menuData)
       .then((res) => {
@@ -574,6 +582,7 @@ class CreateMenu extends Component {
       selectionOfDefaultMeal: defaultMealArr,
       CreateMenu: newCreateMenu,
       newMeal: 0,
+      newMealDefault: 'FALSE',
     });
   };
 
@@ -648,17 +657,27 @@ class CreateMenu extends Component {
   }
 
   handleDefaultMealChange = (newValue, index) => {
-    let arr = this.state.selectionOfDefaultMeal;
+    let arr = [...(this.state.selectionOfDefaultMeal)];
     arr[index] = newValue;
-    let day = this.state.datekeys[this.state.selection]; //get the current date
-    let newCreateMenu = this.state.createMenu;
-    let mealArray = newCreateMenu[day];
-    mealArray[index].Default_Meal = newValue;
-
-    this.setState({
-      selectionOfDefaultMeal: arr,
-      CreateMenu: newCreateMenu,
-    });
+    let totalTrue = arr.reduce((acc,cur) => {
+      if(cur === 'FALSE') {
+        return acc;
+      } else {
+        return acc + 1;
+      }
+    },0)  
+    if(totalTrue <= 5) {
+      let day = this.state.datekeys[this.state.selection]; //get the current date
+      let newCreateMenu = this.state.createMenu;
+      let mealArray = newCreateMenu[day];
+      mealArray[index].Default_Meal = newValue;
+      this.setState({
+        selectionOfDefaultMeal: arr,
+        CreateMenu: newCreateMenu,
+      });
+    } else {
+      window.alert('Cannot have more than 5 default meals on same day');
+    }
   }
 
 }
